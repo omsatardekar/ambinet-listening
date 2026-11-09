@@ -13,7 +13,7 @@ try {
         throw "The existing virtual environment was not found at $Python. Create it using the project's setup instructions."
     }
 
-    & $Python -c "import fastapi, multipart, uvicorn, websockets, faster_whisper" 2>$null
+    & $Python -c "import fastapi, multipart, uvicorn, websockets, vosk" 2>$null
     if ($LASTEXITCODE -ne 0) {
         Write-Host "Installing missing backend requirements into the existing virtual environment..."
         & $Python -m pip install -r (Join-Path $ProjectRoot "requirements.txt")

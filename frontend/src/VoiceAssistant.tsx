@@ -30,6 +30,7 @@ type VoiceState = {
   level: number;
   audio_connected: boolean;
   input_silent?: boolean;
+  stop_armed?: boolean;
   last_command: "wake" | "start" | "stop" | null;
   heard?: string;
   heard_age?: number | null;
@@ -250,7 +251,8 @@ function VoiceAssistant({
 
         const inputRate = context.sampleRate;
         source = context.createMediaStreamSource(stream);
-        processor = context.createScriptProcessor(4096, 1, 1);
+        // Small buffers keep microphone-to-server delay low (32 ms at 16 kHz, ~43 ms at 48 kHz).
+        processor = context.createScriptProcessor(inputRate <= 16000 ? 512 : 2048, 1, 1);
         mute = context.createGain();
         mute.gain.value = 0;
         let pending = new Float32Array(0);
@@ -417,11 +419,13 @@ function VoiceAssistant({
               </div>
               <VoiceWave level={level} active />
               <p className="va-title">
-                {mode === "recording" ? "Capturing the conversation" : "Yes, I'm listening"}
+                {mode === "recording" ? "Capturing the conversation" : "Asha is listening"}
               </p>
               <p className="va-sub">
                 {mode === "recording"
-                  ? 'Say "Hey Asha, stop recording" to save.'
+                  ? voice.stop_armed
+                    ? 'Asha is listening — say "stop recording".'
+                    : 'Say "Hey Asha, stop recording" to save.'
                   : `Say "start recording" within ${Math.ceil(countdown)} seconds.`}
               </p>
               {mode === "awake" && (

@@ -18,7 +18,7 @@ A demo of an ambient clinical workflow: capture an encounter by voice or upload,
 | Node.js | 18 LTS or newer | Includes `npm`. |
 | Google Chrome or Microsoft Edge | recent | Needed for microphone access on `http://127.0.0.1:5173`. |
 | Microphone | — | Built-in or USB. Make sure it is not muted in Windows Sound settings. |
-| Internet | — | Needed for Azure, and once for the first Whisper speech-model download (about 150 MB). |
+| Internet | — | Needed for Azure, and once for the one-time voice-model download (about 36 MB, saved in `models/` and reused forever). |
 
 You also need access to the project's Azure resources. Ask the project owner for the values for `.env` (section 3).
 
@@ -40,7 +40,7 @@ python -m pip install -r requirements-dev.txt
 
 `requirements-dev.txt` installs everything in `requirements.txt` plus `pytest` for the tests. For a runtime-only install, use `requirements.txt`.
 
-The first install of `faster-whisper` also downloads the speech model the first time the server starts, not during `pip install`.
+The voice model (Vosk, 36 MB) is downloaded once into `models/` the first time the server starts and is loaded into memory at startup; later starts need no download.
 
 ## 4. Configure secrets
 
@@ -111,7 +111,7 @@ Drop a WAV file into the upload card (or choose one), then select **Create trans
 
 | Symptom | What to check |
 |---|---|
-| Header says "Voice unavailable" or "Loading voice model" | The first start downloads the Whisper model. Wait for "Voice control is ready" in the backend terminal. |
+| Header says "Voice unavailable" or "Loading voice model" | The very first start downloads the 36 MB voice model once. Wait for "Voice control is ready" in the backend terminal. |
 | "Microphone blocked" | Click the lock icon in the address bar and allow the microphone for `127.0.0.1:5173`, then reload. |
 | "Waiting for microphone" or a warning about silent input | Pick the right input device in Windows Sound settings and check its level. |
 | "Hey Asha" is not recognised | The header shows what was last heard. Speak clearly at normal volume, close to the microphone. |
@@ -122,7 +122,7 @@ Drop a WAV file into the upload card (or choose one), then select **Create trans
 ## 9. Project layout
 
 ```text
-backend/app/        FastAPI server: API, WebSocket voice channel, Whisper voice control, pipeline
+backend/app/        FastAPI server: API, WebSocket voice channel, Vosk voice control, pipeline
 frontend/src/       React + Vite UI (App.tsx, VoiceAssistant.tsx for hands-free recording)
 scripts/            Transcription and reconstruction steps used by the pipeline
 prompts/            Instructions for the reconstruction agent

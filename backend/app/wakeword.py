@@ -1,19 +1,27 @@
 """Local voice control for the browser recorder.
 
-Pipeline (everything runs on this machine; no audio leaves the device):
+Everything runs on this machine; no audio leaves the device.
 
     browser mic (16 kHz PCM frames over WebSocket)
         ├──► recording writer (only while a session is active) -> offline_recordings/<id>.wav
-        └──► utterance segmenter (energy VAD) ──► Whisper worker ──► command matcher
+        └──► energy VAD ──► Vosk recognizer locked to a tiny command grammar ──► command state machine
 
-The matcher works on transcribed text, so "Hey Asha", "start recording" and "stop recording"
-are recognised the same way the CLI assistant recognises them, and the name "Asha" does not
-need to be in a keyword vocabulary.
+Why this design is fast and strict
+  * The recognizer is a streaming Vosk model restricted to a grammar of exactly the control phrases
+    ("hey asha", "start recording", "stop recording"; everything else is ``[unk]``). It is loaded
+    once when the server starts and kept in memory, so there is no per-command model load.
+  * A phrase is decoded as soon as the speaker pauses for ``END_SILENCE_SECONDS`` (~0.3 s), not after
+    a slow full-sentence transcription, so commands react in a few hundred milliseconds.
+  * Commands are gated: "start recording" only works after "Hey Asha" (the assistant is awake), and
+    "stop recording" only works together with "Hey Asha".
+  * Vosk gives word timings, so the saved WAV starts right after "start recording" and ends right
+    before "Hey Asha, stop recording": the control phrases are not part of the recording.
 """
 
 from __future__ import annotations
 
-import difflib
+import collections
+import json
 import logging
 import os
 import queue
@@ -21,7 +29,9 @@ import re
 import secrets
 import threading
 import time
+import urllib.request
 import wave
+import zipfile
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -34,68 +44,99 @@ logger = logging.getLogger("ambient_demo.wakeword")
 SAMPLE_RATE = 16000
 FRAME_SAMPLES = 512
 FRAME_SECONDS = FRAME_SAMPLES / SAMPLE_RATE
-COMMAND_WINDOW_SECONDS = 10.0
+COMMAND_WINDOW_SECONDS = 10.0      # how long Asha waits for "start recording" after "Hey Asha"
+STOP_WINDOW_SECONDS = 8.0          # "Hey Asha ... stop recording" may be said as two phrases
 MAX_LISTED_RECORDINGS = 200
-WHISPER_MODEL = os.getenv("ASHA_WAKE_MODEL", "base.en")
 SILENCE_LEVEL = 0.003
 SILENCE_WARNING_SECONDS = 5.0
-END_SILENCE_SECONDS = 0.6      # pause that closes an utterance
-MAX_UTTERANCE_SECONDS = 15.0   # force a cut during long speech so commands are heard promptly
-MIN_UTTERANCE_SECONDS = 0.4
-PRE_ROLL_SECONDS = 0.25
+END_SILENCE_SECONDS = 0.30         # pause that closes a phrase and triggers decoding
+MAX_PHRASE_SECONDS = 12.0          # force a decode during long speech
+MIN_SPEECH_FRAMES = 3              # ignore clicks shorter than ~100 ms
+PRE_ROLL_FRAMES = 10               # audio fed to the recognizer before the detected onset
+RING_FRAMES = 160                  # ~5 s of recent audio kept for exact start trimming
+START_TRIM_SECONDS = 0.10          # drop this much after "recording" so its tail is not saved
+STOP_TRIM_SECONDS = 0.08           # cut this much before "hey" so its onset is not saved
+MIN_CONFIDENCE = 0.45
 SESSION_ID_PATTERN = re.compile(r"^\d{8}-\d{6}-[a-f0-9]{6}$")
 
-FILLERS = {"hey", "hi", "hiya", "hello", "ok", "okay", "oh", "so", "um", "uh", "a"}
-ASHA_ALIASES = {"asha", "ashah", "aasha", "aisha", "asa", "esha", "ashaa", "osha", "ahsa", "ashia", "ashya", "shah", "sha"}
-HOTWORDS = "Hey Asha, start recording, stop recording"
+MODEL_NAME = os.getenv("ASHA_VOICE_MODEL", "vosk-model-small-en-in-0.4")
+MODEL_ROOT = Path(os.getenv("ASHA_MODEL_DIR", Path(__file__).resolve().parents[2] / "models"))
+MODEL_URL = f"https://alphacephei.com/vosk/models/{MODEL_NAME}.zip"
+
+HEY_WORDS = ("hey", "hay", "hi", "hello", "okay")
+ASHA_WORDS = ("asha",)  # the only spelling present in the model vocabulary
+RECORD_WORDS = {"recording", "record"}
+GRAMMAR = json.dumps(
+    [f"{hey} {asha}" for hey in HEY_WORDS for asha in ASHA_WORDS]
+    + ["start recording", "stop recording", "hey asha start recording", "hey asha stop recording", "[unk]"]
+)
 
 
-@dataclass
-class _Utterance:
-    audio: np.ndarray
-    start_frame: int  # absolute frame index (across the whole service lifetime)
+@dataclass(frozen=True)
+class Token:
+    word: str
+    start: int   # absolute frame index (across the whole service lifetime)
+    end: int
+    conf: float = 1.0
 
 
-def normalize_words(text: str) -> list[str]:
-    return re.findall(r"[a-z]+", text.lower().replace("'", ""))
+def tokens_from_result(result: dict[str, Any], offset_frame: int) -> list[Token]:
+    """Words of a Vosk final result with absolute frame positions ([unk] filler is dropped)."""
+    tokens: list[Token] = []
+    for item in result.get("result") or []:
+        word = str(item.get("word", "")).lower()
+        if not word or word == "[unk]":
+            continue
+        tokens.append(
+            Token(
+                word,
+                offset_frame + int(float(item.get("start", 0.0)) * SAMPLE_RATE),
+                offset_frame + int(float(item.get("end", 0.0)) * SAMPLE_RATE),
+                float(item.get("conf", 1.0)),
+            )
+        )
+    return tokens
 
 
-def contains_wake_word(words: list[str]) -> int:
-    """Return the index just after a leading 'Hey Asha' (or -1).
-
-    Exact spellings match anywhere at the start. Looser spellings (e.g. "Shah") only match
-    when a greeting filler such as "hey" or "hiya" comes first, so "Asia" in normal speech
-    does not wake the assistant.
-    """
-    i = 0
-    while i < len(words) and words[i] in FILLERS:
-        i += 1
-    if i >= len(words):
-        return -1
-    greeted = i > 0
-    for span in (1, 2):
-        candidate = "".join(words[i:i + span])
-        if candidate in ASHA_ALIASES or (greeted and _is_close_to_asha(candidate)):
-            return i + span
+def find_wake(tokens: list[Token]) -> int:
+    """Index of the 'asha' token in the first "<hey> asha" (or -1)."""
+    for i in range(1, len(tokens)):
+        if (
+            tokens[i].word in ASHA_WORDS
+            and tokens[i - 1].word in HEY_WORDS
+            and min(tokens[i].conf, tokens[i - 1].conf) >= MIN_CONFIDENCE
+        ):
+            return i
     return -1
 
 
-def _is_close_to_asha(candidate: str) -> bool:
-    return len(candidate) >= 3 and difflib.SequenceMatcher(None, candidate, "asha").ratio() >= 0.7
+def find_command(tokens: list[Token], verb: str, after: int = 0) -> int:
+    """Index of the 'recording' token in "<verb> recording" at or after ``after`` (or -1)."""
+    for i in range(max(1, after), len(tokens)):
+        if (
+            tokens[i].word in RECORD_WORDS
+            and tokens[i - 1].word == verb
+            and min(tokens[i].conf, tokens[i - 1].conf) >= MIN_CONFIDENCE
+        ):
+            return i
+    return -1
 
 
-def has_start_command(words: list[str]) -> bool:
-    return any(
-        words[i] == "start" and i + 1 < len(words) and words[i + 1] in {"recording", "record", "recordings"}
-        for i in range(len(words))
-    )
-
-
-def has_stop_command(words: list[str]) -> bool:
-    return any(
-        words[i] == "stop" and any(w in {"recording", "record", "recordings"} for w in words[i + 1:i + 3])
-        for i in range(len(words))
-    )
+def ensure_model(path: Path | None = None) -> Path:
+    """Return the local Vosk model folder, downloading it once if it is not on disk yet."""
+    target = path or MODEL_ROOT / MODEL_NAME
+    if (target / "am").is_dir():
+        return target
+    target.parent.mkdir(parents=True, exist_ok=True)
+    archive = target.parent / f"{MODEL_NAME}.zip"
+    logger.info("Downloading the voice model once (%s) ...", MODEL_URL)
+    urllib.request.urlretrieve(MODEL_URL, archive)
+    with zipfile.ZipFile(archive) as bundle:
+        bundle.extractall(target.parent)
+    archive.unlink(missing_ok=True)
+    if not (target / "am").is_dir():
+        raise RuntimeError(f"The voice model was not found in {target} after download.")
+    return target
 
 
 class WakeWordService:
@@ -106,11 +147,10 @@ class WakeWordService:
         self._lock = threading.RLock()
         self._listeners: list[Callable[[dict[str, Any]], None]] = []
         self._audio_queue: queue.Queue[bytes] = queue.Queue(maxsize=512)
-        self._utterances: queue.Queue[_Utterance | None] = queue.Queue(maxsize=50)
         self._stop = threading.Event()
         self._model: Any = None
+        self._vosk: Any = None
         self._worker: threading.Thread | None = None
-        self._transcriber: threading.Thread | None = None
         self._writer: wave.Wave_write | None = None
         self._session_id: str | None = None
         self._session_started_at: str | None = None
@@ -119,8 +159,11 @@ class WakeWordService:
         self._total_frames = 0
         self._state = "listening"
         self._armed_until = 0.0
+        self._stop_cut: int | None = None      # frame where a pending "Hey Asha" began (while recording)
+        self._stop_cut_until = 0.0
         self._level = 0.0
         self._noise = 0.002
+        self._speech_rms = 0.05
         self._last_audio_at = 0.0
         self._quiet_since: float | None = None
         self._input_silent = False
@@ -132,12 +175,14 @@ class WakeWordService:
         self._error: str | None = None
         self._last_event = "starting"
         self._recordings = self._load_recordings()
-        # utterance segmentation state (worker thread only)
-        self._seg: list[np.ndarray] = []
-        self._seg_start_frame = 0
-        self._seg_silence = 0.0
+        # phrase segmentation state (audio worker thread only)
+        self._ring: collections.deque[tuple[int, bytes]] = collections.deque(maxlen=RING_FRAMES)
+        self._recognizer: Any = None
         self._in_speech = False
-        self._pre_roll: list[np.ndarray] = []
+        self._seg_offset = 0
+        self._seg_frames = 0
+        self._seg_speech_frames = 0
+        self._seg_silence = 0
 
     # ── lifecycle ────────────────────────────────────────────────────
 
@@ -147,22 +192,24 @@ class WakeWordService:
         self._loading = True
         self._emit("loading")
         try:
-            from faster_whisper import WhisperModel
+            import vosk
 
-            self._model = WhisperModel(WHISPER_MODEL, device="cpu", compute_type="int8")
+            vosk.SetLogLevel(-1)
+            self._vosk = vosk
+            self._model = vosk.Model(str(ensure_model()))   # loaded once, kept for the process lifetime
+            self._recognizer = self._new_recognizer()
+            self._warm_up()
             self._recordings_dir.mkdir(parents=True, exist_ok=True)
             self._stop.clear()
             self._worker = threading.Thread(target=self._process_audio, name="asha-voice-input", daemon=True)
-            self._transcriber = threading.Thread(target=self._transcribe_loop, name="asha-voice-stt", daemon=True)
             self._worker.start()
-            self._transcriber.start()
             with self._lock:
                 self._available = True
                 self._loading = False
                 self._error = None
                 self._state = "listening"
             self._emit("ready")
-            logger.info("Voice control is ready (Whisper %s, local only)", WHISPER_MODEL)
+            logger.info("Voice control is ready (%s, local only)", MODEL_NAME)
         except Exception as exc:
             logger.exception("Could not start voice control")
             with self._lock:
@@ -172,15 +219,25 @@ class WakeWordService:
                 self._state = "unavailable"
             self._emit("unavailable")
 
+    def _new_recognizer(self) -> Any:
+        recognizer = self._vosk.KaldiRecognizer(self._model, SAMPLE_RATE, GRAMMAR)
+        recognizer.SetWords(True)
+        return recognizer
+
+    def _warm_up(self) -> None:
+        """Run one dummy decode so the first real command is not slower than the rest."""
+        silence = bytes(FRAME_SAMPLES * 2)
+        for _ in range(8):
+            self._recognizer.AcceptWaveform(silence)
+        self._recognizer.FinalResult()
+
     def shutdown(self) -> None:
         self._stop.set()
         if self._writer is not None:
             self.stop_recording("shutdown")
-        for thread in (self._worker, self._transcriber):
-            if thread is not None:
-                thread.join(timeout=3)
+        if self._worker is not None:
+            self._worker.join(timeout=3)
         self._worker = None
-        self._transcriber = None
         with self._lock:
             self._available = False
 
@@ -195,8 +252,9 @@ class WakeWordService:
 
     def snapshot(self) -> dict[str, Any]:
         with self._lock:
-            elapsed = time.monotonic() - self._session_started_mono if self._writer is not None else 0.0
-            armed_left = max(0.0, self._armed_until - time.monotonic()) if self._state == "awake" else 0.0
+            now = time.monotonic()
+            elapsed = now - self._session_started_mono if self._writer is not None else 0.0
+            armed_left = max(0.0, self._armed_until - now) if self._state == "awake" else 0.0
             return {
                 "type": "state",
                 "available": self._available,
@@ -209,12 +267,13 @@ class WakeWordService:
                 ),
                 "elapsed": round(elapsed, 1),
                 "armed_seconds": round(armed_left, 1),
+                "stop_armed": self._writer is not None and self._stop_cut is not None and now <= self._stop_cut_until,
                 "level": round(self._level, 3),
-                "audio_connected": time.monotonic() - self._last_audio_at < 3.0,
+                "audio_connected": now - self._last_audio_at < 3.0,
                 "input_silent": self._input_silent,
                 "last_command": self._last_command,
                 "heard": self._heard,
-                "heard_age": round(time.monotonic() - self._heard_at, 1) if self._heard_at else None,
+                "heard_age": round(now - self._heard_at, 1) if self._heard_at else None,
                 "recordings": list(self._recordings),
                 "error": self._error,
                 "event": self._last_event,
@@ -226,7 +285,9 @@ class WakeWordService:
 
     # ── recording ────────────────────────────────────────────────────
 
-    def start_recording(self, source: str = "button") -> bool:
+    def start_recording(self, source: str = "button", trim_from_frame: int | None = None) -> bool:
+        """Open a new WAV. With ``trim_from_frame`` the file begins at that absolute frame
+        (taken from the recent-audio ring) so the spoken "start recording" is left out."""
         with self._lock:
             if not self._available:
                 raise RuntimeError("Voice recording is not available.")
@@ -239,12 +300,20 @@ class WakeWordService:
             writer.setnchannels(1)
             writer.setsampwidth(2)
             writer.setframerate(SAMPLE_RATE)
+            first_frame = self._total_frames
+            if trim_from_frame is not None:
+                for frame_start, frame_bytes in self._ring:
+                    if frame_start >= trim_from_frame:
+                        if first_frame == self._total_frames:
+                            first_frame = frame_start
+                        writer.writeframesraw(frame_bytes)
             self._writer = writer
             self._session_id = session_id
             self._session_started_at = started.isoformat(timespec="seconds")
             self._session_started_mono = time.monotonic()
-            self._session_start_frame = self._total_frames
+            self._session_start_frame = first_frame
             self._armed_until = 0.0
+            self._stop_cut = None
             self._state = "recording"
         self._emit(f"recording_started:{source}")
         logger.info("Recording started (%s)", source)
@@ -262,10 +331,10 @@ class WakeWordService:
             self._session_started_at = None
             self._state = "listening"
             self._armed_until = 0.0
+            self._stop_cut = None
             path = self._path_for(session_id)
             if cut_at_frame is not None:
-                keep = max(0, cut_at_frame - self._session_start_frame)
-                _truncate_wav(path, keep)
+                _truncate_wav(path, max(0, cut_at_frame - self._session_start_frame))
             duration = round(_wav_duration(path), 1)
             entry = self._entry(session_id, started_at, duration)
             self._recordings.insert(0, entry)
@@ -296,7 +365,7 @@ class WakeWordService:
             except queue.Empty:
                 pass
 
-    # ── worker 1: frames -> recording file + utterance segments ──────
+    # ── audio worker: frames -> recording file + phrase decoding ─────
 
     def _process_audio(self) -> None:
         while not self._stop.is_set():
@@ -305,122 +374,134 @@ class WakeWordService:
             except queue.Empty:
                 self._expire_wake_window()
                 continue
-            pcm = np.frombuffer(frame, dtype=np.int16)
-            audio = pcm.astype(np.float32) / 32768
-            peak = float(np.abs(pcm.astype(np.int32)).max()) / 32768
-            rms = float(np.sqrt(np.mean(audio * audio)))
-            with self._lock:
-                self._level = max(peak, self._level * 0.82)
-                start_frame = self._total_frames
-                self._total_frames += pcm.size
-                if self._writer is not None:
-                    self._writer.writeframesraw(frame)
-            self._track_silence(peak)
-            self._segment(audio, rms, start_frame)
-            self._expire_wake_window()
-
-    def _segment(self, audio: np.ndarray, rms: float, start_frame: int) -> None:
-        threshold = max(0.012, self._noise * 3.5)
-        is_speech = rms > threshold
-        if not is_speech and not self._in_speech:
-            self._noise = 0.97 * self._noise + 0.03 * rms
-            self._pre_roll.append(audio)
-            max_pre = int(PRE_ROLL_SECONDS / FRAME_SECONDS)
-            del self._pre_roll[:-max_pre]
-            return
-        if not self._in_speech:
-            self._in_speech = True
-            self._seg = list(self._pre_roll)
-            self._seg_start_frame = start_frame - sum(chunk.size for chunk in self._pre_roll)
-            self._pre_roll = []
-            self._seg_silence = 0.0
-        self._seg.append(audio)
-        self._seg_silence = 0.0 if is_speech else self._seg_silence + FRAME_SECONDS
-        seconds = sum(chunk.size for chunk in self._seg) / SAMPLE_RATE
-        if self._seg_silence >= END_SILENCE_SECONDS or seconds >= MAX_UTTERANCE_SECONDS:
-            self._close_segment()
-
-    def _close_segment(self) -> None:
-        seconds = sum(chunk.size for chunk in self._seg) / SAMPLE_RATE
-        if seconds >= MIN_UTTERANCE_SECONDS:
-            utterance = _Utterance(np.concatenate(self._seg), self._seg_start_frame)
             try:
-                self._utterances.put_nowait(utterance)
-            except queue.Full:
-                logger.warning("Voice backlog full; dropping one utterance")
-        self._seg = []
-        self._in_speech = False
-        self._seg_silence = 0.0
-
-    # ── worker 2: Whisper transcription + command matching ───────────
-
-    def _transcribe_loop(self) -> None:
-        while not self._stop.is_set():
-            try:
-                utterance = self._utterances.get(timeout=0.2)
-            except queue.Empty:
-                continue
-            if utterance is None:
-                break
-            audio = utterance.audio
-            peak = float(np.max(np.abs(audio))) if audio.size else 0.0
-            if 0.01 < peak < 0.6:
-                # Quiet microphones transcribe poorly; normalise each phrase to a usable level.
-                audio = audio * min(20.0, 0.8 / peak)
-            try:
-                segments, _ = self._model.transcribe(
-                    audio,
-                    language="en",
-                    beam_size=1,
-                    vad_filter=False,
-                    condition_on_previous_text=False,
-                    without_timestamps=True,
-                    hotwords=HOTWORDS,
-                )
-                text = " ".join(segment.text.strip() for segment in segments).strip()
+                self._process_frame(frame)
             except Exception:
-                logger.exception("Speech recognition failed for one utterance")
-                continue
-            logger.info("Heard (%.1fs, peak %.2f): %r", audio.size / SAMPLE_RATE, peak, text)
-            if text:
-                self._handle_text(text, utterance.start_frame)
+                logger.exception("Voice processing failed for one audio frame")
 
-    def _handle_text(self, text: str, start_frame: int) -> None:
-        words = normalize_words(text)
+    def _process_frame(self, frame: bytes) -> None:
+        pcm = np.frombuffer(frame, dtype=np.int16)
+        audio = pcm.astype(np.float32) / 32768
+        peak = float(np.abs(pcm.astype(np.int32)).max()) / 32768
+        rms = float(np.sqrt(np.mean(audio * audio)))
         with self._lock:
-            self._heard = text
+            self._level = max(peak, self._level * 0.82)
+            start_frame = self._total_frames
+            self._total_frames += pcm.size
+            self._ring.append((start_frame, frame))
+            if self._writer is not None:
+                self._writer.writeframesraw(frame)
+        self._track_silence(peak)
+        self._segment(frame, rms, start_frame)
+        self._expire_wake_window()
+
+    def _segment(self, frame: bytes, rms: float, start_frame: int) -> None:
+        is_speech = rms > max(0.008, self._noise * 3.0)
+        if not self._in_speech:
+            if not is_speech:
+                self._noise = 0.97 * self._noise + 0.03 * rms
+                return
+            self._in_speech = True
+            # A fresh recognizer per phrase (~0.3 ms) keeps its word timings relative to this phrase.
+            self._recognizer = self._new_recognizer()
+            preroll = list(self._ring)[-(PRE_ROLL_FRAMES + 1):-1]
+            self._seg_offset = preroll[0][0] if preroll else start_frame
+            self._seg_frames = 0
+            self._seg_speech_frames = 0
+            self._seg_silence = 0
+            for _, pre_bytes in preroll:
+                self._feed(pre_bytes)
+        self._feed(frame)
+        if is_speech:
+            self._seg_speech_frames += 1
+            self._seg_silence = 0
+            self._speech_rms = 0.98 * self._speech_rms + 0.02 * rms
+        else:
+            self._seg_silence += 1
+        if (
+            self._seg_silence * FRAME_SECONDS >= END_SILENCE_SECONDS
+            or self._seg_frames * FRAME_SECONDS >= MAX_PHRASE_SECONDS
+        ):
+            self._finish_phrase()
+
+    def _feed(self, frame: bytes) -> None:
+        self._seg_frames += 1
+        # Quiet microphones recognise poorly: bring the speech level to a usable range.
+        gain = min(8.0, max(1.0, 0.06 / max(self._speech_rms, 1e-4)))
+        if gain > 1.05:
+            samples = np.frombuffer(frame, dtype=np.int16).astype(np.float32) * gain
+            frame = np.clip(samples, -32768, 32767).astype(np.int16).tobytes()
+        self._recognizer.AcceptWaveform(frame)
+
+    def _finish_phrase(self) -> None:
+        self._in_speech = False
+        started = time.monotonic()
+        result = json.loads(self._recognizer.FinalResult())
+        if self._seg_speech_frames < MIN_SPEECH_FRAMES:
+            return
+        logger.info("Heard %r (decoded in %.0f ms)", result.get("text", ""), (time.monotonic() - started) * 1000)
+        self._handle_tokens(tokens_from_result(result, self._seg_offset))
+
+    # ── command state machine ────────────────────────────────────────
+
+    def _handle_tokens(self, tokens: list[Token]) -> None:
+        """Act on one decoded phrase. Tokens carry absolute frame positions."""
+        if not tokens:
+            return
+        with self._lock:
+            self._heard = " ".join(token.word for token in tokens)
             self._heard_at = time.monotonic()
-            recording = self._writer is not None
-            awake = self._state == "awake" and time.monotonic() <= self._armed_until
         self._emit("heard")
-        if not words:
-            return
 
+        now = time.monotonic()
+        with self._lock:
+            recording = self._writer is not None
+            awake = self._state == "awake" and now <= self._armed_until
+            pending_cut = self._stop_cut if now <= self._stop_cut_until else None
+
+        wake = find_wake(tokens)
         if recording:
-            if has_stop_command(words):
+            stop = find_command(tokens, "stop")
+            if stop >= 0:
+                if 0 <= wake < stop:
+                    cut = tokens[wake - 1].start
+                elif pending_cut is not None:
+                    cut = pending_cut
+                else:
+                    logger.info("Ignoring 'stop recording' without 'Hey Asha'")
+                    return
                 self._set_command("stop")
-                logger.info("Stop command heard: %r", text)
-                self.stop_recording("voice", cut_at_frame=start_frame)
+                logger.info("Stop command heard")
+                self.stop_recording("voice", cut_at_frame=max(0, cut - int(STOP_TRIM_SECONDS * SAMPLE_RATE)))
+            elif wake >= 0:
+                with self._lock:
+                    self._stop_cut = tokens[wake - 1].start
+                    self._stop_cut_until = now + STOP_WINDOW_SECONDS
+                self._set_command("wake")
+                self._emit("stop_armed")
             return
 
-        wake_end = contains_wake_word(words)
-        if wake_end >= 0:
+        if wake >= 0:
             self._set_command("wake")
-            logger.info("Wake word heard: %r", text)
+            logger.info("Wake word heard")
             with self._lock:
                 self._state = "awake"
-                self._armed_until = time.monotonic() + COMMAND_WINDOW_SECONDS
+                self._armed_until = now + COMMAND_WINDOW_SECONDS
             self._emit("wake_detected")
-            # Command spoken in the same breath: "Hey Asha, start recording"
-            if has_start_command(words[wake_end:]):
-                self._set_command("start")
-                self.start_recording("voice")
+            start = find_command(tokens, "start", after=wake + 1)
+            if start >= 0:
+                self._begin_voice_recording(tokens[start])
             return
 
-        if awake and has_start_command(words):
-            self._set_command("start")
-            logger.info("Start command heard: %r", text)
-            self.start_recording("voice")
+        if awake:
+            start = find_command(tokens, "start")
+            if start >= 0:
+                self._begin_voice_recording(tokens[start])
+
+    def _begin_voice_recording(self, last_word: Token) -> None:
+        self._set_command("start")
+        logger.info("Start command heard")
+        self.start_recording("voice", trim_from_frame=last_word.end + int(START_TRIM_SECONDS * SAMPLE_RATE))
 
     def _set_command(self, command: str) -> None:
         with self._lock:
@@ -501,11 +582,14 @@ def _wav_duration(path: Path) -> float:
 
 
 def _truncate_wav(path: Path, keep_frames: int) -> None:
+    """Cut a mono 16-bit WAV to ``keep_frames`` samples in place (no rewrite of the audio)."""
     with wave.open(str(path), "rb") as reader:
-        params = reader.getparams()
-        data = reader.readframes(min(keep_frames, reader.getnframes()))
-    tmp = path.with_suffix(".tmp")
-    with wave.open(str(tmp), "wb") as writer:
-        writer.setparams(params)
-        writer.writeframes(data)
-    os.replace(tmp, path)
+        keep = min(keep_frames, reader.getnframes())
+        width = reader.getsampwidth() * reader.getnchannels()
+    data_bytes = keep * width
+    with open(path, "r+b") as handle:
+        handle.truncate(44 + data_bytes)       # the stdlib writer emits a canonical 44-byte header
+        handle.seek(4)
+        handle.write((36 + data_bytes).to_bytes(4, "little"))
+        handle.seek(40)
+        handle.write(data_bytes.to_bytes(4, "little"))

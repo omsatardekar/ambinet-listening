@@ -1,93 +1,150 @@
 import wave
 
-import pytest
-
 from backend.app.wakeword import (
     FRAME_SAMPLES,
     SAMPLE_RATE,
+    START_TRIM_SECONDS,
+    STOP_TRIM_SECONDS,
+    Token,
     WakeWordService,
-    contains_wake_word,
-    has_start_command,
-    has_stop_command,
-    normalize_words,
+    find_command,
+    find_wake,
+    tokens_from_result,
 )
 
-
-@pytest.mark.parametrize(
-    "text",
-    ["Hey Asha.", "Hey Aisha", "Hiya Shah.", "Hey Shah", "Okay, Asha", "Asha", "Hello 1 2 Hey Asha"],
-)
-def test_wake_phrase_variants_are_recognised(text):
-    assert contains_wake_word(normalize_words(text)) >= 0
+F = FRAME_SAMPLES
 
 
-@pytest.mark.parametrize(
-    "text",
-    ["Asia, can you check the dose", "the patient has asthma", "we should stop taking the tablets"],
-)
-def test_ordinary_speech_does_not_wake_the_assistant(text):
-    assert contains_wake_word(normalize_words(text)) < 0
+def _tokens(*items):
+    """(word, start_frame_index, end_frame_index) in units of audio frames."""
+    return [Token(word, start * F, end * F) for word, start, end in items]
 
 
-def test_start_and_stop_commands_are_matched_in_context():
-    assert has_start_command(normalize_words("Hey Asha, start recording"))
-    assert has_stop_command(normalize_words("hey asha stop recording"))
-    assert has_stop_command(normalize_words("Stop the recording."))
-    assert not has_start_command(normalize_words("I started recording my notes last week"))
-
-
-def test_start_before_wake_word_is_ignored(tmp_path):
+def _service(tmp_path):
     service = WakeWordService(tmp_path / "offline_recordings")
     service._available = True
-
-    service._handle_text("Start recording.", start_frame=0)
-
-    assert service.snapshot()["state"] == "listening"
-    assert service.snapshot()["current"] is None
+    return service
 
 
-def test_wake_then_start_then_stop_saves_one_wav(tmp_path):
-    service = WakeWordService(tmp_path / "offline_recordings")
-    service._available = True
-
-    service._handle_text("Hey Asha", start_frame=0)
-    assert service.snapshot()["state"] == "awake"
-
-    service._handle_text("start recording", start_frame=0)
-    assert service.snapshot()["state"] == "recording"
-
-    frame = bytes(FRAME_SAMPLES * 2)
-    for _ in range(8):
-        service._writer.writeframesraw(frame)
-        service._total_frames += FRAME_SAMPLES
-
-    service._handle_text("Hey Asha, stop recording", start_frame=service._total_frames)
-
-    snapshot = service.snapshot()
-    assert snapshot["state"] == "listening"
-    saved = snapshot["recordings"][0]
-    wav_path = service.audio_path(saved["session_id"])
-    assert wav_path is not None
-    assert wav_path.parent == tmp_path / "offline_recordings"
-    with wave.open(str(wav_path), "rb") as audio:
-        assert (audio.getnchannels(), audio.getsampwidth(), audio.getframerate()) == (1, 2, SAMPLE_RATE)
-        assert audio.getnframes() == FRAME_SAMPLES * 8
+def _feed_frames(service, count):
+    frame = bytes(F * 2)
+    for _ in range(count):
+        start = service._total_frames
+        service._total_frames += F
+        service._ring.append((start, frame))
+        if service._writer is not None:
+            service._writer.writeframesraw(frame)
 
 
-def test_stop_trims_audio_after_the_stop_phrase(tmp_path):
-    service = WakeWordService(tmp_path / "offline_recordings")
-    service._available = True
-    service._handle_text("Hey Asha", start_frame=0)
-    service._handle_text("start recording", start_frame=0)
-
-    frame = bytes(FRAME_SAMPLES * 2)
-    for _ in range(10):
-        service._writer.writeframesraw(frame)
-        service._total_frames += FRAME_SAMPLES
-
-    # The stop phrase began after 4 frames; everything from there on is dropped.
-    service._handle_text("stop recording", start_frame=4 * FRAME_SAMPLES)
-
+def _wav_frames(service):
     saved = service.snapshot()["recordings"][0]
     with wave.open(str(service.audio_path(saved["session_id"])), "rb") as audio:
-        assert audio.getnframes() == 4 * FRAME_SAMPLES
+        assert (audio.getnchannels(), audio.getsampwidth(), audio.getframerate()) == (1, 2, SAMPLE_RATE)
+        return audio.getnframes()
+
+
+def test_tokens_skip_unknown_filler_and_use_absolute_frames():
+    result = {"result": [
+        {"word": "[unk]", "start": 0.0, "end": 0.1, "conf": 1.0},
+        {"word": "hey", "start": 0.5, "end": 0.7, "conf": 0.9},
+        {"word": "asha", "start": 0.7, "end": 1.0, "conf": 1.0},
+    ]}
+    tokens = tokens_from_result(result, offset_frame=1000)
+    assert [t.word for t in tokens] == ["hey", "asha"]
+    assert tokens[0].start == 1000 + 8000
+    assert find_wake(tokens) == 1
+
+
+def test_wake_needs_hey_and_enough_confidence():
+    assert find_wake(_tokens(("asha", 0, 1))) == -1
+    assert find_wake(_tokens(("hey", 0, 1), ("asha", 1, 2))) == 1
+    weak = [Token("hey", 0, 1, 0.9), Token("asha", 1, 2, 0.2)]
+    assert find_wake(weak) == -1
+
+
+def test_commands_need_the_verb_directly_before_recording():
+    tokens = _tokens(("start", 0, 1), ("recording", 1, 2), ("stop", 3, 4), ("recording", 4, 5))
+    assert find_command(tokens, "start") == 1
+    assert find_command(tokens, "stop") == 3
+    assert find_command(_tokens(("recording", 0, 1), ("start", 1, 2)), "start") == -1
+
+
+def test_start_recording_without_hey_asha_is_ignored(tmp_path):
+    service = _service(tmp_path)
+    service._handle_tokens(_tokens(("start", 0, 1), ("recording", 1, 2)))
+    assert service.snapshot()["state"] == "listening"
+
+
+def test_hey_asha_wakes_and_then_start_recording_starts(tmp_path):
+    service = _service(tmp_path)
+    service._handle_tokens(_tokens(("hey", 0, 1), ("asha", 1, 2)))
+    assert service.snapshot()["state"] == "awake"
+    service._handle_tokens(_tokens(("start", 10, 11), ("recording", 11, 12)))
+    assert service.snapshot()["state"] == "recording"
+
+
+def test_hey_asha_start_recording_in_one_breath(tmp_path):
+    service = _service(tmp_path)
+    service._handle_tokens(_tokens(("hey", 0, 1), ("asha", 1, 2), ("start", 3, 4), ("recording", 4, 5)))
+    assert service.snapshot()["state"] == "recording"
+
+
+def test_wake_window_expiry_requires_hey_asha_again(tmp_path):
+    service = _service(tmp_path)
+    service._handle_tokens(_tokens(("hey", 0, 1), ("asha", 1, 2)))
+    service._armed_until = 0.0
+    service._handle_tokens(_tokens(("start", 10, 11), ("recording", 11, 12)))
+    assert service.snapshot()["state"] != "recording"
+
+
+def test_saved_wav_starts_after_the_start_phrase(tmp_path):
+    service = _service(tmp_path)
+    _feed_frames(service, 20)
+    # "start recording" ended at frame 10; the file must begin after the trim margin.
+    service._handle_tokens(_tokens(("hey", 2, 4), ("asha", 4, 6), ("start", 7, 9), ("recording", 9, 10)))
+    _feed_frames(service, 6)
+    service._stop_cut = None
+    service.stop_recording("button")
+    first = 10 * F + int(START_TRIM_SECONDS * SAMPLE_RATE)
+    first = -(-first // F)  # first whole frame at or after the trim point
+    assert _wav_frames(service) == (26 - first) * F
+
+
+def test_stop_needs_hey_asha_and_cuts_before_it(tmp_path):
+    service = _service(tmp_path)
+    service._handle_tokens(_tokens(("hey", 0, 1), ("asha", 1, 2), ("start", 2, 3), ("recording", 3, 4)))
+    start_at = service._session_start_frame
+    _feed_frames(service, 30)
+
+    # "stop recording" alone must not stop the recording
+    service._handle_tokens(_tokens(("stop", 40, 41), ("recording", 41, 42)))
+    assert service.snapshot()["state"] == "recording"
+
+    # "Hey Asha, stop recording": hey begins at frame 20
+    service._handle_tokens(_tokens(("hey", 20, 21), ("asha", 21, 22), ("stop", 23, 24), ("recording", 24, 25)))
+    assert service.snapshot()["state"] == "listening"
+    cut = 20 * F - int(STOP_TRIM_SECONDS * SAMPLE_RATE)
+    assert _wav_frames(service) == cut - start_at
+
+
+def test_hey_asha_and_stop_recording_as_two_phrases(tmp_path):
+    service = _service(tmp_path)
+    service._handle_tokens(_tokens(("hey", 0, 1), ("asha", 1, 2), ("start", 2, 3), ("recording", 3, 4)))
+    start_at = service._session_start_frame
+    _feed_frames(service, 30)
+
+    service._handle_tokens(_tokens(("hey", 20, 21), ("asha", 21, 22)))
+    assert service.snapshot()["state"] == "recording"
+    assert service.snapshot()["stop_armed"]
+    service._handle_tokens(_tokens(("stop", 30, 31), ("recording", 31, 32)))
+
+    assert service.snapshot()["state"] == "listening"
+    assert _wav_frames(service) == 20 * F - int(STOP_TRIM_SECONDS * SAMPLE_RATE) - start_at
+
+
+def test_button_start_and_stop_keep_all_audio(tmp_path):
+    service = _service(tmp_path)
+    assert service.start_recording("button")
+    _feed_frames(service, 8)
+    service.stop_recording("button")
+    assert _wav_frames(service) == 8 * F
