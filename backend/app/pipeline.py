@@ -214,6 +214,8 @@ def run_pipeline(
                     metadata=metadata,
                     content_settings=_AUDIO_CONTENT,
                     progress_hook=audio_upload_progress,
+                    max_concurrency=2,
+                    timeout=120,
                 )
 
         progress.update(
@@ -420,7 +422,7 @@ def run_pipeline(
                 retry_base_seconds=process_config["retry_base"],
             )
             instructions = transcript_processing.load_instructions(
-                PROJECT_ROOT / "prompts" / "agent_instructions.md"
+                transcript_processing.AGENT_PROMPT_PATH
             )
             agent.ensure_agent(instructions)
             progress.update(
@@ -584,7 +586,7 @@ def run_pipeline(
             type(exc).__name__,
             safe_detail,
         )
-        if audio_blob is not None:
+        if audio_blob is not None and current_stage != "audio_upload":
             try:
                 _set_pipeline_status(audio_blob, "failed")
             except Exception as metadata_error:

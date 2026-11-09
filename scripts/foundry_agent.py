@@ -104,6 +104,18 @@ class FoundryAgent:
         existing = self._request("GET", agent_url)
 
         if existing.status_code == 200:
+            # Publish a new agent version automatically when the instruction file
+            # changed since the saved latest version (for example v1 -> v2).
+            saved = None
+            try:
+                latest = (existing.json().get("versions") or {}).get("latest") or {}
+                saved = (latest.get("definition") or {}).get("instructions")
+            except (ValueError, AttributeError):
+                saved = None
+            if isinstance(saved, str) and _same_text(saved, instructions) is False:
+                force_update = True
+                print("Agent instructions changed; creating a new agent version.")
+
             if force_update:
                 version_url = (
                     f"{self.endpoint}/agents/{self.agent_name}/versions"
@@ -336,12 +348,26 @@ of an object or string. If uncertain, use UNKNOWN and NEEDS_REVIEW
 rather than writing lengthy explanations.
 """
 
+        task = (
+            "Conservatively reconstruct this complete clinical encounter. "
+            "Preserve source turns and boundaries, assign speakers and roles "
+            "only where supported, and return the required compact JSON."
+        )
+        if PROMPT_V2_MARKER in instructions:
+            compact_output_rules = compact_output_rules.replace(
+                _PRESERVE_TURNS_V1, _PRESERVE_TURNS_V2
+            )
+            task = (
+                "Reconstruct this complete clinical encounter. Decide the speaker of "
+                "every segment first, then combine directly consecutive segments of "
+                "the same speaker into one utterance, repair stray fragments, convert "
+                "dictated symbols and numbers to clinical notation without changing "
+                "values, never merge different speakers, and return the required "
+                "compact JSON."
+            )
+
         user_payload = {
-            "task": (
-                "Conservatively reconstruct this complete clinical encounter. "
-                "Preserve source turns and boundaries, assign speakers and roles "
-                "only where supported, and return the required compact JSON."
-            ),
+            "task": task,
             "output_rules": compact_output_rules,
             "reconstruction_instructions": instructions,
             "encounter": encounter_payload,
@@ -421,6 +447,43 @@ rather than writing lengthy explanations.
         result["model_deployment"] = body.get("model", self.model)
 
         return result
+
+
+PROMPT_V2_MARKER = "prompt-version: 2"
+
+
+def _same_text(left: str, right: str) -> bool:
+    def normalize(value: str) -> str:
+        return "\n".join(line.rstrip() for line in value.replace("\r\n", "\n").strip().split("\n"))
+
+    return normalize(left) == normalize(right)
+
+_PRESERVE_TURNS_V1 = """PRESERVE SOURCE TURNS:
+- Default to one output utterance per input source segment.
+- Never merge source segments with different non-empty speaker_id values.
+- Never merge a question and its response, a handoff, a correction, or two
+  distinct conversational turns, even when they discuss the same subject.
+- Merge fragments only when one uninterrupted speaker turn is strongly
+  supported. If uncertain, keep segments separate and mark attribution for review.
+- Do not infer extra participants or roles merely because diarization has few IDs
+  or because a clinic is expected to have a doctor and nurse."""
+
+_PRESERVE_TURNS_V2 = """SPEAKER TURNS (v2 rules, these replace any earlier one-utterance-per-segment default):
+- First decide the speaker of every source segment from the whole conversation.
+- Directly consecutive segments of the SAME speaker become ONE utterance. List every
+  merged index in source_segment_indices (ascending, contiguous) and use
+  reconstruction_type MERGED_FRAGMENTS. Keep all of their text, cleaned and joined.
+- A stray one-to-three-word fragment (for example "We.") is attached to the
+  neighbouring segment it continues, using that segment's speaker even when the
+  fragment's source speaker_id differs. Repair the punctuation.
+- Never merge different speakers: questions and answers, handoffs, interpreter
+  relays, corrections, interruptions and backchannels from another speaker stay
+  separate utterances. Never merge across another speaker's segment.
+- Convert dictated symbols and spoken numbers to clinical notation without changing
+  any value ("slash" -> "/", "one twenty over eighty" -> "120/80", "ninety eight
+  point six" -> "98.6"). Do not add words, units or certainty that were not said.
+- Do not infer extra participants or roles merely because diarization has few IDs
+  or because a clinic is expected to have a doctor and nurse."""
 
 
 def load_instructions(path: str | Path) -> str:

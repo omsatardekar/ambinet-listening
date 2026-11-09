@@ -190,7 +190,7 @@ frontend/src/       React + Vite interface (App.tsx, VoiceAssistant.tsx for hand
 models/             Offline voice models, included in the repository (no download needed)
 offline_recordings/ Your saved recordings (git-ignored, may contain sensitive audio)
 scripts/            Transcription and reconstruction steps used by the pipeline
-prompts/            Instructions for the reconstruction agent
+prompts/            Reconstruction agent instructions (agent_instructions.md = v1, agent_instructions_v2.md = current)
 tests/              pytest suite
 docs/               architecture.md and output_schema.md
 start_demo.ps1      One-command launcher for both services

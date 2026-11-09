@@ -183,7 +183,19 @@ def build_storage_clients(cfg):
         "EndpointSuffix=core.windows.net"
     )
 
-    service = BlobServiceClient.from_connection_string(connection_string)
+    # Upload in small blocks instead of one large request. Slow or proxied
+    # networks time out on a single multi-megabyte PUT ("write operation timed
+    # out"); small blocks each finish quickly and are retried individually.
+    service = BlobServiceClient.from_connection_string(
+        connection_string,
+        max_single_put_size=1024 * 1024,
+        max_block_size=1024 * 1024,
+        connection_timeout=30,
+        read_timeout=120,
+        retry_total=6,
+        retry_connect=6,
+        retry_read=6,
+    )
 
     input_container = service.get_container_client(cfg["input"])
     output_container = service.get_container_client(cfg["output"])
