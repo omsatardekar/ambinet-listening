@@ -1,4 +1,9 @@
-import { ChangeEvent, DragEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ChangeEvent, DragEvent, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, animate, motion, type Variants } from "framer-motion";
+import {
+  Activity, ArrowRight, AudioLines, Check, ClipboardList, FileText, Info, Mic, Play, RotateCcw,
+  ShieldCheck, Sparkles, Stethoscope, TriangleAlert, UploadCloud, Users,
+} from "lucide-react";
 import VoiceAssistant, { type VoiceStatus } from "./VoiceAssistant";
 
 type StageKey =
@@ -86,13 +91,13 @@ const INITIAL_STAGES: Record<StageKey, StageState> = {
 };
 
 const ROLE_STYLES: Record<string, string> = {
-  DOCTOR: "bg-blue-50 text-blue-800 ring-blue-100",
-  PATIENT: "bg-teal-50 text-teal-800 ring-teal-100",
-  NURSE: "bg-violet-50 text-violet-800 ring-violet-100",
-  CAREGIVER: "bg-amber-50 text-amber-800 ring-amber-100",
-  FAMILY_MEMBER: "bg-orange-50 text-orange-800 ring-orange-100",
-  PHARMACIST: "bg-cyan-50 text-cyan-800 ring-cyan-100",
-  UNKNOWN: "bg-slate-100 text-slate-700 ring-slate-200",
+  DOCTOR: "bg-cyan-400/10 text-cyan-200 ring-cyan-400/30",
+  PATIENT: "bg-violet-400/10 text-violet-200 ring-violet-400/30",
+  NURSE: "bg-emerald-400/10 text-emerald-200 ring-emerald-400/30",
+  CAREGIVER: "bg-amber-400/10 text-amber-200 ring-amber-400/30",
+  FAMILY_MEMBER: "bg-orange-400/10 text-orange-200 ring-orange-400/30",
+  PHARMACIST: "bg-sky-400/10 text-sky-200 ring-sky-400/30",
+  UNKNOWN: "bg-slate-400/10 text-slate-300 ring-slate-400/30",
 };
 
 const SPEECH_PROVIDER_OPTIONS: Array<{
@@ -137,7 +142,7 @@ function App() {
   const [stages, setStages] = useState(INITIAL_STAGES);
   const [events, setEvents] = useState<ProgressEvent[]>([]);
   const [percent, setPercent] = useState(0);
-  const [currentOperation, setCurrentOperation] = useState("Select a WAV recording to begin.");
+  const [currentOperation, setCurrentOperation] = useState("Select a recording to begin.");
   const [transcript, setTranscript] = useState<FinalTranscript | null>(null);
   const [startedAt, setStartedAt] = useState<number | null>(null);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -225,7 +230,7 @@ function App() {
     setTranscript(null);
     if (!file.name.toLowerCase().endsWith(".wav")) {
       setSelectedFile(null);
-      setUploadError("Only WAV recordings are supported by this pipeline.");
+      setUploadError("Please choose a WAV recording.");
       return;
     }
     setSelectedFile(file);
@@ -323,7 +328,7 @@ function App() {
     setStages(INITIAL_STAGES);
     setEvents([]);
     setPercent(0);
-    setCurrentOperation("Select a WAV recording to begin.");
+    setCurrentOperation("Select a recording to begin.");
     setTranscript(null);
     setStartedAt(null);
     setElapsedSeconds(0);
@@ -373,19 +378,33 @@ function App() {
   const stageIcon = (key: StageKey) => {
     if (stages[key].status === "completed") return <Icon name="check" />;
     if (stages[key].status === "failed") return <Icon name="alert" />;
-    if (stages[key].status === "in_progress") return <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-teal" />;
+    if (stages[key].status === "in_progress") return <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-aqua" />;
     return <Icon name={key === "audio_upload" ? "upload" : key === "speech_transcription" ? "wave" : key === "llm_reconstruction" ? "users" : "file"} />;
   };
 
+  const statusLabel =
+    runStatus === "failed" ? "Needs attention"
+      : runStatus === "completed" ? "Transcript ready"
+        : processing ? "In progress" : "Ready when you are";
+  const statusTone =
+    runStatus === "failed" ? "border-rose-400/40 bg-rose-400/10 text-rose-200"
+      : runStatus === "completed" ? "border-mint/40 bg-mint/10 text-emerald-200"
+        : processing ? "border-aqua/40 bg-aqua/10 text-cyan-100" : "border-white/10 bg-white/5 text-slate-300";
+  const journeyDone = runStatus === "completed" ? 2 : processing ? 1 : 0;
+
   return (
-    <div className="app-shell min-h-screen text-ink">
-      <header className="app-header">
-        <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-5 px-5 py-4 sm:px-8">
+    <div className="relative min-h-screen overflow-x-hidden bg-night font-sans text-slate-100">
+      <Backdrop />
+
+      <header className="sticky top-0 z-40 border-b border-white/[0.07] bg-night/60 backdrop-blur-2xl">
+        <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-4 px-4 py-3.5 sm:px-8">
           <div className="flex items-center gap-3">
-            <div className="brand-mark"><Icon name="wave" className="h-5 w-5" /></div>
-            <div>
-              <div className="text-[15px] font-bold tracking-[-0.03em] text-[#17314b]">Ambient Clinical</div>
-              <div className="mt-0.5 text-[11px] font-medium tracking-wide text-muted">LISTENING PLATFORM</div>
+            <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-aqua via-iris to-rose2 shadow-glow">
+              <Icon name="wave" className="h-5 w-5 text-white" />
+            </div>
+            <div className="leading-tight">
+              <div className="font-display text-[15px] font-semibold tracking-tight text-white">Ambient Clinical</div>
+              <div className="text-[10px] font-medium uppercase tracking-[0.22em] text-slate-400">Listening platform</div>
             </div>
           </div>
           <ConnectionPill
@@ -395,443 +414,435 @@ function App() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1440px] px-5 pb-12 pt-8 sm:px-8 lg:pt-12">
-        <section className="mb-8 grid items-center gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:gap-12">
-          <div className="py-2">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d6e8e4] bg-white/80 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#287a72]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#39a995]" />
-              Ambient clinical listening platform
-            </div>
-            <h1 className="max-w-[620px] text-[38px] font-semibold leading-[1.08] tracking-[-0.055em] text-[#17314b] sm:text-[50px]">
-              One platform for <span className="text-[#267c74]">connected clinical workflows.</span>
-            </h1>
-            <p className="mt-5 max-w-[530px] text-[15px] leading-7 text-[#65788a]">
-              From encounter audio and speaker-aware transcripts to structured clinical context, documentation, and clinician review.
-            </p>
-            <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3 text-xs font-medium text-[#526b7a]">
-              <span className="inline-flex items-center gap-2"><Icon name="wave" className="h-4 w-4 text-[#38877e]" /> Conversation intelligence</span>
-              <span className="inline-flex items-center gap-2"><Icon name="users" className="h-4 w-4 text-[#38877e]" /> Clinician-led review</span>
-            </div>
-          </div>
-
-          <section className="upload-card">
-            <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <p className="section-kicker">RECORDING & TRANSCRIPTION</p>
-                <h2 className="mt-1.5 text-[20px] font-semibold tracking-[-0.03em] text-[#17314b]">Start an encounter</h2>
-                <p className="mt-1.5 text-xs leading-5 text-muted">Upload a WAV recording to create the encounter transcript.</p>
-              </div>
-              <span className="file-format-badge">WAV AUDIO</span>
-            </div>
-
-            <input
-              ref={fileInput}
-              type="file"
-              accept=".wav,audio/wav"
-              className="hidden"
-              onChange={handleFileInput}
-              aria-label="Select WAV recording"
-            />
-            <div
-              onDragOver={(event) => { event.preventDefault(); setDragging(true); }}
-              onDragLeave={() => setDragging(false)}
-              onDrop={handleDrop}
-              className={`upload-dropzone ${dragging ? "drop-active" : ""}`}
+      <main className="relative mx-auto max-w-[1280px] px-4 pb-16 pt-10 sm:px-8 lg:pt-16">
+        {/* ───────── Hero ───────── */}
+        <section className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14">
+          <motion.div className="min-w-0" variants={stagger} initial="hidden" animate="show">
+            <motion.div variants={rise} className="chip border-aqua/30 bg-aqua/10 text-cyan-100">
+              <Sparkles className="h-3.5 w-3.5" /> Hands-free · Always listening
+            </motion.div>
+            <motion.h1
+              variants={rise}
+              className="mt-5 font-display text-[40px] font-semibold leading-[1.04] tracking-[-0.04em] text-white sm:text-[58px]"
             >
-              <div className="flex min-w-0 items-center gap-4">
-                <div className="upload-icon"><Icon name="upload" className="h-5 w-5" /></div>
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-[#17314b]">
-                    {selectedFile ? selectedFile.name : "Drop your audio recording here"}
-                  </p>
-                  <p className="mt-1 text-xs text-muted">
-                    {selectedFile
-                      ? `${formatBytes(selectedFile.size)} · ${formatDuration(audioDuration)}`
-                      : "WAV format · or choose a file from your device"}
+              Every consultation,<br />
+              <span className="gradient-text">turned into a clinical note.</span>
+            </motion.h1>
+            <motion.p variants={rise} className="mt-6 max-w-[560px] text-base leading-7 text-slate-400">
+              Just talk. Ambient Clinical captures the conversation, writes the transcript, picks out the
+              clinical details, and prepares the SOAP note — so you can stay with your patient.
+            </motion.p>
+            <motion.div variants={rise}>
+              <Journey done={journeyDone} active={processing} />
+            </motion.div>
+          </motion.div>
+
+          <motion.section
+            initial={{ opacity: 0, y: 30, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.2, 0.8, 0.2, 1] }}
+            className="relative min-w-0"
+          >
+            <div className="absolute -inset-px rounded-[28px] bg-gradient-to-br from-aqua/50 via-iris/30 to-rose2/40 opacity-60 blur-md" aria-hidden="true" />
+            <div className="glass relative !rounded-[28px] bg-panel/80 p-5 sm:p-7">
+              <div className="mb-5 flex items-start justify-between gap-4">
+                <div>
+                  <p className="kicker">New encounter</p>
+                  <h2 className="mt-1.5 font-display text-[22px] font-semibold tracking-tight text-white">Start with a recording</h2>
+                  <p className="mt-1.5 text-[13px] leading-5 text-slate-400">
+                    Upload a conversation to create the transcript and move it toward the final note.
                   </p>
                 </div>
+                <Equalizer active={processing} />
               </div>
-              <div className="mt-4 flex flex-wrap items-center gap-3 sm:mt-0">
-                {selectedFile && !processing && (
+
+              <input
+                ref={fileInput}
+                type="file"
+                accept=".wav,audio/wav"
+                className="hidden"
+                onChange={handleFileInput}
+                aria-label="Select recording"
+              />
+              <div
+                onDragOver={(event) => { event.preventDefault(); setDragging(true); }}
+                onDragLeave={() => setDragging(false)}
+                onDrop={handleDrop}
+                onClick={() => !processing && !selectedFile && fileInput.current?.click()}
+                className={`group relative flex cursor-pointer flex-col gap-4 overflow-hidden rounded-2xl border border-dashed p-5 transition-all duration-300 sm:flex-row sm:items-center sm:justify-between ${
+                  dragging
+                    ? "border-aqua bg-aqua/10 shadow-glow"
+                    : selectedFile
+                      ? "border-mint/40 bg-mint/[0.06]"
+                      : "border-white/15 bg-white/[0.03] hover:border-aqua/50 hover:bg-white/[0.06]"
+                }`}
+              >
+                <div className="flex min-w-0 items-center gap-4">
+                  <motion.div
+                    animate={dragging ? { scale: 1.15, y: -3 } : { scale: 1, y: 0 }}
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-aqua/25 to-iris/25 text-cyan-200 ring-1 ring-white/10"
+                  >
+                    <Icon name={selectedFile ? "file" : "upload"} className="h-5 w-5" />
+                  </motion.div>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-white">
+                      {selectedFile ? selectedFile.name : "Drop your recording here"}
+                    </p>
+                    <p className="mt-1 text-xs text-slate-400">
+                      {selectedFile
+                        ? `${formatBytes(selectedFile.size)} · ${formatDuration(audioDuration)}`
+                        : "WAV audio · or browse from your device"}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-2" onClick={(event) => event.stopPropagation()}>
+                  {selectedFile && !processing && (
+                    <button
+                      type="button"
+                      onClick={() => { setSelectedFile(null); setUploadError(null); }}
+                      className="btn-ghost"
+                      aria-label="Remove selected recording"
+                    >
+                      Remove
+                    </button>
+                  )}
                   <button
                     type="button"
-                    onClick={() => { setSelectedFile(null); setUploadError(null); }}
-                    className="quiet-button"
-                    aria-label="Remove selected recording"
+                    onClick={() => fileInput.current?.click()}
+                    disabled={processing}
+                    className="btn-ghost"
                   >
-                    Remove
+                    {selectedFile ? "Change file" : "Browse files"}
                   </button>
-                )}
-                <button
-                  type="button"
-                  onClick={() => fileInput.current?.click()}
-                  disabled={processing}
-                  className="secondary-button"
-                >
-                  {selectedFile ? "Change file" : "Browse files"}
-                </button>
+                </div>
               </div>
-            </div>
 
-            {uploadError && <p role="alert" className="mt-3 rounded-xl bg-rose-50 px-4 py-3 text-xs text-rose-700">{uploadError}</p>}
+              {uploadError && (
+                <p role="alert" className="mt-3 rounded-xl border border-rose-400/30 bg-rose-400/10 px-4 py-3 text-xs text-rose-200">{uploadError}</p>
+              )}
 
-            <fieldset className="provider-fieldset mt-5" disabled={processing}>
-              <legend className="provider-legend">Choose transcription approach</legend>
-              <div className="provider-options">
-                {SPEECH_PROVIDER_OPTIONS.map((option) => {
-                  const configured = Boolean(speechProviders[option.id]?.configured);
-                  return (
-                    <label
-                      key={option.id}
-                      className={`provider-option ${
-                        speechProvider === option.id ? "provider-option-selected" : ""
-                      } ${!configured ? "provider-option-unavailable" : ""}`}
-                    >
-                      <input
-                        type="radio"
-                        name="speech-provider"
-                        value={option.id}
-                        checked={speechProvider === option.id}
-                        disabled={!configured}
-                        onChange={() => setSpeechProvider(option.id)}
-                      />
-                      <span className="provider-radio" aria-hidden="true" />
-                      <span className="provider-copy">
-                        <span className="provider-heading">
-                          <span className="provider-title">{option.title}</span>
-                          <span className="provider-badge">
-                            {configured ? option.subtitle : "Configuration needed"}
+              <fieldset className="mt-5 min-w-0 border-0 p-0" disabled={processing}>
+                <legend className="mb-2.5 p-0 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+                  Transcription style
+                </legend>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {SPEECH_PROVIDER_OPTIONS.map((option) => {
+                    const configured = Boolean(speechProviders[option.id]?.configured);
+                    const selected = speechProvider === option.id;
+                    return (
+                      <label
+                        key={option.id}
+                        className={`relative flex cursor-pointer gap-3 rounded-2xl border p-4 transition-all duration-300 ${
+                          selected
+                            ? "border-aqua/60 bg-aqua/[0.09] shadow-[0_0_32px_-10px_rgba(34,211,238,0.6)]"
+                            : "border-white/10 bg-white/[0.03] hover:border-white/25"
+                        } ${!configured ? "cursor-not-allowed opacity-45" : ""}`}
+                      >
+                        <input
+                          type="radio"
+                          name="speech-provider"
+                          value={option.id}
+                          checked={selected}
+                          disabled={!configured}
+                          onChange={() => setSpeechProvider(option.id)}
+                          className="sr-only"
+                        />
+                        <span
+                          aria-hidden="true"
+                          className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition ${
+                            selected ? "border-aqua" : "border-slate-500"
+                          }`}
+                        >
+                          <span className={`h-2 w-2 rounded-full bg-aqua transition ${selected ? "scale-100" : "scale-0"}`} />
+                        </span>
+                        <span className="min-w-0">
+                          <span className="block text-[13px] font-semibold text-white">{option.title}</span>
+                          <span className="mt-0.5 block text-[11px] leading-4 text-slate-400">
+                            {configured ? option.description : "Currently unavailable"}
                           </span>
                         </span>
-                        <span className="provider-description">{option.description}</span>
-                        {!configured && (
-                          <span className="provider-setup">
-                            This approach is currently unavailable.
-                          </span>
-                        )}
-                      </span>
-                    </label>
-                  );
-                })}
+                      </label>
+                    );
+                  })}
+                </div>
+                {speechProvider === "foundry_fast" && (
+                  <p className="mt-3 text-[11px] leading-5 text-slate-500">Recordings up to 250 MB are supported with this style.</p>
+                )}
+              </fieldset>
+
+              <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+                <div className="flex min-w-0 items-center gap-2 text-[11px] text-slate-500">
+                  <Icon name="shield" className="h-4 w-4 shrink-0 text-mint" />
+                  <span>Private and secure</span>
+                </div>
+                {runStatus === "completed" || runStatus === "failed" ? (
+                  <button type="button" onClick={startAnother} className="btn-primary">
+                    <Icon name="refresh" /> New recording
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={startProcessing}
+                    disabled={!selectedFile || processing || !backendOnline || !azureConfigured || !selectedProviderConfigured}
+                    className="btn-primary"
+                  >
+                    {processing
+                      ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-night/30 border-t-night" />
+                      : <Icon name="play" />}
+                    {processing ? "Working on it…" : "Create transcript"}
+                    {!processing && <Icon name="arrow" className="h-4 w-4" />}
+                  </button>
+                )}
               </div>
-              {speechProvider === "foundry_fast" && (
-                <p className="provider-footnote">
-                  Fast transcription accepts WAV files smaller than 250 MB. Transcription,
-                  speaker structuring, and final review output continue through the shared workflow.
+
+              {backendOnline && (!azureConfigured || !selectedProviderConfigured) && (
+                <p role="status" className="mt-3 rounded-xl border border-amber-300/30 bg-amber-300/10 px-4 py-3 text-xs leading-5 text-amber-100">
+                  Transcription is not available for this workspace right now. Please contact your administrator.
                 </p>
               )}
-            </fieldset>
-
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex min-w-0 items-center gap-2 text-[11px] text-[#738495]">
-                <Icon name="shield" className="h-4 w-4 shrink-0 text-[#39877d]" />
-                <span>Recording handled by your configured clinical workflow.</span>
-              </div>
-              {runStatus === "completed" || runStatus === "failed" ? (
-                <button type="button" onClick={startAnother} className="primary-button">
-                  <Icon name="refresh" />
-                  New recording
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={startProcessing}
-                  disabled={!selectedFile || processing || !backendOnline || !azureConfigured || !selectedProviderConfigured}
-                  className="primary-button disabled:cursor-not-allowed disabled:opacity-45"
-                >
-                  {processing
-                    ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-                    : <Icon name="play" />}
-                  {processing ? "Processing…" : "Create transcript"}
-                  {!processing && <Icon name="arrow" className="h-4 w-4" />}
-                </button>
+              {!backendOnline && (
+                <p role="status" className="mt-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-xs leading-5 text-slate-300">
+                  The workspace is offline. Start the service, then refresh this page.
+                </p>
               )}
             </div>
-
-            {backendOnline && (!azureConfigured || !selectedProviderConfigured) && (
-              <p role="status" className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-900">
-                Transcription is not available for this workspace. Contact your administrator for assistance.
-              </p>
-            )}
-            {!backendOnline && (
-              <p role="status" className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-5 text-slate-600">
-                The workspace is offline. Start the demo service, then refresh this page.
-              </p>
-            )}
-          </section>
+          </motion.section>
         </section>
 
-        <section className="platform-map mb-6" aria-labelledby="platform-map-title">
-          <div className="platform-map-header">
-            <div>
-              <p className="section-kicker">PLATFORM ARCHITECTURE</p>
-              <h2 id="platform-map-title" className="mt-1 text-[17px] font-semibold tracking-[-0.02em] text-[#17314b]">
-                A connected path from conversation to care
-              </h2>
-            </div>
-            <span className="platform-map-note">Current demo capabilities are identified below</span>
-          </div>
-          <div className="platform-map-grid">
-            <PlatformModule
-              number="01"
-              title="Capture & transcribe"
-              detail="Secure audio intake, speech recognition, and speaker diarization."
-              status="Current module"
-              active
-              icon="wave"
-            />
-            <PlatformModule
-              number="02"
-              title="Structure conversation"
-              detail="Role-aware transcript reconstruction with traceable source segments."
-              status="In this workflow"
-              active
-              icon="users"
-            />
-            <PlatformModule
-              number="03"
-              title="Clinical intelligence"
-              detail="Clinical entities, evidence, uncertainty, and follow-up extraction."
-              status="Platform architecture"
-              icon="shield"
-            />
-            <PlatformModule
-              number="04"
-              title="Documentation & review"
-              detail="Grounded SOAP drafts with clinician review and approval."
-              status="Platform architecture"
-              icon="file"
-            />
-            <PlatformModule
-              number="05"
-              title="Care team workspace"
-              detail="Encounter records, assigned access, and operational oversight."
-              status="Platform architecture"
-              icon="activity"
-            />
-          </div>
-        </section>
-
-        <section className="workflow-card mb-6">
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="section-kicker">YOUR WORKFLOW</p>
-              <h2 className="mt-1 text-[17px] font-semibold tracking-[-0.02em] text-[#17314b]">This encounter’s processing path</h2>
-            </div>
-            <span className={`status-badge ${
-              runStatus === "failed" ? "status-error" :
-              runStatus === "completed" ? "status-complete" :
-              processing ? "status-active" : "status-idle"
-            }`}>
-              {runStatus === "failed" ? "Needs attention" : runStatus === "completed" ? "Draft is ready" : processing ? "In progress" : "Ready when you are"}
-            </span>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            {STAGE_ORDER.map((key, index) => {
-              const stage = stages[key];
-              return (
-                <div key={key} className={`step-card ${
-                  stage.status === "in_progress" ? "step-active" :
-                  stage.status === "completed" ? "step-complete" :
-                  stage.status === "failed" ? "step-error" : ""
-                }`}>
-                  <div className="flex items-center justify-between">
-                    <span className="step-number">{String(index + 1).padStart(2, "0")}</span>
-                    <span className={`step-icon ${
-                      stage.status === "completed" ? "step-icon-complete" :
-                      stage.status === "failed" ? "step-icon-error" :
-                      stage.status === "in_progress" ? "step-icon-active" : ""
-                    }`}>{stageIcon(key)}</span>
-                  </div>
-                  <div className="mt-4 text-[13px] font-semibold text-[#203e52]">{stage.label}</div>
-                  <div className="mt-1 text-[11px] text-[#7b8b98]">
-                    {stage.status === "waiting" ? "Up next" :
-                      stage.status === "in_progress" ? "In progress" :
-                        stage.status === "completed" ? "Complete" : "Needs attention"}
-                  </div>
+        {/* ───────── Hands-free voice ───────── */}
+        <Reveal className="mt-14">
+          <section className="glass overflow-hidden p-6 sm:p-9">
+            <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-[auto_minmax(0,1fr)]">
+              <AshaOrb />
+              <div>
+                <p className="kicker">Meet Asha</p>
+                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-white sm:text-[30px]">
+                  Your hands-free clinical assistant
+                </h2>
+                <p className="mt-2 max-w-[620px] text-sm leading-6 text-slate-400">
+                  No clicks, no typing. Asha only listens when you call her, and records only when you ask.
+                </p>
+                <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  <VoiceCue step="1" phrase="“Hey Asha”" hint="Wakes Asha up" tone="from-aqua/25" />
+                  <VoiceCue step="2" phrase="“Start recording”" hint="Begins the consultation" tone="from-mint/25" />
+                  <VoiceCue step="3" phrase="“Hey Asha, stop recording”" hint="Saves it instantly" tone="from-rose2/25" />
                 </div>
-              );
-            })}
-          </div>
-          <div className="mt-5">
-            <div className="mb-2 flex items-center justify-between gap-4 text-[11px]">
-              <span className="truncate font-medium text-[#627788]">{currentOperation}</span>
-              <span className="shrink-0 font-semibold tabular-nums text-[#264657]">{percent}%</span>
+              </div>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-[#eaf0f1]">
-              <div
-                className={`h-full rounded-full bg-gradient-to-r from-[#267c74] to-[#55b59e] transition-[width] duration-500 ${processing ? "indeterminate-track" : ""}`}
-                style={{ width: `${percent}%` }}
-              />
-            </div>
-          </div>
-        </section>
+          </section>
+        </Reveal>
 
-        <section className="activity-card">
-          <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[#e9eff0] px-5 py-5 sm:px-7">
-            <div>
+        {/* ───────── Workflow ───────── */}
+        <Reveal className="mt-6">
+          <section className="glass p-6 sm:p-8">
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="kicker">Your workflow</p>
+                <h2 className="mt-1.5 font-display text-xl font-semibold tracking-tight text-white">Progress of this encounter</h2>
+              </div>
+              <span className={`rounded-full border px-3.5 py-1.5 text-[11px] font-semibold ${statusTone}`}>{statusLabel}</span>
+            </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              {STAGE_ORDER.map((key, index) => {
+                const stage = stages[key];
+                const state = stage.status;
+                return (
+                  <motion.div
+                    key={key}
+                    layout
+                    className={`relative overflow-hidden rounded-2xl border p-4 transition-colors duration-500 ${
+                      state === "in_progress" ? "border-aqua/50 bg-aqua/[0.08]"
+                        : state === "completed" ? "border-mint/40 bg-mint/[0.07]"
+                          : state === "failed" ? "border-rose-400/40 bg-rose-400/[0.08]"
+                            : "border-white/10 bg-white/[0.03]"
+                    }`}
+                  >
+                    {state === "in_progress" && (
+                      <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqua to-transparent" aria-hidden="true" />
+                    )}
+                    <div className="flex items-center justify-between">
+                      <span className="font-display text-xs font-semibold tracking-widest text-slate-500">{String(index + 1).padStart(2, "0")}</span>
+                      <span className={`flex h-8 w-8 items-center justify-center rounded-xl ${
+                        state === "completed" ? "bg-mint/20 text-emerald-200"
+                          : state === "failed" ? "bg-rose-400/20 text-rose-200"
+                            : state === "in_progress" ? "bg-aqua/20 text-cyan-100" : "bg-white/5 text-slate-400"
+                      }`}>{stageIcon(key)}</span>
+                    </div>
+                    <div className="mt-4 text-[13px] font-semibold text-white">{stage.label}</div>
+                    <div className="mt-1 text-[11px] text-slate-400">
+                      {state === "waiting" ? "Up next" : state === "in_progress" ? "In progress" : state === "completed" ? "Complete" : "Needs attention"}
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+            <div className="mt-6">
+              <div className="mb-2 flex items-center justify-between gap-4 text-xs">
+                <span className="truncate font-medium text-slate-300">{currentOperation}</span>
+                <span className="shrink-0 font-display font-semibold tabular-nums text-white">{percent}%</span>
+              </div>
+              <div className="relative h-2.5 overflow-hidden rounded-full bg-white/[0.07]">
+                <motion.div
+                  className="relative h-full overflow-hidden rounded-full bg-gradient-to-r from-aqua via-mint to-iris"
+                  initial={false}
+                  animate={{ width: `${percent}%` }}
+                  transition={{ type: "spring", stiffness: 70, damping: 18 }}
+                >
+                  {processing && <span className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/50 to-transparent" />}
+                </motion.div>
+              </div>
+            </div>
+          </section>
+        </Reveal>
+
+        {/* ───────── Activity ───────── */}
+        <Reveal className="mt-6">
+          <section className="glass overflow-hidden">
+            <div className="flex flex-wrap items-start justify-between gap-4 border-b border-white/[0.07] px-6 py-5 sm:px-8">
               <div className="flex items-center gap-3">
-                <span className={`activity-mark ${processing ? "activity-mark-live" : ""}`}>
-                  {processing ? <span className="h-2 w-2 animate-pulse rounded-full bg-white" /> : <Icon name="activity" />}
+                <span className={`relative flex h-10 w-10 items-center justify-center rounded-2xl ${processing ? "bg-aqua/20 text-cyan-100" : "bg-white/5 text-slate-300"}`}>
+                  {processing && <span className="absolute inset-0 animate-ring rounded-2xl border border-aqua/60" />}
+                  <Icon name="activity" className="h-5 w-5" />
                 </span>
                 <div>
-                  <h2 className="text-[16px] font-semibold tracking-[-0.02em] text-[#17314b]">Processing activity</h2>
-                  <p className="mt-1 text-xs text-[#728391]">
-                    {processing
-                      ? "Your recording is being processed. Updates appear here as each step completes."
-                      : "A clear record of progress will appear here."}
+                  <h2 className="font-display text-base font-semibold tracking-tight text-white">Live activity</h2>
+                  <p className="mt-0.5 text-xs text-slate-400">
+                    {processing ? "Updates appear here as each step completes." : "Progress will appear here once you begin."}
                   </p>
                 </div>
               </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-right">
+                <div className="text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-500">Elapsed</div>
+                <div className="font-display text-[17px] font-semibold tabular-nums text-white">{formatDuration(elapsedSeconds)}</div>
+              </div>
             </div>
-            <div className="rounded-xl bg-[#f4f8f7] px-4 py-2 text-right">
-              <div className="text-[9px] font-bold uppercase tracking-[0.14em] text-[#7e909a]">Elapsed time</div>
-              <div className="mt-0.5 font-mono text-[15px] font-semibold tabular-nums text-[#244454]">{formatDuration(elapsedSeconds)}</div>
-            </div>
-          </div>
-          <div className="px-5 py-4 sm:px-7">
-            {currentStage && (
-              <div className="mb-4 flex items-center gap-2 text-xs">
-                <span className="font-medium text-[#84939d]">Current step</span>
-                <span className="text-slate-300">/</span>
-                <span className="font-semibold text-[#29485a]">{stages[currentStage].label}</span>
-              </div>
-            )}
-            {streamReconnecting && processing && (
-              <div className="mb-3 rounded-lg bg-amber-50 px-3 py-2 text-[11px] text-amber-800">
-                Reconnecting to progress updates. Processing continues in the background.
-              </div>
-            )}
-            {processing && elapsedSeconds >= 120 && (
-              <div role="status" className="mb-3 rounded-lg bg-[#f3f8f7] px-3 py-2 text-[11px] leading-5 text-[#466b68]">
-                This recording is taking longer than usual. The service is still checking for updates; please keep this page open.
-              </div>
-            )}
-            {backendError && (
-              <div role="alert" className="mb-3 rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-3 text-xs leading-5 text-rose-800">
-                <div className="mb-1 font-bold">We couldn’t finish this recording</div>
-                {backendError}
-              </div>
-            )}
-            <div className="scrollbar-subtle max-h-[300px] min-h-[150px] space-y-3 overflow-y-auto pr-2">
-              {events.length === 0 ? (
-                <div className="flex min-h-[150px] flex-col items-center justify-center text-center">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eff6f4] text-[#648d87]">
-                    <Icon name="activity" className="h-5 w-5" />
-                  </div>
-                  <p className="mt-3 text-xs font-semibold text-[#526c78]">Ready for your recording</p>
-                  <p className="mt-1 max-w-[300px] text-[11px] leading-5 text-[#8997a0]">Progress and completed steps will appear in this space.</p>
+            <div className="px-6 py-5 sm:px-8">
+              {streamReconnecting && processing && (
+                <div className="mb-3 rounded-xl bg-amber-300/10 px-3 py-2 text-[11px] text-amber-100">
+                  Reconnecting to live updates. Your recording keeps processing.
                 </div>
-              ) : events.map((event) => (
-                <div key={event.sequence} className="flex gap-3">
-                  <span className={`mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
-                    event.status === "failed" ? "bg-rose-100 text-rose-700" :
-                    event.status === "completed" ? "bg-[#e2f3ed] text-[#287c69]" : "bg-[#eaf2f8] text-[#4c7490]"
-                  }`}>
-                    {event.status === "completed" ? <Icon name="check" className="h-3 w-3" /> :
-                      event.status === "failed" ? <Icon name="alert" className="h-3 w-3" /> :
-                        <span className="h-1.5 w-1.5 rounded-full bg-current" />}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <div className="text-xs leading-5 text-[#334c5c]">{event.message}</div>
-                    <div className="mt-0.5 text-[10px] text-[#8997a0]">
-                      {event.stage ? event.stages[event.stage]?.label : "Workflow"} <span className="px-1">·</span> {formatClock(event.timestamp)}
+              )}
+              {processing && elapsedSeconds >= 120 && (
+                <div role="status" className="mb-3 rounded-xl bg-aqua/10 px-3 py-2 text-[11px] leading-5 text-cyan-100">
+                  This recording is taking a little longer than usual. Please keep this page open.
+                </div>
+              )}
+              {backendError && (
+                <div role="alert" className="mb-3 rounded-2xl border border-rose-400/30 bg-rose-400/10 px-4 py-3 text-xs leading-5 text-rose-100">
+                  <div className="mb-1 font-bold">We couldn’t finish this recording</div>
+                  {backendError}
+                </div>
+              )}
+              <div className="scrollbar-subtle max-h-[300px] min-h-[140px] space-y-3 overflow-y-auto pr-2">
+                {events.length === 0 ? (
+                  <div className="flex min-h-[140px] flex-col items-center justify-center text-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 text-slate-400">
+                      <Icon name="activity" className="h-5 w-5" />
                     </div>
+                    <p className="mt-3 text-xs font-semibold text-slate-300">Ready for your recording</p>
+                    <p className="mt-1 max-w-[300px] text-[11px] leading-5 text-slate-500">Each completed step shows up here in real time.</p>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="flex items-start gap-2 border-t border-[#e9eff0] bg-[#fafcfb] px-5 py-3.5 sm:px-7">
-            <Icon name="shield" className="mt-0.5 shrink-0 text-[#39877d]" />
-            <p className="text-[10px] leading-4 text-[#788891]">
-              This workspace supports documentation review. A clinician must verify the draft before clinical use.
-            </p>
-          </div>
-        </section>
-
-        {transcript && transcriptSummary && (
-          <section ref={transcriptPanel} className="panel mt-6 overflow-hidden">
-            <div className="flex flex-wrap items-start justify-between gap-4 border-b border-line px-5 py-5 sm:px-7">
-              <div>
-                <div className="flex items-center gap-2">
-                  <Icon name="file" className="text-teal" />
-                  <h2 className="text-lg font-bold tracking-[-0.02em] text-ink">Clinical conversation transcript</h2>
-                </div>
-                <p className="mt-1.5 text-xs text-muted">
-                  {transcript.encounter_id ? `Encounter ${transcript.encounter_id}` : "Reconstructed conversation"}
-                  {" · "}Draft for clinician review
-                </p>
+                ) : (
+                  <AnimatePresence initial={false}>
+                    {events.map((event) => (
+                      <motion.div
+                        key={event.sequence}
+                        initial={{ opacity: 0, x: -14 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="flex gap-3"
+                      >
+                        <span className={`mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
+                          event.status === "failed" ? "bg-rose-400/20 text-rose-200"
+                            : event.status === "completed" ? "bg-mint/20 text-emerald-200" : "bg-aqua/15 text-cyan-200"
+                        }`}>
+                          {event.status === "completed" ? <Icon name="check" className="h-3 w-3" />
+                            : event.status === "failed" ? <Icon name="alert" className="h-3 w-3" />
+                              : <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current" />}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="text-[13px] leading-5 text-slate-200">{event.message}</div>
+                          <div className="mt-0.5 text-[10px] text-slate-500">
+                            {event.stage ? event.stages[event.stage]?.label : "Workflow"} <span className="px-1">·</span> {formatClock(event.timestamp)}
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                )}
               </div>
-              <span className={`rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.08em] ${
-                transcriptSummary.needsReview ? "bg-amber-50 text-amber-800" : "bg-blue-50 text-blue-800"
-              }`}>
-                {transcriptSummary.needsReview ? "Review required" : "Draft · Not approved"}
-              </span>
             </div>
+          </section>
+        </Reveal>
 
-            {transcriptSummary.needsReview && (
-              <div className="mx-5 mt-5 flex gap-3 rounded-xl border border-amber-200 bg-amber-50/70 px-4 py-3 sm:mx-7">
-                <Icon name="alert" className="mt-0.5 shrink-0 text-amber-700" />
+        {/* ───────── Transcript ───────── */}
+        <AnimatePresence>
+          {transcript && transcriptSummary && (
+            <motion.section
+              ref={transcriptPanel}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
+              className="glass mt-6 overflow-hidden"
+            >
+              <div className="flex flex-wrap items-start justify-between gap-4 border-b border-white/[0.07] px-6 py-6 sm:px-8">
                 <div>
-                  <div className="text-xs font-bold text-amber-900">Clinician review required</div>
-                  <div className="mt-1 text-[11px] leading-5 text-amber-800">
-                    The final output contains review indicators. This transcript is not a diagnosis or clinician-approved record.
+                  <p className="kicker">Step 2 complete</p>
+                  <h2 className="mt-1.5 font-display text-2xl font-semibold tracking-tight text-white">Conversation transcript</h2>
+                  <p className="mt-1.5 text-xs text-slate-400">
+                    {transcript.encounter_id ? `Encounter ${transcript.encounter_id}` : "Reconstructed conversation"} · Draft for clinician review
+                  </p>
+                </div>
+                <span className={`rounded-full border px-3.5 py-1.5 text-[11px] font-semibold ${
+                  transcriptSummary.needsReview
+                    ? "border-amber-300/40 bg-amber-300/10 text-amber-100"
+                    : "border-aqua/40 bg-aqua/10 text-cyan-100"
+                }`}>
+                  {transcriptSummary.needsReview ? "Review suggested" : "Draft"}
+                </span>
+              </div>
+
+              {transcriptSummary.needsReview && (
+                <div className="mx-6 mt-5 flex gap-3 rounded-2xl border border-amber-300/30 bg-amber-300/10 px-4 py-3 sm:mx-8">
+                  <Icon name="alert" className="mt-0.5 shrink-0 text-amber-200" />
+                  <div className="text-[12px] leading-5 text-amber-100">
+                    Some parts of this transcript need a clinician’s review before they are relied on.
                   </div>
                 </div>
-              </div>
-            )}
-            {!transcriptSummary.needsReview && (
-              <div className="mx-5 mt-5 flex gap-3 rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3 sm:mx-7">
-                <Icon name="info" className="mt-0.5 shrink-0 text-blue" />
-                <div className="text-[11px] leading-5 text-blue-900">
-                  Draft transcript for clinician review. Processing completion does not indicate clinical approval.
-                </div>
-              </div>
-            )}
+              )}
 
-            <div className="grid grid-cols-2 gap-3 px-5 py-5 sm:grid-cols-4 sm:px-7">
-              <SummaryMetric label="Utterances" value={String(transcriptSummary.utterances.length)} />
-              <SummaryMetric label="Participants" value={String(transcriptSummary.participantCount)} />
-              <SummaryMetric label="Encounter duration" value={formatDuration(transcriptSummary.duration)} />
-              <SummaryMetric label="Processing status" value={transcript.processing_status || "Available"} />
-            </div>
-
-            <div className="mx-5 mb-5 overflow-hidden rounded-xl border border-line sm:mx-7">
-              <div className="grid grid-cols-[minmax(125px,0.22fr)_minmax(0,1fr)_75px] gap-3 bg-[#f7f9fc] px-4 py-3 text-[10px] font-bold uppercase tracking-[0.1em] text-muted sm:grid-cols-[minmax(165px,0.25fr)_minmax(0,1fr)_100px]">
-                <span>Participant</span>
-                <span>Conversation</span>
-                <span className="text-right">Duration</span>
+              <div className="grid grid-cols-2 gap-3 px-6 py-6 sm:grid-cols-4 sm:px-8">
+                <SummaryMetric label="Utterances" value={transcriptSummary.utterances.length} />
+                <SummaryMetric label="Participants" value={transcriptSummary.participantCount} />
+                <SummaryMetric label="Duration" text={formatDuration(transcriptSummary.duration)} />
+                <SummaryMetric label="Status" text={humanStatus(transcript.processing_status)} />
               </div>
-              <div className="scrollbar-subtle max-h-[560px] divide-y divide-line overflow-y-auto">
+
+              <div className="scrollbar-subtle mx-4 mb-6 max-h-[620px] space-y-4 overflow-y-auto rounded-2xl bg-black/20 p-4 sm:mx-8 sm:p-6">
                 {transcriptSummary.utterances.map((utterance, index) => (
                   <TranscriptRow
                     key={utterance.utterance_id || `${utterance.start_seconds ?? "time"}-${index}`}
+                    index={index}
                     utterance={utterance}
                     speakers={transcript.speaker_registry ?? []}
                     formatDuration={formatDuration}
                   />
                 ))}
                 {transcriptSummary.utterances.length === 0 && (
-                  <div className="px-4 py-8 text-center text-xs text-muted">No utterances were present in the final output.</div>
+                  <div className="py-8 text-center text-xs text-slate-400">No conversation was found in this recording.</div>
                 )}
               </div>
-            </div>
 
-            <details className="mx-5 mb-6 rounded-xl border border-line bg-[#fbfcfe] sm:mx-7">
-              <summary className="cursor-pointer px-4 py-3 text-xs font-semibold text-[#294764]">
-                Inspect original final JSON
-              </summary>
-              <pre className="scrollbar-subtle max-h-[360px] overflow-auto border-t border-line px-4 py-4 text-[11px] leading-5 text-slate-700">
-                {JSON.stringify(transcript, null, 2)}
-              </pre>
-            </details>
-          </section>
-        )}
+              <div className="grid grid-cols-1 gap-3 border-t border-white/[0.07] px-6 py-6 sm:grid-cols-2 sm:px-8">
+                <NextStep icon="pulse" title="Clinical entities" text="Symptoms, medications, findings and follow-ups are picked out of the conversation." />
+                <NextStep icon="note" title="SOAP note" text="The structured note is drafted from the transcript, ready for your review." />
+              </div>
+            </motion.section>
+          )}
+        </AnimatePresence>
 
-        <footer className="mt-8 flex flex-col gap-2 border-t border-[#e2e9e9] px-1 pt-5 text-[10px] leading-5 text-[#829099] sm:flex-row sm:items-center sm:justify-between">
-          <span>Ambient Clinical <span className="px-1">·</span> Conversation workspace</span>
-          <span>Draft transcript only. Not a diagnosis or a substitute for clinical judgment.</span>
+        <footer className="mt-12 flex flex-col gap-2 border-t border-white/[0.07] px-1 pt-6 text-[11px] leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+          <span>Ambient Clinical <span className="px-1">·</span> From conversation to SOAP note</span>
+          <span>Drafts are for clinician review and are not a substitute for clinical judgment.</span>
         </footer>
       </main>
 
@@ -840,31 +851,130 @@ function App() {
   );
 }
 
-function PlatformModule({
-  number,
-  title,
-  detail,
-  status,
-  active = false,
-  icon,
-}: {
-  number: string;
-  title: string;
-  detail: string;
-  status: string;
-  active?: boolean;
-  icon: "wave" | "users" | "shield" | "file" | "activity";
-}) {
+/* ───────────────────────── Presentational pieces ───────────────────────── */
+
+const rise: Variants = {
+  hidden: { opacity: 0, y: 26 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.2, 0.8, 0.2, 1] } },
+};
+const stagger: Variants = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } };
+
+function Reveal({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <article className={`platform-module ${active ? "platform-module-active" : ""}`}>
-      <div className="platform-module-top">
-        <span className="platform-module-number">{number}</span>
-        <span className="platform-module-icon"><Icon name={icon} className="h-3.5 w-3.5" /></span>
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y: 36 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function Backdrop() {
+  return (
+    <div className="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
+      <div className="absolute -left-[12%] -top-[18%] h-[60vmax] w-[60vmax] animate-drift rounded-full bg-aqua/20 blur-[120px]" />
+      <div className="absolute -right-[16%] top-[8%] h-[52vmax] w-[52vmax] animate-drift-slow rounded-full bg-iris/25 blur-[130px]" />
+      <div className="absolute -bottom-[26%] left-[22%] h-[50vmax] w-[50vmax] animate-drift rounded-full bg-rose2/[0.14] blur-[130px]" />
+      <div className="bg-grid absolute inset-0" />
+    </div>
+  );
+}
+
+function Journey({ done, active }: { done: number; active: boolean }) {
+  const steps = [
+    { icon: "mic" as const, label: "Conversation", sub: "Captured" },
+    { icon: "file" as const, label: "Transcript", sub: "Speaker by speaker" },
+    { icon: "pulse" as const, label: "Clinical entities", sub: "Extracted" },
+    { icon: "note" as const, label: "SOAP note", sub: "Ready to review" },
+  ];
+  return (
+    <div className="mt-9 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {steps.map((step, index) => {
+        const complete = index < done;
+        const lit = complete || (index === done && active);
+        return (
+          <motion.div
+            key={step.label}
+            whileHover={{ y: -4 }}
+            className={`relative overflow-hidden rounded-2xl border p-3.5 transition-colors duration-500 ${
+              complete ? "border-mint/40 bg-mint/[0.08]" : lit ? "border-aqua/50 bg-aqua/[0.09]" : "border-white/10 bg-white/[0.03]"
+            }`}
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <span className={`flex h-8 w-8 items-center justify-center rounded-xl ${complete ? "bg-mint/20 text-emerald-200" : lit ? "bg-aqua/20 text-cyan-100" : "bg-white/5 text-slate-400"}`}>
+                <Icon name={complete ? "check" : step.icon} className="h-4 w-4" />
+              </span>
+              <span className="font-display text-[10px] font-semibold tracking-widest text-slate-600">0{index + 1}</span>
+            </div>
+            <div className="text-[13px] font-semibold text-white">{step.label}</div>
+            <div className="mt-0.5 text-[11px] text-slate-400">{step.sub}</div>
+            {lit && !complete && <span className="absolute inset-x-0 bottom-0 h-0.5 animate-shimmer bg-gradient-to-r from-transparent via-aqua to-transparent" />}
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+}
+
+function Equalizer({ active }: { active: boolean }) {
+  return (
+    <div className="flex h-9 shrink-0 items-end gap-[3px]" aria-hidden="true">
+      {[0.2, 0.55, 0.9, 0.4, 0.75, 0.3, 0.6].map((delay, index) => (
+        <span
+          key={index}
+          className={`h-full w-[3px] origin-bottom rounded-full bg-gradient-to-t from-aqua to-iris ${active ? "animate-bar" : "opacity-40"}`}
+          style={{ animationDelay: `${delay}s`, transform: active ? undefined : `scaleY(${0.25 + (index % 3) * 0.2})` }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function AshaOrb() {
+  return (
+    <div className="relative mx-auto flex h-40 w-40 items-center justify-center sm:h-48 sm:w-48" aria-hidden="true">
+      <span className="absolute inset-0 animate-ring rounded-full border border-aqua/40" />
+      <span className="absolute inset-0 animate-ring rounded-full border border-iris/40 [animation-delay:1.2s]" />
+      <span className="absolute inset-3 animate-spin-slow rounded-full bg-[conic-gradient(from_0deg,#22d3ee,#8b5cf6,#f472b6,#34d399,#22d3ee)] opacity-90 blur-[10px]" />
+      <span className="absolute inset-[14px] animate-spin-slow rounded-full bg-[conic-gradient(from_180deg,#22d3ee,#8b5cf6,#f472b6,#34d399,#22d3ee)] [animation-direction:reverse]" />
+      <span className="absolute inset-[26px] rounded-full bg-night/90 shadow-[inset_0_0_30px_rgba(139,92,246,0.5)]" />
+      <div className="relative"><Equalizer active /></div>
+    </div>
+  );
+}
+
+function VoiceCue({ step, phrase, hint, tone }: { step: string; phrase: string; hint: string; tone: string }) {
+  return (
+    <motion.div
+      whileHover={{ y: -5, scale: 1.02 }}
+      className={`relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br ${tone} to-transparent p-4`}
+    >
+      <span className="font-display text-[11px] font-semibold tracking-widest text-slate-400">STEP {step}</span>
+      <div className="mt-2 font-display text-[15px] font-semibold leading-snug text-white">{phrase}</div>
+      <div className="mt-1 text-[11px] text-slate-400">{hint}</div>
+    </motion.div>
+  );
+}
+
+function NextStep({ icon, title, text }: { icon: "pulse" | "note"; title: string; text: string }) {
+  return (
+    <div className="relative flex gap-4 overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-iris/10 to-transparent p-4">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/5 text-violet-200 ring-1 ring-white/10">
+        <Icon name={icon} className="h-5 w-5" />
+      </span>
+      <div>
+        <div className="flex items-center gap-2 text-sm font-semibold text-white">
+          {title}
+          <span className="rounded-full bg-iris/20 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-widest text-violet-200">Up next</span>
+        </div>
+        <p className="mt-1 text-xs leading-5 text-slate-400">{text}</p>
       </div>
-      <h3 className="platform-module-title">{title}</h3>
-      <p className="platform-module-detail">{detail}</p>
-      <span className="platform-module-status">{status}</span>
-    </article>
+      <span className="absolute inset-x-0 bottom-0 h-px animate-shimmer bg-gradient-to-r from-transparent via-violet-300/70 to-transparent" />
+    </div>
   );
 }
 
@@ -872,101 +982,112 @@ function TranscriptRow({
   utterance,
   speakers,
   formatDuration,
+  index,
 }: {
   utterance: TranscriptUtterance;
   speakers: Speaker[];
   formatDuration: (seconds: number | null) => string;
+  index: number;
 }) {
-  const speaker = speakers.find(
-    (item) => item.canonical_speaker_id === utterance.canonical_speaker_id,
-  );
+  const speaker = speakers.find((item) => item.canonical_speaker_id === utterance.canonical_speaker_id);
   const role = (utterance.role || speaker?.role || "UNKNOWN").toUpperCase();
-  const label =
-    speaker?.display_name ||
-    speaker?.name ||
-    utterance.canonical_speaker_id ||
-    "Unidentified participant";
+  const label = speaker?.display_name || speaker?.name || utterance.canonical_speaker_id || "Unidentified participant";
   const start = formatTime(utterance.start_seconds);
-  const end = formatTime(utterance.end_seconds);
   const duration =
     typeof utterance.duration_seconds === "number"
       ? utterance.duration_seconds
       : typeof utterance.start_seconds === "number" && typeof utterance.end_seconds === "number"
         ? utterance.end_seconds - utterance.start_seconds
         : null;
+  const clinician = role === "DOCTOR" || role === "NURSE" || role === "PHARMACIST";
 
   return (
-    <article className="grid grid-cols-[minmax(125px,0.22fr)_minmax(0,1fr)_75px] items-start gap-3 px-4 py-4 sm:grid-cols-[minmax(165px,0.25fr)_minmax(0,1fr)_100px]">
-      <div className="min-w-0">
-        <span className={`inline-flex max-w-full items-center rounded-full px-2.5 py-1 text-[9px] font-bold tracking-[0.04em] ring-1 ring-inset ${ROLE_STYLES[role] || ROLE_STYLES.UNKNOWN}`}>
-          <span className="truncate">{role.replace(/_/g, " ")}</span>
-        </span>
-        <div className="mt-1.5 truncate text-[10px] text-muted" title={label}>{label}</div>
-        <div className="mt-1 text-[10px] tabular-nums text-slate-400">{start}{end !== "—" ? ` – ${end}` : ""}</div>
+    <motion.article
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "40px" }}
+      transition={{ duration: 0.45, delay: Math.min(index, 6) * 0.04 }}
+      className={`flex ${clinician ? "justify-start" : "justify-end"}`}
+    >
+      <div className={`max-w-[92%] sm:max-w-[78%] ${clinician ? "" : "text-right"}`}>
+        <div className={`mb-1.5 flex flex-wrap items-center gap-2 ${clinician ? "" : "justify-end"}`}>
+          <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold tracking-wider ring-1 ring-inset ${ROLE_STYLES[role] || ROLE_STYLES.UNKNOWN}`}>
+            {role.replace(/_/g, " ")}
+          </span>
+          <span className="max-w-[180px] truncate text-[10px] text-slate-500" title={label}>{label}</span>
+          <span className="text-[10px] tabular-nums text-slate-600">{start} · {formatDuration(duration)}</span>
+        </div>
+        <p className={`m-0 whitespace-pre-wrap break-words rounded-2xl px-4 py-3 text-left text-[13px] leading-6 text-slate-100 ${
+          clinician
+            ? "rounded-tl-md border border-aqua/20 bg-gradient-to-br from-aqua/[0.12] to-aqua/[0.03]"
+            : "rounded-tr-md border border-iris/25 bg-gradient-to-br from-iris/[0.14] to-iris/[0.04]"
+        }`}>
+          {utterance.text || "No transcript text available."}
+        </p>
       </div>
-      <p className="m-0 whitespace-pre-wrap break-words text-xs leading-6 text-[#29415a]">
-        {utterance.text || "No transcript text available."}
-      </p>
-      <div className="pt-1 text-right text-[11px] tabular-nums text-muted">{formatDuration(duration)}</div>
-    </article>
+    </motion.article>
   );
 }
 
-function SummaryMetric({ label, value }: { label: string; value: string }) {
+function CountUp({ value }: { value: number }) {
+  const [shown, setShown] = useState(0);
+  useEffect(() => {
+    const controls = animate(0, value, { duration: 1.1, ease: "easeOut", onUpdate: (latest) => setShown(Math.round(latest)) });
+    return () => controls.stop();
+  }, [value]);
+  return <>{shown}</>;
+}
+
+function SummaryMetric({ label, value, text }: { label: string; value?: number; text?: string }) {
   return (
-    <div className="rounded-xl border border-line bg-[#fbfcfe] px-3.5 py-3">
-      <div className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted">{label}</div>
-      <div className="mt-1.5 truncate text-sm font-bold text-ink" title={value}>{value}</div>
+    <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3.5">
+      <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">{label}</div>
+      <div className="mt-1.5 truncate font-display text-xl font-semibold text-white" title={text}>
+        {typeof value === "number" ? <CountUp value={value} /> : text}
+      </div>
     </div>
   );
 }
 
 function ConnectionPill({ good, label }: { good: boolean; label: string }) {
   return (
-    <div className="flex items-center gap-2 rounded-full border border-[#e1e9e7] bg-white px-3.5 py-2 shadow-[0_2px_8px_rgba(27,63,70,0.04)]">
-      <span className={`h-2 w-2 rounded-full ${good ? "bg-[#35a184]" : "bg-[#d19b54]"}`} />
-      <span className="text-[10px] font-semibold text-[#526c78]">{label}</span>
+    <div className="flex max-w-[60vw] items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-3.5 py-2 backdrop-blur">
+      <span className="relative flex h-2.5 w-2.5 shrink-0">
+        {good && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-70" />}
+        <span className={`relative inline-flex h-2.5 w-2.5 rounded-full ${good ? "bg-mint" : "bg-amber-400"}`} />
+      </span>
+      <span className="truncate text-[11px] font-semibold text-slate-200">{label}</span>
     </div>
   );
 }
 
-function Icon({
-  name,
-  className = "",
-}: {
-  name: "check" | "alert" | "upload" | "wave" | "users" | "file" | "mic" | "play" | "refresh" | "activity" | "shield" | "info" | "close" | "arrow";
-  className?: string;
-}) {
-  const paths: Record<typeof name, string> = {
-    check: "M5 12.5 9.2 17 19 7",
-    alert: "M12 8v4m0 4h.01M10.3 3.8 2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0Z",
-    upload: "M12 16V4m0 0L7 9m5-5 5 5M4 16v4h16v-4",
-    wave: "M2 12h3l3-8 5 16 3-8h6",
-    users: "M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2m6-10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm6-7.5a4 4 0 0 1 0 7.8M20 21v-2a4 4 0 0 0-3-3.9",
-    file: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Zm0 0v6h6M8 13h8m-8 4h8",
-    mic: "M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Zm7 10a7 7 0 0 1-14 0m7 7v3m-4 0h8",
-    play: "m8 5 12 7-12 7V5Z",
-    refresh: "M20 7v5h-5M4 17v-5h5m-4.1-3a7 7 0 0 1 11.6-2.5L20 12M4 12l3.5 5.5A7 7 0 0 0 19 15",
-    activity: "M3 12h4l3-8 4 16 3-8h4",
-    shield: "M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Zm-3-11 2 2 4-4",
-    info: "M12 16v-4m0-4h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z",
-    close: "m6 6 12 12M18 6 6 18",
-    arrow: "M5 12h14m-6-6 6 6-6 6",
-  };
-  return (
-    <svg
-      className={`h-4 w-4 ${className}`}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d={paths[name]} />
-    </svg>
-  );
+function humanStatus(status?: string): string {
+  if (!status) return "Available";
+  const text = status.replace(/_/g, " ").toLowerCase();
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+const ICONS = {
+  check: Check,
+  alert: TriangleAlert,
+  upload: UploadCloud,
+  wave: AudioLines,
+  users: Users,
+  file: FileText,
+  mic: Mic,
+  play: Play,
+  refresh: RotateCcw,
+  activity: Activity,
+  shield: ShieldCheck,
+  info: Info,
+  arrow: ArrowRight,
+  pulse: Stethoscope,
+  note: ClipboardList,
+};
+
+function Icon({ name, className = "" }: { name: keyof typeof ICONS; className?: string }) {
+  const Glyph = ICONS[name];
+  return <Glyph className={`h-4 w-4 ${className}`} strokeWidth={1.8} aria-hidden="true" />;
 }
 
 function formatTime(seconds: number | null | undefined): string {

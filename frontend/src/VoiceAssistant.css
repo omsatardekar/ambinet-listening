@@ -1,325 +1,204 @@
-/* Hands-free voice overlay (Siri-style) and saved-recordings drawer. */
+/* Hands-free voice experience: Siri-style overlay and recordings drawer (dark glass theme). */
 .va-overlay,
 .va-recordings-pill,
-.va-drawer-scrim {
-  --va-ink: #13293a;
-  --va-muted: #5d7180;
-  --va-line: #dce7e4;
-  --va-green: #1f9d74;
-  --va-green-soft: rgba(31, 157, 116, 0.12);
-  --va-danger: #c2412f;
-  font-family: inherit;
+.va-drawer-scrim,
+.va-drawer {
+  --va-ink: #f1f5ff;
+  --va-muted: #94a3c4;
+  --va-line: rgba(255, 255, 255, 0.1);
+  --va-aqua: #22d3ee;
+  --va-mint: #34d399;
+  --va-iris: #8b5cf6;
+  --va-rose: #f472b6;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
 }
 
-/* ── Overlay card ───────────────────────────────────────────────── */
-/* Full-screen stage: the voice card sits in the foreground, the page is dimmed behind it. */
+/* ── Full-screen stage ──────────────────────────────────────────── */
 .va-stage {
   position: fixed;
   inset: 0;
   z-index: 60;
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   justify-content: center;
-  padding: clamp(56px, 13vh, 140px) 16px 16px;
-  background: radial-gradient(ellipse at 50% 0%, rgba(31, 157, 116, 0.2), rgba(10, 28, 38, 0.5) 65%);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  padding: 16px 16px clamp(24px, 8vh, 80px);
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 100%, rgba(139, 92, 246, 0.38), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(34, 211, 238, 0.3), transparent 70%),
+    rgba(3, 5, 12, 0.66);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
   pointer-events: none;
-  animation: va-fade 0.3s ease-out;
-}
-.va-overlay {
-  pointer-events: auto;
-  width: min(520px, 100%);
-  padding: 18px 20px 16px;
-  border-radius: 26px;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(31, 157, 116, 0.22);
-  box-shadow:
-    0 0 0 6px rgba(31, 157, 116, 0.06),
-    0 18px 48px rgba(19, 41, 58, 0.18);
-  color: var(--va-ink);
-  animation: va-rise 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.va-overlay.va-recording {
-  border-color: rgba(31, 157, 116, 0.45);
-  box-shadow:
-    0 0 0 6px rgba(31, 157, 116, 0.1),
-    0 0 40px rgba(31, 157, 116, 0.25),
-    0 18px 48px rgba(19, 41, 58, 0.18);
+  animation: va-fade 0.28s ease-out;
 }
 
-.va-head {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 24px;
+/* ── Glass card with a living gradient edge ─────────────────────── */
+.va-overlay {
+  position: relative;
+  pointer-events: auto;
+  width: min(560px, 100%);
+  padding: 22px 24px 18px;
+  border-radius: 32px;
+  background: rgba(10, 14, 30, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  color: var(--va-ink);
+  box-shadow: 0 40px 90px -20px rgba(0, 0, 0, 0.8), 0 0 80px -10px rgba(139, 92, 246, 0.55);
+  animation: va-rise 0.5s cubic-bezier(0.2, 0.9, 0.2, 1);
+  isolation: isolate;
 }
+.va-overlay::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  border-radius: 34px;
+  background: conic-gradient(from var(--va-angle, 0deg), #22d3ee, #8b5cf6, #f472b6, #34d399, #22d3ee);
+  animation: va-spin 5s linear infinite;
+  filter: blur(0.5px);
+}
+.va-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 32px;
+  background: rgba(10, 14, 30, 0.94);
+}
+.va-overlay.va-saved::before { animation-duration: 12s; opacity: 0.6; }
+.va-overlay.va-recording::before { animation-duration: 3s; }
+
+@property --va-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.va-head { display: flex; align-items: center; gap: 10px; min-height: 28px; }
 .va-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--va-green);
-  box-shadow: 0 0 0 0 rgba(31, 157, 116, 0.6);
-  animation: va-pulse 1.6s ease-out infinite;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--va-aqua);
+  box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.7);
+  animation: va-pulse 1.5s ease-out infinite;
 }
-.va-dot-saved {
-  background: #6b8594;
-  animation: none;
-}
+.va-recording .va-dot { background: #fb7185; box-shadow: 0 0 0 0 rgba(251, 113, 133, 0.7); }
+.va-dot-saved { background: var(--va-mint); animation: none; }
 .va-kicker {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--va-green);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+  background: linear-gradient(90deg, #67e8f9, #c4b5fd);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 .va-timer {
-  margin-left: auto;
-  font-variant-numeric: tabular-nums;
-  font-weight: 700;
-  font-size: 15px;
-  color: var(--va-ink);
+  margin-left: auto; font-family: Sora, Inter, sans-serif; font-variant-numeric: tabular-nums;
+  font-weight: 600; font-size: 17px; color: var(--va-ink);
 }
 .va-close {
-  margin-left: auto;
-  width: 30px;
-  height: 30px;
-  border: 0;
-  border-radius: 50%;
-  background: #eef4f2;
-  color: var(--va-muted);
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
+  margin-left: auto; width: 32px; height: 32px; border: 1px solid var(--va-line); border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06); color: var(--va-muted); font-size: 20px; line-height: 1; cursor: pointer;
+  transition: background 0.2s, color 0.2s;
 }
-.va-close + .va-timer,
-.va-timer + .va-close {
-  margin-left: 0;
-}
+.va-close:hover { background: rgba(255, 255, 255, 0.14); color: #fff; }
 .va-head .va-timer + .va-close { margin-left: 8px; }
 
-.va-wave {
-  display: block;
-  width: 100%;
-  height: 120px;
-  margin: 12px 0 6px;
-}
+.va-wave { display: block; width: 100%; height: 132px; margin: 10px 0 4px; }
 
 .va-title {
-  margin: 4px 0 2px;
-  font-size: 18px;
-  font-weight: 650;
-  letter-spacing: -0.01em;
+  margin: 4px 0 2px; font-family: Sora, Inter, sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.02em;
+  background: linear-gradient(100deg, #fff, #c7d2fe 60%, #f5d0fe);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-.va-sub {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--va-muted);
-}
+.va-sub { margin: 0; font-size: 14px; line-height: 1.55; color: var(--va-muted); }
 
-.va-countdown {
-  margin-top: 12px;
-  height: 4px;
-  border-radius: 999px;
-  background: #e5efec;
-  overflow: hidden;
-}
+.va-countdown { margin-top: 14px; height: 4px; border-radius: 99px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
 .va-countdown span {
-  display: block;
-  height: 100%;
-  background: var(--va-green);
-  transition: width 0.25s linear;
+  display: block; height: 100%; border-radius: 99px;
+  background: linear-gradient(90deg, #22d3ee, #8b5cf6, #f472b6); transition: width 0.25s linear;
 }
 
-.va-footer {
-  margin-top: 14px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
+.va-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; }
 .va-heard {
-  flex: 1 1 180px;
-  min-width: 0;
-  font-size: 13px;
-  color: var(--va-ink);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 12px; color: #c7d2fe; transition: opacity 0.4s;
 }
-.va-heard-old { color: var(--va-muted); }
+.va-heard-old { opacity: 0.45; }
 
 .va-btn {
-  appearance: none;
-  border: 0;
-  border-radius: 999px;
-  padding: 10px 16px;
-  background: var(--va-danger);
-  color: #fff;
-  font: inherit;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  transition: transform 0.15s ease, opacity 0.15s ease;
+  flex-shrink: 0; border: 0; border-radius: 14px; padding: 10px 18px;
+  font-weight: 700; font-size: 13px; color: #06101c; cursor: pointer;
+  background: linear-gradient(100deg, #22d3ee, #34d399);
+  box-shadow: 0 10px 26px -10px rgba(34, 211, 238, 0.7);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-.va-btn:hover:not(:disabled) { transform: translateY(-1px); }
-.va-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-.va-btn-ghost {
-  background: var(--va-green-soft);
-  color: var(--va-green);
-}
-.va-btn-wide {
-  width: 100%;
-  background: var(--va-green);
-  margin-top: 14px;
-}
+.va-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 14px 32px -10px rgba(34, 211, 238, 0.9); }
+.va-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.va-btn-ghost { background: rgba(255, 255, 255, 0.08); color: #e2e8f8; box-shadow: none; border: 1px solid var(--va-line); }
+.va-btn-wide { width: 100%; margin: 4px 0 16px; padding: 13px 18px; }
+.va-recording .va-btn { background: linear-gradient(100deg, #fb7185, #f472b6); color: #fff; box-shadow: 0 10px 26px -10px rgba(244, 114, 182, 0.8); }
 
-.va-error {
-  margin: 10px 0 0;
-  font-size: 13px;
-  color: var(--va-danger);
-}
+.va-error { margin: 12px 0 0; font-size: 12px; color: #fda4af; }
 
-.va-link {
-  color: var(--va-green);
-  font-weight: 700;
-  font-size: 14px;
-  text-decoration: none;
-}
+.va-audio { width: 100%; margin-top: 12px; height: 40px; border-radius: 20px; color-scheme: dark; }
+.va-link { font-size: 13px; font-weight: 600; color: #67e8f9; text-decoration: none; }
 .va-link:hover { text-decoration: underline; }
 
-.va-audio {
-  width: 100%;
-  height: 40px;
-  margin-top: 12px;
-}
-
-/* ── Header-level pill to open recordings ───────────────────────── */
+/* ── Floating "Recordings" pill ─────────────────────────────────── */
 .va-recordings-pill {
-  position: fixed;
-  left: 20px;
-  bottom: 24px;
-  z-index: 55;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--va-line);
-  background: rgba(255, 255, 255, 0.94);
-  color: var(--va-ink);
-  font: inherit;
-  font-size: 13px;
-  font-weight: 650;
-  box-shadow: 0 6px 18px rgba(19, 41, 58, 0.1);
-  cursor: pointer;
+  position: fixed; right: 20px; bottom: 20px; z-index: 50;
+  display: inline-flex; align-items: center; gap: 10px; padding: 11px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 999px; cursor: pointer;
+  background: rgba(12, 16, 34, 0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  color: var(--va-ink); font-weight: 600; font-size: 13px;
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.7), 0 0 30px -8px rgba(34, 211, 238, 0.4);
+  transition: transform 0.25s, border-color 0.25s;
 }
+.va-recordings-pill:hover { transform: translateY(-3px); border-color: rgba(34, 211, 238, 0.6); }
 .va-recordings-pill span {
-  min-width: 22px;
-  padding: 1px 7px;
-  border-radius: 999px;
-  background: var(--va-green-soft);
-  color: var(--va-green);
-  text-align: center;
-  font-size: 12px;
+  min-width: 22px; padding: 2px 7px; border-radius: 999px; text-align: center; font-size: 11px; color: #06101c;
+  background: linear-gradient(100deg, #22d3ee, #34d399);
 }
 
-/* ── Recordings drawer ─────────────────────────────────────────── */
+/* ── Recordings drawer ──────────────────────────────────────────── */
 .va-drawer-scrim {
-  position: fixed;
-  inset: 0;
-  z-index: 70;
-  background: rgba(19, 41, 58, 0.25);
-  display: flex;
-  justify-content: flex-end;
+  position: fixed; inset: 0; z-index: 70; display: flex; justify-content: flex-end;
+  background: rgba(3, 5, 12, 0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  animation: va-fade 0.2s ease-out;
 }
 .va-drawer {
-  width: min(440px, 100vw);
-  height: 100%;
-  overflow-y: auto;
-  padding: 22px;
-  background: #fff;
-  color: var(--va-ink);
-  box-shadow: -12px 0 40px rgba(19, 41, 58, 0.2);
-  animation: va-slide 0.25s ease-out;
+  width: min(440px, 100%); height: 100%; overflow-y: auto; padding: 24px 22px;
+  background: rgba(9, 12, 26, 0.96); border-left: 1px solid var(--va-line); color: var(--va-ink);
+  box-shadow: -30px 0 80px -20px rgba(0, 0, 0, 0.8);
+  animation: va-slide 0.35s cubic-bezier(0.2, 0.9, 0.2, 1);
+  scrollbar-width: thin; scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
 }
-.va-drawer-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-.va-drawer h3 {
-  margin: 0;
-  font-size: 18px;
-}
-.va-drawer-head p {
-  margin: 4px 0 0;
-  font-size: 12px;
-  color: var(--va-muted);
-}
-.va-drawer .va-close { margin-left: 0; }
-.va-empty {
-  margin: 18px 0 0;
-  padding: 16px;
-  border: 1px dashed var(--va-line);
-  border-radius: 12px;
-  color: var(--va-muted);
-  font-size: 14px;
-  text-align: center;
-}
-.va-list {
-  list-style: none;
-  margin: 16px 0 0;
-  padding: 0;
-  display: grid;
-  gap: 12px;
-}
+.va-drawer-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.va-drawer h3 { margin: 0; font-family: Sora, Inter, sans-serif; font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+.va-drawer-head p { margin: 5px 0 0; font-size: 12px; color: var(--va-muted); }
+.va-drawer .va-close { margin-left: 0; flex-shrink: 0; }
+.va-empty { padding: 28px 8px; text-align: center; font-size: 13px; color: var(--va-muted); }
+.va-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
 .va-item {
-  padding: 12px 14px;
-  border: 1px solid var(--va-line);
-  border-radius: 14px;
-  display: grid;
-  gap: 4px;
+  padding: 14px 16px; border: 1px solid var(--va-line); border-radius: 18px;
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.07), rgba(139, 92, 246, 0.05));
 }
-.va-item-meta {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  font-size: 14px;
-}
-.va-item-meta span {
-  color: var(--va-muted);
-  font-variant-numeric: tabular-nums;
-}
+.va-item-meta { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; }
+.va-item-meta strong { font-weight: 600; color: #fff; }
+.va-item-meta span { font-variant-numeric: tabular-nums; color: var(--va-muted); }
 
-/* ── Motion ─────────────────────────────────────────────────────── */
-@keyframes va-rise {
-  from { opacity: 0; transform: translateY(18px) scale(0.98); }
-  to { opacity: 1; transform: none; }
-}
-@keyframes va-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes va-slide {
-  from { transform: translateX(24px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
+@keyframes va-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes va-rise { from { opacity: 0; transform: translateY(40px) scale(0.92); } to { opacity: 1; transform: none; } }
+@keyframes va-slide { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes va-spin { to { --va-angle: 360deg; } }
 @keyframes va-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(31, 157, 116, 0.55); }
-  100% { box-shadow: 0 0 0 10px rgba(31, 157, 116, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.65); }
+  100% { box-shadow: 0 0 0 14px rgba(34, 211, 238, 0); }
 }
 
-@media (max-width: 560px) {
-  .va-overlay { padding: 16px; border-radius: 22px; }
-  .va-recordings-pill { left: 12px; bottom: 12px; }
-  .va-wave { height: 64px; }
+@media (max-width: 520px) {
+  .va-overlay { padding: 18px 18px 14px; border-radius: 28px; }
+  .va-wave { height: 108px; }
+  .va-title { font-size: 19px; }
+  .va-recordings-pill { right: 12px; bottom: 12px; }
 }
-
 @media (prefers-reduced-motion: reduce) {
-  .va-overlay, .va-drawer, .va-dot { animation: none; }
+  .va-overlay::before, .va-dot { animation: none; }
 }

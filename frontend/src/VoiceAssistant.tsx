@@ -75,14 +75,21 @@ function formatWhen(value: string | null, fallback: string): string {
     : date.toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
-/* ─── Green level wave (canvas, driven by the live microphone level) ─── */
+/* ─── Siri-style flowing wave (canvas, driven by the live microphone level) ─── */
+const WAVE_LAYERS = [
+  { color: "34, 211, 238", speed: 1.0, freq: 1.6, amp: 1.0, phase: 0 },
+  { color: "139, 92, 246", speed: 1.35, freq: 2.2, amp: 0.8, phase: 1.7 },
+  { color: "244, 114, 182", speed: 0.8, freq: 2.9, amp: 0.62, phase: 3.1 },
+  { color: "52, 211, 153", speed: 1.7, freq: 1.2, amp: 0.5, phase: 4.6 },
+];
+
 function VoiceWave({ level, active }: { level: number; active: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const targetRef = useRef(0);
   const activeRef = useRef(active);
 
   useEffect(() => {
-    targetRef.current = Math.min(1, Math.sqrt(Math.max(0, level)) * 1.5);
+    targetRef.current = Math.min(1, Math.sqrt(Math.max(0, level)) * 1.6);
   }, [level]);
   useEffect(() => {
     activeRef.current = active;
@@ -100,37 +107,41 @@ function VoiceWave({ level, active }: { level: number; active: boolean }) {
     canvas.height = height * dpr;
     ctx.scale(dpr, dpr);
 
-    const bars = 36;
-    const gap = 3;
-    const barWidth = (width - gap * (bars - 1)) / bars;
-    const smooth = new Float32Array(bars);
     let smoothLevel = 0;
     let raf = 0;
     let t = 0;
 
     const draw = () => {
-      t += 0.05;
-      smoothLevel += (targetRef.current - smoothLevel) * 0.2;
+      t += 0.035;
+      smoothLevel += (targetRef.current - smoothLevel) * 0.18;
+      const energy = (activeRef.current ? 0.14 : 0.05) + smoothLevel * 0.86;
       ctx.clearRect(0, 0, width, height);
-      const center = (bars - 1) / 2;
-      for (let i = 0; i < bars; i += 1) {
-        const distance = Math.abs(i - center) / center;
-        const shape = 1 - distance * 0.55;
-        const idle = activeRef.current ? 0.08 + 0.05 * Math.sin(t * 1.3 + i * 0.4) : 0.04;
-        const jitter = 0.55 + 0.45 * Math.abs(Math.sin(t * 2.6 + i * 1.7));
-        const target = Math.min(1, idle + smoothLevel * shape * jitter);
-        smooth[i] += (target - smooth[i]) * 0.35;
-        const barHeight = Math.max(4, smooth[i] * height * 0.92);
-        const x = i * (barWidth + gap);
-        const y = (height - barHeight) / 2;
-        const gradient = ctx.createLinearGradient(0, y, 0, y + barHeight);
-        gradient.addColorStop(0, "rgba(72, 214, 160, 0.95)");
-        gradient.addColorStop(1, "rgba(24, 150, 110, 0.85)");
-        ctx.fillStyle = gradient;
+      ctx.globalCompositeOperation = "lighter";
+      const mid = height / 2;
+      for (const layer of WAVE_LAYERS) {
+        const gradient = ctx.createLinearGradient(0, 0, width, 0);
+        gradient.addColorStop(0, `rgba(${layer.color}, 0)`);
+        gradient.addColorStop(0.5, `rgba(${layer.color}, 0.95)`);
+        gradient.addColorStop(1, `rgba(${layer.color}, 0)`);
         ctx.beginPath();
-        ctx.roundRect(x, y, barWidth, barHeight, barWidth / 2);
-        ctx.fill();
+        for (let x = 0; x <= width; x += 3) {
+          const progress = x / width;
+          const envelope = Math.pow(Math.sin(progress * Math.PI), 2.2);
+          const y =
+            mid +
+            Math.sin(progress * Math.PI * 2 * layer.freq + t * layer.speed * 3 + layer.phase) *
+              envelope * mid * 0.86 * energy * layer.amp;
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.lineWidth = 2.4;
+        ctx.strokeStyle = gradient;
+        ctx.shadowColor = `rgba(${layer.color}, 0.9)`;
+        ctx.shadowBlur = 14;
+        ctx.stroke();
       }
+      ctx.globalCompositeOperation = "source-over";
+      ctx.shadowBlur = 0;
       raf = requestAnimationFrame(draw);
     };
     raf = requestAnimationFrame(draw);
@@ -352,9 +363,9 @@ function VoiceAssistant({
 
   useEffect(() => {
     const labels: Record<Mode, string> = {
-      offline: "Voice offline",
-      loading: "Loading voice model",
-      unavailable: "Voice unavailable",
+      offline: "Asha offline",
+      loading: "Asha is getting ready",
+      unavailable: "Asha unavailable",
       mic: mic === "denied" ? "Microphone blocked" : "Microphone needed",
       waiting: "Waiting for microphone",
       idle: 'Listening for "Hey Asha"',
@@ -426,7 +437,7 @@ function VoiceAssistant({
                   ? voice.stop_armed
                     ? 'Asha is listening — say "stop recording".'
                     : 'Say "Hey Asha, stop recording" to save.'
-                  : `Say "start recording" within ${Math.ceil(countdown)} seconds.`}
+                  : `Say "Start recording" — I'm listening for ${Math.ceil(countdown)}s.`}
               </p>
               {mode === "awake" && (
                 <div className="va-countdown" aria-hidden="true">

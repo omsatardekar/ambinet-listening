@@ -1,129 +1,194 @@
 # Ambient Clinical Listening
 
-A demo of an ambient clinical workflow: capture an encounter by voice or upload, transcribe it, reconstruct a speaker-aware draft transcript, and review it.
+Talk to your patient — Ambient Clinical listens, writes the **transcript**, picks out the **clinical entities**, and prepares the **SOAP note**.
 
-- **Hands-free recording.** Say **"Hey Asha"**, then **"start recording"**. Say **"Hey Asha, stop recording"** to save. Recordings are saved as WAV files on this machine and are never uploaded.
-- **Upload.** Upload a WAV file and run the Azure transcription pipeline.
+This repository contains the working front half of that journey today (hands-free capture → speaker-aware transcript). Clinical entity extraction and the SOAP note follow the transcript in the full platform.
 
-> **Clinical safety:** This is a demonstration. Reconstructed transcripts are drafts that a qualified clinician must review. Do not use real patient data unless your organisation has approved the environment and data handling.
+- **Hands-free recording ("Asha").** Say **"Hey Asha"**, then **"Start recording"**. Say **"Hey Asha, stop recording"** to save. Recordings are saved as WAV files on your machine and are never uploaded.
+- **Upload.** Upload a WAV recording and create the transcript.
+- **A modern, responsive interface** with a Siri-style voice overlay, live progress, and a chat-style transcript.
+
+> **Clinical safety:** This is a demonstration. Transcripts are drafts that a qualified clinician must review. Do not use real patient data unless your organisation has approved the environment and data handling.
+
+## Versions
+
+| Tag | What it is |
+|---|---|
+| `v1.0` | First release (Whisper-based voice control, original interface). |
+| `v2.0` | Fast, strict offline voice control (about 0.25 s reaction time, commands trimmed from recordings). |
+| `v3.0` | **Current.** Completely redesigned interface (dark glass theme, animations, responsive) plus a full setup guide. |
+
+Switch between them with `git checkout v1.0`, `git checkout v2.0`, `git checkout v3.0`, and `git checkout main` for the latest.
 
 ---
 
-## 1. Prerequisites
+# Setup from zero (Windows 10/11)
 
-| Tool | Version | Notes |
-|---|---|---|
-| Windows 10/11 | — | `start_demo.ps1` is a PowerShell launcher. macOS/Linux users can run the steps in section 5 manually. |
-| Python | 3.12 (3.11 also works) | Install from python.org and tick "Add to PATH". |
-| Node.js | 18 LTS or newer | Includes `npm`. |
-| Google Chrome or Microsoft Edge | recent | Needed for microphone access on `http://127.0.0.1:5173`. |
-| Microphone | — | Built-in or USB. Make sure it is not muted in Windows Sound settings. |
-| Internet | — | Needed for Azure, and once for the one-time voice-model download (about 36 MB, saved in `models/` and reused forever). |
+Follow these steps in order on a fresh machine. Everything is copy-paste.
 
-You also need access to the project's Azure resources. Ask the project owner for the values for `.env` (section 3).
+## Step 1 — Install the tools
 
-## 2. Get the code
+Install each of these once. After installing, **close and reopen PowerShell** so the new tools are found.
+
+| Tool | Version | Download | Important |
+|---|---|---|---|
+| Git | any recent | https://git-scm.com/download/win | Keep the default options. |
+| Python | **3.12** (3.11 also works) | https://www.python.org/downloads/ | **Tick "Add python.exe to PATH"** on the first installer screen. |
+| Node.js | **18 LTS or newer** (20/22 LTS recommended) | https://nodejs.org | Includes `npm`. |
+| Google Chrome or Microsoft Edge | recent | — | Needed for microphone access. |
+
+You also need:
+
+- A working **microphone** (built-in or USB), not muted in Windows Sound settings.
+- **Internet** for the first run: the one-time voice model (about 36 MB) and the project's cloud services.
+- The **`.env` values** for the project's cloud resources. Ask the project owner for them (Step 5).
+
+Check the installs (each should print a version):
+
+```powershell
+git --version
+python --version
+node --version
+npm --version
+```
+
+## Step 2 — Allow PowerShell scripts (one time)
+
+The launcher is a PowerShell script. Run this once so Windows lets you run it:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+## Step 3 — Get the code
 
 ```powershell
 git clone https://github.com/omsatardekar/ambinet-listening.git
 cd ambinet-listening
 ```
 
-## 3. Set up Python
+## Step 4 — Create the Python environment
+
+The launcher expects the virtual environment to be named `.venv` inside the project folder.
 
 ```powershell
-py -3.12 -m venv .venv
+python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -r requirements-dev.txt
 ```
 
-`requirements-dev.txt` installs everything in `requirements.txt` plus `pytest` for the tests. For a runtime-only install, use `requirements.txt`.
+Your prompt should now start with `(.venv)`. (If `python` is not found, reinstall Python with "Add to PATH" ticked.)
 
-The voice model (Vosk, 36 MB) is downloaded once into `models/` the first time the server starts and is loaded into memory at startup; later starts need no download.
-
-## 4. Configure secrets
+## Step 5 — Add your configuration
 
 ```powershell
 Copy-Item .env.example .env
 notepad .env
 ```
 
-Fill in the values in `.env`. The file lists every setting the app reads. Empty optional values fall back to sensible defaults.
+Paste in the values the project owner gave you (storage, speech and agent settings), save, and close. `.env.example` lists every setting; empty optional ones use sensible defaults.
 
-**Never commit `.env`.** It is listed in `.gitignore`.
+**Never commit `.env`** — it is already in `.gitignore`.
 
-## 5. Run the demo
+## Step 6 — Install the frontend packages
 
-From the project root, with the virtual environment active:
+(The launcher does this automatically on first run; doing it now makes the first start faster.)
+
+```powershell
+cd frontend
+npm install
+cd ..
+```
+
+## Step 7 — Run it
+
+From the project folder, with `(.venv)` active:
 
 ```powershell
 .\start_demo.ps1
 ```
 
-The launcher:
+The launcher checks the Python packages, starts the backend at **http://127.0.0.1:8000** and the interface at **http://127.0.0.1:5173**, then opens your browser. Press **Ctrl+C** in the terminal to stop both.
 
-1. Checks the Python packages and installs any that are missing.
-2. Runs `npm install` in `frontend/` the first time.
-3. Starts the backend at **http://127.0.0.1:8000** and the frontend at **http://127.0.0.1:5173**.
+**First run only:** the backend downloads the 36 MB voice model into the `models/` folder. Wait until the terminal prints **`Voice control is ready`**. After that the model is stored permanently and loaded once when the server starts — no download, no waiting, on later runs.
 
-Open **http://127.0.0.1:5173** in Chrome or Edge and allow microphone access when asked. Press **Ctrl+C** in the terminal to stop both services.
+When the browser asks for the **microphone**, click **Allow**.
 
-To run the two services by hand (macOS/Linux, or without the launcher):
+### Running the two services by hand (macOS / Linux, or without the launcher)
 
 ```bash
-# Terminal 1 - backend (from the project root)
+# Terminal 1 — backend (from the project root, venv active)
 python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000
 
-# Terminal 2 - frontend
+# Terminal 2 — interface
 cd frontend
 npm install
 npx vite --host 127.0.0.1 --port 5173
 ```
 
-## 6. Using the app
+---
 
-**Hands-free recording (Hey Asha)**
+# Using the app
 
-1. The header shows **"Listening for 'Hey Asha'"** once the microphone is live.
-2. Say **"Hey Asha"**. A full-screen card appears and waits for up to 10 seconds.
-3. Say **"start recording"**. The card shows a timer and a green wave that follows your voice.
-4. Say **"Hey Asha, stop recording"**, or press **Stop and save**. The card shows the saved recording with a player.
-5. Open **Recordings** (bottom left) to see every saved file. Files are in `offline_recordings/`.
+## Hands-free recording
 
-You can also say "Hey Asha, start recording" as one phrase.
+1. The header shows that Asha is listening once the microphone is live.
+2. Say **"Hey Asha"**. A glowing card appears — *"Asha is listening"* — and waits up to 10 seconds for your command.
+3. Say **"Start recording"**. The card turns to recording mode with a timer and a wave that follows your voice.
+4. Say **"Hey Asha, stop recording"** (or press **Stop and save**). The recording is saved and you can play it straight away.
+5. Open **Recordings** (bottom right) to see every saved file. Files are stored in `offline_recordings/`.
 
-**Upload**
+Rules Asha follows:
 
-Drop a WAV file into the upload card (or choose one), then select **Create transcript**. Progress and the final transcript appear below.
+- She only wakes on **"Hey Asha"**.
+- **"Start recording"** only works right after "Hey Asha". Said on its own it is ignored.
+- **"Stop recording"** only works together with "Hey Asha".
+- The words of the commands themselves are **not** included in the saved recording.
+- You can say it in one breath: "Hey Asha, start recording".
 
-## 7. Check that it works
+## Upload a recording
 
-- Backend health and configuration: **http://127.0.0.1:8000/api/health**. `azure_configured` should be `true`, and `wake_word.available` should be `true` once the speech model has loaded.
-- Tests (from the project root, venv active):
+Drop a WAV file into the upload card (or browse for one), choose a transcription style, and press **Create transcript**. Live progress appears below, followed by the conversation transcript.
+
+---
+
+# Check that it works
+
+- Open **http://127.0.0.1:8000/api/health**. `azure_configured` should be `true` and `wake_word.available` should be `true` once the voice model has loaded.
+- Run the tests (from the project root, venv active):
 
   ```powershell
   $env:PYTHONPATH = "$PWD\scripts"
   python -m pytest -q tests
   ```
 
-## 8. Troubleshooting
+---
+
+# Troubleshooting
 
 | Symptom | What to check |
 |---|---|
-| Header says "Voice unavailable" or "Loading voice model" | The very first start downloads the 36 MB voice model once. Wait for "Voice control is ready" in the backend terminal. |
-| "Microphone blocked" | Click the lock icon in the address bar and allow the microphone for `127.0.0.1:5173`, then reload. |
-| "Waiting for microphone" or a warning about silent input | Pick the right input device in Windows Sound settings and check its level. |
-| "Hey Asha" is not recognised | The header shows what was last heard. Speak clearly at normal volume, close to the microphone. |
-| Upload says the service is not configured | Check `.env` and `http://127.0.0.1:8000/api/health`. |
-| Port 8000 or 5173 is already in use | Close the other program, or stop the earlier demo with Ctrl+C. |
-| `python` is not found | Reinstall Python with "Add to PATH" ticked, then open a new terminal. |
+| `running scripts is disabled on this system` | Run the command in Step 2, then try again. |
+| `python` / `node` / `git` not found | Install it (Step 1) and **open a new PowerShell window**. |
+| Launcher says the virtual environment was not found | Make sure the folder is named exactly `.venv` in the project root (Step 4). |
+| Header says Asha is getting ready for a long time | The first start downloads the 36 MB voice model. Check your internet and wait for "Voice control is ready" in the terminal. If the download failed, delete the `models/` folder and start again. |
+| "Microphone blocked" | Click the lock icon in the address bar, allow the microphone for `127.0.0.1:5173`, reload. |
+| "Waiting for microphone", or a silent-input warning | Choose the right input device in Windows Sound settings and check its level. |
+| "Hey Asha" is not recognised | The header shows what was last heard. Speak clearly at normal volume, close to the microphone, and pause briefly after each phrase. |
+| Upload says transcription is unavailable | Check `.env` and `http://127.0.0.1:8000/api/health`. |
+| Port 8000 or 5173 already in use | Close the other program, or stop the earlier run with Ctrl+C. |
+| Blank or old interface after updating | Run `npm install` in `frontend/`, then hard-refresh the browser (Ctrl+Shift+R). |
 
-## 9. Project layout
+---
+
+# Project layout
 
 ```text
-backend/app/        FastAPI server: API, WebSocket voice channel, Vosk voice control, pipeline
-frontend/src/       React + Vite UI (App.tsx, VoiceAssistant.tsx for hands-free recording)
+backend/app/        FastAPI server: API, WebSocket voice channel, voice control, pipeline
+frontend/src/       React + Vite interface (App.tsx, VoiceAssistant.tsx for hands-free recording)
+models/             Voice model, downloaded once on first start (git-ignored)
+offline_recordings/ Your saved recordings (git-ignored, may contain sensitive audio)
 scripts/            Transcription and reconstruction steps used by the pipeline
 prompts/            Instructions for the reconstruction agent
 tests/              pytest suite
@@ -137,4 +202,5 @@ See [docs/architecture.md](docs/architecture.md) for the processing design and [
 
 ## Known issues
 
-- Two tests in `tests/test_backend_pipeline.py` and `tests/test_foundry_fast_transcription.py` currently fail. They predate the voice-control work and need a separate fix.
+- Two tests (`tests/test_backend_pipeline.py` with `foundry_fast`, and `tests/test_foundry_fast_transcription.py`) currently fail. They predate the voice-control and interface work and need a separate fix.
+- `tests/test_audio_validation.py` needs `PYTHONPATH` set to the `scripts` folder (see "Check that it works").
