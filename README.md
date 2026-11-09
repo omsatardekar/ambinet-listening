@@ -40,7 +40,7 @@ Install each of these once. After installing, **close and reopen PowerShell** so
 You also need:
 
 - A working **microphone** (built-in or USB), not muted in Windows Sound settings.
-- **Internet** for the first run: the one-time voice model (about 36 MB) and the project's cloud services.
+- **Internet** for installing packages and for the project's cloud services (the voice model is included in the repository).
 - The **`.env` values** for the project's cloud resources. Ask the project owner for them (Step 5).
 
 Check the installs (each should print a version):
@@ -111,7 +111,7 @@ From the project folder, with `(.venv)` active:
 
 The launcher checks the Python packages, starts the backend at **http://127.0.0.1:8000** and the interface at **http://127.0.0.1:5173**, then opens your browser. Press **Ctrl+C** in the terminal to stop both.
 
-**First run only:** the backend downloads the 36 MB voice model into the `models/` folder. Wait until the terminal prints **`Voice control is ready`**. After that the model is stored permanently and loaded once when the server starts — no download, no waiting, on later runs.
+**Voice model:** the voice model is already included in this repository (`models/vosk-model-small-en-in-0.4`), so nothing is downloaded and it works behind company firewalls and SSL-inspecting proxies. It is loaded once when the server starts. Wait until the terminal prints **`Voice control is ready`**.
 
 When the browser asks for the **microphone**, click **Allow**.
 
@@ -172,7 +172,7 @@ Drop a WAV file into the upload card (or browse for one), choose a transcription
 | `running scripts is disabled on this system` | Run the command in Step 2, then try again. |
 | `python` / `node` / `git` not found | Install it (Step 1) and **open a new PowerShell window**. |
 | Launcher says the virtual environment was not found | Make sure the folder is named exactly `.venv` in the project root (Step 4). |
-| Header says Asha is getting ready for a long time | The first start downloads the 36 MB voice model. Check your internet and wait for "Voice control is ready" in the terminal. If the download failed, delete the `models/` folder and start again. |
+| Header says Asha is getting ready for a long time | Wait for "Voice control is ready" in the terminal. Make sure the `models/vosk-model-small-en-in-0.4` folder exists and is complete (re-clone or `git checkout -- models` if not). |
 | "Microphone blocked" | Click the lock icon in the address bar, allow the microphone for `127.0.0.1:5173`, reload. |
 | "Waiting for microphone", or a silent-input warning | Choose the right input device in Windows Sound settings and check its level. |
 | "Hey Asha" is not recognised | The header shows what was last heard. Speak clearly at normal volume, close to the microphone, and pause briefly after each phrase. |
@@ -187,7 +187,7 @@ Drop a WAV file into the upload card (or browse for one), choose a transcription
 ```text
 backend/app/        FastAPI server: API, WebSocket voice channel, voice control, pipeline
 frontend/src/       React + Vite interface (App.tsx, VoiceAssistant.tsx for hands-free recording)
-models/             Voice model, downloaded once on first start (git-ignored)
+models/             Offline voice models, included in the repository (no download needed)
 offline_recordings/ Your saved recordings (git-ignored, may contain sensitive audio)
 scripts/            Transcription and reconstruction steps used by the pipeline
 prompts/            Instructions for the reconstruction agent
