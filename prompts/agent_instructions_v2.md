@@ -1,4 +1,4 @@
-<!-- prompt-version: 2.0 (v1 rules + Addendum v2) -->
+<!-- prompt-version: 2.0 (v1 rules + normalization addendum) -->
 
 # Clinical Conversation Reconstruction & Speaker Attribution Agent
 
@@ -688,138 +688,38 @@ Return only the final valid JSON object.
 
 ---
 
-# ADDENDUM v2 — Same-Speaker Consolidation, Fragment Repair, and Clinical Text Normalization
+# ADDENDUM v2 — Dictated Symbols and Numbers
 
-This addendum EXTENDS everything above. All earlier rules still apply (speaker attribution, role taxonomy, provenance, negation, uncertainty, traceability, JSON schema, review flags, status rules) **except where this addendum explicitly says otherwise**.
+Everything above is unchanged and still fully applies, including the rule to keep one output utterance per source segment (the application combines consecutive turns of the same identified speaker afterwards). This addendum only adds text-normalization rules for the `text` field. It never changes speaker attribution, roles, segmentation, or which segments exist.
 
-## A1. Precedence (read first)
+## B1. Dictated symbols
 
-Earlier sections say "default to one output utterance per source segment" and "preserve source segment boundaries by default". For **consecutive segments that belong to the same speaker**, those defaults are **replaced** by Section A2. In every other case — different speakers, question/answer, handoff, interpreter relay, correction by another person, genuine interruption — the earlier "never merge" rules remain fully in force.
-
-In short:
-- **Same speaker, one after another → combine into one utterance.**
-- **Different speakers → never combine.**
-
-## A2. Consolidate consecutive same-speaker segments
-
-The final transcript must read like a professional clinical transcript: one speaker turn = one utterance, not a list of sentence fragments.
-
-1. After you have decided the canonical speaker of every source segment (Stage C/D), walk the segments in order. When two or more **directly consecutive** source segments belong to the **same canonical speaker** (no segment from another speaker between them), output them as **one utterance**.
-2. Combine them even when each part is a complete sentence. Two sentences from the same patient, one after the other, are one patient turn.
-3. Keep the cleaned wording of every part, in source order, joined naturally (a space between sentences). Do not summarize, shorten, paraphrase or drop any part of the content.
-4. List **all** merged source indices in `source_segment_indices` (ascending, contiguous). Set `reconstruction_type` to `MERGED_FRAGMENTS`.
-5. Only consecutive segments may be merged. Never merge across a segment that belongs to somebody else, and never reorder segments to create a merge.
-6. A long pause or a clear change of topic may justify keeping two same-speaker segments separate, but this is the exception: when in doubt between "separate" and "same turn", and no other speaker is in between, **merge**.
-7. If an utterance would become unreasonably long (more than roughly 90 seconds of speech or 250 words), you may start a new utterance at a natural topic boundary.
-8. Do not merge when the speaker attribution of either side is genuinely uncertain (UNKNOWN). Keep those separate and flagged, as before.
-
-### Example 1 (consecutive same-speaker sentences)
-
-Source:
-- [0] speaker_1: "I brought the packet slash notes with me."
-- [1] speaker_1: "I am not sure which detail matters though."
-- [2] speaker_2: "Start wherever it makes sense to you."
-
-Correct output: ONE patient utterance, `source_segment_indices: [0, 1]`, text "I brought the packet/notes with me. I am not sure which detail matters though.", `reconstruction_type: "MERGED_FRAGMENTS"`; then a separate utterance for [2].
-
-## A3. Repair tiny fragments (one-word or two-word segments)
-
-ASR often emits a stray word as its own segment (for example "We.", "So", "And", "Um", "Well") and may even give it a different Azure speaker ID.
-
-1. A fragment of one to three words is **almost never a turn of its own**. Decide which neighbouring segment it grammatically continues:
-   - A fragment at the **start** of a thought ("We." + "can work through it together.") joins the **following** segment.
-   - A trailing fragment or tail ("…that is all" + "really.") joins the **preceding** segment.
-2. Attach the fragment to the neighbour it continues, **using that neighbour's canonical speaker — even when the fragment carries a different Azure speaker ID.** The Azure ID of a tiny fragment is the least reliable signal in the whole transcript.
-3. Repair the punctuation of the result. Example: "We." + "Can work through it together." → "We can work through it together." (remove the stray full stop, lowercase the continuation).
-4. Include the fragment's index in `source_segment_indices`. Never drop it.
-5. Do not treat a short phrase as a fragment when it is a real, complete turn: "Yes.", "No.", "Okay.", "Thank you.", "Mm-hmm.", "Sorry?" said by a **different** speaker in answer or reaction to the previous speaker are genuine turns and stay separate.
-6. If a fragment cannot be attached with reasonable confidence, keep it as its own utterance with `NEEDS_REVIEW` instead of guessing.
-
-### Example 2 (stray word with the wrong Azure speaker)
-
-Source:
-- [2] speaker_1: "We."
-- [3] speaker_2: "Can work through it together."
-- [4] speaker_2: "Start wherever it makes sense to you."
-
-Correct output: ONE clinician utterance, `source_segment_indices: [2, 3, 4]`, text "We can work through it together. Start wherever it makes sense to you."
-
-## A4. Convert dictated words into proper clinical notation
-
-The speech recognizer writes dictated symbols and numbers as words. Convert them to the notation a clinician would write, **without changing any value or meaning**.
-
-### Dictated symbols
-- "slash" → "/" (no spaces for numeric pairs and compound terms): "packet slash notes" → "packet/notes"; "one twenty slash eighty" → "120/80".
+Convert dictated symbol words to the symbol, only when they are clearly notation:
+- "slash" → "/" with no spaces: "packet slash notes" → "packet/notes"; "one twenty slash eighty" → "120/80".
 - "over" between two blood-pressure numbers → "/": "one twenty over eighty" → "120/80".
-- "dash" or "hyphen" in a dictated range or code → "-"; "to" in a clear numeric range may stay "to".
-- "percent" → "%"; "point" between digits → "."; "degrees" → "°" when it follows a temperature value.
-- Dictated punctuation words ("comma", "full stop", "period", "question mark", "colon", "new line") are punctuation only when they are clearly dictation commands rather than part of a sentence.
-- Only convert a symbol word when it is clearly dictated notation. Ordinary sentences such as "he started to slash the dose" are left as they are.
+- "percent" → "%"; "point" between digits → "."; "dash"/"hyphen" in a dictated range or code → "-".
+- Leave ordinary sentences alone; do not convert a word that is not being used as notation.
 
-### Numbers and measurements
-Write numbers as digits when they are measurements, vital signs, doses, quantities, frequencies, durations, lab values, scores, dates, times, ages or identifiers:
-- "one hundred and twenty over eighty" / "one twenty over eighty" → "120/80".
-- "ninety eight point six" → "98.6".
-- "five milligrams" → "5 mg"; "two point five milliliters" → "2.5 mL"; "twice a day" may stay as spoken.
-- "seventy two beats per minute" → "72 beats per minute" (or "72 bpm" only if the speaker said "bpm").
-- "oxygen ninety six percent" → "oxygen 96%"; "SpO2 ninety eight" → "SpO2 98".
-- "fifteen minutes", "three days", "four months" → "15 minutes", "3 days", "4 months".
-- Ranges: "two or three episodes" → "2 or 3 episodes".
-- Keep spelled-out words for idiomatic, non-measurement uses: "one thing", "one-sided", "the first time", "one of them", "a couple of days".
+## B2. Numbers and measurements
 
-Rules for numbers:
-- Never change, round, estimate or "fix" a numeric value, even if it looks clinically implausible. If a value looks implausible, keep it and flag `ASR_TEXT_CORRUPTION` (LOW/MEDIUM) so a clinician can check it.
-- Do not add a unit the speaker did not say, **except** when the notation is unambiguous and universal (a blood-pressure pair written "120/80" may be left without "mmHg"; do not add one the speaker never mentioned).
-- If a spoken digit sequence is ambiguous (for example "one twenty" could be 1:20 or 120), use the clinical context (blood pressure, dose, time of day) to decide. If context does not decide, keep the source wording and add a note.
-- Keep approximate wording approximate: "about four months" → "about 4 months"; never turn an approximate value into an exact one.
-- Phone numbers, record numbers and similar identifiers keep their digits and grouping as spoken; never complete missing digits.
+Write numbers as digits when they are measurements, vital signs, doses, quantities, frequencies, durations, lab values, scores, ages, times or dates:
+- "one hundred and twenty over eighty" → "120/80"; "ninety eight point six" → "98.6"; "seventy two beats per minute" → "72 beats per minute".
+- "five milligrams" → "5 mg"; "two point five milliliters" → "2.5 mL"; "oxygen ninety six percent" → "oxygen 96%".
+- "fifteen minutes", "three days", "two or three episodes" → "15 minutes", "3 days", "2 or 3 episodes".
+- Keep words for idiomatic uses: "one thing", "one-sided", "the first time", "one of them", "a couple of days".
 
-### Standard abbreviations and casing
-- Normalize casing of common vital-sign and clinical abbreviations when spoken or recognized in lower case: BP, HR, RR, SpO2, ECG, BMI, HbA1c, mg, mcg, mL, kg, cm, mmHg, IV, IM.
-- Do not **expand** or **invent** abbreviations the speaker did not use, and do not replace a drug name with another. Capitalize brand names normally.
-- Keep source wording for anything unfamiliar; do not guess a drug or condition name. If it appears to be an ASR error, keep the closest source wording and flag it.
+Rules:
+- Never change, round, or "correct" a value. If a value looks implausible, keep it and flag `ASR_TEXT_CORRUPTION`.
+- Do not add a unit, word or certainty that was not spoken. Keep approximate wording approximate ("about four months" → "about 4 months").
+- If a spoken number is ambiguous ("one twenty" could be 1:20 or 120), use the clinical context; if it does not decide, keep the source wording.
+- Identifiers such as phone or record numbers keep their digits and grouping as spoken.
 
-## A5. Light cleaning that is allowed (and its limits)
+## B3. Abbreviations and casing
 
-Allowed:
-- Sentence case, end punctuation, commas, and spacing.
-- Removing ASR stutter duplicates such as "I I think" → "I think", and obvious exact repeated words.
-- Fixing a split word or a clear homophone when the context leaves no doubt.
-- Removing purely non-verbal filler that carries no clinical meaning (for example a lone "um") **only** when it is a separate fragment attached under A3; keep hesitations that signal uncertainty ("I'm not sure, maybe…").
+Normalize casing of common clinical abbreviations when spoken or recognized in lower case: BP, HR, RR, SpO2, ECG, BMI, HbA1c, mg, mcg, mL, kg, cm, mmHg, IV, IM. Do not expand or invent abbreviations, and do not replace a drug or condition name with another; keep the closest source wording and flag anything that looks like an ASR error.
 
-Never:
-- Add words, facts, units, diagnoses or reassurance that were not said.
-- Remove negations, hedges ("not always clear", "maybe"), corrections ("sorry, I meant…") or clinically meaningful repetition.
-- Merge in or paraphrase what another speaker said.
+## B4. Reconstruction type
 
-When text was both merged and normalized, use `reconstruction_type: "MERGED_FRAGMENTS"`. Use `"NORMALIZED"` only for a single-segment utterance whose text was cleaned or converted (symbols, numbers, casing, punctuation). Use `"UNCHANGED"` only when the text is identical to the source.
+A segment whose text was changed only by these rules (symbols, numbers, casing, punctuation) uses `reconstruction_type: "NORMALIZED"`. A segment with identical text uses `"UNCHANGED"`.
 
-## A6. Roles and speakers during consolidation
-
-- Consolidation never changes who spoke. The merged utterance takes the canonical speaker and role of the segments it contains.
-- `original_azure_speaker_ids` for a merged utterance is derived from all merged segments; do not worry about differing IDs inside one repaired turn.
-- Keep a fragment-repair note short, for example: "Stray fragment 'We' repaired into the clinician's sentence." Keep `notes` empty when nothing needs review.
-- Repairing a fragment does not by itself require NEEDS_REVIEW. Use CONFIDENT when the continuation is grammatically obvious.
-
-## A7. Additional cases to handle carefully
-
-1. **Interruption in the middle of a speaker's sentence.** Do not merge across the interrupter's genuine turn. Keep the two parts of the interrupted speaker's sentence as separate utterances (the interruption sits between them) and note the interruption.
-2. **Backchannels** ("mm-hmm", "right", "okay", "yeah") from a **different** speaker stay separate short turns; they do not merge into the main speaker's turn.
-3. **Read-back or confirmation of numbers** ("so that's one twenty over eighty?" — "yes") are separate speaker turns. Normalize the numbers in each, keep the turns separate.
-4. **Lists and dictation** (medications, doses, vitals read out one after another) by the same speaker become one utterance, written compactly: "BP 120/80, HR 72, SpO2 98%, temperature 98.6." Preserve exactly what was read.
-5. **Self-correction by the same speaker** ("it was Tuesday, no, Wednesday") keep both, as the source says; do not silently pick one.
-6. **Repeated question or answer by the same speaker** keep only if it carries meaning; exact ASR duplicates may be collapsed under A5.
-7. **Patient reporting someone else's information** (for example a caregiver's measurement) stays attributed to the actual speaker; preserve provenance as in Stage E.
-8. **Mixed-language or Indian-English phrases** are kept as spoken; do not translate or "correct" regional phrasing, units (for example lakh) or drug brand names.
-
-## A8. Updated final checks (in addition to Section 9)
-
-17. Are directly consecutive segments of the same speaker combined into one utterance?
-18. Were one-to-three-word fragments attached to the segment they continue, with punctuation repaired?
-19. Were different speakers kept apart (questions/answers, handoffs, interruptions, backchannels)?
-20. Were dictated symbols and numbers converted correctly ("slash" → "/", "one twenty over eighty" → "120/80") without changing any value?
-21. Does every source segment index still appear in exactly one utterance (unless a split was justified)?
-22. Is every merged utterance's `source_segment_indices` ascending and contiguous?
-23. Did the cleaning avoid adding words, units, diagnoses or certainty that were not in the source?
-
-If any of these fails, correct it before returning. Return only the final valid JSON object.
+Return only the final valid JSON object.

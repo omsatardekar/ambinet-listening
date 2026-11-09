@@ -24,16 +24,17 @@ ALLOWED_ROLES = {
 }
 ALLOWED_STATUSES = {"CONFIDENT", "PROVISIONAL", "NEEDS_REVIEW"}
 
-# Agent instruction file. agent_instructions.md is v1 (kept unchanged for
-# traceability); agent_instructions_v2.md = v1 + same-speaker consolidation,
-# fragment repair and clinical text normalization. Override with AGENT_PROMPT_FILE.
+# Agent instruction file. agent_instructions.md is v1 (kept unchanged); the default
+# agent_instructions_v2.md is v1 plus a short text-normalization addendum (slash, numbers).
+# Override with AGENT_PROMPT_FILE.
 AGENT_PROMPT_FILE = os.getenv("AGENT_PROMPT_FILE", "").strip() or "agent_instructions_v2.md"
 AGENT_PROMPT_PATH = ROOT / "prompts" / AGENT_PROMPT_FILE
-CONSOLIDATE_SAME_SPEAKER = AGENT_PROMPT_FILE != "agent_instructions.md"
-# A segment this short (in words) that carries a different source speaker ID is
-# treated as a stray ASR fragment when it is merged into a neighbouring turn.
-FRAGMENT_MAX_WORDS = 3
-FRAGMENT_MIN_CONFIDENCE = 0.6
+
+# After the speakers are decided, consecutive utterances of the same speaker are joined
+# into one turn (done in code, not by the model). Set MERGE_SAME_SPEAKER_TURNS=0 to disable.
+MERGE_SAME_SPEAKER_TURNS = os.getenv("MERGE_SAME_SPEAKER_TURNS", "1").strip() != "0"
+FRAGMENT_MAX_WORDS = 3      # a piece this short is a stray ASR fragment ("We.")
+MERGED_TURN_MAX_WORDS = 250  # start a new turn rather than build an endless paragraph
 
 
 def required(name: str) -> str:
@@ -150,16 +151,7 @@ def compact_encounter(raw: dict[str, Any], blob_name: str) -> dict[str, Any]:
         seg.get("speaker_id") for seg in segments if seg.get("speaker_id")
     })
     is_foundry_fast = raw.get("speech_job_id") is None
-    if CONSOLIDATE_SAME_SPEAKER:
-        diarization_notice = (
-            f"The source produced {len(distinct_ids)} distinct speaker ID(s) "
-            f"({', '.join(distinct_ids)}). Treat them as fallible clues, not proof "
-            "of identity or role. Do not assume additional participants and do not "
-            "invent speakers or roles to match expected clinic staffing. Decide the "
-            "speaker of every segment from context first; one ID may hold more than "
-            "one person and one person may have several IDs."
-        )
-    elif is_foundry_fast and len(distinct_ids) <= 2:
+    if is_foundry_fast and len(distinct_ids) <= 2:
         diarization_notice = (
             "The source produced only "
             f"{len(distinct_ids)} speaker ID(s) ({', '.join(distinct_ids)}). "
@@ -183,29 +175,6 @@ def compact_encounter(raw: dict[str, Any], blob_name: str) -> dict[str, Any]:
             "proof of identity or role."
         )
 
-    if CONSOLIDATE_SAME_SPEAKER:
-        important_instruction = (
-            "Use speaker IDs as fallible clues. Combine directly consecutive segments "
-            "of the same speaker into ONE utterance (list every merged source index), "
-            "and attach one-to-three-word stray fragments to the segment they continue "
-            "even when the fragment's speaker ID differs. Never merge different "
-            "speakers: keep questions and answers, handoffs, corrections, interruptions "
-            "and backchannels separate. Convert dictated symbols and spoken numbers to "
-            "clinical notation without changing any value (slash -> /, "
-            "'one twenty over eighty' -> 120/80). Assign uncertain speakers or roles "
-            "as UNKNOWN/PROVISIONAL and require review. "
-            + diarization_notice
-        )
-    else:
-        important_instruction = (
-            "Preserve source segment order and conversational turn boundaries. "
-            "Never merge different speaker IDs into one utterance. Do not merge "
-            "separate complete turns, questions and answers, handoffs, or corrections. "
-            "Use speaker IDs as fallible clues; assign uncertain speakers or roles "
-            "as UNKNOWN/PROVISIONAL and require review. "
-            + diarization_notice
-        )
-
     return {
         "encounter_id": str(raw.get("recording_id") or blob_name[:2]),
         "source_blob": blob_name,
@@ -220,54 +189,100 @@ def compact_encounter(raw: dict[str, Any], blob_name: str) -> dict[str, Any]:
             "distinct_speaker_id_count": len(distinct_ids),
             "diarization_may_be_coarse": is_foundry_fast and len(distinct_ids) <= 2,
         },
-        "important_instruction": important_instruction,
+        "important_instruction": (
+            "Preserve source segment order and conversational turn boundaries. "
+            "Never merge different speaker IDs into one utterance. Do not merge "
+            "separate complete turns, questions and answers, handoffs, or corrections. "
+            "Use speaker IDs as fallible clues; assign uncertain speakers or roles "
+            "as UNKNOWN/PROVISIONAL and require review. "
+            + diarization_notice
+        ),
     }
 
 
-def _word_count(text: Any) -> int:
-    return len(str(text or "").split())
+_DICTATED_SLASH = re.compile(r"(?<=\w)\s+slash\s+(?=\w)", re.IGNORECASE)
+# Words that cannot end a sentence: a fragment ending in one of these continues in the next piece.
+_DANGLING_WORDS = {
+    "we", "i", "they", "he", "she", "the", "a", "an", "and", "or", "but", "to", "of", "for", "with",
+    "which", "as", "if", "when", "because", "my", "your", "our", "his", "their", "than", "from", "by",
+    "is", "are", "was", "were", "can", "will", "should", "would", "could", "have", "has",
+}
+# Words a continuation may start with (safe to lowercase after a dangling fragment).
+_CONTINUATION_WORDS = _DANGLING_WORDS | {
+    "it", "you", "that", "this", "do", "does", "did", "may", "might", "must", "had", "been", "also",
+    "just", "still", "work", "go", "see", "make", "get", "take", "start", "keep", "check", "look",
+    "talk", "walk", "exact", "exactly",
+}
 
 
-def _merge_is_safe(
-    indices: list[int],
-    source_segments: list[dict[str, Any]],
-    pid: str,
-    registry_map: dict[str, Any],
-    confidence: float | None,
-) -> bool:
-    """Decide whether a model-merged utterance may be kept as ONE utterance.
+def normalize_dictation(text: str) -> str:
+    """Safe code-level cleanup of dictated notation ("packet slash notes" -> "packet/notes")."""
+    return _DICTATED_SLASH.sub("/", text)
 
-    Allowed only when the merge is the consolidation of consecutive turns of one
-    registered speaker (the v2 prompt behaviour). The earlier safety rule is kept
-    for everything else: unknown speakers, gaps, or different speaker IDs.
+
+def _words(text: str) -> list[str]:
+    return re.findall(r"[A-Za-z0-9'/]+", text)
+
+
+def _join_turn_text(first: str, second: str) -> str:
+    """Join two pieces of one speaker's turn; repair a dangling stray fragment like "We." + "Can work..."."""
+    first = first.strip()
+    second = second.strip()
+    first_words = _words(first)
+    second_words = _words(second)
+    dangling = bool(first_words) and first_words[-1].lower() in _DANGLING_WORDS
+    lead = second_words[0] if second_words else ""
+    if dangling and lead.lower() in _CONTINUATION_WORDS:
+        first = first.rstrip(".,;:").rstrip()
+        if lead != "I" and not lead.startswith("I'") and not (len(lead) > 1 and lead.isupper()):
+            second = second[:1].lower() + second[1:]
+    return f"{first} {second}".strip()
+
+
+def merge_same_speaker_turns(utterances: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Join directly consecutive utterances of the same identified speaker into one turn.
+
+    Runs after the speakers have been decided, so it never changes who spoke. UNKNOWN
+    speakers, non-adjacent source segments and split segments are never merged.
     """
-    if not CONSOLIDATE_SAME_SPEAKER:
-        return False
-    if pid == "UNKNOWN" or pid not in registry_map:
-        return False
-    ordered = sorted(set(indices))
-    # Only directly consecutive source segments, so no other turn is swallowed.
-    if ordered != list(range(ordered[0], ordered[-1] + 1)):
-        return False
-    ids = [source_segments[i].get("speaker_id") for i in ordered]
-    known = {str(value) for value in ids if value not in (None, "")}
-    if len(known) <= 1:
-        return True
-    # Different source IDs: only the stray-fragment repair is allowed. Every
-    # segment outside the dominant ID must be a very short fragment.
-    counts: dict[str, int] = {}
-    for i in ordered:
-        value = source_segments[i].get("speaker_id")
-        if value not in (None, ""):
-            counts[str(value)] = counts.get(str(value), 0) + _word_count(source_segments[i].get("text"))
-    dominant = max(counts, key=counts.get)
-    for i in ordered:
-        value = source_segments[i].get("speaker_id")
-        if value in (None, "") or str(value) == dominant:
+    merged: list[dict[str, Any]] = []
+    for item in utterances:
+        previous = merged[-1] if merged else None
+        if (
+            previous is not None
+            and item["canonical_speaker_id"] != "UNKNOWN"
+            and previous["canonical_speaker_id"] == item["canonical_speaker_id"]
+            and "SPLIT_SEGMENT" not in (previous["reconstruction_type"], item["reconstruction_type"])
+            and max(previous["source_segment_indices"]) + 1 == min(item["source_segment_indices"])
+            and len(_words(previous["text"])) + len(_words(item["text"])) <= MERGED_TURN_MAX_WORDS
+        ):
+            fragment_only = len(_words(item["text"])) <= FRAGMENT_MAX_WORDS
+            previous["text"] = _join_turn_text(previous["text"], item["text"])
+            previous["source_segment_indices"] = sorted(
+                set(previous["source_segment_indices"]) | set(item["source_segment_indices"])
+            )
+            previous["original_azure_speaker_ids"] = sorted(
+                set(previous["original_azure_speaker_ids"]) | set(item["original_azure_speaker_ids"])
+            )
+            if previous["start_seconds"] is not None and item["end_seconds"] is not None:
+                previous["end_seconds"] = max(previous["end_seconds"] or 0.0, item["end_seconds"])
+                previous["duration_seconds"] = previous["end_seconds"] - previous["start_seconds"]
+            rank = {"NEEDS_REVIEW": 0, "PROVISIONAL": 1, "CONFIDENT": 2}
+            weaker = min(previous, item, key=lambda x: rank.get(x["attribution_status"], 0))
+            # A tiny stray fragment should not drag a solid turn down to review.
+            status_source = previous if fragment_only else weaker
+            previous["attribution_status"] = status_source["attribution_status"]
+            previous["attribution_confidence"] = (
+                previous["attribution_confidence"] if fragment_only
+                else min(previous["attribution_confidence"], item["attribution_confidence"])
+            )
+            previous["reconstruction_type"] = "MERGED_FRAGMENTS"
+            previous["notes"] = list(previous["notes"]) + list(item["notes"])
             continue
-        if _word_count(source_segments[i].get("text")) > FRAGMENT_MAX_WORDS:
-            return False
-    return confidence is not None and confidence >= FRAGMENT_MIN_CONFIDENCE
+        merged.append(item)
+    for number, item in enumerate(merged, start=1):
+        item["utterance_id"] = f"U{number:04d}"
+    return merged
 
 
 def safe_number(value):
@@ -329,14 +344,7 @@ def validate_and_finalize(agent_result: dict[str, Any], raw: dict[str, Any], blo
         if not valid_indices:
             flags.append({"type": "UTTERANCE_WITHOUT_SOURCE", "utterance_id": utterance.get("utterance_id", f"U{n:04d}")})
             continue
-        merged_confidence = safe_number(utterance.get("attribution_confidence"))
-        if len(set(valid_indices)) > 1 and not _merge_is_safe(
-            valid_indices,
-            source_segments,
-            utterance.get("canonical_speaker_id") or "UNKNOWN",
-            registry_map,
-            merged_confidence,
-        ):
+        if len(set(valid_indices)) > 1:
             flags.append({
                 "type": "MERGED_SOURCE_TURNS_REVIEW",
                 "utterance_id": utterance.get("utterance_id", f"U{n:04d}"),
@@ -403,9 +411,6 @@ def validate_and_finalize(agent_result: dict[str, Any], raw: dict[str, Any], blo
         status = utterance.get("attribution_status") if utterance.get("attribution_status") in ALLOWED_STATUSES else "NEEDS_REVIEW"
         confidence = safe_number(utterance.get("attribution_confidence"))
         confidence = min(1.0, max(0.0, confidence if confidence is not None else 0.0))
-        reconstruction_type = utterance.get("reconstruction_type", "UNCHANGED")
-        if len(set(valid_indices)) > 1 and reconstruction_type != "SPLIT_SEGMENT":
-            reconstruction_type = "MERGED_FRAGMENTS"
         normalized_utterances.append({
             "utterance_id": f"U{len(normalized_utterances)+1:04d}",
             "start_seconds": start,
@@ -418,7 +423,7 @@ def validate_and_finalize(agent_result: dict[str, Any], raw: dict[str, Any], blo
             "original_azure_speaker_ids": azure_ids,
             "attribution_confidence": confidence,
             "attribution_status": status,
-            "reconstruction_type": reconstruction_type,
+            "reconstruction_type": utterance.get("reconstruction_type", "UNCHANGED"),
             "notes": utterance.get("notes") if isinstance(utterance.get("notes"), list) else [],
         })
 
@@ -453,7 +458,15 @@ def validate_and_finalize(agent_result: dict[str, Any], raw: dict[str, Any], blo
             })
 
     normalized_utterances.sort(key=lambda x: (x["start_seconds"] is None, x["start_seconds"] or 0.0, x["utterance_id"]))
-    # Re-number after chronological sorting.
+    for item in normalized_utterances:
+        cleaned = normalize_dictation(item["text"])
+        if cleaned != item["text"]:
+            item["text"] = cleaned
+            if item["reconstruction_type"] == "UNCHANGED":
+                item["reconstruction_type"] = "NORMALIZED"
+    if MERGE_SAME_SPEAKER_TURNS:
+        normalized_utterances = merge_same_speaker_turns(normalized_utterances)
+    # Re-number after chronological sorting (and merging).
     for n, item in enumerate(normalized_utterances, start=1):
         item["utterance_id"] = f"U{n:04d}"
 

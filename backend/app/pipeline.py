@@ -3,10 +3,13 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import math
 import os
 import re
 import sys
 import threading
+import time
+import wave
 from pathlib import Path
 from typing import Any
 
@@ -36,6 +39,93 @@ _AUDIO_CONTENT = ContentSettings(content_type="audio/wav")
 WEB_SPEECH_POLL_INTERVAL_SECONDS = 10
 
 
+def _audio_seconds(path: Path) -> float:
+    """Length of the recording, used to size the progress estimate for external waits."""
+    try:
+        with wave.open(str(path), "rb") as reader:
+            return reader.getnframes() / float(reader.getframerate() or 16000)
+    except (OSError, EOFError, wave.Error):
+        try:
+            return path.stat().st_size / 32000.0
+        except OSError:
+            return 60.0
+
+
+def _env_float(name: str, default: float) -> float:
+    try:
+        return float(os.getenv(name, "").strip() or default)
+    except ValueError:
+        return default
+
+
+class _EstimatedProgress:
+    """Keeps the progress bar moving while a slow external service works.
+
+    The speech service and the model do not report a percentage, so while we wait the
+    bar advances smoothly from ``start`` towards ``end`` along an easing curve sized by
+    ``expected_seconds``. It never reaches ``end`` on its own (the real completion of the
+    step moves it on), so it cannot claim more progress than has actually happened.
+    """
+
+    def __init__(
+        self,
+        progress: ProgressManager,
+        run_id: str,
+        stage: str,
+        message: str,
+        operation: str,
+        start: int,
+        end: int,
+        expected_seconds: float,
+        interval: float = 1.0,
+    ) -> None:
+        self._progress = progress
+        self._run_id = run_id
+        self._stage = stage
+        self.message = message
+        self._operation = operation
+        self._start = start
+        self._end = end
+        self._expected = max(5.0, expected_seconds)
+        self._interval = interval
+        self._stop = threading.Event()
+        self._thread: threading.Thread | None = None
+        self._last = start
+
+    def __enter__(self) -> "_EstimatedProgress":
+        self._began = time.monotonic()
+        self._thread = threading.Thread(target=self._run, name="progress-estimate", daemon=True)
+        self._thread.start()
+        return self
+
+    def __exit__(self, *_exc: Any) -> None:
+        self._stop.set()
+        if self._thread is not None:
+            self._thread.join(timeout=5)
+
+    def _run(self) -> None:
+        span = self._end - self._start
+        while not self._stop.wait(self._interval):
+            elapsed = time.monotonic() - self._began
+            percent = self._start + int(span * (1 - math.exp(-elapsed / self._expected)))
+            percent = min(self._end - 1, percent)
+            if percent <= self._last:
+                continue
+            self._last = percent
+            try:
+                self._progress.update(
+                    self._run_id,
+                    self._stage,
+                    "in_progress",
+                    self.message,
+                    percent,
+                    operation=self._operation,
+                    stage_status="in_progress",
+                )
+            except Exception:  # progress is cosmetic; never break the pipeline
+                logger.debug("Could not publish estimated progress", exc_info=True)
+
+
 def audio_fingerprint(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as audio_file:
@@ -57,6 +147,15 @@ def run_pipeline(
     process_service = None
 
     try:
+        progress.update(
+            run_id,
+            "audio_upload",
+            "in_progress",
+            f"Preparing {filename}.",
+            1,
+            operation="Preparing your recording",
+            stage_status="in_progress",
+        )
         storage_config = speech_pipeline.get_storage_config()
         speech_config = (
             speech_pipeline.get_transcription_config()
@@ -82,6 +181,15 @@ def run_pipeline(
             transcript_processing.make_clients(process_config)
         )
 
+        progress.update(
+            run_id,
+            "audio_upload",
+            "in_progress",
+            "Connecting to secure storage.",
+            2,
+            operation="Connecting to secure storage",
+            stage_status="in_progress",
+        )
         _require_container(audio_container, required_containers["Audio recording"])
         _require_container(transcript_container, required_containers["Speech transcript"])
         _require_container(output_container, required_containers["Final transcript"])
@@ -91,9 +199,9 @@ def run_pipeline(
             run_id,
             "audio_upload",
             "in_progress",
-            f"Uploading {filename}.",
-            0,
-            operation="Uploading audio",
+            f"Checking {filename} before upload.",
+            4,
+            operation="Checking for earlier copies",
             stage_status="in_progress",
         )
 
@@ -192,11 +300,20 @@ def run_pipeline(
                 "speech_provider": speech_provider,
             }
             audio_size = upload_path.stat().st_size
+            progress.update(
+                run_id,
+                "audio_upload",
+                "in_progress",
+                f"Uploading {filename}.",
+                6,
+                operation="Uploading audio",
+                stage_status="in_progress",
+            )
 
             def audio_upload_progress(current: int, total: int | None) -> None:
                 effective_total = total or audio_size
                 fraction = min(1.0, current / effective_total) if effective_total else 1.0
-                percent = min(15, max(0, int(fraction * 15)))
+                percent = min(15, 6 + int(fraction * 9))
                 progress.update(
                     run_id,
                     "audio_upload",
@@ -249,10 +366,11 @@ def run_pipeline(
                 current_stage,
                 "in_progress",
                 "Recording received. Starting transcription.",
-                15,
+                17,
                 operation="Starting transcription",
                 stage_status="in_progress",
             )
+            audio_seconds = _audio_seconds(upload_path)
 
             if speech_provider == "foundry_fast":
                 progress.update(
@@ -260,20 +378,39 @@ def run_pipeline(
                     current_stage,
                     "in_progress",
                     "Sending the recording to Foundry Fast Transcription.",
-                    23,
+                    20,
                     operation="Transcribing with Foundry Fast Transcription",
                     stage_status="in_progress",
                 )
-                raw_speech_result = fast_speech_pipeline.transcribe_file(
-                    upload_path,
-                    speech_config,
-                )
+                with _EstimatedProgress(
+                    progress,
+                    run_id,
+                    current_stage,
+                    "Transcribing the conversation.",
+                    "Transcribing with Foundry Fast Transcription",
+                    start=20,
+                    end=40,
+                    expected_seconds=max(15.0, audio_seconds * _env_float("PROGRESS_FAST_SPEECH_FACTOR", 0.25)),
+                ):
+                    raw_speech_result = fast_speech_pipeline.transcribe_file(
+                        upload_path,
+                        speech_config,
+                    )
                 transcript = fast_speech_pipeline.normalize_result(
                     raw_speech_result,
                     audio_name,
                     max_speakers=int(speech_config.get("max_speakers", 4)),
                 )
             else:
+                progress.update(
+                    run_id,
+                    current_stage,
+                    "in_progress",
+                    "Securing access to the recording.",
+                    18,
+                    operation="Preparing transcription",
+                    stage_status="in_progress",
+                )
                 sas = speech_pipeline.create_input_sas(speech_config)
                 headers = {"Ocp-Apim-Subscription-Key": speech_config["speech_key"]}
                 job_url = speech_pipeline.submit_transcription(
@@ -288,29 +425,32 @@ def run_pipeline(
                     current_stage,
                     "in_progress",
                     "Transcription started. Waiting for the service to finish.",
-                    23,
+                    20,
                     operation="Transcribing with Azure Speech",
                     stage_status="in_progress",
                 )
 
-                def speech_status(status: str) -> None:
-                    progress.update(
-                        run_id,
-                        current_stage,
-                        "in_progress",
-                        f"Azure Speech transcription is in progress (service status: {status}).",
-                        23,
-                        operation="Transcribing with Azure Speech",
-                        stage_status="in_progress",
-                    )
+                with _EstimatedProgress(
+                    progress,
+                    run_id,
+                    current_stage,
+                    "Transcribing the conversation.",
+                    "Transcribing with Azure Speech",
+                    start=20,
+                    end=38,
+                    expected_seconds=max(45.0, audio_seconds * _env_float("PROGRESS_BATCH_SPEECH_FACTOR", 0.5)),
+                ) as estimate:
 
-                speech_pipeline.wait_for_job(
-                    job_url,
-                    job_id,
-                    headers,
-                    on_status=speech_status,
-                    poll_interval_seconds=WEB_SPEECH_POLL_INTERVAL_SECONDS,
-                )
+                    def speech_status(status: str) -> None:
+                        estimate.message = f"Transcribing the conversation (service status: {status})."
+
+                    speech_pipeline.wait_for_job(
+                        job_url,
+                        job_id,
+                        headers,
+                        on_status=speech_status,
+                        poll_interval_seconds=WEB_SPEECH_POLL_INTERVAL_SECONDS,
+                    )
                 progress.update(
                     run_id,
                     current_stage,
@@ -438,7 +578,19 @@ def run_pipeline(
                 transcript,
                 transcript_name,
             )
-            agent_result = agent.reconstruct(encounter, instructions)
+            segment_count = len(transcript.get("segments") or [])
+            with _EstimatedProgress(
+                progress,
+                run_id,
+                current_stage,
+                "Organizing speakers and conversation context.",
+                "Reconstructing clinical conversation",
+                start=60,
+                end=70,
+                expected_seconds=_env_float("PROGRESS_LLM_BASE_SECONDS", 30.0)
+                + segment_count * _env_float("PROGRESS_LLM_SECONDS_PER_SEGMENT", 1.0),
+            ):
+                agent_result = agent.reconstruct(encounter, instructions)
             progress.update(
                 run_id,
                 current_stage,

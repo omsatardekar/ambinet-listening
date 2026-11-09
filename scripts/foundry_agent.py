@@ -354,17 +354,7 @@ rather than writing lengthy explanations.
             "only where supported, and return the required compact JSON."
         )
         if PROMPT_V2_MARKER in instructions:
-            compact_output_rules = compact_output_rules.replace(
-                _PRESERVE_TURNS_V1, _PRESERVE_TURNS_V2
-            )
-            task = (
-                "Reconstruct this complete clinical encounter. Decide the speaker of "
-                "every segment first, then combine directly consecutive segments of "
-                "the same speaker into one utterance, repair stray fragments, convert "
-                "dictated symbols and numbers to clinical notation without changing "
-                "values, never merge different speakers, and return the required "
-                "compact JSON."
-            )
+            compact_output_rules += _NORMALIZATION_RULES_V2
 
         user_payload = {
             "task": task,
@@ -458,32 +448,15 @@ def _same_text(left: str, right: str) -> bool:
 
     return normalize(left) == normalize(right)
 
-_PRESERVE_TURNS_V1 = """PRESERVE SOURCE TURNS:
-- Default to one output utterance per input source segment.
-- Never merge source segments with different non-empty speaker_id values.
-- Never merge a question and its response, a handoff, a correction, or two
-  distinct conversational turns, even when they discuss the same subject.
-- Merge fragments only when one uninterrupted speaker turn is strongly
-  supported. If uncertain, keep segments separate and mark attribution for review.
-- Do not infer extra participants or roles merely because diarization has few IDs
-  or because a clinic is expected to have a doctor and nurse."""
-
-_PRESERVE_TURNS_V2 = """SPEAKER TURNS (v2 rules, these replace any earlier one-utterance-per-segment default):
-- First decide the speaker of every source segment from the whole conversation.
-- Directly consecutive segments of the SAME speaker become ONE utterance. List every
-  merged index in source_segment_indices (ascending, contiguous) and use
-  reconstruction_type MERGED_FRAGMENTS. Keep all of their text, cleaned and joined.
-- A stray one-to-three-word fragment (for example "We.") is attached to the
-  neighbouring segment it continues, using that segment's speaker even when the
-  fragment's source speaker_id differs. Repair the punctuation.
-- Never merge different speakers: questions and answers, handoffs, interpreter
-  relays, corrections, interruptions and backchannels from another speaker stay
-  separate utterances. Never merge across another speaker's segment.
-- Convert dictated symbols and spoken numbers to clinical notation without changing
-  any value ("slash" -> "/", "one twenty over eighty" -> "120/80", "ninety eight
-  point six" -> "98.6"). Do not add words, units or certainty that were not said.
-- Do not infer extra participants or roles merely because diarization has few IDs
-  or because a clinic is expected to have a doctor and nurse."""
+_NORMALIZATION_RULES_V2 = """
+TEXT NORMALIZATION (v2, applies only to the text field; segmentation and speakers are unchanged):
+- Convert dictated notation without changing any value: "slash" -> "/" (packet slash notes
+  -> packet/notes), "one twenty over eighty" -> "120/80", "ninety eight point six" -> "98.6",
+  "five milligrams" -> "5 mg", "percent" -> "%".
+- Write measurements, vitals, doses, durations and counts as digits; keep idiomatic words
+  ("one thing", "one-sided").
+- Never add words, units or certainty that were not spoken, and never change a number.
+"""
 
 
 def load_instructions(path: str | Path) -> str:

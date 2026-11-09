@@ -68,7 +68,8 @@ class ProgressManager:
             state["current_stage"] = stage
             state["operation"] = operation or message
             state["message"] = message
-            state["percent"] = max(0, min(100, percent))
+            # The bar only ever moves forward within a run.
+            state["percent"] = max(state["percent"], max(0, min(100, percent)))
             state["stages"][stage]["status"] = stage_status or status
             state["stages"][stage]["message"] = message
             self._append_event(state, stage, status, message, state["percent"], state["operation"])
