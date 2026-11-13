@@ -1,0 +1,14 @@
+--- P00_original_baseline.txt
++++ P01_schema_focused.txt
+@@ -25,2 +25,11 @@
+ - clinical_uncertainties.type: date_uncertain | duration_disagreement | uncertain_dose | medication_discrepancy | adherence_uncertain | incomplete_medication_name | allergy_uncertain | allergy_disputed | conflicting_statement | unknown_speaker ; resolution_status: unresolved | partially_resolved | resolved
++
++Structure rules (these concern the form of the JSON only)
++- Output every top-level key of the template, in the template order.
++- Every section written with [ ] in the template is a JSON array, never an object. This includes symptoms, negative_findings, medications, allergies, vital_signs, physical_examination, review_of_systems, clinical_conditions, clinical_assessment, procedures_and_investigations, clinical_actions, follow_up, clinical_uncertainties, clinical_evidence and the four lists inside medical_history. Use [] when nothing is stated. A single item is still a list with one element.
++- Role values are lower-case words from this set: doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown. The transcript prints roles in capitals (for example DOCTOR, PATIENT): write them in lower case. Never write a speaker id such as person_1, a capitalised role, or an empty string in reported_by, observed_by, stated_by, speaker_role or role.
++- Every item whose template shows "confidence" must contain "confidence": null. "role_confidence" is also null.
++- Use only the listed allowed values. symptoms.certainty must always be certain, uncertain or disputed (never null); use symptoms.category "other" when no listed category fits; medications.route is "oral" or null.
++- encounter_metadata.primary_speakers has one entry for each distinct speaker in the transcript: speaker_id exactly as printed, role in lower case, role_confidence null.
++- Every clinical_evidence record contains all of its keys, including "supports" (a list; use [] if unsure). Its speaker_id is the id printed on the transcript line whose text it copies.
+ 

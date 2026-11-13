@@ -1,0 +1,54 @@
+11c11
+< - Every extracted item lists evidence_ids pointing to clinical_evidence records. Each evidence record copies the exact transcript text of one segment and lists the items it supports as locations such as "symptoms[0]" or "chief_complaint".
+---
+> - Every extracted item lists in source_segments the segment id(s) of the transcript line(s) that state it (see the Source rules).
+26a27,34
+> Source rules (these concern which transcript lines an item comes from, not what is extracted)
+> - Every transcript line starts with its segment id in square brackets, for example [SEG0007]. Write ids exactly as printed, in the form SEG0007, without brackets.
+> - For every extracted item, source_segments lists the id of each line that directly states or confirms the item. Select the minimum number of transcript segments needed to support each fact. Use several segments when the fact genuinely requires them; do not add more segments when one is sufficient.
+> - Include a question line only when it is necessary to interpret the response; a question alone is never proof of a clinical fact. For example, when the doctor asks whether the patient has a symptom and the patient answers no, the patient's answer is the evidence for the denied symptom.
+> - Select evidence by meaning, not by position in the transcript. Do not cite greetings or small talk unless they contain clinically relevant information.
+> - Never write evidence records, speaker ids, times or quotations of transcript text: they are added automatically from the ids.
+> - If no transcript line states an item, do not output that item.
+> 
+46,48c54,56
+<   "chief_complaint": {"value": "<text>", "normalized_value": "<text>", "reported_by": "<role>", "evidence_ids": ["EV_001"]},
+<   "symptoms": [{"name": "", "normalized_name": "", "category": "", "status": "", "severity": null, "duration": {"value": null, "unit": null, "normalized": null}, "frequency": null, "onset": null, "temporality": "", "body_site": null, "associated_symptoms": [], "aggravating_factors": [], "relieving_factors": [], "reported_by": "", "certainty": "", "evidence_ids": [], "confidence": null}],
+<   "negative_findings": [{"finding": "", "normalized_name": "", "status": "absent", "assertion": "negative", "reported_by": "", "temporality": "", "evidence_ids": [], "confidence": null}],
+---
+>   "chief_complaint": {"value": "<text>", "normalized_value": "<text>", "reported_by": "<role>", "source_segments": ["<segment id>"]},
+>   "symptoms": [{"name": "", "normalized_name": "", "category": "", "status": "", "severity": null, "duration": {"value": null, "unit": null, "normalized": null}, "frequency": null, "onset": null, "temporality": "", "body_site": null, "associated_symptoms": [], "aggravating_factors": [], "relieving_factors": [], "reported_by": "", "certainty": "", "source_segments": ["<segment id>"], "confidence": null}],
+>   "negative_findings": [{"finding": "", "normalized_name": "", "status": "absent", "assertion": "negative", "reported_by": "", "temporality": "", "source_segments": ["<segment id>"], "confidence": null}],
+50,65c58,72
+<     "past_medical_history": [{"condition": "", "normalized_condition": "", "status": "ongoing", "duration": null, "reported_by": "", "evidence_ids": [], "confidence": null}],
+<     "surgical_history": [{"procedure": "", "normalized_procedure": "", "timeframe": null, "reported_by": "", "evidence_ids": [], "confidence": null}],
+<     "family_history": [{"condition": "", "normalized_condition": "", "relation": "", "reported_by": "", "evidence_ids": [], "confidence": null}],
+<     "social_history": [{"category": "", "description": "", "status": "", "details": null, "reported_by": "", "evidence_ids": [], "confidence": null}]},
+<   "medications": [{"name": "", "normalized_name": null, "generic_name": null, "dose": null, "route": null, "frequency": null, "duration": null, "indication": null, "status": "", "reported_by": "", "evidence_ids": [], "confidence": null}],
+<   "allergies": [{"substance": "", "normalized_substance": "", "allergy_type": "", "reaction": null, "severity": "unknown", "status": "", "reported_by": "", "evidence_ids": [], "confidence": null}],
+<   "vital_signs": [{"name": "", "normalized_name": "", "value": null, "unit": "", "reported_by": "", "evidence_ids": [], "confidence": null}],
+<   "physical_examination": [{"finding": "", "normalized_finding": "", "body_site": null, "status": "", "observed_by": "", "evidence_ids": [], "confidence": null}],
+<   "review_of_systems": [{"system": "", "status": "negative", "details": null, "reported_by": "", "evidence_ids": [], "confidence": null}],
+<   "clinical_conditions": [{"name": "", "normalized_name": "", "status": "existing", "duration": null, "reported_by": "", "evidence_ids": [], "confidence": null}],
+<   "clinical_assessment": [{"assessment": "", "normalized_assessment": "", "certainty": "", "basis": null, "stated_by": "doctor", "evidence_ids": [], "confidence": null}],
+<   "procedures_and_investigations": [{"name": "", "normalized_name": "", "type": "", "status": "", "requested_by": null, "indication": null, "scheduled_datetime": null, "evidence_ids": [], "confidence": null}],
+<   "clinical_actions": [{"action_type": "", "description": "", "status": "", "responsible_person": "", "time_reference": null, "evidence_ids": [], "confidence": null}],
+<   "follow_up": [{"type": "consultation", "time_reference": "", "normalized_datetime": null, "status": "", "evidence_ids": []}],
+<   "clinical_uncertainties": [{"type": "", "description": "", "related_entities": [], "resolution_status": "", "evidence_ids": [], "confidence": null}],
+<   "clinical_evidence": [{"evidence_id": "EV_001", "speaker_id": "", "speaker_role": "", "transcript_text": "", "start_timestamp": "MM:SS", "end_timestamp": "MM:SS", "supports": []}],
+---
+>     "past_medical_history": [{"condition": "", "normalized_condition": "", "status": "ongoing", "duration": null, "reported_by": "", "source_segments": ["<segment id>"], "confidence": null}],
+>     "surgical_history": [{"procedure": "", "normalized_procedure": "", "timeframe": null, "reported_by": "", "source_segments": ["<segment id>"], "confidence": null}],
+>     "family_history": [{"condition": "", "normalized_condition": "", "relation": "", "reported_by": "", "source_segments": ["<segment id>"], "confidence": null}],
+>     "social_history": [{"category": "", "description": "", "status": "", "details": null, "reported_by": "", "source_segments": ["<segment id>"], "confidence": null}]},
+>   "medications": [{"name": "", "normalized_name": null, "generic_name": null, "dose": null, "route": null, "frequency": null, "duration": null, "indication": null, "status": "", "reported_by": "", "source_segments": ["<segment id>"], "confidence": null}],
+>   "allergies": [{"substance": "", "normalized_substance": "", "allergy_type": "", "reaction": null, "severity": "unknown", "status": "", "reported_by": "", "source_segments": ["<segment id>"], "confidence": null}],
+>   "vital_signs": [{"name": "", "normalized_name": "", "value": null, "unit": "", "reported_by": "", "source_segments": ["<segment id>"], "confidence": null}],
+>   "physical_examination": [{"finding": "", "normalized_finding": "", "body_site": null, "status": "", "observed_by": "", "source_segments": ["<segment id>"], "confidence": null}],
+>   "review_of_systems": [{"system": "", "status": "negative", "details": null, "reported_by": "", "source_segments": ["<segment id>"], "confidence": null}],
+>   "clinical_conditions": [{"name": "", "normalized_name": "", "status": "existing", "duration": null, "reported_by": "", "source_segments": ["<segment id>"], "confidence": null}],
+>   "clinical_assessment": [{"assessment": "", "normalized_assessment": "", "certainty": "", "basis": null, "stated_by": "doctor", "source_segments": ["<segment id>"], "confidence": null}],
+>   "procedures_and_investigations": [{"name": "", "normalized_name": "", "type": "", "status": "", "requested_by": null, "indication": null, "scheduled_datetime": null, "source_segments": ["<segment id>"], "confidence": null}],
+>   "clinical_actions": [{"action_type": "", "description": "", "status": "", "responsible_person": "", "time_reference": null, "source_segments": ["<segment id>"], "confidence": null}],
+>   "follow_up": [{"type": "consultation", "time_reference": "", "normalized_datetime": null, "status": "", "source_segments": ["<segment id>"]}],
+>   "clinical_uncertainties": [{"type": "", "description": "", "related_entities": [], "resolution_status": "", "source_segments": ["<segment id>"], "confidence": null}],

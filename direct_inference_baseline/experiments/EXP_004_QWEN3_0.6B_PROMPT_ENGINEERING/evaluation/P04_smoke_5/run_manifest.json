@@ -1,0 +1,412 @@
+{
+ "experiment_id": "P04_smoke_5",
+ "stage": "3 - direct inference baseline (no fine-tuning, no prompt optimisation, no RAG)",
+ "started_utc": "2026-11-12T20:46:02.885337+00:00",
+ "split": "development",
+ "encounter_ids": [
+  "00035",
+  "00037",
+  "00040",
+  "00215",
+  "00248"
+ ],
+ "dataset": {
+  "name": "dataset_v2_batch_001_corrected",
+  "manifest_sha256": "4403fef843fbd0bbcfc09cc2d6d2130c64b6936bbfb51a003c7874edcdd0c5aa",
+  "frozen_files_verified": 501
+ },
+ "split_seed": 20260301,
+ "model": {
+  "provider": "openvino_genai",
+  "model_id": "Qwen/Qwen3-0.6B",
+  "model_revision_commit": "c1899de289a04d12100db370d81485cdf75e47ca",
+  "deployment_name": null,
+  "device": "GPU",
+  "runtime": "openvino_genai.LLMPipeline",
+  "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+  "openvino_genai": "2026.4.1.0-3408-ab01d1771e4",
+  "converted_model_dir": "experiments/EXP_002_QWEN3_0.6B_GPU_DIRECT/models/Qwen3-0.6B-ov-fp16",
+  "weights_precision": "FP16 (converted from BF16 source weights)",
+  "compiled_model_cache": "EXP_004/ov_cache",
+  "generation": {
+   "do_sample": false,
+   "enable_thinking": false,
+   "chat_template": "tokenizer.apply_chat_template(add_generation_prompt=True, enable_thinking=False); GenAI template disabled",
+   "pipeline_per_encounter": true
+  },
+  "parameter_support": {
+   "temperature": "not applied (greedy)",
+   "top_p": "not applied (greedy)",
+   "top_k": "not applied (greedy)",
+   "max_new_tokens": "applied",
+   "enable_thinking": "applied via chat template (False)"
+  }
+ },
+ "max_new_tokens": 6144,
+ "retry_policy": {
+  "retries": 3,
+  "base_seconds": 2.0,
+  "scope": "transient API/OOM errors only"
+ },
+ "prompt_file": "prompts/direct_extraction_prompt.txt",
+ "prompt_sha256": "e05c8beaf82380bdd9581acd07fc77940a363346eb003d44295364683c5aaf55",
+ "prompt_text": "You are a clinical information extraction system. You will be given the transcript of one outpatient consultation as numbered segments with speaker IDs and roles. Extract the clinical information that is stated in the transcript and return it as ONE JSON object that follows the output format below. Return only the JSON object, with no explanation and no markdown.\n\nRules\n- Extract only what is stated in the transcript. Do not invent or infer missing facts. If a value was not stated use null; if a list has no items use [].\n- Record who said it: reported_by / observed_by / stated_by use one of: doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown.\n- Keep denied findings (no fever, no allergies, no previous surgery) in negative_findings, not in symptoms.\n- Distinguish current, past and resolved symptoms (temporality), and certain, uncertain or disputed information (certainty).\n- If speakers disagree or a detail is unclear, keep both statements and describe it in clinical_uncertainties.\n- Do not turn a possibility into a diagnosis. Doctor impressions go in clinical_assessment as provisional or differential.\n- Distinguish actions that are planned, completed, recommended or conditional.\n- Every extracted item lists in source_segments the segment id(s) of the transcript line(s) that state it (see the Source rules).\n- All confidence fields must be null.\n\nCoverage rules (these concern how complete the extraction is, not the form of the JSON)\n- Read the whole transcript in order and extract EVERY item that is stated, in every section. A consultation normally yields many items in many sections; do not stop after the first few and do not leave a section empty if the transcript supports it. One item per distinct finding; do not merge different findings into one item.\n- chief_complaint: the main reason for the visit, as stated early in the consultation, as one short phrase; set normalized_value to the standard clinical term for it.\n- symptoms: every symptom the patient describes, including each associated symptom, as its own item.\n- negative_findings: every finding that is denied or absent (the patient says no, denies, never, none, or the doctor notes it is absent), one item per denied finding, including denied symptoms, denied habits and denied past conditions.\n- medical_history: every past condition, every past operation or procedure, every condition in a relative (with the relation), and each social-history topic that is discussed (a habit, lifestyle, work or home-circumstance topic) as its own item.\n- medications: every medicine named, whether current, stopped or newly prescribed, with dose, route and frequency when stated. allergies: every allergy stated, with the reaction when stated.\n- vital_signs: every body measurement that is stated as a number (with its unit, when given), one item per measurement.\n- physical_examination: every finding the doctor or examiner reports from examining the patient. review_of_systems: every body system the doctor asks about and the answer.\n- clinical_conditions: every current diagnosis or condition named. clinical_assessment: every impression or diagnosis the doctor states. procedures_and_investigations: every test, scan, procedure or specialist investigation that is done, ordered or planned. clinical_actions: every instruction, prescription, piece of advice, counselling, referral or plan the doctor gives, one item per action. follow_up: every return visit or review that is mentioned.\n- Terminology: in every normalized_* field (and normalized_value) write the standard clinical term in lower case, in the singular, with the same meaning as the transcript; replace everyday wording by the medical term (for example \"sugar\" in a blood test means glucose; \"water tablet\" means diuretic) but never add a diagnosis, cause or detail that was not said. Keep the original wording in the plain field (name, finding, condition).\n- Do not repeat the same item twice in one section, and do not list an item that is not supported by the transcript.\n\nSource rules (these concern which transcript lines an item comes from, not what is extracted)\n- Every transcript line starts with its segment id in square brackets, for example [SEG0007]. Write ids exactly as printed, in the form SEG0007, without brackets.\n- For every extracted item, source_segments lists the id of each line that directly states or confirms the item. Select the minimum number of transcript segments needed to support each fact. Use several segments when the fact genuinely requires them; do not add more segments when one is sufficient.\n- Include a question line only when it is necessary to interpret the response; a question alone is never proof of a clinical fact. For example, when the doctor asks whether the patient has a symptom and the patient answers no, the patient's answer is the evidence for the denied symptom.\n- Select evidence by meaning, not by position in the transcript. Do not cite greetings or small talk unless they contain clinically relevant information.\n- Never write evidence records, speaker ids, times or quotations of transcript text: they are added automatically from the ids.\n- If no transcript line states an item, do not output that item.\n\nAllowed values\n- symptoms.status: present | resolved ; certainty: certain | uncertain | disputed ; temporality: current | past | resolved\n- symptoms.category: constitutional | neurological | cardiovascular | respiratory | gastrointestinal | musculoskeletal | dermatological | endocrine | genitourinary | ENT | ophthalmological | psychiatric | other\n- negative_findings: status \"absent\", assertion \"negative\", temporality current | past\n- medications.status: currently_used | discontinued | planned\n- allergies.allergy_type: medication | food | environmental ; status: reported | uncertain | historical | disputed ; severity: \"unknown\"\n- procedures_and_investigations.type: laboratory | imaging | cardiac | other ; status: planned | completed | conditional\n- clinical_actions.action_type: investigation | medication | counselling | referral | follow_up | other ; status: planned | completed | recommended | conditional ; responsible_person: doctor | patient | nurse | clinical_staff\n- follow_up.status: planned | conditional\n- physical_examination.status: present | absent\n- clinical_assessment.certainty: provisional | differential\n- clinical_uncertainties.type: date_uncertain | duration_disagreement | uncertain_dose | medication_discrepancy | adherence_uncertain | incomplete_medication_name | allergy_uncertain | allergy_disputed | conflicting_statement | unknown_speaker ; resolution_status: unresolved | partially_resolved | resolved\n\nOutput format (replace the placeholders; repeat list items as needed; a list with no items is [])\n{\n  \"encounter_id\": \"<encounter id>\",\n  \"extraction_status\": \"completed\",\n  \"encounter_metadata\": {\"encounter_date\": null, \"encounter_type\": \"outpatient_consultation\", \"language\": \"en\",\n    \"primary_speakers\": [{\"speaker_id\": \"<id>\", \"role\": \"<role>\", \"role_confidence\": null}]},\n  \"chief_complaint\": {\"value\": \"<text>\", \"normalized_value\": \"<text>\", \"reported_by\": \"<role>\", \"source_segments\": [\"<segment id>\"]},\n  \"symptoms\": [{\"name\": \"\", \"normalized_name\": \"\", \"category\": \"\", \"status\": \"\", \"severity\": null, \"duration\": {\"value\": null, \"unit\": null, \"normalized\": null}, \"frequency\": null, \"onset\": null, \"temporality\": \"\", \"body_site\": null, \"associated_symptoms\": [], \"aggravating_factors\": [], \"relieving_factors\": [], \"reported_by\": \"\", \"certainty\": \"\", \"source_segments\": [\"<segment id>\"], \"confidence\": null}],\n  \"negative_findings\": [{\"finding\": \"\", \"normalized_name\": \"\", \"status\": \"absent\", \"assertion\": \"negative\", \"reported_by\": \"\", \"temporality\": \"\", \"source_segments\": [\"<segment id>\"], \"confidence\": null}],\n  \"medical_history\": {\n    \"past_medical_history\": [{\"condition\": \"\", \"normalized_condition\": \"\", \"status\": \"ongoing\", \"duration\": null, \"reported_by\": \"\", \"source_segments\": [\"<segment id>\"], \"confidence\": null}],\n    \"surgical_history\": [{\"procedure\": \"\", \"normalized_procedure\": \"\", \"timeframe\": null, \"reported_by\": \"\", \"source_segments\": [\"<segment id>\"], \"confidence\": null}],\n    \"family_history\": [{\"condition\": \"\", \"normalized_condition\": \"\", \"relation\": \"\", \"reported_by\": \"\", \"source_segments\": [\"<segment id>\"], \"confidence\": null}],\n    \"social_history\": [{\"category\": \"\", \"description\": \"\", \"status\": \"\", \"details\": null, \"reported_by\": \"\", \"source_segments\": [\"<segment id>\"], \"confidence\": null}]},\n  \"medications\": [{\"name\": \"\", \"normalized_name\": null, \"generic_name\": null, \"dose\": null, \"route\": null, \"frequency\": null, \"duration\": null, \"indication\": null, \"status\": \"\", \"reported_by\": \"\", \"source_segments\": [\"<segment id>\"], \"confidence\": null}],\n  \"allergies\": [{\"substance\": \"\", \"normalized_substance\": \"\", \"allergy_type\": \"\", \"reaction\": null, \"severity\": \"unknown\", \"status\": \"\", \"reported_by\": \"\", \"source_segments\": [\"<segment id>\"], \"confidence\": null}],\n  \"vital_signs\": [{\"name\": \"\", \"normalized_name\": \"\", \"value\": null, \"unit\": \"\", \"reported_by\": \"\", \"source_segments\": [\"<segment id>\"], \"confidence\": null}],\n  \"physical_examination\": [{\"finding\": \"\", \"normalized_finding\": \"\", \"body_site\": null, \"status\": \"\", \"observed_by\": \"\", \"source_segments\": [\"<segment id>\"], \"confidence\": null}],\n  \"review_of_systems\": [{\"system\": \"\", \"status\": \"negative\", \"details\": null, \"reported_by\": \"\", \"source_segments\": [\"<segment id>\"], \"confidence\": null}],\n  \"clinical_conditions\": [{\"name\": \"\", \"normalized_name\": \"\", \"status\": \"existing\", \"duration\": null, \"reported_by\": \"\", \"source_segments\": [\"<segment id>\"], \"confidence\": null}],\n  \"clinical_assessment\": [{\"assessment\": \"\", \"normalized_assessment\": \"\", \"certainty\": \"\", \"basis\": null, \"stated_by\": \"doctor\", \"source_segments\": [\"<segment id>\"], \"confidence\": null}],\n  \"procedures_and_investigations\": [{\"name\": \"\", \"normalized_name\": \"\", \"type\": \"\", \"status\": \"\", \"requested_by\": null, \"indication\": null, \"scheduled_datetime\": null, \"source_segments\": [\"<segment id>\"], \"confidence\": null}],\n  \"clinical_actions\": [{\"action_type\": \"\", \"description\": \"\", \"status\": \"\", \"responsible_person\": \"\", \"time_reference\": null, \"source_segments\": [\"<segment id>\"], \"confidence\": null}],\n  \"follow_up\": [{\"type\": \"consultation\", \"time_reference\": \"\", \"normalized_datetime\": null, \"status\": \"\", \"source_segments\": [\"<segment id>\"]}],\n  \"clinical_uncertainties\": [{\"type\": \"\", \"description\": \"\", \"related_entities\": [], \"resolution_status\": \"\", \"source_segments\": [\"<segment id>\"], \"confidence\": null}],\n  \"quality_checks\": {\"negation_detected\": false, \"temporality_detected\": false, \"speaker_attribution_available\": true, \"unsupported_clinical_claims\": [], \"contradictions_detected\": [], \"ambiguous_entities\": [], \"requires_clinician_review\": false}\n}\n\nTranscript (encounter {ENCOUNTER_ID})\n{TRANSCRIPT}\n\nJSON:\n",
+ "git_commit": "afa808023df260e01e27c8908ad19cad0f8c60bf",
+ "records": {
+  "00035": {
+   "encounter_id": "00035",
+   "finish_reason": "stop",
+   "prompt_tokens": 4132,
+   "completion_tokens": 1750,
+   "latency_seconds": 307.484,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [
+    "evidence built from source_segments"
+   ],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 16,
+    "enum_violation": 9,
+    "wrong_type": 2
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].severity"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "negative_findings[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].duration"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].indication"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].reported_by"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "allergies[0].reported_by='none'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[0].reported_by='none'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[1].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[1].reported_by='none'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[2].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[2].reported_by='none'"
+    }
+   ],
+   "keys_expected": 376,
+   "keys_present": 360,
+   "keys_emitted": 360,
+   "keys_unexpected": 0
+  },
+  "00037": {
+   "encounter_id": "00037",
+   "finish_reason": "stop",
+   "prompt_tokens": 4872,
+   "completion_tokens": 5365,
+   "latency_seconds": 1080.943,
+   "attempts": 1,
+   "parse_status": "invalid_json",
+   "parse_notes": [
+    "removed markdown fence",
+    "Expecting ',' delimiter at char 5818"
+   ],
+   "status": "failed",
+   "failure_type": "invalid_json"
+  },
+  "00040": {
+   "encounter_id": "00040",
+   "finish_reason": "stop",
+   "prompt_tokens": 4930,
+   "completion_tokens": 1281,
+   "latency_seconds": 242.439,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [
+    "evidence built from source_segments"
+   ],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 16,
+    "wrong_type": 2
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "encounter_metadata.primary_speakers"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].severity"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "negative_findings[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].generic_name"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].duration"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].indication"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].reported_by"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].severity"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "physical_examination[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "review_of_systems[0].reported_by"
+    },
+    {
+     "kind": "missing_field",
+     "message": "review_of_systems[0].confidence"
+    }
+   ],
+   "keys_expected": 308,
+   "keys_present": 292,
+   "keys_emitted": 292,
+   "keys_unexpected": 0
+  },
+  "00215": {
+   "encounter_id": "00215",
+   "finish_reason": "stop",
+   "prompt_tokens": 4396,
+   "completion_tokens": 1110,
+   "latency_seconds": 196.646,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [
+    "evidence built from source_segments"
+   ],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 18,
+    "enum_violation": 8,
+    "wrong_type": 2
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].severity"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[0].reported_by=''"
+    },
+    {
+     "kind": "missing_field",
+     "message": "negative_findings[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "negative_findings[0].reported_by=''"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].generic_name"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].duration"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].indication"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].reported_by"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].severity"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].status"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].reported_by"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[0].confidence"
+    }
+   ],
+   "keys_expected": 164,
+   "keys_present": 146,
+   "keys_emitted": 146,
+   "keys_unexpected": 0
+  },
+  "00248": {
+   "encounter_id": "00248",
+   "finish_reason": "stop",
+   "prompt_tokens": 4135,
+   "completion_tokens": 898,
+   "latency_seconds": 160.278,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [
+    "evidence built from source_segments"
+   ],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 7,
+    "missing_field": 6,
+    "wrong_type": 2
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "chief_complaint.reported_by='DOCTOR'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[0].reported_by='DOCTOR'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "negative_findings[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "negative_findings[0].reported_by='DOCTOR'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "allergies[0].reported_by='DOCTOR'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[0].reported_by='DOCTOR'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[1].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[1].reported_by='DOCTOR'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[2].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[2].reported_by='DOCTOR'"
+    },
+    {
+     "kind": "wrong_type",
+     "message": "clinical_assessment should be a list"
+    },
+    {
+     "kind": "wrong_type",
+     "message": "follow_up should be a list"
+    }
+   ],
+   "keys_expected": 125,
+   "keys_present": 119,
+   "keys_emitted": 119,
+   "keys_unexpected": 0
+  }
+ },
+ "last_update_utc": "2026-11-12T21:19:38.934282+00:00"
+}

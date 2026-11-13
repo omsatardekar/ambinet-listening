@@ -1,0 +1,11 @@
+13a14,23
+> Evidence rules (these concern how every item is tied to the transcript, not what is extracted)
+> - Each transcript line has the form: [segment id] speaker id (ROLE) start-end seconds: text. One clinical_evidence record describes exactly ONE transcript line.
+> - Create one clinical_evidence record for every transcript line that states at least one extracted item. Number the records EV_001, EV_002, EV_003, ... in the order in which you first cite them. Text from two different lines never goes into one record.
+> - transcript_text: copy the text of that line exactly as written, word for word (the whole line text, or one complete sentence of it). Do not paraphrase, shorten, translate or correct it.
+> - speaker_id: the speaker id printed on that same line (for example person_1), never the id of a different line. speaker_role: the role printed on that line, in lower case.
+> - start_timestamp and end_timestamp: the start and end seconds printed on that line, written as MM:SS in whole seconds: drop the decimals, never round up (for example 75.80 becomes 01:15 and 125.40 becomes 02:05). Never invent a time.
+> - supports: the list of locations of the items that this record supports, written as in the output format, for example "chief_complaint", "symptoms[0]", "medications[1]", "medical_history.surgical_history[0]". It must not be empty.
+> - evidence_ids of an item: the ids of the record(s) whose line states that item. Every item lists at least one id, and every id that is used exists as a clinical_evidence record. A record may be listed by several items only when that same line states all of them.
+> - If no transcript line states an item, do not output that item. Never create evidence for text that is not in the transcript.
+> 

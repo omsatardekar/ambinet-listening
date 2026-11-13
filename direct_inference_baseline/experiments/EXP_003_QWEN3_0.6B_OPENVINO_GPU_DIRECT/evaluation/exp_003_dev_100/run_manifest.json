@@ -1,0 +1,5174 @@
+{
+  "experiment_id": "exp_003_dev_100",
+  "stage": "3 - direct inference baseline, EXP_003 combined 100-encounter development run (no fine-tuning, no prompt optimisation, no RAG)",
+  "started_utc": "2026-11-12T06:25:30.308695+00:00",
+  "split": "development",
+  "encounter_ids": [
+    "00021",
+    "00032",
+    "00034",
+    "00035",
+    "00037",
+    "00039",
+    "00040",
+    "00042",
+    "00060",
+    "00064",
+    "00069",
+    "00071",
+    "00077",
+    "00081",
+    "00086",
+    "00092",
+    "00096",
+    "00107",
+    "00119",
+    "00120",
+    "00122",
+    "00127",
+    "00139",
+    "00141",
+    "00143",
+    "00144",
+    "00147",
+    "00151",
+    "00152",
+    "00155",
+    "00157",
+    "00162",
+    "00164",
+    "00165",
+    "00168",
+    "00173",
+    "00176",
+    "00182",
+    "00187",
+    "00189",
+    "00190",
+    "00200",
+    "00201",
+    "00202",
+    "00203",
+    "00204",
+    "00206",
+    "00210",
+    "00215",
+    "00221",
+    "00223",
+    "00228",
+    "00238",
+    "00240",
+    "00242",
+    "00248",
+    "00252",
+    "00264",
+    "00266",
+    "00269",
+    "00288",
+    "00289",
+    "00291",
+    "00292",
+    "00318",
+    "00322",
+    "00342",
+    "00345",
+    "00348",
+    "00350",
+    "00359",
+    "00367",
+    "00373",
+    "00375",
+    "00386",
+    "00393",
+    "00395",
+    "00397",
+    "00402",
+    "00403",
+    "00404",
+    "00409",
+    "00416",
+    "00417",
+    "00420",
+    "00426",
+    "00428",
+    "00429",
+    "00436",
+    "00445",
+    "00454",
+    "00455",
+    "00460",
+    "00462",
+    "00469",
+    "00471",
+    "00475",
+    "00492",
+    "00497",
+    "00500"
+  ],
+  "dataset": {
+    "name": "dataset_v2_batch_001_corrected",
+    "manifest_sha256": "4403fef843fbd0bbcfc09cc2d6d2130c64b6936bbfb51a003c7874edcdd0c5aa",
+    "frozen_files_verified": 501
+  },
+  "split_seed": 20260301,
+  "model": {
+    "provider": "openvino_genai",
+    "model_id": "Qwen/Qwen3-0.6B",
+    "model_revision_commit": "c1899de289a04d12100db370d81485cdf75e47ca",
+    "deployment_name": null,
+    "device": "GPU",
+    "runtime": "openvino_genai.LLMPipeline",
+    "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+    "openvino_genai": "2026.4.1.0-3408-ab01d1771e4",
+    "converted_model_dir": "experiments/EXP_002_QWEN3_0.6B_GPU_DIRECT/models/Qwen3-0.6B-ov-fp16",
+    "weights_precision": "FP16 (converted from BF16 source weights)",
+    "compiled_model_cache": "EXP_003/ov_cache",
+    "generation": {
+      "do_sample": false,
+      "enable_thinking": false,
+      "chat_template": "tokenizer.apply_chat_template(add_generation_prompt=True, enable_thinking=False); GenAI template disabled",
+      "pipeline_per_encounter": true
+    },
+    "parameter_support": {
+      "temperature": "not applied (greedy)",
+      "top_p": "not applied (greedy)",
+      "top_k": "not applied (greedy)",
+      "max_new_tokens": "applied",
+      "enable_thinking": "applied via chat template (False)"
+    }
+  },
+  "max_new_tokens": 6144,
+  "retry_policy": {
+    "retries": 3,
+    "base_seconds": 2.0,
+    "scope": "transient API/OOM errors only"
+  },
+  "prompt_file": "prompts/direct_extraction_prompt.txt",
+  "prompt_sha256": "78c5ab95d0019d0b3c6801ae17f7fa29477dde37d123ecd4fda946e3dd14f604",
+  "prompt_text": "You are a clinical information extraction system. You will be given the transcript of one outpatient consultation as numbered segments with speaker IDs and roles. Extract the clinical information that is stated in the transcript and return it as ONE JSON object that follows the output format below. Return only the JSON object, with no explanation and no markdown.\n\nRules\n- Extract only what is stated in the transcript. Do not invent or infer missing facts. If a value was not stated use null; if a list has no items use [].\n- Record who said it: reported_by / observed_by / stated_by use one of: doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown.\n- Keep denied findings (no fever, no allergies, no previous surgery) in negative_findings, not in symptoms.\n- Distinguish current, past and resolved symptoms (temporality), and certain, uncertain or disputed information (certainty).\n- If speakers disagree or a detail is unclear, keep both statements and describe it in clinical_uncertainties.\n- Do not turn a possibility into a diagnosis. Doctor impressions go in clinical_assessment as provisional or differential.\n- Distinguish actions that are planned, completed, recommended or conditional.\n- Every extracted item lists evidence_ids pointing to clinical_evidence records. Each evidence record copies the exact transcript text of one segment and lists the items it supports as locations such as \"symptoms[0]\" or \"chief_complaint\".\n- All confidence fields must be null.\n\nAllowed values\n- symptoms.status: present | resolved ; certainty: certain | uncertain | disputed ; temporality: current | past | resolved\n- symptoms.category: constitutional | neurological | cardiovascular | respiratory | gastrointestinal | musculoskeletal | dermatological | endocrine | genitourinary | ENT | ophthalmological | psychiatric | other\n- negative_findings: status \"absent\", assertion \"negative\", temporality current | past\n- medications.status: currently_used | discontinued | planned\n- allergies.allergy_type: medication | food | environmental ; status: reported | uncertain | historical | disputed ; severity: \"unknown\"\n- procedures_and_investigations.type: laboratory | imaging | cardiac | other ; status: planned | completed | conditional\n- clinical_actions.action_type: investigation | medication | counselling | referral | follow_up | other ; status: planned | completed | recommended | conditional ; responsible_person: doctor | patient | nurse | clinical_staff\n- follow_up.status: planned | conditional\n- physical_examination.status: present | absent\n- clinical_assessment.certainty: provisional | differential\n- clinical_uncertainties.type: date_uncertain | duration_disagreement | uncertain_dose | medication_discrepancy | adherence_uncertain | incomplete_medication_name | allergy_uncertain | allergy_disputed | conflicting_statement | unknown_speaker ; resolution_status: unresolved | partially_resolved | resolved\n\nOutput format (replace the placeholders; repeat list items as needed; a list with no items is [])\n{\n  \"encounter_id\": \"<encounter id>\",\n  \"extraction_status\": \"completed\",\n  \"encounter_metadata\": {\"encounter_date\": null, \"encounter_type\": \"outpatient_consultation\", \"language\": \"en\",\n    \"primary_speakers\": [{\"speaker_id\": \"<id>\", \"role\": \"<role>\", \"role_confidence\": null}]},\n  \"chief_complaint\": {\"value\": \"<text>\", \"normalized_value\": \"<text>\", \"reported_by\": \"<role>\", \"evidence_ids\": [\"EV_001\"]},\n  \"symptoms\": [{\"name\": \"\", \"normalized_name\": \"\", \"category\": \"\", \"status\": \"\", \"severity\": null, \"duration\": {\"value\": null, \"unit\": null, \"normalized\": null}, \"frequency\": null, \"onset\": null, \"temporality\": \"\", \"body_site\": null, \"associated_symptoms\": [], \"aggravating_factors\": [], \"relieving_factors\": [], \"reported_by\": \"\", \"certainty\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"negative_findings\": [{\"finding\": \"\", \"normalized_name\": \"\", \"status\": \"absent\", \"assertion\": \"negative\", \"reported_by\": \"\", \"temporality\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"medical_history\": {\n    \"past_medical_history\": [{\"condition\": \"\", \"normalized_condition\": \"\", \"status\": \"ongoing\", \"duration\": null, \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n    \"surgical_history\": [{\"procedure\": \"\", \"normalized_procedure\": \"\", \"timeframe\": null, \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n    \"family_history\": [{\"condition\": \"\", \"normalized_condition\": \"\", \"relation\": \"\", \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n    \"social_history\": [{\"category\": \"\", \"description\": \"\", \"status\": \"\", \"details\": null, \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}]},\n  \"medications\": [{\"name\": \"\", \"normalized_name\": null, \"generic_name\": null, \"dose\": null, \"route\": null, \"frequency\": null, \"duration\": null, \"indication\": null, \"status\": \"\", \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"allergies\": [{\"substance\": \"\", \"normalized_substance\": \"\", \"allergy_type\": \"\", \"reaction\": null, \"severity\": \"unknown\", \"status\": \"\", \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"vital_signs\": [{\"name\": \"\", \"normalized_name\": \"\", \"value\": null, \"unit\": \"\", \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"physical_examination\": [{\"finding\": \"\", \"normalized_finding\": \"\", \"body_site\": null, \"status\": \"\", \"observed_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"review_of_systems\": [{\"system\": \"\", \"status\": \"negative\", \"details\": null, \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"clinical_conditions\": [{\"name\": \"\", \"normalized_name\": \"\", \"status\": \"existing\", \"duration\": null, \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"clinical_assessment\": [{\"assessment\": \"\", \"normalized_assessment\": \"\", \"certainty\": \"\", \"basis\": null, \"stated_by\": \"doctor\", \"evidence_ids\": [], \"confidence\": null}],\n  \"procedures_and_investigations\": [{\"name\": \"\", \"normalized_name\": \"\", \"type\": \"\", \"status\": \"\", \"requested_by\": null, \"indication\": null, \"scheduled_datetime\": null, \"evidence_ids\": [], \"confidence\": null}],\n  \"clinical_actions\": [{\"action_type\": \"\", \"description\": \"\", \"status\": \"\", \"responsible_person\": \"\", \"time_reference\": null, \"evidence_ids\": [], \"confidence\": null}],\n  \"follow_up\": [{\"type\": \"consultation\", \"time_reference\": \"\", \"normalized_datetime\": null, \"status\": \"\", \"evidence_ids\": []}],\n  \"clinical_uncertainties\": [{\"type\": \"\", \"description\": \"\", \"related_entities\": [], \"resolution_status\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"clinical_evidence\": [{\"evidence_id\": \"EV_001\", \"speaker_id\": \"\", \"speaker_role\": \"\", \"transcript_text\": \"\", \"start_timestamp\": \"MM:SS\", \"end_timestamp\": \"MM:SS\", \"supports\": []}],\n  \"quality_checks\": {\"negation_detected\": false, \"temporality_detected\": false, \"speaker_attribution_available\": true, \"unsupported_clinical_claims\": [], \"contradictions_detected\": [], \"ambiguous_entities\": [], \"requires_clinician_review\": false}\n}\n\nTranscript (encounter {ENCOUNTER_ID})\n{TRANSCRIPT}\n\nJSON:\n",
+  "git_commit": "afa808023df260e01e27c8908ad19cad0f8c60bf",
+  "records": {
+    "00021": {
+      "encounter_id": "00021",
+      "finish_reason": "stop",
+      "prompt_tokens": 3987,
+      "completion_tokens": 775,
+      "latency_seconds": 134.034,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 5,
+        "wrong_type": 1,
+        "enum_violation": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.surgical_history[0].reported_by"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.surgical_history[0].evidence_ids"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.surgical_history[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[1].status='current'"
+        }
+      ],
+      "keys_expected": 86,
+      "keys_present": 81,
+      "keys_emitted": 81,
+      "keys_unexpected": 0
+    },
+    "00032": {
+      "encounter_id": "00032",
+      "finish_reason": "stop",
+      "prompt_tokens": 3382,
+      "completion_tokens": 629,
+      "latency_seconds": 101.037,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "wrong_type": 2,
+        "missing_field": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "wrong_type",
+          "message": "medical_history should be an object"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        }
+      ],
+      "keys_expected": 62,
+      "keys_present": 61,
+      "keys_emitted": 61,
+      "keys_unexpected": 0
+    },
+    "00034": {
+      "encounter_id": "00034",
+      "finish_reason": "stop",
+      "prompt_tokens": 4079,
+      "completion_tokens": 775,
+      "latency_seconds": 140.183,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 6,
+        "enum_violation": 6,
+        "wrong_type": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='DOCTOR'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='DOCTOR'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].frequency"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].evidence_ids"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].reported_by='PATIENT'"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "clinical_evidence[0].speaker_role='DOCTOR'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].route='night'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].category='eye'"
+        }
+      ],
+      "keys_expected": 75,
+      "keys_present": 69,
+      "keys_emitted": 69,
+      "keys_unexpected": 0
+    },
+    "00035": {
+      "encounter_id": "00035",
+      "finish_reason": "stop",
+      "prompt_tokens": 3368,
+      "completion_tokens": 656,
+      "latency_seconds": 119.373,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "wrong_type": 2,
+        "missing_field": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "wrong_type",
+          "message": "medical_history should be an object"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        }
+      ],
+      "keys_expected": 62,
+      "keys_present": 61,
+      "keys_emitted": 61,
+      "keys_unexpected": 0
+    },
+    "00037": {
+      "encounter_id": "00037",
+      "finish_reason": "stop",
+      "prompt_tokens": 4108,
+      "completion_tokens": 1948,
+      "latency_seconds": 368.28,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 16,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].dose"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].route"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].frequency"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].duration"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].indication"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].dose"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].route"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].frequency"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].duration"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].indication"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].reaction"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].severity"
+        }
+      ],
+      "keys_expected": 235,
+      "keys_present": 219,
+      "keys_emitted": 219,
+      "keys_unexpected": 0
+    },
+    "00039": {
+      "encounter_id": "00039",
+      "finish_reason": "stop",
+      "prompt_tokens": 4099,
+      "completion_tokens": 795,
+      "latency_seconds": 149.182,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 15,
+        "enum_violation": 4,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='DOCTOR'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='DOCTOR'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].duration"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].indication"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].reported_by"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].evidence_ids"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].duration"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].indication"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].reported_by"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].evidence_ids"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].reaction"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].evidence_ids"
+        }
+      ],
+      "keys_expected": 96,
+      "keys_present": 81,
+      "keys_emitted": 81,
+      "keys_unexpected": 0
+    },
+    "00040": {
+      "encounter_id": "00040",
+      "finish_reason": "stop",
+      "prompt_tokens": 4166,
+      "completion_tokens": 623,
+      "latency_seconds": 120.723,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 2,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 61,
+      "keys_emitted": 61,
+      "keys_unexpected": 0
+    },
+    "00042": {
+      "encounter_id": "00042",
+      "finish_reason": "stop",
+      "prompt_tokens": 3620,
+      "completion_tokens": 1264,
+      "latency_seconds": 225.106,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 49,
+        "wrong_type": 3,
+        "enum_violation": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.surgical_history[0].reported_by"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.surgical_history[0].evidence_ids"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.surgical_history[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].severity"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].associated_symptoms"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].aggravating_factors"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].relieving_factors"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].reported_by"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].certainty"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].evidence_ids"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[1].severity"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[1].associated_symptoms"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[1].aggravating_factors"
+        }
+      ],
+      "keys_expected": 164,
+      "keys_present": 115,
+      "keys_emitted": 115,
+      "keys_unexpected": 0
+    },
+    "00060": {
+      "encounter_id": "00060",
+      "finish_reason": "stop",
+      "prompt_tokens": 3883,
+      "completion_tokens": 906,
+      "latency_seconds": 154.491,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 1,
+        "wrong_type": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "follow_up should be a list"
+        }
+      ],
+      "keys_expected": 97,
+      "keys_present": 96,
+      "keys_emitted": 96,
+      "keys_unexpected": 0
+    },
+    "00064": {
+      "encounter_id": "00064",
+      "finish_reason": "stop",
+      "prompt_tokens": 3390,
+      "completion_tokens": 634,
+      "latency_seconds": 116.758,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "wrong_type": 1,
+        "missing_field": 1,
+        "enum_violation": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].category='skin'"
+        }
+      ],
+      "keys_expected": 66,
+      "keys_present": 65,
+      "keys_emitted": 65,
+      "keys_unexpected": 0
+    },
+    "00069": {
+      "encounter_id": "00069",
+      "finish_reason": "stop",
+      "prompt_tokens": 3516,
+      "completion_tokens": 705,
+      "latency_seconds": 125.683,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 1,
+        "wrong_type": 2,
+        "enum_violation": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        }
+      ],
+      "keys_expected": 66,
+      "keys_present": 65,
+      "keys_emitted": 65,
+      "keys_unexpected": 0
+    },
+    "00071": {
+      "encounter_id": "00071",
+      "finish_reason": "stop",
+      "prompt_tokens": 3872,
+      "completion_tokens": 764,
+      "latency_seconds": 143.778,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 1,
+        "wrong_type": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 62,
+      "keys_emitted": 62,
+      "keys_unexpected": 0
+    },
+    "00077": {
+      "encounter_id": "00077",
+      "finish_reason": "stop",
+      "prompt_tokens": 3936,
+      "completion_tokens": 909,
+      "latency_seconds": 163.308,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "enum_violation": 5,
+        "wrong_type": 1,
+        "missing_field": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='person_2'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='person_2'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[1].reported_by='person_2'"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].category='skin'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[1].category='gynecology'"
+        }
+      ],
+      "keys_expected": 83,
+      "keys_present": 82,
+      "keys_emitted": 82,
+      "keys_unexpected": 0
+    },
+    "00081": {
+      "encounter_id": "00081",
+      "finish_reason": "stop",
+      "prompt_tokens": 3870,
+      "completion_tokens": 772,
+      "latency_seconds": 154.209,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 2,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 61,
+      "keys_emitted": 61,
+      "keys_unexpected": 0
+    },
+    "00086": {
+      "encounter_id": "00086",
+      "finish_reason": "stop",
+      "prompt_tokens": 3757,
+      "completion_tokens": 1039,
+      "latency_seconds": 188.717,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "enum_violation": 6,
+        "missing_field": 1,
+        "wrong_type": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='DOCTOR'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medical_history.surgical_history[0].reported_by='PATIENT'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='PATIENT'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].reported_by='PATIENT'"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "clinical_evidence[0].speaker_role='NURSE'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].route='daily'"
+        }
+      ],
+      "keys_expected": 90,
+      "keys_present": 89,
+      "keys_emitted": 89,
+      "keys_unexpected": 0
+    },
+    "00092": {
+      "encounter_id": "00092",
+      "finish_reason": "stop",
+      "prompt_tokens": 3845,
+      "completion_tokens": 726,
+      "latency_seconds": 135.472,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 2,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 61,
+      "keys_emitted": 61,
+      "keys_unexpected": 0
+    },
+    "00096": {
+      "encounter_id": "00096",
+      "finish_reason": "stop",
+      "prompt_tokens": 4068,
+      "completion_tokens": 2548,
+      "latency_seconds": 443.842,
+      "attempts": 1,
+      "parse_status": "invalid_json",
+      "parse_notes": [
+        "Expecting ',' delimiter at char 3769"
+      ],
+      "status": "failed",
+      "failure_type": "invalid_json"
+    },
+    "00107": {
+      "encounter_id": "00107",
+      "finish_reason": "stop",
+      "prompt_tokens": 3647,
+      "completion_tokens": 693,
+      "latency_seconds": 122.936,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 2,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 61,
+      "keys_emitted": 61,
+      "keys_unexpected": 0
+    },
+    "00119": {
+      "encounter_id": "00119",
+      "finish_reason": "stop",
+      "prompt_tokens": 4230,
+      "completion_tokens": 755,
+      "latency_seconds": 137.809,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "enum_violation": 3,
+        "wrong_type": 2,
+        "missing_field": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='DOCTOR'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='DOCTOR'"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "clinical_evidence[0].speaker_role='PATIENT'"
+        }
+      ],
+      "keys_expected": 66,
+      "keys_present": 65,
+      "keys_emitted": 65,
+      "keys_unexpected": 0
+    },
+    "00120": {
+      "encounter_id": "00120",
+      "finish_reason": "stop",
+      "prompt_tokens": 3716,
+      "completion_tokens": 592,
+      "latency_seconds": 106.828,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 3,
+        "enum_violation": 3,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by=''"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=''"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].category='eye'"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 60,
+      "keys_emitted": 60,
+      "keys_unexpected": 0
+    },
+    "00122": {
+      "encounter_id": "00122",
+      "finish_reason": "stop",
+      "prompt_tokens": 3851,
+      "completion_tokens": 625,
+      "latency_seconds": 115.222,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [
+        "removed markdown fence"
+      ],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 2,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 61,
+      "keys_emitted": 61,
+      "keys_unexpected": 0
+    },
+    "00127": {
+      "encounter_id": "00127",
+      "finish_reason": "stop",
+      "prompt_tokens": 3987,
+      "completion_tokens": 927,
+      "latency_seconds": 171.32,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 16,
+        "enum_violation": 10,
+        "unexpected_field": 1,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='DOCTOR'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='DOCTOR'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].evidence_ids"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].reported_by='PATIENT'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].evidence_ids"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[1].reported_by='PATIENT'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[2].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[2].dose"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[2].route"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[2].frequency"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[2].duration"
+        }
+      ],
+      "keys_expected": 108,
+      "keys_present": 92,
+      "keys_emitted": 93,
+      "keys_unexpected": 1
+    },
+    "00139": {
+      "encounter_id": "00139",
+      "finish_reason": "stop",
+      "prompt_tokens": 3646,
+      "completion_tokens": 745,
+      "latency_seconds": 131.807,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 4,
+        "enum_violation": 4,
+        "wrong_type": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by=''"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "allergies[0].reported_by=''"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=''"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "allergies[0].status=''"
+        }
+      ],
+      "keys_expected": 72,
+      "keys_present": 68,
+      "keys_emitted": 68,
+      "keys_unexpected": 0
+    },
+    "00141": {
+      "encounter_id": "00141",
+      "finish_reason": "stop",
+      "prompt_tokens": 4387,
+      "completion_tokens": 932,
+      "latency_seconds": 185.125,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 8,
+        "enum_violation": 7,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='person_2'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.surgical_history[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medical_history.surgical_history[0].reported_by='person_4'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='person_2'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].reported_by='person_1'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "allergies[0].reported_by='person_2'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "vital_signs[0].reported_by='person_1'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "physical_examination[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "physical_examination[0].observed_by='person_1'"
+        }
+      ],
+      "keys_expected": 104,
+      "keys_present": 96,
+      "keys_emitted": 96,
+      "keys_unexpected": 0
+    },
+    "00143": {
+      "encounter_id": "00143",
+      "finish_reason": "stop",
+      "prompt_tokens": 3823,
+      "completion_tokens": 960,
+      "latency_seconds": 173.463,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 4,
+        "wrong_type": 2,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "medical_history.surgical_history[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "clinical_evidence[0].speaker_role='Nurse'"
+        }
+      ],
+      "keys_expected": 84,
+      "keys_present": 80,
+      "keys_emitted": 80,
+      "keys_unexpected": 0
+    },
+    "00144": {
+      "encounter_id": "00144",
+      "finish_reason": "stop",
+      "prompt_tokens": 3513,
+      "completion_tokens": 647,
+      "latency_seconds": 121.157,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 2,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        }
+      ],
+      "keys_expected": 66,
+      "keys_present": 64,
+      "keys_emitted": 64,
+      "keys_unexpected": 0
+    },
+    "00147": {
+      "encounter_id": "00147",
+      "finish_reason": "stop",
+      "prompt_tokens": 4615,
+      "completion_tokens": 597,
+      "latency_seconds": 136.113,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 2,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 61,
+      "keys_emitted": 61,
+      "keys_unexpected": 0
+    },
+    "00151": {
+      "encounter_id": "00151",
+      "finish_reason": "stop",
+      "prompt_tokens": 3566,
+      "completion_tokens": 695,
+      "latency_seconds": 129.462,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 3,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        }
+      ],
+      "keys_expected": 75,
+      "keys_present": 72,
+      "keys_emitted": 72,
+      "keys_unexpected": 0
+    },
+    "00152": {
+      "encounter_id": "00152",
+      "finish_reason": "stop",
+      "prompt_tokens": 3298,
+      "completion_tokens": 650,
+      "latency_seconds": 116.796,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "wrong_type": 2,
+        "missing_field": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "wrong_type",
+          "message": "medical_history should be an object"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        }
+      ],
+      "keys_expected": 62,
+      "keys_present": 61,
+      "keys_emitted": 61,
+      "keys_unexpected": 0
+    },
+    "00155": {
+      "encounter_id": "00155",
+      "finish_reason": "stop",
+      "prompt_tokens": 4197,
+      "completion_tokens": 901,
+      "latency_seconds": 175.532,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 2,
+        "enum_violation": 3,
+        "wrong_type": 4
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='person_1'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='person_1'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].reported_by='person_1'"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_actions should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "follow_up should be a list"
+        }
+      ],
+      "keys_expected": 75,
+      "keys_present": 73,
+      "keys_emitted": 73,
+      "keys_unexpected": 0
+    },
+    "00157": {
+      "encounter_id": "00157",
+      "finish_reason": "stop",
+      "prompt_tokens": 3306,
+      "completion_tokens": 623,
+      "latency_seconds": 115.612,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "wrong_type": 2,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "wrong_type",
+          "message": "medical_history should be an object"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].category='allergic'"
+        }
+      ],
+      "keys_expected": 62,
+      "keys_present": 62,
+      "keys_emitted": 62,
+      "keys_unexpected": 0
+    },
+    "00162": {
+      "encounter_id": "00162",
+      "finish_reason": "stop",
+      "prompt_tokens": 3309,
+      "completion_tokens": 606,
+      "latency_seconds": 102.568,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "wrong_type": 2,
+        "missing_field": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "wrong_type",
+          "message": "medical_history should be an object"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        }
+      ],
+      "keys_expected": 62,
+      "keys_present": 61,
+      "keys_emitted": 61,
+      "keys_unexpected": 0
+    },
+    "00164": {
+      "encounter_id": "00164",
+      "finish_reason": "stop",
+      "prompt_tokens": 4599,
+      "completion_tokens": 721,
+      "latency_seconds": 140.525,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [
+        "removed markdown fence"
+      ],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 2,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        }
+      ],
+      "keys_expected": 75,
+      "keys_present": 73,
+      "keys_emitted": 73,
+      "keys_unexpected": 0
+    },
+    "00165": {
+      "encounter_id": "00165",
+      "finish_reason": "stop",
+      "prompt_tokens": 3453,
+      "completion_tokens": 824,
+      "latency_seconds": 143.174,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 9,
+        "wrong_type": 1,
+        "enum_violation": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].dose"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].route"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].frequency"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].duration"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].indication"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "allergies[0].allergy_type='none'"
+        }
+      ],
+      "keys_expected": 92,
+      "keys_present": 83,
+      "keys_emitted": 83,
+      "keys_unexpected": 0
+    },
+    "00168": {
+      "encounter_id": "00168",
+      "finish_reason": "stop",
+      "prompt_tokens": 3398,
+      "completion_tokens": 769,
+      "latency_seconds": 128.456,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 3,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "medical_history.surgical_history[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        }
+      ],
+      "keys_expected": 84,
+      "keys_present": 81,
+      "keys_emitted": 81,
+      "keys_unexpected": 0
+    },
+    "00173": {
+      "encounter_id": "00173",
+      "finish_reason": "stop",
+      "prompt_tokens": 3935,
+      "completion_tokens": 785,
+      "latency_seconds": 138.323,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 5,
+        "wrong_type": 2,
+        "enum_violation": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "medications[0].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].frequency"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].evidence_ids"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "clinical_evidence[0].speaker_role='NURSE'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].category='gastro-oesophageal reflux'"
+        }
+      ],
+      "keys_expected": 78,
+      "keys_present": 73,
+      "keys_emitted": 73,
+      "keys_unexpected": 0
+    },
+    "00176": {
+      "encounter_id": "00176",
+      "finish_reason": "stop",
+      "prompt_tokens": 3750,
+      "completion_tokens": 1544,
+      "latency_seconds": 254.603,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 13,
+        "enum_violation": 15,
+        "wrong_type": 5
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by=''"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[1].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[1].reported_by=''"
+        },
+        {
+          "kind": "missing_field",
+          "message": "negative_findings[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "negative_findings[0].reported_by=''"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].frequency"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].reported_by=''"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].frequency"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[1].reported_by=''"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].reaction"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        }
+      ],
+      "keys_expected": 142,
+      "keys_present": 129,
+      "keys_emitted": 129,
+      "keys_unexpected": 0
+    },
+    "00182": {
+      "encounter_id": "00182",
+      "finish_reason": "stop",
+      "prompt_tokens": 3730,
+      "completion_tokens": 765,
+      "latency_seconds": 141.225,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 5,
+        "wrong_type": 2,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].evidence_ids"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        }
+      ],
+      "keys_expected": 75,
+      "keys_present": 70,
+      "keys_emitted": 70,
+      "keys_unexpected": 0
+    },
+    "00187": {
+      "encounter_id": "00187",
+      "finish_reason": "stop",
+      "prompt_tokens": 4255,
+      "completion_tokens": 952,
+      "latency_seconds": 170.656,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 4,
+        "enum_violation": 4,
+        "wrong_type": 4
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='person_2'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='person_2'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].frequency"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].reported_by='person_2'"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_actions should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "follow_up should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].route='once a day'"
+        }
+      ],
+      "keys_expected": 75,
+      "keys_present": 71,
+      "keys_emitted": 71,
+      "keys_unexpected": 0
+    },
+    "00189": {
+      "encounter_id": "00189",
+      "finish_reason": "stop",
+      "prompt_tokens": 3522,
+      "completion_tokens": 1107,
+      "latency_seconds": 180.634,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 10,
+        "wrong_type": 1,
+        "enum_violation": 3
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[1].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[2].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.surgical_history[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.family_history[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.social_history[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "physical_examination[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medical_history.social_history[0].category='none'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medical_history.social_history[0].status=''"
+        }
+      ],
+      "keys_expected": 125,
+      "keys_present": 115,
+      "keys_emitted": 115,
+      "keys_unexpected": 0
+    },
+    "00190": {
+      "encounter_id": "00190",
+      "finish_reason": "stop",
+      "prompt_tokens": 3541,
+      "completion_tokens": 1141,
+      "latency_seconds": 181.492,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 3,
+        "wrong_type": 2,
+        "enum_violation": 5
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[2].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].route='night'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[1].route='once a day'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[2].route='before breakfast'"
+        }
+      ],
+      "keys_expected": 108,
+      "keys_present": 105,
+      "keys_emitted": 105,
+      "keys_unexpected": 0
+    },
+    "00200": {
+      "encounter_id": "00200",
+      "finish_reason": "stop",
+      "prompt_tokens": 3343,
+      "completion_tokens": 685,
+      "latency_seconds": 113.953,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [
+        "removed markdown fence"
+      ],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "wrong_type": 1,
+        "missing_field": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        }
+      ],
+      "keys_expected": 66,
+      "keys_present": 65,
+      "keys_emitted": 65,
+      "keys_unexpected": 0
+    },
+    "00201": {
+      "encounter_id": "00201",
+      "finish_reason": "stop",
+      "prompt_tokens": 3392,
+      "completion_tokens": 980,
+      "latency_seconds": 158.113,
+      "attempts": 1,
+      "parse_status": "invalid_json",
+      "parse_notes": [
+        "removed markdown fence",
+        "Expecting ',' delimiter at char 1656"
+      ],
+      "status": "failed",
+      "failure_type": "invalid_json"
+    },
+    "00202": {
+      "encounter_id": "00202",
+      "finish_reason": "stop",
+      "prompt_tokens": 3657,
+      "completion_tokens": 670,
+      "latency_seconds": 117.824,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 3,
+        "enum_violation": 4,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by=''"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].category='epileptic'"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 60,
+      "keys_emitted": 60,
+      "keys_unexpected": 0
+    },
+    "00203": {
+      "encounter_id": "00203",
+      "finish_reason": "stop",
+      "prompt_tokens": 4090,
+      "completion_tokens": 1112,
+      "latency_seconds": 194.395,
+      "attempts": 1,
+      "parse_status": "invalid_json",
+      "parse_notes": [
+        "Expecting ',' delimiter at char 2486"
+      ],
+      "status": "failed",
+      "failure_type": "invalid_json"
+    },
+    "00204": {
+      "encounter_id": "00204",
+      "finish_reason": "stop",
+      "prompt_tokens": 3451,
+      "completion_tokens": 1230,
+      "latency_seconds": 195.88,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [
+        "removed markdown fence"
+      ],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 3,
+        "wrong_type": 2,
+        "enum_violation": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='uncertain'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].category='skin'"
+        }
+      ],
+      "keys_expected": 87,
+      "keys_present": 84,
+      "keys_emitted": 84,
+      "keys_unexpected": 0
+    },
+    "00206": {
+      "encounter_id": "00206",
+      "finish_reason": "stop",
+      "prompt_tokens": 4639,
+      "completion_tokens": 885,
+      "latency_seconds": 175.246,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 6,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].frequency"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "physical_examination[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].route='once a day'"
+        }
+      ],
+      "keys_expected": 98,
+      "keys_present": 92,
+      "keys_emitted": 92,
+      "keys_unexpected": 0
+    },
+    "00210": {
+      "encounter_id": "00210",
+      "finish_reason": "stop",
+      "prompt_tokens": 4348,
+      "completion_tokens": 601,
+      "latency_seconds": 120.548,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 2,
+        "enum_violation": 4,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='DOCTOR'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='DOCTOR'"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "clinical_evidence[0].speaker_role='PATIENT'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 61,
+      "keys_emitted": 61,
+      "keys_unexpected": 0
+    },
+    "00215": {
+      "encounter_id": "00215",
+      "finish_reason": "stop",
+      "prompt_tokens": 3632,
+      "completion_tokens": 871,
+      "latency_seconds": 148.482,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 4,
+        "enum_violation": 4,
+        "wrong_type": 3
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by=''"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].reported_by=''"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "allergies[0].reported_by=''"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_actions should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "follow_up should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=''"
+        }
+      ],
+      "keys_expected": 84,
+      "keys_present": 80,
+      "keys_emitted": 80,
+      "keys_unexpected": 0
+    },
+    "00221": {
+      "encounter_id": "00221",
+      "finish_reason": "stop",
+      "prompt_tokens": 3966,
+      "completion_tokens": 909,
+      "latency_seconds": 158.867,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 1,
+        "wrong_type": 2,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].route='daily'"
+        }
+      ],
+      "keys_expected": 84,
+      "keys_present": 83,
+      "keys_emitted": 83,
+      "keys_unexpected": 0
+    },
+    "00223": {
+      "encounter_id": "00223",
+      "finish_reason": "stop",
+      "prompt_tokens": 3810,
+      "completion_tokens": 1198,
+      "latency_seconds": 197.304,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 6,
+        "wrong_type": 1,
+        "enum_violation": 3
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "medications[0].normalized_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].normalized_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[2].status='existing'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].status='ongoing'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[1].status='ongoing'"
+        }
+      ],
+      "keys_expected": 141,
+      "keys_present": 135,
+      "keys_emitted": 135,
+      "keys_unexpected": 0
+    },
+    "00228": {
+      "encounter_id": "00228",
+      "finish_reason": "stop",
+      "prompt_tokens": 3600,
+      "completion_tokens": 907,
+      "latency_seconds": 154.574,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 6,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].indication"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        }
+      ],
+      "keys_expected": 82,
+      "keys_present": 76,
+      "keys_emitted": 76,
+      "keys_unexpected": 0
+    },
+    "00238": {
+      "encounter_id": "00238",
+      "finish_reason": "stop",
+      "prompt_tokens": 3532,
+      "completion_tokens": 805,
+      "latency_seconds": 137.347,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 4,
+        "wrong_type": 1,
+        "enum_violation": 3
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].route='before breakfast'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "allergies[0].allergy_type='none'"
+        }
+      ],
+      "keys_expected": 87,
+      "keys_present": 83,
+      "keys_emitted": 83,
+      "keys_unexpected": 0
+    },
+    "00240": {
+      "encounter_id": "00240",
+      "finish_reason": "stop",
+      "prompt_tokens": 3415,
+      "completion_tokens": 1000,
+      "latency_seconds": 161.599,
+      "attempts": 1,
+      "parse_status": "invalid_json",
+      "parse_notes": [
+        "Expecting ',' delimiter at char 1627"
+      ],
+      "status": "failed",
+      "failure_type": "invalid_json"
+    },
+    "00242": {
+      "encounter_id": "00242",
+      "finish_reason": "stop",
+      "prompt_tokens": 3471,
+      "completion_tokens": 710,
+      "latency_seconds": 119.619,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 2,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 61,
+      "keys_emitted": 61,
+      "keys_unexpected": 0
+    },
+    "00248": {
+      "encounter_id": "00248",
+      "finish_reason": "stop",
+      "prompt_tokens": 3371,
+      "completion_tokens": 831,
+      "latency_seconds": 144.435,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "wrong_type": 1,
+        "enum_violation": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[1].certainty=None"
+        }
+      ],
+      "keys_expected": 83,
+      "keys_present": 83,
+      "keys_emitted": 83,
+      "keys_unexpected": 0
+    },
+    "00252": {
+      "encounter_id": "00252",
+      "finish_reason": "stop",
+      "prompt_tokens": 3276,
+      "completion_tokens": 648,
+      "latency_seconds": 110.295,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "wrong_type": 1,
+        "missing_field": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        }
+      ],
+      "keys_expected": 66,
+      "keys_present": 65,
+      "keys_emitted": 65,
+      "keys_unexpected": 0
+    },
+    "00264": {
+      "encounter_id": "00264",
+      "finish_reason": "stop",
+      "prompt_tokens": 3685,
+      "completion_tokens": 1104,
+      "latency_seconds": 180.871,
+      "attempts": 1,
+      "parse_status": "invalid_json",
+      "parse_notes": [
+        "Expecting ',' delimiter at char 2666"
+      ],
+      "status": "failed",
+      "failure_type": "invalid_json"
+    },
+    "00266": {
+      "encounter_id": "00266",
+      "finish_reason": "stop",
+      "prompt_tokens": 3720,
+      "completion_tokens": 621,
+      "latency_seconds": 115.127,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 3,
+        "enum_violation": 4,
+        "wrong_type": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by=''"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "clinical_evidence[0].speaker_role=''"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=''"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 60,
+      "keys_emitted": 60,
+      "keys_unexpected": 0
+    },
+    "00269": {
+      "encounter_id": "00269",
+      "finish_reason": "stop",
+      "prompt_tokens": 3389,
+      "completion_tokens": 655,
+      "latency_seconds": 111.624,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "wrong_type": 1,
+        "missing_field": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        }
+      ],
+      "keys_expected": 66,
+      "keys_present": 65,
+      "keys_emitted": 65,
+      "keys_unexpected": 0
+    },
+    "00288": {
+      "encounter_id": "00288",
+      "finish_reason": "stop",
+      "prompt_tokens": 3797,
+      "completion_tokens": 759,
+      "latency_seconds": 131.528,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 1,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].category='skin'"
+        }
+      ],
+      "keys_expected": 78,
+      "keys_present": 77,
+      "keys_emitted": 77,
+      "keys_unexpected": 0
+    },
+    "00289": {
+      "encounter_id": "00289",
+      "finish_reason": "stop",
+      "prompt_tokens": 3392,
+      "completion_tokens": 848,
+      "latency_seconds": 135.34,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 2,
+        "wrong_type": 2,
+        "enum_violation": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        }
+      ],
+      "keys_expected": 75,
+      "keys_present": 73,
+      "keys_emitted": 73,
+      "keys_unexpected": 0
+    },
+    "00291": {
+      "encounter_id": "00291",
+      "finish_reason": "stop",
+      "prompt_tokens": 4176,
+      "completion_tokens": 793,
+      "latency_seconds": 145.582,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 3,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.surgical_history[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].category='skin'"
+        }
+      ],
+      "keys_expected": 81,
+      "keys_present": 78,
+      "keys_emitted": 78,
+      "keys_unexpected": 0
+    },
+    "00292": {
+      "encounter_id": "00292",
+      "finish_reason": "stop",
+      "prompt_tokens": 3845,
+      "completion_tokens": 1261,
+      "latency_seconds": 209.258,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 13,
+        "wrong_type": 3
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[1].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].evidence_ids"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].reaction"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].evidence_ids"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[1].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[2].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[3].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "physical_examination[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_actions should be a list"
+        }
+      ],
+      "keys_expected": 136,
+      "keys_present": 123,
+      "keys_emitted": 123,
+      "keys_unexpected": 0
+    },
+    "00318": {
+      "encounter_id": "00318",
+      "finish_reason": "stop",
+      "prompt_tokens": 4010,
+      "completion_tokens": 1101,
+      "latency_seconds": 191.631,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 9,
+        "wrong_type": 2,
+        "enum_violation": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].reaction"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_conditions[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_conditions[1].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_conditions[2].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_conditions[3].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].status='ongoing'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].route='once a week'"
+        }
+      ],
+      "keys_expected": 118,
+      "keys_present": 109,
+      "keys_emitted": 109,
+      "keys_unexpected": 0
+    },
+    "00322": {
+      "encounter_id": "00322",
+      "finish_reason": "stop",
+      "prompt_tokens": 3349,
+      "completion_tokens": 744,
+      "latency_seconds": 122.906,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        }
+      ],
+      "keys_expected": 66,
+      "keys_present": 66,
+      "keys_emitted": 66,
+      "keys_unexpected": 0
+    },
+    "00342": {
+      "encounter_id": "00342",
+      "finish_reason": "stop",
+      "prompt_tokens": 3419,
+      "completion_tokens": 1475,
+      "latency_seconds": 256.465,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 14,
+        "wrong_type": 1,
+        "enum_violation": 5
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "negative_findings[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "negative_findings[1].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].dose"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].route"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].frequency"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].duration"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].indication"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].reaction"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].severity"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "physical_examination[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        }
+      ],
+      "keys_expected": 175,
+      "keys_present": 161,
+      "keys_emitted": 161,
+      "keys_unexpected": 0
+    },
+    "00345": {
+      "encounter_id": "00345",
+      "finish_reason": "stop",
+      "prompt_tokens": 4249,
+      "completion_tokens": 688,
+      "latency_seconds": 162.235,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "enum_violation": 5,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='DOCTOR'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='DOCTOR'"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "clinical_evidence[0].speaker_role='NURSE'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].category='psychological'"
+        }
+      ],
+      "keys_expected": 69,
+      "keys_present": 69,
+      "keys_emitted": 69,
+      "keys_unexpected": 0
+    },
+    "00348": {
+      "encounter_id": "00348",
+      "finish_reason": "stop",
+      "prompt_tokens": 3321,
+      "completion_tokens": 695,
+      "latency_seconds": 122.258,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [
+        "removed markdown fence"
+      ],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "wrong_type": 2,
+        "missing_field": 1,
+        "enum_violation": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "wrong_type",
+          "message": "medical_history should be an object"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].category='psychological'"
+        }
+      ],
+      "keys_expected": 62,
+      "keys_present": 61,
+      "keys_emitted": 61,
+      "keys_unexpected": 0
+    },
+    "00350": {
+      "encounter_id": "00350",
+      "finish_reason": "stop",
+      "prompt_tokens": 3627,
+      "completion_tokens": 779,
+      "latency_seconds": 147.795,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 4,
+        "enum_violation": 4,
+        "wrong_type": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by=''"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].reported_by=''"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "clinical_evidence[0].speaker_role=''"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=''"
+        }
+      ],
+      "keys_expected": 75,
+      "keys_present": 71,
+      "keys_emitted": 71,
+      "keys_unexpected": 0
+    },
+    "00359": {
+      "encounter_id": "00359",
+      "finish_reason": "stop",
+      "prompt_tokens": 3682,
+      "completion_tokens": 687,
+      "latency_seconds": 123.962,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 3,
+        "enum_violation": 3,
+        "wrong_type": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by=''"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "clinical_evidence[0].speaker_role=''"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 60,
+      "keys_emitted": 60,
+      "keys_unexpected": 0
+    },
+    "00367": {
+      "encounter_id": "00367",
+      "finish_reason": "stop",
+      "prompt_tokens": 3320,
+      "completion_tokens": 695,
+      "latency_seconds": 122.026,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [
+        "removed markdown fence"
+      ],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "wrong_type": 1,
+        "missing_field": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        }
+      ],
+      "keys_expected": 66,
+      "keys_present": 65,
+      "keys_emitted": 65,
+      "keys_unexpected": 0
+    },
+    "00373": {
+      "encounter_id": "00373",
+      "finish_reason": "stop",
+      "prompt_tokens": 3465,
+      "completion_tokens": 891,
+      "latency_seconds": 149.801,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 3,
+        "wrong_type": 2,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        }
+      ],
+      "keys_expected": 84,
+      "keys_present": 81,
+      "keys_emitted": 81,
+      "keys_unexpected": 0
+    },
+    "00375": {
+      "encounter_id": "00375",
+      "finish_reason": "stop",
+      "prompt_tokens": 3516,
+      "completion_tokens": 760,
+      "latency_seconds": 133.214,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 2,
+        "wrong_type": 1,
+        "enum_violation": 3
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].route='daily'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].category='psychological'"
+        }
+      ],
+      "keys_expected": 78,
+      "keys_present": 76,
+      "keys_emitted": 76,
+      "keys_unexpected": 0
+    },
+    "00386": {
+      "encounter_id": "00386",
+      "finish_reason": "stop",
+      "prompt_tokens": 4605,
+      "completion_tokens": 806,
+      "latency_seconds": 155.807,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 6,
+        "wrong_type": 1,
+        "enum_violation": 3
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].frequency"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].reaction"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].evidence_ids"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].route='inhalation'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].category='skin'"
+        }
+      ],
+      "keys_expected": 84,
+      "keys_present": 78,
+      "keys_emitted": 78,
+      "keys_unexpected": 0
+    },
+    "00393": {
+      "encounter_id": "00393",
+      "finish_reason": "stop",
+      "prompt_tokens": 4088,
+      "completion_tokens": 2138,
+      "latency_seconds": 348.315,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 23,
+        "unexpected_field": 3,
+        "wrong_type": 2,
+        "enum_violation": 4
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[1].condition"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[1].normalized_condition"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[1].status"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[1].duration"
+        },
+        {
+          "kind": "unexpected_field",
+          "message": "medical_history.past_medical_history[1].procedure"
+        },
+        {
+          "kind": "unexpected_field",
+          "message": "medical_history.past_medical_history[1].normalized_procedure"
+        },
+        {
+          "kind": "unexpected_field",
+          "message": "medical_history.past_medical_history[1].timeframe"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[1].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[2].confidence"
+        }
+      ],
+      "keys_expected": 235,
+      "keys_present": 212,
+      "keys_emitted": 215,
+      "keys_unexpected": 3
+    },
+    "00395": {
+      "encounter_id": "00395",
+      "finish_reason": "stop",
+      "prompt_tokens": 3470,
+      "completion_tokens": 615,
+      "latency_seconds": 103.386,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 1,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty='resolved'"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 62,
+      "keys_emitted": 62,
+      "keys_unexpected": 0
+    },
+    "00397": {
+      "encounter_id": "00397",
+      "finish_reason": "stop",
+      "prompt_tokens": 4049,
+      "completion_tokens": 885,
+      "latency_seconds": 159.189,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "enum_violation": 3,
+        "wrong_type": 3,
+        "missing_field": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='DOCTOR'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='DOCTOR'"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_actions should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "follow_up should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "clinical_evidence[0].speaker_role='NURSE'"
+        }
+      ],
+      "keys_expected": 69,
+      "keys_present": 68,
+      "keys_emitted": 68,
+      "keys_unexpected": 0
+    },
+    "00402": {
+      "encounter_id": "00402",
+      "finish_reason": "stop",
+      "prompt_tokens": 3945,
+      "completion_tokens": 740,
+      "latency_seconds": 133.076,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "wrong_type": 3,
+        "missing_field": 1,
+        "enum_violation": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "follow_up should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        }
+      ],
+      "keys_expected": 66,
+      "keys_present": 65,
+      "keys_emitted": 65,
+      "keys_unexpected": 0
+    },
+    "00403": {
+      "encounter_id": "00403",
+      "finish_reason": "stop",
+      "prompt_tokens": 3582,
+      "completion_tokens": 621,
+      "latency_seconds": 103.959,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 3,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 60,
+      "keys_emitted": 60,
+      "keys_unexpected": 0
+    },
+    "00404": {
+      "encounter_id": "00404",
+      "finish_reason": "stop",
+      "prompt_tokens": 3442,
+      "completion_tokens": 744,
+      "latency_seconds": 120.699,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 1,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        }
+      ],
+      "keys_expected": 78,
+      "keys_present": 77,
+      "keys_emitted": 77,
+      "keys_unexpected": 0
+    },
+    "00409": {
+      "encounter_id": "00409",
+      "finish_reason": "stop",
+      "prompt_tokens": 3564,
+      "completion_tokens": 612,
+      "latency_seconds": 100.523,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 2,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].category='skin'"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 61,
+      "keys_emitted": 61,
+      "keys_unexpected": 0
+    },
+    "00416": {
+      "encounter_id": "00416",
+      "finish_reason": "stop",
+      "prompt_tokens": 4272,
+      "completion_tokens": 981,
+      "latency_seconds": 169.041,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 11,
+        "enum_violation": 9,
+        "unexpected_field": 3,
+        "wrong_type": 4
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='DOCTOR'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medical_history.past_medical_history[0].reported_by='PATIENT'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[1].condition"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[1].normalized_condition"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[1].status"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[1].duration"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[1].confidence"
+        },
+        {
+          "kind": "unexpected_field",
+          "message": "medical_history.past_medical_history[1].procedure"
+        },
+        {
+          "kind": "unexpected_field",
+          "message": "medical_history.past_medical_history[1].normalized_procedure"
+        },
+        {
+          "kind": "unexpected_field",
+          "message": "medical_history.past_medical_history[1].timeframe"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medical_history.past_medical_history[1].reported_by='PATIENT'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='DOCTOR'"
+        }
+      ],
+      "keys_expected": 98,
+      "keys_present": 87,
+      "keys_emitted": 90,
+      "keys_unexpected": 3
+    },
+    "00417": {
+      "encounter_id": "00417",
+      "finish_reason": "stop",
+      "prompt_tokens": 3928,
+      "completion_tokens": 853,
+      "latency_seconds": 140.772,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "enum_violation": 4,
+        "wrong_type": 4,
+        "missing_field": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='DOCTOR'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='DOCTOR'"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_actions should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "follow_up should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "clinical_evidence[0].speaker_role='DOCTOR'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        }
+      ],
+      "keys_expected": 69,
+      "keys_present": 68,
+      "keys_emitted": 68,
+      "keys_unexpected": 0
+    },
+    "00420": {
+      "encounter_id": "00420",
+      "finish_reason": "stop",
+      "prompt_tokens": 3908,
+      "completion_tokens": 1173,
+      "latency_seconds": 186.7,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 14,
+        "unexpected_field": 3,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[1].condition"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[1].normalized_condition"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[1].status"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.past_medical_history[1].duration"
+        },
+        {
+          "kind": "unexpected_field",
+          "message": "medical_history.past_medical_history[1].procedure"
+        },
+        {
+          "kind": "unexpected_field",
+          "message": "medical_history.past_medical_history[1].normalized_procedure"
+        },
+        {
+          "kind": "unexpected_field",
+          "message": "medical_history.past_medical_history[1].timeframe"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[1].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[2].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[2].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].reaction"
+        }
+      ],
+      "keys_expected": 129,
+      "keys_present": 115,
+      "keys_emitted": 118,
+      "keys_unexpected": 3
+    },
+    "00426": {
+      "encounter_id": "00426",
+      "finish_reason": "stop",
+      "prompt_tokens": 3723,
+      "completion_tokens": 729,
+      "latency_seconds": 121.591,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 2,
+        "enum_violation": 2,
+        "wrong_type": 2
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='person_1'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='person_1'"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 61,
+      "keys_emitted": 61,
+      "keys_unexpected": 0
+    },
+    "00428": {
+      "encounter_id": "00428",
+      "finish_reason": "stop",
+      "prompt_tokens": 3608,
+      "completion_tokens": 722,
+      "latency_seconds": 121.922,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 2,
+        "enum_violation": 4,
+        "wrong_type": 3
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by=''"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_actions should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "follow_up should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=''"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].category='skin'"
+        }
+      ],
+      "keys_expected": 66,
+      "keys_present": 64,
+      "keys_emitted": 64,
+      "keys_unexpected": 0
+    },
+    "00429": {
+      "encounter_id": "00429",
+      "finish_reason": "stop",
+      "prompt_tokens": 3506,
+      "completion_tokens": 638,
+      "latency_seconds": 108.74,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        }
+      ],
+      "keys_expected": 66,
+      "keys_present": 66,
+      "keys_emitted": 66,
+      "keys_unexpected": 0
+    },
+    "00436": {
+      "encounter_id": "00436",
+      "finish_reason": "stop",
+      "prompt_tokens": 4279,
+      "completion_tokens": 824,
+      "latency_seconds": 142.054,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "enum_violation": 5,
+        "missing_field": 2,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='DOCTOR'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='DOCTOR'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].reported_by='PATIENT'"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "clinical_evidence[0].speaker_role='PATIENT'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        }
+      ],
+      "keys_expected": 78,
+      "keys_present": 76,
+      "keys_emitted": 76,
+      "keys_unexpected": 0
+    },
+    "00445": {
+      "encounter_id": "00445",
+      "finish_reason": "stop",
+      "prompt_tokens": 3830,
+      "completion_tokens": 1144,
+      "latency_seconds": 183.241,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "enum_violation": 6,
+        "missing_field": 5,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "enum_violation",
+          "message": "chief_complaint.reported_by='DOCTOR'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by='DOCTOR'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].generic_name"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].frequency"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].reported_by='DOCTOR'"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].reaction"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "allergies[0].reported_by='DOCTOR'"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "clinical_evidence[0].speaker_role='NURSE'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].route='nasal'"
+        }
+      ],
+      "keys_expected": 111,
+      "keys_present": 106,
+      "keys_emitted": 106,
+      "keys_unexpected": 0
+    },
+    "00454": {
+      "encounter_id": "00454",
+      "finish_reason": "stop",
+      "prompt_tokens": 4175,
+      "completion_tokens": 1141,
+      "latency_seconds": 190.779,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 9,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[1].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[2].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[3].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "physical_examination[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        }
+      ],
+      "keys_expected": 119,
+      "keys_present": 110,
+      "keys_emitted": 110,
+      "keys_unexpected": 0
+    },
+    "00455": {
+      "encounter_id": "00455",
+      "finish_reason": "stop",
+      "prompt_tokens": 4253,
+      "completion_tokens": 971,
+      "latency_seconds": 166.132,
+      "attempts": 1,
+      "parse_status": "invalid_json",
+      "parse_notes": [
+        "Expecting ',' delimiter at char 1802"
+      ],
+      "status": "failed",
+      "failure_type": "invalid_json"
+    },
+    "00460": {
+      "encounter_id": "00460",
+      "finish_reason": "stop",
+      "prompt_tokens": 3535,
+      "completion_tokens": 800,
+      "latency_seconds": 141.026,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 5,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].frequency"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].evidence_ids"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].route='inhalation'"
+        }
+      ],
+      "keys_expected": 78,
+      "keys_present": 73,
+      "keys_emitted": 73,
+      "keys_unexpected": 0
+    },
+    "00462": {
+      "encounter_id": "00462",
+      "finish_reason": "stop",
+      "prompt_tokens": 3237,
+      "completion_tokens": 650,
+      "latency_seconds": 108.011,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [
+        "removed markdown fence"
+      ],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "wrong_type": 1,
+        "missing_field": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        }
+      ],
+      "keys_expected": 66,
+      "keys_present": 65,
+      "keys_emitted": 65,
+      "keys_unexpected": 0
+    },
+    "00469": {
+      "encounter_id": "00469",
+      "finish_reason": "stop",
+      "prompt_tokens": 3673,
+      "completion_tokens": 600,
+      "latency_seconds": 106.331,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 3,
+        "enum_violation": 3,
+        "wrong_type": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].reported_by=''"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='uncertain'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=''"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 60,
+      "keys_emitted": 60,
+      "keys_unexpected": 0
+    },
+    "00471": {
+      "encounter_id": "00471",
+      "finish_reason": "stop",
+      "prompt_tokens": 4348,
+      "completion_tokens": 832,
+      "latency_seconds": 167.161,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 5,
+        "wrong_type": 2,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.surgical_history[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "physical_examination should be a list"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "missing_field",
+          "message": "clinical_evidence[0].supports"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        }
+      ],
+      "keys_expected": 81,
+      "keys_present": 76,
+      "keys_emitted": 76,
+      "keys_unexpected": 0
+    },
+    "00475": {
+      "encounter_id": "00475",
+      "finish_reason": "stop",
+      "prompt_tokens": 4149,
+      "completion_tokens": 924,
+      "latency_seconds": 181.49,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 4,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "physical_examination[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].route='every morning'"
+        }
+      ],
+      "keys_expected": 91,
+      "keys_present": 87,
+      "keys_emitted": 87,
+      "keys_unexpected": 0
+    },
+    "00492": {
+      "encounter_id": "00492",
+      "finish_reason": "stop",
+      "prompt_tokens": 3474,
+      "completion_tokens": 659,
+      "latency_seconds": 109.667,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 1,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        }
+      ],
+      "keys_expected": 63,
+      "keys_present": 62,
+      "keys_emitted": 62,
+      "keys_unexpected": 0
+    },
+    "00497": {
+      "encounter_id": "00497",
+      "finish_reason": "stop",
+      "prompt_tokens": 3462,
+      "completion_tokens": 802,
+      "latency_seconds": 134.285,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 4,
+        "wrong_type": 1,
+        "enum_violation": 3
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].frequency"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "allergies[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].status='current'"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "symptoms[0].certainty=None"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].route='once daily'"
+        }
+      ],
+      "keys_expected": 84,
+      "keys_present": 80,
+      "keys_emitted": 80,
+      "keys_unexpected": 0
+    },
+    "00500": {
+      "encounter_id": "00500",
+      "finish_reason": "stop",
+      "prompt_tokens": 3885,
+      "completion_tokens": 1273,
+      "latency_seconds": 220.626,
+      "attempts": 1,
+      "parse_status": "ok",
+      "parse_notes": [],
+      "status": "parsed",
+      "schema_compliant": false,
+      "schema_violation_counts": {
+        "missing_field": 13,
+        "wrong_type": 1,
+        "enum_violation": 1
+      },
+      "schema_violations_sample": [
+        {
+          "kind": "missing_field",
+          "message": "encounter_metadata.primary_speakers"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.surgical_history[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.family_history[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medical_history.family_history[1].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "symptoms[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "medications[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[0].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[1].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[2].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[3].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[4].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "vital_signs[5].confidence"
+        },
+        {
+          "kind": "missing_field",
+          "message": "physical_examination[0].confidence"
+        },
+        {
+          "kind": "wrong_type",
+          "message": "clinical_assessment should be a list"
+        },
+        {
+          "kind": "enum_violation",
+          "message": "medications[0].route='before breakfast'"
+        }
+      ],
+      "keys_expected": 142,
+      "keys_present": 129,
+      "keys_emitted": 129,
+      "keys_unexpected": 0
+    }
+  },
+  "last_update_utc": "2026-11-12T10:55:46.623313+00:00",
+  "components": {
+    "exp_003_dev_smoke_5": {
+      "run_manifest": "evaluation/exp_003_dev_smoke_5/run_manifest.json",
+      "run_manifest_sha256": "f01f287dcb08af4f59568c55c034c0d12b9a6f212a22b87bb3c00c7346f3c9c3",
+      "n_encounters": 5,
+      "started_utc": "2026-11-12T06:25:30.308695+00:00"
+    },
+    "exp_003_dev_remaining_95": {
+      "run_manifest": "evaluation/exp_003_dev_remaining_95/run_manifest.json",
+      "run_manifest_sha256": "1258f3326f0c7199c6169e006619afba52de2ef42d81c0f576dbd2987f70e849",
+      "n_encounters": 95,
+      "started_utc": "2026-11-12T06:46:13.349935+00:00"
+    }
+  }
+}

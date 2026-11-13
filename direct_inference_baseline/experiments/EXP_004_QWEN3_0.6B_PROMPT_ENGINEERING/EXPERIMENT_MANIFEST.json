@@ -1,0 +1,152 @@
+{
+ "experiment_id": "EXP_004_QWEN3_0.6B_PROMPT_ENGINEERING",
+ "status": "P05 approved (D1-D5); R_cons v4 and the P05 configuration FROZEN; integrated guard/runner built and tested with dry-runs only; validation NOT authorised and NOT started; no inference, no GPU for P05",
+ "created_utc": "2026-11-12T11:23:17.955880+00:00",
+ "model": {
+  "id": "Qwen/Qwen3-0.6B",
+  "revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+  "runtime": "openvino_genai.LLMPipeline",
+  "precision": "FP16 (from BF16)",
+  "device": "GPU (Intel UHD 620)",
+  "converted_model": "EXP_002/models/Qwen3-0.6B-ov-fp16"
+ },
+ "inference_settings": {
+  "do_sample": false,
+  "enable_thinking": false,
+  "max_new_tokens": 6144,
+  "pipeline_per_encounter": true
+ },
+ "evaluator": "direct_inference_baseline/evaluation/evaluation_runner.py (unmodified; identical to EXP_001 code snapshot)",
+ "frozen_schema": "dataset_v2_batch_001_corrected/schema/final_label_schema.json",
+ "split": {
+  "file": "experiments/split_v1.json",
+  "sha256": "b23fccfba02085ca9df42ed7edb8fe10a90f9086a40c31b7162dd8329b87cf94",
+  "seed": 20260401,
+  "prompt_dev": 50,
+  "validation": 50,
+  "locked_test_used": false
+ },
+ "prompts": {
+  "P00_original_baseline": {
+   "file": "prompts/P00_original_baseline.txt",
+   "sha256": "78c5ab95d0019d0b3c6801ae17f7fa29477dde37d123ecd4fda946e3dd14f604",
+   "verified_equal_to": [
+    "direct_inference_baseline/prompts/direct_extraction_prompt.txt",
+    "EXP_001 archived prompt",
+    "EXP_003 run_manifest prompt_sha256"
+   ]
+  },
+  "P01_schema_focused": {
+   "file": "prompts/P01_schema_focused.txt",
+   "sha256": "9095b50196c4313a316127235eeb9937e6b047e9e116a5f057822eaf4d2f7a99",
+   "diff": "prompts/P01_schema_focused.diff",
+   "status": "approved and frozen; run P01_schema_focused_dev50 complete; decision REJECT (reports/03_P01_results.md)"
+  },
+  "P02_comprehensive_extraction": {
+   "file": "prompts/P02_comprehensive_extraction.txt",
+   "sha256": "cf50ce8efe850cda76fe6eadebf45391fa0461a657e52de5783edb31ccdde5d1",
+   "diff": "prompts/P02_comprehensive_extraction.diff",
+   "status": "approved, frozen, run complete; decision KEEP (reports/05_P02_results.md)",
+   "design": "reports/04_P02_experiment_design.md",
+   "leakage_check": "evaluation/P02_leakage_check.json (0 hits)",
+   "validation_status": "postponed by user decision 2026-11-12; not validated; not final"
+  },
+  "P03_evidence_grounded": {
+   "file": "prompts/P03_evidence_grounded.txt",
+   "sha256": "4f7ee6f763aa886ec8090f7bb680f40eaa2f7f89e37175dfd6b8ce29daad5c9f",
+   "diff": "prompts/P03_evidence_grounded.diff",
+   "status": "REJECTED AS DESIGNED by user (partial results, 35/50); artifacts preserved",
+   "design": "reports/06_P03_experiment_design.md",
+   "leakage_check": "evaluation/P03_leakage_check.json (0 hits)",
+   "previous_unfrozen_draft_sha256": "da91bc71cdc40f0fcfac8ed4e0f3f4b7bc651fc6244dbc30a1cc50f757d0188d",
+   "timestamp_convention_analysis": "analysis/timestamp_convention_dev.json"
+  },
+  "P04_integrated_segment_evidence": {
+   "file": "prompts/P04_integrated_segment_evidence.txt",
+   "sha256": "e05c8beaf82380bdd9581acd07fc77940a363346eb003d44295364683c5aaf55",
+   "diff_vs_P00": "prompts/P04_integrated_segment_evidence.diff_vs_P00",
+   "diff_vs_P02": "prompts/P04_integrated_segment_evidence.diff_vs_P02",
+   "status": "REJECTED AS DESIGNED by user after the 5-record smoke test; all outputs, logs, metrics, prompt files and reports preserved",
+   "design": "reports/07_P04_architecture_and_design_v2.md",
+   "leakage_check": "evaluation/P04_leakage_check.json (0 hits)",
+   "builder": "experiments/evidence_builder.py (prototype; round trip on 100 dev gold labels: 3516/3516 evidence records identical)",
+   "design_v1": "reports/07_P04_architecture_and_design.md (preserved)",
+   "diff_vs_draft1": "prompts/P04_integrated_segment_evidence.diff_vs_draft1",
+   "superseded_draft": {
+    "sha256": "a4c17897b89e90ff4eaea119ea5f4a995b2459652cdf24152b4f174fe217ab68",
+    "files": "prompts/superseded_drafts/"
+   },
+   "smoke_ids_check": "evaluation/P04_smoke_ids_check.json (all 5 in prompt_dev, none in validation or test)",
+   "arm_R": "arm_R/arm_R_summary_all.json (offline, no inference)",
+   "smoke_run": {
+    "run_id": "P04_smoke_5",
+    "ids": [
+     "00035",
+     "00037",
+     "00040",
+     "00215",
+     "00248"
+    ],
+    "preflight": "outputs/P04_smoke_5/preflight.json (all checks passed)",
+    "run_settings": "outputs/P04_smoke_5/run_settings.json",
+    "runner": "experiments/run_p04_smoke.py",
+    "start_local": "2026-11-13T02:15:55+05:30",
+    "end_local": "2026-11-13T02:49:38+05:30",
+    "report": "reports/P04_smoke_test_report.md (copy: P04_SMOKE_TEST_REPORT.md)",
+    "metrics": "evaluation/P04_smoke_5/smoke_metrics.json",
+    "manual_review": "evaluation/P04_smoke_5/manual_review.json",
+    "frozen_dataset_hash_access_audit": "evaluation/frozen_dataset_hash_access_audit.json"
+   }
+  }
+ },
+ "immutable_references": {
+  "EXP_001_checksums_sha256": "a1f80ea223cb473ca998f9c6a04f6a91e8d7160b74bb705ca8544907e5c6aca9",
+  "EXP_003_checksums_sha256_at_setup": "0e79280114c0b300f9ba33edb9a94c343d6675a6ce6cb0d138c251c662480543",
+  "EXP_002_conversion_record_sha256": "83232f2a4460664a8d9af7833919cd66ce6b04bada8b78f2ba6091478617727b"
+ },
+ "p00_reference_metrics": "evaluation/P00_baseline_subset_metrics.json",
+ "planned_versions": [
+  "P00",
+  "P01",
+  "P02",
+  "P03",
+  "P04",
+  "P05",
+  "P06"
+ ],
+ "experiments_run": [],
+ "not_in_scope": [
+  "LoRA",
+  "fine-tuning",
+  "Qwen3-1.7B",
+  "locked 400-record test",
+  "RAG",
+  "quantisation"
+ ],
+ "decisions_log": "reports/02_decisions_log.md",
+ "proposals": {
+  "P05": {
+   "status": "approved by user with conditions; frozen; awaiting user review of freeze, guard integration and validation protocol before any validation run",
+   "design": "reports/09_P05_architecture_and_diagnostics.md",
+   "locked_test_audit": "reports/08_locked_test_access_audit.md",
+   "code": [
+    "experiments/p05_retrieval.py",
+    "experiments/p05_diagnostics.py",
+    "experiments/p05_sensitivity.py",
+    "experiments/dev_guard.py",
+    "experiments/test_dev_guard.py"
+   ],
+   "results": "p05_diagnostics/p05_ladder_results.json",
+   "stage1": "existing frozen P02 prompt cf50ce8e...d5 and its existing outputs (read only)",
+   "freeze_manifest": "P05_FREEZE_MANIFEST.json",
+   "freeze_manifest_sha256": "e383d3a352a6e431bc74c49c8c409d15a6e02831b05ee73e47aec472fd56fae0",
+   "documents": [
+    "reports/10_P05_final_architecture.md",
+    "reports/11_P05_validation_protocol_and_gates.md",
+    "reports/12_P05_human_audit_plan.md",
+    "reports/13_P05_freeze_guard_and_access_audit.md"
+   ],
+   "validation_authorization_file": "P05_VALIDATION_AUTHORIZATION.json (absent: validation not authorised)"
+  }
+ }
+}

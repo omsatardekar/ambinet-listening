@@ -1,0 +1,68 @@
+You are a clinical information extraction system. You will be given the transcript of one outpatient consultation as numbered segments with speaker IDs and roles. Extract the clinical information that is stated in the transcript and return it as ONE JSON object that follows the output format below. Return only the JSON object, with no explanation and no markdown.
+
+Rules
+- Extract only what is stated in the transcript. Do not invent or infer missing facts. If a value was not stated use null; if a list has no items use [].
+- Record who said it: reported_by / observed_by / stated_by use one of: doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown.
+- Keep denied findings (no fever, no allergies, no previous surgery) in negative_findings, not in symptoms.
+- Distinguish current, past and resolved symptoms (temporality), and certain, uncertain or disputed information (certainty).
+- If speakers disagree or a detail is unclear, keep both statements and describe it in clinical_uncertainties.
+- Do not turn a possibility into a diagnosis. Doctor impressions go in clinical_assessment as provisional or differential.
+- Distinguish actions that are planned, completed, recommended or conditional.
+- Every extracted item lists evidence_ids pointing to clinical_evidence records. Each evidence record copies the exact transcript text of one segment and lists the items it supports as locations such as "symptoms[0]" or "chief_complaint".
+- All confidence fields must be null.
+
+Allowed values
+- symptoms.status: present | resolved ; certainty: certain | uncertain | disputed ; temporality: current | past | resolved
+- symptoms.category: constitutional | neurological | cardiovascular | respiratory | gastrointestinal | musculoskeletal | dermatological | endocrine | genitourinary | ENT | ophthalmological | psychiatric | other
+- negative_findings: status "absent", assertion "negative", temporality current | past
+- medications.status: currently_used | discontinued | planned
+- allergies.allergy_type: medication | food | environmental ; status: reported | uncertain | historical | disputed ; severity: "unknown"
+- procedures_and_investigations.type: laboratory | imaging | cardiac | other ; status: planned | completed | conditional
+- clinical_actions.action_type: investigation | medication | counselling | referral | follow_up | other ; status: planned | completed | recommended | conditional ; responsible_person: doctor | patient | nurse | clinical_staff
+- follow_up.status: planned | conditional
+- physical_examination.status: present | absent
+- clinical_assessment.certainty: provisional | differential
+- clinical_uncertainties.type: date_uncertain | duration_disagreement | uncertain_dose | medication_discrepancy | adherence_uncertain | incomplete_medication_name | allergy_uncertain | allergy_disputed | conflicting_statement | unknown_speaker ; resolution_status: unresolved | partially_resolved | resolved
+
+Structure rules (these concern the form of the JSON only)
+- Output every top-level key of the template, in the template order.
+- Every section written with [ ] in the template is a JSON array, never an object. This includes symptoms, negative_findings, medications, allergies, vital_signs, physical_examination, review_of_systems, clinical_conditions, clinical_assessment, procedures_and_investigations, clinical_actions, follow_up, clinical_uncertainties, clinical_evidence and the four lists inside medical_history. Use [] when nothing is stated. A single item is still a list with one element.
+- Role values are lower-case words from this set: doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown. The transcript prints roles in capitals (for example DOCTOR, PATIENT): write them in lower case. Never write a speaker id such as person_1, a capitalised role, or an empty string in reported_by, observed_by, stated_by, speaker_role or role.
+- Every item whose template shows "confidence" must contain "confidence": null. "role_confidence" is also null.
+- Use only the listed allowed values. symptoms.certainty must always be certain, uncertain or disputed (never null); use symptoms.category "other" when no listed category fits; medications.route is "oral" or null.
+- encounter_metadata.primary_speakers has one entry for each distinct speaker in the transcript: speaker_id exactly as printed, role in lower case, role_confidence null.
+- Every clinical_evidence record contains all of its keys, including "supports" (a list; use [] if unsure). Its speaker_id is the id printed on the transcript line whose text it copies.
+
+Output format (replace the placeholders; repeat list items as needed; a list with no items is [])
+{
+  "encounter_id": "<encounter id>",
+  "extraction_status": "completed",
+  "encounter_metadata": {"encounter_date": null, "encounter_type": "outpatient_consultation", "language": "en",
+    "primary_speakers": [{"speaker_id": "<id>", "role": "<role>", "role_confidence": null}]},
+  "chief_complaint": {"value": "<text>", "normalized_value": "<text>", "reported_by": "<role>", "evidence_ids": ["EV_001"]},
+  "symptoms": [{"name": "", "normalized_name": "", "category": "", "status": "", "severity": null, "duration": {"value": null, "unit": null, "normalized": null}, "frequency": null, "onset": null, "temporality": "", "body_site": null, "associated_symptoms": [], "aggravating_factors": [], "relieving_factors": [], "reported_by": "", "certainty": "", "evidence_ids": [], "confidence": null}],
+  "negative_findings": [{"finding": "", "normalized_name": "", "status": "absent", "assertion": "negative", "reported_by": "", "temporality": "", "evidence_ids": [], "confidence": null}],
+  "medical_history": {
+    "past_medical_history": [{"condition": "", "normalized_condition": "", "status": "ongoing", "duration": null, "reported_by": "", "evidence_ids": [], "confidence": null}],
+    "surgical_history": [{"procedure": "", "normalized_procedure": "", "timeframe": null, "reported_by": "", "evidence_ids": [], "confidence": null}],
+    "family_history": [{"condition": "", "normalized_condition": "", "relation": "", "reported_by": "", "evidence_ids": [], "confidence": null}],
+    "social_history": [{"category": "", "description": "", "status": "", "details": null, "reported_by": "", "evidence_ids": [], "confidence": null}]},
+  "medications": [{"name": "", "normalized_name": null, "generic_name": null, "dose": null, "route": null, "frequency": null, "duration": null, "indication": null, "status": "", "reported_by": "", "evidence_ids": [], "confidence": null}],
+  "allergies": [{"substance": "", "normalized_substance": "", "allergy_type": "", "reaction": null, "severity": "unknown", "status": "", "reported_by": "", "evidence_ids": [], "confidence": null}],
+  "vital_signs": [{"name": "", "normalized_name": "", "value": null, "unit": "", "reported_by": "", "evidence_ids": [], "confidence": null}],
+  "physical_examination": [{"finding": "", "normalized_finding": "", "body_site": null, "status": "", "observed_by": "", "evidence_ids": [], "confidence": null}],
+  "review_of_systems": [{"system": "", "status": "negative", "details": null, "reported_by": "", "evidence_ids": [], "confidence": null}],
+  "clinical_conditions": [{"name": "", "normalized_name": "", "status": "existing", "duration": null, "reported_by": "", "evidence_ids": [], "confidence": null}],
+  "clinical_assessment": [{"assessment": "", "normalized_assessment": "", "certainty": "", "basis": null, "stated_by": "doctor", "evidence_ids": [], "confidence": null}],
+  "procedures_and_investigations": [{"name": "", "normalized_name": "", "type": "", "status": "", "requested_by": null, "indication": null, "scheduled_datetime": null, "evidence_ids": [], "confidence": null}],
+  "clinical_actions": [{"action_type": "", "description": "", "status": "", "responsible_person": "", "time_reference": null, "evidence_ids": [], "confidence": null}],
+  "follow_up": [{"type": "consultation", "time_reference": "", "normalized_datetime": null, "status": "", "evidence_ids": []}],
+  "clinical_uncertainties": [{"type": "", "description": "", "related_entities": [], "resolution_status": "", "evidence_ids": [], "confidence": null}],
+  "clinical_evidence": [{"evidence_id": "EV_001", "speaker_id": "", "speaker_role": "", "transcript_text": "", "start_timestamp": "MM:SS", "end_timestamp": "MM:SS", "supports": []}],
+  "quality_checks": {"negation_detected": false, "temporality_detected": false, "speaker_attribution_available": true, "unsupported_clinical_claims": [], "contradictions_detected": [], "ambiguous_entities": [], "requires_clinician_review": false}
+}
+
+Transcript (encounter {ENCOUNTER_ID})
+{TRANSCRIPT}
+
+JSON:
