@@ -1,0 +1,23 @@
+{
+  "purpose": "Predefined Phase A gates and selection rules, fixed BEFORE any Phase A inference. Phase A uses synthetic, template-generated consultations only (phase_a/synth_gen.py, seed fixed); no project transcript, label, validation, locked-test or Batch 002 file is used.",
+  "synthetic_set": {"n_cases": 10, "seed": 20261113, "target_lines_per_case": "36-52", "note": "disjoint from the 3 hand-written feasibility cases"},
+  "settings_fixed": {"model": "Qwen3-0.6B OpenVINO FP16 (EXP_002 IR), GPU, greedy, thinking off", "max_new_tokens": 2048, "rendering_for_constrained": "R1 role-label lines, no ids/times", "array_cap_in_bounded_grammar": 20},
+  "prompt_candidates": {"P1": "design/S1_1_DRAFT_PROMPT.txt wording, no output skeleton", "P2": "P1 plus a one-paragraph compact output skeleton with angle-bracket descriptions (no blank strings)"},
+  "prompt_selection_rule": "Run P1 and P2 unconstrained on R1 over the 10 cases. Choose the prompt with more valid-JSON outputs; tie -> higher mean expected-fact recall; tie -> P1 (shorter). The chosen prompt text is used for B1, B2 and B3 (same wording; only the layout sentence differs by rendering). No further prompt edits.",
+  "grammar_variants_in_order": {"G1": "compact EBNF, unbounded arrays (round-2 config)", "G2": "G1 + every list capped at 20 items", "G3": "G2 + forced answer prefix '{\"chief_complaint\":\"' supplied as the start of the assistant turn (grammar continues after it)"},
+  "grammar_selection_rule": "Evaluate G1, G2, G3 in this order with the chosen prompt on R1; B3 uses the FIRST variant that passes Gate C. If none passes, Gate C fails. No other variant may be added without approval.",
+  "gate_P_prompt_unconstrained": {"applies_to": "arms B1 and B2", "criteria": ["valid JSON >= 7/10 on R1 with the chosen prompt", "valid JSON >= 7/10 on R0 (original rendering) with the chosen prompt", "token-cap hits <= 1/10 in each rendering"], "if_fails": "B1 and B2 are not run; stop and report"},
+  "gate_C_constrained": {"applies_to": "arm B3", "criteria": [
+    "valid JSON = 10/10 and schema-compliant (own validator) >= 9/10",
+    "token-cap hits = 0, truncated outputs = 0",
+    "empty collapse = 0 (empty collapse = chief_complaint shorter than 4 characters or consisting only of punctuation, or every list empty)",
+    "repetition loops = 0 (loop = any list with >= 3 items identical in their primary field, or >= 3 items whose primary field is none/null/n-a/empty-like)",
+    "chief_complaint contains at least one expected key word in >= 7/10 cases",
+    "expected medication names found (micro, across cases) >= 0.60",
+    "allergy_status correct in >= 7/10 cases",
+    "reported_by correct (== expected role) for >= 0.90 of matched expected items, and no reported_by outside the role vocabulary",
+    "no category collapse: for each of symptoms, negative_findings, medications, vital_signs, investigations, follow_up the expected-item recall across the 10 cases is > 0.20"],
+    "if_fails": "B3 is not run; stop and report; no new variant without approval"},
+  "phase_A_overall": "B1/B2 proceed iff gate P passes. B3 proceeds iff gate P and gate C pass. If gate P fails nothing proceeds.",
+  "metrics_definition": "expected facts are known by construction of the synthetic generator; matching = lower-case substring of the expected name in the item's primary field; the same code scores every variant. These are feasibility gates, not extraction-quality claims."
+}

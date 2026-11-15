@@ -1,0 +1,2737 @@
+{
+ "experiment_id": "P00_direct_dev50",
+ "stage": "3 - direct inference baseline (no fine-tuning, no prompt optimisation, no RAG)",
+ "started_utc": "2026-11-13T14:16:39.541558+00:00",
+ "split": "development",
+ "encounter_ids": [
+  "00035",
+  "00037",
+  "00040",
+  "00042",
+  "00060",
+  "00069",
+  "00077",
+  "00092",
+  "00120",
+  "00127",
+  "00141",
+  "00152",
+  "00155",
+  "00157",
+  "00162",
+  "00165",
+  "00168",
+  "00182",
+  "00187",
+  "00189",
+  "00202",
+  "00204",
+  "00206",
+  "00210",
+  "00215",
+  "00221",
+  "00238",
+  "00248",
+  "00264",
+  "00266",
+  "00288",
+  "00289",
+  "00291",
+  "00350",
+  "00393",
+  "00397",
+  "00402",
+  "00403",
+  "00409",
+  "00416",
+  "00426",
+  "00429",
+  "00454",
+  "00455",
+  "00460",
+  "00462",
+  "00469",
+  "00471",
+  "00475",
+  "00497"
+ ],
+ "dataset": {
+  "name": "dataset_v2_batch_001_corrected",
+  "manifest_sha256": "4403fef843fbd0bbcfc09cc2d6d2130c64b6936bbfb51a003c7874edcdd0c5aa",
+  "frozen_files_verified": 50
+ },
+ "split_seed": 20260301,
+ "model": {
+  "provider": "openvino_genai",
+  "model_id": "Qwen/Qwen3-1.7B",
+  "model_revision_commit": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "deployment_name": null,
+  "device": "GPU",
+  "runtime": "openvino_genai.LLMPipeline",
+  "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+  "openvino_genai": "2026.4.1.0-3408-ab01d1771e4",
+  "converted_model_dir": "models/Qwen3-1.7B-ov-fp16",
+  "weights_precision": "FP16 (converted from BF16 source weights)",
+  "compiled_model_cache": "D:\\ambient_clinical_speech_transcription\\ambient_clinical_speech_transcription\\direct_inference_1_7B\\experiments\\EXP_001_DIRECT_INFERENCE\\ov_cache",
+  "generation": {
+   "do_sample": false,
+   "enable_thinking": false,
+   "chat_template": "tokenizer.apply_chat_template(add_generation_prompt=True, enable_thinking=False); GenAI template disabled",
+   "pipeline_per_encounter": true
+  },
+  "parameter_support": {
+   "temperature": "not applied (greedy)",
+   "top_p": "not applied (greedy)",
+   "top_k": "not applied (greedy)",
+   "max_new_tokens": "applied",
+   "enable_thinking": "applied via chat template (False)"
+  }
+ },
+ "max_new_tokens": 4096,
+ "retry_policy": {
+  "retries": 3,
+  "base_seconds": 2.0,
+  "scope": "transient API/OOM errors only"
+ },
+ "prompt_file": "prompts/direct_extraction_prompt.txt",
+ "prompt_sha256": "78c5ab95d0019d0b3c6801ae17f7fa29477dde37d123ecd4fda946e3dd14f604",
+ "prompt_text": "You are a clinical information extraction system. You will be given the transcript of one outpatient consultation as numbered segments with speaker IDs and roles. Extract the clinical information that is stated in the transcript and return it as ONE JSON object that follows the output format below. Return only the JSON object, with no explanation and no markdown.\n\nRules\n- Extract only what is stated in the transcript. Do not invent or infer missing facts. If a value was not stated use null; if a list has no items use [].\n- Record who said it: reported_by / observed_by / stated_by use one of: doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown.\n- Keep denied findings (no fever, no allergies, no previous surgery) in negative_findings, not in symptoms.\n- Distinguish current, past and resolved symptoms (temporality), and certain, uncertain or disputed information (certainty).\n- If speakers disagree or a detail is unclear, keep both statements and describe it in clinical_uncertainties.\n- Do not turn a possibility into a diagnosis. Doctor impressions go in clinical_assessment as provisional or differential.\n- Distinguish actions that are planned, completed, recommended or conditional.\n- Every extracted item lists evidence_ids pointing to clinical_evidence records. Each evidence record copies the exact transcript text of one segment and lists the items it supports as locations such as \"symptoms[0]\" or \"chief_complaint\".\n- All confidence fields must be null.\n\nAllowed values\n- symptoms.status: present | resolved ; certainty: certain | uncertain | disputed ; temporality: current | past | resolved\n- symptoms.category: constitutional | neurological | cardiovascular | respiratory | gastrointestinal | musculoskeletal | dermatological | endocrine | genitourinary | ENT | ophthalmological | psychiatric | other\n- negative_findings: status \"absent\", assertion \"negative\", temporality current | past\n- medications.status: currently_used | discontinued | planned\n- allergies.allergy_type: medication | food | environmental ; status: reported | uncertain | historical | disputed ; severity: \"unknown\"\n- procedures_and_investigations.type: laboratory | imaging | cardiac | other ; status: planned | completed | conditional\n- clinical_actions.action_type: investigation | medication | counselling | referral | follow_up | other ; status: planned | completed | recommended | conditional ; responsible_person: doctor | patient | nurse | clinical_staff\n- follow_up.status: planned | conditional\n- physical_examination.status: present | absent\n- clinical_assessment.certainty: provisional | differential\n- clinical_uncertainties.type: date_uncertain | duration_disagreement | uncertain_dose | medication_discrepancy | adherence_uncertain | incomplete_medication_name | allergy_uncertain | allergy_disputed | conflicting_statement | unknown_speaker ; resolution_status: unresolved | partially_resolved | resolved\n\nOutput format (replace the placeholders; repeat list items as needed; a list with no items is [])\n{\n  \"encounter_id\": \"<encounter id>\",\n  \"extraction_status\": \"completed\",\n  \"encounter_metadata\": {\"encounter_date\": null, \"encounter_type\": \"outpatient_consultation\", \"language\": \"en\",\n    \"primary_speakers\": [{\"speaker_id\": \"<id>\", \"role\": \"<role>\", \"role_confidence\": null}]},\n  \"chief_complaint\": {\"value\": \"<text>\", \"normalized_value\": \"<text>\", \"reported_by\": \"<role>\", \"evidence_ids\": [\"EV_001\"]},\n  \"symptoms\": [{\"name\": \"\", \"normalized_name\": \"\", \"category\": \"\", \"status\": \"\", \"severity\": null, \"duration\": {\"value\": null, \"unit\": null, \"normalized\": null}, \"frequency\": null, \"onset\": null, \"temporality\": \"\", \"body_site\": null, \"associated_symptoms\": [], \"aggravating_factors\": [], \"relieving_factors\": [], \"reported_by\": \"\", \"certainty\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"negative_findings\": [{\"finding\": \"\", \"normalized_name\": \"\", \"status\": \"absent\", \"assertion\": \"negative\", \"reported_by\": \"\", \"temporality\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"medical_history\": {\n    \"past_medical_history\": [{\"condition\": \"\", \"normalized_condition\": \"\", \"status\": \"ongoing\", \"duration\": null, \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n    \"surgical_history\": [{\"procedure\": \"\", \"normalized_procedure\": \"\", \"timeframe\": null, \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n    \"family_history\": [{\"condition\": \"\", \"normalized_condition\": \"\", \"relation\": \"\", \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n    \"social_history\": [{\"category\": \"\", \"description\": \"\", \"status\": \"\", \"details\": null, \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}]},\n  \"medications\": [{\"name\": \"\", \"normalized_name\": null, \"generic_name\": null, \"dose\": null, \"route\": null, \"frequency\": null, \"duration\": null, \"indication\": null, \"status\": \"\", \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"allergies\": [{\"substance\": \"\", \"normalized_substance\": \"\", \"allergy_type\": \"\", \"reaction\": null, \"severity\": \"unknown\", \"status\": \"\", \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"vital_signs\": [{\"name\": \"\", \"normalized_name\": \"\", \"value\": null, \"unit\": \"\", \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"physical_examination\": [{\"finding\": \"\", \"normalized_finding\": \"\", \"body_site\": null, \"status\": \"\", \"observed_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"review_of_systems\": [{\"system\": \"\", \"status\": \"negative\", \"details\": null, \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"clinical_conditions\": [{\"name\": \"\", \"normalized_name\": \"\", \"status\": \"existing\", \"duration\": null, \"reported_by\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"clinical_assessment\": [{\"assessment\": \"\", \"normalized_assessment\": \"\", \"certainty\": \"\", \"basis\": null, \"stated_by\": \"doctor\", \"evidence_ids\": [], \"confidence\": null}],\n  \"procedures_and_investigations\": [{\"name\": \"\", \"normalized_name\": \"\", \"type\": \"\", \"status\": \"\", \"requested_by\": null, \"indication\": null, \"scheduled_datetime\": null, \"evidence_ids\": [], \"confidence\": null}],\n  \"clinical_actions\": [{\"action_type\": \"\", \"description\": \"\", \"status\": \"\", \"responsible_person\": \"\", \"time_reference\": null, \"evidence_ids\": [], \"confidence\": null}],\n  \"follow_up\": [{\"type\": \"consultation\", \"time_reference\": \"\", \"normalized_datetime\": null, \"status\": \"\", \"evidence_ids\": []}],\n  \"clinical_uncertainties\": [{\"type\": \"\", \"description\": \"\", \"related_entities\": [], \"resolution_status\": \"\", \"evidence_ids\": [], \"confidence\": null}],\n  \"clinical_evidence\": [{\"evidence_id\": \"EV_001\", \"speaker_id\": \"\", \"speaker_role\": \"\", \"transcript_text\": \"\", \"start_timestamp\": \"MM:SS\", \"end_timestamp\": \"MM:SS\", \"supports\": []}],\n  \"quality_checks\": {\"negation_detected\": false, \"temporality_detected\": false, \"speaker_attribution_available\": true, \"unsupported_clinical_claims\": [], \"contradictions_detected\": [], \"ambiguous_entities\": [], \"requires_clinician_review\": false}\n}\n\nTranscript (encounter {ENCOUNTER_ID})\n{TRANSCRIPT}\n\nJSON:\n",
+ "git_commit": "1e9f4462f78a7994ec6d1c96087459dbc82c46c9",
+ "records": {
+  "00035": {
+   "encounter_id": "00035",
+   "finish_reason": "stop",
+   "prompt_tokens": 3368,
+   "completion_tokens": 2521,
+   "latency_seconds": 990.053,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 22
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.family_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].frequency"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].onset"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].body_site"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].associated_symptoms"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].aggravating_factors"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].relieving_factors"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].indication"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[2].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[3].confidence"
+    }
+   ],
+   "keys_expected": 162,
+   "keys_present": 140,
+   "keys_emitted": 140,
+   "keys_unexpected": 0
+  },
+  "00037": {
+   "encounter_id": "00037",
+   "finish_reason": "stop",
+   "prompt_tokens": 4108,
+   "completion_tokens": 3026,
+   "latency_seconds": 1210.356,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 32,
+    "missing_field": 36
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "chief_complaint.reported_by='person_3'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[0].reported_by=''"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[1].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[1].reported_by=''"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[2].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[2].reported_by=''"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.surgical_history[0].reported_by=''"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.family_history[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.family_history[0].reported_by=''"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.family_history[1].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.family_history[1].reported_by=''"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.social_history[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[0].reported_by=''"
+    }
+   ],
+   "keys_expected": 351,
+   "keys_present": 315,
+   "keys_emitted": 315,
+   "keys_unexpected": 0
+  },
+  "00040": {
+   "encounter_id": "00040",
+   "finish_reason": "length",
+   "prompt_tokens": 4166,
+   "completion_tokens": 4096,
+   "latency_seconds": 1587.726,
+   "attempts": 1,
+   "parse_status": "truncated",
+   "parse_notes": [
+    "Unterminated string starting at at char 8565; output hit the token budget (finish_reason=length)"
+   ],
+   "status": "failed",
+   "failure_type": "truncated"
+  },
+  "00042": {
+   "encounter_id": "00042",
+   "finish_reason": "stop",
+   "prompt_tokens": 3620,
+   "completion_tokens": 2674,
+   "latency_seconds": 1076.548,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "unexpected_field": 1,
+    "enum_violation": 3
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "unexpected_field",
+     "message": "follow_up[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "clinical_evidence[0].speaker_role=''"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[0].category='lifestyle'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[0].status=''"
+    }
+   ],
+   "keys_expected": 247,
+   "keys_present": 247,
+   "keys_emitted": 248,
+   "keys_unexpected": 1
+  },
+  "00060": {
+   "encounter_id": "00060",
+   "finish_reason": "length",
+   "prompt_tokens": 3883,
+   "completion_tokens": 4096,
+   "latency_seconds": 1601.096,
+   "attempts": 1,
+   "parse_status": "truncated",
+   "parse_notes": [
+    "Unterminated string starting at at char 10736; output hit the token budget (finish_reason=length)"
+   ],
+   "status": "failed",
+   "failure_type": "truncated"
+  },
+  "00069": {
+   "encounter_id": "00069",
+   "finish_reason": "stop",
+   "prompt_tokens": 3516,
+   "completion_tokens": 2674,
+   "latency_seconds": 1022.56,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 13,
+    "missing_field": 17
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "chief_complaint.reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[0].reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[0].reported_by='person_2'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[1].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[1].reported_by='person_2'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[2].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[2].reported_by='person_2'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[3].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[3].reported_by='person_2'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[4].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[4].reported_by='person_2'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[5].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[5].reported_by='person_2'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[6].confidence"
+    }
+   ],
+   "keys_expected": 194,
+   "keys_present": 177,
+   "keys_emitted": 177,
+   "keys_unexpected": 0
+  },
+  "00077": {
+   "encounter_id": "00077",
+   "finish_reason": "stop",
+   "prompt_tokens": 3936,
+   "completion_tokens": 3601,
+   "latency_seconds": 1381.466,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 29,
+    "unexpected_field": 1
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "chief_complaint.reported_by='person_3'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[1].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.surgical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.family_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.family_history[1].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[0].reported_by='person_3'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[1].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[2].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[3].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "negative_findings[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[0].reported_by='person_3'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[1].reported_by='person_3'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[2].reported_by='person_1'"
+    }
+   ],
+   "keys_expected": 332,
+   "keys_present": 332,
+   "keys_emitted": 333,
+   "keys_unexpected": 1
+  },
+  "00092": {
+   "encounter_id": "00092",
+   "finish_reason": "stop",
+   "prompt_tokens": 3845,
+   "completion_tokens": 1212,
+   "latency_seconds": 515.497,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 10
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_conditions[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_assessment[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "procedures_and_investigations[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "procedures_and_investigations[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_actions[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_actions[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_uncertainties[0].confidence"
+    }
+   ],
+   "keys_expected": 131,
+   "keys_present": 121,
+   "keys_emitted": 121,
+   "keys_unexpected": 0
+  },
+  "00120": {
+   "encounter_id": "00120",
+   "finish_reason": "stop",
+   "prompt_tokens": 3716,
+   "completion_tokens": 2304,
+   "latency_seconds": 907.159,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 18,
+    "enum_violation": 1
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "negative_findings[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[2].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "physical_examination[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "review_of_systems[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_conditions[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_assessment[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "procedures_and_investigations[0].confidence"
+    }
+   ],
+   "keys_expected": 210,
+   "keys_present": 192,
+   "keys_emitted": 192,
+   "keys_unexpected": 0
+  },
+  "00127": {
+   "encounter_id": "00127",
+   "finish_reason": "length",
+   "prompt_tokens": 3987,
+   "completion_tokens": 4096,
+   "latency_seconds": 1569.532,
+   "attempts": 1,
+   "parse_status": "truncated",
+   "parse_notes": [
+    "Unterminated string starting at at char 8328; output hit the token budget (finish_reason=length)"
+   ],
+   "status": "failed",
+   "failure_type": "truncated"
+  },
+  "00141": {
+   "encounter_id": "00141",
+   "finish_reason": "stop",
+   "prompt_tokens": 4387,
+   "completion_tokens": 2352,
+   "latency_seconds": 952.106,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 3
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "clinical_evidence[0].speaker_role=''"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[0].category='physical activity'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[0].status='normal'"
+    }
+   ],
+   "keys_expected": 219,
+   "keys_present": 219,
+   "keys_emitted": 219,
+   "keys_unexpected": 0
+  },
+  "00152": {
+   "encounter_id": "00152",
+   "finish_reason": "stop",
+   "prompt_tokens": 3298,
+   "completion_tokens": 547,
+   "latency_seconds": 264.727,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 1
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "clinical_assessment[0].confidence"
+    }
+   ],
+   "keys_expected": 56,
+   "keys_present": 55,
+   "keys_emitted": 55,
+   "keys_unexpected": 0
+  },
+  "00155": {
+   "encounter_id": "00155",
+   "finish_reason": "length",
+   "prompt_tokens": 4197,
+   "completion_tokens": 4096,
+   "latency_seconds": 1574.682,
+   "attempts": 1,
+   "parse_status": "truncated",
+   "parse_notes": [
+    "Unterminated string starting at at char 7056; output hit the token budget (finish_reason=length)"
+   ],
+   "status": "failed",
+   "failure_type": "truncated"
+  },
+  "00157": {
+   "encounter_id": "00157",
+   "finish_reason": "stop",
+   "prompt_tokens": 3306,
+   "completion_tokens": 1233,
+   "latency_seconds": 487.807,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 8
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "physical_examination[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_conditions[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_assessment[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "procedures_and_investigations[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_actions[0].confidence"
+    }
+   ],
+   "keys_expected": 129,
+   "keys_present": 121,
+   "keys_emitted": 121,
+   "keys_unexpected": 0
+  },
+  "00162": {
+   "encounter_id": "00162",
+   "finish_reason": "stop",
+   "prompt_tokens": 3309,
+   "completion_tokens": 2374,
+   "latency_seconds": 877.46,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 42,
+    "enum_violation": 2
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.social_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].frequency"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].onset"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].body_site"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].associated_symptoms"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].aggravating_factors"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].relieving_factors"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[1].frequency"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[1].onset"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[1].body_site"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[1].associated_symptoms"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[1].aggravating_factors"
+    }
+   ],
+   "keys_expected": 267,
+   "keys_present": 225,
+   "keys_emitted": 225,
+   "keys_unexpected": 0
+  },
+  "00165": {
+   "encounter_id": "00165",
+   "finish_reason": "stop",
+   "prompt_tokens": 3453,
+   "completion_tokens": 3491,
+   "latency_seconds": 1292.783,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 21,
+    "unexpected_field": 1,
+    "missing_field": 2
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "chief_complaint.reported_by='person_3'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[0].reported_by='person_3'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.surgical_history[0].reported_by='person_3'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.family_history[0].reported_by='person_3'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[0].reported_by='person_3'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[0].reported_by='person_3'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "negative_findings[0].reported_by='person_3'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[0].reported_by='person_3'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[1].reported_by='person_3'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "allergies[0].reported_by='person_3'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[1].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[2].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "physical_examination[0].observed_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "physical_examination[1].observed_by='person_2'"
+    }
+   ],
+   "keys_expected": 242,
+   "keys_present": 240,
+   "keys_emitted": 241,
+   "keys_unexpected": 1
+  },
+  "00168": {
+   "encounter_id": "00168",
+   "finish_reason": "length",
+   "prompt_tokens": 3398,
+   "completion_tokens": 4096,
+   "latency_seconds": 1531.731,
+   "attempts": 1,
+   "parse_status": "truncated",
+   "parse_notes": [
+    "Unterminated string starting at at char 14056; output hit the token budget (finish_reason=length)"
+   ],
+   "status": "failed",
+   "failure_type": "truncated"
+  },
+  "00182": {
+   "encounter_id": "00182",
+   "finish_reason": "stop",
+   "prompt_tokens": 3730,
+   "completion_tokens": 2837,
+   "latency_seconds": 1089.104,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 26,
+    "enum_violation": 4
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.family_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.social_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[2].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "negative_findings[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "negative_findings[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[2].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[3].confidence"
+    }
+   ],
+   "keys_expected": 259,
+   "keys_present": 233,
+   "keys_emitted": 233,
+   "keys_unexpected": 0
+  },
+  "00187": {
+   "encounter_id": "00187",
+   "finish_reason": "stop",
+   "prompt_tokens": 4255,
+   "completion_tokens": 2355,
+   "latency_seconds": 940.793,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 23,
+    "enum_violation": 3
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.family_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.social_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "negative_findings[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "negative_findings[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "negative_findings[2].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[2].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[2].confidence"
+    }
+   ],
+   "keys_expected": 257,
+   "keys_present": 234,
+   "keys_emitted": 234,
+   "keys_unexpected": 0
+  },
+  "00189": {
+   "encounter_id": "00189",
+   "finish_reason": "stop",
+   "prompt_tokens": 3522,
+   "completion_tokens": 1863,
+   "latency_seconds": 727.57,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 17,
+    "missing_field": 17
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "chief_complaint.reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[1].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[1].reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.surgical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.family_history[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.family_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.social_history[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[0].reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[0].reported_by='person_1'"
+    }
+   ],
+   "keys_expected": 196,
+   "keys_present": 179,
+   "keys_emitted": 179,
+   "keys_unexpected": 0
+  },
+  "00202": {
+   "encounter_id": "00202",
+   "finish_reason": "stop",
+   "prompt_tokens": 3657,
+   "completion_tokens": 4064,
+   "latency_seconds": 1543.723,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 16,
+    "unexpected_field": 1,
+    "missing_field": 3
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "chief_complaint.reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.surgical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "negative_findings[0].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "allergies[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[0].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[1].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[2].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[3].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "physical_examination[0].observed_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "review_of_systems[0].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "clinical_conditions[0].reported_by='person_2'"
+    },
+    {
+     "kind": "unexpected_field",
+     "message": "follow_up[0].confidence"
+    }
+   ],
+   "keys_expected": 225,
+   "keys_present": 222,
+   "keys_emitted": 223,
+   "keys_unexpected": 1
+  },
+  "00204": {
+   "encounter_id": "00204",
+   "finish_reason": "length",
+   "prompt_tokens": 3451,
+   "completion_tokens": 4096,
+   "latency_seconds": 1523.636,
+   "attempts": 1,
+   "parse_status": "truncated",
+   "parse_notes": [
+    "Expecting ',' delimiter at char 12768; output hit the token budget (finish_reason=length)"
+   ],
+   "status": "failed",
+   "failure_type": "truncated"
+  },
+  "00206": {
+   "encounter_id": "00206",
+   "finish_reason": "stop",
+   "prompt_tokens": 4639,
+   "completion_tokens": 4044,
+   "latency_seconds": 1594.905,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 29,
+    "enum_violation": 3
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.family_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.family_history[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.social_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "negative_findings[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[1].confidence"
+    }
+   ],
+   "keys_expected": 270,
+   "keys_present": 241,
+   "keys_emitted": 241,
+   "keys_unexpected": 0
+  },
+  "00210": {
+   "encounter_id": "00210",
+   "finish_reason": "length",
+   "prompt_tokens": 4348,
+   "completion_tokens": 4096,
+   "latency_seconds": 1585.011,
+   "attempts": 1,
+   "parse_status": "truncated",
+   "parse_notes": [
+    "Unterminated string starting at at char 10439; output hit the token budget (finish_reason=length)"
+   ],
+   "status": "failed",
+   "failure_type": "truncated"
+  },
+  "00215": {
+   "encounter_id": "00215",
+   "finish_reason": "stop",
+   "prompt_tokens": 3632,
+   "completion_tokens": 1847,
+   "latency_seconds": 721.736,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 15
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "chief_complaint.reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.surgical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "negative_findings[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "negative_findings[1].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "negative_findings[2].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "allergies[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[0].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[1].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[2].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "physical_examination[0].observed_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "review_of_systems[0].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "clinical_conditions[0].reported_by='person_2'"
+    }
+   ],
+   "keys_expected": 202,
+   "keys_present": 202,
+   "keys_emitted": 202,
+   "keys_unexpected": 0
+  },
+  "00221": {
+   "encounter_id": "00221",
+   "finish_reason": "stop",
+   "prompt_tokens": 3966,
+   "completion_tokens": 1745,
+   "latency_seconds": 704.524,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 11,
+    "unexpected_field": 1
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "chief_complaint.reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[1].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[2].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.surgical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[1].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "physical_examination[0].observed_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "clinical_conditions[0].reported_by='person_1'"
+    },
+    {
+     "kind": "unexpected_field",
+     "message": "follow_up[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[0].category='urological'"
+    }
+   ],
+   "keys_expected": 180,
+   "keys_present": 180,
+   "keys_emitted": 181,
+   "keys_unexpected": 1
+  },
+  "00238": {
+   "encounter_id": "00238",
+   "finish_reason": "stop",
+   "prompt_tokens": 3532,
+   "completion_tokens": 2079,
+   "latency_seconds": 845.596,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 20,
+    "unexpected_field": 1
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "chief_complaint.reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[1].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.surgical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.family_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[1].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[1].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "allergies[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "physical_examination[0].observed_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "review_of_systems[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "review_of_systems[1].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "clinical_conditions[0].reported_by='person_1'"
+    }
+   ],
+   "keys_expected": 211,
+   "keys_present": 211,
+   "keys_emitted": 212,
+   "keys_unexpected": 1
+  },
+  "00248": {
+   "encounter_id": "00248",
+   "finish_reason": "stop",
+   "prompt_tokens": 3371,
+   "completion_tokens": 2019,
+   "latency_seconds": 770.444,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 17,
+    "enum_violation": 3
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.social_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "negative_findings[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[2].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "physical_examination[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "review_of_systems[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_conditions[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_assessment[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "procedures_and_investigations[0].confidence"
+    }
+   ],
+   "keys_expected": 193,
+   "keys_present": 176,
+   "keys_emitted": 176,
+   "keys_unexpected": 0
+  },
+  "00264": {
+   "encounter_id": "00264",
+   "finish_reason": "stop",
+   "prompt_tokens": 3685,
+   "completion_tokens": 2370,
+   "latency_seconds": 914.894,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 1
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "allergies[0].allergy_type='other'"
+    }
+   ],
+   "keys_expected": 243,
+   "keys_present": 243,
+   "keys_emitted": 243,
+   "keys_unexpected": 0
+  },
+  "00266": {
+   "encounter_id": "00266",
+   "finish_reason": "stop",
+   "prompt_tokens": 3720,
+   "completion_tokens": 2428,
+   "latency_seconds": 934.15,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 27,
+    "enum_violation": 3
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.family_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.social_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[2].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[3].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[4].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[5].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[6].confidence"
+    }
+   ],
+   "keys_expected": 265,
+   "keys_present": 238,
+   "keys_emitted": 238,
+   "keys_unexpected": 0
+  },
+  "00288": {
+   "encounter_id": "00288",
+   "finish_reason": "stop",
+   "prompt_tokens": 3797,
+   "completion_tokens": 1106,
+   "latency_seconds": 486.68,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_top_level": 1,
+    "missing_field": 10
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_top_level",
+     "message": "quality_checks"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "physical_examination[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_assessment[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_assessment[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "procedures_and_investigations[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "procedures_and_investigations[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_actions[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_actions[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_uncertainties[0].confidence"
+    }
+   ],
+   "keys_expected": 124,
+   "keys_present": 113,
+   "keys_emitted": 113,
+   "keys_unexpected": 0
+  },
+  "00289": {
+   "encounter_id": "00289",
+   "finish_reason": "stop",
+   "prompt_tokens": 3392,
+   "completion_tokens": 2365,
+   "latency_seconds": 893.905,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 22,
+    "enum_violation": 3
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.family_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.social_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "negative_findings[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[2].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[3].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "physical_examination[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "review_of_systems[0].confidence"
+    }
+   ],
+   "keys_expected": 230,
+   "keys_present": 208,
+   "keys_emitted": 208,
+   "keys_unexpected": 0
+  },
+  "00291": {
+   "encounter_id": "00291",
+   "finish_reason": "length",
+   "prompt_tokens": 4176,
+   "completion_tokens": 4096,
+   "latency_seconds": 1574.722,
+   "attempts": 1,
+   "parse_status": "truncated",
+   "parse_notes": [
+    "Unterminated string starting at at char 7792; output hit the token budget (finish_reason=length)"
+   ],
+   "status": "failed",
+   "failure_type": "truncated"
+  },
+  "00350": {
+   "encounter_id": "00350",
+   "finish_reason": "stop",
+   "prompt_tokens": 3627,
+   "completion_tokens": 2298,
+   "latency_seconds": 882.13,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 15
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "chief_complaint.reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[1].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.family_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "allergies[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[0].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[1].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[2].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[3].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[4].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "physical_examination[0].observed_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "physical_examination[1].observed_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "clinical_conditions[0].reported_by='person_1'"
+    }
+   ],
+   "keys_expected": 222,
+   "keys_present": 222,
+   "keys_emitted": 222,
+   "keys_unexpected": 0
+  },
+  "00393": {
+   "encounter_id": "00393",
+   "finish_reason": "length",
+   "prompt_tokens": 4088,
+   "completion_tokens": 4096,
+   "latency_seconds": 1570.0,
+   "attempts": 1,
+   "parse_status": "truncated",
+   "parse_notes": [
+    "Unterminated string starting at at char 9074; output hit the token budget (finish_reason=length)"
+   ],
+   "status": "failed",
+   "failure_type": "truncated"
+  },
+  "00397": {
+   "encounter_id": "00397",
+   "finish_reason": "length",
+   "prompt_tokens": 4049,
+   "completion_tokens": 4096,
+   "latency_seconds": 1580.49,
+   "attempts": 1,
+   "parse_status": "truncated",
+   "parse_notes": [
+    "Unterminated string starting at at char 11206; output hit the token budget (finish_reason=length)"
+   ],
+   "status": "failed",
+   "failure_type": "truncated"
+  },
+  "00402": {
+   "encounter_id": "00402",
+   "finish_reason": "stop",
+   "prompt_tokens": 3945,
+   "completion_tokens": 3772,
+   "latency_seconds": 1489.122,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 14,
+    "missing_field": 19
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "chief_complaint.reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[1].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[1].reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.surgical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[0].reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[0].reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[1].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[1].reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "allergies[0].reported_by='person_1'"
+    }
+   ],
+   "keys_expected": 202,
+   "keys_present": 183,
+   "keys_emitted": 183,
+   "keys_unexpected": 0
+  },
+  "00403": {
+   "encounter_id": "00403",
+   "finish_reason": "stop",
+   "prompt_tokens": 3582,
+   "completion_tokens": 3270,
+   "latency_seconds": 1243.137,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 20,
+    "unexpected_field": 1
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "chief_complaint.reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.surgical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.family_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[1].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "allergies[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[0].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[1].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[2].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[3].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "physical_examination[0].observed_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "physical_examination[1].observed_by='person_2'"
+    }
+   ],
+   "keys_expected": 226,
+   "keys_present": 226,
+   "keys_emitted": 227,
+   "keys_unexpected": 1
+  },
+  "00409": {
+   "encounter_id": "00409",
+   "finish_reason": "stop",
+   "prompt_tokens": 3564,
+   "completion_tokens": 1834,
+   "latency_seconds": 718.953,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 19,
+    "enum_violation": 3
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.family_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.social_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.social_history[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "allergies[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "vital_signs[2].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "physical_examination[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "review_of_systems[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_conditions[0].confidence"
+    }
+   ],
+   "keys_expected": 207,
+   "keys_present": 188,
+   "keys_emitted": 188,
+   "keys_unexpected": 0
+  },
+  "00416": {
+   "encounter_id": "00416",
+   "finish_reason": "length",
+   "prompt_tokens": 4272,
+   "completion_tokens": 4096,
+   "latency_seconds": 1580.242,
+   "attempts": 1,
+   "parse_status": "truncated",
+   "parse_notes": [
+    "Unterminated string starting at at char 11424; output hit the token budget (finish_reason=length)"
+   ],
+   "status": "failed",
+   "failure_type": "truncated"
+  },
+  "00426": {
+   "encounter_id": "00426",
+   "finish_reason": "stop",
+   "prompt_tokens": 3723,
+   "completion_tokens": 879,
+   "latency_seconds": 389.293,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_field": 5,
+    "enum_violation": 1
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_field",
+     "message": "medical_history.family_history[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_assessment[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "procedures_and_investigations[0].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "procedures_and_investigations[1].confidence"
+    },
+    {
+     "kind": "missing_field",
+     "message": "clinical_actions[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "clinical_evidence[0].speaker_role=''"
+    }
+   ],
+   "keys_expected": 92,
+   "keys_present": 87,
+   "keys_emitted": 87,
+   "keys_unexpected": 0
+  },
+  "00429": {
+   "encounter_id": "00429",
+   "finish_reason": "stop",
+   "prompt_tokens": 3506,
+   "completion_tokens": 3581,
+   "latency_seconds": 1339.78,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "unexpected_field": 1,
+    "enum_violation": 3
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "unexpected_field",
+     "message": "follow_up[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "clinical_evidence[0].speaker_role=''"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[0].category='lifestyle'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[0].status=''"
+    }
+   ],
+   "keys_expected": 210,
+   "keys_present": 210,
+   "keys_emitted": 211,
+   "keys_unexpected": 1
+  },
+  "00454": {
+   "encounter_id": "00454",
+   "finish_reason": "length",
+   "prompt_tokens": 4175,
+   "completion_tokens": 4096,
+   "latency_seconds": 1568.398,
+   "attempts": 1,
+   "parse_status": "truncated",
+   "parse_notes": [
+    "Unterminated string starting at at char 8778; output hit the token budget (finish_reason=length)"
+   ],
+   "status": "failed",
+   "failure_type": "truncated"
+  },
+  "00455": {
+   "encounter_id": "00455",
+   "finish_reason": "length",
+   "prompt_tokens": 4253,
+   "completion_tokens": 4096,
+   "latency_seconds": 1573.747,
+   "attempts": 1,
+   "parse_status": "truncated",
+   "parse_notes": [
+    "Unterminated string starting at at char 7448; output hit the token budget (finish_reason=length)"
+   ],
+   "status": "failed",
+   "failure_type": "truncated"
+  },
+  "00460": {
+   "encounter_id": "00460",
+   "finish_reason": "stop",
+   "prompt_tokens": 3535,
+   "completion_tokens": 2577,
+   "latency_seconds": 975.024,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 19,
+    "unexpected_field": 1
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "chief_complaint.reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[1].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.surgical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[1].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[2].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "allergies[0].reported_by='person_1'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[0].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[1].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[2].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[3].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "vital_signs[4].reported_by='person_2'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "physical_examination[0].observed_by='person_2'"
+    }
+   ],
+   "keys_expected": 253,
+   "keys_present": 253,
+   "keys_emitted": 254,
+   "keys_unexpected": 1
+  },
+  "00462": {
+   "encounter_id": "00462",
+   "finish_reason": "stop",
+   "prompt_tokens": 3237,
+   "completion_tokens": 2259,
+   "latency_seconds": 846.636,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "unexpected_field": 1,
+    "enum_violation": 4
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "unexpected_field",
+     "message": "follow_up[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "clinical_evidence[0].speaker_role=''"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "allergies[0].allergy_type='other'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[0].category='Work'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[0].status=''"
+    }
+   ],
+   "keys_expected": 230,
+   "keys_present": 230,
+   "keys_emitted": 231,
+   "keys_unexpected": 1
+  },
+  "00469": {
+   "encounter_id": "00469",
+   "finish_reason": "stop",
+   "prompt_tokens": 3673,
+   "completion_tokens": 3898,
+   "latency_seconds": 1477.588,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "unexpected_field": 1,
+    "enum_violation": 4
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "unexpected_field",
+     "message": "follow_up[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "clinical_evidence[0].speaker_role=''"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[0].route='mouth'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[0].category='Lifestyle'"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.social_history[0].status='ongoing'"
+    }
+   ],
+   "keys_expected": 226,
+   "keys_present": 226,
+   "keys_emitted": 227,
+   "keys_unexpected": 1
+  },
+  "00471": {
+   "encounter_id": "00471",
+   "finish_reason": "length",
+   "prompt_tokens": 4348,
+   "completion_tokens": 4096,
+   "latency_seconds": 1590.509,
+   "attempts": 1,
+   "parse_status": "truncated",
+   "parse_notes": [
+    "Unterminated string starting at at char 10125; output hit the token budget (finish_reason=length)"
+   ],
+   "status": "failed",
+   "failure_type": "truncated"
+  },
+  "00475": {
+   "encounter_id": "00475",
+   "finish_reason": "length",
+   "prompt_tokens": 4149,
+   "completion_tokens": 4096,
+   "latency_seconds": 1575.974,
+   "attempts": 1,
+   "parse_status": "truncated",
+   "parse_notes": [
+    "Unterminated string starting at at char 9389; output hit the token budget (finish_reason=length)"
+   ],
+   "status": "failed",
+   "failure_type": "truncated"
+  },
+  "00497": {
+   "encounter_id": "00497",
+   "finish_reason": "stop",
+   "prompt_tokens": 3462,
+   "completion_tokens": 1420,
+   "latency_seconds": 577.733,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "enum_violation": 7,
+    "missing_field": 18
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "enum_violation",
+     "message": "chief_complaint.reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medical_history.past_medical_history[0].reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].frequency"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].onset"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].body_site"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].associated_symptoms"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].aggravating_factors"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].relieving_factors"
+    },
+    {
+     "kind": "missing_field",
+     "message": "symptoms[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "symptoms[0].reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].indication"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[0].confidence"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "medications[0].reported_by='person_1'"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medications[1].indication"
+    }
+   ],
+   "keys_expected": 150,
+   "keys_present": 132,
+   "keys_emitted": 132,
+   "keys_unexpected": 0
+  }
+ },
+ "last_update_utc": "2026-11-14T06:08:36.593823+00:00"
+}

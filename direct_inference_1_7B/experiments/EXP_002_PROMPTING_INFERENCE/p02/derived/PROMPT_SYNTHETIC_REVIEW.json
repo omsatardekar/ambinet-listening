@@ -1,0 +1,136 @@
+{
+ "note": "invented consultation; validates prompt consistency and the checks, not model behaviour",
+ "cases": {
+  "reference_output_following_the_rules": {
+   "expected_violations": [],
+   "reported": [],
+   "pass": true
+  },
+  "ongoing_symptom_written_as_resolved/past": {
+   "expected_violations": [
+    "ongoing_symptom_written_as_past_or_resolved"
+   ],
+   "reported": [
+    "ongoing_symptom_written_as_past_or_resolved"
+   ],
+   "pass": true
+  },
+  "resolved_symptom_written_as_current": {
+   "expected_violations": [
+    "resolved_symptom_written_as_current"
+   ],
+   "reported": [
+    "resolved_symptom_written_as_current"
+   ],
+   "pass": true
+  },
+  "blood_pressure_truncated_to_first_number": {
+   "expected_violations": [
+    "blood_pressure_not_both_numbers"
+   ],
+   "reported": [
+    "blood_pressure_not_both_numbers"
+   ],
+   "pass": true
+  },
+  "nurse_measurement_attributed_to_patient": {
+   "expected_violations": [
+    "speaker_not_in_cited_lines:vital_signs"
+   ],
+   "reported": [
+    "speaker_not_in_cited_lines:vital_signs"
+   ],
+   "pass": true
+  },
+  "invented_segment_id": {
+   "expected_violations": [
+    "invalid_segment_id:SEG0099",
+    "backfill:invalid_reference"
+   ],
+   "reported": [
+    "invalid_segment_id:SEG0099",
+    "speaker_not_in_cited_lines:symptoms",
+    "backfill:invalid_reference"
+   ],
+   "pass": true
+  },
+  "model_wrote_EV_records_and_ids": {
+   "expected_violations": [
+    "model_wrote_evidence_records",
+    "invalid_segment_id:EV_001"
+   ],
+   "reported": [
+    "model_wrote_evidence_records",
+    "invalid_segment_id:EV_001",
+    "speaker_not_in_cited_lines:symptoms",
+    "backfill:model_wrote_evidence_records",
+    "backfill:invalid_reference"
+   ],
+   "pass": true
+  },
+  "negative_finding_from_a_question_only": {
+   "expected_violations": [
+    "negative_finding_without_negation_in_cited_line"
+   ],
+   "reported": [
+    "speaker_not_in_cited_lines:negative_findings",
+    "negative_finding_without_negation_in_cited_line"
+   ],
+   "pass": true
+  },
+  "follow_up_dependent_on_results_turned_into_weeks": {
+   "expected_violations": [
+    "follow_up_time_not_in_cited_text"
+   ],
+   "reported": [
+    "follow_up_time_not_in_cited_text"
+   ],
+   "pass": true
+  },
+  "invalid_enum_for_temporality": {
+   "expected_violations": [
+    "enum:symptoms.temporality",
+    "status_temporality_combination"
+   ],
+   "reported": [
+    "enum:symptoms.temporality",
+    "status_temporality_combination",
+    "ongoing_symptom_written_as_past_or_resolved"
+   ],
+   "pass": true
+  },
+  "template_key_dropped": {
+   "expected_violations": [
+    "item_keys:medications",
+    "no_evidence:medications"
+   ],
+   "reported": [
+    "item_keys:medications",
+    "no_evidence:medications",
+    "backfill:no_references"
+   ],
+   "pass": true
+  },
+  "whole_conversation_cited": {
+   "expected_violations": [
+    "too_many_refs:symptoms"
+   ],
+   "reported": [
+    "too_many_refs:symptoms",
+    "resolved_symptom_written_as_current"
+   ],
+   "pass": true
+  }
+ },
+ "rule_coverage": {
+  "temporality: ongoing / resolved / earlier episode / intermittent": true,
+  "negation incl. cues and known-absence phrases": true,
+  "speaker attribution": true,
+  "evidence selection": true,
+  "vital signs": true,
+  "actions and follow-up": true,
+  "anti-hallucination": true
+ },
+ "all_pass": true,
+ "prompt_sha256": "f6d5202f26d97c2d73c9d00adbca050bc7114ad8b0272749eeff8d0757de09b0"
+}

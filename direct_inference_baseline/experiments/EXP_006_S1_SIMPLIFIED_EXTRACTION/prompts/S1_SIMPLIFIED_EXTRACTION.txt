@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read the outpatient consultation below and list the clinical facts that the speakers state. Return ONE JSON object and nothing else.
+
+Each transcript line looks like: [SEG0001] person_1 (ROLE) times: text. Ignore the segment ids and the times. ROLE tells you who is speaking.
+
+Rules
+1. Extract only what is stated. Never invent medicines, doses, allergies, symptoms, diagnoses, findings, vital signs, tests, plans or dates. If something is unclear, leave it out or leave the value empty "". Do not fill every list: an empty list [] is correct when nothing was stated.
+2. A doctor's question is not a fact. Use the answer. "Any allergies?" with the answer "No" means no allergies were stated; a question alone means nothing.
+3. One item per fact. Do not merge two facts into one item. Do not repeat an item.
+4. Write names short and in the speaker's own words, lower case, no explanation. For "negative_findings" write the thing that is absent WITHOUT "no" or "not" ("fever", "chest pain").
+5. "reported_by" is the role of the person who said it: doctor, patient, nurse, caregiver, family_member or clinical_staff. Copy the role shown on the line. The nurse or doctor reading out a measurement is the one who said it.
+6. Medicines: one item per medicine, with only the dose, route and frequency that were said for THAT medicine. Never copy a dose or route from another medicine. status: "current" = taken now, "stopped" = was taken but stopped or replaced, "new" = the doctor starts it in this visit. A medicine that is only mentioned is not assumed to be taken. If the name is unclear, give what was said.
+7. Allergies: "allergy_status" is "reported" (an allergy was stated), "none_stated" (the patient clearly said no allergies), "unknown" (asked but the answer was unclear or disputed) or "not_asked". Put only real allergies in "allergies". A medicine the patient takes is not an allergy.
+8. Symptoms the patient has go in "symptoms" (status "present", or "resolved" if it has gone away). Symptoms the patient denies go in "negative_findings". A symptom must not appear in both.
+9. Never write dates, clock times or appointment times unless a person said them. "follow_up" "when" is exactly the words said, for example "in two weeks".
+10. Doctor impressions go in "clinical_assessment" as "provisional" (working impression) or "differential" (a possibility). Do not turn a possibility into a diagnosis.
+
+JSON to return (all keys must be present; remove nothing; use [] when empty). Allowed values are given after the template.
+{
+"encounter_id": "{ENCOUNTER_ID}",
+"chief_complaint": "",
+"symptoms": [{"name": "", "status": "", "duration": "", "reported_by": ""}],
+"negative_findings": [{"finding": "", "reported_by": ""}],
+"medical_history": [{"condition": "", "duration": "", "reported_by": ""}],
+"current_conditions": [{"condition": "", "reported_by": ""}],
+"surgical_history": [{"procedure": "", "when": "", "reported_by": ""}],
+"family_history": [{"condition": "", "relation": "", "reported_by": ""}],
+"social_history": [{"category": "", "status": "", "detail": "", "reported_by": ""}],
+"medications": [{"name": "", "dose": "", "route": "", "frequency": "", "status": "", "reported_by": ""}],
+"allergy_status": "",
+"allergies": [{"substance": "", "reaction": "", "reported_by": ""}],
+"vital_signs": [{"name": "", "value": "", "unit": "", "reported_by": ""}],
+"physical_examination": [{"finding": "", "body_site": "", "reported_by": ""}],
+"review_of_systems": [{"system": "", "details": "", "reported_by": ""}],
+"clinical_assessment": [{"assessment": "", "certainty": ""}],
+"investigations": [{"name": "", "type": "", "status": ""}],
+"procedures": [{"name": "", "status": ""}],
+"clinical_actions": [{"type": "", "description": ""}],
+"follow_up": [{"when": "", "status": ""}]
+}
+
+Allowed values
+- symptoms.status: present | resolved
+- medical_history = past or ongoing conditions the patient reports; current_conditions = conditions the patient has now that the doctor confirms or names as a current diagnosis
+- social_history.category: smoking | alcohol | occupation | exercise | diet | living ; status: current | former | never | none | retired
+- medications.status: current | stopped | new
+- allergy_status: reported | none_stated | unknown | not_asked
+- vital_signs.name: blood pressure | pulse | temperature | respiratory rate | oxygen saturation | weight | height | BMI
+- review_of_systems: one item for each body system the patient was asked about and denied a problem with
+- clinical_assessment.certainty: provisional | differential
+- investigations.type: laboratory | imaging | cardiac | other ; investigations.status and procedures.status: planned | done | conditional (conditional = only if something happens)
+- clinical_actions.type: medication | investigation | counselling | referral | follow_up | other (a short description of what the doctor orders, prescribes, advises or arranges)
+- follow_up.status: planned | conditional
+
+Transcript (encounter {ENCOUNTER_ID})
+{TRANSCRIPT}
+
+JSON:
