@@ -134,6 +134,17 @@ is a doctor.
   evidence does not justify DOCTOR, NURSE, or another specific clinical role.
 - Asking questions, reading observations, or being present in a clinic is not
   sufficient by itself to distinguish a doctor from other clinical staff.
+- **Default for a two-person consultation.** When the encounter is a clinical
+  consultation with one PATIENT and exactly one other clinical participant, and
+  that participant takes the history, evaluates the symptoms, explains clinical
+  considerations or terms (for example a test or a diagnosis), and sets out a
+  plan, use **DOCTOR** with attribution_status PROVISIONAL and review_required
+  true. A missing self-introduction or title is NOT a reason to choose
+  OTHER_CLINICAL_STAFF; record "no explicit title stated" in
+  conflicting_evidence instead. This default does not apply when the transcript
+  contains a nurse-type pattern (triage, vital-sign recording, medication
+  administration) or an identifiable allied role (therapist, paramedic,
+  technician, trainee), or when there is a second clinician.
 - If the text does not support a reliable distinction, use UNKNOWN or
   PROVISIONAL attribution and explain the uncertainty in the required review
   fields instead of guessing.
