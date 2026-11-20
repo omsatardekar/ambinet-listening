@@ -1,0 +1,100 @@
+{
+ "prompt": "prompt_versions\\P02_v3_p01_schema_no_evidence.txt",
+ "sha256": "31c61b484e367b1f4a2d2aceacdcbedbf127646962ddac08c4a2dd7fa9957bbb",
+ "p01_sha256": "b51121cd18b4f798971204b280d81eb5ea43498822f472a165210c6d82543ad8",
+ "checks": [
+  {
+   "check": "no BOM, no CRLF, valid UTF-8",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "{ENCOUNTER_ID} and {TRANSCRIPT} occur exactly once",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "template parses as JSON in both prompts",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "same 20 top-level keys in the same order",
+   "ok": true,
+   "detail": "['encounter_id', 'extraction_status', 'encounter_metadata', 'chief_complaint', 'symptoms', 'negative_findings', 'medical_history', 'medications', 'allergies', 'vital_signs', 'physical_examination', 'review_of_systems', 'clinical_conditions', 'clinical_assessment', 'procedures_and_investigations', 'clinical_actions', 'follow_up', 'clinical_uncertainties', 'clinical_evidence', 'quality_checks']"
+  },
+  {
+   "check": "every nested key path and its order is identical to P01 (field names, nesting, order)",
+   "ok": true,
+   "detail": "178 paths"
+  },
+  {
+   "check": "the only template sections that differ are chief_complaint (evidence placeholder) and clinical_evidence",
+   "ok": true,
+   "detail": "['chief_complaint', 'clinical_evidence']"
+  },
+  {
+   "check": "clinical_evidence is [] in the new template; P01 had one record",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "chief_complaint differs only in the evidence_ids placeholder",
+   "ok": true,
+   "detail": "['EV_001'] -> ['<segment id>']"
+  },
+  {
+   "check": "quality_checks and encounter_metadata are byte-identical to P01",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "Allowed-values block is byte-identical to P01 (every enum unchanged)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "old leaked phrase 'no fever, no allergies, no previous surgery' is gone",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "prompt contains no dev encounter id",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "model is told to write no EV_ ids / no evidence records",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "no 5-word sequence of any quoted example sentence occurs in a dev transcript",
+   "ok": true,
+   "detail": "overlapping 5-grams=0"
+  },
+  {
+   "check": "none of the example-specific clinical terms occurs anywhere in the 50 dev transcripts or gold",
+   "ok": true,
+   "detail": "{}"
+  }
+ ],
+ "example_content_terms_present_in_dev_data": {
+  "blurred vision": false,
+  "hip pain": false,
+  "hip": false,
+  "clicking": false,
+  "zinc": false,
+  "magnesium": false,
+  "gout": false,
+  "grandfather": false,
+  "swimming": false,
+  "eye test": false,
+  "drink more water": false
+ },
+ "size": {
+  "chars": 13766,
+  "p01_chars": 9010
+ },
+ "all_checks_pass": true
+}

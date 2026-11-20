@@ -1,0 +1,72 @@
+{
+ "status": "FROZEN before the 30-encounter run",
+ "frozen_at": "2026-11-19T02:45:39+05:30",
+ "prompt_file": "prompts/H1_hybrid_prompt.txt",
+ "prompt_sha256": "dc10ba065c9f1acaa237d106bd97b451ddfe1efcd94117b727d6585511f79cd8",
+ "derived_from": "EXP_004 P02 (0.6B) prompt text + faithfulness rules + 1.7B-P02-style SEG evidence ids; = prompts/H1_v6b_seg_evidence.txt",
+ "evaluated_ids": [
+  "00035",
+  "00037",
+  "00040",
+  "00042",
+  "00060",
+  "00069",
+  "00077",
+  "00092",
+  "00120",
+  "00127",
+  "00141",
+  "00152",
+  "00155",
+  "00157",
+  "00162",
+  "00165",
+  "00168",
+  "00182",
+  "00187",
+  "00189",
+  "00202",
+  "00204",
+  "00206",
+  "00210",
+  "00215",
+  "00221",
+  "00238",
+  "00248",
+  "00264",
+  "00266"
+ ],
+ "n_ids": 30,
+ "ids_rule": "exactly the 30 ids of the 1.7B P01/P02 runs (first 30 of FROZEN_50_PROMPT_DEV_IDS)",
+ "prompt_selection": {
+  "data": "3 spare development ids 00288, 00289, 00291 (NOT among the 30 evaluated ids)",
+  "candidates": [
+   "v6b_seg_evidence",
+   "v6c_no_empty_bullet",
+   "v6d_minimal"
+  ],
+  "judge_f1_lenient_on_3": {
+   "v6b": 0.236,
+   "v6c": 0.274,
+   "v6d": 0.284,
+   "EXP_004_P02_reference": 0.348,
+   "S1_1_B1_reference": 0.377
+  },
+  "chosen": "v6b",
+  "reason": "highest precision (0.600) and lowest critical-flag rate (0.133) of the three hybrids; v6d wrote a degenerate speaker list; owner priority is minimal hallucination, partial recall acceptable. Selection n=3 is tiny and no hybrid beat the earlier prompts on it."
+ },
+ "failed_designs_kept_in_prompts/superseded": [
+  "v2 angle-bracket template: invalid JSON / 5327 tokens",
+  "v3 empty emphasis: blank skeleton echoed",
+  "v4 blank head: blank skeleton echoed",
+  "v5 head placeholders: lists blank"
+ ],
+ "runner_sanity_check": "EXP_004 P02 prompt re-run through this runner on 00288 reproduced the stored output exactly (same text, 1301 tokens)",
+ "generation": {
+  "do_sample": false,
+  "enable_thinking": false,
+  "max_new_tokens": 6144,
+  "device": "GPU",
+  "pipeline": "fresh per encounter"
+ }
+}

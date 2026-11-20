@@ -1,0 +1,959 @@
+{
+ "prompt": "direct_inference_1_7B\\experiments\\EXP_002_PROMPTING_INFERENCE\\prompt_versions\\drafts\\P02_draft_v2.txt",
+ "prompt_sha256": "effe5be3a90bb8e8803dff360261e46169f94f6bd523610f3c201eb5c089d802",
+ "checks_total": 108,
+ "checks_failed": 6,
+ "issues": [
+  "vital_signs_value_placeholder_is_not_an_empty_string: template value=''",
+  "prompt_says_vital_value_is_required_number_or_systolic_diastolic_text: ",
+  "prompt_ties_route_oral_to_that_medicine: ",
+  "prompt_instructs:related_entities: ",
+  "prompt_instructs:ambiguous_entities: ",
+  "prompt_instructs:conflicting_statement uncertainty: "
+ ],
+ "type_nullability_mismatches": [],
+ "type_nullability_notes": [
+  [
+   "clinical_assessment[].stated_by",
+   "NOTE",
+   "constant 'doctor', gold values {'string': 89}"
+  ]
+ ],
+ "documented_deviations": [
+  [
+   "medical_history.surgical_history[].timeframe",
+   "DOCUMENTED_DEVIATION",
+   "gold always states a timeframe (27/27), but the frozen schema does not forbid null and a surgery without a stated timeframe must not be dropped or invented; template keeps null"
+  ],
+  [
+   "physical_examination[].body_site",
+   "DOCUMENTED_DEVIATION",
+   "gold always states a body site (80/80), but the frozen schema does not forbid null and a finding without a stated site must not be invented; template keeps null"
+  ]
+ ],
+ "enum_report": [
+  {
+   "enum": "symptoms.status",
+   "schema": [
+    "present",
+    "resolved"
+   ],
+   "prompt": [
+    "present",
+    "resolved"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "symptoms.certainty",
+   "schema": [
+    "certain",
+    "disputed",
+    "uncertain"
+   ],
+   "prompt": [
+    "certain",
+    "disputed",
+    "uncertain"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "symptoms.temporality",
+   "schema": [
+    "current",
+    "past",
+    "resolved"
+   ],
+   "prompt": [
+    "current",
+    "past",
+    "resolved"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "negative_findings.status",
+   "schema": [
+    "absent"
+   ],
+   "prompt": [
+    "absent"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "negative_findings.assertion",
+   "schema": [
+    "negative"
+   ],
+   "prompt": [
+    "negative"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "negative_findings.temporality",
+   "schema": [
+    "current",
+    "past"
+   ],
+   "prompt": [
+    "current",
+    "past"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "medications.status",
+   "schema": [
+    "currently_used",
+    "discontinued",
+    "planned"
+   ],
+   "prompt": [
+    "currently_used",
+    "discontinued",
+    "planned"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "medications.route",
+   "schema": [
+    "oral"
+   ],
+   "prompt": [
+    "oral"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "allergies.allergy_type",
+   "schema": [
+    "environmental",
+    "food",
+    "medication"
+   ],
+   "prompt": [
+    "environmental",
+    "food",
+    "medication"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "allergies.severity",
+   "schema": [
+    "unknown"
+   ],
+   "prompt": [
+    "unknown"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "allergies.status",
+   "schema": [
+    "disputed",
+    "historical",
+    "reported",
+    "uncertain"
+   ],
+   "prompt": [
+    "disputed",
+    "historical",
+    "reported",
+    "uncertain"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "physical_examination.status",
+   "schema": [
+    "absent",
+    "present"
+   ],
+   "prompt": [
+    "absent",
+    "present"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "review_of_systems.status",
+   "schema": [
+    "negative"
+   ],
+   "prompt": [
+    "negative"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "clinical_conditions.status",
+   "schema": [
+    "existing"
+   ],
+   "prompt": [
+    "existing"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "clinical_assessment.certainty",
+   "schema": [
+    "differential",
+    "provisional"
+   ],
+   "prompt": [
+    "differential",
+    "provisional"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "procedures_and_investigations.type",
+   "schema": [
+    "cardiac",
+    "imaging",
+    "laboratory",
+    "other"
+   ],
+   "prompt": [
+    "cardiac",
+    "imaging",
+    "laboratory",
+    "other"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "procedures_and_investigations.status",
+   "schema": [
+    "completed",
+    "conditional",
+    "planned"
+   ],
+   "prompt": [
+    "completed",
+    "conditional",
+    "planned"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "clinical_actions.action_type",
+   "schema": [
+    "counselling",
+    "follow_up",
+    "investigation",
+    "medication",
+    "other",
+    "referral"
+   ],
+   "prompt": [
+    "counselling",
+    "follow_up",
+    "investigation",
+    "medication",
+    "other",
+    "referral"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "clinical_actions.status",
+   "schema": [
+    "completed",
+    "conditional",
+    "planned",
+    "recommended"
+   ],
+   "prompt": [
+    "completed",
+    "conditional",
+    "planned",
+    "recommended"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "clinical_actions.responsible_person",
+   "schema": [
+    "clinical_staff",
+    "doctor",
+    "nurse",
+    "patient"
+   ],
+   "prompt": [
+    "clinical_staff",
+    "doctor",
+    "nurse",
+    "patient"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "follow_up.type",
+   "schema": [
+    "consultation"
+   ],
+   "prompt": [
+    "consultation"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "follow_up.status",
+   "schema": [
+    "conditional",
+    "planned"
+   ],
+   "prompt": [
+    "conditional",
+    "planned"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "clinical_uncertainties.type",
+   "schema": [
+    "adherence_uncertain",
+    "allergy_disputed",
+    "allergy_uncertain",
+    "conflicting_statement",
+    "date_uncertain",
+    "duration_disagreement",
+    "incomplete_medication_name",
+    "medication_discrepancy",
+    "uncertain_dose",
+    "unknown_speaker"
+   ],
+   "prompt": [
+    "adherence_uncertain",
+    "allergy_disputed",
+    "allergy_uncertain",
+    "conflicting_statement",
+    "date_uncertain",
+    "duration_disagreement",
+    "incomplete_medication_name",
+    "medication_discrepancy",
+    "uncertain_dose",
+    "unknown_speaker"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "clinical_uncertainties.resolution_status",
+   "schema": [
+    "partially_resolved",
+    "resolved",
+    "unresolved"
+   ],
+   "prompt": [
+    "partially_resolved",
+    "resolved",
+    "unresolved"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "medical_history.past_medical_history.status",
+   "schema": [
+    "ongoing"
+   ],
+   "prompt": [
+    "ongoing"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "medical_history.social_history.category",
+   "schema": [
+    "alcohol",
+    "diet",
+    "exercise",
+    "living",
+    "occupation",
+    "smoking"
+   ],
+   "prompt": [
+    "alcohol",
+    "diet",
+    "exercise",
+    "living",
+    "occupation",
+    "smoking"
+   ],
+   "equal": true
+  },
+  {
+   "enum": "medical_history.social_history.status",
+   "schema": [
+    "current",
+    "former",
+    "never",
+    "none",
+    "retired"
+   ],
+   "prompt": [
+    "current",
+    "former",
+    "never",
+    "none",
+    "retired"
+   ],
+   "equal": true
+  }
+ ],
+ "notes": [
+  "enum lines in the prompt that have no entry in final_label_schema.enums: ['symptoms.category'] (their value sets are checked against the gold labels below)",
+  "symptoms.category: prompt ['ENT', 'cardiovascular', 'constitutional', 'dermatological', 'endocrine', 'gastrointestinal', 'genitourinary', 'musculoskeletal', 'neurological', 'ophthalmological', 'other', 'psychiatric', 'respiratory']; gold values used ['ENT', 'cardiovascular', 'constitutional', 'dermatological', 'endocrine', 'gastrointestinal', 'genitourinary', 'musculoskeletal', 'neurological', 'ophthalmological', 'psychiatric', 'respiratory']",
+  "template fields shown as \"\" whose field name is never mentioned in the instructions (self-explanatory text/enum fields): ['normalized_assessment', 'normalized_condition', 'normalized_finding', 'normalized_procedure']"
+ ],
+ "checks": [
+  {
+   "check": "template_parses_as_json",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "top_level_keys_equal_schema_and_order",
+   "pass": true,
+   "detail": "template=['encounter_id', 'extraction_status', 'encounter_metadata', 'chief_complaint', 'symptoms', 'negative_findings', 'medical_history', 'medications', 'allergies', 'vital_signs', 'physical_examination', 'review_of_systems', 'clinical_conditions', 'clinical_assessment', 'procedures_and_investigations', 'clinical_actions', 'follow_up', 'clinical_uncertainties', 'clinical_evidence', 'quality_checks']"
+  },
+  {
+   "check": "chief_complaint_is_object",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "chief_complaint_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['value', 'normalized_value', 'reported_by', 'evidence_ids'] schema=['value', 'normalized_value', 'reported_by', 'evidence_ids']"
+  },
+  {
+   "check": "symptoms_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "symptoms_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['name', 'normalized_name', 'category', 'status', 'severity', 'duration', 'frequency', 'onset', 'temporality', 'body_site', 'associated_symptoms', 'aggravating_factors', 'relieving_factors', 'reported_by', 'certainty', 'evidence_ids', 'confidence'] schema=['name', 'normalized_name', 'category', 'status', 'severity', 'duration', 'frequency', 'onset', 'temporality', 'body_site', 'associated_symptoms', 'aggravating_factors', 'relieving_factors', 'reported_by', 'certainty', 'evidence_ids', 'confidence']"
+  },
+  {
+   "check": "negative_findings_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "negative_findings_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['finding', 'normalized_name', 'status', 'assertion', 'reported_by', 'temporality', 'evidence_ids', 'confidence'] schema=['finding', 'normalized_name', 'status', 'assertion', 'reported_by', 'temporality', 'evidence_ids', 'confidence']"
+  },
+  {
+   "check": "medical_history.past_medical_history_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "medical_history.past_medical_history_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['condition', 'normalized_condition', 'status', 'duration', 'reported_by', 'evidence_ids', 'confidence'] schema=['condition', 'normalized_condition', 'status', 'duration', 'reported_by', 'evidence_ids', 'confidence']"
+  },
+  {
+   "check": "medical_history.surgical_history_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "medical_history.surgical_history_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['procedure', 'normalized_procedure', 'timeframe', 'reported_by', 'evidence_ids', 'confidence'] schema=['procedure', 'normalized_procedure', 'timeframe', 'reported_by', 'evidence_ids', 'confidence']"
+  },
+  {
+   "check": "medical_history.family_history_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "medical_history.family_history_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['condition', 'normalized_condition', 'relation', 'reported_by', 'evidence_ids', 'confidence'] schema=['condition', 'normalized_condition', 'relation', 'reported_by', 'evidence_ids', 'confidence']"
+  },
+  {
+   "check": "medical_history.social_history_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "medical_history.social_history_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['category', 'description', 'status', 'details', 'reported_by', 'evidence_ids', 'confidence'] schema=['category', 'description', 'status', 'details', 'reported_by', 'evidence_ids', 'confidence']"
+  },
+  {
+   "check": "medications_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "medications_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['name', 'normalized_name', 'generic_name', 'dose', 'route', 'frequency', 'duration', 'indication', 'status', 'reported_by', 'evidence_ids', 'confidence'] schema=['name', 'normalized_name', 'generic_name', 'dose', 'route', 'frequency', 'duration', 'indication', 'status', 'reported_by', 'evidence_ids', 'confidence']"
+  },
+  {
+   "check": "allergies_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "allergies_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['substance', 'normalized_substance', 'allergy_type', 'reaction', 'severity', 'status', 'reported_by', 'evidence_ids', 'confidence'] schema=['substance', 'normalized_substance', 'allergy_type', 'reaction', 'severity', 'status', 'reported_by', 'evidence_ids', 'confidence']"
+  },
+  {
+   "check": "vital_signs_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "vital_signs_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['name', 'normalized_name', 'value', 'unit', 'reported_by', 'evidence_ids', 'confidence'] schema=['name', 'normalized_name', 'value', 'unit', 'reported_by', 'evidence_ids', 'confidence']"
+  },
+  {
+   "check": "physical_examination_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "physical_examination_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['finding', 'normalized_finding', 'body_site', 'status', 'observed_by', 'evidence_ids', 'confidence'] schema=['finding', 'normalized_finding', 'body_site', 'status', 'observed_by', 'evidence_ids', 'confidence']"
+  },
+  {
+   "check": "review_of_systems_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "review_of_systems_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['system', 'status', 'details', 'reported_by', 'evidence_ids', 'confidence'] schema=['system', 'status', 'details', 'reported_by', 'evidence_ids', 'confidence']"
+  },
+  {
+   "check": "clinical_conditions_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "clinical_conditions_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['name', 'normalized_name', 'status', 'duration', 'reported_by', 'evidence_ids', 'confidence'] schema=['name', 'normalized_name', 'status', 'duration', 'reported_by', 'evidence_ids', 'confidence']"
+  },
+  {
+   "check": "clinical_assessment_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "clinical_assessment_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['assessment', 'normalized_assessment', 'certainty', 'basis', 'stated_by', 'evidence_ids', 'confidence'] schema=['assessment', 'normalized_assessment', 'certainty', 'basis', 'stated_by', 'evidence_ids', 'confidence']"
+  },
+  {
+   "check": "procedures_and_investigations_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "procedures_and_investigations_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['name', 'normalized_name', 'type', 'status', 'requested_by', 'indication', 'scheduled_datetime', 'evidence_ids', 'confidence'] schema=['name', 'normalized_name', 'type', 'status', 'requested_by', 'indication', 'scheduled_datetime', 'evidence_ids', 'confidence']"
+  },
+  {
+   "check": "clinical_actions_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "clinical_actions_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['action_type', 'description', 'status', 'responsible_person', 'time_reference', 'evidence_ids', 'confidence'] schema=['action_type', 'description', 'status', 'responsible_person', 'time_reference', 'evidence_ids', 'confidence']"
+  },
+  {
+   "check": "follow_up_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "follow_up_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['type', 'time_reference', 'normalized_datetime', 'status', 'evidence_ids'] schema=['type', 'time_reference', 'normalized_datetime', 'status', 'evidence_ids']"
+  },
+  {
+   "check": "clinical_uncertainties_is_list_with_one_template_item",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "clinical_uncertainties_keys_equal_schema_in_order",
+   "pass": true,
+   "detail": "template=['type', 'description', 'related_entities', 'resolution_status', 'evidence_ids', 'confidence'] schema=['type', 'description', 'related_entities', 'resolution_status', 'evidence_ids', 'confidence']"
+  },
+  {
+   "check": "encounter_metadata_keys",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "primary_speakers_keys",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "quality_checks_keys",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "clinical_evidence_keys",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "medical_history_keys",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "symptom_duration_is_null_or_object_with_schema_keys",
+   "pass": true,
+   "detail": "template duration=None"
+  },
+  {
+   "check": "medications_duration_is_null_or_schema_object",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "past_medical_history_duration_is_null_or_schema_object",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "prompt_describes_duration_object_keys",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "prompt_describes_action_time_reference_object",
+   "pass": true,
+   "detail": "clinical_actions.time_reference is null or {value, normalized_date}"
+  },
+  {
+   "check": "allowed_values_equal_schema:symptoms.status",
+   "pass": true,
+   "detail": "schema=['present', 'resolved'] prompt=['present', 'resolved']"
+  },
+  {
+   "check": "allowed_values_equal_schema:symptoms.certainty",
+   "pass": true,
+   "detail": "schema=['certain', 'disputed', 'uncertain'] prompt=['certain', 'disputed', 'uncertain']"
+  },
+  {
+   "check": "allowed_values_equal_schema:symptoms.temporality",
+   "pass": true,
+   "detail": "schema=['current', 'past', 'resolved'] prompt=['current', 'past', 'resolved']"
+  },
+  {
+   "check": "allowed_values_equal_schema:negative_findings.status",
+   "pass": true,
+   "detail": "schema=['absent'] prompt=['absent']"
+  },
+  {
+   "check": "allowed_values_equal_schema:negative_findings.assertion",
+   "pass": true,
+   "detail": "schema=['negative'] prompt=['negative']"
+  },
+  {
+   "check": "allowed_values_equal_schema:negative_findings.temporality",
+   "pass": true,
+   "detail": "schema=['current', 'past'] prompt=['current', 'past']"
+  },
+  {
+   "check": "allowed_values_equal_schema:medications.status",
+   "pass": true,
+   "detail": "schema=['currently_used', 'discontinued', 'planned'] prompt=['currently_used', 'discontinued', 'planned']"
+  },
+  {
+   "check": "allowed_values_equal_schema:medications.route",
+   "pass": true,
+   "detail": "schema=['oral'] prompt=['oral']"
+  },
+  {
+   "check": "allowed_values_equal_schema:allergies.allergy_type",
+   "pass": true,
+   "detail": "schema=['environmental', 'food', 'medication'] prompt=['environmental', 'food', 'medication']"
+  },
+  {
+   "check": "allowed_values_equal_schema:allergies.severity",
+   "pass": true,
+   "detail": "schema=['unknown'] prompt=['unknown']"
+  },
+  {
+   "check": "allowed_values_equal_schema:allergies.status",
+   "pass": true,
+   "detail": "schema=['disputed', 'historical', 'reported', 'uncertain'] prompt=['disputed', 'historical', 'reported', 'uncertain']"
+  },
+  {
+   "check": "allowed_values_equal_schema:physical_examination.status",
+   "pass": true,
+   "detail": "schema=['absent', 'present'] prompt=['absent', 'present']"
+  },
+  {
+   "check": "allowed_values_equal_schema:review_of_systems.status",
+   "pass": true,
+   "detail": "schema=['negative'] prompt=['negative']"
+  },
+  {
+   "check": "allowed_values_equal_schema:clinical_conditions.status",
+   "pass": true,
+   "detail": "schema=['existing'] prompt=['existing']"
+  },
+  {
+   "check": "allowed_values_equal_schema:clinical_assessment.certainty",
+   "pass": true,
+   "detail": "schema=['differential', 'provisional'] prompt=['differential', 'provisional']"
+  },
+  {
+   "check": "allowed_values_equal_schema:procedures_and_investigations.type",
+   "pass": true,
+   "detail": "schema=['cardiac', 'imaging', 'laboratory', 'other'] prompt=['cardiac', 'imaging', 'laboratory', 'other']"
+  },
+  {
+   "check": "allowed_values_equal_schema:procedures_and_investigations.status",
+   "pass": true,
+   "detail": "schema=['completed', 'conditional', 'planned'] prompt=['completed', 'conditional', 'planned']"
+  },
+  {
+   "check": "allowed_values_equal_schema:clinical_actions.action_type",
+   "pass": true,
+   "detail": "schema=['counselling', 'follow_up', 'investigation', 'medication', 'other', 'referral'] prompt=['counselling', 'follow_up', 'investigation', 'medication', 'other', 'referral']"
+  },
+  {
+   "check": "allowed_values_equal_schema:clinical_actions.status",
+   "pass": true,
+   "detail": "schema=['completed', 'conditional', 'planned', 'recommended'] prompt=['completed', 'conditional', 'planned', 'recommended']"
+  },
+  {
+   "check": "allowed_values_equal_schema:clinical_actions.responsible_person",
+   "pass": true,
+   "detail": "schema=['clinical_staff', 'doctor', 'nurse', 'patient'] prompt=['clinical_staff', 'doctor', 'nurse', 'patient']"
+  },
+  {
+   "check": "allowed_values_equal_schema:follow_up.type",
+   "pass": true,
+   "detail": "schema=['consultation'] prompt=['consultation']"
+  },
+  {
+   "check": "allowed_values_equal_schema:follow_up.status",
+   "pass": true,
+   "detail": "schema=['conditional', 'planned'] prompt=['conditional', 'planned']"
+  },
+  {
+   "check": "allowed_values_equal_schema:clinical_uncertainties.type",
+   "pass": true,
+   "detail": "schema=['adherence_uncertain', 'allergy_disputed', 'allergy_uncertain', 'conflicting_statement', 'date_uncertain', 'duration_disagreement', 'incomplete_medication_name', 'medication_discrepancy', 'uncertain_dose', 'unknown_speaker'] prompt=['adherence_uncertain', 'allergy_disputed', 'allergy_uncertain', 'conflicting_statement', 'date_uncertain', 'duration_disagreement', 'incomplete_medication_name', 'medication_discrepancy', 'uncertain_dose', 'unknown_speaker']"
+  },
+  {
+   "check": "allowed_values_equal_schema:clinical_uncertainties.resolution_status",
+   "pass": true,
+   "detail": "schema=['partially_resolved', 'resolved', 'unresolved'] prompt=['partially_resolved', 'resolved', 'unresolved']"
+  },
+  {
+   "check": "allowed_values_equal_schema:medical_history.past_medical_history.status",
+   "pass": true,
+   "detail": "schema=['ongoing'] prompt=['ongoing']"
+  },
+  {
+   "check": "allowed_values_equal_schema:medical_history.social_history.category",
+   "pass": true,
+   "detail": "schema=['alcohol', 'diet', 'exercise', 'living', 'occupation', 'smoking'] prompt=['alcohol', 'diet', 'exercise', 'living', 'occupation', 'smoking']"
+  },
+  {
+   "check": "allowed_values_equal_schema:medical_history.social_history.status",
+   "pass": true,
+   "detail": "schema=['current', 'former', 'never', 'none', 'retired'] prompt=['current', 'former', 'never', 'none', 'retired']"
+  },
+  {
+   "check": "constant_extraction_status_in_template",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "constant_encounter_metadata.encounter_type_in_template",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "roles_listed_exactly_as_schema",
+   "pass": true,
+   "detail": "schema roles: ['doctor', 'patient', 'nurse', 'caregiver', 'family_member', 'clinical_staff', 'unknown']"
+  },
+  {
+   "check": "route_enum_is_only_oral",
+   "pass": true,
+   "detail": "schema={'oral'} prompt={'oral'}"
+  },
+  {
+   "check": "pmh_status_only_ongoing",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "review_of_systems_status_only_negative",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "allergy_severity_only_unknown",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "gold_evidence_all_exact_single_lines",
+   "pass": true,
+   "detail": "1772/1772"
+  },
+  {
+   "check": "gold_timestamps_MM:SS_all",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "gold_timestamps_equal_floor_of_line_times_almost_all",
+   "pass": true,
+   "detail": "start 1768/1772, end 1768/1772 (4 exceptions each, rounding of times that end exactly on a second boundary)"
+  },
+  {
+   "check": "gold_supports_never_empty",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "gold_references_symmetric_in_all_labels",
+   "pass": true,
+   "detail": "50/50"
+  },
+  {
+   "check": "prompt_mentions:MM:SS",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "prompt_mentions:rounded down",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "prompt_mentions:EV_001",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "prompt_mentions:supports",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "supports_path_examples_use_valid_syntax",
+   "pass": true,
+   "detail": "['symptoms[0]', 'medical_history.social_history[1]', 'chief_complaint', 'chief_complaint']"
+  },
+  {
+   "check": "prompt_states_empty_string_is_never_valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "gold_has_no_empty_string_anywhere",
+   "pass": true,
+   "detail": "{}"
+  },
+  {
+   "check": "template_has_only_the_two_runner_placeholders",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "every_snake_case_identifier_in_the_instructions_is_a_schema_key_or_enum_value",
+   "pass": true,
+   "detail": "unknown identifiers: []"
+  },
+  {
+   "check": "enum_values_written_after_field_words_in_the_rules_are_allowed_values",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "no_field_in_the_template_is_shown_as_empty_string_where_gold_allows_null",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "vital_signs_value_placeholder_is_not_an_empty_string",
+   "pass": false,
+   "detail": "template value=''"
+  },
+  {
+   "check": "prompt_says_vital_value_is_required_number_or_systolic_diastolic_text",
+   "pass": false,
+   "detail": ""
+  },
+  {
+   "check": "no_instruction_states_a_speaker_count",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "prompt_ties_route_oral_to_that_medicine",
+   "pass": false,
+   "detail": ""
+  },
+  {
+   "check": "prompt_instructs:related_entities",
+   "pass": false,
+   "detail": ""
+  },
+  {
+   "check": "prompt_instructs:resolution_status",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "prompt_instructs:contradictions_detected",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "prompt_instructs:ambiguous_entities",
+   "pass": false,
+   "detail": ""
+  },
+  {
+   "check": "prompt_instructs:conflicting_statement uncertainty",
+   "pass": false,
+   "detail": ""
+  },
+  {
+   "check": "all_label_convention_claims_hold_on_the_50_dev_gold_labels",
+   "pass": true,
+   "detail": "31 claims, not exact: []"
+  }
+ ],
+ "field_verdicts_ok": 130,
+ "field_verdicts_total": 133
+}
