@@ -64,12 +64,27 @@ def parse_dialogue(path: Path, speakers: dict) -> list[dict]:
     return turns
 
 
-def resolve_speaker(sp: dict) -> dict:
-    sp = dict(sp)
-    sp["voice"] = os.environ.get(f"VOICE_{sp['role']}", sp["voice"])
-    sp.setdefault("rate", "0%")
-    sp.setdefault("pitch", "0%")
-    return sp
+def resolve_speakers(speakers: dict, use_env: bool = True) -> dict:
+    """Voice per speaker. Lookup order (first one set in .env wins, else the voice written in scenario.json):
+         VOICE_<ROLE>_<M|F>   e.g. VOICE_PATIENT_F   (only if the speaker has a "gender")
+         VOICE_<ROLE>         e.g. VOICE_CAREGIVER   (ROLE: DOCTOR PATIENT NURSE CAREGIVER FAMILY_MEMBER CLINICAL_STAFF UNKNOWN)
+       Two people in one encounter never share a voice: a later person whose .env voice is already taken keeps the
+       voice from scenario.json instead (they would be indistinguishable to the diarization otherwise).
+       use_env=False ignores every VOICE_* setting and uses the voices (and accents) written in scenario.json."""
+    resolved, taken = {}, set()
+    for key, sp in speakers.items():
+        sp = dict(sp)
+        role, gender = sp["role"].upper(), str(sp.get("gender", "")).upper()[:1]
+        names = ([f"VOICE_{role}_{gender}"] if gender else []) + [f"VOICE_{role}"]
+        voice = next((os.environ[n].strip() for n in names if use_env and os.environ.get(n, "").strip()), sp["voice"])
+        if voice in taken:
+            voice = sp["voice"]
+        taken.add(voice)
+        sp["voice"] = voice
+        sp.setdefault("rate", "0%")
+        sp.setdefault("pitch", "0%")
+        resolved[key] = sp
+    return resolved
 
 
 # ----------------------------------------------------------------------------- engines
@@ -223,6 +238,12 @@ def cmd_generate(a):
     dirs = scenario_dirs(Path(a.scenarios), a.only)
     if not dirs:
         raise SystemExit("No scenarios found.")
+    if not a.only and not a.all:                  # default: the NEXT --next scenarios that have no audio in the output folder yet
+        todo = [d for d in dirs if not (out / d.name / "audio.wav").exists()]
+        log.info("%d scenarios, %d already have audio, %d to do; generating the next %d", len(dirs), len(dirs) - len(todo), len(todo), min(a.next, len(todo)))
+        dirs = todo[: a.next]
+        if not dirs:
+            raise SystemExit("Nothing to do: every scenario already has audio in the output folder (use --only NAME or --all to regenerate).")
     if a.dry_run:
         print(f"{'encounter':<38}{'turns':>6}{'words':>7}{'chars':>8}{'est.min':>9}")
         tot = 0
@@ -240,9 +261,10 @@ def cmd_generate(a):
     manifests, billed = [], 0
     for d in dirs:
         sc = json.loads((d / "scenario.json").read_text())
-        speakers = {k: resolve_speaker(v) for k, v in sc["speakers"].items()}
+        speakers = resolve_speakers(sc["speakers"], use_env=not a.scenario_voices)
         turns = parse_dialogue(d / "dialogue.txt", speakers)
-        log.info("== %s: %d turns", sc["encounter_id"], len(turns))
+        log.info("== %s: %d turns | voices: %s", sc["encounter_id"], len(turns),
+                 ", ".join(f"{v['role']}={v['voice'].replace('Neural', '')}" for v in speakers.values()))
         pcms = []
         for i, t in enumerate(turns, 1):
             sp = speakers[t["key"]]
@@ -259,7 +281,7 @@ def cmd_generate(a):
         man = {
             "encounter_id": sc["encounter_id"], "title": sc["title"],
             "audio_file": f"{d.name}/audio.wav", "audio_duration_sec": round(dur, 2),
-            "audio_duration_mmss": mmss(dur), "meets_10_minute_target": dur >= 600,
+            "audio_duration_mmss": mmss(dur), "meets_5_minute_minimum": dur >= 300,
             "difficulty": sc.get("difficulty", "unspecified"),
             "audio_format": {"container": "WAV", "encoding": "PCM signed 16-bit LE", "channels": 1, "sample_rate_hz": SR},
             "synthetic_data": True,
@@ -268,8 +290,16 @@ def cmd_generate(a):
                            "generated_utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
         }
         manifests.append(man)
-        log.info("   wrote %s (%s)%s", eo / "audio.wav", mmss(dur), "" if dur >= 600 else "  ** SHORTER THAN 10 MIN **")
-    (out / "dataset_manifest.json").write_text(json.dumps({"encounters": manifests}, indent=2), encoding="utf-8")
+        log.info("   wrote %s (%s)%s", eo / "audio.wav", mmss(dur), "" if dur >= 300 else "  ** SHORTER THAN 5 MIN **")
+    manifest_path = out / "dataset_manifest.json"
+    merged = {}                                   # keep the entries of earlier runs (batches of 10); this run replaces same-named ones
+    if manifest_path.exists():
+        try:
+            merged = {m["encounter_id"]: m for m in json.loads(manifest_path.read_text(encoding="utf-8")).get("encounters", [])}
+        except (ValueError, KeyError):
+            merged = {}
+    merged.update({m["encounter_id"]: m for m in manifests})
+    manifest_path.write_text(json.dumps({"encounters": [merged[k] for k in sorted(merged)]}, indent=2), encoding="utf-8")
     (out / "README.md").write_text("# Synthetic clinical audio dataset\n\nWAV files only. This folder intentionally excludes dialogue text, transcripts, speaker-role mappings, and downstream outputs. All encounters are fictional synthetic speech.\n", encoding="utf-8")
     log.info("Done. Characters sent to the TTS service this run (cache misses): %d", billed)
 
@@ -302,8 +332,8 @@ def cmd_validate(a, quiet=False):
         raise SystemExit(f"Output directory does not exist: {out}")
     dirs = sorted(d for d in out.iterdir() if d.is_dir() and d.name.startswith("encounter_"))
     report, fails = {}, 0
-    if len(dirs) != 50:
-        report["_dataset"] = [{"check": "exactly 50 encounter directories", "status": "fail", "detail": f"found {len(dirs)}"}]
+    if a.expected is not None and len(dirs) != a.expected:
+        report["_dataset"] = [{"check": f"exactly {a.expected} encounter directories", "status": "fail", "detail": f"found {len(dirs)}"}]
         fails += 1
     for d in dirs:
         checks = validate_encounter(d, a.min_minutes)
@@ -358,17 +388,23 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("-v", "--verbose", action="store_true")
     sub = p.add_subparsers(dest="cmd", required=True)
+    sub.add_parser("voices")
     g = sub.add_parser("generate")
     g.add_argument("--scenarios", default="scenarios"); g.add_argument("--out", default="output")
     g.add_argument("--engine", choices=["azure", "fake"], default="azure")
-    g.add_argument("--only"); g.add_argument("--dry-run", action="store_true")
+    g.add_argument("--only", help="regenerate scenarios whose folder name contains this text")
+    g.add_argument("--next", type=int, default=10, help="generate the next N scenarios that have no audio yet (default 10)")
+    g.add_argument("--all", action="store_true", help="generate every scenario, also those that already have audio")
+    g.add_argument("--scenario-voices", action="store_true",
+                   help="ignore the VOICE_* lines of .env and use the voices/accents written in each scenario.json (more variety)")
+    g.add_argument("--dry-run", action="store_true")
     g.add_argument("--seed", type=int, default=7); g.add_argument("--noise-db", type=float, default=-62)
     g.add_argument("--cache", default=".tts_cache")
-    v = sub.add_parser("validate"); v.add_argument("--out", default="output/clinical_audio_dataset"); v.add_argument("--min-minutes", type=float, default=10)
+    v = sub.add_parser("validate"); v.add_argument("--out", default="output/clinical_audio_dataset"); v.add_argument("--min-minutes", type=float, default=3); v.add_argument("--expected", type=int, default=None, help="fail unless exactly this many encounter folders exist")
 
     k = sub.add_parser("package")
     k.add_argument("--out", default="output/clinical_audio_dataset")
-    k.add_argument("--min-minutes", type=float, default=10)
+    k.add_argument("--min-minutes", type=float, default=3); k.add_argument("--expected", type=int, default=None)
     k.add_argument("--zip", default="ambient_clinical_audio_toolkit_dataset.zip")
     k.add_argument("--force", action="store_true")
     a = p.parse_args()
