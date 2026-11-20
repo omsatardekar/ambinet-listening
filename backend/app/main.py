@@ -70,6 +70,18 @@ app = FastAPI(
     version="1.0.0",
 )
 progress_manager = ProgressManager()
+
+# Module 3 (clinical extraction): separate router under /api/extraction. Reads the compact transcript from AZURE_STORAGE_SLM_CONTAINER, sends it to the
+# hosted model (EXTRACTION_ENDPOINT_URL/KEY) and saves the JSON to AZURE_STORAGE_EXTRACTION_CONTAINER. Does not use the pipeline executor or wake-word code.
+from clinical_extraction.api import register_extraction_routes  # noqa: E402
+
+register_extraction_routes(app, run_result=progress_manager.result)
+
+# Module 4 (SOAP note): separate router under /api/soap. Reads the saved extraction from the extraction container, has the SOAP agent write the note and
+# saves it to AZURE_STORAGE_SOAP_CONTAINER. Does not touch the pipeline, wake-word or extraction code.
+from soap_generation.api import register_soap_routes  # noqa: E402
+
+register_soap_routes(app, run_result=progress_manager.result)
 pipeline_executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="clinical-pipeline")
 voice_service = WakeWordService(LOCAL_RECORDINGS_DIR)
 wake_clients: set[WebSocket] = set()
