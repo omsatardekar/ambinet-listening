@@ -1,8 +1,8 @@
 # Ambient Clinical Listening
 
-Talk to your patient — Ambient Clinical listens, writes the **transcript**, picks out the **clinical entities**, and prepares the **SOAP note**.
+Talk to your patient — Ambient Clinical listens, writes the **transcript**, picks out the **clinical entities** with a small language model, and prepares the **SOAP note** with an agent.
 
-This repository contains the working front half of that journey today (hands-free capture → speaker-aware transcript). Clinical entity extraction and the SOAP note follow the transcript in the full platform.
+This repository contains the whole pipeline: hands-free capture → speaker-aware transcript → clinical extraction → SOAP note, together with every experiment, dataset and evaluation that led to the extraction model. See [The pipeline](#the-pipeline) and [Setting up modules 3 and 4](#setting-up-modules-3-and-4).
 
 - **Hands-free recording ("Asha").** Say **"Hey Asha"**, then **"Start recording"**. Say **"Hey Asha, stop recording"** to save. Recordings are saved as WAV files on your machine and are never uploaded.
 - **Upload.** Upload a WAV recording and create the transcript.
@@ -182,20 +182,115 @@ Drop a WAV file into the upload card (or browse for one), choose a transcription
 
 ---
 
+# The pipeline
+
+```text
+Module 1  Hands-free capture ("Hey Asha")                      ->  WAV on this machine
+Module 2  Transcription (Azure Speech) + reconstruction (Foundry agent)
+                                                                ->  {NN}final_transcript.json, {NN}slm_input.json   (Azure Blob)
+Module 3  Clinical extraction: Qwen3-0.6B with the frozen H1 prompt, hosted on Azure ML
+                                                                ->  extraction-output / {NN}extraction.json
+Module 4  SOAP note: a Foundry prompt agent, from the extraction output only
+                                                                ->  soap-output / {NN}soap.json and {NN}soap.md
+```
+
+| Module | Code | Panel in the app |
+|---|---|---|
+| 1 and 2 | `backend/app/`, `scripts/`, `frontend/src/VoiceAssistant.tsx`, `prompts/agent_instructions_v2.md` | recording, upload, transcript |
+| 3 | `clinical_extraction/` (own README), `azure_ml_h1/` (hosting package), `frontend/src/ExtractionPanel.tsx` | **Clinical summary** |
+| 4 | `soap_generation/` (own README), `prompts/soap_agent_instructions_v1.md`, `scripts/generate_soap.py`, `scripts/create_soap_agent.py`, `frontend/src/SoapPanel.tsx` | **SOAP note** |
+
+The extraction model is meant to be replaced by a fine-tuned one: only `EXTRACTION_ENDPOINT_URL` and `EXTRACTION_ENDPOINT_KEY` change. The SOAP step reads the saved extraction and nothing else, so its quality follows the extraction model's quality.
+
+---
+
+# Setting up modules 3 and 4
+
+Do this after modules 1 and 2 work on the machine (Steps 1 to 7 above).
+
+1. **Git LFS (once per machine), before cloning or pulling.** The OpenVINO model files and the generated test recordings are stored with Git LFS.
+   ```powershell
+   git lfs install
+   git pull
+   git lfs pull
+   ```
+2. **New Python packages** (the reconstruction stage and the SOAP step use the Foundry agent SDK):
+   ```powershell
+   python -m pip install -r requirements-dev.txt
+   cd frontend; npm install; cd ..
+   ```
+3. **Sign in to Azure** (the Foundry agents use your Azure CLI sign-in): `az login`.
+4. **Settings in `.env`** (copy any missing names from `.env.example`; ask the project owner for the values):
+
+   | Setting | Meaning |
+   |---|---|
+   | `EXTRACTION_ENDPOINT_URL`, `EXTRACTION_ENDPOINT_KEY` | the hosted extraction model (Azure ML endpoint). Leave empty to use the local model instead (see `clinical_extraction/README.md`) |
+   | `AZURE_STORAGE_EXTRACTION_CONTAINER` | container for the extraction JSON (`extraction-output`, created automatically) |
+   | `AZURE_STORAGE_SOAP_CONTAINER` | container for the SOAP notes (`soap-output`, created automatically) |
+   | `SOAP_BACKEND=agent`, `SOAP_AGENT_NAME=clinical-soap-note`, `SOAP_AGENT_VERSION=<n>` | the SOAP agent. It already exists in the Foundry project; use the version the owner gives you |
+   | `SOAP_INCLUDE_TRANSCRIPT=0` | keep `0`: the SOAP step works from the extraction output only |
+
+   Only if you use a **different Foundry project**: create the agent there once with `python scripts/create_soap_agent.py --model <deployment name> --update-env`, which also writes the version into `.env`. After editing `prompts/soap_agent_instructions_v1.md`, run it again and restart the backend.
+5. **Run:** `.\start_demo.ps1`. In the app: record or upload a conversation, wait for the transcript, press **Generate summary** (clinical summary), then **Generate SOAP note**.
+6. **Check:** `http://127.0.0.1:8000/api/extraction/health` and `http://127.0.0.1:8000/api/soap/health` should both report `"ready": true`.
+7. **Tests (no Azure needed):**
+   ```powershell
+   python -m pytest -q clinical_extraction/tests soap_generation/tests
+   cd frontend; npx tsc --noEmit
+   ```
+
+**Test recordings.** `scenarios/` holds 20 hand-written consultations and `output/` the 20 generated recordings (about 11 minutes each, synthetic speech). Upload them in the app to exercise the whole pipeline; `scenarios/README.md` explains how to generate more with `scripts/ambient_tts.py`.
+
+---
+
+# Experiments and evaluation (everything is in this repository)
+
+| Folder | What it holds |
+|---|---|
+| `direct_inference_baseline/` | Qwen3-0.6B experiments EXP_001 to EXP_008 (CPU baseline, GPU, OpenVINO, prompt engineering, repair, simplified extraction, the hybrid prompt H1 that is deployed), code, outputs, reports, logs. The 0.6B OpenVINO model (1.2 GB) is in Git LFS |
+| `direct_inference_1_7B/` | Qwen3-1.7B track (P00, P01, P02): scripts, manifests, prompts, evaluations, reports. The 3.4 GB weights file is not in Git, see below |
+| `judge_eval/` | the LLM-as-judge evaluation of all runs (`METHODOLOGY.md`, `REPORT.md`, results) |
+| `dataset_v2_batch_001_corrected/`, `dataset_v2_batch_001/` | the synthetic encounters (Batch 001 and Batch 002, 500 each) with paired transcripts and ground-truth labels, validation reports |
+| `azure_ml_h1/` | how the 0.6B model is hosted on Azure ML (scoring script, environment, step-by-step guide) |
+| `docs/MODULE3_FINETUNING_FOCUS.md` | the failure classes seen in six live runs, what the fine-tuning has to cover, and the checks to measure it |
+| `PROJECT_DOCUMENTATION_AND_PRESENTATION/` | the master experiment report, fine-tuning roadmap and the metrics comparison table (CSV) |
+| `archive/` | obsolete experiments, kept for the record |
+
+---
+
+# What is not in Git
+
+| Item | Why | What to do |
+|---|---|---|
+| `.env` | secrets | copy `.env.example` and ask the project owner for the values |
+| `.venv`, `.venv-extraction`, `.../env_openvino` | virtual environments | create them (Step 4; `python -m clinical_extraction.setup_local_model` for the local extraction environment) |
+| `direct_inference_1_7B/models/Qwen3-1.7B-ov-fp16/openvino_model.bin` | 3.4 GB, over GitHub's 2 GiB Git LFS limit | recreate with `direct_inference_1_7B/scripts/convert_model.py` (see `direct_inference_1_7B/OMITTED_FROM_GIT.json` for the checksum) or copy it over from the original machine. Only needed to re-run the 1.7B experiments |
+| `**/ov_cache`, `direct_inference_1_7B/models/hf_cache` | machine-specific compile caches and a model download | regenerated automatically or by `scripts/download_model.py` |
+| `.tts_cache/` | cache of synthesized speech | regenerated by `scripts/ambient_tts.py` |
+| `extraction_data/`, `soap_data/`, `offline_recordings/` | local job data and your own recordings (patient-related) | created at run time |
+| `office_transfer_package/` and `*.zip` | not needed on other machines | none |
+
+---
+
 # Project layout
 
 ```text
-backend/app/        FastAPI server: API, WebSocket voice channel, voice control, pipeline
-frontend/src/       React + Vite interface (App.tsx, VoiceAssistant.tsx for hands-free recording)
-models/             Offline voice models, included in the repository (no download needed)
-offline_recordings/ Your saved recordings (git-ignored, may contain sensitive audio)
-scripts/            Transcription and reconstruction steps used by the pipeline
-prompts/            Reconstruction agent instructions (agent_instructions.md = v1, agent_instructions_v2.md = current)
-tests/              pytest suite
-docs/               architecture.md and output_schema.md
-start_demo.ps1      One-command launcher for both services
-requirements.txt    Pinned Python runtime dependencies
-.env.example        Every setting the app reads, with no values
+backend/app/              FastAPI server: API, WebSocket voice channel, voice control, pipeline; registers the /api/extraction and /api/soap routes
+frontend/src/            React + Vite interface (App.tsx, VoiceAssistant.tsx, ExtractionPanel.tsx + extraction/, SoapPanel.tsx + soap/)
+models/                   Offline voice models, included in the repository (no download needed)
+offline_recordings/       Your saved recordings (git-ignored, may contain sensitive audio)
+scripts/                  Transcription, reconstruction, test-speech generation (ambient_tts.py), SOAP command-line tools
+prompts/                  Reconstruction agent (agent_instructions_v2.md) and SOAP agent (soap_agent_instructions_v1.md) instructions
+clinical_extraction/      Module 3: extraction service, Azure/local model clients, evidence linking, tests
+soap_generation/          Module 4: SOAP service, checks, rendering, tests
+azure_ml_h1/              Hosting package for the extraction model on Azure ML
+scenarios/ and output/    20 hand-written test consultations and their generated recordings
+direct_inference_baseline/, direct_inference_1_7B/, judge_eval/, dataset_v2_batch_001*/   experiments, evaluation and datasets (see above)
+tests/                    pytest suite of modules 1 and 2
+docs/                     architecture.md, output_schema.md, MODULE3_FINETUNING_FOCUS.md
+start_demo.ps1            One-command launcher for both services
+requirements.txt          Pinned Python runtime dependencies
+.env.example              Every setting the app reads, with no secret values
 ```
 
 See [docs/architecture.md](docs/architecture.md) for the processing design and [docs/output_schema.md](docs/output_schema.md) for the transcript format.

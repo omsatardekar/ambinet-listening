@@ -1,0 +1,12 @@
+PASS stop-on-oom, retries=0, transient OOM -> OOMStop after exactly 1 attempt, exact text kept -> ('OOMStop', 1, 'TransientInferenceError: Exception from src/plugins/intel_gpu: out of GPU memory while allocating 1.2 GiB')
+PASS stop-on-oom, retries=3 requested, transient OOM -> still stops after 1 attempt (no retry) -> ('OOMStop', 1, 'TransientInferenceError: Exception from src/plugins/intel_gpu: out of GPU memory while allocating 1.2 GiB')
+PASS stop-on-oom, Python MemoryError -> OOMStop -> ('OOMStop', 1, 'MemoryError: x')
+PASS stop-on-oom, permanent 'Failed to allocate' -> OOMStop -> ('OOMStop', 1, 'PermanentInferenceError: RuntimeError: Failed to allocate 4 GiB')
+PASS stop-on-oom, NON-memory permanent error -> unchanged (PermanentInferenceError, recorded as before) -> ('PermanentInferenceError', 1, 'RuntimeError: device GPU not found')
+PASS DEFAULT behaviour preserved: no stop flag, retries=3, transient OOM -> 4 attempts then 'gave up' -> ('TransientInferenceError', 4, 'gave up after 4 attempts: Exception from src/plugins/intel_gpu: out of GPU memory while al')
+PASS retries=0 without stop flag -> exactly 1 attempt then TransientInferenceError (no retry) -> ('TransientInferenceError', 1, 'gave up after 1 attempts: Exception from src/plugins/intel_gpu: out of GPU memory while al')
+PASS OOMStop escapes the per-record `except Exception` handler (run stops)
+PASS ordinary errors are still recorded per record and the run continues: recorded-as-failed-and-run-continues
+PASS file access works again after OOMStop passed through the spy context
+
+10/10 tests passed

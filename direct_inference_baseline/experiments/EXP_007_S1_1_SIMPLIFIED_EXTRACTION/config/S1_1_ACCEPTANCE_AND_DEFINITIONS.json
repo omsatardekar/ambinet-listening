@@ -1,0 +1,21 @@
+{
+  "status": "fixed before any Phase B inference",
+  "scope": "development set only: the 50 P02 prompt-development ids. Further tuning on these records is not independent validation. Comparisons are P02 (primary), S1.0 (secondary).",
+  "acceptance_thresholds_approved": {"micro_f1_min": 0.1507, "micro_f1_note": "P02 0.1207 + 0.03", "valid_json_min_of_50": 48, "speaker_attribution_accuracy_min": 0.42, "category_collapse_allowed": false},
+  "evaluation_scope_fairness": {
+    "primary_headline": "strict micro F1 over all 18 canonical categories for P02, S1.0 and S1.1 alike. Removing current_conditions from model generation leaves canonical clinical_conditions as the schema's empty list; its gold entities then count as FN (same scope as P02).",
+    "reported_separately": ["micro F1 excluding clinical_conditions (all three systems)", "micro F1 excluding clinical_conditions and clinical_uncertainties (all three systems)", "clinical_conditions category row for all three systems"],
+    "disclosure": "S1.1 does not generate current_conditions; this is a change of the model task, not of the canonical schema or evaluator"
+  },
+  "failed_outputs": "a record whose output is not parseable contributes no predictions (all gold counted FN) in every headline number; parsed-only subsets are post-hoc diagnostics, never headline",
+  "definitions": {
+    "token_cap_hit": "finish_reason == length (n generated tokens >= max_new_tokens)",
+    "truncated_output": "parse_status == truncated",
+    "empty_collapse": "parsed record whose chief_complaint is shorter than 4 characters or has no alphanumeric character, or whose 16 lists are all empty",
+    "repetition_loop": "any list with >= 3 items identical in their primary field, or >= 3 items whose primary field is none/null/n-a/unknown/empty; OR the project parser flags degenerate repetition at the end of the output",
+    "category_collapse": "a category where the arm has TP == 0 while P02 has TP >= 3 in that category (relative drops of >50% are listed as regressions, not collapses)",
+    "empty_field": "blank primary field of an item (counted by validate_s11) or blank chief_complaint",
+    "missing_field": "a required item field absent, or a required top-level key absent (validate_s11)"
+  },
+  "speaker_attribution": "the canonical evaluator's speaker_attribution accuracy (unchanged); role flags from the adapter/sidecar are reported alongside: invalid_role, role_not_in_encounter, role_unavailable, role_missing"
+}

@@ -1,0 +1,221 @@
+{
+ "prompt": "prompt_versions\\P02_p01_schema_no_evidence.txt",
+ "sha256": "f6d5202f26d97c2d73c9d00adbca050bc7114ad8b0272749eeff8d0757de09b0",
+ "p01_sha256": "b51121cd18b4f798971204b280d81eb5ea43498822f472a165210c6d82543ad8",
+ "checks": [
+  {
+   "check": "no BOM, no CRLF, valid UTF-8",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "{ENCOUNTER_ID} and {TRANSCRIPT} occur exactly once",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "template parses as JSON in both prompts",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "same 20 top-level keys in the same order",
+   "ok": true,
+   "detail": "['encounter_id', 'extraction_status', 'encounter_metadata', 'chief_complaint', 'symptoms', 'negative_findings', 'medical_history', 'medications', 'allergies', 'vital_signs', 'physical_examination', 'review_of_systems', 'clinical_conditions', 'clinical_assessment', 'procedures_and_investigations', 'clinical_actions', 'follow_up', 'clinical_uncertainties', 'clinical_evidence', 'quality_checks']"
+  },
+  {
+   "check": "every nested key path and its order is identical to P01 (field names, nesting, order)",
+   "ok": true,
+   "detail": "178 paths"
+  },
+  {
+   "check": "the only template sections that differ are chief_complaint (evidence placeholder) and clinical_evidence",
+   "ok": true,
+   "detail": "['chief_complaint', 'clinical_evidence']"
+  },
+  {
+   "check": "clinical_evidence is [] in the new template; P01 had one record",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "chief_complaint differs only in the evidence_ids placeholder",
+   "ok": true,
+   "detail": "['EV_001'] -> ['<segment id>']"
+  },
+  {
+   "check": "quality_checks and encounter_metadata are byte-identical to P01",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "Allowed-values block is byte-identical to P01 (every enum unchanged)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "old leaked phrase 'no fever, no allergies, no previous surgery' is gone",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "prompt contains no dev encounter id",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "model is told to write no EV_ ids / no evidence records",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "no 5-word sequence of any quoted example sentence occurs in a dev transcript",
+   "ok": true,
+   "detail": "overlapping 5-grams=0"
+  },
+  {
+   "check": "blood-pressure-like numbers in the prompt do not occur in any dev transcript or gold",
+   "ok": true,
+   "detail": "['138/86']"
+  },
+  {
+   "check": "none of the example-specific clinical terms occurs anywhere in the 50 dev transcripts or gold",
+   "ok": true,
+   "detail": "{}"
+  },
+  {
+   "check": "output-format block (template, placeholders, key order) is byte-identical to the previous P02 prompt",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "Allowed-values block identical to the previous P02 prompt",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "14 numbered patterns present",
+   "ok": true,
+   "detail": "['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14']"
+  },
+  {
+   "check": "required content present: temporality block",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "required content present: ongoing duration is not an end",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "required content present: intermittent stays current",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "required content present: separate earlier episode -> past",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "required content present: tense of the clinician is not evidence",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "required content present: unclear timing handled",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "required content present: negation cues",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "required content present: no known allergies is a negative finding",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "required content present: compound blood pressure",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "required content present: doctor-read value not patient",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "required content present: evidence is minimal and exact",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "required content present: no evidence records",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "required content present: no invented segment ids",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "required content present: call out of missing info",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "required content present: results-dependent follow-up",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "required content present: question is not a finding",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "required content present: final anti-hallucination section",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "prompt keeps every segment-id instruction and never asks for EV ids",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "blood_pressure_like_strings_in_prompt": [
+  "138/86"
+ ],
+ "example_content_terms_present_in_dev_data": {
+  "twitch": false,
+  "hoarse voice": false,
+  "flutters": false,
+  "hiccups": false,
+  "gout": false,
+  "gallstones": false,
+  "blurred vision": false,
+  "hip pain": false,
+  "white tablet": false,
+  "muscle strain": false,
+  "disc problem": false,
+  "138/86": false,
+  "138 over 86": false,
+  "98.6": false,
+  "sinus scan": false,
+  "sinus infection": false,
+  "left eyelid": false,
+  "stomach problems": false,
+  "aunt": false
+ },
+ "size": {
+  "chars": 20976,
+  "p01_chars": 9010
+ },
+ "all_checks_pass": true
+}

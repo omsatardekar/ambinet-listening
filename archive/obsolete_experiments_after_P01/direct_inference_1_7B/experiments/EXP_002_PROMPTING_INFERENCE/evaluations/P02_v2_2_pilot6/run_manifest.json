@@ -1,0 +1,337 @@
+{
+ "experiment_id": "P02_v2_2_pilot6",
+ "stage": "3 - direct inference baseline (no fine-tuning, no prompt optimisation, no RAG)",
+ "started_utc": "2026-11-15T04:44:52.971694+00:00",
+ "split": "development",
+ "encounter_ids": [
+  "00168",
+  "00204",
+  "00037",
+  "00092",
+  "00152",
+  "00157"
+ ],
+ "dataset": {
+  "name": "dataset_v2_batch_001_corrected",
+  "manifest_sha256": "4403fef843fbd0bbcfc09cc2d6d2130c64b6936bbfb51a003c7874edcdd0c5aa",
+  "frozen_files_verified": 6
+ },
+ "split_seed": 20260301,
+ "model": {
+  "provider": "openvino_genai",
+  "model_id": "Qwen/Qwen3-1.7B",
+  "model_revision_commit": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "deployment_name": null,
+  "device": "GPU",
+  "runtime": "openvino_genai.LLMPipeline",
+  "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+  "openvino_genai": "2026.4.1.0-3408-ab01d1771e4",
+  "converted_model_dir": "models/Qwen3-1.7B-ov-fp16",
+  "weights_precision": "FP16 (converted from BF16 source weights)",
+  "compiled_model_cache": "D:\\ambient_clinical_speech_transcription\\ambient_clinical_speech_transcription\\direct_inference_1_7B\\experiments\\EXP_002_PROMPTING_INFERENCE\\ov_cache",
+  "generation": {
+   "do_sample": false,
+   "enable_thinking": false,
+   "chat_template": "tokenizer.apply_chat_template(add_generation_prompt=True, enable_thinking=False); GenAI template disabled",
+   "pipeline_per_encounter": true
+  },
+  "parameter_support": {
+   "temperature": "not applied (greedy)",
+   "top_p": "not applied (greedy)",
+   "top_k": "not applied (greedy)",
+   "max_new_tokens": "applied",
+   "enable_thinking": "applied via chat template (False)"
+  }
+ },
+ "max_new_tokens": 4096,
+ "retry_policy": {
+  "retries": 0,
+  "base_seconds": 2.0,
+  "scope": "transient API/OOM errors only"
+ },
+ "prompt_file": "prompts/direct_extraction_prompt.txt",
+ "prompt_sha256": "7c61b0d1a53c56f72478b5f605fed197ea0700a3c1448549c1c5751668e954f3",
+ "prompt_text": "You are a clinical information extraction system. You get the transcript of ONE outpatient consultation. Every line has the form\n[segment id] speaker_id (ROLE) start-end seconds: text\nExtract every clinical fact that is explicitly stated and return ONE JSON object. Return only the JSON: no explanation, no markdown, no indentation, one top-level key per line.\n\nHow to work\n1. Read the whole transcript from the first line to the last. A consultation has many facts in many sections; do not stop after the first one.\n2. Write the sections in the order of the format below. Check each section against the transcript before you move on.\n\nEvery fact has refs\n- refs = the segment ids of the line or lines where the fact is said, copied exactly as printed (for example \"SEG0007\"). Usually 1 or 2 ids: the line that states the fact, plus the question line only when the answer alone is unclear. Never cite greetings.\n- Never write transcript text, times or speaker ids anywhere. Never write an id that is not in the transcript. Never invent evidence.\n- by = the role of the person the fact comes from, lower case, as printed in brackets on the line: doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown. Always write by. Never write person_1 or person_2. Do not assume person_1 is the patient: read the role on the line. For physical_examination by = who examined, for clinical_assessment by = who gave the impression, for procedures_and_investigations by = who ordered it.\n- responsible (clinical_actions) = who must do it: doctor, patient, nurse or clinical_staff. It is not the same as by.\n\nWriting rules\n- Leave out every key that does not apply. Never write null, \"\", [] or a placeholder. Leave out a section that has no facts. A key marked * is required.\n- A key you leave out gets its default. So always write a status that is not the default: \"resolved\" (symptoms), \"absent\" (physical_examination), \"completed\" or \"conditional\" (procedures_and_investigations, clinical_actions, follow_up), \"discontinued\" or \"planned\" (medications), \"past\" (negative_findings.temporality).\n- Extract only what is said. Never invent or guess a value, a date, a route, a reason, a habit or a diagnosis. If a value is not said, leave the key out.\n- Negation: a negative finding is something a speaker explicitly denies (\"no\", \"never\", \"none\", \"haven't had\"). Write one item for each denied thing. A question that lists several things answered \"no\" gives one item for each thing. Silence, a question alone, or an unasked topic is NOT a negative finding. If the patient says there are no allergies write finding \"Allergies\" with normalized_name \"No known allergies\".\n- Resolved symptom: \"that went away\" or \"it has gone\" gives a symptoms item with status \"resolved\". A separate earlier episode also needs temporality \"past\".\n- Planned medicine: a medicine the doctor starts or prescribes now has status \"planned\" with the dose, frequency and duration as spoken. A medicine the patient takes now is \"currently_used\". A stopped one is \"discontinued\".\n- Contradiction: if two speakers (for example the patient and the nurse's chart) give different values for the same thing, never choose one. Leave that value out and write a clinical_uncertainties item that names both values in the description, with related pointing at the fact (for example \"medications[0]\") and refs citing both lines.\n- Keep time context: hedged statements are certainty \"uncertain\" (symptoms). Do not turn a possibility into a diagnosis: possible or cannot be ruled out is certainty \"differential\".\n- Each fact is about the patient. Never record a relative's condition as the patient's; use family_history with relation.\n- If something has no place in the format, leave it out.\n\nSections, in output order. Each line lists the keys; * = required; text in brackets is the rule for that key.\n- negative_findings: finding*, normalized_name, temporality (only \"past\" for a denied past item), by, refs*\n- medications: name*, normalized_name, generic_name, dose, route (only \"oral\", only if said by mouth or orally), frequency, duration, indication (only if said), status*, by, refs*\n- clinical_uncertainties: type*, description*, related, resolution_status (only \"partially_resolved\" for duration_disagreement), refs*\n- clinical_actions: action_type*, description*, status*, responsible*, time_reference, refs*  (one item for every separate instruction of the doctor's plan: tests, medicines, advice, referrals, return visits)\n- procedures_and_investigations: name*, normalized_name, type*, status (default planned; or completed, conditional), by, indication, scheduled_datetime, refs*\n- clinical_assessment: assessment*, normalized_assessment, certainty*, basis, by, refs*\n- follow_up: time_reference* (as said), status (default planned; conditional if it depends on a condition), refs*\n- chief_complaint: value*, normalized_value, by, refs*\n- symptoms: name*, normalized_name, category, status (default present; or resolved), severity, duration, frequency, onset, temporality (default current; resolved is automatic for status resolved; past for a separate earlier episode), body_site, associated_symptoms, aggravating_factors, relieving_factors, certainty (default certain; uncertain, disputed), by, refs*\n- medical_history.past_medical_history: condition*, normalized_condition, duration, by, refs*\n- medical_history.surgical_history: procedure*, normalized_procedure, timeframe, by, refs*\n- medical_history.family_history: condition*, normalized_condition, relation*, by, refs*\n- medical_history.social_history: category*, description*, status*, details, by, refs*\n- allergies: substance*, normalized_substance, allergy_type*, reaction, status*, by, refs*\n- vital_signs: name*, normalized_name, value*, unit*, by, refs*\n- physical_examination: finding*, normalized_finding, body_site, status (default present; absent if the doctor says it is not there), by, refs*\n- review_of_systems: system*, details, by, refs*  (only when the patient says a whole body system is fine)\n- clinical_conditions: name*, normalized_name, duration, by, refs*  (a long-standing condition the patient reports and the doctor acknowledges)\n\nShapes\n- duration is {\"value\":<number>,\"unit\":\"days\" or \"weeks\" or \"months\" or \"years\",\"normalized\":\"<in words>\"}; leave out parts that are not said. clinical_actions.time_reference is {\"value\":\"<time as said>\"}. follow_up.time_reference is text. associated_symptoms, aggravating_factors, relieving_factors, related and refs are lists of text. vital_signs.value is a number, or \"<systolic>/<diastolic>\" text for blood pressure.\n- medical_history is an object with the lists past_medical_history, surgical_history, family_history, social_history (leave out the empty ones).\n- normalized_* = the standard clinical term if you are sure, otherwise the speaker's own words.\n\nAllowed values\n- symptoms.status: present | resolved ; certainty: certain | uncertain | disputed ; temporality: current | resolved | past\n- symptoms.category: constitutional | neurological | cardiovascular | respiratory | gastrointestinal | musculoskeletal | dermatological | endocrine | genitourinary | ENT | ophthalmological | psychiatric | other\n- negative_findings.temporality: current | past\n- medications.status: currently_used | discontinued | planned ; route: oral\n- medical_history.social_history.category: smoking | alcohol | occupation | exercise | diet | living ; status: current | former | never | none | retired\n- allergies.allergy_type: medication | food | environmental ; status: reported | uncertain | historical | disputed\n- physical_examination.status: present | absent\n- clinical_assessment.certainty: provisional | differential\n- procedures_and_investigations.type: laboratory | imaging | cardiac | other ; status: planned | completed | conditional\n- clinical_actions.action_type: investigation | medication | counselling | referral | follow_up | other ; status: planned | completed | recommended | conditional ; responsible: doctor | patient | nurse | clinical_staff\n- follow_up.status: planned | conditional\n- clinical_uncertainties.type: date_uncertain | duration_disagreement | uncertain_dose | medication_discrepancy | adherence_uncertain | incomplete_medication_name | allergy_uncertain | allergy_disputed | conflicting_statement | unknown_speaker\n\nExample (invented; the facts are not from your transcript)\n[SEG0001] person_1 (DOCTOR) 0.50-3.10s: Morning. Tell me what has brought you here.\n[SEG0002] person_2 (PATIENT) 4.00-12.30s: My left shoulder has ached for about three weeks, and yesterday I had hiccups but they stopped.\n[SEG0003] person_1 (DOCTOR) 13.00-15.00s: Any ringing in the ears or a hoarse voice?\n[SEG0004] person_2 (PATIENT) 15.80-19.00s: No ringing, no hoarse voice.\n[SEG0005] person_1 (DOCTOR) 19.50-22.00s: Which tablets are you on at the moment?\n[SEG0006] person_2 (PATIENT) 22.80-28.00s: Sertraline, 50 milligrams every morning.\n[SEG0007] person_3 (NURSE) 28.50-32.00s: Our chart has sertraline down as 100 milligrams.\n[SEG0008] person_1 (DOCTOR) 33.00-35.00s: And tobacco, do you use it?\n[SEG0009] person_2 (PATIENT) 35.50-37.00s: Never.\n[SEG0010] person_3 (NURSE) 38.00-44.00s: Pulse 74, blood pressure 118 over 76.\n[SEG0011] person_1 (DOCTOR) 45.00-62.00s: This sounds like rotator cuff tendinitis, though bursitis cannot be ruled out. I will order a shoulder X-ray. Start meloxicam 7.5 milligrams at bedtime for ten days. Avoid lifting your arm above shoulder height. Please come back in two weeks.\nOutput for the example:\n{\"negative_findings\":[{\"finding\":\"ringing in the ears\",\"normalized_name\":\"Tinnitus\",\"by\":\"patient\",\"refs\":[\"SEG0003\",\"SEG0004\"]},{\"finding\":\"hoarse voice\",\"normalized_name\":\"Hoarseness\",\"by\":\"patient\",\"refs\":[\"SEG0003\",\"SEG0004\"]}],\n\"medications\":[{\"name\":\"sertraline\",\"normalized_name\":\"Sertraline\",\"frequency\":\"every morning\",\"status\":\"currently_used\",\"by\":\"patient\",\"refs\":[\"SEG0006\",\"SEG0007\"]},{\"name\":\"meloxicam\",\"normalized_name\":\"Meloxicam\",\"dose\":\"7.5 mg\",\"frequency\":\"at bedtime\",\"duration\":{\"value\":10,\"unit\":\"days\",\"normalized\":\"10 days\"},\"status\":\"planned\",\"by\":\"doctor\",\"refs\":[\"SEG0011\"]}],\n\"clinical_uncertainties\":[{\"type\":\"medication_discrepancy\",\"description\":\"sertraline: patient states 50 mg; nurse states 100 mg. Current dose not established.\",\"related\":[\"medications[0]\"],\"refs\":[\"SEG0006\",\"SEG0007\"]}],\n\"clinical_actions\":[{\"action_type\":\"investigation\",\"description\":\"Arrange shoulder X-ray\",\"status\":\"planned\",\"responsible\":\"doctor\",\"refs\":[\"SEG0011\"]},{\"action_type\":\"medication\",\"description\":\"Start meloxicam 7.5 mg at bedtime for 10 days\",\"status\":\"planned\",\"responsible\":\"doctor\",\"refs\":[\"SEG0011\"]},{\"action_type\":\"counselling\",\"description\":\"Avoid lifting the arm above shoulder height\",\"status\":\"recommended\",\"responsible\":\"patient\",\"refs\":[\"SEG0011\"]},{\"action_type\":\"follow_up\",\"description\":\"Follow-up consultation\",\"status\":\"planned\",\"responsible\":\"doctor\",\"time_reference\":{\"value\":\"in two weeks\"},\"refs\":[\"SEG0011\"]}],\n\"procedures_and_investigations\":[{\"name\":\"shoulder X-ray\",\"normalized_name\":\"Shoulder X-ray\",\"type\":\"imaging\",\"by\":\"doctor\",\"refs\":[\"SEG0011\"]}],\n\"clinical_assessment\":[{\"assessment\":\"rotator cuff tendinitis\",\"normalized_assessment\":\"Rotator cuff tendinitis\",\"certainty\":\"provisional\",\"by\":\"doctor\",\"refs\":[\"SEG0011\"]},{\"assessment\":\"bursitis\",\"normalized_assessment\":\"Bursitis\",\"certainty\":\"differential\",\"by\":\"doctor\",\"refs\":[\"SEG0011\"]}],\n\"follow_up\":[{\"time_reference\":\"in two weeks\",\"refs\":[\"SEG0011\"]}],\n\"chief_complaint\":{\"value\":\"aching left shoulder\",\"normalized_value\":\"Shoulder pain\",\"by\":\"patient\",\"refs\":[\"SEG0002\"]},\n\"symptoms\":[{\"name\":\"aching left shoulder\",\"normalized_name\":\"Shoulder pain\",\"category\":\"musculoskeletal\",\"duration\":{\"value\":3,\"unit\":\"weeks\",\"normalized\":\"about 3 weeks\"},\"body_site\":\"left shoulder\",\"by\":\"patient\",\"refs\":[\"SEG0002\"]},{\"name\":\"hiccups\",\"normalized_name\":\"Hiccups\",\"category\":\"gastrointestinal\",\"status\":\"resolved\",\"by\":\"patient\",\"refs\":[\"SEG0002\"]}],\n\"medical_history\":{\"social_history\":[{\"category\":\"smoking\",\"description\":\"Does not use tobacco\",\"status\":\"never\",\"by\":\"patient\",\"refs\":[\"SEG0008\",\"SEG0009\"]}]},\n\"vital_signs\":[{\"name\":\"Heart rate\",\"normalized_name\":\"Heart rate\",\"value\":74,\"unit\":\"bpm\",\"by\":\"nurse\",\"refs\":[\"SEG0010\"]},{\"name\":\"Blood pressure\",\"normalized_name\":\"Blood pressure\",\"value\":\"118/76\",\"unit\":\"mmHg\",\"by\":\"nurse\",\"refs\":[\"SEG0010\"]}]}\nIn the example the sertraline dose is left out because the two sources disagree, and no route, reason or date is written because none was said.\n\nTranscript (encounter {ENCOUNTER_ID})\n{TRANSCRIPT}\n\nJSON:\n",
+ "git_commit": "1e9f4462f78a7994ec6d1c96087459dbc82c46c9",
+ "records": {
+  "00168": {
+   "encounter_id": "00168",
+   "finish_reason": "stop",
+   "prompt_tokens": 4904,
+   "completion_tokens": 177,
+   "latency_seconds": 183.574,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_top_level": 5,
+    "missing_field": 13,
+    "unexpected_field": 6,
+    "enum_violation": 1
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_top_level",
+     "message": "encounter_id"
+    },
+    {
+     "kind": "missing_top_level",
+     "message": "extraction_status"
+    },
+    {
+     "kind": "missing_top_level",
+     "message": "encounter_metadata"
+    },
+    {
+     "kind": "missing_top_level",
+     "message": "clinical_evidence"
+    },
+    {
+     "kind": "missing_top_level",
+     "message": "quality_checks"
+    },
+    {
+     "kind": "missing_field",
+     "message": "chief_complaint.reported_by"
+    },
+    {
+     "kind": "missing_field",
+     "message": "chief_complaint.evidence_ids"
+    },
+    {
+     "kind": "unexpected_field",
+     "message": "chief_complaint.by"
+    },
+    {
+     "kind": "unexpected_field",
+     "message": "chief_complaint.refs"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.family_history"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.social_history[0].details"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.social_history[0].reported_by"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.social_history[0].evidence_ids"
+    }
+   ],
+   "keys_expected": 42,
+   "keys_present": 24,
+   "keys_emitted": 30,
+   "keys_unexpected": 6
+  },
+  "00204": {
+   "encounter_id": "00204",
+   "finish_reason": "stop",
+   "prompt_tokens": 4957,
+   "completion_tokens": 537,
+   "latency_seconds": 345.813,
+   "attempts": 1,
+   "parse_status": "invalid_json",
+   "parse_notes": [
+    "Expecting ',' delimiter at char 1975"
+   ],
+   "status": "failed",
+   "failure_type": "invalid_json"
+  },
+  "00037": {
+   "encounter_id": "00037",
+   "finish_reason": "stop",
+   "prompt_tokens": 5614,
+   "completion_tokens": 1037,
+   "latency_seconds": 536.472,
+   "attempts": 1,
+   "parse_status": "invalid_json",
+   "parse_notes": [
+    "Extra data at char 287"
+   ],
+   "status": "failed",
+   "failure_type": "invalid_json"
+  },
+  "00092": {
+   "encounter_id": "00092",
+   "finish_reason": "stop",
+   "prompt_tokens": 5351,
+   "completion_tokens": 750,
+   "latency_seconds": 494.147,
+   "attempts": 1,
+   "parse_status": "invalid_json",
+   "parse_notes": [
+    "Extra data at char 197"
+   ],
+   "status": "failed",
+   "failure_type": "invalid_json"
+  },
+  "00152": {
+   "encounter_id": "00152",
+   "finish_reason": "stop",
+   "prompt_tokens": 4804,
+   "completion_tokens": 136,
+   "latency_seconds": 206.753,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_top_level": 5,
+    "missing_field": 3,
+    "unexpected_field": 2,
+    "enum_violation": 1
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_top_level",
+     "message": "encounter_id"
+    },
+    {
+     "kind": "missing_top_level",
+     "message": "extraction_status"
+    },
+    {
+     "kind": "missing_top_level",
+     "message": "encounter_metadata"
+    },
+    {
+     "kind": "missing_top_level",
+     "message": "clinical_evidence"
+    },
+    {
+     "kind": "missing_top_level",
+     "message": "quality_checks"
+    },
+    {
+     "kind": "missing_field",
+     "message": "chief_complaint.reported_by"
+    },
+    {
+     "kind": "missing_field",
+     "message": "chief_complaint.evidence_ids"
+    },
+    {
+     "kind": "unexpected_field",
+     "message": "chief_complaint.by"
+    },
+    {
+     "kind": "unexpected_field",
+     "message": "chief_complaint.refs"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history"
+    },
+    {
+     "kind": "enum_violation",
+     "message": "extraction_status=None"
+    }
+   ],
+   "keys_expected": 28,
+   "keys_present": 20,
+   "keys_emitted": 22,
+   "keys_unexpected": 2
+  },
+  "00157": {
+   "encounter_id": "00157",
+   "finish_reason": "stop",
+   "prompt_tokens": 4812,
+   "completion_tokens": 410,
+   "latency_seconds": 373.956,
+   "attempts": 1,
+   "parse_status": "ok",
+   "parse_notes": [],
+   "status": "parsed",
+   "schema_compliant": false,
+   "schema_violation_counts": {
+    "missing_top_level": 9,
+    "missing_field": 55,
+    "unexpected_field": 19,
+    "enum_violation": 1
+   },
+   "schema_violations_sample": [
+    {
+     "kind": "missing_top_level",
+     "message": "encounter_id"
+    },
+    {
+     "kind": "missing_top_level",
+     "message": "extraction_status"
+    },
+    {
+     "kind": "missing_top_level",
+     "message": "encounter_metadata"
+    },
+    {
+     "kind": "missing_top_level",
+     "message": "allergies"
+    },
+    {
+     "kind": "missing_top_level",
+     "message": "physical_examination"
+    },
+    {
+     "kind": "missing_top_level",
+     "message": "review_of_systems"
+    },
+    {
+     "kind": "missing_top_level",
+     "message": "clinical_conditions"
+    },
+    {
+     "kind": "missing_top_level",
+     "message": "clinical_evidence"
+    },
+    {
+     "kind": "missing_top_level",
+     "message": "quality_checks"
+    },
+    {
+     "kind": "missing_field",
+     "message": "chief_complaint.reported_by"
+    },
+    {
+     "kind": "missing_field",
+     "message": "chief_complaint.evidence_ids"
+    },
+    {
+     "kind": "unexpected_field",
+     "message": "chief_complaint.by"
+    },
+    {
+     "kind": "unexpected_field",
+     "message": "chief_complaint.refs"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.past_medical_history"
+    },
+    {
+     "kind": "missing_field",
+     "message": "medical_history.surgical_history"
+    }
+   ],
+   "keys_expected": 107,
+   "keys_present": 43,
+   "keys_emitted": 62,
+   "keys_unexpected": 19
+  }
+ },
+ "last_update_utc": "2026-11-15T05:21:49.895530+00:00"
+}

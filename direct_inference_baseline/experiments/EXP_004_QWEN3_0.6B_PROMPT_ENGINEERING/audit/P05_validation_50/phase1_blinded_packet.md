@@ -1,0 +1,1578 @@
+# Phase 1 (BLIND): does the transcript support each extracted fact?
+
+You are shown extracted facts (in random order) and the full transcripts. You are NOT shown any system citation. For each fact answer in `phase1_responses_template.csv`:
+- `supported` yes / partly / no / cannot_tell  (is the fact stated in the transcript, with correct polarity and for the right person?)
+- `supporting_segments` the segment id(s) YOU consider the best evidence (blank if none)
+- `speaker_ok` yes/no/na (is the fact attributed to the right speaker?)  - `polarity_ok` yes/no/na (negation/denial handled correctly?)  - `attribution_ok` yes/no/na (patient's own condition vs family member's, etc.)  - `comment`
+
+- **A01** (encounter 00096, clinical_conditions): name: underactive thyroid; normalized_name: underactive thyroid; status: existing; reported_by: doctor
+- **A02** (encounter 00203, symptoms): name: hearing loss; normalized_name: hearing loss; category: cardiovascular; status: present; temporality: current; body_site: ear; reported_by: patient; certainty: uncertain
+- **A03** (encounter 00223, symptoms): name: high blood pressure; normalized_name: high blood pressure; category: cardiovascular; status: present; temporality: current; body_site: upper body; reported_by: doctor
+- **A04** (encounter 00119, negative_findings): finding: absent; normalized_name: absent; status: absent; assertion: negative; reported_by: doctor; temporality: current
+- **A05** (encounter 00143, medical_history.surgical_history): procedure: bypass operation; normalized_procedure: bypass operation; timeframe: 6 years ago; reported_by: PATIENT
+- **A06** (encounter 00021, clinical_actions): action_type: medication; description: take omeprazole; status: completed; responsible_person: doctor; time_reference: planned
+- **A07** (encounter 00034, allergies): substance: none; normalized_substance: none; allergy_type: none; reaction: none; severity: unknown; status: reported; reported_by: doctor
+- **A08** (encounter 00318, medical_history.surgical_history): procedure: gallbladder removal; normalized_procedure: gallbladder removal; timeframe: 2016; reported_by: doctor
+- **A09** (encounter 00081, negative_findings): finding: morning shakiness; normalized_name: morning shakiness; status: absent; assertion: negative; reported_by: doctor; temporality: current
+- **A10** (encounter 00071, allergies): substance: Amlodipine; normalized_substance: Amlodipine; allergy_type: medication; severity: unknown; status: reported; reported_by: patient
+- **A11** (encounter 00359, medical_history.family_history): condition: asthma; normalized_condition: asthma; relation: brother; reported_by: patient
+- **A12** (encounter 00322, negative_findings): finding: no fever; normalized_name: no fever; status: absent; assertion: negative; reported_by: doctor; temporality: current
+- **A13** (encounter 00445, clinical_actions): action_type: prescription; description: hydrocortisone nasal spray; status: completed; responsible_person: DOCTOR; time_reference: 4 weeks
+- **A14** (encounter 00436, physical_examination): finding: pressure in the right knee; normalized_finding: pressure in the right knee; body_site: right knee; status: present; observed_by: DOCTOR
+- **A15** (encounter 00395, clinical_actions): action_type: follow_up; description: I'll have a look; status: completed; responsible_person: doctor; time_reference: consultation
+- **A16** (encounter 00203, procedures_and_investigations): name: hearing test; normalized_name: hearing test; type: laboratory; status: planned; requested_by: doctor; indication: hearing loss
+- **A17** (encounter 00096, negative_findings): finding: thin bones; normalized_name: thin bones; status: absent; assertion: negative; reported_by: doctor; temporality: current
+- **A18** (encounter 00367, clinical_conditions): name: hypertension; normalized_name: hypertension; status: existing; reported_by: doctor
+- **A19** (encounter 00039, vital_signs): name: SpO2; normalized_name: SpO2; value: 97%; unit: percent; reported_by: doctor
+- **A20** (encounter 00420, clinical_conditions): name: heart failure; normalized_name: heart failure; status: existing; reported_by: doctor
+- **A21** (encounter 00223, negative_findings): finding: COPD flare-up; normalized_name: coping disorder; status: absent; assertion: negative; reported_by: doctor; temporality: current
+- **A22** (encounter 00203, vital_signs): name: blood pressure; normalized_name: blood pressure; value: 117/81; unit: mmHg; reported_by: patient
+- **A23** (encounter 00417, physical_examination): finding: wheezing; normalized_finding: wheezing; body_site: lungs; status: present; observed_by: doctor
+- **A24** (encounter 00147, symptoms): name: headache; normalized_name: headache; category: cardiovascular; status: present; temporality: current; body_site: head; reported_by: patient; certainty: uncertain
+- **A25** (encounter 00021, symptoms): name: racing heart; normalized_name: racing heart; category: cardiovascular; status: present; temporality: current; body_site: cardiovascular; reported_by: doctor
+- **A26** (encounter 00395, negative_findings): finding: persistent tiredness; normalized_name: persistent tiredness; status: absent; assertion: negative; reported_by: doctor; temporality: current
+- **A27** (encounter 00345, review_of_systems): system: urinary; status: negative; details: stress urinary incontinence; reported_by: DOCTOR
+- **A28** (encounter 00096, medications): name: Thyronorm; normalized_name: Thyronorm; generic_name: Thyronorm; dose: 500 milligrams; route: every morning; frequency: daily; indication: thyroid; status: currently_used; reported_by: doctor
+- **A29** (encounter 00034, follow_up): type: consultation; normalized_datetime: 388.63s; status: planned
+- **A30** (encounter 00147, medical_history.family_history): condition: asthma; normalized_condition: asthma; relation: family; reported_by: patient
+- **A31** (encounter 00386, negative_findings): finding: no fever; normalized_name: no fever; status: absent; assertion: negative; reported_by: PATIENT; temporality: current
+- **A32** (encounter 00086, medical_history.family_history): condition: thyroid problems; normalized_condition: thyroid problems; relation: family; reported_by: PATIENT
+- **A33** (encounter 00151, symptoms): name: fever; normalized_name: fever; category: cardiovascular; status: present; temporality: current; body_site: head; reported_by: doctor
+- **A34** (encounter 00173, clinical_assessment): assessment: provisional; normalized_assessment: provisional; certainty: provisional; basis: differential; stated_by: doctor
+- **A35** (encounter 00203, follow_up): type: consultation; time_reference: now; status: planned
+- **A36** (encounter 00345, allergies): substance: none; normalized_substance: none; allergy_type: none; severity: unknown; status: reported; reported_by: DOCTOR
+- **A37** (encounter 00240, medications): name: alendronate; normalized_name: alendronate; generic_name: alendronate; dose: 70 milligrams; route: once a week; frequency: once a week; status: currently_used
+- **A38** (encounter 00176, clinical_conditions): name: hypertension; normalized_name: hypertension; status: existing; reported_by: PATIENT
+- **A39** (encounter 00034, physical_examination): finding: yellow eyes; normalized_finding: yellow eyes; body_site: eyes; status: present; observed_by: doctor
+- **A40** (encounter 00345, vital_signs): name: height; normalized_name: height; value: 162; unit: cm; reported_by: DOCTOR
+- **A41** (encounter 00064, medications): name: Candid cream; normalized_name: Candid cream; status: currently_used; reported_by: patient
+- **A42** (encounter 00081, symptoms): name: morning shakiness; normalized_name: morning shakiness; category: cardiovascular; status: present; temporality: current; reported_by: patient; certainty: uncertain
+- **A43** (encounter 00021, clinical_assessment): assessment: differential; normalized_assessment: differential; certainty: provisional; basis: racing heart and dizziness; stated_by: doctor
+- **A44** (encounter 00190, medical_history.past_medical_history): procedure: hernia repair; normalized_procedure: hernia repair; timeframe: 5 years
+- **A45** (encounter 00223, procedures_and_investigations): name: chest X-ray; normalized_name: chest X-ray; type: imaging; status: planned; scheduled_datetime: 2023-04-10T10:00:00Z; requested_by: doctor
+
+## Transcripts (segment id | speaker | role | text)
+
+### Encounter 00021
+
+- SEG0001 | person_1 | NURSE | Doctor, the patient's with us now. I did the usual checks at the front, so just say when you want them.
+- SEG0002 | person_2 | DOCTOR | Thanks, that's helpful. Hello, please sit. What's been happening?
+- SEG0003 | person_3 | FAMILY_MEMBER | Morning, doctor. I'll stay and and fill in anything that's missed.
+- SEG0004 | person_2 | DOCTOR | that's fine, sit down. We'll go through it together
+- SEG0005 | person_3 | FAMILY_MEMBER | Oh, you know, we came because of breathlessness on the stairs.
+- SEG0006 | person_2 | DOCTOR | Alright, and when did that start?
+- SEG0007 | person_4 | PATIENT | well, it's been going on for ten days
+- SEG0008 | person_2 | DOCTOR | Right.
+- SEG0009 | person_4 | PATIENT | I was just going to say that the main thing is—
+- SEG0010 | person_1 | NURSE | Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+- SEG0011 | person_2 | DOCTOR | Later, thanks. Please go on.
+- SEG0012 | person_4 | PATIENT | I've had a racing heart sometimes too, for about three months. So, I've had dizziness too, for three days.
+- SEG0013 | person_2 | DOCTOR | Is it mild, moderate or severe?
+- SEG0014 | person_4 | PATIENT | Well, it feels mild to me.
+- SEG0015 | person_2 | DOCTOR | Any black stools, chest pain or weight loss?
+- SEG0016 | person_4 | PATIENT | No, no black stools, no chest pain, no weight loss. I was feeling tired at one point, but that went away on its own.
+- SEG0017 | person_2 | DOCTOR | Any heavy periods or blood in the stool at all?
+- SEG0018 | person_4 | PATIENT | Right, I haven't had heavy periods or blood in the stool, no.
+- SEG0019 | person_2 | DOCTOR | Any problems with your joints or muscles?
+- SEG0020 | person_4 | PATIENT | I move fine otherwise.
+- SEG0021 | person_2 | DOCTOR | Have you got any chronic problems?
+- SEG0022 | person_4 | PATIENT | So, I've had acid reflux for two years now.
+- SEG0023 | person_2 | DOCTOR | okay, I can see acid reflux in your file as well
+- SEG0024 | person_2 | DOCTOR | Let's go through your medication. What are you taking?
+- SEG0025 | person_3 | FAMILY_MEMBER | Hmm, he takes omeprazole, 20 milligrams, once a day.
+- SEG0026 | person_2 | DOCTOR | And for how long?
+- SEG0027 | person_3 | FAMILY_MEMBER | For two months.
+- SEG0028 | person_4 | PATIENT | Pantoprazole I don't take anymore.
+- SEG0029 | person_2 | DOCTOR | Let's talk a little about your daily life and habits.
+- SEG0030 | person_4 | PATIENT | I used to smoke but I quit five years ago. I gave up drinking about three years ago. Not really, I don't get much exercise.
+- SEG0031 | person_2 | DOCTOR | Any drug or food allergies?
+- SEG0032 | person_4 | PATIENT | hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did
+- SEG0033 | person_2 | DOCTOR | Any procedures or operations?
+- SEG0034 | person_4 | PATIENT | Well, yes, I had my gallbladder removed, in 2016.
+- SEG0035 | person_1 | NURSE | Okay, so the vitals from earlier. Saturation 96 percent, heart rate 108. Temp 37.1 degrees, respiratory rate 20, blood pressure 134 over 78.
+- SEG0036 | person_2 | DOCTOR | Okay, noted.
+- SEG0037 | person_2 | DOCTOR | Come over here and I'll have a look.
+- SEG0038 | person_2 | DOCTOR | let me press here
+- SEG0039 | person_2 | DOCTOR | Heart sounds are normal, I don't hear any murmur.
+- SEG0040 | person_2 | DOCTOR | okay, stay still while I have a look
+- SEG0041 | person_2 | DOCTOR | Your eyelids are pale inside.
+- SEG0042 | person_2 | DOCTOR | okay, you can sit up so, based on the history and and the examination, it fits best with anaemia of some kind a thyroid problem is also on my list
+- SEG0043 | person_4 | PATIENT | uh, is this something I'll have for good?
+- SEG0044 | person_2 | DOCTOR | nothing I've seen today points to an emergency. It looks like anaemia of some kind, but I'd like to confirm. Let's get a full blood count, for pallor
+- SEG0045 | person_4 | PATIENT | does it need any preparation?
+- SEG0046 | person_2 | DOCTOR | I'll request a ferritin level, it'll help with possible iron deficiency.
+- SEG0047 | person_4 | PATIENT | okay, that's fine
+- SEG0048 | person_2 | DOCTOR | What I'm giving you is ferrous sulfate, 200 milligrams, once a day, for three months. That should help with possible iron deficiency. Iron can darken the stools and bother the stomach, so take it after food. Cut down on salt and fried food for now, it really does make a difference. A vitamin B12 level is something we might do if this doesn't improve next month.
+- SEG0049 | person_2 | DOCTOR | keep an eye out, and if the symptoms get worse, call us the same day or go to emergency. Let's review you after the results are back. Okay, we're done for today. Take care
+- SEG0050 | person_4 | PATIENT | I appreciate it, uh, doctor
+- SEG0051 | person_2 | DOCTOR | All the best.
+
+### Encounter 00034
+
+- SEG0001 | person_1 | PATIENT | Excuse me, doctor, should I sit here?
+- SEG0002 | person_2 | DOCTOR | Of course, put it down anywhere. So, how can I help?
+- SEG0003 | person_3 | CAREGIVER | doctor, I've come along because I know the history, if it helps
+- SEG0004 | person_2 | DOCTOR | Of course, please stay. It's helpful to have you here.
+- SEG0005 | person_3 | CAREGIVER | We came because of yellow eyes.
+- SEG0006 | person_2 | DOCTOR | Let me measure a few things.
+- SEG0007 | person_2 | DOCTOR | Hold still for me...
+- SEG0008 | person_2 | DOCTOR | okay: temperature 36.9, BP is 120 over 77, pulse 76, saturation 99 percent
+- SEG0009 | person_1 | PATIENT | is that normal?
+- SEG0010 | person_2 | DOCTOR | That's fine, we'll come to it. And when did that start?
+- SEG0011 | person_1 | PATIENT | For about a month, I'd say.
+- SEG0012 | person_2 | DOCTOR | anything that tends to go along with it?
+- SEG0013 | person_1 | PATIENT | It usually comes with itching all over. Oh, and pale stools. That's been about the same, about two weeks. The itching all over? That's been for five days. There was a dull ache on the right side of the tummy, yes, but that went away.
+- SEG0014 | person_2 | DOCTOR | Let me check a few things. Any vomiting blood, swelling of the tummy, confusion or black stools?
+- SEG0015 | person_1 | PATIENT | No vomiting blood, swelling of the tummy, confusion or black stools, none of it.
+- SEG0016 | person_2 | DOCTOR | how about fever?
+- SEG0017 | person_1 | PATIENT | I haven't noticed any fever.
+- SEG0018 | person_2 | DOCTOR | your breathing, any trouble there?
+- SEG0019 | person_1 | PATIENT | No problems with breathing.
+- SEG0020 | person_2 | DOCTOR | How's your diet?
+- SEG0021 | person_1 | PATIENT | I'm mostly vegetarian
+- SEG0022 | person_2 | DOCTOR | are you living with family?
+- SEG0023 | person_1 | PATIENT | I stay with my daughter and her family.
+- SEG0024 | person_2 | DOCTOR | moving on to your background, any past medical history?
+- SEG0025 | person_1 | PATIENT | I've had high cholesterol for five years now
+- SEG0026 | person_2 | DOCTOR | Hm, okay.
+- SEG0027 | person_1 | PATIENT | Um, I have diabetes, for two years.
+- SEG0028 | person_2 | DOCTOR | Yes?
+- SEG0029 | person_2 | DOCTOR | alright, diabetes, that matches what I have here
+- SEG0030 | person_2 | DOCTOR | Any previous surgeries?
+- SEG0031 | person_1 | PATIENT | No, nothing like that.
+- SEG0032 | person_2 | DOCTOR | which tablets or creams or inhalers do you use?
+- SEG0033 | person_1 | PATIENT | Atorvastatin. I take it 20 milligrams, at night.
+- SEG0034 | person_3 | CAREGIVER | Doctor, I think the last prescription for the atorvastatin was 10 milligrams. We changed it at the last visit.
+- SEG0035 | person_2 | DOCTOR | Okay. Have you got the newest prescription or the box with you?
+- SEG0036 | person_1 | PATIENT | No, I left it at home. Metformin, 500 milligrams, twice a day.
+- SEG0037 | person_2 | DOCTOR | Roughly how long on that one?
+- SEG0038 | person_1 | PATIENT | About about three months.
+- SEG0039 | person_2 | DOCTOR | Right, let me check a few things physically.
+- SEG0040 | person_2 | DOCTOR | let me look at this properly
+- SEG0041 | person_2 | DOCTOR | The whites of your eyes are yellow.
+- SEG0042 | person_1 | PATIENT | yes, doctor
+- SEG0043 | person_2 | DOCTOR | take your time, no rush
+- SEG0044 | person_2 | DOCTOR | Liver edge is just palpable and mildly tender.
+- SEG0045 | person_2 | DOCTOR | That's all I need, thank you. From what you've told me and what I found, I think we're dealing with jaundice with a cause we still need to find at this stage. It could also be a gallstone blocking the bile duct, so so we'll keep that open.
+- SEG0046 | person_1 | PATIENT | What are the chances it's something bad?
+- SEG0047 | person_2 | DOCTOR | I can't promise yet, but most people with jaundice with a cause we still need to find do well once it's treated properly. Let's book liver function tests to look into jaundice.
+- SEG0048 | person_1 | PATIENT | Mm, okay.
+- SEG0049 | person_2 | DOCTOR | I want a hepatitis screen done, that's for jaundice. I'd rather check than guess, and this is the quickest way to know more. Please avoid alcohol completely and don't take any painkillers except paracetamol, and not much of that. Let's get you seen by a liver specialist, I'll arrange the letter. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+- SEG0050 | person_1 | PATIENT | so, um, got it, thank you
+- SEG0051 | person_2 | DOCTOR | come back or go to emergency straight away if you vomit blood or become drowsy or confused
+- SEG0052 | person_1 | PATIENT | understood
+- SEG0053 | person_2 | DOCTOR | Alright, I'll see you out.
+- SEG0054 | person_1 | PATIENT | I think that's clear. Thank you for being so thorough.
+- SEG0055 | person_2 | DOCTOR | See you then.
+
+### Encounter 00039
+
+- SEG0001 | person_1 | PATIENT | Oh, hi, doctor, I brought my bag, is it fine to to leave it here?
+- SEG0002 | person_2 | DOCTOR | right on time. Sit, please. How can I help?
+- SEG0003 | person_3 | FAMILY_MEMBER | doctor, thank you for seeing us
+- SEG0004 | person_2 | DOCTOR | yes, that's no problem at all please sit
+- SEG0005 | person_3 | FAMILY_MEMBER | It's hot flushes, doctor. She didn't want to come, but I insisted.
+- SEG0006 | person_2 | DOCTOR | how long has this been going on?
+- SEG0007 | person_1 | PATIENT | probably three weeks yeah
+- SEG0008 | person_2 | DOCTOR | Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+- SEG0009 | person_1 | PATIENT | Okay, you know, so it's severe, honestly. It's worse with caffeine and warm rooms. Sorry, I know I'm rambling a bit. Hmm, I've had irregular periods too, for two days. Uh, you know, as for night sweats, I honestly can't say when that began. It might have been last month or the month before.
+- SEG0010 | person_2 | DOCTOR | Would you call it mild or bad?
+- SEG0011 | person_1 | PATIENT | It's moderate, honestly.
+- SEG0012 | person_2 | DOCTOR | let's get your blood pressure and the other basics
+- SEG0013 | person_2 | DOCTOR | Rest your hand here...
+- SEG0014 | person_2 | DOCTOR | Okay: SpO2 97 percent on room air, pulse 84, temp 36.7 degrees, pressure 122 over 75.
+- SEG0015 | person_1 | PATIENT | is that normal?
+- SEG0016 | person_2 | DOCTOR | I'll come back to those numbers
+- SEG0017 | person_2 | DOCTOR | If you're comfortable, I'll examine you now.
+- SEG0018 | person_2 | DOCTOR | I'll go gently.
+- SEG0019 | person_2 | DOCTOR | Blood pressure and pulse are fine, and there are no breast lumps on examination.
+- SEG0020 | person_2 | DOCTOR | Right, you can sit back down.
+- SEG0021 | person_2 | DOCTOR | Any bleeding after sex or breast lumps at all?
+- SEG0022 | person_1 | PATIENT | No bleeding after sex or breast lumps, none of it.
+- SEG0023 | person_2 | DOCTOR | Alright, have you had palpitations, by any chance?
+- SEG0024 | person_1 | PATIENT | um, I haven't noticed any palpitations
+- SEG0025 | person_3 | FAMILY_MEMBER | Actually, doctor, I did notice palpitations. She doesn't always say.
+- SEG0026 | person_1 | PATIENT | Okay, um, so no, I don't think I did. Maybe a little, I'm not sure.
+- SEG0027 | person_2 | DOCTOR | Alright, I'll note both what you've said and what you've noticed. Let me check a few things. Any weight loss or chest pain?
+- SEG0028 | person_1 | PATIENT | Hmm, none, as far as I know.
+- SEG0029 | person_2 | DOCTOR | Is your chest okay generally?
+- SEG0030 | person_1 | PATIENT | Uh, no, my breathing's been fine.
+- SEG0031 | person_2 | DOCTOR | Who's at home with you?
+- SEG0032 | person_1 | PATIENT | It's just me and my wife at home now.
+- SEG0033 | person_2 | DOCTOR | are you working or retired?
+- SEG0034 | person_1 | PATIENT | Retired. I stopped a few years back.
+- SEG0035 | person_2 | DOCTOR | any diagnoses you've been given before?
+- SEG0036 | person_1 | PATIENT | I've had high blood pressure for about a year now. I'd rather know what's going on than keep guessing. I have thin bones. I've had an underactive thyroid, yes.
+- SEG0037 | person_2 | DOCTOR | Right, so high blood pressure and thin bones are already on your record. We'll keep that in mind today. Do you have any allergies to medicines, food, anything at all?
+- SEG0038 | person_1 | PATIENT | I mean, years back I got hives from penicillin, so I stay away from it now.
+- SEG0039 | person_2 | DOCTOR | what medicines are you taking at the moment?
+- SEG0040 | person_1 | PATIENT | It's ramipril, 5 milligrams, maybe, every morning.
+- SEG0041 | person_2 | DOCTOR | Have you got the box or the prescription on you?
+- SEG0042 | person_1 | PATIENT | Okay, so not with me. I'll bring it next time. Alendronate, once a week for my bones.
+- SEG0043 | person_2 | DOCTOR | And what strength is that?
+- SEG0044 | person_1 | PATIENT | It's 70 milligrams. Thyronorm, 50 micrograms, every morning for my thyroid.
+- SEG0045 | person_2 | DOCTOR | So where does that leave us? The most likely explanation is perimenopausal symptoms. Anaemia is still possible.
+- SEG0046 | person_1 | PATIENT | What are the chances it's something bad?
+- SEG0047 | person_2 | DOCTOR | I can't promise yet, but most people with perimenopausal symptoms do well once it's treated properly. Stop me if I've got anything wrong. You've had hot flushes for three weeks, severe, and no breast lumps
+- SEG0048 | person_1 | PATIENT | That's it, yes.
+- SEG0049 | person_2 | DOCTOR | A bone density scan is what I'd like next, for menopause. I'm gonna order blood tests, for irregular periods. Layers of clothing, a fan by the bed, and cutting down on caffeine and spicy food can help the flushes. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Come back or go to emergency straight away if the symptoms get worse.
+- SEG0050 | person_2 | DOCTOR | okay, we're done for today take care
+- SEG0051 | person_1 | PATIENT | I think that's clear. Thank you for being so so thorough.
+- SEG0052 | person_2 | DOCTOR | Bye for now.
+
+### Encounter 00064
+
+- SEG0001 | person_1 | PATIENT | Hi, doctor, I brought my bag, is it fine to leave it here?
+- SEG0002 | person_2 | DOCTOR | no trouble at all, come in. What's been bothering you?
+- SEG0003 | person_1 | PATIENT | mainly a ring-shaped itchy patch there's a couple of other things, but that's the the main one
+- SEG0004 | person_2 | DOCTOR | how long are we talking about?
+- SEG0005 | person_1 | PATIENT | right, for four weeks, I'd say
+- SEG0006 | person_2 | DOCTOR | okay, give me more detail on it, whatever comes to mind
+- SEG0007 | person_1 | PATIENT | it happens every other day maybe a seven out of ten on a bad day and itching in the groin as well, since Monday
+- SEG0008 | person_2 | DOCTOR | does anything bring it it on or make it worse?
+- SEG0009 | person_1 | PATIENT | Yes, sweating. That makes it worse.
+- SEG0010 | person_2 | DOCTOR | are you on any tablets or medication?
+- SEG0011 | person_1 | PATIENT | it's Candid cream, twice a day
+- SEG0012 | person_2 | DOCTOR | do you have any known allergies at all?
+- SEG0013 | person_1 | PATIENT | no, none that I know of
+- SEG0014 | person_2 | DOCTOR | Any medical conditions anything you've been treated for?
+- SEG0015 | person_1 | PATIENT | No, none that I know of.
+- SEG0016 | person_2 | DOCTOR | any previous surgeries?
+- SEG0017 | person_1 | PATIENT | No nothing like that.
+- SEG0018 | person_2 | DOCTOR | Anyone in the the family with similar problems or other conditions?
+- SEG0019 | person_1 | PATIENT | My father had a stroke.
+- SEG0020 | person_2 | DOCTOR | are you working or retired?
+- SEG0021 | person_1 | PATIENT | Retired. I stopped a few years back.
+- SEG0022 | person_2 | DOCTOR | what do you do to keep active?
+- SEG0023 | person_1 | PATIENT | I cycle to work most mornings
+- SEG0024 | person_2 | DOCTOR | Nothing like fever?
+- SEG0025 | person_1 | PATIENT | Nope, no fever.
+- SEG0026 | person_2 | DOCTOR | any new partner similar rash on the scalp or pain at all?
+- SEG0027 | person_1 | PATIENT | Um, no, none of those.
+- SEG0028 | person_2 | DOCTOR | Is your chest okay generally?
+- SEG0029 | person_1 | PATIENT | no, nothing there
+- SEG0030 | person_2 | DOCTOR | Before we go on a few quick readings.
+- SEG0031 | person_2 | DOCTOR | hold still for me..
+- SEG0032 | person_2 | DOCTOR | okay: pressure 119 over 72, weight 83 kilos, saturation 97 percent and height 170 centimetres, BMI works out to 28.7, temperature 36.9, pulse is 84 beats a minute
+- SEG0033 | person_1 | PATIENT | is that okay?
+- SEG0034 | person_2 | DOCTOR | I'll explain what that means shortly
+- SEG0035 | person_2 | DOCTOR | okay a quick examination now
+- SEG0036 | person_2 | DOCTOR | Just relax, I'll be quick.
+- SEG0037 | person_2 | DOCTOR | skin between the toes is white and peeling
+- SEG0038 | person_2 | DOCTOR | Okay, finished. From what you've told me and what I found, I think we're dealing with a fungal skin infection at this stage.
+- SEG0039 | person_1 | PATIENT | I've been thinking the worst to be honest is it bad?
+- SEG0040 | person_2 | DOCTOR | Nothing I've seen today points to an emergency. It looks like a fungal skin infection. I'd like you to take fluconazole, 150 milligrams, once a week, for two weeks. You take it by mouth. That should help with fungal infection. Take care, and call us if anything changes.
+- SEG0041 | person_1 | PATIENT | okay, thank you. Bye
+
+### Encounter 00071
+
+- SEG0001 | person_1 | DOCTOR | So, morning. Just put your bag down anywhere. What made you decide to come in?
+- SEG0002 | person_2 | PATIENT | Well, I've been having swollen ankles in the evening. I wasn't sure whether to come in at all, to be honest.
+- SEG0003 | person_1 | DOCTOR | so, roughly when did it it start?
+- SEG0004 | person_2 | PATIENT | Ten days, I think... sorry, about four days, I got that wrong. My family kept telling me to get it checked
+- SEG0005 | person_1 | DOCTOR | Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+- SEG0006 | person_2 | PATIENT | I'd say every other day. Mostly moderate. A neighbour of mine said I should see someone about it.
+- SEG0007 | person_1 | DOCTOR | Any a flushed face sometimes as well?
+- SEG0008 | person_2 | PATIENT | I mean, yeah. One week, I'd say
+- SEG0009 | person_1 | DOCTOR | Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+- SEG0010 | person_2 | PATIENT | it sort of comes and goes. A five out of ten, I suppose. I did try to ignore it for a while
+- SEG0011 | person_1 | DOCTOR | has there been a heavy feeling in the legs too?
+- SEG0012 | person_2 | PATIENT | Oh, yes, since last Tuesday.
+- SEG0013 | person_1 | DOCTOR | Is it mild, moderate or severe?
+- SEG0014 | person_2 | PATIENT | Severe, I'd say.
+- SEG0015 | person_1 | DOCTOR | Let's get your blood pressure and the other basics.
+- SEG0016 | person_1 | DOCTOR | Okay, give me a moment...
+- SEG0017 | person_1 | DOCTOR | Okay: temperature is 37.0 degrees, SpO2 97 percent on room air. And blood pressure 151 over 95, pulse 88.
+- SEG0018 | person_1 | DOCTOR | I'd like to examine you now.
+- SEG0019 | person_1 | DOCTOR | let me look at this properly
+- SEG0020 | person_1 | DOCTOR | chest is clear and the neck veins aren't raised
+- SEG0021 | person_2 | PATIENT | Okay, ready.
+- SEG0022 | person_1 | DOCTOR | bear with me a second
+- SEG0023 | person_1 | DOCTOR | mild pitting swelling around both ankles, equal on both sides
+- SEG0024 | person_1 | DOCTOR | okay, finished any reduced urine, one leg more swollen than the other or chest pain at all?
+- SEG0025 | person_2 | PATIENT | Nothing like that, no.
+- SEG0026 | person_1 | DOCTOR | any calf pain?
+- SEG0027 | person_2 | PATIENT | Not that I've noticed, no calf pain.
+- SEG0028 | person_1 | DOCTOR | Is your chest okay generally?
+- SEG0029 | person_2 | PATIENT | breathing's normal
+- SEG0030 | person_1 | DOCTOR | Anything with your nerves, like weakness or numbness?
+- SEG0031 | person_2 | PATIENT | No, you know, nothing like that.
+- SEG0032 | person_1 | DOCTOR | any surgery in your history?
+- SEG0033 | person_2 | PATIENT | Uh, just a hysterectomy, about twelve years ago.
+- SEG0034 | person_1 | DOCTOR | Which tablets or creams or inhalers do you use?
+- SEG0035 | person_2 | PATIENT | I mean, I take amlodipine, once a day for my pressure
+- SEG0036 | person_1 | DOCTOR | And what strength is that?
+- SEG0037 | person_2 | PATIENT | It's 5 milligrams.
+- SEG0038 | person_1 | DOCTOR | Hm, okay. What about allergies, to to medicines or foods or anything else?
+- SEG0039 | person_2 | PATIENT | I mean, I've never been told I have allergies.
+- SEG0040 | person_1 | DOCTOR | How about exercise?
+- SEG0041 | person_2 | PATIENT | Not really, I don't get much exercise.
+- SEG0042 | person_1 | DOCTOR | Who's at home with you?
+- SEG0043 | person_2 | PATIENT | It's just me and my wife at home now.
+- SEG0044 | person_1 | DOCTOR | Anything special about your diet?
+- SEG0045 | person_2 | PATIENT | I try to avoid too much sugar
+- SEG0046 | person_1 | DOCTOR | Is there anything medical in your background?
+- SEG0047 | person_2 | PATIENT | Yes, high blood pressure.
+- SEG0048 | person_1 | DOCTOR | so, based on the history and the examination, my working impression is ankle swelling possibly from a blood pressure tablet
+- SEG0049 | person_2 | PATIENT | doctor, you know, is this dangerous?
+- SEG0050 | person_1 | DOCTOR | I understand the worry. At the moment I'd say it's ankle swelling possibly from a blood pressure tablet, and we'll watch how it goes.
+- SEG0051 | person_1 | DOCTOR | Raise your legs when you're sitting and try compression socks. We'll catch up after the results are back. Is there anything you wanted to ask?
+- SEG0052 | person_2 | PATIENT | Nothing more from me, thanks.
+
+### Encounter 00081
+
+- SEG0001 | person_1 | NURSE | Okay, doctor, we're all set in here. I'll give you the numbers when you want them.
+- SEG0002 | person_2 | DOCTOR | Okay, great. Hello, come in and sit down. How can I help?
+- SEG0003 | person_3 | FAMILY_MEMBER | Hello, doctor, I came in with them, if that's okay.
+- SEG0004 | person_2 | DOCTOR | So, absolutely, come and sit beside them.
+- SEG0005 | person_4 | PATIENT | I'm here because of morning shakiness. My family kept telling me to get it checked.
+- SEG0006 | person_2 | DOCTOR | When did it begin?
+- SEG0007 | person_4 | PATIENT | I've had it for five days.
+- SEG0008 | person_2 | DOCTOR | Okay, what's the pattern, is it there all day?
+- SEG0009 | person_4 | PATIENT | Honestly, every other day.
+- SEG0010 | person_4 | PATIENT | And the other thing I wanted to mention is that I can't really—
+- SEG0011 | person_3 | FAMILY_MEMBER | Tell the doctor about the other thing, that's what worries me.
+- SEG0012 | person_4 | PATIENT | I was getting to that!
+- SEG0013 | person_2 | DOCTOR | That's fine, one at a time. I'll ask about everything. Have you had an upset stomach in the mornings?
+- SEG0014 | person_4 | PATIENT | Yes, you know, about the same, three weeks.
+- SEG0015 | person_2 | DOCTOR | Have you had morning shakiness before, or is this the first time?
+- SEG0016 | person_4 | PATIENT | Yes, something like this happened last year, and it went away on its own.
+- SEG0017 | person_2 | DOCTOR | And what about seizures or vomiting blood?
+- SEG0018 | person_4 | PATIENT | No, no seizures, no vomiting blood. I was wanting to cut down on drinking at one point, but that went away on its own.
+- SEG0019 | person_2 | DOCTOR | Right, and what about blackouts, thoughts of harming myself or yellow eyes?
+- SEG0020 | person_4 | PATIENT | No blackouts, thoughts of harming myself or yellow eyes, none of it.
+- SEG0021 | person_2 | DOCTOR | Anything different when you pass water?
+- SEG0022 | person_4 | PATIENT | Nothing there, no.
+- SEG0023 | person_2 | DOCTOR | Any rashes or skin problems otherwise?
+- SEG0024 | person_4 | PATIENT | No rashes.
+- SEG0025 | person_2 | DOCTOR | Have you had to have anything operated on?
+- SEG0026 | person_4 | PATIENT | Um, just a lump removed from my back, years ago.
+- SEG0027 | person_2 | DOCTOR | So, are you on any tablets or medication?
+- SEG0028 | person_4 | PATIENT | It's a... um, I can't remember what it's called. It's a round yellow one.
+- SEG0029 | person_2 | DOCTOR | Do you remember what it's for?
+- SEG0030 | person_4 | PATIENT | Oh, for the reflux, I believe. My husband sets them out for me, I just take what I'm given.
+- SEG0031 | person_2 | DOCTOR | Any allergies I should know about?
+- SEG0032 | person_4 | PATIENT | Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+- SEG0033 | person_2 | DOCTOR | Any smoking?
+- SEG0034 | person_4 | PATIENT | I smoke, yes, around five a day.
+- SEG0035 | person_2 | DOCTOR | Is anyone at home with you?
+- SEG0036 | person_4 | PATIENT | I share a flat with two friends.
+- SEG0037 | person_2 | DOCTOR | Tell me about your health in general, any ongoing conditions?
+- SEG0038 | person_4 | PATIENT | I've, I've got acid reflux. I told myself I'd wait and see, and here I am.
+- SEG0039 | person_2 | DOCTOR | Anything more?
+- SEG0040 | person_4 | PATIENT | I've had high blood pressure, yes.
+- SEG0041 | person_2 | DOCTOR | Okay, I can see acid reflux in your file as well.
+- SEG0042 | person_1 | NURSE | Here are the numbers, doctor. Oxygen saturation is 98 percent, BMI works out to 23.0, pulse is 82 beats a minute, height 172 centimetres, weight 68 kilos, respiratory rate 16, blood pressure 122 over 81, temperature is 36.7 degrees.
+- SEG0043 | person_2 | DOCTOR | Good, thank you. Right, here's what I'm thinking. This looks most like alcohol use that you'd like to reduce. We shouldn't forget anxiety driving the drinking. It could also be alcohol-related liver strain, so we'll keep that open. Blood tests is what I'd like next, for alcohol use. I'll request liver function tests, it'll help with alcohol use. Plan a few alcohol-free days each week and track how much you drink.
+- SEG0044 | person_2 | DOCTOR | Let's get you seen by the alcohol support service, I'll arrange the letter. The thing that would worry me is if you have severe shaking, confusion or seizures when you cut down. If that happens, go to emergency.
+- SEG0045 | person_4 | PATIENT | Alright, I know what to look for.
+- SEG0046 | person_2 | DOCTOR | See me again in four weeks. Any last questions?
+- SEG0047 | person_4 | PATIENT | Um, you know, that's everything I wanted to ask. Thank you.
+- SEG0048 | person_2 | DOCTOR | All the best.
+
+### Encounter 00086
+
+- SEG0001 | person_1 | NURSE | All set here, doctor. Chart's updated, and I'll read the readings out when you're ready.
+- SEG0002 | person_2 | DOCTOR | Great. Hello, come in and sit down. How can I help?
+- SEG0003 | person_3 | PATIENT | I wanted to get a heavy feeling in the left arm looked at. My family kept telling me to get it checked.
+- SEG0004 | person_2 | DOCTOR | And when did that start?
+- SEG0005 | person_3 | PATIENT | It's been about a week, I'm fairly sure.
+- SEG0006 | person_2 | DOCTOR | Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+- SEG0007 | person_3 | PATIENT | Only resting, and it's not much. It's moderate, honestly. Oh, and tiredness. That's been about the same, about a week. I'd been sweating with it, but that went away.
+- SEG0008 | person_2 | DOCTOR | Any drug or food allergies?
+- SEG0009 | person_3 | PATIENT | No, none that I know of.
+- SEG0010 | person_2 | DOCTOR | Any previous surgeries?
+- SEG0011 | person_3 | PATIENT | Just a hernia repair, about five years back.
+- SEG0012 | person_2 | DOCTOR | Does anything run in the family?
+- SEG0013 | person_3 | PATIENT | My sister has thyroid problems.
+- SEG0014 | person_2 | DOCTOR | What do you do for work?
+- SEG0015 | person_3 | PATIENT | I work in an office, mostly sitting at a desk.
+- SEG0016 | person_2 | DOCTOR | Any sport or activity?
+- SEG0017 | person_3 | PATIENT | I play badminton on Sundays.
+- SEG0018 | person_2 | DOCTOR | Are you living with family?
+- SEG0019 | person_3 | PATIENT | I stay with my daughter and her family.
+- SEG0020 | person_2 | DOCTOR | Any diagnoses you've been given before?
+- SEG0021 | person_3 | PATIENT | I mean, I have high blood pressure, for nearly five years. It's a relief to finally sit down and talk about it. I did try to ignore it for a while. I have high cholesterol, for five years.
+- SEG0022 | person_2 | DOCTOR | Right, right. Right, what medicines are you taking at the moment?
+- SEG0023 | person_3 | PATIENT | Ramipril. I take it every morning for my blood pressure.
+- SEG0024 | person_2 | DOCTOR | And what strength is that?
+- SEG0025 | person_3 | PATIENT | 5 milligrams, I think that's what's on the box. I mean, I'm on something called ator... atorvastatin, 20 milligrams, maybe, at night for my cholesterol.
+- SEG0026 | person_2 | DOCTOR | Did you happen to bring the box or the paperwork?
+- SEG0027 | person_3 | PATIENT | Not with me. I'll bring it next time. Aspirin, 75 milligrams, once a day.
+- SEG0028 | person_2 | DOCTOR | Have you had any pain at rest, cough or swelling in the ankles?
+- SEG0029 | person_3 | PATIENT | I haven't had pain at rest, cough or swelling in the ankles, no.
+- SEG0030 | person_2 | DOCTOR | Did you notice any fainting?
+- SEG0031 | person_3 | PATIENT | No, no fainting.
+- SEG0032 | person_2 | DOCTOR | Any breathing difficulties apart from this?
+- SEG0033 | person_3 | PATIENT | No, my breathing's been fine.
+- SEG0034 | person_2 | DOCTOR | What about your tummy and bowels, anything unusual there?
+- SEG0035 | person_3 | PATIENT | Right, um, no, all normal there.
+- SEG0036 | person_1 | NURSE | Here are the numbers, doctor. Respiratory rate 15, temp 36.5 degrees, BP is 153 over 98. Pulse is 79 beats a minute, oxygen saturation is 97 percent.
+- SEG0037 | person_2 | DOCTOR | Okay, noted.
+- SEG0038 | person_2 | DOCTOR | Let's do the physical part now.
+- SEG0039 | person_2 | DOCTOR | Hold that position for me.
+- SEG0040 | person_2 | DOCTOR | Lungs are clear and there's no swelling in your ankles.
+- SEG0041 | person_2 | DOCTOR | Okay, finished.
+- SEG0042 | person_2 | DOCTOR | From what you've told me and what I found, I can't pin this down yet. We're looking at angina-type chest pain or gastro-oesophageal reflux.
+- SEG0043 | person_1 | NURSE | We've already done an ECG this morning, doctor.
+- SEG0044 | person_2 | DOCTOR | Alright, thanks, I'll check it. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+- SEG0045 | person_3 | PATIENT | Okay, fair enough.
+- SEG0046 | person_2 | DOCTOR | There's nothing new for me to start or arrange today. Okay, we're done for today. Take care.
+- SEG0047 | person_3 | PATIENT | I think that's clear. Thank you for being so thorough.
+
+### Encounter 00096
+
+- SEG0001 | person_1 | NURSE | Ready for you, doctor. I'll stay in case you need anything.
+- SEG0002 | person_2 | DOCTOR | Thanks. Hello, come in, sit down. What brings you in today?
+- SEG0003 | person_3 | PATIENT | I've been losing weight without trying, and and I wanted to get it checked
+- SEG0004 | person_2 | DOCTOR | how long have you had it?
+- SEG0005 | person_3 | PATIENT | It's been about a month, I'm fairly sure.
+- SEG0006 | person_2 | DOCTOR | Does it come along with anything else?
+- SEG0007 | person_3 | PATIENT | when it starts I tend to get a cough as well i've had a low fever in the evenings too, for three days
+- SEG0008 | person_2 | DOCTOR | How often does it happen?
+- SEG0009 | person_3 | PATIENT | It's on and off. About cough, I'd say on and off.
+- SEG0010 | person_2 | DOCTOR | Any diarrhoea or chest pain?
+- SEG0011 | person_3 | PATIENT | No, nothing there.
+- SEG0012 | person_2 | DOCTOR | Have you noticed blood in the stool, shortness of breath or coughing up blood?
+- SEG0013 | person_3 | PATIENT | I haven't had blood in the stool, shortness of breath or coughing up blood, no
+- SEG0014 | person_2 | DOCTOR | any pins and needles or loss of strength anywhere?
+- SEG0015 | person_3 | PATIENT | No, nothing like that.
+- SEG0016 | person_2 | DOCTOR | How are your joints, any aches elsewhere?
+- SEG0017 | person_3 | PATIENT | No, nothing there.
+- SEG0018 | person_2 | DOCTOR | What about your general health, any conditions you're being treated for?
+- SEG0019 | person_3 | PATIENT | I've, I've had diabetes for five years now i'd rather not end up on lots of tablets if I can avoid it i have an underactive thyroid. Thin bones, for five years
+- SEG0020 | person_2 | DOCTOR | Hm, okay. Yes, an underactive thyroid and thin bones are known to us, good to have that clear. Any drug or food allergies?
+- SEG0021 | person_3 | PATIENT | Oh, no, no allergies to anything.
+- SEG0022 | person_2 | DOCTOR | Tell me what you take day to day.
+- SEG0023 | person_3 | PATIENT | I'm on Glycomet, twice a day for my sugar.
+- SEG0024 | person_2 | DOCTOR | How much do you take?
+- SEG0025 | person_3 | PATIENT | It's 500 milligrams. It's Thyronorm, every morning.
+- SEG0026 | person_2 | DOCTOR | How much do you take?
+- SEG0027 | person_3 | PATIENT | it's 50 micrograms hmm, I take alendronate, 70 milligrams, once a week for my bones
+- SEG0028 | person_1 | NURSE | Doctor, our chart from the last visit lists it as 35 milligrams.
+- SEG0029 | person_2 | DOCTOR | Hm, that's different. Is the latest prescription anywhere near you?
+- SEG0030 | person_3 | PATIENT | no, I left it at home i was on glimepiride before i stopped taking it
+- SEG0031 | person_2 | DOCTOR | so, who do you live with?
+- SEG0032 | person_3 | PATIENT | I live with my family, my husband and two kids.
+- SEG0033 | person_2 | DOCTOR | What's your diet like?
+- SEG0034 | person_3 | PATIENT | I eat out quite a lot, to be honest.
+- SEG0035 | person_1 | NURSE | Here are the numbers, doctor. Temperature is 38.8 degrees, respiratory rate 18, BP is 123 over 66, pulse is 89 beats a minute, oxygen saturation is 98 percent.
+- SEG0036 | person_2 | DOCTOR | Thanks.
+- SEG0037 | person_2 | DOCTOR | Okay, a quick examination now.
+- SEG0038 | person_3 | PATIENT | Yes, doctor.
+- SEG0039 | person_2 | DOCTOR | Just relax, I'll be quick.
+- SEG0040 | person_2 | DOCTOR | Air entry is a bit reduced at the top of the right lung.
+- SEG0041 | person_2 | DOCTOR | Almost done with this part.
+- SEG0042 | person_2 | DOCTOR | I can feel a a couple of small glands in your neck, not tender.
+- SEG0043 | person_2 | DOCTOR | All done, you can get dressed.
+- SEG0044 | person_2 | DOCTOR | Okay, so my impression is this: I think we're dealing with an infection or something chronic going on, I can't say what yet at this stage. We shouldn't forget a thyroid problem. Let me repeat that back to make sure. You've been losing weight without trying for about a month, and no shortness of breath or coughing up blood.
+- SEG0045 | person_3 | PATIENT | That's it, yes.
+- SEG0046 | person_2 | DOCTOR | I want a sputum test done, that's for chronic cough.
+- SEG0047 | person_3 | PATIENT | does it need any preparation?
+- SEG0048 | person_2 | DOCTOR | I want a chest X-ray done, that's for weight loss and cough weigh yourself once a week at the same time and note it down try to get to bed and wake up at the same time each day, and keep your phone away from the bed i'll also refer you to the chest clinic and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+- SEG0049 | person_3 | PATIENT | Oh, got it, thank you.
+- SEG0050 | person_2 | DOCTOR | Book a review after the results are back. Before we finish, can you repeat the plan back to me?
+- SEG0051 | person_3 | PATIENT | So, I come back after the results are back. Is that right?
+- SEG0052 | person_2 | DOCTOR | Yes, exactly right. Is there anything you wanted to ask?
+- SEG0053 | person_3 | PATIENT | Thanks so much, doctor.
+
+### Encounter 00119
+
+- SEG0001 | person_1 | PATIENT | hi, doctor long queue outside, but here I am
+- SEG0002 | person_2 | DOCTOR | Yes, come in, take a a seat. What can I do for you today?
+- SEG0003 | person_3 | CAREGIVER | doctor, thank you for seeing us
+- SEG0004 | person_2 | DOCTOR | please do. Extra information is always welcome
+- SEG0005 | person_1 | PATIENT | Mainly sneezing fits. There's a couple of other things, but that's the main one.
+- SEG0006 | person_2 | DOCTOR | How long have you had it?
+- SEG0007 | person_1 | PATIENT | it's been going on for about three months
+- SEG0008 | person_2 | DOCTOR | can you describe it a bit more for me? How strong it is, what the pattern is, what helps
+- SEG0009 | person_1 | PATIENT | I'd call it severe. Dust definitely sets it off. It's a relief to finally sit down and talk about it.
+- SEG0010 | person_2 | DOCTOR | any a runny nose as well?
+- SEG0011 | person_1 | PATIENT | Yes, uh, for three weeks. There's itchy watery eyes as well. Um, as for itchy watery eyes, it feels mild to me.
+- SEG0012 | person_2 | DOCTOR | any drug or food allergies?
+- SEG0013 | person_1 | PATIENT | Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+- SEG0014 | person_2 | DOCTOR | right have you ever been under the knife?
+- SEG0015 | person_1 | PATIENT | yes, I had a C-section, about ten years ago
+- SEG0016 | person_2 | DOCTOR | Any diagnoses you've been given before?
+- SEG0017 | person_1 | PATIENT | I have eczema. I've had asthma for five years now. I took the morning off to come in today. I've got acid reflux
+- SEG0018 | person_2 | DOCTOR | and apart from that?
+- SEG0019 | person_2 | DOCTOR | right so acid reflux is already on your record. We'll keep that in mind today. And And your work?
+- SEG0020 | person_1 | PATIENT | I drive a delivery van all day
+- SEG0021 | person_2 | DOCTOR | Anything special about your diet?
+- SEG0022 | person_1 | PATIENT | I try to avoid too much sugar.
+- SEG0023 | person_2 | DOCTOR | alright, what about family history, any illnesses that run in the family?
+- SEG0024 | person_1 | PATIENT | okay, so my brother has asthma. So, my father had a heart attack
+- SEG0025 | person_2 | DOCTOR | Which tablets or creams or inhalers do you use?
+- SEG0026 | person_1 | PATIENT | it's hydrocortisone cream when needed. It's Asthalin inhaler when needed for my asthma
+- SEG0027 | person_3 | CAREGIVER | It's meant to be when needed, though I don't see she take it every time.
+- SEG0028 | person_1 | PATIENT | it's pantoprazole 40 milligrams before breakfast for my acidity. Cetirizine 10 milligrams when it flares
+- SEG0029 | person_2 | DOCTOR | Okay. Any wheezing, shortness of breath, loss of smell or rash at all?
+- SEG0030 | person_1 | PATIENT | oh, no wheezing, shortness of breath, loss of smell or rash, none of it
+- SEG0031 | person_2 | DOCTOR | Any facial pain?
+- SEG0032 | person_1 | PATIENT | nope no facial pain
+- SEG0033 | person_2 | DOCTOR | How about fever?
+- SEG0034 | person_1 | PATIENT | nope, you know, no fever
+- SEG0035 | person_3 | CAREGIVER | Um, actually, doctor, I did notice fever. She doesn't always say.
+- SEG0036 | person_1 | PATIENT | No you know I don't think I did. Maybe a little I'm not sure.
+- SEG0037 | person_2 | DOCTOR | Alright, I'll note both what you've said and what you've noticed. On the cardiac side, anything I should know?
+- SEG0038 | person_1 | PATIENT | My heart's been fine, as far as I know.
+- SEG0039 | person_2 | DOCTOR | let me measure a few things
+- SEG0040 | person_2 | DOCTOR | just relax your arm..
+- SEG0041 | person_2 | DOCTOR | okay: pressure 125 over 70, respiratory rate 14. And temperature 36.8, pulse is 75 beats a minute, SpO2 98 percent on room air
+- SEG0042 | person_1 | PATIENT | is that that okay?
+- SEG0043 | person_2 | DOCTOR | I'll interpret it once I've examined you
+- SEG0044 | person_2 | DOCTOR | let's do the the physical part now
+- SEG0045 | person_1 | PATIENT | sure
+- SEG0046 | person_2 | DOCTOR | Alright, tell me if anything hurts.
+- SEG0047 | person_2 | DOCTOR | Chest is clear, no wheeze.
+- SEG0048 | person_1 | PATIENT | alright
+- SEG0049 | person_2 | DOCTOR | Let me press here.
+- SEG0050 | person_2 | DOCTOR | the inside of your nose is pale and swollen
+- SEG0051 | person_2 | DOCTOR | Good, that's the examination.
+- SEG0052 | person_2 | DOCTOR | from what you've told me and and what I found, I think we're dealing with allergic rhinitis at this stage a viral cold is also on my list
+- SEG0053 | person_1 | PATIENT | I've been thinking the worst to be honest. Is it bad?
+- SEG0054 | person_2 | DOCTOR | nothing I've seen today points to an emergency it looks like allergic rhinitis stop me if I've got anything wrong you've had sneezing fits for about three months severe and no facial pain
+- SEG0055 | person_1 | PATIENT | I mean yes you've got it.
+- SEG0056 | person_2 | DOCTOR | I don't need to add any tests or treatment at this point. That's it on my side. Anything unclear?
+- SEG0057 | person_1 | PATIENT | okay, so I appreciate it, doctor
+- SEG0058 | person_2 | DOCTOR | Alright, goodbye.
+
+### Encounter 00143
+
+- SEG0001 | person_1 | NURSE | Doctor, this one's ready for you. Everything's on the chart, but I'll go through it.
+- SEG0002 | person_2 | DOCTOR | Thank you. Right, hello, what's the problem?
+- SEG0003 | person_3 | PATIENT | So the thing is, I've got severe pain in my right side that comes in waves. It's the not knowing that gets to me.
+- SEG0004 | person_2 | DOCTOR | Alright, roughly when did it start?
+- SEG0005 | person_3 | PATIENT | Okay, so it's been two weeks now.
+- SEG0006 | person_2 | DOCTOR | How would you describe it, mild, moderate, severe?
+- SEG0007 | person_3 | PATIENT | It's severe, honestly. There's nausea as well.
+- SEG0008 | person_2 | DOCTOR | Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+- SEG0009 | person_3 | PATIENT | Oh, it's a couple of times a week. Pretty severe, if I'm being honest. I've also had restlessness, I can't sit still, for three days.
+- SEG0010 | person_2 | DOCTOR | What about allergies, to medicines or foods or anything else?
+- SEG0011 | person_3 | PATIENT | No allergies that I know of, no.
+- SEG0012 | person_2 | DOCTOR | Do you have any medical conditions, anything you've been treated for?
+- SEG0013 | person_3 | PATIENT | Hmm, um, I've had gout for five years now. Yes, heart disease.
+- SEG0014 | person_2 | DOCTOR | Okay, I can see gout in your file as well.
+- SEG0015 | person_2 | DOCTOR | Are you living with family?
+- SEG0016 | person_3 | PATIENT | I stay with my daughter and her family.
+- SEG0017 | person_2 | DOCTOR | Do you exercise at all?
+- SEG0018 | person_3 | PATIENT | I go to the gym a couple of times a week.
+- SEG0019 | person_2 | DOCTOR | Let's go through your medication. What are you taking?
+- SEG0020 | person_3 | PATIENT | Allopurinol, 100 milligrams, once a day. I'm supposed to take it regularly, but I don't always manage. Clopidogrel. I take it once a day.
+- SEG0021 | person_2 | DOCTOR | So, and what strength is that?
+- SEG0022 | person_3 | PATIENT | 75 milligrams, I think that's what's on the box.
+- SEG0023 | person_2 | DOCTOR | Okay, so. Any surgery in your history?
+- SEG0024 | person_3 | PATIENT | Just a bypass operation, six years ago.
+- SEG0025 | person_2 | DOCTOR | Does anything run in the family?
+- SEG0026 | person_3 | PATIENT | My sister has thyroid problems.
+- SEG0027 | person_2 | DOCTOR | Any previous kidney stones, testicular pain or burning when passing urine at all?
+- SEG0028 | person_3 | PATIENT | No, uh, no previous kidney stones, testicular pain or burning when passing urine.
+- SEG0029 | person_2 | DOCTOR | Any difficulty passing urine or vomiting at all?
+- SEG0030 | person_3 | PATIENT | Hmm, I haven't had difficulty passing urine or vomiting, no.
+- SEG0031 | person_2 | DOCTOR | Right, anything with your heart, like skipped beats or fainting?
+- SEG0032 | person_3 | PATIENT | My heart's been fine, as far as I know.
+- SEG0033 | person_2 | DOCTOR | Your breathing, any trouble there?
+- SEG0034 | person_3 | PATIENT | Breathing's normal.
+- SEG0035 | person_1 | NURSE | Here are the numbers, doctor. BMI works out to 30.1, temp 36.9 degrees, weight 79 kilos. Blood pressure 131 over 78, respiratory rate 20, oxygen saturation is 99 percent, height 162 centimetres, heart rate 116.
+- SEG0036 | person_2 | DOCTOR | Right, good, thank you.
+- SEG0037 | person_2 | DOCTOR | Let me examine, it won't take long.
+- SEG0038 | person_3 | PATIENT | Fine.
+- SEG0039 | person_2 | DOCTOR | Bear with me a second.
+- SEG0040 | person_2 | DOCTOR | There's tenderness in the right loin when I tap, and your tummy is soft.
+- SEG0041 | person_2 | DOCTOR | Good, that's the examination. Having listened and examined, it fits best with a kidney stone. Another possibility is a urine infection. An ultrasound of the kidneys is what I'd like next, for flank pain. The result will help us decide whether anything more is needed. Let's use tamsulosin, 0.4 milligrams, at night, for two weeks. It's for stone passage.
+- SEG0042 | person_2 | DOCTOR | Drink three litres of water a day and try to strain your urine so we can catch the stone if it passes. I'd like you to see the urology team as well, and I'll write the referral. Please don't wait if you get a fever or can't pass urine at all. That's when to be seen urgently. I'd like to see you again after the scan.
+- SEG0043 | person_3 | PATIENT | Yeah, I'll make the appointment on my way out.
+- SEG0044 | person_2 | DOCTOR | Okay, I think we're finished. Is everything clear?
+- SEG0045 | person_3 | PATIENT | Uh, I appreciate it, doctor.
+- SEG0046 | person_2 | DOCTOR | See you then.
+
+### Encounter 00147
+
+- SEG0001 | person_1 | NURSE | Doctor, the patient's with us now. I did the usual checks at the front, so just say when you want them.
+- SEG0002 | person_2 | DOCTOR | Perfect, thanks. Hello there, so what's the trouble?
+- SEG0003 | person_3 | CAREGIVER | Hmm, you know, hello, doctor, I came in with them, if that's okay.
+- SEG0004 | person_2 | DOCTOR | That's fine, sit down. We'll go through it together.
+- SEG0005 | person_4 | PATIENT | Well, um, I've been having headaches for a while.
+- SEG0006 | person_2 | DOCTOR | What medicines do you take regularly?
+- SEG0007 | person_4 | PATIENT | It's a... um, um, I can't remember what it's called. It's a round yellow one.
+- SEG0008 | person_2 | DOCTOR | Do you remember what it's for?
+- SEG0009 | person_4 | PATIENT | For my pressure, I believe. My wife sets them out for me, I just take what I'm given. It's alendronate, 70 milligrams, maybe, once a week.
+- SEG0010 | person_2 | DOCTOR | Did you happen to bring the box or the paperwork?
+- SEG0011 | person_4 | PATIENT | Right, not with me. I'll bring it next time. Spironolactone, 25 milligrams, once a day for my heart. It's paracetamol, when it hurts.
+- SEG0012 | person_2 | DOCTOR | Do you know the dose?
+- SEG0013 | person_4 | PATIENT | 500 milligrams.
+- SEG0014 | person_2 | DOCTOR | Is that long-standing?
+- SEG0015 | person_4 | PATIENT | For about a year. I was on losartan before. I stopped taking it.
+- SEG0016 | person_2 | DOCTOR | How far back does it go?
+- SEG0017 | person_4 | PATIENT | Around two weeks, I think.
+- SEG0018 | person_3 | CAREGIVER | It was closer to three weeks, you know, doctor.
+- SEG0019 | person_2 | DOCTOR | Okay, so roughly two to three weeks. Is that right?
+- SEG0020 | person_4 | PATIENT | Yeah, yes, somewhere around that.
+- SEG0021 | person_2 | DOCTOR | Okay, give me more detail on it, whatever comes to mind.
+- SEG0022 | person_4 | PATIENT | Uh, I'd say severe. It settles a little with painkillers. It's worse with coughing. I'd say every other day.
+- SEG0023 | person_2 | DOCTOR | Does it come along with anything else?
+- SEG0024 | person_4 | PATIENT | Um, when it starts I tend to get neck tightness as well.
+- SEG0025 | person_4 | PATIENT | Well, I was just going to say that the main thing is—
+- SEG0026 | person_1 | NURSE | Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+- SEG0027 | person_2 | DOCTOR | Later, thanks. Please go on. What about occasional nausea, have you noticed that?
+- SEG0028 | person_4 | PATIENT | Yes, uh, for three weeks. As for occasional nausea, maybe a eight out of ten on a bad day. It happens a couple of times a week. I've had blurry vision at times too, you know, for one week. Okay, so the neck tightness? That's been since last Tuesday. I mean, about neck tightness, it comes and goes.
+- SEG0029 | person_2 | DOCTOR | Have you had headaches for a while before, or is this the first time?
+- SEG0030 | person_4 | PATIENT | Hmm, a bit, last winter. It settled by itself back then.
+- SEG0031 | person_2 | DOCTOR | And what about jaw pain on chewing, head injury or fever?
+- SEG0032 | person_4 | PATIENT | Well, no jaw pain on chewing, head injury or fever, none of it.
+- SEG0033 | person_2 | DOCTOR | Did you get confusion, weakness or seizures?
+- SEG0034 | person_4 | PATIENT | No, no confusion, weakness or seizures.
+- SEG0035 | person_2 | DOCTOR | Anything unusual with passing urine?
+- SEG0036 | person_4 | PATIENT | No, that's all fine.
+- SEG0037 | person_2 | DOCTOR | Before I prescribe anything, any allergies? I ask because it helps me narrow things down.
+- SEG0038 | person_4 | PATIENT | No allergies.
+- SEG0039 | person_2 | DOCTOR | Okay, do you get any exercise?
+- SEG0040 | person_4 | PATIENT | I walk for about half an hour most days.
+- SEG0041 | person_2 | DOCTOR | Are you living with family?
+- SEG0042 | person_4 | PATIENT | I stay with my daughter and her family.
+- SEG0043 | person_2 | DOCTOR | What about family history, any illnesses that run in the family?
+- SEG0044 | person_4 | PATIENT | My brother has asthma.
+- SEG0045 | person_2 | DOCTOR | Right, do you have any medical conditions, anything you've been treated for?
+- SEG0046 | person_4 | PATIENT | High blood pressure, for nearly five years. I've got thin bones. I've had heart failure for about ten years now.
+- SEG0047 | person_2 | DOCTOR | Anything more?
+- SEG0048 | person_1 | NURSE | Here are the numbers, doctor. Temperature 36.7, respiratory rate 14. Blood pressure 121 over 69, saturation 98 percent, pulse 69.
+- SEG0049 | person_2 | DOCTOR | Right, good, thank you.
+- SEG0050 | person_2 | DOCTOR | I'll examine you now, bear with me.
+- SEG0051 | person_4 | PATIENT | Okay.
+- SEG0052 | person_2 | DOCTOR | Almost done with this part.
+- SEG0053 | person_2 | DOCTOR | Visual fields are full to confrontation and the optic discs look normal.
+- SEG0054 | person_4 | PATIENT | Okay.
+- SEG0055 | person_2 | DOCTOR | Let me just check something.
+- SEG0056 | person_2 | DOCTOR | Power and reflexes are equal on both sides.
+- SEG0057 | person_2 | DOCTOR | Okay, you can sit up. Putting it all together, I don't have a clear answer today: a headache disorder of uncertain type is possible, and so is a secondary headache we should exclude.
+- SEG0058 | person_4 | PATIENT | Yeah, is it something serious, doctor?
+- SEG0059 | person_2 | DOCTOR | It's reasonable to be concerned, but right now a headache disorder of uncertain type is my leading thought, not anything worse. I think an MRI of the brain makes sense here, for headaches with visual symptoms.
+- SEG0060 | person_4 | PATIENT | That sounds sensible.
+- SEG0061 | person_2 | DOCTOR | I think an eye pressure check makes sense here, for headache with blurred vision. Note down each headache with the date, time and what you were doing. Let's get you seen by a neurologist, I'll arrange the letter. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+- SEG0062 | person_4 | PATIENT | Understood.
+- SEG0063 | person_2 | DOCTOR | I'll want another look after the scan. Call the clinic if you need us.
+- SEG0064 | person_4 | PATIENT | Right, thanks so much, doctor.
+- SEG0065 | person_2 | DOCTOR | Goodbye.
+
+### Encounter 00151
+
+- SEG0001 | person_1 | PATIENT | Uh, sorry I'm a few minutes behind, doctor.
+- SEG0002 | person_2 | DOCTOR | So, no trouble at all, come in. What's been bothering you?
+- SEG0003 | person_1 | PATIENT | Honestly, it's a fever for days, and my family pushed me to come. I wasn't sure whether to come in at all, to be honest. I kept putting it off, which I know isn't sensible.
+- SEG0004 | person_2 | DOCTOR | when did you first notice it?
+- SEG0005 | person_1 | PATIENT | it's been about two weeks now i did try to ignore it for a while
+- SEG0006 | person_2 | DOCTOR | Does it it happen all the time or in spells?
+- SEG0007 | person_1 | PATIENT | I'd say on and off.
+- SEG0008 | person_2 | DOCTOR | how much is it bothering you?
+- SEG0009 | person_1 | PATIENT | mostly severe
+- SEG0010 | person_2 | DOCTOR | Anything that tends to go along with it?
+- SEG0011 | person_1 | PATIENT | A bad headache goes along with it, most of the time. The bad headache? That's been for two days. I've also had constipation, since yesterday.
+- SEG0012 | person_2 | DOCTOR | Right, any jaundice, blood in the stool, rash or burning when passing urine at all?
+- SEG0013 | person_1 | PATIENT | no, nothing there
+- SEG0014 | person_2 | DOCTOR | what about cough?
+- SEG0015 | person_1 | PATIENT | definitely no cough
+- SEG0016 | person_2 | DOCTOR | Ah. How about your heart, any problems like that?
+- SEG0017 | person_1 | PATIENT | I mean, you know, no, nothing with my heart.
+- SEG0018 | person_2 | DOCTOR | okay, any procedures or operations?
+- SEG0019 | person_1 | PATIENT | Just my tonsils out, when I was a child.
+- SEG0020 | person_2 | DOCTOR | Anyone in the family with similar problems or other conditions?
+- SEG0021 | person_1 | PATIENT | my brother has asthma
+- SEG0022 | person_2 | DOCTOR | Tell me about your health in general, any ongoing conditions?
+- SEG0023 | person_1 | PATIENT | Diabetes, for nearly five years.
+- SEG0024 | person_2 | DOCTOR | Okay, I can see diabetes in your file as well.
+- SEG0025 | person_2 | DOCTOR | What's your current medication list?
+- SEG0026 | person_1 | PATIENT | Glimepiride, 2 milligrams, before breakfast for my sugar. Dolo. I take it 650 milligrams, when I get the fever.
+- SEG0027 | person_2 | DOCTOR | Now some background about your lifestyle.
+- SEG0028 | person_1 | PATIENT | I gave up drinking about three years ago. I used to smoke but I quit five years ago. I go to the gym a couple of times a week. Mostly home-cooked food, rice and vegetables. I work in an office, mostly sitting at a desk.
+- SEG0029 | person_2 | DOCTOR | Before we go on, a few quick readings.
+- SEG0030 | person_2 | DOCTOR | Almost there...
+- SEG0031 | person_2 | DOCTOR | Okay: pulse 90, SpO2 98 percent on room air, BP is 122 over 69. And temperature 38.7, respiratory rate 18.
+- SEG0032 | person_1 | PATIENT | Is that alright, you know, doctor?
+- SEG0033 | person_2 | DOCTOR | I'll explain what that means shortly.
+- SEG0034 | person_2 | DOCTOR | okay, I need to examine you for this
+- SEG0035 | person_1 | PATIENT | sure
+- SEG0036 | person_2 | DOCTOR | Almost done with this part.
+- SEG0037 | person_2 | DOCTOR | I can't feel your liver or spleen enlarged.
+- SEG0038 | person_2 | DOCTOR | Okay, finished. Putting it all together, I'd lean towards typhoid fever, which we need to confirm.
+- SEG0039 | person_1 | PATIENT | Is it something serious, doctor?
+- SEG0040 | person_2 | DOCTOR | It's reasonable to be concerned, but right now typhoid fever, which we need to confirm is my leading thought, not anything worse. I think a full blood count makes sense here, for fever.
+- SEG0041 | person_1 | PATIENT | How long does that take?
+- SEG0042 | person_2 | DOCTOR | I think blood cultures makes sense here, for prolonged fever. Eat only home-cooked food and drink boiled or bottled water while this is going on. Ask me anything before you go.
+- SEG0043 | person_1 | PATIENT | Thanks, um, that was helpful.
+
+### Encounter 00173
+
+- SEG0001 | person_1 | NURSE | Doctor, I've brought them through. The observations are done, whenever you need them.
+- SEG0002 | person_2 | DOCTOR | Thank you. Good morning, tell me what's been going on.
+- SEG0003 | person_3 | FAMILY_MEMBER | Hello, doctor. I hope it's alright if I stay in for this.
+- SEG0004 | person_2 | DOCTOR | Good, that'll be useful. Pull up a chair.
+- SEG0005 | person_4 | PATIENT | I've been dealing with heartburn.
+- SEG0006 | person_2 | DOCTOR | Okay, give me more detail on it, whatever comes to mind.
+- SEG0007 | person_4 | PATIENT | Maybe a five out of ten on a bad day. Antacids helps a bit. It happens a few times a day. It's worse with lying down and big meals.
+- SEG0008 | person_2 | DOCTOR | Any food coming back up as well?
+- SEG0009 | person_4 | PATIENT | Yes, I have. With food coming back up, it's worse with bending over. Oh, and chest discomfort after eating.
+- SEG0010 | person_2 | DOCTOR | Right, how intense does it get?
+- SEG0011 | person_4 | PATIENT | I'd call it severe. I mean, I did have a cough at night at one point, but that's gone now.
+- SEG0012 | person_2 | DOCTOR | And what about black stools, vomiting blood, weight loss or anaemia?
+- SEG0013 | person_4 | PATIENT | No, no black stools, vomiting blood, weight loss or anaemia.
+- SEG0014 | person_2 | DOCTOR | Alright, on the cardiac side, anything I should know?
+- SEG0015 | person_4 | PATIENT | No, that's been fine.
+- SEG0016 | person_2 | DOCTOR | Now some background about your lifestyle.
+- SEG0017 | person_4 | PATIENT | I've never smoked. A beer or two most evenings, to be honest. Yes, I'm a nurse on a busy ward. Yes, I live on my own. I play badminton on Sundays.
+- SEG0018 | person_2 | DOCTOR | Do you have any allergies to medicines, food, anything at all?
+- SEG0019 | person_4 | PATIENT | No, nothing I'm aware of.
+- SEG0020 | person_2 | DOCTOR | Any medication at the moment, including things from the pharmacy?
+- SEG0021 | person_4 | PATIENT | I take amlodipine, 5 milligrams, once a day.
+- SEG0022 | person_3 | FAMILY_MEMBER | I mean, that's what's prescribed, but I'm not sure she takes it every day.
+- SEG0023 | person_4 | PATIENT | I take Seretide inhaler, twice a day for my asthma. Before this I was on losartan; that's been stopped.
+- SEG0024 | person_2 | DOCTOR | Do you have any medical conditions, anything you've been treated for?
+- SEG0025 | person_4 | PATIENT | Okay, so I've had high blood pressure, yes. I've, I've got acid reflux.
+- SEG0026 | person_2 | DOCTOR | And then?
+- SEG0027 | person_4 | PATIENT | So, I have asthma, for five years.
+- SEG0028 | person_2 | DOCTOR | Sure. Right, so high blood pressure is already on your record. We'll keep that in mind today. Have you had to have anything operated on?
+- SEG0029 | person_4 | PATIENT | Yes, I had my gallbladder removed, in 2016.
+- SEG0030 | person_2 | DOCTOR | Any relatives with health problems I should be aware of?
+- SEG0031 | person_4 | PATIENT | My mother has diabetes.
+- SEG0032 | person_1 | NURSE | Okay, so the vitals from earlier. Pulse is 84 beats a minute, pressure 124 over 76, saturation 97 percent.
+- SEG0033 | person_2 | DOCTOR | Thanks.
+- SEG0034 | person_2 | DOCTOR | Let's do the physical part now.
+- SEG0035 | person_2 | DOCTOR | Okay, take your time, no rush.
+- SEG0036 | person_2 | DOCTOR | Tummy is soft and non-tender.
+- SEG0037 | person_2 | DOCTOR | Good, that's the examination.
+- SEG0038 | person_2 | DOCTOR | Okay, so my impression is this: I'm honestly not certain yet. It could be gastro-oesophageal reflux, or it might be gastritis.
+- SEG0039 | person_4 | PATIENT | I've been thinking the worst, to be honest. Is it bad?
+- SEG0040 | person_2 | DOCTOR | I can't promise yet, but most people with gastro-oesophageal reflux do well once it's treated properly. So, to recap quickly. You've had heartburn, and no black stools or anaemia.
+- SEG0041 | person_4 | PATIENT | Oh, that's what happened, yes.
+- SEG0042 | person_1 | NURSE | We've already done an ECG this morning, doctor.
+- SEG0043 | person_2 | DOCTOR | Right, thanks, I'll check it. I think an upper endoscopy makes sense here, for persistent reflux. It's a routine test and it'll give us a much clearer picture. Let's use esomeprazole, 40 milligrams, before breakfast, for eight weeks. You take it by mouth. That should help with reflux. It's a commonly used medicine and most people tolerate it well.
+- SEG0044 | person_4 | PATIENT | Should I keep taking it if I feel better?
+- SEG0045 | person_2 | DOCTOR | Smaller dinners, earlier in the evening, and prop up the head of the bed with a couple of extra pillows. Don't skip meals, and try to eat smaller portions more often through the day. I'd like you back in eight weeks.
+- SEG0046 | person_4 | PATIENT | Good, I'll come back then.
+- SEG0047 | person_2 | DOCTOR | Thanks for coming in.
+- SEG0048 | person_4 | PATIENT | Alright, thanks. Bye for now.
+
+### Encounter 00176
+
+- SEG0001 | person_1 | PATIENT | morning, doctor, I hope I'm not interrupting
+- SEG0002 | person_2 | DOCTOR | right you're fine sit down so what brings you in?
+- SEG0003 | person_3 | FAMILY_MEMBER | Morning, um, doctor. I'll stay and fill in anything that's missed. She's been feeling tired, doctor.
+- SEG0004 | person_1 | PATIENT | and, And the other thing I wanted to mention is that I can't really—
+- SEG0005 | person_3 | FAMILY_MEMBER | Tell the doctor about the other thing that's what worries me.
+- SEG0006 | person_1 | PATIENT | I was getting to that!
+- SEG0007 | person_2 | DOCTOR | that's fine one at a time i'll ask about everything
+- SEG0008 | person_1 | PATIENT | I've had ankles puffing up too uh for five days.
+- SEG0009 | person_2 | DOCTOR | is it mild, moderate or severe?
+- SEG0010 | person_1 | PATIENT | it's severe, honestly and a dry cough at night, too
+- SEG0011 | person_2 | DOCTOR | have you been feeling tired at any time before this?
+- SEG0012 | person_1 | PATIENT | a bit last winter it settled by itself back then
+- SEG0013 | person_2 | DOCTOR | Do you have any allergies to medicines, food, anything at all?
+- SEG0014 | person_1 | PATIENT | Years back I got a rash from ibuprofen, so I stay away from it now.
+- SEG0015 | person_2 | DOCTOR | what about alcohol?
+- SEG0016 | person_1 | PATIENT | A beer or two most evenings, to be honest
+- SEG0017 | person_2 | DOCTOR | tell me about your work
+- SEG0018 | person_1 | PATIENT | I'm a software engineer, so I'm at a screen all day.
+- SEG0019 | person_2 | DOCTOR | alright how about exercise?
+- SEG0020 | person_1 | PATIENT | Not really, I don't get much exercise.
+- SEG0021 | person_2 | DOCTOR | Alright anyone in the the family with similar problems or other conditions?
+- SEG0022 | person_1 | PATIENT | my father had a heart attack yeah, my uncle had colon cancer
+- SEG0023 | person_2 | DOCTOR | let's go through your medication what are you taking?
+- SEG0024 | person_1 | PATIENT | I take losartan, 50 milligrams, once a day.
+- SEG0025 | person_3 | FAMILY_MEMBER | she is supposed to take it once a day, but I can't say she always does
+- SEG0026 | person_1 | PATIENT | I take metformin 500 milligrams twice a day for my sugar. Iron tablets. I take it once a day. I'd been on telmisartan not any more though I stopped.
+- SEG0027 | person_2 | DOCTOR | what about your general health, any conditions you're being treated for?
+- SEG0028 | person_1 | PATIENT | I've, I've got high blood pressure. I've got diabetes
+- SEG0029 | person_2 | DOCTOR | Mhm.
+- SEG0030 | person_1 | PATIENT | I've got low haemoglobin.
+- SEG0031 | person_2 | DOCTOR | and apart from that?
+- SEG0032 | person_2 | DOCTOR | Alright, diabetes and low haemoglobin, that matches what I have here. Any previous surgeries?
+- SEG0033 | person_1 | PATIENT | No operations no.
+- SEG0034 | person_2 | DOCTOR | alright, have you had any palpitations, chest pain or coughing up blood?
+- SEG0035 | person_1 | PATIENT | hmm, you know, none, as far as I know
+- SEG0036 | person_2 | DOCTOR | did you get wheezing, fever or calf swelling?
+- SEG0037 | person_1 | PATIENT | No. None of those.
+- SEG0038 | person_2 | DOCTOR | Alright, have you noticed any weakness, or anything odd with your balance?
+- SEG0039 | person_1 | PATIENT | No weakness or anything.
+- SEG0040 | person_2 | DOCTOR | first the numbers if you don't mind
+- SEG0041 | person_2 | DOCTOR | Okay, give me a moment...
+- SEG0042 | person_2 | DOCTOR | okay: SpO2 99 percent on room air, heart rate 86, blood pressure 116 over 73. Putting together what you've described, it points towards breathlessness with several possible contributors i'd also keep deconditioning in mind
+- SEG0043 | person_1 | PATIENT | Should I be worried about this?
+- SEG0044 | person_2 | DOCTOR | I understand the worry. At the moment I'd say it's breathlessness with several possible contributors, and we'll know more once the an echocardiogram is back. Let's get an echocardiogram, for breathlessness.
+- SEG0045 | person_4 | CLINICAL_STAFF | the earliest is Friday 9 am
+- SEG0046 | person_2 | DOCTOR | I'd like to arrange a chest X-ray for breathlessness. A short daily walk building up slowly is a sensible start. A short walk every day even twenty minutes will help more than you'd think. Good. Let us know how you get on.
+- SEG0047 | person_1 | PATIENT | nothing more from me, thanks
+
+### Encounter 00190
+
+- SEG0001 | person_1 | DOCTOR | Good afternoon. Have a seat and we'll begin.
+- SEG0002 | person_2 | PATIENT | Hi. Thanks.
+- SEG0003 | person_1 | DOCTOR | So, what's been going on?
+- SEG0004 | person_2 | PATIENT | so, I've been getting lost on familiar roads, doctor
+- SEG0005 | person_1 | DOCTOR | How long are we talking about?
+- SEG0006 | person_2 | PATIENT | Um, I'm not sure when it began, to be honest. Some weeks ago, but I can't say how many.
+- SEG0007 | person_1 | DOCTOR | have you been forgetting things lately?
+- SEG0008 | person_2 | PATIENT | Yeah, that too. I'd been repeating the same questions, but that went away.
+- SEG0009 | person_1 | DOCTOR | Moving on to your background, any past medical history?
+- SEG0010 | person_2 | PATIENT | High cholesterol, for five years.
+- SEG0011 | person_1 | DOCTOR | I see
+- SEG0012 | person_2 | PATIENT | High blood pressure, for five years. I have diabetes.
+- SEG0013 | person_1 | DOCTOR | Anything more?
+- SEG0014 | person_1 | DOCTOR | yes, high cholesterol and high blood pressure are known to us, good to have that clear. What about operations, anything like that?
+- SEG0015 | person_2 | PATIENT | Yes, I had a hernia repair, about five years back.
+- SEG0016 | person_1 | DOCTOR | have you ever reacted badly to a medicine or food? Any allergies?
+- SEG0017 | person_2 | PATIENT | Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+- SEG0018 | person_1 | DOCTOR | How do you eat, generally?
+- SEG0019 | person_2 | PATIENT | I skip breakfast most days.
+- SEG0020 | person_1 | DOCTOR | any sport or activity?
+- SEG0021 | person_2 | PATIENT | I play badminton on Sundays.
+- SEG0022 | person_1 | DOCTOR | Is anyone at home with you?
+- SEG0023 | person_2 | PATIENT | I share a flat with two friends
+- SEG0024 | person_1 | DOCTOR | Any relatives with health problems I should be aware of?
+- SEG0025 | person_2 | PATIENT | My mother had high blood pressure. Um, my sister has epilepsy.
+- SEG0026 | person_1 | DOCTOR | What's your current medication list?
+- SEG0027 | person_2 | PATIENT | I'm on atorvastatin, 20 milligrams, at night. It's losartan, 50 milligrams, once a day. Glimepiride. I take it 2 milligrams, before breakfast
+- SEG0028 | person_1 | DOCTOR | Have you had any trouble with bladder control or falls?
+- SEG0029 | person_2 | PATIENT | nothing like that, no
+- SEG0030 | person_1 | DOCTOR | Let me check a few things. Any low mood, headache, weakness on one side or hallucinations?
+- SEG0031 | person_2 | PATIENT | no, no low mood, headache, weakness on one side or hallucinations
+- SEG0032 | person_1 | DOCTOR | has your heart given you any trouble?
+- SEG0033 | person_2 | PATIENT | My heart's been fine, as far as I know.
+- SEG0034 | person_1 | DOCTOR | let me examine, it won't take long
+- SEG0035 | person_2 | PATIENT | Yes, doctor.
+- SEG0036 | person_1 | DOCTOR | Almost done with this part.
+- SEG0037 | person_1 | DOCTOR | your gait is steady and the tone in your limbs is normal
+- SEG0038 | person_1 | DOCTOR | all done, you can get dressed
+- SEG0039 | person_1 | DOCTOR | Having listened and examined, this is probably memory difficulties that need to be worked up. I can't rule out a vitamin deficiency yet.
+- SEG0040 | person_2 | PATIENT | Doctor, is this dangerous?
+- SEG0041 | person_1 | DOCTOR | I understand the worry. At the moment I'd say it's memory difficulties that need to be worked up, and we'll know more once the a thyroid test is back. a thyroid test is what I'd like next, for memory loss. The result will help us decide whether anything more is needed. I'm going to order blood tests, for memory loss. That will help us see what's going on underneath and decide the next step.
+- SEG0042 | person_1 | DOCTOR | keep a daily routine and write things down, a notebook by the door works well. Good. Let us know how you get on
+- SEG0043 | person_2 | PATIENT | Alright, thanks. Bye for now.
+
+### Encounter 00203
+
+- SEG0001 | person_1 | DOCTOR | Good afternoon. Take a seat, please.
+- SEG0002 | person_2 | PATIENT | Hi.
+- SEG0003 | person_3 | CAREGIVER | Thank you for fitting us in, doctor.
+- SEG0004 | person_1 | DOCTOR | What seems to be the problem?
+- SEG0005 | person_3 | CAREGIVER | It's, It's trouble hearing in my left ear, doctor. She didn't want to come, but I insisted.
+- SEG0006 | person_1 | DOCTOR | How long has this been going on?
+- SEG0007 | person_2 | PATIENT | For four weeks, I'd say.
+- SEG0008 | person_1 | DOCTOR | And how severe is it?
+- SEG0009 | person_2 | PATIENT | Severe, I'd say.
+- SEG0010 | person_1 | DOCTOR | Have you had a feeling of fullness in the ear?
+- SEG0011 | person_2 | PATIENT | Oh, yes, about the same, nearly five years. As for difficulty following conversation in crowds, I honestly can't say when that began. It might have been last month or the month before.
+- SEG0012 | person_1 | DOCTOR | And how severe is it?
+- SEG0013 | person_2 | PATIENT | It, It feels moderate to me.
+- SEG0014 | person_1 | DOCTOR | Have you had trouble hearing in your left ear before, or is this the first time?
+- SEG0015 | person_2 | PATIENT | Yes, something like this happened a couple of years ago, and it went away on its own.
+- SEG0016 | person_1 | DOCTOR | What about family history, any illnesses that run in the family?
+- SEG0017 | person_2 | PATIENT | My sister has epilepsy. Well, my father had a stroke.
+- SEG0018 | person_1 | DOCTOR | Do you have any medical conditions, anything you've been treated for?
+- SEG0019 | person_2 | PATIENT | Yes, high blood pressure. I have diabetes.
+- SEG0020 | person_1 | DOCTOR | Right, any more?
+- SEG0021 | person_2 | PATIENT | I have epilepsy, for about a year.
+- SEG0022 | person_1 | DOCTOR | Okay, I can see high blood pressure in your file as well.
+- SEG0023 | person_1 | DOCTOR | Okay, any previous surgeries?
+- SEG0024 | person_2 | PATIENT | Yes, I had a knee arthroscopy, three years ago.
+- SEG0025 | person_1 | DOCTOR | Do you live alone?
+- SEG0026 | person_2 | PATIENT | Yes, I live on my own.
+- SEG0027 | person_1 | DOCTOR | What's your job?
+- SEG0028 | person_2 | PATIENT | I teach at a primary school.
+- SEG0029 | person_1 | DOCTOR | Anything special about your diet?
+- SEG0030 | person_2 | PATIENT | I try to avoid too much sugar.
+- SEG0031 | person_1 | DOCTOR | What medicines do you take regularly?
+- SEG0032 | person_2 | PATIENT | Okay, so I take telmisartan, 40 milligrams, once a day for my pressure. I take Glycomet, 500 milligrams, twice a day. Right, I'm on levetiracetam, 500 milligrams, twice a day for the seizures.
+- SEG0033 | person_1 | DOCTOR | Has there been any dizziness?
+- SEG0034 | person_2 | PATIENT | No. No dizziness.
+- SEG0035 | person_3 | CAREGIVER | Um, actually, doctor, I did notice dizziness. She doesn't always say.
+- SEG0036 | person_2 | PATIENT | No, you know, I don't think I did. Maybe a little, I'm not sure.
+- SEG0037 | person_1 | DOCTOR | Alright, I'll note both what you've said and what you've noticed. Any facial weakness, discharge or headache?
+- SEG0038 | person_2 | PATIENT | No, you know, no facial weakness, discharge or headache.
+- SEG0039 | person_1 | DOCTOR | Is your urine normal, no changes?
+- SEG0040 | person_2 | PATIENT | No changes there.
+- SEG0041 | person_1 | DOCTOR | Let me check your vitals now.
+- SEG0042 | person_1 | DOCTOR | Hold still for me...
+- SEG0043 | person_1 | DOCTOR | Okay: BP is 117 over 81, oxygen saturation is 97 percent, temperature is 36.5 degrees, pulse is 71 beats a minute.
+- SEG0044 | person_2 | PATIENT | Is that alright, um, doctor?
+- SEG0045 | person_1 | DOCTOR | They help build the picture, I'll tell you more soon.
+- SEG0046 | person_1 | DOCTOR | If you're comfortable, I'll examine you now.
+- SEG0047 | person_1 | DOCTOR | Almost done with this part.
+- SEG0048 | person_1 | DOCTOR | There's a lot of wax in the left ear canal, I can't see the drum.
+- SEG0049 | person_1 | DOCTOR | Bear with me a second.
+- SEG0050 | person_1 | DOCTOR | The right ear canal and drum are normal.
+- SEG0051 | person_1 | DOCTOR | Thanks, please take a seat again. So, based on the history and the examination, I don't have a clear answer today: hearing loss from wax is possible, and so is age-related hearing loss.
+- SEG0052 | person_2 | PATIENT | Do you think it's serious?
+- SEG0053 | person_1 | DOCTOR | I can't promise yet, but most people with hearing loss from wax do well once it's treated properly. We should do a hearing test for hearing loss. The treatment will be ear drops, three times a day, for five days. That should help with wax softening. Please don't use cotton buds or ear candles, they push the wax in further.
+- SEG0054 | person_1 | DOCTOR | Mm-hm. Thanks for coming in.
+- SEG0055 | person_2 | PATIENT | No questions. Thank you.
+- SEG0056 | person_1 | DOCTOR | All the best.
+
+### Encounter 00223
+
+- SEG0001 | person_1 | PATIENT | Hi, doctor. Long queue outside, but here I am.
+- SEG0002 | person_2 | DOCTOR | Right on time. Sit, please. How can I help?
+- SEG0003 | person_1 | PATIENT | Yeah, it's a rattling chest. I don't know what's causing it. A neighbour of mine said I should see someone about it.
+- SEG0004 | person_2 | DOCTOR | Which tablets or creams or inhalers do you use?
+- SEG0005 | person_1 | PATIENT | Tiotropium inhaler, once a day.
+- SEG0006 | person_2 | DOCTOR | How long has this been going on?
+- SEG0007 | person_1 | PATIENT | It started yesterday.
+- SEG0008 | person_2 | DOCTOR | Go on. How intense does it get?
+- SEG0009 | person_1 | PATIENT | A seven out of ten, I suppose. Hmm, I've also had poor sleep because of the cough, for five days.
+- SEG0010 | person_2 | DOCTOR | Any weight loss, fever, coughing up blood or swollen ankles?
+- SEG0011 | person_1 | PATIENT | No, not any of them.
+- SEG0012 | person_2 | DOCTOR | Anything with your heart, like skipped beats or fainting?
+- SEG0013 | person_1 | PATIENT | No, nothing with my heart.
+- SEG0014 | person_2 | DOCTOR | Is your digestion otherwise okay?
+- SEG0015 | person_1 | PATIENT | Uh, no, all normal there.
+- SEG0016 | person_2 | DOCTOR | Alright, have you got any chronic problems?
+- SEG0017 | person_1 | PATIENT | I have COPD, for five years. I took the morning off to come in today.
+- SEG0018 | person_2 | DOCTOR | Hm, okay.
+- SEG0019 | person_1 | PATIENT | Uh, yes, high blood pressure. I've never really been one for hospitals.
+- SEG0020 | person_2 | DOCTOR | Okay, and what else?
+- SEG0021 | person_2 | DOCTOR | Okay, I can see COPD in your file as well. Any previous surgeries?
+- SEG0022 | person_1 | PATIENT | No operations, no.
+- SEG0023 | person_2 | DOCTOR | Do you drink alcohol?
+- SEG0024 | person_1 | PATIENT | I don't drink at all.
+- SEG0025 | person_2 | DOCTOR | Are you living with family?
+- SEG0026 | person_1 | PATIENT | I stay with my daughter and her family.
+- SEG0027 | person_2 | DOCTOR | Tell me about your work.
+- SEG0028 | person_1 | PATIENT | I'm a software engineer, so I'm at a screen all day.
+- SEG0029 | person_2 | DOCTOR | Are you active at all?
+- SEG0030 | person_1 | PATIENT | Barely, I'm mostly sedentary these days.
+- SEG0031 | person_2 | DOCTOR | Any drug or food allergies? I ask because it helps me narrow things down.
+- SEG0032 | person_1 | PATIENT | Oh, yes, ibuprofen. I get stomach pain.
+- SEG0033 | person_2 | DOCTOR | Let me check your vitals now.
+- SEG0034 | person_2 | DOCTOR | Okay, give me a moment...
+- SEG0035 | person_2 | DOCTOR | Okay: temperature is 37.5 degrees, heart rate 98. And respiratory rate 20, blood pressure 119 over 75, SpO2 90 percent on room air.
+- SEG0036 | person_2 | DOCTOR | Let me examine, it won't take long.
+- SEG0037 | person_2 | DOCTOR | Hold that position for me.
+- SEG0038 | person_2 | DOCTOR | Air entry is reduced on both sides with a prolonged breathing out phase.
+- SEG0039 | person_1 | PATIENT | Yes, doctor.
+- SEG0040 | person_2 | DOCTOR | Thanks, please take a seat again. Let me tell you where I've got to. I don't have a clear answer today: a flare-up of COPD is possible, and so is pneumonia.
+- SEG0041 | person_2 | DOCTOR | I'm going to order blood tests, for infective exacerbation. I'm going to order a chest X-ray, for breathlessness.
+- SEG0042 | person_1 | PATIENT | Alright, when would that be?
+- SEG0043 | person_2 | DOCTOR | Let's use doxycycline, 100 milligrams, twice a day, for five days. It's for chest infection.
+- SEG0044 | person_1 | PATIENT | Should I keep taking it if I feel better?
+- SEG0045 | person_2 | DOCTOR | I'll start you on prednisolone, 30 milligrams, once a day, for five days. That should help with COPD flare-up. I'll put all of this in writing so you don't have to remember it. If you become more breathless or your lips turn blue, that's the point to come in urgently.
+- SEG0046 | person_1 | PATIENT | Okay, I'll remember.
+- SEG0047 | person_2 | DOCTOR | I'd like to see you again in two weeks.
+- SEG0048 | person_1 | PATIENT | Fine.
+- SEG0049 | person_2 | DOCTOR | Any last questions?
+- SEG0050 | person_1 | PATIENT | I, I appreciate it, doctor.
+
+### Encounter 00240
+
+- SEG0001 | person_1 | DOCTOR | Come in, come in. Pull the door closed behind you, please.
+- SEG0002 | person_2 | PATIENT | hello, uh, doctor, thank you
+- SEG0003 | person_1 | DOCTOR | Tell me what's been troubling you.
+- SEG0004 | person_2 | PATIENT | well, I've been having hot flushes. I'm hoping you can tell me something definite
+- SEG0005 | person_1 | DOCTOR | how far back does it go?
+- SEG0006 | person_2 | PATIENT | I've had it since Friday i looked a few things up online, and and that probably didn't help
+- SEG0007 | person_1 | DOCTOR | Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+- SEG0008 | person_2 | PATIENT | it's once or twice a day i notice it more with warm rooms and caffeine i'm not great at remembering details, you know, so bear with me oh, and vaginal dryness that's been about the same, six months about vaginal dryness, maybe a three out of ten on a bad day
+- SEG0009 | person_1 | DOCTOR | A few measurements, then we'll continue.
+- SEG0010 | person_1 | DOCTOR | Okay, give me a moment...
+- SEG0011 | person_1 | DOCTOR | Okay: temperature is 36.4 degrees, pressure 113 over 78, heart rate 80. And BMI works out to 29.3, weight 95 kilos, height 180 centimetres, oxygen saturation is 98 percent.
+- SEG0012 | person_1 | DOCTOR | I'd like to examine you now
+- SEG0013 | person_2 | PATIENT | Okay.
+- SEG0014 | person_1 | DOCTOR | Let me just check something.
+- SEG0015 | person_1 | DOCTOR | blood pressure and pulse are fine, and there are no breast lumps on examination
+- SEG0016 | person_2 | PATIENT | Sure.
+- SEG0017 | person_1 | DOCTOR | Thanks for that. And what about heavy bleeding, weight loss, palpitations or bleeding after sex?
+- SEG0018 | person_2 | PATIENT | Oh, uh, no, no heavy bleeding, weight loss, palpitations or bleeding after sex.
+- SEG0019 | person_1 | DOCTOR | neurologically, anything strange?
+- SEG0020 | person_2 | PATIENT | No, um, nothing like that.
+- SEG0021 | person_1 | DOCTOR | Any problems with your joints or muscles?
+- SEG0022 | person_2 | PATIENT | No, you know, joints are fine.
+- SEG0023 | person_1 | DOCTOR | Before I prescribe anything, any allergies?
+- SEG0024 | person_2 | PATIENT | Yes, dust, it gives me itchy eyes.
+- SEG0025 | person_1 | DOCTOR | any long-term health problems I should know about?
+- SEG0026 | person_2 | PATIENT | I've had thin bones, yes. A neighbour of mine said I should see someone about it.
+- SEG0027 | person_1 | DOCTOR | Have you had any previous surgeries?
+- SEG0028 | person_2 | PATIENT | Uh, no, never had any surgery.
+- SEG0029 | person_1 | DOCTOR | A few questions about your lifestyle now.
+- SEG0030 | person_2 | PATIENT | I've never smoked. I'm mostly vegetarian. I work in an office, mostly sitting at a desk.
+- SEG0031 | person_1 | DOCTOR | Let's go through your medication. What are you taking?
+- SEG0032 | person_2 | PATIENT | I take alendronate, 70 milligrams, once a week
+- SEG0033 | person_1 | DOCTOR | From what you've told me and what I found, it fits best with perimenopausal symptoms.
+- SEG0034 | person_2 | PATIENT | Is this gonna go away?
+- SEG0035 | person_1 | DOCTOR | It's reasonable to be concerned, but right now perimenopausal symptoms is my leading thought, not anything worse. We should do a thyroid test for hot flushes. I'd like to arrange blood tests for irregular periods. Layers of clothing, a fan by the bed, and cutting down on caffeine and spicy food can help the flushes.
+- SEG0036 | person_2 | PATIENT | Do I need a bone density scan? I read it might help.
+- SEG0037 | person_1 | DOCTOR | Right, not right now, it wouldn't change what we do today. Is there anything you wanted to ask?
+- SEG0038 | person_2 | PATIENT | Oh, thanks so much, doctor.
+
+### Encounter 00318
+
+- SEG0001 | person_1 | PATIENT | So, um, excuse me, doctor, should I sit here?
+- SEG0002 | person_2 | DOCTOR | Yes, do sit. Tell me what's been happening.
+- SEG0003 | person_3 | CAREGIVER | Morning, doctor. I'll stay and fill in anything that's missed.
+- SEG0004 | person_1 | PATIENT | Um, so... constipation. That's why I came.
+- SEG0005 | person_4 | NURSE | Here are the numbers, doctor. Pressure 120 over 68, temperature 36.6, saturation 99 percent, pulse is 83 beats a minute.
+- SEG0006 | person_2 | DOCTOR | Thanks. How long have you had it?
+- SEG0007 | person_1 | PATIENT | About... well, two years.
+- SEG0008 | person_2 | DOCTOR | Okay, give me more detail on it, whatever comes to mind. Take your time, there's no rush.
+- SEG0009 | person_1 | PATIENT | Hmm, about a eight out of ten. I get some relief from drinking more water.
+- SEG0010 | person_1 | PATIENT | And the other thing I wanted to mention is that I can't really—
+- SEG0011 | person_5 | FAMILY_MEMBER | Tell the doctor about the other thing, that's what worries me.
+- SEG0012 | person_1 | PATIENT | Okay, so I was getting to that! Oh, and straining to pass stool. That's been about the same, about a year.
+- SEG0013 | person_2 | DOCTOR | And how severe is it?
+- SEG0014 | person_1 | PATIENT | Pretty moderate, if I'm being honest.
+- SEG0015 | person_2 | DOCTOR | Has there been a little bright blood on the paper too?
+- SEG0016 | person_1 | PATIENT | Yes, about the same, about a month. There was a heavy feeling in the lower tummy, yes, but that went away.
+- SEG0017 | person_2 | DOCTOR | Alright, have you had constipation before, or is this the first time?
+- SEG0018 | person_1 | PATIENT | Yes, something like this happened last winter, and it went away on its own.
+- SEG0019 | person_2 | DOCTOR | Let me check a few things. Any vomiting, weight loss or black stools?
+- SEG0020 | person_1 | PATIENT | No, no vomiting, weight loss or black stools.
+- SEG0021 | person_2 | DOCTOR | Have you noticed fever or pain on passing stool?
+- SEG0022 | person_1 | PATIENT | I haven't had fever or pain on passing stool, no.
+- SEG0023 | person_2 | DOCTOR | Anything with your nerves, like weakness or numbness?
+- SEG0024 | person_1 | PATIENT | No weakness or anything.
+- SEG0025 | person_2 | DOCTOR | What about your general health, any conditions you're being treated for?
+- SEG0026 | person_1 | PATIENT | I, I have diabetes, for nearly five years. I have an underactive thyroid, for about ten years. I have thin bones, for two years.
+- SEG0027 | person_2 | DOCTOR | Hm, okay.
+- SEG0028 | person_1 | PATIENT | Yes, arthritis in my knees.
+- SEG0029 | person_2 | DOCTOR | Okay, I can see thin bones and arthritis in your knees in your file as well.
+- SEG0030 | person_2 | DOCTOR | Right, are you on any tablets or medication? Take your time, there's no rush.
+- SEG0031 | person_1 | PATIENT | It's, It's a... um, I can't remember what it's called. It's a round yellow one.
+- SEG0032 | person_2 | DOCTOR | Do you remember what it's for?
+- SEG0033 | person_1 | PATIENT | For my sugar, I believe. My wife sets them out for me, I just take what I'm given. I'm on alendronate, 70 milligrams, once a week for my bones. I mean, it's diclofenac, 50 milligrams, when needed for the joint pain. Well, it's Cremaffin, at night. I thought it would sort itself out, but it hasn't. I wasn't sure whether to come in at all, to be honest.
+- SEG0034 | person_2 | DOCTOR | Since when have you been taking it?
+- SEG0035 | person_1 | PATIENT | About a year now. Thyroxine I don't take anymore.
+- SEG0036 | person_2 | DOCTOR | Any procedures or operations?
+- SEG0037 | person_1 | PATIENT | I, I had my gallbladder removed in 2016.
+- SEG0038 | person_2 | DOCTOR | Do you have any allergies to medicines, food, anything at all?
+- SEG0039 | person_1 | PATIENT | Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+- SEG0040 | person_2 | DOCTOR | Is anyone at home with you?
+- SEG0041 | person_1 | PATIENT | I share a flat with two friends.
+- SEG0042 | person_2 | DOCTOR | I'd like to examine you now.
+- SEG0043 | person_2 | DOCTOR | Hold that position for me.
+- SEG0044 | person_2 | DOCTOR | There's no mass in the tummy.
+- SEG0045 | person_2 | DOCTOR | Hold that position for me.
+- SEG0046 | person_2 | DOCTOR | I can feel firm stool in the left lower abdomen.
+- SEG0047 | person_2 | DOCTOR | That's all I need, thank you. Taking everything into account, the most likely explanation is chronic constipation. We shouldn't forget haemorrhoids. I'll request a colonoscopy, it'll help with constipation and rectal bleeding. I'm sending you for blood tests because of constipation. The treatment will be lactulose, 15 ml, at night, for two weeks. That's for constipation. More fibre, more water, and give yourself ten unhurried minutes after breakfast.
+- SEG0048 | person_2 | DOCTOR | Please don't wait if the symptoms get worse. That's when to be seen urgently. Please come and see me in three weeks. That's it on my side. Anything unclear?
+- SEG0049 | person_1 | PATIENT | Alright, thanks. Bye for now.
+
+### Encounter 00322
+
+- SEG0001 | person_1 | PATIENT | Hmm, hi there, is it alright if I come in now?
+- SEG0002 | person_2 | DOCTOR | Not at all, please sit. What's the problem?
+- SEG0003 | person_1 | PATIENT | it's tiredness all the time, mostly i'm not great at remembering details, so bear with me my family kept telling me to get it it checked
+- SEG0004 | person_2 | DOCTOR | when did you first notice it?
+- SEG0005 | person_1 | PATIENT | For five days, I'd say.
+- SEG0006 | person_2 | DOCTOR | Does it it come along with anything else?
+- SEG0007 | person_1 | PATIENT | Hair falling out goes along with it, most of the time. Well, the Hair falling out? That's been for two days.
+- SEG0008 | person_2 | DOCTOR | A few measurements, then we'll continue.
+- SEG0009 | person_2 | DOCTOR | Almost there...
+- SEG0010 | person_2 | DOCTOR | okay: heart rate 86, temp 36.6 degrees. And pressure 116 over 78, SpO2 97 percent on room air
+- SEG0011 | person_1 | PATIENT | Is that okay?
+- SEG0012 | person_2 | DOCTOR | That's fine, we'll come to it.
+- SEG0013 | person_2 | DOCTOR | Okay, I need to examine you for this.
+- SEG0014 | person_1 | PATIENT | no problem
+- SEG0015 | person_2 | DOCTOR | Let me just check something.
+- SEG0016 | person_2 | DOCTOR | You look a little pale in the eyelids.
+- SEG0017 | person_2 | DOCTOR | Right, you can sit back down. Any low mood, shortness of breath, blood in the stool or fever at all?
+- SEG0018 | person_1 | PATIENT | I haven't had low mood, shortness of breath, blood in the stool or fever, no
+- SEG0019 | person_2 | DOCTOR | what about your tummy and bowels, anything unusual there?
+- SEG0020 | person_1 | PATIENT | Nothing unusual, no.
+- SEG0021 | person_2 | DOCTOR | Any previous surgeries?
+- SEG0022 | person_1 | PATIENT | No operations, no.
+- SEG0023 | person_2 | DOCTOR | do you have any medical conditions I should know about?
+- SEG0024 | person_1 | PATIENT | Well, no, none that I know of.
+- SEG0025 | person_2 | DOCTOR | Anything special about your diet?
+- SEG0026 | person_1 | PATIENT | I try to avoid too much sugar
+- SEG0027 | person_2 | DOCTOR | How about exercise?
+- SEG0028 | person_1 | PATIENT | Not really, I don't get much exercise
+- SEG0029 | person_2 | DOCTOR | Have you ever reacted badly to a medicine or food? Any allergies?
+- SEG0030 | person_1 | PATIENT | Dust. I come out in... well, itchy eyes.
+- SEG0031 | person_2 | DOCTOR | Any regular medication?
+- SEG0032 | person_1 | PATIENT | Nothing, uh, no.
+- SEG0033 | person_2 | DOCTOR | Putting it all together, I think we're dealing with persistent tiredness, possibly from low iron at this stage.
+- SEG0034 | person_1 | PATIENT | is this something I'll have for good?
+- SEG0035 | person_2 | DOCTOR | I understand the worry. At the moment I'd say it's persistent tiredness, possibly from low iron, and we'll know more once the a thyroid test is back. Let me repeat that back to make sure. You've had tiredness all the time for five days, and and no blood in the stool or low mood
+- SEG0036 | person_1 | PATIENT | Yes, you've got it.
+- SEG0037 | person_2 | DOCTOR | I'm sending you for a thyroid test because of fatigue. I'm prescribing vitamin D, 60000 units, once a week, for eight weeks. That should help with low energy. Try to keep a regular sleep time and get some daylight in the morning. Please don't wait if the symptoms get worse. That's when to be seen urgently. Thanks for coming in.
+- SEG0038 | person_1 | PATIENT | Right, thanks so much, doctor.
+
+### Encounter 00345
+
+- SEG0001 | person_1 | NURSE | Afternoon doctor. They're in and comfortable and I have the measurements ready.
+- SEG0002 | person_2 | DOCTOR | Thank you. Good morning, tell me what's been going on.
+- SEG0003 | person_3 | CAREGIVER | Oh doctor I've come along because I know the history if it helps.
+- SEG0004 | person_2 | DOCTOR | that's fine, sit down we'll go through it together
+- SEG0005 | person_3 | CAREGIVER | he's been having an urgent need to go sometimes, doctor
+- SEG0006 | person_2 | DOCTOR | When did you first notice it?
+- SEG0007 | person_4 | PATIENT | for three weeks, I'd say
+- SEG0008 | person_2 | DOCTOR | How bad is it would you say?
+- SEG0009 | person_4 | PATIENT | Pretty moderate if I'm being honest.
+- SEG0010 | person_2 | DOCTOR | okay, does it come along with anything else?
+- SEG0011 | person_4 | PATIENT | hmm, it usually comes with leaking urine when I cough or sneeze the leaking urine when I cough or sneeze? That's been since last Tuesday
+- SEG0012 | person_2 | DOCTOR | And alcohol, how much?
+- SEG0013 | person_4 | PATIENT | A beer or two most evenings, to be honest
+- SEG0014 | person_2 | DOCTOR | tell me about your work
+- SEG0015 | person_4 | PATIENT | I'm a software engineer, so I'm at a screen all day.
+- SEG0016 | person_2 | DOCTOR | do you get any exercise?
+- SEG0017 | person_4 | PATIENT | I walk for about half an hour most days
+- SEG0018 | person_2 | DOCTOR | Moving on to your background, any past medical history?
+- SEG0019 | person_4 | PATIENT | I've had diabetes yes. Yes high blood pressure.
+- SEG0020 | person_2 | DOCTOR | uh-huh
+- SEG0021 | person_4 | PATIENT | I've got heart disease. I kept putting it off which I know isn't sensible.
+- SEG0022 | person_2 | DOCTOR | Alright high blood pressure and heart disease that matches what I have here. Have you had any surgery before?
+- SEG0023 | person_4 | PATIENT | I had my gallbladder removed in 2016
+- SEG0024 | person_2 | DOCTOR | alright, what's your current medication list?
+- SEG0025 | person_4 | PATIENT | Glimepiride 2 milligrams maybe before breakfast for my sugar
+- SEG0026 | person_2 | DOCTOR | have you got the box or the prescription on you?
+- SEG0027 | person_4 | PATIENT | hmm, not with me i'll bring it next time i'm on aspirin, 75 milligrams, once a day for my heart
+- SEG0028 | person_3 | CAREGIVER | That's what's prescribed but I'm not sure he takes it every day.
+- SEG0029 | person_2 | DOCTOR | does anything run in the family?
+- SEG0030 | person_4 | PATIENT | my father had kidney stones
+- SEG0031 | person_2 | DOCTOR | Are there any allergies on your record that I should check?
+- SEG0032 | person_4 | PATIENT | no allergies
+- SEG0033 | person_3 | CAREGIVER | Hold on, doctor, I think he reacted to ibuprofen once. I'm not certain, though.
+- SEG0034 | person_4 | PATIENT | Really? I don't think so.
+- SEG0035 | person_2 | DOCTOR | Alright, so that's unclear. I'll record what each of you said. Alright, any fever or burning when passing urine at all?
+- SEG0036 | person_4 | PATIENT | no, no fever, no burning when passing urine i did have a heavy dragging feeling low down at one point, but that that went away on its own
+- SEG0037 | person_2 | DOCTOR | Any difficulty emptying?
+- SEG0038 | person_4 | PATIENT | No no difficulty emptying.
+- SEG0039 | person_2 | DOCTOR | Have you had any constipation or blood in the urine?
+- SEG0040 | person_4 | PATIENT | Um no no constipation or blood in the urine.
+- SEG0041 | person_2 | DOCTOR | any change in your bowel habit or your stomach generally?
+- SEG0042 | person_4 | PATIENT | bowels are regular nothing odd
+- SEG0043 | person_2 | DOCTOR | how's your breathing otherwise?
+- SEG0044 | person_4 | PATIENT | no, my breathing's been fine
+- SEG0045 | person_1 | NURSE | doctor, I've got the readings for you weight 90 kilos, height 162 centimetres, pulse 83. BP is 128 over 70, saturation 98 percent, temperature is 36.8 degrees
+- SEG0046 | person_2 | DOCTOR | Good, thank you.
+- SEG0047 | person_2 | DOCTOR | shall we do the examination?
+- SEG0048 | person_2 | DOCTOR | I'll go gently.
+- SEG0049 | person_2 | DOCTOR | No bulge is visible when you cough and the the tummy is soft.
+- SEG0050 | person_2 | DOCTOR | right, you can sit back down
+- SEG0051 | person_2 | DOCTOR | taking everything into account, I'd lean towards stress urinary incontinence. Another possibility is a urine infection. A bladder diary is what I'd like next, for urinary symptoms. I'd rather check than guess, and this is the quickest way to know more
+- SEG0052 | person_1 | NURSE | doctor I did a urine test before they came in the result's on your screen
+- SEG0053 | person_2 | DOCTOR | thanks I'll look at that. Pelvic floor exercises three sets a day make a real difference over a couple of months
+- SEG0054 | person_2 | DOCTOR | yes?
+- SEG0055 | person_2 | DOCTOR | And please bring the latest prescription or the medicine boxes to the next visit so we can settle the dose.
+- SEG0056 | person_4 | PATIENT | Yes, I'll watch for that.
+- SEG0057 | person_2 | DOCTOR | I'll want another look in six weeks
+- SEG0058 | person_4 | PATIENT | good I'll come back then
+- SEG0059 | person_2 | DOCTOR | that's everything from me any other questions?
+- SEG0060 | person_4 | PATIENT | thanks so much, doctor
+
+### Encounter 00359
+
+- SEG0001 | person_1 | PATIENT | Hi, doctor. Is this the right room?
+- SEG0002 | person_2 | DOCTOR | Yes, come in, take a seat. What can I do for you today?
+- SEG0003 | person_1 | PATIENT | Oh, it's numbness on the left side of my face. I thought I'd wait, but it hasn't gone. I've never really been one for hospitals.
+- SEG0004 | person_2 | DOCTOR | How long has this been going on?
+- SEG0005 | person_1 | PATIENT | Yeah, it's been going on for about two weeks. I'd rather not end up on lots of tablets if I can avoid it.
+- SEG0006 | person_2 | DOCTOR | right, anything that tends to go along with it?
+- SEG0007 | person_1 | PATIENT | It usually comes with tiredness. The tiredness? That's been for about two weeks.
+- SEG0008 | person_2 | DOCTOR | any trouble swallowing, confusion, loss of vision or chest pain at all?
+- SEG0009 | person_1 | PATIENT | No, none of that at all.
+- SEG0010 | person_2 | DOCTOR | any rashes or skin problems otherwise?
+- SEG0011 | person_1 | PATIENT | No, skin's been fine.
+- SEG0012 | person_2 | DOCTOR | on the cardiac side, anything I should know?
+- SEG0013 | person_1 | PATIENT | nothing like that
+- SEG0014 | person_2 | DOCTOR | Have you had any previous surgeries?
+- SEG0015 | person_1 | PATIENT | No operations, no.
+- SEG0016 | person_2 | DOCTOR | Have you ever reacted badly to a medicine or food? Any allergies?
+- SEG0017 | person_1 | PATIENT | None, you know, as far as I'm aware.
+- SEG0018 | person_2 | DOCTOR | Any diagnoses you've been given before? Take your time, there's no rush.
+- SEG0019 | person_1 | PATIENT | Yes, high blood pressure.
+- SEG0020 | person_2 | DOCTOR | I follow. Yes, high blood pressure is known to to us, good to have that clear. Which tablets or creams or inhalers do you use?
+- SEG0021 | person_1 | PATIENT | Oh, you know, I take losartan, 50 milligrams, once a day for my blood pressure.
+- SEG0022 | person_2 | DOCTOR | Do you drink alcohol?
+- SEG0023 | person_1 | PATIENT | I have a couple of drinks on the weekend.
+- SEG0024 | person_2 | DOCTOR | what do you do to keep active?
+- SEG0025 | person_1 | PATIENT | I cycle to work most mornings
+- SEG0026 | person_2 | DOCTOR | are you working or retired?
+- SEG0027 | person_1 | PATIENT | Retired. I stopped a few years back.
+- SEG0028 | person_2 | DOCTOR | How do you eat, generally?
+- SEG0029 | person_1 | PATIENT | I skip breakfast most days.
+- SEG0030 | person_2 | DOCTOR | Is there a family history of anything significant?
+- SEG0031 | person_1 | PATIENT | My brother has asthma.
+- SEG0032 | person_2 | DOCTOR | Let me check your vitals now.
+- SEG0033 | person_2 | DOCTOR | One second...
+- SEG0034 | person_2 | DOCTOR | Okay: pulse is 86 beats a minute, SpO2 97 percent on room air, BP is 164 over 93.
+- SEG0035 | person_1 | PATIENT | Is that normal?
+- SEG0036 | person_2 | DOCTOR | let's look at it together in a minute
+- SEG0037 | person_2 | DOCTOR | Shall we do the examination?
+- SEG0038 | person_1 | PATIENT | Okay, ready.
+- SEG0039 | person_2 | DOCTOR | Almost done with this part.
+- SEG0040 | person_2 | DOCTOR | there's mild drooping at the left corner of your mouth
+- SEG0041 | person_1 | PATIENT | go ahead
+- SEG0042 | person_2 | DOCTOR | All done, you can get dressed. So, based on the history and the examination, this looks most like a possible mini-stroke, which we need to investigate urgently.
+- SEG0043 | person_2 | DOCTOR | Let's book an ECG to look into possible stroke. Let's use clopidogrel, 75 milligrams, once a day, until we review. You take it by mouth. That's for stroke prevention.
+- SEG0044 | person_1 | PATIENT | That's easy enough to remember.
+- SEG0045 | person_2 | DOCTOR | don't drive for now, and bring someone with you to the next visit. If the numbness, weakness or speech problem returns, or you feel really unwell, please come to the emergency department. I'd like you back in one week. Thanks for coming in
+- SEG0046 | person_1 | PATIENT | no, um, you've explained it well. Thanks
+- SEG0047 | person_2 | DOCTOR | So, mind how you go.
+
+### Encounter 00367
+
+- SEG0001 | person_1 | DOCTOR | Hello again. Come on in.
+- SEG0002 | person_2 | PATIENT | Hello. Is it okay if I sit here?
+- SEG0003 | person_1 | DOCTOR | Go ahead, tell me what's happening.
+- SEG0004 | person_2 | PATIENT | I wanted to get headaches in the mornings looked at.
+- SEG0005 | person_1 | DOCTOR | Let's go through your medication. What are you taking?
+- SEG0006 | person_2 | PATIENT | Losartan. I take it once a day.
+- SEG0007 | person_1 | DOCTOR | How much do you take?
+- SEG0008 | person_2 | PATIENT | 50 milligrams, I think that's what's on the box.
+- SEG0009 | person_1 | DOCTOR | How far back does it go?
+- SEG0010 | person_2 | PATIENT | For about three months, I'd say.
+- SEG0011 | person_1 | DOCTOR | Does it come along with anything else?
+- SEG0012 | person_2 | PATIENT | Occasional dizziness goes along with it, most of the time. The occasional dizziness? That's been for about three months. About occasional dizziness, it's moderate, honestly. I'd say all the time.
+- SEG0013 | person_1 | DOCTOR | Have you noticed breathlessness, chest pain or weakness?
+- SEG0014 | person_2 | PATIENT | No breathlessness, chest pain or weakness, none of it.
+- SEG0015 | person_1 | DOCTOR | Any rashes or skin problems otherwise?
+- SEG0016 | person_2 | PATIENT | No rashes.
+- SEG0017 | person_1 | DOCTOR | How are your joints, any aches elsewhere?
+- SEG0018 | person_2 | PATIENT | No, nothing there.
+- SEG0019 | person_1 | DOCTOR | Any drug or food allergies?
+- SEG0020 | person_2 | PATIENT | Yes, pollen.
+- SEG0021 | person_1 | DOCTOR | Moving on to your background, any past medical history?
+- SEG0022 | person_2 | PATIENT | I've had high blood pressure for nearly five years now.
+- SEG0023 | person_1 | DOCTOR | Right, so high blood pressure is already on your record. We'll keep that in mind today.
+- SEG0024 | person_1 | DOCTOR | How do you eat, generally?
+- SEG0025 | person_2 | PATIENT | I skip breakfast most days.
+- SEG0026 | person_1 | DOCTOR | Any sport or activity?
+- SEG0027 | person_2 | PATIENT | I play badminton on Sundays.
+- SEG0028 | person_1 | DOCTOR | Is anyone at home with you?
+- SEG0029 | person_2 | PATIENT | I share a flat with two friends.
+- SEG0030 | person_1 | DOCTOR | Let me check your vitals now.
+- SEG0031 | person_1 | DOCTOR | Okay, give me a moment...
+- SEG0032 | person_1 | DOCTOR | Okay: height 183 centimetres, BMI works out to 23.9, temp 36.9 degrees, BP is 172 over 98, saturation 97 percent, respiratory rate 17, pulse is 86 beats a minute, weight 80 kilos.
+- SEG0033 | person_1 | DOCTOR | If you're comfortable, I'll examine you now.
+- SEG0034 | person_2 | PATIENT | Alright.
+- SEG0035 | person_1 | DOCTOR | Take your time, no rush.
+- SEG0036 | person_1 | DOCTOR | There's mild pitting swelling at both ankles.
+- SEG0037 | person_1 | DOCTOR | Thanks for that.
+- SEG0038 | person_1 | DOCTOR | Putting it all together, this looks most like hypertension that isn't well controlled. Salt is the big one, try to keep it low even though it's hard. Do get help quickly if the symptoms get worse. Do you have any questions?
+- SEG0039 | person_2 | PATIENT | No, I think that's everything. Thank you, doctor.
+- SEG0040 | person_1 | DOCTOR | All the best.
+
+### Encounter 00386
+
+- SEG0001 | person_1 | NURSE | Okay, doctor, we're all set in here. I'll give you the numbers when you want them.
+- SEG0002 | person_2 | DOCTOR | Thank you. Good morning, tell me what's been going on.
+- SEG0003 | person_3 | FAMILY_MEMBER | Um, good morning, doctor. I came along to help out.
+- SEG0004 | person_2 | DOCTOR | Yes, that's no problem at all. Please sit.
+- SEG0005 | person_4 | PATIENT | It's, It's hives. I thought I'd wait, but it hasn't gone.
+- SEG0006 | person_2 | DOCTOR | Roughly when did it start?
+- SEG0007 | person_4 | PATIENT | Okay, so it's been ten days now.
+- SEG0008 | person_2 | DOCTOR | Is it mild, moderate or severe?
+- SEG0009 | person_4 | PATIENT | Maybe a three out of ten on a bad day.
+- SEG0010 | person_2 | DOCTOR | Is there anything that takes the edge off?
+- SEG0011 | person_4 | PATIENT | Only antihistamines, and it's not much.
+- SEG0012 | person_2 | DOCTOR | Anything that tends to go along with it?
+- SEG0013 | person_4 | PATIENT | Welts that move around goes along with it, most of the time.
+- SEG0014 | person_4 | PATIENT | I was just going to say that the main thing is—
+- SEG0015 | person_1 | NURSE | Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+- SEG0016 | person_2 | DOCTOR | Later, thanks. Please go on.
+- SEG0017 | person_4 | PATIENT | Well, the welts that move around? That's been for about a week. Okay, so and swelling of the lips as well, since Friday.
+- SEG0018 | person_2 | DOCTOR | Is it mild, moderate or severe?
+- SEG0019 | person_4 | PATIENT | Well, uh, it's... hard to say, it's kind of... I don't know—
+- SEG0020 | person_2 | DOCTOR | Take your time. Mild, moderate, or severe, if you had to pick?
+- SEG0021 | person_4 | PATIENT | About a eight out of ten.
+- SEG0022 | person_1 | NURSE | Here are the numbers, doctor. Oxygen saturation is 98 percent, pressure 117 over 82, respiratory rate 18. Temperature is 36.4 degrees, heart rate 69.
+- SEG0023 | person_2 | DOCTOR | Thanks.
+- SEG0024 | person_2 | DOCTOR | If you're comfortable, I'll examine you now.
+- SEG0025 | person_2 | DOCTOR | Let me press here.
+- SEG0026 | person_2 | DOCTOR | Lips look a little puffy, but the tongue and throat are normal.
+- SEG0027 | person_2 | DOCTOR | Tell me if anything hurts.
+- SEG0028 | person_2 | DOCTOR | There are raised pink welts on the chest and back, some joined together.
+- SEG0029 | person_2 | DOCTOR | All done, you can get dressed. Any fever?
+- SEG0030 | person_4 | PATIENT | I mean, not at all, no fever.
+- SEG0031 | person_3 | FAMILY_MEMBER | Actually, doctor, I did notice fever. He doesn't always say.
+- SEG0032 | person_4 | PATIENT | Um, no, I don't think I did. Maybe a little, I'm not sure.
+- SEG0033 | person_2 | DOCTOR | Alright, I'll note both what you've said and what you've noticed. Have you noticed wheezing, throat tightness or new medicines?
+- SEG0034 | person_4 | PATIENT | No, no wheezing, no throat tightness, no new medicines. I did have a burning feeling on the skin at one point, but that went away on its own.
+- SEG0035 | person_2 | DOCTOR | And then?
+- SEG0036 | person_2 | DOCTOR | Any joint pain or trouble breathing?
+- SEG0037 | person_4 | PATIENT | Um, no joint pain or trouble breathing, none of it.
+- SEG0038 | person_2 | DOCTOR | Anything with your nerves, like weakness or numbness?
+- SEG0039 | person_4 | PATIENT | No weakness or anything.
+- SEG0040 | person_2 | DOCTOR | Are you on any tablets or medication?
+- SEG0041 | person_4 | PATIENT | It's Seretide inhaler, twice a day for my asthma. I'm, I'm on hydrocortisone cream, when needed.
+- SEG0042 | person_4 | PATIENT | Hmm, it's a... um, I can't remember what it's called. It's a little pink tablet.
+- SEG0043 | person_2 | DOCTOR | Do you remember what it's for?
+- SEG0044 | person_4 | PATIENT | For the gout, I believe. My daughter sets them out for me, I just take what I'm given. I mean, I take cetirizine, 10 milligrams, at night. Asthalin inhaler I don't take anymore.
+- SEG0045 | person_2 | DOCTOR | Any long-term health problems I should know about?
+- SEG0046 | person_4 | PATIENT | I have asthma, for about ten years. Yes, eczema. I'm not great at remembering details, so bear with me.
+- SEG0047 | person_2 | DOCTOR | Okay, so.
+- SEG0048 | person_4 | PATIENT | I mean, I have gout, for about ten years. It's the not knowing that gets to me. I wasn't sure whether to come in at all, to be honest.
+- SEG0049 | person_2 | DOCTOR | Alright, asthma and eczema, that matches what I have here. Any procedures or operations?
+- SEG0050 | person_4 | PATIENT | Just a lump removed from my back, years ago.
+- SEG0051 | person_2 | DOCTOR | Anyone in the family with similar problems or other conditions?
+- SEG0052 | person_4 | PATIENT | My mother has migraines. My brother has asthma.
+- SEG0053 | person_2 | DOCTOR | Have you ever reacted badly to a medicine or food? Any allergies?
+- SEG0054 | person_4 | PATIENT | Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+- SEG0055 | person_2 | DOCTOR | Let's talk a little about your daily life and habits.
+- SEG0056 | person_4 | PATIENT | I gave up drinking about three years ago. No, I don't smoke and never have. Yes, I live on my own.
+- SEG0057 | person_2 | DOCTOR | From what you've told me and what I found, I think we're dealing with acute urticaria, possibly allergic at this stage. It could also be a viral trigger, so we'll keep that open. I'd also keep a drug reaction in mind.
+- SEG0058 | person_4 | PATIENT | Is this something I'll have for good?
+- SEG0059 | person_2 | DOCTOR | I understand the worry. At the moment I'd say it's acute urticaria, possibly allergic, and we'll know more once the blood tests is back.
+- SEG0060 | person_2 | DOCTOR | I'll request blood tests, it'll help with urticaria. I'm going to order an allergy test, for recurrent urticaria. We'll begin with prednisolone, 20 milligrams, once a day, for three days. It's for hives. Write down anything new you ate, took or used before this started, even small things. Please take the tablets with food so they don't upset your stomach. Book a review in two weeks. Look after yourself.
+- SEG0061 | person_4 | PATIENT | Right. Thanks again.
+- SEG0062 | person_2 | DOCTOR | Goodbye.
+
+### Encounter 00395
+
+- SEG0001 | person_1 | PATIENT | Hello doctor, sorry, am I early?
+- SEG0002 | person_2 | DOCTOR | Right on time. Sit, please. How can I help?
+- SEG0003 | person_1 | PATIENT | Um, so... tiredness all the time. That's why I came. I looked a few things up online, and that probably didn't help.
+- SEG0004 | person_2 | DOCTOR | Which tablets or creams or inhalers do you use?
+- SEG0005 | person_1 | PATIENT | Metformin. I take it 500 milligrams, twice a day. Well, I do miss it now and then, to be fair.
+- SEG0006 | person_2 | DOCTOR | How long have you had it?
+- SEG0007 | person_1 | PATIENT | For about two weeks, I'd say.
+- SEG0008 | person_2 | DOCTOR | Right, anything that tends to go along with it?
+- SEG0009 | person_1 | PATIENT | Hair falling out goes along with it, most of the time.
+- SEG0010 | person_2 | DOCTOR | And then?
+- SEG0011 | person_2 | DOCTOR | Have you noticed fever or blood in the stool?
+- SEG0012 | person_1 | PATIENT | Yeah, um, no, none of those.
+- SEG0013 | person_2 | DOCTOR | Have you noticed low mood, chest pain or night sweats?
+- SEG0014 | person_1 | PATIENT | None, as far as I know.
+- SEG0015 | person_2 | DOCTOR | How about your heart, any problems like that?
+- SEG0016 | person_1 | PATIENT | My heart's been fine, as far as I know.
+- SEG0017 | person_2 | DOCTOR | Any problems with your joints or muscles?
+- SEG0018 | person_1 | PATIENT | No, joints are fine.
+- SEG0019 | person_2 | DOCTOR | Any diagnoses you've been given before?
+- SEG0020 | person_1 | PATIENT | I have diabetes, for nearly five years.
+- SEG0021 | person_2 | DOCTOR | Do you drink alcohol?
+- SEG0022 | person_1 | PATIENT | I don't drink at all.
+- SEG0023 | person_2 | DOCTOR | Do you smoke?
+- SEG0024 | person_1 | PATIENT | No, I don't smoke and never have.
+- SEG0025 | person_2 | DOCTOR | What's your diet like?
+- SEG0026 | person_1 | PATIENT | I eat out quite a lot, to be honest.
+- SEG0027 | person_2 | DOCTOR | Are you working at the moment?
+- SEG0028 | person_1 | PATIENT | Yes, I'm a nurse on a busy ward.
+- SEG0029 | person_2 | DOCTOR | Are you living with family?
+- SEG0030 | person_1 | PATIENT | I stay with my daughter and her family.
+- SEG0031 | person_2 | DOCTOR | Any previous surgeries?
+- SEG0032 | person_1 | PATIENT | Oh, yes, I had my tonsils out, when I was a child.
+- SEG0033 | person_2 | DOCTOR | What about family history, any illnesses that run in the family?
+- SEG0034 | person_1 | PATIENT | So, my mother has diabetes.
+- SEG0035 | person_2 | DOCTOR | Come over here and I'll have a look.
+- SEG0036 | person_2 | DOCTOR | Let me just check something.
+- SEG0037 | person_2 | DOCTOR | Your thyroid isn't enlarged, I can't feel any lumps in your neck.
+- SEG0038 | person_2 | DOCTOR | Right, you can sit back down.
+- SEG0039 | person_2 | DOCTOR | From what you've told me and what I found, I'd lean towards persistent tiredness, possibly from low iron.
+- SEG0040 | person_1 | PATIENT | Doctor, is this dangerous?
+- SEG0041 | person_2 | DOCTOR | Nothing I've seen today points to an emergency. It looks like persistent tiredness, possibly from low iron.
+- SEG0042 | person_1 | PATIENT | Should I have blood tests as well?
+- SEG0043 | person_2 | DOCTOR | Not at this point, no. It isn't indicated yet. I don't need to add any tests or treatment at this point. Good. Let us know how you get on.
+- SEG0044 | person_1 | PATIENT | I think that's clear. Thank you for being so thorough.
+
+### Encounter 00417
+
+- SEG0001 | person_1 | PATIENT | Hello doctor, sorry, am I early?
+- SEG0002 | person_2 | DOCTOR | That's alright, take a seat. Tell me why you've come.
+- SEG0003 | person_3 | CAREGIVER | Good morning, doctor. I came along to help out. She's been having a night-time cough, doctor.
+- SEG0004 | person_2 | DOCTOR | Can I take your vitals now?
+- SEG0005 | person_2 | DOCTOR | Hold still for me...
+- SEG0006 | person_2 | DOCTOR | Okay: pulse is 97 beats a minute, temperature is 37.3 degrees, oxygen saturation is 90 percent. And blood pressure 131 over 90, respiratory rate 20. How long are we talking about?
+- SEG0007 | person_1 | PATIENT | Since last night, that's when it began.
+- SEG0008 | person_2 | DOCTOR | And how severe is it?
+- SEG0009 | person_1 | PATIENT | Maybe a six out of ten on a bad day.
+- SEG0010 | person_2 | DOCTOR | Anything that tends to go along with it?
+- SEG0011 | person_1 | PATIENT | Wheezing goes along with it, most of the time.
+- SEG0012 | person_2 | DOCTOR | Have you had shortness of breath on walking?
+- SEG0013 | person_1 | PATIENT | Yes, for three days. The, The wheezing? That's been for about two weeks. Okay, so with wheezing, mild, I'd say. It just comes and goes.
+- SEG0014 | person_2 | DOCTOR | So, any leg swelling, runny nose or fever at all?
+- SEG0015 | person_1 | PATIENT | Nothing like that, no.
+- SEG0016 | person_2 | DOCTOR | Let me check a few things. Any weight loss or chest pain?
+- SEG0017 | person_1 | PATIENT | No weight loss or chest pain, none of it.
+- SEG0018 | person_2 | DOCTOR | How are your joints, any aches elsewhere?
+- SEG0019 | person_1 | PATIENT | Nothing else aches.
+- SEG0020 | person_2 | DOCTOR | Right, is your urine normal, no changes?
+- SEG0021 | person_1 | PATIENT | No changes there.
+- SEG0022 | person_2 | DOCTOR | Do your parents or siblings have any long-term illnesses?
+- SEG0023 | person_1 | PATIENT | My uncle had colon cancer.
+- SEG0024 | person_2 | DOCTOR | What's your current medication list?
+- SEG0025 | person_1 | PATIENT | I used to take Seretide inhaler, but I stopped it.
+- SEG0026 | person_2 | DOCTOR | What about operations, anything like that?
+- SEG0027 | person_1 | PATIENT | I had my thyroid operated on a long time ago.
+- SEG0028 | person_2 | DOCTOR | Let's talk a little about your daily life and habits.
+- SEG0029 | person_1 | PATIENT | A beer or two most evenings, to be honest. I've never smoked. I'm mostly vegetarian. I walk for about half an hour most days. I drive a delivery van all day.
+- SEG0030 | person_2 | DOCTOR | Do you have any allergies to medicines, food, anything at all?
+- SEG0031 | person_1 | PATIENT | Hmm, no allergies that I know of, no.
+- SEG0032 | person_3 | CAREGIVER | Hold on, doctor, I think she reacted to penicillin once. I'm not certain, though.
+- SEG0033 | person_1 | PATIENT | Maybe, but I don't recall it.
+- SEG0034 | person_2 | DOCTOR | Okay, I'll note both of those.
+- SEG0035 | person_2 | DOCTOR | What about your general health, any conditions you're being treated for?
+- SEG0036 | person_1 | PATIENT | I, I have asthma. I have migraines.
+- SEG0037 | person_2 | DOCTOR | Okay, so. Okay, I can see asthma in your file as well.
+- SEG0038 | person_2 | DOCTOR | Shall we do the examination?
+- SEG0039 | person_2 | DOCTOR | Right, tell me if anything hurts.
+- SEG0040 | person_2 | DOCTOR | You're speaking in full sentences, which is reassuring.
+- SEG0041 | person_2 | DOCTOR | Almost done with this part.
+- SEG0042 | person_2 | DOCTOR | I can hear a widespread wheeze on both sides when you breathe out.
+- SEG0043 | person_2 | DOCTOR | Good, that's the examination.
+- SEG0044 | person_2 | DOCTOR | Putting it all together, I think we're dealing with an asthma flare-up at this stage. I want to be honest that this is an impression, not a final answer. I can't rule out an allergic reaction yet.
+- SEG0045 | person_1 | PATIENT | So, should I be worried about this?
+- SEG0046 | person_2 | DOCTOR | It's reasonable to be concerned, but right now an asthma flare-up is my leading thought, not anything worse. Let's book a chest X-ray to look into wheeze. Let's book breathing tests to look into asthma. Let's use prednisolone, 30 milligrams, once a day, for five days. You take it by mouth. That's for asthma flare-up. Let me watch you use the inhaler, a lot of people don't get the full dose.
+- SEG0047 | person_2 | DOCTOR | The thing that would worry me is if the inhaler isn't helping or you can't speak in full sentences. If that happens, go to emergency.
+- SEG0048 | person_1 | PATIENT | Okay, fair enough.
+- SEG0049 | person_2 | DOCTOR | Book a review in two weeks. Okay, I think we're finished. Is everything clear?
+- SEG0050 | person_1 | PATIENT | Thanks so much, doctor.
+
+### Encounter 00420
+
+- SEG0001 | person_1 | PATIENT | Hi, doctor, I brought my bag, is it fine to leave it here?
+- SEG0002 | person_2 | DOCTOR | Alright, no trouble at all, come in. What's been bothering you?
+- SEG0003 | person_3 | FAMILY_MEMBER | Doctor, I've come along because I know the history, if it helps.
+- SEG0004 | person_1 | PATIENT | I'm here because of a mole on my back that looks different.
+- SEG0005 | person_2 | DOCTOR | How far back does it go?
+- SEG0006 | person_1 | PATIENT | About... well, about three months.
+- SEG0007 | person_2 | DOCTOR | What about another new spot on your arm, have you noticed that?
+- SEG0008 | person_1 | PATIENT | Yes, I have. I've also had a bit of itching on it, for four weeks. Um, as for bit of itching on it, it's a few times a day. It bled once was there, but it's gone away on its own.
+- SEG0009 | person_2 | DOCTOR | Moving on to your background, any past medical history?
+- SEG0010 | person_1 | PATIENT | Heart disease, for five years. I've had heart failure for about a year now. I'm hoping you can tell me something definite.
+- SEG0011 | person_2 | DOCTOR | I see.
+- SEG0012 | person_1 | PATIENT | I have diabetes, for about ten years.
+- SEG0013 | person_2 | DOCTOR | Right, so heart failure is already on your record. We'll keep that in mind today.
+- SEG0014 | person_2 | DOCTOR | Any sport or activity?
+- SEG0015 | person_1 | PATIENT | I play badminton on Sundays.
+- SEG0016 | person_2 | DOCTOR | What's your job?
+- SEG0017 | person_1 | PATIENT | I teach at a primary school.
+- SEG0018 | person_2 | DOCTOR | Let's go through your medication. What are you taking?
+- SEG0019 | person_1 | PATIENT | I take aspirin, 75 milligrams, once a day.
+- SEG0020 | person_3 | FAMILY_MEMBER | It's meant to be once a day, though I don't see he take it every time.
+- SEG0021 | person_1 | PATIENT | I take furosemide, 40 milligrams, every morning for the fluid.
+- SEG0022 | person_2 | DOCTOR | Is that long-standing?
+- SEG0023 | person_1 | PATIENT | About two months. It's Glycomet, 500 milligrams, twice a day.
+- SEG0024 | person_2 | DOCTOR | Before I prescribe anything, any allergies?
+- SEG0025 | person_1 | PATIENT | Ibuprofen, I'd say.
+- SEG0026 | person_2 | DOCTOR | Did you get pain, weight loss, fever or history of skin cancer?
+- SEG0027 | person_1 | PATIENT | No, no pain, weight loss, fever or history of skin cancer.
+- SEG0028 | person_2 | DOCTOR | Nothing like lumps in the armpit?
+- SEG0029 | person_1 | PATIENT | No. No lumps in the armpit.
+- SEG0030 | person_2 | DOCTOR | How are your bowels, any trouble?
+- SEG0031 | person_1 | PATIENT | No, that side's been fine.
+- SEG0032 | person_2 | DOCTOR | First the numbers, if you don't mind.
+- SEG0033 | person_2 | DOCTOR | One second...
+- SEG0034 | person_2 | DOCTOR | Okay: saturation 99 percent, temperature is 36.5 degrees, heart rate 74, respiratory rate 18, pressure 109 over 74.
+- SEG0035 | person_1 | PATIENT | Is that alright, doctor?
+- SEG0036 | person_2 | DOCTOR | Let's look at it together in a minute.
+- SEG0037 | person_2 | DOCTOR | Shall we do the examination?
+- SEG0038 | person_1 | PATIENT | Mm, okay.
+- SEG0039 | person_2 | DOCTOR | Just relax, I'll be quick.
+- SEG0040 | person_2 | DOCTOR | I can't feel any glands in the armpit.
+- SEG0041 | person_1 | PATIENT | Fine.
+- SEG0042 | person_2 | DOCTOR | Just relax, I'll be quick.
+- SEG0043 | person_2 | DOCTOR | It's about eight millimetres, with an uneven border and two shades of brown.
+- SEG0044 | person_2 | DOCTOR | All done, you can get dressed.
+- SEG0045 | person_2 | DOCTOR | So, based on the history and the examination, I can't pin this down yet. We're looking at a pigmented lesion that needs to be looked at more closely or a seborrhoeic keratosis.
+- SEG0046 | person_1 | PATIENT | I've been thinking the worst, to be honest. Is it bad?
+- SEG0047 | person_2 | DOCTOR | It's reasonable to be concerned, but right now a pigmented lesion that needs to be looked at more closely is my leading thought, not anything worse. Let's book a dermoscopy to look into changing mole. I'm going to order a skin biopsy, for changing mole. Please use sunscreen and cover up in the midday sun, and check your skin once a month. Do get help quickly if the symptoms get worse.
+- SEG0048 | person_2 | DOCTOR | I'll want another look after the biopsy results.
+- SEG0049 | person_1 | PATIENT | Okay.
+- SEG0050 | person_2 | DOCTOR | Is there anything you wanted to ask?
+- SEG0051 | person_1 | PATIENT | Nothing more from me, thanks.
+
+### Encounter 00436
+
+- SEG0001 | person_1 | PATIENT | Doctor, hello, I've got my papers here, where should I put them?
+- SEG0002 | person_2 | DOCTOR | You're fine, sit down. So, what brings you in?
+- SEG0003 | person_3 | CAREGIVER | Morning, doctor. I'll stay and and fill in anything that's missed.
+- SEG0004 | person_2 | DOCTOR | Yes, that's no problem at all. Please sit.
+- SEG0005 | person_3 | CAREGIVER | She's been having pain in both knees, doctor.
+- SEG0006 | person_1 | PATIENT | And the other thing I wanted to mention is that I can't really—
+- SEG0007 | person_3 | CAREGIVER | Tell the doctor about the other thing, that's what worries me.
+- SEG0008 | person_1 | PATIENT | I was getting to to that! Well, I've also had a grinding sound when I move, for two months. I mean, as for difficulty getting up from a chair, I honestly can't say when that began. It might have been last month or the month before.
+- SEG0009 | person_4 | NURSE | Okay, so the vitals from earlier. Temperature 36.9, heart rate 81, oxygen saturation is 99 percent, respiratory rate 16, pressure 115 over 73.
+- SEG0010 | person_2 | DOCTOR | Good, thank you.
+- SEG0011 | person_2 | DOCTOR | I'll examine you now, bear with me.
+- SEG0012 | person_2 | DOCTOR | A A little pressure here, tell me if it's tender.
+- SEG0013 | person_2 | DOCTOR | Bending is limited to about a right angle, and it hurts at the end.
+- SEG0014 | person_2 | DOCTOR | Bear with me a second.
+- SEG0015 | person_2 | DOCTOR | There's mild swelling on the right knee, and a grating feel when I bend it.
+- SEG0016 | person_2 | DOCTOR | That's all I need, thank you. A few quick ones: redness over the knee, pain in other joints, fever or back pain?
+- SEG0017 | person_1 | PATIENT | No, um, no redness over the knee, no pain in other joints, no fever. I did have stiffness in the morning at one point, but that that went away on its own.
+- SEG0018 | person_2 | DOCTOR | Did you get locking of the knee or fall?
+- SEG0019 | person_1 | PATIENT | No, no locking of the knee or fall.
+- SEG0020 | person_2 | DOCTOR | is your urine normal, no changes?
+- SEG0021 | person_1 | PATIENT | no, that's all fine
+- SEG0022 | person_2 | DOCTOR | Have you noticed any weakness, or anything odd with your balance?
+- SEG0023 | person_1 | PATIENT | Nothing odd there.
+- SEG0024 | person_2 | DOCTOR | any previous surgeries?
+- SEG0025 | person_1 | PATIENT | No, nothing like that.
+- SEG0026 | person_2 | DOCTOR | Before I prescribe anything, any allergies?
+- SEG0027 | person_1 | PATIENT | I've never been told I have allergies
+- SEG0028 | person_2 | DOCTOR | are you on any tablets or medication?
+- SEG0029 | person_1 | PATIENT | it's metformin, twice a day for my sugar
+- SEG0030 | person_2 | DOCTOR | So, and what strength is that?
+- SEG0031 | person_1 | PATIENT | 500 milligrams, I think that's what's on the box.
+- SEG0032 | person_2 | DOCTOR | when did you start it?
+- SEG0033 | person_1 | PATIENT | For about a month. I'm on telmisartan, 40 milligrams, once a day.
+- SEG0034 | person_3 | CAREGIVER | That's what's prescribed, but I'm not sure she takes it every day.
+- SEG0035 | person_1 | PATIENT | it's a... um, I can't remember what it's called it's a round yellow one
+- SEG0036 | person_2 | DOCTOR | do you remember what it's for?
+- SEG0037 | person_1 | PATIENT | for the joint pain, I believe my daughter sets them out for me, I just take what I'm given it's bisoprolol, 2.5 milligrams, once a day
+- SEG0038 | person_2 | DOCTOR | right, anyone in the family with similar problems or other conditions?
+- SEG0039 | person_1 | PATIENT | My brother has asthma. My mother has migraines.
+- SEG0040 | person_2 | DOCTOR | so, do you have any medical conditions, anything you've been treated for?
+- SEG0041 | person_1 | PATIENT | I've had diabetes, yes. High blood pressure, for about a year. I have arthritis in my knees.
+- SEG0042 | person_2 | DOCTOR | okay, anything else?
+- SEG0043 | person_1 | PATIENT | yes, high cholesterol my family kept telling me to get it checked
+- SEG0044 | person_2 | DOCTOR | Go on.
+- SEG0045 | person_1 | PATIENT | I've had an irregular heartbeat, yes
+- SEG0046 | person_2 | DOCTOR | Do you smoke?
+- SEG0047 | person_1 | PATIENT | I've never smoked
+- SEG0048 | person_2 | DOCTOR | Are you living with family?
+- SEG0049 | person_1 | PATIENT | I stay with my daughter and her family
+- SEG0050 | person_2 | DOCTOR | just to be sure I understood you've had pain in both knees, and no fever or pain in other joints
+- SEG0051 | person_1 | PATIENT | Exactly.
+- SEG0052 | person_2 | DOCTOR | we should do blood tests for joint pain. Let's book an X-ray of both knees to look into knee pain. The treatment will be paracetamol, 650 milligrams, three times a day, for two weeks. You take it by mouth. That's for knee pain. Losing even a few kilos takes a lot of load off the knees, and I'd like you to do the strengthening exercises. If the symptoms get worse, that's the point to come in urgently
+- SEG0053 | person_1 | PATIENT | Oh, alright, I know what to look for.
+- SEG0054 | person_2 | DOCTOR | We'll catch up in four weeks. What are the next steps as you understand them?
+- SEG0055 | person_1 | PATIENT | So, I take the paracetamol, 650 milligrams, three times a day and come back in four weeks. Is that right?
+- SEG0056 | person_2 | DOCTOR | Yes, exactly right. Alright, I'll see you out.
+- SEG0057 | person_1 | PATIENT | all good here. Thank you
+
+### Encounter 00445
+
+- SEG0001 | person_1 | NURSE | Morning, doctor. I've settled them in, ready when you are.
+- SEG0002 | person_2 | DOCTOR | Great. Hello, come in and sit down. How can I help?
+- SEG0003 | person_3 | PATIENT | I mean, uh, I've been dealing with sneezing fits. It's a relief to finally sit down and and talk about it.
+- SEG0004 | person_2 | DOCTOR | how long have you had it?
+- SEG0005 | person_3 | PATIENT | So, I've had it for three weeks. I'm hoping you can tell me something definite. I wasn't sure whether to come in at all, to be honest.
+- SEG0006 | person_2 | DOCTOR | Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+- SEG0007 | person_3 | PATIENT | It sort of comes and goes. Antihistamines helps a bit. I'd call it moderate. My family kept telling me to get it checked. I did try to ignore it for a while.
+- SEG0008 | person_2 | DOCTOR | does it come along with anything else?
+- SEG0009 | person_3 | PATIENT | A runny nose goes along with it, most of the time. The runny nose? That's been for three weeks. As for runny nose, about a seven out of ten. Oh, you know, and a dry cough. That's been about the same, three days. With dry cough, I'd say on and off.
+- SEG0010 | person_1 | NURSE | Doctor, I've got the readings for you. Pressure 125 over 81, respiratory rate 15, pulse 64, oxygen saturation is 98 percent.
+- SEG0011 | person_2 | DOCTOR | thanks
+- SEG0012 | person_2 | DOCTOR | let me examine, it won't take long
+- SEG0013 | person_3 | PATIENT | fine
+- SEG0014 | person_2 | DOCTOR | so, a little pressure here, tell me if it's tender
+- SEG0015 | person_2 | DOCTOR | Chest is clear, no wheeze.
+- SEG0016 | person_2 | DOCTOR | Okay, just relax, I'll be quick.
+- SEG0017 | person_2 | DOCTOR | The inside of your nose is pale and swollen.
+- SEG0018 | person_2 | DOCTOR | Right, you can sit back down.
+- SEG0019 | person_2 | DOCTOR | Any loss of smell, facial pain or wheezing at all?
+- SEG0020 | person_3 | PATIENT | Right, you know, no loss of smell, facial pain or wheezing, none of it.
+- SEG0021 | person_2 | DOCTOR | any fever?
+- SEG0022 | person_3 | PATIENT | not at all, you know, no fever
+- SEG0023 | person_2 | DOCTOR | Have you noticed any weakness, or anything odd with your balance?
+- SEG0024 | person_3 | PATIENT | Yeah, you know, no, that's all normal.
+- SEG0025 | person_2 | DOCTOR | Any rashes or skin problems otherwise?
+- SEG0026 | person_3 | PATIENT | Right, you know, nothing on the skin, no.
+- SEG0027 | person_2 | DOCTOR | What medicines are you taking at the the moment?
+- SEG0028 | person_3 | PATIENT | It's, It's hydrocortisone cream, when needed.
+- SEG0029 | person_2 | DOCTOR | Since when have you been taking it?
+- SEG0030 | person_3 | PATIENT | for nearly five years. Cetirizine, 10 milligrams, when it flares
+- SEG0031 | person_2 | DOCTOR | do you have any medical conditions, anything you've been treated for?
+- SEG0032 | person_3 | PATIENT | Uh, I have eczema. I looked a few things up online, and that probably didn't help.
+- SEG0033 | person_2 | DOCTOR | Mm. Alright, eczema, that matches what I have here. Any previous surgeries?
+- SEG0034 | person_3 | PATIENT | Just a lump removed from my back, years ago.
+- SEG0035 | person_2 | DOCTOR | Anything special about your diet?
+- SEG0036 | person_3 | PATIENT | I try to avoid too much sugar.
+- SEG0037 | person_2 | DOCTOR | do you get any exercise?
+- SEG0038 | person_3 | PATIENT | I walk for about half an hour most days.
+- SEG0039 | person_2 | DOCTOR | Before I prescribe anything, any allergies?
+- SEG0040 | person_3 | PATIENT | Right, uh, I don't have any known medication allergies.
+- SEG0041 | person_2 | DOCTOR | From what you've told me and what I found, my working impression is allergic rhinitis.
+- SEG0042 | person_3 | PATIENT | Should I be worried about this?
+- SEG0043 | person_2 | DOCTOR | I understand the worry. At the moment I'd say it's allergic rhinitis, and we'll know more once the an allergy test is back. I'll request an allergy test, it'll help with allergic rhinitis. For this, fluticasone nasal spray, 50 micrograms, one spray each side daily, for four weeks. It's for allergic rhinitis. Keep the the windows closed in the early morning and wash the bedsheets weekly in hot water
+- SEG0044 | person_2 | DOCTOR | if the symptoms get worse, that's the point to come in urgently. I'd like you back in a month. Alright, do you have any questions?
+- SEG0045 | person_3 | PATIENT | So, you know, thank you for your time.
+- SEG0046 | person_2 | DOCTOR | Goodbye.

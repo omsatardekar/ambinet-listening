@@ -1,0 +1,579 @@
+{
+ "type": "object",
+ "properties": {
+  "chief_complaint": {
+   "type": "string",
+   "minLength": 1
+  },
+  "symptoms": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "minLength": 1
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "present",
+       "resolved"
+      ]
+     },
+     "duration": {
+      "type": "string"
+     },
+     "reported_by": {
+      "type": "string",
+      "enum": [
+       "doctor",
+       "patient",
+       "nurse",
+       "caregiver",
+       "family_member",
+       "clinical_staff",
+       "unknown"
+      ]
+     }
+    },
+    "required": [
+     "name",
+     "status",
+     "reported_by"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "negative_findings": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "finding": {
+      "type": "string",
+      "minLength": 1
+     },
+     "reported_by": {
+      "type": "string",
+      "enum": [
+       "doctor",
+       "patient",
+       "nurse",
+       "caregiver",
+       "family_member",
+       "clinical_staff",
+       "unknown"
+      ]
+     }
+    },
+    "required": [
+     "finding",
+     "reported_by"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "medical_history": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "condition": {
+      "type": "string",
+      "minLength": 1
+     },
+     "duration": {
+      "type": "string"
+     },
+     "reported_by": {
+      "type": "string",
+      "enum": [
+       "doctor",
+       "patient",
+       "nurse",
+       "caregiver",
+       "family_member",
+       "clinical_staff",
+       "unknown"
+      ]
+     }
+    },
+    "required": [
+     "condition",
+     "reported_by"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "surgical_history": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "procedure": {
+      "type": "string",
+      "minLength": 1
+     },
+     "when": {
+      "type": "string"
+     },
+     "reported_by": {
+      "type": "string",
+      "enum": [
+       "doctor",
+       "patient",
+       "nurse",
+       "caregiver",
+       "family_member",
+       "clinical_staff",
+       "unknown"
+      ]
+     }
+    },
+    "required": [
+     "procedure",
+     "reported_by"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "family_history": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "condition": {
+      "type": "string",
+      "minLength": 1
+     },
+     "relation": {
+      "type": "string",
+      "minLength": 1
+     },
+     "reported_by": {
+      "type": "string",
+      "enum": [
+       "doctor",
+       "patient",
+       "nurse",
+       "caregiver",
+       "family_member",
+       "clinical_staff",
+       "unknown"
+      ]
+     }
+    },
+    "required": [
+     "condition",
+     "relation",
+     "reported_by"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "social_history": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "type": "string",
+      "enum": [
+       "smoking",
+       "alcohol",
+       "occupation",
+       "exercise",
+       "diet",
+       "living"
+      ]
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "current",
+       "former",
+       "never",
+       "none",
+       "retired"
+      ]
+     },
+     "detail": {
+      "type": "string"
+     },
+     "reported_by": {
+      "type": "string",
+      "enum": [
+       "doctor",
+       "patient",
+       "nurse",
+       "caregiver",
+       "family_member",
+       "clinical_staff",
+       "unknown"
+      ]
+     }
+    },
+    "required": [
+     "category",
+     "reported_by"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "medications": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "minLength": 1
+     },
+     "dose": {
+      "type": "string"
+     },
+     "route": {
+      "type": "string"
+     },
+     "frequency": {
+      "type": "string"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "current",
+       "stopped",
+       "new"
+      ]
+     },
+     "reported_by": {
+      "type": "string",
+      "enum": [
+       "doctor",
+       "patient",
+       "nurse",
+       "caregiver",
+       "family_member",
+       "clinical_staff",
+       "unknown"
+      ]
+     }
+    },
+    "required": [
+     "name",
+     "status",
+     "reported_by"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "allergy_status": {
+   "type": "string",
+   "enum": [
+    "reported",
+    "none_stated",
+    "unknown",
+    "not_asked"
+   ]
+  },
+  "allergies": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "substance": {
+      "type": "string",
+      "minLength": 1
+     },
+     "reaction": {
+      "type": "string"
+     },
+     "reported_by": {
+      "type": "string",
+      "enum": [
+       "doctor",
+       "patient",
+       "nurse",
+       "caregiver",
+       "family_member",
+       "clinical_staff",
+       "unknown"
+      ]
+     }
+    },
+    "required": [
+     "substance",
+     "reported_by"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "vital_signs": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "enum": [
+       "blood pressure",
+       "pulse",
+       "temperature",
+       "respiratory rate",
+       "oxygen saturation",
+       "weight",
+       "height",
+       "BMI"
+      ]
+     },
+     "value": {
+      "type": "string",
+      "minLength": 1
+     },
+     "unit": {
+      "type": "string"
+     },
+     "reported_by": {
+      "type": "string",
+      "enum": [
+       "doctor",
+       "patient",
+       "nurse",
+       "caregiver",
+       "family_member",
+       "clinical_staff",
+       "unknown"
+      ]
+     }
+    },
+    "required": [
+     "name",
+     "value",
+     "reported_by"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "physical_examination": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "finding": {
+      "type": "string",
+      "minLength": 1
+     },
+     "body_site": {
+      "type": "string"
+     },
+     "reported_by": {
+      "type": "string",
+      "enum": [
+       "doctor",
+       "patient",
+       "nurse",
+       "caregiver",
+       "family_member",
+       "clinical_staff",
+       "unknown"
+      ]
+     }
+    },
+    "required": [
+     "finding",
+     "reported_by"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "review_of_systems": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "system": {
+      "type": "string",
+      "minLength": 1
+     },
+     "details": {
+      "type": "string"
+     },
+     "reported_by": {
+      "type": "string",
+      "enum": [
+       "doctor",
+       "patient",
+       "nurse",
+       "caregiver",
+       "family_member",
+       "clinical_staff",
+       "unknown"
+      ]
+     }
+    },
+    "required": [
+     "system",
+     "reported_by"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "clinical_assessment": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "assessment": {
+      "type": "string",
+      "minLength": 1
+     },
+     "certainty": {
+      "type": "string",
+      "enum": [
+       "provisional",
+       "differential"
+      ]
+     }
+    },
+    "required": [
+     "assessment",
+     "certainty"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "investigations": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "minLength": 1
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "laboratory",
+       "imaging",
+       "cardiac",
+       "other"
+      ]
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "planned",
+       "done",
+       "conditional"
+      ]
+     }
+    },
+    "required": [
+     "name",
+     "status"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "procedures": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "minLength": 1
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "planned",
+       "done",
+       "conditional"
+      ]
+     }
+    },
+    "required": [
+     "name",
+     "status"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "clinical_actions": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "type": {
+      "type": "string",
+      "enum": [
+       "medication",
+       "investigation",
+       "counselling",
+       "referral",
+       "follow_up",
+       "other"
+      ]
+     },
+     "description": {
+      "type": "string",
+      "minLength": 1
+     }
+    },
+    "required": [
+     "type",
+     "description"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "follow_up": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "when": {
+      "type": "string",
+      "minLength": 1
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "planned",
+       "conditional"
+      ]
+     }
+    },
+    "required": [
+     "when",
+     "status"
+    ],
+    "additionalProperties": false
+   }
+  }
+ },
+ "required": [
+  "chief_complaint",
+  "symptoms",
+  "negative_findings",
+  "medical_history",
+  "surgical_history",
+  "family_history",
+  "social_history",
+  "medications",
+  "allergy_status",
+  "allergies",
+  "vital_signs",
+  "physical_examination",
+  "review_of_systems",
+  "clinical_assessment",
+  "investigations",
+  "procedures",
+  "clinical_actions",
+  "follow_up"
+ ],
+ "additionalProperties": false
+}

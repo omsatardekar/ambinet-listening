@@ -5,6 +5,8 @@ import {
   ShieldCheck, Sparkles, Stethoscope, TriangleAlert, UploadCloud, Users,
 } from "lucide-react";
 import VoiceAssistant, { type VoiceStatus } from "./VoiceAssistant";
+import ExtractionPanel from "./ExtractionPanel";
+import SoapPanel from "./SoapPanel";
 
 type StageKey =
   | "audio_upload"
@@ -839,6 +841,12 @@ function App() {
             </motion.section>
           )}
         </AnimatePresence>
+
+        {/* ───────── Clinical extraction (module 3) ───────── */}
+        {transcript && <ExtractionPanel runId={runId} encounterId={transcript.encounter_id} />}
+
+        {/* ───────── SOAP note (module 4, the last step) ───────── */}
+        {transcript && <SoapPanel runId={runId} encounterId={transcript.encounter_id} />}
 
         <footer className="mt-12 flex flex-col gap-2 border-t border-white/[0.07] px-1 pt-6 text-[11px] leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
           <span>Ambient Clinical <span className="px-1">·</span> From conversation to SOAP note</span>

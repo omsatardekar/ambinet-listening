@@ -1,0 +1,95 @@
+# Phase 2 (UNBLINDED): the system's citation or abstention
+
+Complete only after Phase 1. For CITED facts judge the selected segment(s); for ABSTAINED facts judge whether usable evidence existed (compare with your Phase 1 answer).
+Columns in `phase2_responses_template.csv`: `relevant` yes/partly/no (cited), `supports` yes/partly/no (cited), `speaker_ok`, `polarity_ok`, `context_ok` (is a needed question included / is an unnecessary question included?), `family_attribution_ok`, `abstention_justified` yes/no (abstained: no usable evidence existed), `comment`.
+
+- **A01** allergies: substance: antibiotic; normalized_substance: antibiotic; allergy_type: medication; reaction: unknown; status: reported; reported_by: patient
+  - SYSTEM CITED: SEG0025 [person_2/PATIENT] I think I reacted to to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+- **A02** negative_findings: finding: slight slur in speech; normalized_name: slight slur in speech; status: absent; assertion: negative; reported_by: doctor; temporality: current
+  - SYSTEM CITED: SEG0003 [person_1/PATIENT] Yeah, it's a slight slur in my speech. I don't know what's causing it. I didn't want to make a fuss, you know.
+- **A03** clinical_assessment: assessment: diabetes that isn't well controlled; normalized_assessment: diabetes; certainty: provisional; basis: examination and medical history; stated_by: doctor
+  - SYSTEM ABSTAINED (reason: ambiguous_many_equal_matches)
+- **A04** procedures_and_investigations: name: HbA1c test; normalized_name: HbA1c test; type: laboratory; status: planned; indication: blood sugar control
+  - SYSTEM ABSTAINED (reason: no_candidate)
+- **A05** medical_history.family_history: condition: heart attack; normalized_condition: heart attack; relation: father; reported_by: patient
+  - SYSTEM CITED: SEG0026 [person_3/PATIENT] Well, my father had a heart attack. Hmm, you know, my father had kidney stones.
+- **A06** symptoms: name: moderate, with thinning hair and irregular periods; normalized_name: moderate, with thinning hair and irregular periods; category: gastrointestinal; status: present; severity: moderate; temporality: current; body_site: head; reported_by: doctor; certainty: uncertain
+  - SYSTEM CITED: SEG0010 [person_1/PATIENT] Moderate, really. Hmm, and there's thinning hair on the scalp as well, about four days now. And, And irregular periods, too.
+- **A07** medical_history.past_medical_history: procedure: thyroid operation; normalized_procedure: thyroid operation; reported_by: doctor
+  - SYSTEM ABSTAINED (reason: no_anchor_words)
+- **A08** medical_history.social_history: category: lifestyle; description: eat out quite a lot; reported_by: doctor
+  - SYSTEM CITED: SEG0020 [person_2/DOCTOR] What's your diet like? || SEG0021 [person_1/PATIENT] I eat out quite a lot, to be honest.  (question added as context)
+- **A09** clinical_conditions: name: diabetes; normalized_name: diabetes; status: existing; reported_by: doctor
+  - SYSTEM CITED: SEG0031 [person_1/DOCTOR] Any long-term health problems I should know about? || SEG0032 [person_2/PATIENT] uh, I've had diabetes for nearly five years now || SEG0035 [person_1/DOCTOR] Okay, I can see diabetes in your file as well. Any relatives with health problems I should be aware of? || SEG0036 [person_2/PATIENT] My grandmother had breast cancer.  (question added as context)
+- **A10** clinical_actions: action_type: referral; description: refer to physiotherapy; status: recommended; responsible_person: DOCTOR; time_reference: 2023-04-05
+  - SYSTEM CITED: SEG0055 [person_1/DOCTOR] rest, ice for twenty minutes at a time, a compression bandage and keep the foot up. I'll also refer you to physiotherapy. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Let's review you in two weeks. Alright, I'll see you out
+- **A11** negative_findings: finding: mild pain in the lower right tummy; normalized_name: mild pain in the lower right tummy; status: absent; assertion: negative; reported_by: doctor; temporality: current
+  - SYSTEM ABSTAINED (reason: polarity_conflict)
+- **A12** negative_findings: finding: no fever; normalized_name: no fever; status: absent; assertion: negative; reported_by: doctor; temporality: current
+  - SYSTEM CITED: SEG0011 [person_2/DOCTOR] Okay, did you get fever, eye redness or weeping? || SEG0012 [person_1/PATIENT] No, no fever, eye redness or weeping.  (question added as context)
+- **A13** physical_examination: finding: no fever, no allergies, no previous surgery; normalized_finding: no fever, no allergies, no previous surgery; body_site: head; status: present; observed_by: doctor
+  - SYSTEM CITED: SEG0042 [person_2/DOCTOR] It's reasonable to be concerned, but right now breakthrough seizure on known epilepsy is my leading thought, not anything worse. Let me just check I've got this right. You've been feeling drowsy for one week, and no fever or headache.
+- **A14** medications: name: metformin; normalized_name: metformin; generic_name: metformin; dose: 500 milligrams; route: oral; frequency: twice a day; status: currently_used
+  - SYSTEM CITED: SEG0005 [person_1/PATIENT] Okay, so I'm on metformin, 500 milligrams, twice a day. It's telmisartan, 40 milligrams, once a day.
+- **A15** clinical_conditions: name: high blood pressure; normalized_name: high blood pressure; status: existing; reported_by: doctor
+  - SYSTEM CITED: SEG0036 [person_1/PATIENT] High blood pressure, for about a year. I looked a few things up online, and that probably didn't help.
+- **A16** medications: name: ramipril; normalized_name: ramipril; status: currently_used; dose: 5 milligrams; route: oral; frequency: every morning
+  - SYSTEM CITED: SEG0027 [person_1/PATIENT] I take ramipril, 5 milligrams, every morning for my blood pressure
+- **A17** medical_history.past_medical_history: condition: heart disease; normalized_condition: heart disease; status: ongoing; reported_by: patient
+  - SYSTEM CITED: SEG0028 [person_3/PATIENT] I've had heart disease for nearly five years now. My sister suggested writing things down, but I forgot. I've had diabetes for nearly five years now. I've never really been one for hospitals.
+- **A18** medical_history.family_history: condition: migraines; normalized_condition: migraines; relation: unclear; reported_by: doctor
+  - SYSTEM CITED: SEG0025 [person_1/PATIENT] My uncle had colon cancer. Okay, you know, so my mother has migraines.
+- **A19** vital_signs: name: spO2; normalized_name: spO2; value: 97%; unit: percent; reported_by: doctor
+  - SYSTEM CITED: SEG0046 [person_2/DOCTOR] Okay: temperature 36.7, BP is 123 over 70. And heart rate 64, SpO2 97 percent on room air.
+- **A20** medical_history.surgical_history: procedure: appendectomy; normalized_procedure: appendectomy; timeframe: 8 years; reported_by: doctor
+  - SYSTEM CITED: SEG0026 [person_2/DOCTOR] Any surgery in your history? || SEG0027 [person_1/PATIENT] I had my appendix out about eight years ago.  (question added as context)
+- **A21** medical_history.past_medical_history: condition: colon cancer; normalized_condition: colon cancer; status: ongoing; reported_by: doctor
+  - SYSTEM ABSTAINED (reason: kinship_conflict)
+- **A22** clinical_assessment: assessment: carpal tunnel syndrome; normalized_assessment: carpal tunnel syndrome; certainty: provisional; basis: physical examination; stated_by: doctor
+  - SYSTEM ABSTAINED (reason: polarity_conflict)
+- **A23** vital_signs: name: heart rate; normalized_name: heart rate; value: 71; unit: beats per minute; reported_by: DOCTOR
+  - SYSTEM CITED: SEG0043 [person_1/NURSE] Doctor, I've got the readings for you. Heart rate 71, temperature 36.5, BP is 109 over 75. Oxygen saturation is 98 percent.
+- **A24** negative_findings: finding: right upper quadrant pain; normalized_name: right upper quadrant pain; status: absent; assertion: negative; reported_by: doctor; temporality: current
+  - SYSTEM ABSTAINED (reason: speaker_class_mismatch)
+- **A25** procedures_and_investigations: name: chest X-ray; normalized_name: chest X-ray; type: imaging; status: planned; requested_by: DOCTOR; indication: pleuritic pain
+  - SYSTEM CITED: SEG0063 [person_1/DOCTOR] I want an ECG done, that's for chest pain. It's a routine test and it'll give us a much clearer picture. I want a chest X-ray done, that's for pleuritic pain
+- **A26** negative_findings: finding: fainting; normalized_name: fainting; status: absent; assertion: negative; reported_by: doctor; temporality: current
+  - SYSTEM CITED: SEG0010 [person_2/DOCTOR] Have you noticed fainting or chest pain? || SEG0011 [person_3/PATIENT] uh, I haven't had fainting or chest pain, no  (question added as context)
+- **A27** negative_findings: finding: no fever; normalized_name: no fever; status: absent; assertion: negative; reported_by: doctor; temporality: current
+  - SYSTEM ABSTAINED (reason: no_candidate)
+- **A28** symptoms: name: slight slur in speech; normalized_name: slight slur in speech; category: psychological; status: present; severity: severe; temporality: current; reported_by: patient; certainty: uncertain
+  - SYSTEM CITED: SEG0033 [person_2/DOCTOR] I can't promise yet, but most people with a possible mini-stroke, which we need to investigate urgently do well once it's treated properly. Just to be sure I understood. You've had a slight slur in your speech for ten days, severe, and no palpitations or chest pain.
+- **A29** medications: name: iron tablets; normalized_name: iron tablets; generic_name: iron; dose: 5 milligrams; route: oral; frequency: once a day; status: currently_used; reported_by: doctor
+  - SYSTEM CITED: SEG0030 [person_3/FAMILY_MEMBER] It's iron tablets, once a day, doctor. Right, um, she takes ramipril, 5 milligrams, every morning.
+- **A30** allergies: substance: none; normalized_substance: none; allergy_type: none; severity: unknown; status: reported
+  - SYSTEM CITED: SEG0012 [person_2/DOCTOR] Did you get chest pain, vomiting or weight loss? || SEG0013 [person_1/PATIENT] None, as far as I know.  (question added as context)
+- **A31** clinical_assessment: assessment: ankle sprain; normalized_assessment: ankle sprain; certainty: provisional; basis: history of ankle pain and swelling; stated_by: DOCTOR
+  - SYSTEM CITED: SEG0052 [person_1/DOCTOR] from what you've told me and what I found, I think we're dealing with an ankle sprain at this stage a ligament tear is still possible || SEG0054 [person_1/DOCTOR] it's reasonable to be concerned, but right now an ankle sprain is my leading thought, not anything worse let's book an X-ray of the ankle to look into ankle injury what I'm giving you is ibuprofen, 400 milligrams, three times a day after food, for three days that's for ankle pain i'll put all of this in writing so you don't have to remember it
+- **A32** procedures_and_investigations: name: ECG; normalized_name: ECG; type: laboratory; status: planned; requested_by: doctor; indication: stroke
+  - SYSTEM CITED: SEG0035 [person_2/DOCTOR] I'd like to arrange an ECG for possible stroke. I'd rather check than guess, and this is the quickest way to know more. Don't drive for now, and bring someone with you to the next visit. If the numbness, weakness or speech problem returns, that's the point to come in urgently. We'll catch up after the results are back.
+- **A33** physical_examination: finding: fever; normalized_finding: fever; body_site: head; status: present; observed_by: doctor
+  - SYSTEM ABSTAINED (reason: ambiguous_many_equal_matches)
+- **A34** clinical_assessment: assessment: pulmonary symptoms; normalized_assessment: pulmonary symptoms; certainty: differential; basis: pulmonary symptoms; stated_by: doctor
+  - SYSTEM ABSTAINED (reason: no_candidate)
+- **A35** clinical_actions: action_type: examination; description: examination; status: completed; responsible_person: doctor; time_reference: 363.78-383.28s
+  - SYSTEM CITED: SEG0009 [person_1/PATIENT] is that okay? || SEG0010 [person_2/DOCTOR] I'll interpret it once I've examined you  (question added as context)
+- **A36** vital_signs: name: temperature; normalized_name: temperature; value: 36.9; unit: degrees Celsius; reported_by: doctor
+  - SYSTEM CITED: SEG0034 [person_2/DOCTOR] Okay: temp 36.9 degrees, weight 79 kilos, pulse is 71 beats a minute, pressure 116 over 73, oxygen saturation is 99 percent, height 156 centimetres, BMI works out to to 32.5.
+- **A37** chief_complaint: value: breakthrough seizure on known epilepsy; normalized_value: breakthrough seizure on known epilepsy; reported_by: doctor
+  - SYSTEM ABSTAINED (reason: speaker_class_mismatch)
+- **A38** physical_examination: finding: red, warm, swollen area on the lower leg; normalized_finding: red, warm, swollen area on the lower leg; body_site: lower leg; status: present; observed_by: doctor
+  - SYSTEM CITED: SEG0055 [person_1/DOCTOR] The skin on the lower leg is red, warm and swollen, about the size of my palm.
+- **A39** negative_findings: finding: no fever; normalized_name: no fever; status: absent; assertion: negative; reported_by: doctor; temporality: current
+  - SYSTEM CITED: SEG0009 [person_1/PATIENT] I haven't had fever, balance problems or weakness in the legs, no
+- **A40** medical_history.surgical_history: procedure: lump removal; normalized_procedure: lump removal; reported_by: doctor
+  - SYSTEM CITED: SEG0025 [person_1/PATIENT] So, I had a lump removed from my back years ago.
+- **A41** medical_history.family_history: condition: breast cancer; normalized_condition: breast cancer; relation: relative; reported_by: doctor
+  - SYSTEM CITED: SEG0035 [person_1/DOCTOR] Okay, I can see diabetes in your file as well. Any relatives with health problems I should be aware of? || SEG0036 [person_2/PATIENT] My grandmother had breast cancer.  (question added as context)
+- **A42** clinical_conditions: name: diabetes; normalized_name: diabetes; status: existing
+  - SYSTEM ABSTAINED (reason: ambiguous_many_equal_matches)
+- **A43** physical_examination: finding: heart sounds are normal; normalized_finding: heart sounds are normal; body_site: chest; status: present; observed_by: doctor
+  - SYSTEM ABSTAINED (reason: polarity_conflict)
+- **A44** chief_complaint: value: carpal tunnel syndrome; normalized_value: carpal tunnel syndrome; reported_by: doctor
+  - SYSTEM ABSTAINED (reason: speaker_class_mismatch)
+- **A45** allergies: substance: unknown; normalized_substance: unknown; allergy_type: unknown; reaction: unknown; severity: unknown; status: reported; reported_by: doctor
+  - SYSTEM ABSTAINED (reason: no_candidate)

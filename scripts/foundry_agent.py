@@ -1,12 +1,13 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
-import time
 from pathlib import Path
 from typing import Any
 
-import requests
+from azure.identity import AzureCliCredential
+from agent_framework.foundry import FoundryAgent as AzureFoundryAgent
 
 
 class FoundryAPIError(RuntimeError):
@@ -14,232 +15,84 @@ class FoundryAPIError(RuntimeError):
 
 
 class FoundryAgent:
-    """Create/reuse and invoke a Microsoft Foundry prompt agent."""
+    """
+    Connect to and invoke an existing Microsoft Foundry Prompt Agent.
+
+    Authentication:
+        Microsoft Entra ID through AzureCliCredential.
+
+    Agent configuration:
+        Managed in the Foundry portal, not created by this script.
+    """
 
     def __init__(
         self,
         endpoint: str,
-        api_key: str,
-        model: str,
-        agent_name: str,
+        api_key: str = "",
+        model: str = "",
+        agent_name: str = "clinical-conversation-reconstruction",
         api_version: str = "v1",
         timeout: int = 300,
         max_output_tokens: int = 24000,
         max_retries: int = 4,
         retry_base_seconds: float = 3.0,
+        agent_version: str = "5",
     ):
         self.endpoint = endpoint.rstrip("/")
-        self.api_key = api_key
-        self.model = model
         self.agent_name = agent_name
-        self.api_version = api_version
+        self.agent_version = str(agent_version)
         self.timeout = timeout
 
-        # A larger output budget helps prevent incomplete JSON responses.
-        # The minimum is enforced even if the old .env still says 12000.
+        # Retained for compatibility with the existing process_transcript.py.
+        # Output-token limits must be configured in the Foundry agent/model
+        # configuration; this value is not sent as an API-key REST parameter.
         self.max_output_tokens = max(24000, int(max_output_tokens))
 
-        self.max_retries = max_retries
-        self.retry_base_seconds = retry_base_seconds
+        self.credential = AzureCliCredential()
 
-        self.session = requests.Session()
-        self.session.headers.update({
-            "api-key": api_key,
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "User-Agent": "clinical-transcript-reconstruction/1.1",
-        })
-
-    def _request(self, method: str, url: str, **kwargs) -> requests.Response:
-        last_error = None
-
-        for attempt in range(self.max_retries + 1):
-            try:
-                response = self.session.request(
-                    method,
-                    url,
-                    timeout=self.timeout,
-                    **kwargs,
-                )
-
-                if response.status_code not in (429, 500, 502, 503, 504):
-                    return response
-
-                last_error = FoundryAPIError(
-                    f"Foundry returned HTTP {response.status_code}: "
-                    f"{response.text[:1500]}"
-                )
-
-                if attempt < self.max_retries:
-                    retry_after = response.headers.get("Retry-After")
-
-                    if retry_after and retry_after.isdigit():
-                        delay = float(retry_after)
-                    else:
-                        delay = self.retry_base_seconds * (2 ** attempt)
-
-                    time.sleep(min(delay, 60))
-
-            except requests.RequestException as exc:
-                last_error = exc
-
-                if attempt < self.max_retries:
-                    time.sleep(
-                        min(self.retry_base_seconds * (2 ** attempt), 60)
-                    )
-
-        raise FoundryAPIError(str(last_error))
+        try:
+            self.agent = AzureFoundryAgent(
+                project_endpoint=self.endpoint,
+                agent_name=self.agent_name,
+                agent_version=self.agent_version,
+                credential=self.credential,
+                timeout=float(self.timeout),
+            )
+        except Exception:
+            self.credential.close()
+            raise
 
     def ensure_agent(
         self,
         instructions: str,
         force_update: bool = False,
     ) -> dict[str, Any]:
+        """
+        Reuse the existing agent.
 
-        agent_url = (
-            f"{self.endpoint}/agents/{self.agent_name}"
-            f"?api-version={self.api_version}"
-        )
+        Agent creation and publishing are intentionally not performed here.
+        Manage instructions and versions in the Foundry portal.
+        """
 
-        existing = self._request("GET", agent_url)
-
-        if existing.status_code == 200:
-            # Publish a new agent version automatically when the instruction file
-            # changed since the saved latest version (for example v1 -> v2).
-            saved = None
-            try:
-                latest = (existing.json().get("versions") or {}).get("latest") or {}
-                saved = (latest.get("definition") or {}).get("instructions")
-            except (ValueError, AttributeError):
-                saved = None
-            if isinstance(saved, str) and _same_text(saved, instructions) is False:
-                force_update = True
-                print("Agent instructions changed; creating a new agent version.")
-
-            if force_update:
-                version_url = (
-                    f"{self.endpoint}/agents/{self.agent_name}/versions"
-                    f"?api-version={self.api_version}"
-                )
-                payload = {
-                    "definition": {
-                        "kind": "prompt",
-                        "model": self.model,
-                        "instructions": instructions,
-                    },
-                }
-                response = self._request(
-                    "POST",
-                    version_url,
-                    json=payload,
-                )
-                self._raise_for_status(response, "Create Foundry agent version")
-                body = response.json()
-                print(f"Created new Foundry agent version: {self.agent_name}")
-                if body.get("version"):
-                    print(f"Agent version: {body['version']}")
-                return body
-
-            body = existing.json()
-            print(
-                "Foundry agent already exists; reusing: "
-                f"{self.agent_name}"
-            )
-            return body
-
-        if existing.status_code not in (404, 405):
-            self._raise_for_status(
-                existing,
-                "Check existing agent",
+        if force_update:
+            raise FoundryAPIError(
+                "Cannot publish agent versions from this script. "
+                "Update and publish the agent in the Foundry portal."
             )
 
-        create_url = (
-            f"{self.endpoint}/agents"
-            f"?api-version={self.api_version}"
-        )
+        print("Connected to existing Foundry agent configuration:")
+        print(f"  Agent name    : {self.agent_name}")
+        print(f"  Agent version : {self.agent_version}")
+        print("  Authentication: Microsoft Entra ID")
 
-        payload = {
+        return {
             "name": self.agent_name,
-            "definition": {
-                "kind": "prompt",
-                "model": self.model,
-                "instructions": instructions,
-            },
+            "version": self.agent_version,
         }
-
-        response = self._request(
-            "POST",
-            create_url,
-            json=payload,
-        )
-
-        self._raise_for_status(response, "Create Foundry agent")
-
-        body = response.json()
-
-        print(f"Created Foundry agent: {self.agent_name}")
-
-        if body.get("id"):
-            print(f"Agent ID: {body['id']}")
-
-        if body.get("version"):
-            print(f"Agent version: {body['version']}")
-
-        return body
-
-    @staticmethod
-    def _raise_for_status(
-        response: requests.Response,
-        operation: str,
-    ) -> None:
-
-        if response.ok:
-            return
-
-        request_id = response.headers.get(
-            "x-request-id",
-            "not supplied",
-        )
-
-        client_request_id = response.headers.get(
-            "x-ms-client-request-id",
-            "not supplied",
-        )
-
-        raise FoundryAPIError(
-            f"{operation} failed: HTTP {response.status_code}; "
-            f"x-request-id={request_id}; "
-            f"x-ms-client-request-id={client_request_id}; "
-            f"response={response.text[:2500]}"
-        )
-
-    @staticmethod
-    def _extract_output_text(body: dict[str, Any]) -> str:
-        """Extract generated text from the Responses API response."""
-
-        output_text = body.get("output_text")
-
-        if isinstance(output_text, str) and output_text.strip():
-            return output_text.strip()
-
-        chunks = []
-
-        for item in body.get("output", []):
-            if item.get("type") != "message":
-                continue
-
-            for content in item.get("content", []):
-                if (
-                    content.get("type") in ("output_text", "text")
-                    and isinstance(content.get("text"), str)
-                ):
-                    chunks.append(content["text"])
-
-        return "\n".join(chunks).strip()
 
     @staticmethod
     def _remove_json_fence(text: str) -> str:
-        """Remove Markdown fences if the model accidentally adds them."""
+        """Remove Markdown JSON fences if the agent accidentally adds them."""
 
         cleaned = text.strip()
 
@@ -256,20 +109,52 @@ class FoundryAgent:
 
         return cleaned
 
+    async def _run_agent(self, prompt: str) -> str:
+        """Invoke the saved Foundry agent asynchronously."""
+
+        response = await self.agent.run(prompt)
+
+        # Agent Framework returns an AgentResponse object.
+        # The generated response text is available through .text.
+        output = response.text
+
+        if not isinstance(output, str):
+            raise FoundryAPIError(
+                "Foundry agent returned an unexpected response type: "
+                f"{type(output).__name__}"
+            )
+
+        return output.strip()
+
+    def _run_agent_sync(self, prompt: str) -> str:
+        """
+        Synchronous wrapper for the current process_transcript.py CLI.
+
+        Do not call this wrapper from an already-running async event loop.
+        """
+
+        try:
+            asyncio.get_running_loop()
+        except RuntimeError:
+            return asyncio.run(self._run_agent(prompt))
+
+        raise FoundryAPIError(
+            "A Python event loop is already running. "
+            "For an async FastAPI endpoint, call "
+            "'await agent._run_agent(prompt)' instead of reconstruct()."
+        )
+
     def reconstruct(
         self,
         encounter_payload: dict[str, Any],
         instructions: str,
     ) -> dict[str, Any]:
         """
-        Invoke the saved Foundry agent.
+        Reconstruct a clinical encounter using the existing Foundry agent.
 
-        The model returns compact reconstruction decisions.
-        Python restores timestamps and original Azure IDs from
-        the source transcript, avoiding unnecessary repeated output.
+        Python restores timestamps and original Azure speaker IDs from
+        source segments in the subsequent validation stage.
         """
-
-        url = f"{self.endpoint}/openai/v1/responses"
 
         compact_output_rules = """
 IMPORTANT OUTPUT EFFICIENCY RULES:
@@ -279,8 +164,9 @@ Return one complete, valid JSON object only.
 The input contains the complete encounter. Read and reason over the
 complete encounter before deciding speaker identity or role.
 
-The reconstruction_instructions in this request are the current authoritative
-rules. Follow them if they differ from older instructions on the saved agent.
+The reconstruction_instructions in this request are the current
+authoritative rules. Follow them if they differ from older instructions
+on the saved agent.
 
 Do not repeat information that Python can derive from source segments.
 
@@ -335,6 +221,14 @@ Distinguish participant roles independently:
 - Use OTHER_CLINICAL_STAFF only when a clinical role is clear but a more specific role is not.
 - Do not use clinical-staff as a substitute for DOCTOR or NURSE when the evidence supports either.
 - Asking questions, reading observations, or being present in a clinic is not enough by itself to distinguish these roles.
+- DEFAULT FOR A TWO-PERSON CONSULTATION: when the encounter has one PATIENT and exactly one other
+  clinical participant who takes the history, evaluates the symptoms, explains clinical terms or
+  considerations, and sets out a plan, assign DOCTOR with attribution_status PROVISIONAL and
+  review_required true. A missing self-introduction or title is NOT a reason to use
+  OTHER_CLINICAL_STAFF; put "no explicit title stated" in conflicting_evidence instead. This default
+  does not apply when there is a nurse-type pattern (triage, recording vital signs, giving
+  medication), an identifiable allied role (therapist, paramedic, technician, trainee), or a
+  second clinician.
 - If the text does not support a reliable distinction, use UNKNOWN or PROVISIONAL and identify the uncertainty.
 
 COARSE OR UNCERTAIN DIARIZATION:
@@ -353,6 +247,7 @@ rather than writing lengthy explanations.
             "Preserve source turns and boundaries, assign speakers and roles "
             "only where supported, and return the required compact JSON."
         )
+
         if PROMPT_V2_MARKER in instructions:
             compact_output_rules += _NORMALIZATION_RULES_V2
 
@@ -363,47 +258,35 @@ rather than writing lengthy explanations.
             "encounter": encounter_payload,
         }
 
-        request_body = {
-            "model": self.model,
-            "agent_reference": {
-                "type": "agent_reference",
-                "name": self.agent_name,
-            },
-            "input": json.dumps(
-                user_payload,
-                ensure_ascii=False,
-                separators=(",", ":"),
-            ),
-            "max_output_tokens": self.max_output_tokens,
-            "store": False,
-        }
+        prompt = json.dumps(
+            user_payload,
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )
 
         print(
             "  Calling Foundry agent "
-            f"(output budget: {self.max_output_tokens} tokens)..."
+            f"{self.agent_name} (version {self.agent_version})..."
+        )
+        print(
+            f"  Encounter segments: "
+            f"{len(encounter_payload.get('segments', []))}"
         )
 
-        response = self._request(
-            "POST",
-            url,
-            json=request_body,
-        )
+        try:
+            output_text = self._run_agent_sync(prompt)
 
-        self._raise_for_status(
-            response,
-            "Invoke Foundry agent",
-        )
+        except FoundryAPIError:
+            raise
 
-        body = response.json()
-        output_text = self._extract_output_text(body)
+        except Exception as exc:
+            raise FoundryAPIError(
+                f"Foundry agent invocation failed: {exc}"
+            ) from exc
 
         if not output_text:
             raise FoundryAPIError(
-                "Foundry response contained no output text. "
-                f"Response ID: {body.get('id', 'unknown')}; "
-                f"status: {body.get('status', 'unknown')}; "
-                f"incomplete_details: "
-                f"{body.get('incomplete_details')}"
+                "Foundry agent returned an empty response."
             )
 
         output_text = self._remove_json_fence(output_text)
@@ -412,20 +295,11 @@ rather than writing lengthy explanations.
             result = json.loads(output_text)
 
         except json.JSONDecodeError as exc:
-            status = body.get("status", "unknown")
-            incomplete_details = body.get("incomplete_details")
-            usage = body.get("usage")
-
-            tail = output_text[-700:]
-
             raise FoundryAPIError(
                 "Agent returned incomplete or invalid JSON.\n"
                 f"JSON error: {exc}\n"
-                f"Response status: {status}\n"
-                f"Incomplete details: {incomplete_details}\n"
                 f"Output characters: {len(output_text)}\n"
-                f"Output token usage: {usage}\n"
-                f"Output ending: {tail}"
+                f"Output ending: {output_text[-700:]}"
             ) from exc
 
         if not isinstance(result, dict):
@@ -433,30 +307,50 @@ rather than writing lengthy explanations.
                 "Agent output JSON must be an object."
             )
 
-        result["foundry_response_id"] = body.get("id")
-        result["model_deployment"] = body.get("model", self.model)
+        # Keep the fields expected by the downstream validation code.
+        result["foundry_response_id"] = None
+        result["model_deployment"] = (
+            "Configured in Foundry agent: " + self.agent_name
+        )
 
         return result
+
+    def close(self) -> None:
+        """Close the synchronous Azure CLI credential."""
+
+        self.credential.close()
 
 
 PROMPT_V2_MARKER = "prompt-version: 2"
 
 
+_NORMALIZATION_RULES_V2 = """
+TEXT NORMALIZATION (v2, applies only to the text field; segmentation
+and speakers are unchanged):
+
+- Convert dictated notation without changing any value:
+  "slash" -> "/" (packet slash notes -> packet/notes),
+  "one twenty over eighty" -> "120/80",
+  "ninety eight point six" -> "98.6",
+  "five milligrams" -> "5 mg",
+  "percent" -> "%".
+
+- Write measurements, vitals, doses, durations and counts as digits;
+  keep idiomatic words ("one thing", "one-sided").
+
+- Never add words, units or certainty that were not spoken,
+  and never change a number.
+"""
+
+
 def _same_text(left: str, right: str) -> bool:
     def normalize(value: str) -> str:
-        return "\n".join(line.rstrip() for line in value.replace("\r\n", "\n").strip().split("\n"))
+        return "\n".join(
+            line.rstrip()
+            for line in value.replace("\r\n", "\n").strip().split("\n")
+        )
 
     return normalize(left) == normalize(right)
-
-_NORMALIZATION_RULES_V2 = """
-TEXT NORMALIZATION (v2, applies only to the text field; segmentation and speakers are unchanged):
-- Convert dictated notation without changing any value: "slash" -> "/" (packet slash notes
-  -> packet/notes), "one twenty over eighty" -> "120/80", "ninety eight point six" -> "98.6",
-  "five milligrams" -> "5 mg", "percent" -> "%".
-- Write measurements, vitals, doses, durations and counts as digits; keep idiomatic words
-  ("one thing", "one-sided").
-- Never add words, units or certainty that were not spoken, and never change a number.
-"""
 
 
 def load_instructions(path: str | Path) -> str:

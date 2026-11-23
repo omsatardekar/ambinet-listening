@@ -1,0 +1,100 @@
+{
+  "schema_name": "P02 v2.2 compact model-output schema",
+  "version": "2.2-draft-1",
+  "status": "DRAFT for owner approval. Not used by any run. The frozen full schema is not modified.",
+  "full_schema_reference": "dataset_v2_batch_001_corrected/schema/final_label_schema.json (read-only; enums, key sets and key order are taken from it at run time)",
+  "model_emits_top_level_keys_in_this_order": [
+    "negative_findings", "medications", "clinical_uncertainties", "clinical_actions",
+    "procedures_and_investigations", "clinical_assessment", "follow_up",
+    "chief_complaint", "symptoms", "medical_history", "allergies", "vital_signs",
+    "physical_examination", "review_of_systems", "clinical_conditions"
+  ],
+  "section_order_note": "Order of emission only (higher-risk sections first). Every one of the 18 clinical categories of the full schema is kept; none is removed. Materialisation restores the frozen order.",
+  "single_object_sections": ["chief_complaint"],
+  "medical_history_subsections": ["past_medical_history", "surgical_history", "family_history", "social_history"],
+  "renames_compact_to_full": {
+    "refs": "evidence_ids",
+    "related": "related_entities",
+    "responsible": "responsible_person",
+    "by": "<the category's speaker field, see speaker_field>"
+  },
+  "speaker_field": {
+    "chief_complaint": "reported_by",
+    "symptoms": "reported_by",
+    "negative_findings": "reported_by",
+    "medical_history.past_medical_history": "reported_by",
+    "medical_history.surgical_history": "reported_by",
+    "medical_history.family_history": "reported_by",
+    "medical_history.social_history": "reported_by",
+    "medications": "reported_by",
+    "allergies": "reported_by",
+    "vital_signs": "reported_by",
+    "physical_examination": "observed_by",
+    "review_of_systems": "reported_by",
+    "clinical_conditions": "reported_by",
+    "clinical_assessment": "stated_by",
+    "procedures_and_investigations": "requested_by"
+  },
+  "speaker_field_note": "`by` = the role (doctor, patient, nurse, ...) of the person the fact comes from. It is NOT derived from `responsible_person`, which is who must act and stays an explicit model field (`responsible`). When `by` is omitted the backend derives it ONLY if every valid cited segment has the same role; otherwise it stays null and is flagged speaker_unresolved. An explicit `by` always wins and is checked, never changed.",
+  "defaults_when_key_omitted": {
+    "symptoms": {"status": "present", "certainty": "certain", "temporality": "@by_status"},
+    "negative_findings": {"status": "absent", "assertion": "negative", "temporality": "current"},
+    "medical_history.past_medical_history": {"status": "ongoing"},
+    "allergies": {"severity": "unknown"},
+    "physical_examination": {"status": "present"},
+    "review_of_systems": {"status": "negative"},
+    "clinical_conditions": {"status": "existing"},
+    "procedures_and_investigations": {"status": "planned"},
+    "follow_up": {"type": "consultation", "status": "planned"},
+    "clinical_uncertainties": {"resolution_status": "unresolved"}
+  },
+  "defaults_note": "Every other omitted key is null (or [] for list-valued keys). '@by_status' = temporality 'current' when status is 'present', 'resolved' when status is 'resolved'; a past episode must write temporality 'past' explicitly. Every default applied is counted and reported by the materialiser.",
+  "required_nonempty": {
+    "chief_complaint": ["value", "refs"],
+    "symptoms": ["name", "refs"],
+    "negative_findings": ["finding", "refs"],
+    "medical_history.past_medical_history": ["condition", "refs"],
+    "medical_history.surgical_history": ["procedure", "refs"],
+    "medical_history.family_history": ["condition", "relation", "refs"],
+    "medical_history.social_history": ["category", "description", "status", "refs"],
+    "medications": ["name", "status", "refs"],
+    "allergies": ["substance", "allergy_type", "status", "refs"],
+    "vital_signs": ["name", "value", "unit", "refs"],
+    "physical_examination": ["finding", "refs"],
+    "review_of_systems": ["system", "refs"],
+    "clinical_conditions": ["name", "refs"],
+    "clinical_assessment": ["assessment", "certainty", "refs"],
+    "procedures_and_investigations": ["name", "type", "refs"],
+    "clinical_actions": ["action_type", "description", "status", "responsible", "refs"],
+    "follow_up": ["time_reference", "refs"],
+    "clinical_uncertainties": ["type", "description", "refs"]
+  },
+  "nested_objects": {
+    "symptoms.duration": ["value", "unit", "normalized"],
+    "medical_history.past_medical_history.duration": ["value", "unit", "normalized"],
+    "medications.duration": ["value", "unit", "normalized"],
+    "clinical_conditions.duration": ["value", "unit", "normalized"],
+    "clinical_actions.time_reference": ["value", "normalized_date"]
+  },
+  "list_valued_keys": ["associated_symptoms", "aggravating_factors", "relieving_factors", "related_entities"],
+  "symptoms_category_enum": {
+    "values": ["constitutional", "neurological", "cardiovascular", "respiratory", "gastrointestinal", "musculoskeletal", "dermatological", "endocrine", "genitourinary", "ENT", "ophthalmological", "psychiatric", "other"],
+    "provenance": "Not in the frozen schema. Same 13-value list as in the dataset generator blueprint, enforced in the evaluator's schema_validator (see P02 v2.1 plan). Copied here as data; nothing is imported."
+  },
+  "reference_policy": {
+    "ref_format": "original transcript segment id exactly as printed in the transcript, e.g. SEG0007. No case folding, no repair.",
+    "max_refs_default": 4,
+    "max_refs_basis": "configurable. Default chosen from the reference-count distribution of the 50 corrected dev gold labels (see derived/ref_count_distribution.json): <=4 refs covers 97.4% of facts. The limit only FLAGS (excessive_references); no reference is ever dropped.",
+    "prompt_target": "1-2 refs per fact (gold median 2, 90.1% of facts have <=2); a soft instruction, not enforced"
+  },
+  "derived_by_backend": {
+    "encounter_id": "from the transcript file",
+    "extraction_status": "constant 'completed' once the compact output parsed",
+    "encounter_metadata": "encounter_date null, encounter_type 'outpatient_consultation', language 'en' (the frozen schema's only values); primary_speakers from the transcript speaker table, role lower-cased, role_confidence null",
+    "clinical_evidence": "one record per distinct cited valid segment, in transcript order, EV_001..., supports = fact locations",
+    "confidence": "null everywhere (frozen confidence policy)"
+  },
+  "not_derived": {
+    "quality_checks": "OWNER DECISION PENDING (see STAGE1 report). Materialised records carry no quality_checks key and the evaluator reports it as not assessed."
+  }
+}

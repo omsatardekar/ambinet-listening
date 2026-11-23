@@ -1,0 +1,95 @@
+# Phase 2 (UNBLINDED): the system's citation or abstention
+
+Complete only after Phase 1. For CITED facts judge the selected segment(s); for ABSTAINED facts judge whether usable evidence existed (compare with your Phase 1 answer).
+Columns in `phase2_responses_template.csv`: `relevant` yes/partly/no (cited), `supports` yes/partly/no (cited), `speaker_ok`, `polarity_ok`, `context_ok` (is a needed question included / is an unnecessary question included?), `family_attribution_ok`, `abstention_justified` yes/no (abstained: no usable evidence existed), `comment`.
+
+- **A01** clinical_conditions: name: underactive thyroid; normalized_name: underactive thyroid; status: existing; reported_by: doctor
+  - SYSTEM CITED: SEG0019 [person_3/PATIENT] I've, I've had diabetes for five years now i'd rather not end up on lots of tablets if I can avoid it i have an underactive thyroid. Thin bones, for five years
+- **A02** symptoms: name: hearing loss; normalized_name: hearing loss; category: cardiovascular; status: present; temporality: current; body_site: ear; reported_by: patient; certainty: uncertain
+  - SYSTEM ABSTAINED (reason: ambiguous_many_equal_matches)
+- **A03** symptoms: name: high blood pressure; normalized_name: high blood pressure; category: cardiovascular; status: present; temporality: current; body_site: upper body; reported_by: doctor
+  - SYSTEM ABSTAINED (reason: polarity_conflict)
+- **A04** negative_findings: finding: absent; normalized_name: absent; status: absent; assertion: negative; reported_by: doctor; temporality: current
+  - SYSTEM ABSTAINED (reason: no_candidate)
+- **A05** medical_history.surgical_history: procedure: bypass operation; normalized_procedure: bypass operation; timeframe: 6 years ago; reported_by: PATIENT
+  - SYSTEM CITED: SEG0023 [person_2/DOCTOR] Okay, so. Any surgery in your history? || SEG0024 [person_3/PATIENT] Just a bypass operation, six years ago.  (question added as context)
+- **A06** clinical_actions: action_type: medication; description: take omeprazole; status: completed; responsible_person: doctor; time_reference: planned
+  - SYSTEM ABSTAINED (reason: speaker_class_mismatch)
+- **A07** allergies: substance: none; normalized_substance: none; allergy_type: none; reaction: none; severity: unknown; status: reported; reported_by: doctor
+  - SYSTEM CITED: SEG0015 [person_1/PATIENT] No vomiting blood, swelling of the tummy, confusion or black stools, none of it.
+- **A08** medical_history.surgical_history: procedure: gallbladder removal; normalized_procedure: gallbladder removal; timeframe: 2016; reported_by: doctor
+  - SYSTEM CITED: SEG0036 [person_2/DOCTOR] Any procedures or operations? || SEG0037 [person_1/PATIENT] I, I had my gallbladder removed in 2016.  (question added as context)
+- **A09** negative_findings: finding: morning shakiness; normalized_name: morning shakiness; status: absent; assertion: negative; reported_by: doctor; temporality: current
+  - SYSTEM ABSTAINED (reason: polarity_conflict)
+- **A10** allergies: substance: Amlodipine; normalized_substance: Amlodipine; allergy_type: medication; severity: unknown; status: reported; reported_by: patient
+  - SYSTEM CITED: SEG0035 [person_2/PATIENT] I mean, I take amlodipine, once a day for my pressure
+- **A11** medical_history.family_history: condition: asthma; normalized_condition: asthma; relation: brother; reported_by: patient
+  - SYSTEM CITED: SEG0030 [person_2/DOCTOR] Is there a family history of anything significant? || SEG0031 [person_1/PATIENT] My brother has asthma.  (question added as context)
+- **A12** negative_findings: finding: no fever; normalized_name: no fever; status: absent; assertion: negative; reported_by: doctor; temporality: current
+  - SYSTEM CITED: SEG0018 [person_1/PATIENT] I haven't had low mood, shortness of breath, blood in the stool or fever, no
+- **A13** clinical_actions: action_type: prescription; description: hydrocortisone nasal spray; status: completed; responsible_person: DOCTOR; time_reference: 4 weeks
+  - SYSTEM CITED: SEG0043 [person_2/DOCTOR] I understand the worry. At the moment I'd say it's allergic rhinitis, and we'll know more once the an allergy test is back. I'll request an allergy test, it'll help with allergic rhinitis. For this, fluticasone nasal spray, 50 micrograms, one spray each side daily, for four weeks. It's for allergic rhinitis. Keep the the windows closed in the early morning and wash the bedsheets weekly in hot water
+- **A14** physical_examination: finding: pressure in the right knee; normalized_finding: pressure in the right knee; body_site: right knee; status: present; observed_by: DOCTOR
+  - SYSTEM CITED: SEG0015 [person_2/DOCTOR] There's mild swelling on the right knee, and a grating feel when I bend it.
+- **A15** clinical_actions: action_type: follow_up; description: I'll have a look; status: completed; responsible_person: doctor; time_reference: consultation
+  - SYSTEM CITED: SEG0035 [person_2/DOCTOR] Come over here and I'll have a look.
+- **A16** procedures_and_investigations: name: hearing test; normalized_name: hearing test; type: laboratory; status: planned; requested_by: doctor; indication: hearing loss
+  - SYSTEM CITED: SEG0053 [person_1/DOCTOR] I can't promise yet, but most people with hearing loss from wax do well once it's treated properly. We should do a hearing test for hearing loss. The treatment will be ear drops, three times a day, for five days. That should help with wax softening. Please don't use cotton buds or ear candles, they push the wax in further.
+- **A17** negative_findings: finding: thin bones; normalized_name: thin bones; status: absent; assertion: negative; reported_by: doctor; temporality: current
+  - SYSTEM CITED: SEG0020 [person_2/DOCTOR] Hm, okay. Yes, an underactive thyroid and thin bones are known to us, good to have that clear. Any drug or food allergies? || SEG0021 [person_3/PATIENT] Oh, no, no allergies to anything.  (question added as context)
+- **A18** clinical_conditions: name: hypertension; normalized_name: hypertension; status: existing; reported_by: doctor
+  - SYSTEM ABSTAINED (reason: polarity_conflict)
+- **A19** vital_signs: name: SpO2; normalized_name: SpO2; value: 97%; unit: percent; reported_by: doctor
+  - SYSTEM CITED: SEG0014 [person_2/DOCTOR] Okay: SpO2 97 percent on room air, pulse 84, temp 36.7 degrees, pressure 122 over 75.
+- **A20** clinical_conditions: name: heart failure; normalized_name: heart failure; status: existing; reported_by: doctor
+  - SYSTEM CITED: SEG0010 [person_1/PATIENT] Heart disease, for five years. I've had heart failure for about a year now. I'm hoping you can tell me something definite. || SEG0013 [person_2/DOCTOR] Right, so heart failure is already on your record. We'll keep that in mind today.
+- **A21** negative_findings: finding: COPD flare-up; normalized_name: coping disorder; status: absent; assertion: negative; reported_by: doctor; temporality: current
+  - SYSTEM CITED: SEG0021 [person_2/DOCTOR] Okay, I can see COPD in your file as well. Any previous surgeries? || SEG0022 [person_1/PATIENT] No operations, no.  (question added as context)
+- **A22** vital_signs: name: blood pressure; normalized_name: blood pressure; value: 117/81; unit: mmHg; reported_by: patient
+  - SYSTEM CITED: SEG0043 [person_1/DOCTOR] Okay: BP is 117 over 81, oxygen saturation is 97 percent, temperature is 36.5 degrees, pulse is 71 beats a minute.
+- **A23** physical_examination: finding: wheezing; normalized_finding: wheezing; body_site: lungs; status: present; observed_by: doctor
+  - SYSTEM CITED: SEG0042 [person_2/DOCTOR] I can hear a widespread wheeze on both sides when you breathe out. || SEG0046 [person_2/DOCTOR] It's reasonable to be concerned, but right now an asthma flare-up is my leading thought, not anything worse. Let's book a chest X-ray to look into wheeze. Let's book breathing tests to look into asthma. Let's use prednisolone, 30 milligrams, once a day, for five days. You take it by mouth. That's for asthma flare-up. Let me watch you use the inhaler, a lot of people don't get the full dose.
+- **A24** symptoms: name: headache; normalized_name: headache; category: cardiovascular; status: present; temporality: current; body_site: head; reported_by: patient; certainty: uncertain
+  - SYSTEM ABSTAINED (reason: ambiguous_many_equal_matches)
+- **A25** symptoms: name: racing heart; normalized_name: racing heart; category: cardiovascular; status: present; temporality: current; body_site: cardiovascular; reported_by: doctor
+  - SYSTEM CITED: SEG0012 [person_4/PATIENT] I've had a racing heart sometimes too, for about three months. So, I've had dizziness too, for three days.
+- **A26** negative_findings: finding: persistent tiredness; normalized_name: persistent tiredness; status: absent; assertion: negative; reported_by: doctor; temporality: current
+  - SYSTEM ABSTAINED (reason: speaker_class_mismatch)
+- **A27** review_of_systems: system: urinary; status: negative; details: stress urinary incontinence; reported_by: DOCTOR
+  - SYSTEM ABSTAINED (reason: speaker_class_mismatch)
+- **A28** medications: name: Thyronorm; normalized_name: Thyronorm; generic_name: Thyronorm; dose: 500 milligrams; route: every morning; frequency: daily; indication: thyroid; status: currently_used; reported_by: doctor
+  - SYSTEM CITED: SEG0019 [person_3/PATIENT] I've, I've had diabetes for five years now i'd rather not end up on lots of tablets if I can avoid it i have an underactive thyroid. Thin bones, for five years || SEG0024 [person_2/DOCTOR] How much do you take? || SEG0025 [person_3/PATIENT] It's 500 milligrams. It's Thyronorm, every morning.  (question added as context)
+- **A29** follow_up: type: consultation; normalized_datetime: 388.63s; status: planned
+  - SYSTEM ABSTAINED (reason: no_anchor_words)
+- **A30** medical_history.family_history: condition: asthma; normalized_condition: asthma; relation: family; reported_by: patient
+  - SYSTEM CITED: SEG0043 [person_2/DOCTOR] What about family history, any illnesses that run in the family? || SEG0044 [person_4/PATIENT] My brother has asthma.  (question added as context)
+- **A31** negative_findings: finding: no fever; normalized_name: no fever; status: absent; assertion: negative; reported_by: PATIENT; temporality: current
+  - SYSTEM CITED: SEG0029 [person_2/DOCTOR] All done, you can get dressed. Any fever? || SEG0030 [person_4/PATIENT] I mean, not at all, no fever. || SEG0031 [person_3/FAMILY_MEMBER] Actually, doctor, I did notice fever. He doesn't always say.  (question added as context)
+- **A32** medical_history.family_history: condition: thyroid problems; normalized_condition: thyroid problems; relation: family; reported_by: PATIENT
+  - SYSTEM CITED: SEG0012 [person_2/DOCTOR] Does anything run in the family? || SEG0013 [person_3/PATIENT] My sister has thyroid problems.  (question added as context)
+- **A33** symptoms: name: fever; normalized_name: fever; category: cardiovascular; status: present; temporality: current; body_site: head; reported_by: doctor
+  - SYSTEM ABSTAINED (reason: ambiguous_many_equal_matches)
+- **A34** clinical_assessment: assessment: provisional; normalized_assessment: provisional; certainty: provisional; basis: differential; stated_by: doctor
+  - SYSTEM ABSTAINED (reason: no_candidate)
+- **A35** follow_up: type: consultation; time_reference: now; status: planned
+  - SYSTEM CITED: SEG0041 [person_1/DOCTOR] Let me check your vitals now. || SEG0046 [person_1/DOCTOR] If you're comfortable, I'll examine you now.
+- **A36** allergies: substance: none; normalized_substance: none; allergy_type: none; severity: unknown; status: reported; reported_by: DOCTOR
+  - SYSTEM ABSTAINED (reason: no_candidate)
+- **A37** medications: name: alendronate; normalized_name: alendronate; generic_name: alendronate; dose: 70 milligrams; route: once a week; frequency: once a week; status: currently_used
+  - SYSTEM CITED: SEG0031 [person_1/DOCTOR] Let's go through your medication. What are you taking? || SEG0032 [person_2/PATIENT] I take alendronate, 70 milligrams, once a week  (question added as context)
+- **A38** clinical_conditions: name: hypertension; normalized_name: hypertension; status: existing; reported_by: PATIENT
+  - SYSTEM ABSTAINED (reason: no_candidate)
+- **A39** physical_examination: finding: yellow eyes; normalized_finding: yellow eyes; body_site: eyes; status: present; observed_by: doctor
+  - SYSTEM CITED: SEG0041 [person_2/DOCTOR] The whites of your eyes are yellow.
+- **A40** vital_signs: name: height; normalized_name: height; value: 162; unit: cm; reported_by: DOCTOR
+  - SYSTEM CITED: SEG0045 [person_1/NURSE] doctor, I've got the readings for you weight 90 kilos, height 162 centimetres, pulse 83. BP is 128 over 70, saturation 98 percent, temperature is 36.8 degrees
+- **A41** medications: name: Candid cream; normalized_name: Candid cream; status: currently_used; reported_by: patient
+  - SYSTEM CITED: SEG0010 [person_2/DOCTOR] are you on any tablets or medication? || SEG0011 [person_1/PATIENT] it's Candid cream, twice a day  (question added as context)
+- **A42** symptoms: name: morning shakiness; normalized_name: morning shakiness; category: cardiovascular; status: present; temporality: current; reported_by: patient; certainty: uncertain
+  - SYSTEM CITED: SEG0005 [person_4/PATIENT] I'm here because of morning shakiness. My family kept telling me to get it checked.
+- **A43** clinical_assessment: assessment: differential; normalized_assessment: differential; certainty: provisional; basis: racing heart and dizziness; stated_by: doctor
+  - SYSTEM CITED: SEG0048 [person_2/DOCTOR] What I'm giving you is ferrous sulfate, 200 milligrams, once a day, for three months. That should help with possible iron deficiency. Iron can darken the stools and bother the stomach, so take it after food. Cut down on salt and fried food for now, it really does make a difference. A vitamin B12 level is something we might do if this doesn't improve next month.
+- **A44** medical_history.past_medical_history: procedure: hernia repair; normalized_procedure: hernia repair; timeframe: 5 years
+  - SYSTEM ABSTAINED (reason: no_anchor_words)
+- **A45** procedures_and_investigations: name: chest X-ray; normalized_name: chest X-ray; type: imaging; status: planned; scheduled_datetime: 2023-04-10T10:00:00Z; requested_by: doctor
+  - SYSTEM CITED: SEG0041 [person_2/DOCTOR] I'm going to order blood tests, for infective exacerbation. I'm going to order a chest X-ray, for breathlessness.
