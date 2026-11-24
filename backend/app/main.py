@@ -17,6 +17,7 @@ from fastapi.responses import FileResponse, StreamingResponse
 
 from .pipeline import run_pipeline
 from .progress import ProgressManager
+from .speaker_gate import SpeakerGate
 from .wakeword import WakeWordService
 
 
@@ -83,7 +84,9 @@ from soap_generation.api import register_soap_routes  # noqa: E402
 
 register_soap_routes(app, run_result=progress_manager.result)
 pipeline_executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="clinical-pipeline")
-voice_service = WakeWordService(LOCAL_RECORDINGS_DIR)
+# Speaker gate: once a voice is enrolled, only that voice can trigger "Hey Asha" commands. Biometric data stays in speaker_data/ (git-ignored).
+speaker_gate = SpeakerGate(PROJECT_ROOT / "speaker_data")
+voice_service = WakeWordService(LOCAL_RECORDINGS_DIR, speaker_gate)
 wake_clients: set[WebSocket] = set()
 
 
@@ -121,6 +124,8 @@ async def lifespan(_: FastAPI):
                     "level": state["level"],
                     "elapsed": state["elapsed"],
                     "audio_connected": state["audio_connected"],
+                    "enroll_progress": speaker_gate.enroll_progress(),
+                    "enrolling": speaker_gate.enrolling,
                 }
             )
 
@@ -210,6 +215,47 @@ def local_recording_audio(session_id: str) -> FileResponse:
     if path is None:
         raise HTTPException(status_code=404, detail="Local recording not found.")
     return FileResponse(path, media_type="audio/wav")
+
+
+@app.get("/api/speaker/status")
+def speaker_status() -> dict[str, Any]:
+    return speaker_gate.status()
+
+
+@app.post("/api/speaker/enroll/start")
+def speaker_enroll_start() -> dict[str, Any]:
+    try:
+        speaker_gate.begin_enrollment()
+    except RuntimeError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    return speaker_gate.status()
+
+
+@app.post("/api/speaker/enroll/cancel")
+def speaker_enroll_cancel() -> dict[str, Any]:
+    speaker_gate.cancel_enrollment()
+    return speaker_gate.status()
+
+
+@app.post("/api/speaker/settings")
+def speaker_settings(settings: dict[str, Any]) -> dict[str, Any]:
+    enabled = settings.get("enabled")
+    threshold = settings.get("threshold")
+    if enabled is not None and not isinstance(enabled, bool):
+        raise HTTPException(status_code=422, detail="'enabled' must be true or false.")
+    if threshold is not None and (isinstance(threshold, bool) or not isinstance(threshold, (int, float))):
+        raise HTTPException(status_code=422, detail="'threshold' must be a number.")
+    try:
+        speaker_gate.configure(enabled=enabled, threshold=None if threshold is None else float(threshold))
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return speaker_gate.status()
+
+
+@app.delete("/api/speaker/voiceprint")
+def speaker_delete_voiceprint() -> dict[str, Any]:
+    speaker_gate.delete_voiceprint()
+    return speaker_gate.status()
 
 
 @app.websocket("/api/wake/ws")
