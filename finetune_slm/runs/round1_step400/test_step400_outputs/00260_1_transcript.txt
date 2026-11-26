@@ -1,0 +1,71 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00260)
+[SEG0001] person_1 (DOCTOR): Good afternoon. Have a seat and we'll begin.
+[SEG0002] person_2 (PATIENT): Thank you.
+[SEG0003] person_1 (DOCTOR): Tell me from the beginning, what's been happening?
+[SEG0004] person_2 (PATIENT): It's fever, mostly.
+[SEG0005] person_1 (DOCTOR): How long has this been going on?
+[SEG0006] person_2 (PATIENT): About... well, about two weeks.
+[SEG0007] person_1 (DOCTOR): Would you call it mild or bad?
+[SEG0008] person_2 (PATIENT): Pretty mild, if I'm being honest. I've, I've also had a mild headache. I've had body aches too, for about four days. As for body aches, pretty moderate, if I'm being honest. There was a sore throat, yes, but that went away.
+[SEG0009] person_1 (DOCTOR): Any previous surgeries?
+[SEG0010] person_2 (PATIENT): No, never had any surgery.
+[SEG0011] person_1 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0012] person_2 (PATIENT): Ramipril. I take it 5 milligrams, every morning.
+[SEG0013] person_3 (NURSE): Doctor, our chart from the last visit lists it as 2.5 milligrams.
+[SEG0014] person_1 (DOCTOR): Hm. Do you have the latest prescription with you?
+[SEG0015] person_2 (PATIENT): Not with me. I'll bring it next time. Asthalin inhaler, when needed.
+[SEG0016] person_1 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0017] person_2 (PATIENT): High blood pressure, for about a year. I have asthma.
+[SEG0018] person_1 (DOCTOR): Okay, anything else?
+[SEG0019] person_1 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0020] person_2 (PATIENT): Oh, my mother has diabetes.
+[SEG0021] person_1 (DOCTOR): Do you get any exercise?
+[SEG0022] person_2 (PATIENT): I walk for about half an hour most days.
+[SEG0023] person_1 (DOCTOR): What do you do for work?
+[SEG0024] person_2 (PATIENT): I work in an office, mostly sitting at a desk.
+[SEG0025] person_1 (DOCTOR): And what do you usually eat?
+[SEG0026] person_2 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0027] person_1 (DOCTOR): Any allergies I should know about?
+[SEG0028] person_2 (PATIENT): I think I reacted to some antibiotic once, uh, years ago. I don't remember which one, or what happened exactly.
+[SEG0029] person_1 (DOCTOR): Any chest pain, rash, burning when passing urine or diarrhoea?
+[SEG0030] person_2 (PATIENT): No chest pain, rash, burning when passing urine or diarrhoea, none of it.
+[SEG0031] person_1 (DOCTOR): Let me check a few things. Any vomiting or stiff neck?
+[SEG0032] person_2 (PATIENT): No, no vomiting or stiff neck.
+[SEG0033] person_1 (DOCTOR): Anything on the skin I should know about?
+[SEG0034] person_2 (PATIENT): Right, nothing on the skin, no.
+[SEG0035] person_1 (DOCTOR): Is your urine normal, no changes?
+[SEG0036] person_2 (PATIENT): Nothing there, no.
+[SEG0037] person_3 (NURSE): Here are the numbers, doctor. Pulse 101, SpO2 98 percent on room air, blood pressure 111 over 72.
+[SEG0038] person_1 (DOCTOR): Thanks.
+[SEG0039] person_1 (DOCTOR): Let me examine, it won't take long.
+[SEG0040] person_1 (DOCTOR): Hold that position for me.
+[SEG0041] person_1 (DOCTOR): Chest is clear when I listen, no crackles.
+[SEG0042] person_1 (DOCTOR): Stay still while I have a look.
+[SEG0043] person_1 (DOCTOR): Your throat looks red at the back, but there's no pus on the tonsils.
+[SEG0044] person_1 (DOCTOR): Good, that's the examination. Putting it all together, this is probably a viral illness. We shouldn't forget influenza.
+[SEG0045] person_2 (PATIENT): Doctor, is this dangerous?
+[SEG0046] person_1 (DOCTOR): I can't promise yet, but most people with a viral illness do well once it's treated properly. Stop me if I've got anything wrong. You've had fever for about two weeks, mild, and no rash or diarrhoea.
+[SEG0047] person_2 (PATIENT): That's it, yes.
+[SEG0048] person_3 (NURSE): Doctor, I did a flu swab before they came in, the result's on your screen.
+[SEG0049] person_1 (DOCTOR): Perfect. I'll request blood tests, it'll help with fever. I'll request a throat swab, it'll help with sore throat.
+[SEG0050] person_2 (PATIENT): Okay, that's fine.
+[SEG0051] person_1 (DOCTOR): I'm going to put you on cetirizine, 10 milligrams, at night, for five days. You take it by mouth. It's for blocked nose.
+[SEG0052] person_2 (PATIENT): Okay, so alright, I'll collect it today.
+[SEG0053] person_1 (DOCTOR): We'll begin with paracetamol, 500 milligrams, every six hours if needed, for three days. That's for fever and body aches. Stay home, rest, and keep the fluids up. Warm soups and water, anything that goes down easily. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0054] person_2 (PATIENT): Understood.
+[SEG0055] person_1 (DOCTOR): Do get help quickly if the symptoms get worse. Let's review you in five days. Take care, and call us if anything changes.
+[SEG0056] person_2 (PATIENT): Um, nothing more from me, thanks.
+
+JSON:

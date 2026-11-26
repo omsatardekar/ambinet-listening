@@ -1,0 +1,50 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03659)
+[SEG0001] person_1 (PATIENT): Oh, um, sorry I'm a little late, doctor.
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_1 (PATIENT): It's an itchy red rash on the chest, mostly.
+[SEG0004] person_2 (DOCTOR): Did it come on recently?
+[SEG0005] person_1 (PATIENT): Ever since... since last weekend, really.
+[SEG0006] person_2 (DOCTOR): So, is it bearing on you a lot?
+[SEG0007] person_1 (PATIENT): Mostly moderate. And a mild temperature, too.
+[SEG0008] person_2 (DOCTOR): Is it bearing on you a lot?
+[SEG0009] person_1 (PATIENT): I'd say moderate.
+[SEG0010] person_2 (DOCTOR): Ah. Let me check a few things. Any mouth sores, breathing difficulty or blistering?
+[SEG0011] person_1 (PATIENT): No, you know, no mouth sores, breathing difficulty or blistering.
+[SEG0012] person_2 (DOCTOR): Anything unusual with passing urine?
+[SEG0013] person_1 (PATIENT): Nothing there, uh, no.
+[SEG0014] person_2 (DOCTOR): Let's run through your medicines.
+[SEG0015] person_1 (PATIENT): Allopurinol. I take it 100 milligrams, started three weeks ago.
+[SEG0016] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0017] person_1 (PATIENT): I've never touched a cigarette. I'll have a glass of wine with dinner. I grab fast food at lunch most days. Not much, I mostly stay in these days. My partner and our baby.
+[SEG0018] person_2 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0019] person_1 (PATIENT): Not to my knowledge, no.
+[SEG0020] person_2 (DOCTOR): Okay, any medical conditions, anything you've been treated for?
+[SEG0021] person_1 (PATIENT): No, um, nothing at all.
+[SEG0022] person_2 (DOCTOR): I'll just record a few vital signs.
+[SEG0023] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0024] person_2 (DOCTOR): Okay: BP is 121 over 70, temperature is 36.5 degrees, heart rate 85.
+[SEG0025] person_2 (DOCTOR): May I examine you now?
+[SEG0026] person_1 (PATIENT): Fine by me.
+[SEG0027] person_2 (DOCTOR): Raise your arm for me.
+[SEG0028] person_2 (DOCTOR): There is a fine pink rash across the chest and arms, with no blistering and the mouth is clear.
+[SEG0029] person_2 (DOCTOR): That's all I needed to check.
+[SEG0030] person_2 (DOCTOR): So where does that leave us? I think we're dealing with a drug rash probably from allopurinol at this stage.
+[SEG0031] person_2 (DOCTOR): Blood tests is what I'd like next, for drug rash.
+[SEG0032] person_1 (PATIENT): Well, you know, when would that take place?
+[SEG0033] person_2 (DOCTOR): What I'm giving you is cetirizine, 10 milligrams, once a day, one week. You take it by mouth. That should help with itch. Please stop the allopurinol and don't restart it until we've spoken to the clinic. Come back or go to emergency straight away if you develop blisters, mouth sores or facial swelling. I'd like to see you again in three days. That's everything on my side. Anything you're unsure about?
+[SEG0034] person_1 (PATIENT): Alright, um, thanks, take care.
+[SEG0035] person_2 (DOCTOR): See you soon.
+
+JSON:

@@ -1,0 +1,71 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00962)
+[SEG0001] person_2 (DOCTOR): Is it Siobhan Brennan? Siobhan, with the two b's? ~
+[SEG0002] person_1 (PATIENT): That's me, doctor, one b and two n's, but sure, you're close enough. Isn't it a grand morning for a broken wrist!
+[SEG0003] person_2 (DOCTOR): Ha. So, this is your fracture clinic check, the cast comes off next week. How's it been going? ~
+[SEG0004] person_1 (PATIENT): Grand, mostly. It was my own fault, I came off the bike on the Phoenix Park road, hit a pothole, my husband never lets me forget it. Five weeks ago now.
+[SEG0005] person_2 (DOCTOR): Five weeks. Any itching under the cast?
+[SEG0006] person_1 (PATIENT): Desperately. I've been poking a knitting needle down it, don't tell the nurse.
+[SEG0007] person_2 (DOCTOR): I won't. Any swelling in the fingers?
+[SEG0008] person_1 (PATIENT): A bit in the evenings, they feel fat, like sausages.
+[SEG0009] person_2 (DOCTOR): Are the fingers stiff?
+[SEG0010] person_1 (PATIENT): Very. I can barely make a fist.
+[SEG0011] person_2 (DOCTOR): Any aching at night?
+[SEG0012] person_1 (PATIENT): In the wrist, yes, when I lie on it.
+[SEG0013] person_2 (DOCTOR): Any numbness in the hand?
+[SEG0014] person_1 (PATIENT): No numbness.
+[SEG0015] person_2 (DOCTOR): Pins and needles?
+[SEG0016] person_1 (PATIENT): No, none.
+[SEG0017] person_2 (DOCTOR): Any sores, or rubbing under the edge of the cast?
+[SEG0018] person_1 (PATIENT): No sores. I looked with a torch.
+[SEG0019] person_2 (DOCTOR): Any smell coming from it?
+[SEG0020] person_1 (PATIENT): No smell. I put my nose right up to it.
+[SEG0021] person_2 (DOCTOR): What are you taking?
+[SEG0022] person_1 (PATIENT): Paracetamol, maybe 1 gram, when it's sore. And a big white chewy tablet for the bones, I don't know what it's called, my mother takes the same one. And omeprazole, 20 mg, in the morning.
+[SEG0023] person_2 (DOCTOR): We'll find the chewable on your record. Any allergies?
+[SEG0024] person_1 (PATIENT): None at all. No allergies.
+[SEG0025] person_2 (DOCTOR): Medical history?
+[SEG0026] person_1 (PATIENT): A bit of thin bones, osteopenia, and acid reflux.
+[SEG0027] person_2 (DOCTOR): Any operations?
+[SEG0028] person_1 (PATIENT): A caesarean, in 2015.
+[SEG0029] person_2 (DOCTOR): Bone problems in the family?
+[SEG0030] person_1 (PATIENT): My mother has osteoporosis.
+[SEG0031] person_2 (DOCTOR): What do you do?
+[SEG0032] person_1 (PATIENT): Primary school teacher. Thirty small children and one broken wrist, you can imagine.
+[SEG0033] person_2 (DOCTOR): And the cycling, how often?
+[SEG0034] person_1 (PATIENT): Three times a week, before this.
+[SEG0035] person_2 (DOCTOR): Let me check you. Blood pressure 124 over 76, pulse 70.
+[SEG0036] person_1 (PATIENT): Is that all right? ~
+[SEG0037] person_2 (DOCTOR): Perfect. Let me look at the cast.
+[SEG0038] person_1 (PATIENT): Be gentle. ~
+[SEG0039] person_2 (DOCTOR): The cast is intact and dry, no cracks.
+[SEG0040] person_1 (PATIENT): I've been very careful in the shower. ~
+[SEG0041] person_2 (DOCTOR): And the fingers are warm, pink, with good colour.
+[SEG0042] person_1 (PATIENT): They're a bit puffy. ~
+[SEG0043] person_2 (DOCTOR): Wiggle them for me. I can see you move all five fingers well.
+[SEG0044] person_1 (PATIENT): There, like a pianist. ~
+[SEG0045] person_2 (DOCTOR): Any problem with feeling in your hand?
+[SEG0046] person_1 (PATIENT): No, nothing, it's all normal.
+[SEG0047] person_2 (DOCTOR): Any problem with your breathing?
+[SEG0048] person_1 (PATIENT): No, nothing.
+[SEG0049] person_2 (DOCTOR): Here's what I think. The fracture is healing well so far, from how it looks and feels.
+[SEG0050] person_1 (PATIENT): That's great. ~
+[SEG0051] person_2 (DOCTOR): Next week, before the cast comes off, I'd like to arrange an X-ray of the wrist, to see the bone.
+[SEG0052] person_1 (PATIENT): That's what I was hoping. ~
+[SEG0053] person_2 (DOCTOR): Given your thin bones and family history, I'd also like to arrange a bone density scan, and a vitamin D blood test.
+[SEG0054] person_1 (PATIENT): Goodness, the full works. ~
+[SEG0055] person_2 (DOCTOR): Better to be thorough. I'd like to see you again next week to take the cast off.
+[SEG0056] person_1 (PATIENT): Next week. I'll bring a cake. ~
+
+JSON:

@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00279)
+[SEG0001] person_1 (DOCTOR): Good evening. Sorry to keep you waiting.
+[SEG0002] person_2 (PATIENT): Hello.
+[SEG0003] person_3 (CAREGIVER): good morning, doctor i came along to help out
+[SEG0004] person_1 (DOCTOR): Alright, in your own words, what's happened?
+[SEG0005] person_3 (CAREGIVER): we came because of pain moving down to the groin
+[SEG0006] person_1 (DOCTOR): How long are we talking about?
+[SEG0007] person_2 (PATIENT): about... well, two weeks
+[SEG0008] person_1 (DOCTOR): Alright, does it happen all the time or in spells?
+[SEG0009] person_2 (PATIENT): honestly, a couple of times a week
+[SEG0010] person_2 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0011] person_3 (CAREGIVER): Tell the doctor about the the other thing, that's what worries me.
+[SEG0012] person_2 (PATIENT): Well, I was getting to that! I've had severe pain in my right side that comes in waves too, for about two weeks.
+[SEG0013] person_1 (DOCTOR): So, how bad is it, would you say?
+[SEG0014] person_2 (PATIENT): I'd say severe
+[SEG0015] person_1 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0016] person_3 (CAREGIVER): it's amlodipine, 5 milligrams, once a day for my pressure, doctor
+[SEG0017] person_2 (PATIENT): I had ramipril at one point, but I'm off it now.
+[SEG0018] person_1 (DOCTOR): Alright, any relatives with health problems I should be aware of?
+[SEG0019] person_2 (PATIENT): My father had a stroke. My sister has thyroid problems.
+[SEG0020] person_1 (DOCTOR): alright, what about operations, anything like that?
+[SEG0021] person_2 (PATIENT): Just a a hernia repair, about five years back.
+[SEG0022] person_1 (DOCTOR): Any smoking?
+[SEG0023] person_2 (PATIENT): I stopped smoking about two years back.
+[SEG0024] person_1 (DOCTOR): So, and alcohol, how much?
+[SEG0025] person_2 (PATIENT): A beer or two most evenings, to be honest.
+[SEG0026] person_1 (DOCTOR): So, do you live alone?
+[SEG0027] person_2 (PATIENT): Yes, I live on my own.
+[SEG0028] person_1 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0029] person_2 (PATIENT): No allergies.
+[SEG0030] person_1 (DOCTOR): So, is there anything medical in your background?
+[SEG0031] person_2 (PATIENT): I have gout. I've got high blood pressure.
+[SEG0032] person_1 (DOCTOR): Right, so gout is already on your record. We'll keep that in mind today. Have you had any fever, difficulty passing urine, previous kidney stones or burning when passing urine?
+[SEG0033] person_2 (PATIENT): No, no fever, no difficulty passing urine, no previous kidney stones. I did have blood in the urine at one point, but that went away on its own.
+[SEG0034] person_1 (DOCTOR): did you get vomiting or testicular pain?
+[SEG0035] person_2 (PATIENT): No, nothing there.
+[SEG0036] person_1 (DOCTOR): How are your bowels, any trouble?
+[SEG0037] person_2 (PATIENT): Bowels are regular, nothing odd.
+[SEG0038] person_1 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0039] person_2 (PATIENT): No weakness or anything.
+[SEG0040] person_4 (NURSE): here are the numbers, doctor pulse is 108 beats a minute, temp 36.6 degrees, respiratory rate 16, blood pressure 113 over 79, oxygen saturation is 96 percent
+[SEG0041] person_1 (DOCTOR): okay, noted
+[SEG0042] person_1 (DOCTOR): Let's do the physical part now.
+[SEG0043] person_1 (DOCTOR): just relax, I'll be quick
+[SEG0044] person_1 (DOCTOR): There's tenderness in the right loin when I tap, and your tummy is soft.
+[SEG0045] person_1 (DOCTOR): thanks for that
+[SEG0046] person_1 (DOCTOR): Okay, thinking it through, the most likely explanation is a kidney stone. A muscular back pain is also on my list. I can't rule out a urine infection yet. Have you had any tests for this so far?
+[SEG0047] person_2 (PATIENT): I had an ultrasound of the kidneys done at another clinic last year. I don't have the report with me
+[SEG0048] person_1 (DOCTOR): I'm going to order a urine test, for flank pain. The result will help us decide whether anything more is needed. I think kidney function tests makes sense here, for renal colic. The treatment will be tamsulosin, 0.4 milligrams, at night, for two weeks. That should help with stone passage. The treatment will be diclofenac, 50 milligrams, twice a day after food, for three days. You take it by mouth. That should help with stone pain.
+[SEG0049] person_1 (DOCTOR): drink three litres of water a day and try to strain your urine so we can catch the stone if it passes. A CT scan of the kidneys and bladder is something we might do if this doesn't improve in two weeks. See me again after the scan
+[SEG0050] person_2 (PATIENT): That works for me.
+[SEG0051] person_1 (DOCTOR): any last questions?
+[SEG0052] person_2 (PATIENT): thanks, that was helpful
+[SEG0053] person_1 (DOCTOR): So, safe journey home.
+
+JSON:

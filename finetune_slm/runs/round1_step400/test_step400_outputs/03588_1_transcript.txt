@@ -1,0 +1,72 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03588)
+[SEG0001] person_1 (NURSE): Morning, doctor. I've settled them in, ready when you are.
+[SEG0002] person_2 (DOCTOR): Good, thank you. Welcome, tell me what's brought you in.
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_4 (PATIENT): Doctor, it's fainting once. It's getting on my nerves now. It's a relief to finally sit down and talk about it.
+[SEG0005] person_2 (DOCTOR): Did it come on recently?
+[SEG0006] person_4 (PATIENT): I've had it for about four days.
+[SEG0007] person_2 (DOCTOR): Is it constant or in episodes?
+[SEG0008] person_4 (PATIENT): Honestly, every other day.
+[SEG0009] person_4 (PATIENT): I was just going to say that the main thing is—
+[SEG0010] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0011] person_2 (DOCTOR): Later, thanks. Please go on.
+[SEG0012] person_4 (PATIENT): Oh, and a faster heartbeat. That's been about the same, six months.
+[SEG0013] person_2 (DOCTOR): How troublesome is it day to day?
+[SEG0014] person_4 (PATIENT): Severe, really. I had a bit breathless since before. That's settled now, though.
+[SEG0015] person_5 (UNKNOWN): Mm, that's what happened, yes.
+[SEG0016] person_2 (DOCTOR): Nothing like fever?
+[SEG0017] person_4 (PATIENT): No, no fever.
+[SEG0018] person_2 (DOCTOR): So, have you noticed cough, coughing up blood or chest pain?
+[SEG0019] person_4 (PATIENT): No, not a single one.
+[SEG0020] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0021] person_4 (PATIENT): Mm, no, joints are fine.
+[SEG0022] person_2 (DOCTOR): So, any previous surgeries?
+[SEG0023] person_4 (PATIENT): No, not at all.
+[SEG0024] person_2 (DOCTOR): Do you follow any particular diet?
+[SEG0025] person_4 (PATIENT): I'm vegetarian and have been for years.
+[SEG0026] person_2 (DOCTOR): Who lives with you?
+[SEG0027] person_4 (PATIENT): My partner and our baby.
+[SEG0028] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0029] person_4 (PATIENT): I have COPD.
+[SEG0030] person_2 (DOCTOR): Mm-hmm.
+[SEG0031] person_4 (PATIENT): I've had anxiety, yes. I've had arthritis in my knees, yes.
+[SEG0032] person_2 (DOCTOR): Sure.
+[SEG0033] person_4 (PATIENT): Epilepsy, for five years.
+[SEG0034] person_2 (DOCTOR): Right, so anxiety and arthritis in your knees are already on your record. We'll keep that in mind today. Is there anything relevant on the family side?
+[SEG0035] person_4 (PATIENT): Um, uh, my uncle has high cholesterol. My cousin has psoriasis.
+[SEG0036] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0037] person_4 (PATIENT): I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0038] person_2 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0039] person_4 (PATIENT): Tiotropium inhaler, once a day. Escitalopram, once a day.
+[SEG0040] person_2 (DOCTOR): Do you know the dose?
+[SEG0041] person_4 (PATIENT): 10 milligrams, I think that's what's on the box.
+[SEG0042] person_2 (DOCTOR): Since when have you been taking it?
+[SEG0043] person_4 (PATIENT): About two months. Paracetamol, 650 milligrams, when needed. Lamotrigine, twice a day.
+[SEG0044] person_2 (DOCTOR): And what strength is that?
+[SEG0045] person_4 (PATIENT): 100 milligrams.
+[SEG0046] person_2 (DOCTOR): Since when have you been taking it?
+[SEG0047] person_4 (PATIENT): For about a month.
+[SEG0048] person_1 (NURSE): Doctor, I've got the readings for you. BP is 117 over 74, pulse 117, respiratory rate 17, temperature 37.1, SpO2 99 percent on room air.
+[SEG0049] person_2 (DOCTOR): Right, thanks.
+[SEG0050] person_2 (DOCTOR): Let's move on to the examination.
+[SEG0051] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0052] person_2 (DOCTOR): Your oxygen is lower than expected for someone so young and the left calf is a little swollen.
+[SEG0053] person_2 (DOCTOR): Alright, all finished, thank you.
+[SEG0054] person_2 (DOCTOR): I'm going to order a CT pulmonary angiogram, for possible embolus.
+[SEG0055] person_4 (PATIENT): Does it hurt?
+[SEG0056] person_2 (DOCTOR): A D-dimer is what I'd like next, for syncope and calf swelling. Even without chest pain this needs a scan today, so please go to hospital. Let's plan a check straight away. I think we're done unless you have questions.
+[SEG0057] person_4 (PATIENT): Good, thanks, I'll see you then.
+
+JSON:

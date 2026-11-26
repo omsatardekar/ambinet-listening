@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20064)
+[SEG0001] person_1 (PATIENT): Good evening, doctor, thanks for seeing me.
+[SEG0002] person_2 (DOCTOR): No problem at all, come in. What's troubling you?
+[SEG0003] person_3 (FAMILY_MEMBER): Good morning, uh, doctor. I came along to help out.
+[SEG0004] person_1 (PATIENT): Sorry, what was I saying, mainly being unsteady. There's a couple of other things, but that's the main one.
+[SEG0005] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0006] person_1 (PATIENT): About a seven out of ten. Only holding on to things, and it's not much.
+[SEG0007] person_2 (DOCTOR): So, have you noticed anything else alongside it?
+[SEG0008] person_1 (PATIENT): It usually comes with a blocked feeling in my ear.
+[SEG0009] person_2 (DOCTOR): Has there been a recent cold too?
+[SEG0010] person_1 (PATIENT): Yes, I have.
+[SEG0011] person_2 (DOCTOR): What about your medical history?
+[SEG0012] person_1 (PATIENT): I have high blood pressure.
+[SEG0013] person_2 (DOCTOR): Yes.
+[SEG0014] person_1 (PATIENT): I've got diabetes.
+[SEG0015] person_2 (DOCTOR): Yes, high blood pressure and diabetes are known to us, good to have that clear. Can you list what you take, tablets, creams or inhalers?
+[SEG0016] person_1 (PATIENT): I'm on telmisartan, 40 milligrams, once a day. Sitagliptin. I take it 100 milligrams, maybe, once a day.
+[SEG0017] person_2 (DOCTOR): Is the packet here, or the prescription?
+[SEG0018] person_1 (PATIENT): No, it's at home.
+[SEG0019] person_2 (DOCTOR): Tell me about your eating.
+[SEG0020] person_1 (PATIENT): I drink a lot of tea and snack through the day.
+[SEG0021] person_2 (DOCTOR): And your job?
+[SEG0022] person_1 (PATIENT): I work in accounts at a hospital.
+[SEG0023] person_2 (DOCTOR): Okay, before we go further, any allergies?
+[SEG0024] person_1 (PATIENT): Not to my knowledge, no.
+[SEG0025] person_3 (FAMILY_MEMBER): Hold on, doctor, I think he reacted to naproxen once. I'm not certain, though.
+[SEG0026] person_1 (PATIENT): I don't remember that.
+[SEG0027] person_2 (DOCTOR): Fair enough, I'll write down both versions. Any surgery in the past?
+[SEG0028] person_1 (PATIENT): I, I had a meniscus repair on my knee four years ago.
+[SEG0029] person_2 (DOCTOR): Have you had any ringing in the ears, slurred speech, headache or weakness?
+[SEG0030] person_1 (PATIENT): No, no ringing in the ears, slurred speech, headache or weakness.
+[SEG0031] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0032] person_1 (PATIENT): Skin's normal.
+[SEG0033] person_2 (DOCTOR): Is your digestion otherwise okay?
+[SEG0034] person_1 (PATIENT): Nothing unusual, no.
+[SEG0035] person_2 (DOCTOR): Let's start with the basic checks.
+[SEG0036] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0037] person_2 (DOCTOR): Okay: saturation 97 percent, pressure 117 over 78, respiratory rate 15. And pulse 84, temp 36.9 degrees.
+[SEG0038] person_2 (DOCTOR): Okay, time for me to examine you.
+[SEG0039] person_2 (DOCTOR): Nearly finished here.
+[SEG0040] person_2 (DOCTOR): I can see a fine jerking of the eyes to the left and your walking is a little unsteady.
+[SEG0041] person_1 (PATIENT): Of course.
+[SEG0042] person_2 (DOCTOR): Okay, that's enough for me.
+[SEG0043] person_2 (DOCTOR): Putting it all together, this looks most like an inner-ear balance problem such as vestibular neuritis. I'd also keep benign positional vertigo in mind. Let me repeat that back to make sure. You've had being unsteady, and no ringing in the ears or headache.
+[SEG0044] person_1 (PATIENT): Mm, that's right.
+[SEG0045] person_2 (DOCTOR): I want blood tests done, that's for dizziness. I'm going to order a positional test, for vertigo. What I'm giving you is prochlorperazine, 5 milligrams, three times a day, for three days. It's for nausea and vertigo. Start moving around gently as soon as you can, since resting too long slows recovery. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0046] person_2 (DOCTOR): The thing that would worry me is if you get double vision, weakness or trouble speaking. If that happens, go to emergency. Please come and see me if it isn't settling in five days. That's all from me. Any questions?
+[SEG0047] person_1 (PATIENT): No, that's all. Thanks a lot.
+[SEG0048] person_2 (DOCTOR): All the best.
+
+JSON:

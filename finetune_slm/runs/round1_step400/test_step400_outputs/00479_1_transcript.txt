@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00479)
+[SEG0001] person_1 (PATIENT): hi, doctor long queue outside, but here I am
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): so, I've been coughing up green phlegm, doctor
+[SEG0004] person_2 (DOCTOR): And when did that start?
+[SEG0005] person_1 (PATIENT): Oh, it's been five days now. I'd rather not end up on lots of tablets if I can avoid it. I did try to ignore it for a while.
+[SEG0006] person_2 (DOCTOR): anything that tends to go along with it?
+[SEG0007] person_1 (PATIENT): when it starts I tend to get poor sleep because of the cough as well. The poor sleep because of the cough? That's been since last night
+[SEG0008] person_2 (DOCTOR): what medicines are you taking at the moment?
+[SEG0009] person_1 (PATIENT): Tiotropium inhaler. I take it once a day for my chest
+[SEG0010] person_2 (DOCTOR): Do you work?
+[SEG0011] person_1 (PATIENT): I run a small shop, so I'm on my feet a lot.
+[SEG0012] person_2 (DOCTOR): how's your diet?
+[SEG0013] person_1 (PATIENT): I'm mostly vegetarian.
+[SEG0014] person_2 (DOCTOR): Before I prescribe anything any allergies?
+[SEG0015] person_1 (PATIENT): I've never been told I have allergies.
+[SEG0016] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0017] person_1 (PATIENT): I've had COPD for nearly five years now. It's the not knowing that gets to me.
+[SEG0018] person_2 (DOCTOR): okay did you get confusion swollen ankles or fever?
+[SEG0019] person_1 (PATIENT): no no confusion swollen ankles or fever
+[SEG0020] person_2 (DOCTOR): any sign of chest pain?
+[SEG0021] person_1 (PATIENT): No chest pain thankfully.
+[SEG0022] person_2 (DOCTOR): How about your heart, any problems like that?
+[SEG0023] person_1 (PATIENT): no that's been fine
+[SEG0024] person_2 (DOCTOR): Before we go on, a a few quick readings.
+[SEG0025] person_2 (DOCTOR): rest your hand here..
+[SEG0026] person_2 (DOCTOR): okay: respiratory rate 24 blood pressure 125 over 73 heart rate 99 temp 36.8 degrees saturation 89 percent
+[SEG0027] person_1 (PATIENT): well, is that alright, doctor?
+[SEG0028] person_2 (DOCTOR): we'll put it in context in a moment
+[SEG0029] person_2 (DOCTOR): okay, if you're comfortable, I'll examine you now
+[SEG0030] person_2 (DOCTOR): Almost done with this part.
+[SEG0031] person_2 (DOCTOR): there's some wheeze, and no swelling in the legs
+[SEG0032] person_2 (DOCTOR): thanks for that
+[SEG0033] person_2 (DOCTOR): Having listened and examined this is probably a flare-up of COPD.
+[SEG0034] person_2 (DOCTOR): let's book a sputum culture to look into productive cough
+[SEG0035] person_1 (PATIENT): Does it need any preparation?
+[SEG0036] person_2 (DOCTOR): I'd like you to take prednisolone, 30 milligrams, once a day, for five days it's for COPD flare-up don't skip meals, and try to eat smaller portions more often through the day please don't wait if you become more breathless or your lips turn blue that's when to be seen urgently see me again in one week can you tell me the plan back in your own words, so I know I've explained it clearly?
+[SEG0037] person_1 (PATIENT): So I take the prednisolone 30 milligrams once a day and come back in one week. Is that right?
+[SEG0038] person_2 (DOCTOR): yes exactly right right look after yourself
+[SEG0039] person_1 (PATIENT): Thanks so much, you know, doctor.
+[SEG0040] person_2 (DOCTOR): safe journey home
+
+JSON:

@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00246)
+[SEG0001] person_1 (PATIENT): um, hi, doctor, I brought my bag, is it fine to leave it here?
+[SEG0002] person_2 (DOCTOR): that's alright, take a seat tell me why you've come
+[SEG0003] person_1 (PATIENT): okay, so so the thing is, I've got shaky spells
+[SEG0004] person_2 (DOCTOR): When did it begin?
+[SEG0005] person_1 (PATIENT): Since yesterday that's when it began.
+[SEG0006] person_2 (DOCTOR): okay give me more detail on it whatever comes to mind
+[SEG0007] person_1 (PATIENT): Honestly all the time. Only eating something sweet and it's not much. Severe really. I told myself I'd wait and see and here I am. I've I've had a pounding heart with it too for four weeks.
+[SEG0008] person_2 (DOCTOR): Have you been feeling suddenly very hungry?
+[SEG0009] person_1 (PATIENT): Yes, I have.
+[SEG0010] person_2 (DOCTOR): so, tell me what you take day to day
+[SEG0011] person_1 (PATIENT): I I take Glycomet 500 milligrams maybe twice a day for my sugar
+[SEG0012] person_2 (DOCTOR): is the packet here, or the prescription?
+[SEG0013] person_1 (PATIENT): So, not with me. I'll bring it next time.
+[SEG0014] person_2 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0015] person_1 (PATIENT): Yes, diabetes.
+[SEG0016] person_2 (DOCTOR): okay, I can see diabetes in your file as well
+[SEG0017] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0018] person_1 (PATIENT): I skip breakfast most days. I work in an office, mostly sitting at a desk. Not really, I don't get much exercise
+[SEG0019] person_2 (DOCTOR): right, any surgery in your history?
+[SEG0020] person_1 (PATIENT): just a knee arthroscopy three years ago
+[SEG0021] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0022] person_1 (PATIENT): I've never been told I have allergies
+[SEG0023] person_2 (DOCTOR): Has there been any seizure?
+[SEG0024] person_1 (PATIENT): No, none, no seizure.
+[SEG0025] person_2 (DOCTOR): hm, okay did you get weight loss, chest pain or confusion?
+[SEG0026] person_1 (PATIENT): No, you know, no weight loss, chest pain or confusion.
+[SEG0027] person_2 (DOCTOR): anything with your nerves, like weakness or numbness?
+[SEG0028] person_1 (PATIENT): No weakness or anything.
+[SEG0029] person_2 (DOCTOR): Any problems with your joints or muscles?
+[SEG0030] person_1 (PATIENT): nothing else aches
+[SEG0031] person_2 (DOCTOR): Can I take your vitals now?
+[SEG0032] person_2 (DOCTOR): Almost there...
+[SEG0033] person_2 (DOCTOR): Okay: respiratory rate 17 saturation 97 percent BP is 115 over 76. And heart rate 82 temperature 36.6.
+[SEG0034] person_2 (DOCTOR): Shall we do the examination?
+[SEG0035] person_2 (DOCTOR): hold that position for me
+[SEG0036] person_2 (DOCTOR): pulse is normal and there's no tremor right now
+[SEG0037] person_2 (DOCTOR): thanks please take a a seat again
+[SEG0038] person_2 (DOCTOR): let me tell you where I've got to. It points towards low sugar episodes related to diabetes medication. I'd also keep a meal-timing issue in mind
+[SEG0039] person_1 (PATIENT): Uh, is this gonna go away?
+[SEG0040] person_2 (DOCTOR): I can't promise yet, but most people with low sugar episodes related to diabetes medication do well once it's treated properly. Stop me if I've got anything wrong. You've had shaky spells, since yesterday, severe, and no confusion or weight loss.
+[SEG0041] person_1 (PATIENT): correct
+[SEG0042] person_2 (DOCTOR): I'm sending you for a blood sugar test cos of hypoglycaemia always keep glucose tablets or a sweet in your bag and don't skip meals if you've taken your sugar tablet and please bring the latest prescription or the medicine boxes to the next visit so we can settle the dose i'd like to see you again in two weeks take care and call us if anything changes
+[SEG0043] person_1 (PATIENT): Uh okay thank you. Bye.
+
+JSON:

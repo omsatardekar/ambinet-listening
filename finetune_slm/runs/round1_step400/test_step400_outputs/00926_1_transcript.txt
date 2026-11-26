@@ -1,0 +1,50 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00926)
+[SEG0001] person_1 (PATIENT): Good afternoon, doctor. I'm a bit worried because my shoulders have been very stiff and sore, and a friend said it might be polymyalgia.
+[SEG0002] person_2 (DOCTOR): Thank you for coming. Tell me about the shoulders. When do they feel worst?
+[SEG0003] person_1 (PATIENT): In the morning. I can hardly lift my arms to wash my hair. It takes about an hour to loosen up.
+[SEG0004] person_2 (DOCTOR): Is it both shoulders?
+[SEG0005] person_1 (PATIENT): Both. And my hips, a little, too.
+[SEG0006] person_2 (DOCTOR): How long has this been going on?
+[SEG0007] person_1 (PATIENT): About five weeks.
+[SEG0008] person_2 (DOCTOR): Any fever, weight loss, or headaches over your temples?
+[SEG0009] person_1 (PATIENT): No fever. No weight loss. No headaches.
+[SEG0010] person_2 (DOCTOR): Any pain when you chew, or changes in your vision?
+[SEG0011] person_1 (PATIENT): No, nothing like that. My jaw is fine.
+[SEG0012] person_2 (DOCTOR): Have you had any joint swelling, or rashes?
+[SEG0013] person_1 (PATIENT): No swelling, and my skin is fine.
+[SEG0014] person_2 (DOCTOR): Let me take your pulse, blood pressure, temperature and oxygen level. ~
+[SEG0015] person_1 (PATIENT): Of course.
+[SEG0016] person_2 (DOCTOR): Pulse 72, blood pressure 130 over 78, temperature 36.7, oxygen 98 percent, breathing 15.
+[SEG0017] person_1 (PATIENT): Everything's normal? ~
+[SEG0018] person_2 (DOCTOR): Normal. I'd like to move your shoulders and check the strength. ~
+[SEG0019] person_1 (PATIENT): Go ahead.
+[SEG0020] person_2 (DOCTOR): You have a good range of movement but it's painful at the extremes, and your strength is normal.
+[SEG0021] person_1 (PATIENT): So what do you think it is? ~
+[SEG0022] person_2 (DOCTOR): The pattern fits polymyalgia rheumatica, but I can't be certain until the blood tests are back.
+[SEG0023] person_1 (PATIENT): What blood tests?
+[SEG0024] person_2 (DOCTOR): Inflammatory markers, a full blood count, and a check of your kidneys and thyroid.
+[SEG0025] person_1 (PATIENT): And if they're high? ~
+[SEG0026] person_2 (DOCTOR): Then we'd talk about a short steroid course, which usually works very quickly. ~
+[SEG0027] person_1 (PATIENT): Is there anyone in the family I should be concerned about? ~
+[SEG0028] person_2 (DOCTOR): Does anyone in your family have rheumatic or autoimmune conditions?
+[SEG0029] person_1 (PATIENT): My mother had rheumatoid arthritis.
+[SEG0030] person_2 (DOCTOR): Thank you, that's useful. Do you smoke or drink?
+[SEG0031] person_1 (PATIENT): I gave up smoking ten years ago. And I drink very little.
+[SEG0032] person_2 (DOCTOR): Good. I'll phone you as soon as the results are in. ~
+[SEG0033] person_1 (PATIENT): Thank you. ~
+[SEG0034] person_2 (DOCTOR): If you get a new headache, jaw pain or changes to your vision, call us the same day.
+[SEG0035] person_1 (PATIENT): I will. ~
+
+JSON:

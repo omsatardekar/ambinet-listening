@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00218)
+[SEG0001] person_1 (DOCTOR): Hello there. Please, sit. What seems to be the problem?
+[SEG0002] person_2 (PATIENT): Um, so... swelling in both ankles. That's why I came.
+[SEG0003] person_1 (DOCTOR): How long has this been going on?
+[SEG0004] person_2 (PATIENT): It's been going on for four weeks.
+[SEG0005] person_1 (DOCTOR): Uh-huh. Okay, give me more detail on it, whatever comes to mind.
+[SEG0006] person_2 (PATIENT): Okay, so it's every other day. Only raising the legs, and it's not much.
+[SEG0007] person_1 (DOCTOR): Anything that tends to go along with it?
+[SEG0008] person_2 (PATIENT): Tiredness goes along with it, most of the time.
+[SEG0009] person_1 (DOCTOR): Before we go on, a few quick readings.
+[SEG0010] person_1 (DOCTOR): Hold still for me...
+[SEG0011] person_1 (DOCTOR): Okay: pulse 90, respiratory rate 25. And temp 37.1 degrees, blood pressure 122 over 73, SpO2 92 percent on room air.
+[SEG0012] person_2 (PATIENT): Is that alright, um, doctor?
+[SEG0013] person_1 (DOCTOR): They help build the picture, I'll tell you more soon.
+[SEG0014] person_1 (DOCTOR): Let me have a look at you.
+[SEG0015] person_1 (DOCTOR): Let me press here.
+[SEG0016] person_1 (DOCTOR): I can hear crackles at the bases of both lungs.
+[SEG0017] person_1 (DOCTOR): Okay, you can sit up. Have you noticed fainting, calf pain or coughing up blood?
+[SEG0018] person_2 (PATIENT): I, I haven't had fainting, calf pain or coughing up blood, no.
+[SEG0019] person_1 (DOCTOR): I see. So, nothing like palpitations?
+[SEG0020] person_2 (PATIENT): I haven't noticed any palpitations.
+[SEG0021] person_1 (DOCTOR): Uh-huh. Any problems with your joints or muscles?
+[SEG0022] person_2 (PATIENT): Nothing else aches.
+[SEG0023] person_1 (DOCTOR): How's your breathing otherwise?
+[SEG0024] person_2 (PATIENT): No, nothing there.
+[SEG0025] person_1 (DOCTOR): Is there a family history of anything significant?
+[SEG0026] person_2 (PATIENT): My father had a heart attack.
+[SEG0027] person_1 (DOCTOR): Any regular medication?
+[SEG0028] person_2 (PATIENT): No, nothing regular.
+[SEG0029] person_1 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0030] person_2 (PATIENT): I was told I'm allergic to pollen, but I don't remember what reaction I had.
+[SEG0031] person_1 (DOCTOR): Have you got any chronic problems?
+[SEG0032] person_2 (PATIENT): I, I have heart failure. I have high blood pressure.
+[SEG0033] person_1 (DOCTOR): Hm, okay.
+[SEG0034] person_2 (PATIENT): Um, I have heart disease, for five years.
+[SEG0035] person_1 (DOCTOR): Alright, high blood pressure and heart disease, that matches what I have here. Who do you live with?
+[SEG0036] person_2 (PATIENT): I live with my family, my husband and two kids.
+[SEG0037] person_1 (DOCTOR): Any sport or activity?
+[SEG0038] person_2 (PATIENT): I play badminton on Sundays.
+[SEG0039] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0040] person_2 (PATIENT): No, never had any surgery.
+[SEG0041] person_1 (DOCTOR): So, based on the history and the examination, this looks most like fluid overload related to the heart. I'd also keep a kidney problem in mind. I think an ECG makes sense here, for breathlessness. I'd like you to take furosemide, 40 milligrams, every morning, until we review. That should help with fluid overload. Keep the salt and the fluids moderate, no more than about one and a half litres a day.
+[SEG0042] person_1 (DOCTOR): Come back after the results are back. That's it on my side. Anything unclear?
+[SEG0043] person_2 (PATIENT): Uh, I think that's clear. Thank you for being so thorough.
+
+JSON:

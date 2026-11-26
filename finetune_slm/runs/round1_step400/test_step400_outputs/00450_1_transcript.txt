@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00450)
+[SEG0001] person_1 (PATIENT): Hi, doctor. Long queue outside, but here I am.
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_1 (PATIENT): Um, uh, so... nausea in the mornings. That's why I came.
+[SEG0004] person_2 (DOCTOR): Are you on any regular medication?
+[SEG0005] person_1 (PATIENT): Okay, so no, I don't take anything regularly.
+[SEG0006] person_2 (DOCTOR): How long are we talking about?
+[SEG0007] person_1 (PATIENT): Okay, uh, so it's been going on for three weeks.
+[SEG0008] person_2 (DOCTOR): So, how would you describe it, mild, moderate, severe?
+[SEG0009] person_1 (PATIENT): A three out of ten, uh, I suppose.
+[SEG0010] person_2 (DOCTOR): Have you noticed vomiting everything or fever?
+[SEG0011] person_1 (PATIENT): Um, no, no vomiting everything or fever.
+[SEG0012] person_2 (DOCTOR): A few quick ones: dizziness or bleeding?
+[SEG0013] person_1 (PATIENT): Nothing like that, no.
+[SEG0014] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0015] person_1 (PATIENT): Nothing else aches.
+[SEG0016] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0017] person_1 (PATIENT): I don't drink at all. Not really, I don't get much exercise. Yes, I live on my own.
+[SEG0018] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0019] person_1 (PATIENT): No, nothing, I've generally been healthy.
+[SEG0020] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0021] person_1 (PATIENT): No allergies that I know of, you know, no.
+[SEG0022] person_2 (DOCTOR): Let's do your observations.
+[SEG0023] person_2 (DOCTOR): One second...
+[SEG0024] person_2 (DOCTOR): Okay: respiratory rate 17, pressure 110 over 70, oxygen saturation is 99 percent, pulse 65, temp 36.7 degrees.
+[SEG0025] person_2 (DOCTOR): Shall we do the examination?
+[SEG0026] person_2 (DOCTOR): Hold that position for me.
+[SEG0027] person_2 (DOCTOR): Tummy is soft, non-tender, and the uterus isn't palpable above the pelvic bone yet.
+[SEG0028] person_2 (DOCTOR): Right, that's fine, sit up.
+[SEG0029] person_2 (DOCTOR): Having listened and examined, the most likely explanation is an early pregnancy. That's my thinking for now, and it may change as we learn more.
+[SEG0030] person_1 (PATIENT): I've been thinking the worst, to be honest. Is it bad?
+[SEG0031] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's an early pregnancy, and we'll know more once the blood tests is back.
+[SEG0032] person_2 (DOCTOR): I'd like to arrange blood tests for antenatal screening.
+[SEG0033] person_1 (PATIENT): How long does that take?
+[SEG0034] person_2 (DOCTOR): I'd like you to take folic acid, 5 milligrams, once a day, until twelve weeks. You take it by mouth. That should help with pregnancy. Avoid alcohol and don't take any new tablets without checking with us first. Let's plan a check after the scan.
+[SEG0035] person_1 (PATIENT): Okay, I'll book that.
+[SEG0036] person_2 (DOCTOR): Thanks for coming in.
+[SEG0037] person_1 (PATIENT): Thank you for your time.
+[SEG0038] person_2 (DOCTOR): Take care.
+
+JSON:

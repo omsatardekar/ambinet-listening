@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01664)
+[SEG0001] person_1 (PATIENT): Hello, doctor. May I come in?
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): Well, I've been having tiredness.
+[SEG0004] person_2 (DOCTOR): How many days or weeks has it been?
+[SEG0005] person_1 (PATIENT): Um, about... well, three weeks. I looked a few things up online, and that probably didn't help. It's the not knowing that gets to me. I've had loose stools with blood too, for five days.
+[SEG0006] person_2 (DOCTOR): I'll do your observations first.
+[SEG0007] person_2 (DOCTOR): That's it, just a little longer...
+[SEG0008] person_2 (DOCTOR): Okay: temperature 36.8, saturation 99 percent, respiratory rate 18. And BP is 109 over 78, pulse 81.
+[SEG0009] person_2 (DOCTOR): Could you come over to the couch, please?
+[SEG0010] person_2 (DOCTOR): take a a deep breath for me
+[SEG0011] person_2 (DOCTOR): there is tenderness in the lower right tummy and no guarding
+[SEG0012] person_2 (DOCTOR): That's the examination finished.
+[SEG0013] person_2 (DOCTOR): Have you noticed joint pain, weight loss or vomiting?
+[SEG0014] person_1 (PATIENT): I haven't had joint pain, weight loss or vomiting, no.
+[SEG0015] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0016] person_1 (PATIENT): Breathing's normal.
+[SEG0017] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0018] person_1 (PATIENT): No, nothing at all.
+[SEG0019] person_2 (DOCTOR): Has anything ever caused you a reaction? I mean any allergies.
+[SEG0020] person_1 (PATIENT): no, I've never reacted to anything
+[SEG0021] person_2 (DOCTOR): right, is there any regular medication you use?
+[SEG0022] person_1 (PATIENT): No, I'm not on anything.
+[SEG0023] person_2 (DOCTOR): Do you live by yourself?
+[SEG0024] person_1 (PATIENT): No, I share a house with my brother.
+[SEG0025] person_2 (DOCTOR): how active are you?
+[SEG0026] person_1 (PATIENT): I hardly move around during the day.
+[SEG0027] person_2 (DOCTOR): Are you in work at the moment?
+[SEG0028] person_1 (PATIENT): Yes, I work in a bakery, early starts.
+[SEG0029] person_2 (DOCTOR): Does your family have any medical conditions?
+[SEG0030] person_1 (PATIENT): My son has asthma.
+[SEG0031] person_2 (DOCTOR): so, based on the history and the examination, the most likely explanation is a flare of inflammatory bowel disease
+[SEG0032] person_1 (PATIENT): Mm, is it dangerous, doctor?
+[SEG0033] person_2 (DOCTOR): It's reasonable to be concerned, but right now a flare of inflammatory bowel disease is my leading thought, not anything worse. I want a stool test done, that's for bloody diarrhoea.
+[SEG0034] person_1 (PATIENT): How long will it take?
+[SEG0035] person_2 (DOCTOR): I'm prescribing prednisolone, 40 milligrams, once a day, one week then reduce. You take it by mouth. That should help with inflammatory bowel flare. Keep up your fluids and call the IBD nurse if you get a fever. Let's get you seen by the IBD nurse, I'll arrange the letter
+[SEG0036] person_1 (PATIENT): alright, thank you
+[SEG0037] person_2 (DOCTOR): that's all from me any questions?
+[SEG0038] person_1 (PATIENT): Erm, thank you, that's helpful.
+
+JSON:

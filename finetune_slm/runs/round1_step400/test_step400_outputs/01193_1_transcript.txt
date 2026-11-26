@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01193)
+[SEG0001] person_1 (NURSE): Doctor, if you're free, we can start. I've got the numbers noted down.
+[SEG0002] person_2 (DOCTOR): Thank you. Good morning, tell me what's been going on.
+[SEG0003] person_3 (PATIENT): Honestly, uh, it's being thirsty, and my family pushed me to come. I'm not great at remembering details, so bear with me.
+[SEG0004] person_2 (DOCTOR): When was the first time you noticed it?
+[SEG0005] person_3 (PATIENT): Since Monday, that's when it began.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_3 (PATIENT): I get some relief from water. Maybe a seven out of ten on a bad day.
+[SEG0008] person_2 (DOCTOR): Right, does anything else come with it?
+[SEG0009] person_3 (PATIENT): Recurrent thrush goes along with it, most of the time. The recurrent thrush? That's been for about a week.
+[SEG0010] person_2 (DOCTOR): Is it a lot or only a little?
+[SEG0011] person_3 (PATIENT): About a five out of ten.
+[SEG0012] person_1 (NURSE): Okay, so the vitals from earlier. Height 153 centimetres, pulse 88. Pressure 167 over 90, SpO2 97 percent on room air, temp 36.9 degrees, weight 79 kilos.
+[SEG0013] person_2 (DOCTOR): Okay, noted.
+[SEG0014] person_2 (DOCTOR): May I examine you now?
+[SEG0015] person_2 (DOCTOR): Raise your arm for me.
+[SEG0016] person_2 (DOCTOR): The feeling at the tips of your toes is reduced and the foot pulses are present.
+[SEG0017] person_2 (DOCTOR): Okay, that's enough for me.
+[SEG0018] person_2 (DOCTOR): Have you had any chest pain, vomiting or foot ulcers?
+[SEG0019] person_3 (PATIENT): No chest pain, vomiting or foot ulcers, none of it.
+[SEG0020] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0021] person_3 (PATIENT): No rashes.
+[SEG0022] person_2 (DOCTOR): Any allergies to tablets, food or anything in the environment?
+[SEG0023] person_3 (PATIENT): I've never had an allergy.
+[SEG0024] person_2 (DOCTOR): Any regular medication at all?
+[SEG0025] person_3 (PATIENT): Well, no, I don't take any tablets.
+[SEG0026] person_2 (DOCTOR): Right, any medical conditions, anything you've been treated for?
+[SEG0027] person_3 (PATIENT): No, I've always been fairly healthy.
+[SEG0028] person_2 (DOCTOR): Anything surgical in your history?
+[SEG0029] person_3 (PATIENT): Well, I had part of my thyroid removed years back.
+[SEG0030] person_2 (DOCTOR): Do you work outside the home?
+[SEG0031] person_3 (PATIENT): I'm a hairdresser, on my feet all day.
+[SEG0032] person_2 (DOCTOR): What does a normal day of food look like?
+[SEG0033] person_3 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0034] person_2 (DOCTOR): Let's book kidney function tests to look into diabetes review. We'll begin with gliclazide, 40 milligrams, once a day with breakfast, long term. That should help with diabetes. Check your feet daily and book the eye screening. If it hasn't settled in two weeks, we'd think about an HbA1c, but not now. If the symptoms get worse, or you feel really unwell, please come to the emergency department. Alright, that's all from me. Any questions?
+[SEG0035] person_3 (PATIENT): Good, thanks, I'll see you then.
+[SEG0036] person_2 (DOCTOR): Take care now.
+
+JSON:

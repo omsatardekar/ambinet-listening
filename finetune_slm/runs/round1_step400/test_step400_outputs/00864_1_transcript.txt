@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00864)
+[SEG0001] person_1 (PATIENT): Athlete's foot. Between the toes. It's back.
+[SEG0002] person_2 (DOCTOR): How long has it been there this time?
+[SEG0003] person_1 (PATIENT): Dunno. A while. Weeks.
+[SEG0004] person_2 (DOCTOR): Which foot?
+[SEG0005] person_1 (PATIENT): Both. Worse on the left. Itchy. Skin's peeling.
+[SEG0006] person_2 (DOCTOR): Have you tried anything?
+[SEG0007] person_1 (PATIENT): Clotrimazole cream. Twice a day. And a powder in my shoes.
+[SEG0008] person_2 (DOCTOR): How long did you use the cream for? ~
+[SEG0009] person_1 (PATIENT): A week. It went. Then it came back. ~
+[SEG0010] person_2 (DOCTOR): How long should you use it for? ~
+[SEG0011] person_1 (PATIENT): Dunno. ~
+[SEG0012] person_2 (DOCTOR): Usually another week or two after it looks better. That's why it comes back. Any health conditions?
+[SEG0013] person_1 (PATIENT): Diabetes. Type 2.
+[SEG0014] person_2 (DOCTOR): Anyone in the family get fungal infections?
+[SEG0015] person_1 (PATIENT): My dad had it on his nails.
+[SEG0016] person_2 (DOCTOR): Any fever, or redness spreading up the foot?
+[SEG0017] person_1 (PATIENT): No. Nothing like that.
+[SEG0018] person_2 (DOCTOR): Any pain, or numbness in your feet?
+[SEG0019] person_1 (PATIENT): No. Normal.
+[SEG0020] person_2 (DOCTOR): Pulse and temperature, please. ~
+[SEG0021] person_1 (PATIENT): Okay. ~
+[SEG0022] person_2 (DOCTOR): Pulse 74, temperature 36.7.
+[SEG0023] person_1 (PATIENT): Fine? ~
+[SEG0024] person_2 (DOCTOR): Fine. Take your socks off and let me see.
+[SEG0025] person_1 (PATIENT): Here. ~
+[SEG0026] person_2 (DOCTOR): There's white, peeling, soggy skin between the little toes on both feet, and a small crack on the left, but no redness spreading, and no sign of infection. ~
+[SEG0027] person_1 (PATIENT): What is it? ~
+[SEG0028] person_2 (DOCTOR): It's the same fungal infection, athlete's foot, tinea pedis, and I'd say it's recurrent because the treatment was stopped too soon, or the shoes are keeping the feet damp.
+[SEG0029] person_1 (PATIENT): What do I do? ~
+[SEG0030] person_2 (DOCTOR): Continue the clotrimazole cream for two weeks after it looks clear, and dry between your toes thoroughly after washing.
+[SEG0031] person_1 (PATIENT): Right. ~
+[SEG0032] person_2 (DOCTOR): Wear cotton socks, change them daily, and alternate your shoes. Don't go barefoot in communal showers.
+[SEG0033] person_1 (PATIENT): Okay. ~
+[SEG0034] person_2 (DOCTOR): And I'd like to take a skin scraping, to confirm the diagnosis, because it's come back.
+[SEG0035] person_1 (PATIENT): Fine.
+[SEG0036] person_2 (DOCTOR): Done. Because you have diabetes, check your feet daily and see me if there's a blister, a crack that won't heal, or redness.
+[SEG0037] person_1 (PATIENT): Okay. ~
+[SEG0038] person_2 (DOCTOR): I'd like to see you again in three weeks, with the result.
+[SEG0039] person_1 (PATIENT): Three weeks. Thanks. ~
+
+JSON:

@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00168)
+[SEG0001] person_1 (NURSE): All set here, doctor. Chart's updated, and I'll read the readings out when you're ready.
+[SEG0002] person_2 (DOCTOR): Perfect, thanks. Hello there, so what's the trouble?
+[SEG0003] person_3 (PATIENT): Right, uh, I've been feeling faint, and I wanted to get it checked.
+[SEG0004] person_2 (DOCTOR): is this recent, or has it it been a while?
+[SEG0005] person_3 (PATIENT): Since last night, that's when it began. I took the morning off to come in today.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to to mind.
+[SEG0007] person_3 (PATIENT): I'd say mild. It's worse with standing in the sun.
+[SEG0008] person_2 (DOCTOR): Any a pounding headache as well?
+[SEG0009] person_3 (PATIENT): Oh, um, yes, about the same, about two weeks. There was nausea, yes, but that went away.
+[SEG0010] person_2 (DOCTOR): Have you noticed fainting or chest pain?
+[SEG0011] person_3 (PATIENT): uh, I haven't had fainting or chest pain, no
+[SEG0012] person_2 (DOCTOR): Let me check a few things. Any passing no urine, vomiting, confusion or fever?
+[SEG0013] person_3 (PATIENT): Hmm, I haven't had passing no urine, vomiting, confusion or fever, no.
+[SEG0014] person_2 (DOCTOR): Is your chest okay generally?
+[SEG0015] person_3 (PATIENT): breathing's normal
+[SEG0016] person_2 (DOCTOR): Do you have any known allergies at all?
+[SEG0017] person_3 (PATIENT): I've never been told I have allergies.
+[SEG0018] person_2 (DOCTOR): now some background about your lifestyle
+[SEG0019] person_3 (PATIENT): I don't drink at all. Yes, I live on my own. I work night shifts at a warehouse
+[SEG0020] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0021] person_3 (PATIENT): I've had high blood pressure, yes. Okay, so I've had arthritis in my knees for five years now.
+[SEG0022] person_2 (DOCTOR): Yes?
+[SEG0023] person_2 (DOCTOR): Okay, I can see arthritis in your knees in your file as well. Alright, any surgery in your history?
+[SEG0024] person_3 (PATIENT): hmm, yes, I had my gallbladder removed, in 2016
+[SEG0025] person_2 (DOCTOR): what medicines do you take regularly?
+[SEG0026] person_3 (PATIENT): Ramipril. I take it 5 milligrams, every morning.
+[SEG0027] person_1 (NURSE): Doctor, our chart from the last visit lists it as 10 milligrams.
+[SEG0028] person_2 (DOCTOR): hm, that's different is the latest prescription anywhere near you?
+[SEG0029] person_3 (PATIENT): so, I don't think I have it with me. Paracetamol. I take it 650 milligrams, when needed for the knee pain
+[SEG0030] person_1 (NURSE): Okay, so the vitals from earlier. Pressure 100 over 62, pulse 93, respiratory rate 19.
+[SEG0031] person_2 (DOCTOR): Good, thank you. Listening to the whole story, I'd lean towards heat exhaustion with some dehydration. We shouldn't forget an electrolyte imbalance. I'm going to order blood salts, for dehydration. Let's use ORS, 1 sachet, three times a day, for two days. You take it by mouth. It's for dehydration. Avoid the midday sun for a few days and keep a water bottle with you.
+[SEG0032] person_2 (DOCTOR): understood and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+[SEG0033] person_3 (PATIENT): Okay, I'll remember.
+[SEG0034] person_2 (DOCTOR): Keep an eye out, and if you become confused or stop sweating, call us the same day or go to emergency. Please come and see me in three days.
+[SEG0035] person_3 (PATIENT): sure, that's doable
+[SEG0036] person_2 (DOCTOR): ask me anything before you go
+[SEG0037] person_3 (PATIENT): Thanks so much, doctor.
+
+JSON:

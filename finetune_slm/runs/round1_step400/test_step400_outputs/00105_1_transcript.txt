@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00105)
+[SEG0001] person_1 (PATIENT): Doctor, hello, I've got my papers here, where should I put them?
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): Well, I've been having a tight chest.
+[SEG0004] person_2 (DOCTOR): And when did that start?
+[SEG0005] person_1 (PATIENT): About... well, about a week. I did try to ignore it for a while.
+[SEG0006] person_2 (DOCTOR): Right, right. Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): Honestly, a couple of times a week. The inhaler helps a bit.
+[SEG0008] person_2 (DOCTOR): Have you been using your blue inhaler more?
+[SEG0009] person_1 (PATIENT): Yes, about the same, five days. About using my blue inhaler more, I'd call it severe.
+[SEG0010] person_2 (DOCTOR): A few measurements, then we'll continue.
+[SEG0011] person_2 (DOCTOR): Right, almost there...
+[SEG0012] person_2 (DOCTOR): Okay: temp 37.4 degrees, heart rate 99, oxygen saturation is 90 percent. And BP is 127 over 75, respiratory rate 22.
+[SEG0013] person_1 (PATIENT): Is that normal?
+[SEG0014] person_2 (DOCTOR): I'll explain what that means shortly.
+[SEG0015] person_2 (DOCTOR): I'll examine you now, bear with me.
+[SEG0016] person_2 (DOCTOR): Almost done with this part.
+[SEG0017] person_2 (DOCTOR): You're speaking in full sentences, which is reassuring.
+[SEG0018] person_2 (DOCTOR): So, tell me if anything hurts.
+[SEG0019] person_2 (DOCTOR): I can hear a widespread wheeze on both sides when you breathe out.
+[SEG0020] person_2 (DOCTOR): Okay, you can sit up.
+[SEG0021] person_2 (DOCTOR): A few quick ones: chest pain, fever or weight loss?
+[SEG0022] person_1 (PATIENT): None, as far as I know.
+[SEG0023] person_2 (DOCTOR): Let me check a few things. Any leg swelling or runny nose?
+[SEG0024] person_1 (PATIENT): No, not any of them.
+[SEG0025] person_2 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0026] person_1 (PATIENT): No, that's all normal.
+[SEG0027] person_2 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0028] person_1 (PATIENT): Nothing unusual, no.
+[SEG0029] person_2 (DOCTOR): Any operations in the past?
+[SEG0030] person_1 (PATIENT): I had a stent put in my heart two years ago.
+[SEG0031] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0032] person_1 (PATIENT): No allergies that I know of, no.
+[SEG0033] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0034] person_1 (PATIENT): I have asthma, for nearly five years. I've got heart disease.
+[SEG0035] person_2 (DOCTOR): Mm. Yes, asthma is known to us, good to have that clear. Which tablets or creams or inhalers do you use?
+[SEG0036] person_1 (PATIENT): I take Seretide inhaler, twice a day.
+[SEG0037] person_2 (DOCTOR): Since when have you been taking it?
+[SEG0038] person_1 (PATIENT): For two years. Aspirin. I take it 75 milligrams, once a day.
+[SEG0039] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0040] person_1 (PATIENT): I gave up drinking about three years ago. Yes, I'm a nurse on a busy ward. Mostly home-cooked food, rice and vegetables.
+[SEG0041] person_2 (DOCTOR): So, based on the history and the examination, this looks most like an asthma flare-up. Another possibility is a chest infection. Let's get a peak flow reading, for asthma control. I'll request breathing tests, it'll help with asthma. I'd like you to take prednisolone, 30 milligrams, once a day, for five days. You take it by mouth. That should help with asthma flare-up. Rinse your mouth after the steroid inhaler.
+[SEG0042] person_1 (PATIENT): Do I need a chest X-ray? I read it might help.
+[SEG0043] person_2 (DOCTOR): I don't think that's needed at this stage, the history doesn't call for it. The thing that would worry me is if the inhaler isn't helping or you can't speak in full sentences. If that happens, go to emergency. Let's plan a check in two weeks.
+[SEG0044] person_1 (PATIENT): I'll make the appointment on my way out.
+[SEG0045] person_2 (DOCTOR): Look after yourself.
+[SEG0046] person_1 (PATIENT): All good here. Thank you.
+
+JSON:

@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00215)
+[SEG0001] person_1 (PATIENT): Hello, doctor. Where would you like me?
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_1 (PATIENT): Well, you know, honestly, it's headaches in the mornings, and my family pushed me to come. My family kept telling me to get it checked. I'd rather know what's going on than keep guessing.
+[SEG0004] person_2 (DOCTOR): How long has this been going on?
+[SEG0005] person_1 (PATIENT): About a year, I think... sorry, nearly five years, I got that wrong.
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): I'd call it severe. Honestly, a couple of times a week.
+[SEG0008] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0009] person_1 (PATIENT): Amlodipine, 5 milligrams, once a day.
+[SEG0010] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0011] person_1 (PATIENT): No, never had any surgery.
+[SEG0012] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0013] person_1 (PATIENT): Um, I have high blood pressure, for nearly five years.
+[SEG0014] person_2 (DOCTOR): Do you smoke?
+[SEG0015] person_1 (PATIENT): I've never smoked.
+[SEG0016] person_2 (DOCTOR): Is anyone at home with you?
+[SEG0017] person_1 (PATIENT): I share a flat with two friends.
+[SEG0018] person_2 (DOCTOR): How do you eat, generally?
+[SEG0019] person_1 (PATIENT): I skip breakfast most days.
+[SEG0020] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0021] person_1 (PATIENT): Um, yes, ibuprofen, it gives me a rash.
+[SEG0022] person_2 (DOCTOR): Okay, and what about nosebleeds, chest pain or palpitations?
+[SEG0023] person_1 (PATIENT): No, none of that at all.
+[SEG0024] person_2 (DOCTOR): Any weakness?
+[SEG0025] person_1 (PATIENT): No, no weakness.
+[SEG0026] person_2 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0027] person_1 (PATIENT): No, joints are fine.
+[SEG0028] person_2 (DOCTOR): Right, before we go on, a few quick readings.
+[SEG0029] person_2 (DOCTOR): Almost there...
+[SEG0030] person_2 (DOCTOR): Okay: pulse 89, temperature 36.8, BP is 152 over 97.
+[SEG0031] person_1 (PATIENT): Is that normal?
+[SEG0032] person_2 (DOCTOR): They help build the picture, I'll tell you more soon.
+[SEG0033] person_2 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0034] person_1 (PATIENT): Go ahead.
+[SEG0035] person_2 (DOCTOR): Let me press here.
+[SEG0036] person_2 (DOCTOR): There's mild pitting swelling at both ankles.
+[SEG0037] person_1 (PATIENT): Go ahead.
+[SEG0038] person_2 (DOCTOR): All done, you can get dressed.
+[SEG0039] person_2 (DOCTOR): From what you've told me and what I found, I'd lean towards hypertension that isn't well controlled. I'd like to arrange a lipid profile for cardiovascular risk.
+[SEG0040] person_1 (PATIENT): Alright, when would that be?
+[SEG0041] person_2 (DOCTOR): I'm going to put you on telmisartan, 40 milligrams, once a day, long term. You take it by mouth. That's for high blood pressure.
+[SEG0042] person_1 (PATIENT): Okay, thank you.
+[SEG0043] person_2 (DOCTOR): Salt is the big one, try to keep it low even though it's hard. Cut down on salt and fried food for now, it really does make a difference. Come back or go to emergency straight away if the symptoms get worse. Let me check I've been clear. What will you do once you get home?
+[SEG0044] person_1 (PATIENT): So, I take the telmisartan, 40 milligrams, once a day. Is that right?
+[SEG0045] person_2 (DOCTOR): Okay, yes, exactly right. Okay, I think we're finished. Is everything clear?
+[SEG0046] person_1 (PATIENT): Well, okay, thank you. Bye.
+
+JSON:

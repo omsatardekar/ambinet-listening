@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00346)
+[SEG0001] person_1 (PATIENT): Good evening, uh, doctor, thank you for staying late.
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_1 (PATIENT): Doctor, it's a tight feeling in the chest. It's getting on my nerves now.
+[SEG0004] person_2 (DOCTOR): And when did that start?
+[SEG0005] person_1 (PATIENT): Ever since... since Friday, really. I just want to get back to normal, really.
+[SEG0006] person_2 (DOCTOR): How intense does it get?
+[SEG0007] person_1 (PATIENT): I, I'd call it mild.
+[SEG0008] person_2 (DOCTOR): right. Okay, a few quick ones: thoughts of harming myself, fainting, alcohol use or weight loss?
+[SEG0009] person_1 (PATIENT): No, none of those.
+[SEG0010] person_2 (DOCTOR): is your digestion otherwise okay?
+[SEG0011] person_1 (PATIENT): no, that side's been fine
+[SEG0012] person_2 (DOCTOR): So, tell me about your routine, work, habits, that sort of thing.
+[SEG0013] person_1 (PATIENT): I drive a delivery van all day. I share a flat with two friends. Mostly home-cooked food, rice and vegetables.
+[SEG0014] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0015] person_1 (PATIENT): no, I've never had anything serious
+[SEG0016] person_2 (DOCTOR): Any previous surgeries?
+[SEG0017] person_1 (PATIENT): No operations, no.
+[SEG0018] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0019] person_1 (PATIENT): No, uh, none that I know of.
+[SEG0020] person_2 (DOCTOR): any regular medication?
+[SEG0021] person_1 (PATIENT): no, nothing regular
+[SEG0022] person_2 (DOCTOR): a few measurements, then we'll continue
+[SEG0023] person_2 (DOCTOR): One second...
+[SEG0024] person_2 (DOCTOR): Okay: BP is 122 over 80, respiratory rate 15, temp 36.5 degrees, pulse is 74 beats a a minute, SpO2 99 percent on room air.
+[SEG0025] person_1 (PATIENT): is that okay?
+[SEG0026] person_2 (DOCTOR): I'll explain what that that means shortly.
+[SEG0027] person_2 (DOCTOR): Okay, shall we do the examination?
+[SEG0028] person_1 (PATIENT): Go ahead.
+[SEG0029] person_2 (DOCTOR): I'll go gently.
+[SEG0030] person_2 (DOCTOR): pulse is regular and you're breathing comfortably right now
+[SEG0031] person_1 (PATIENT): Alright.
+[SEG0032] person_2 (DOCTOR): That's all I need, thank you. Right, here's what I'm thinking. I'd lean towards an anxiety disorder.
+[SEG0033] person_1 (PATIENT): Is this going to go away?
+[SEG0034] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's an anxiety disorder, and we'll know more once the an ECG is back.
+[SEG0035] person_2 (DOCTOR): let's get an ECG, for palpitations i'll request a thyroid test, it'll help with anxiety you'll be taking escitalopram, 5 milligrams, once a day, for two weeks then review that should help with anxiety slow breathing, in for four and out for six, for a few minutes whenever it builds up regular exercise and less caffeine make a real difference if you have thoughts of harming yourself, that's the point to come in urgently
+[SEG0036] person_1 (PATIENT): Okay, I'll remember.
+[SEG0037] person_2 (DOCTOR): we'll catch up in two weeks
+[SEG0038] person_1 (PATIENT): Okay.
+[SEG0039] person_2 (DOCTOR): call the clinic if you need us
+[SEG0040] person_1 (PATIENT): I think that's clear. Thank you for being so thorough.
+
+JSON:

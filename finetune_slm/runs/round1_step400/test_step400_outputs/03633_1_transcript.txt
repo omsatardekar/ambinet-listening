@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03633)
+[SEG0001] person_1 (NURSE): doctor, your next patient is here. I've done the basics, I'll read them out in a moment
+[SEG0002] person_2 (DOCTOR): Thank you. Right, hello, what's the problem?
+[SEG0003] person_3 (PATIENT): erm, mainly I've been feeling weak that's why I came
+[SEG0004] person_2 (DOCTOR): Right, what's the timeline, when did it begin?
+[SEG0005] person_3 (PATIENT): Yeah, it's been going on for five days. I've also had an irregular heartbeat, for about three months. As for irregular heartbeat, severe, really. I've been losing weight too. A poor appetite was there, but it's gone away on its own.
+[SEG0006] person_1 (NURSE): Doctor, I've got the readings for you. Blood pressure 136 over 79, pulse is 111 beats a minute. Respiratory rate 19, temp 36.8 degrees.
+[SEG0007] person_2 (DOCTOR): good, thank you
+[SEG0008] person_2 (DOCTOR): Could you come over to the couch, please?
+[SEG0009] person_2 (DOCTOR): breathe out slowly
+[SEG0010] person_2 (DOCTOR): your pulse is fast and irregular and the thyroid feels slightly enlarged
+[SEG0011] person_2 (DOCTOR): you can relax now. Any heat intolerance or diarrhoea at all?
+[SEG0012] person_3 (PATIENT): No, no heat intolerance or diarrhoea.
+[SEG0013] person_2 (DOCTOR): A few quick ones: tremor or sweating?
+[SEG0014] person_3 (PATIENT): erm, no, I'd have said so
+[SEG0015] person_2 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0016] person_3 (PATIENT): No, nothing like that.
+[SEG0017] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0018] person_3 (PATIENT): I have about eight cigarettes in a day. I do a yoga class on Thursdays. I live with my elderly mother. Lots of rice, lentils and some fruit.
+[SEG0019] person_2 (DOCTOR): So, are you taking anything regularly, including from the pharmacy?
+[SEG0020] person_3 (PATIENT): Tiotropium inhaler, once a day it's alendronate, 70 milligrams, once a week
+[SEG0021] person_1 (NURSE): Doctor, our chart from the last visit lists it as 140 milligrams.
+[SEG0022] person_2 (DOCTOR): Alright. Did you bring the up-to-date prescription?
+[SEG0023] person_3 (PATIENT): I don't think I have it with me. I had atorvastatin at one point, but I'm off it now.
+[SEG0024] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0025] person_3 (PATIENT): I've never had an allergy.
+[SEG0026] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0027] person_3 (PATIENT): I have COPD. I've had high cholesterol for nearly five years now.
+[SEG0028] person_2 (DOCTOR): Yes.
+[SEG0029] person_3 (PATIENT): I've had thin bones, yes
+[SEG0030] person_2 (DOCTOR): Understood. Right, so high cholesterol and thin bones are already on your record. We'll keep that in mind today. Taking everything into account, I don't have a clear answer today: an overactive thyroid with atrial fibrillation, in an apathetic older patient is possible, and so is depression.
+[SEG0031] person_3 (PATIENT): I'm scared it's something bad. Is it?
+[SEG0032] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's an overactive thyroid with atrial fibrillation, in an apathetic older patient, and we'll know more once the an ECG is back.
+[SEG0033] person_1 (NURSE): Doctor, I did an ECG before they came in, the result's on your screen.
+[SEG0034] person_2 (DOCTOR): Okay, I'll take a look at that. A thyroid test is what I'd like next, for weight loss and irregular pulse.
+[SEG0035] person_3 (PATIENT): Mm, uh, alright.
+[SEG0036] person_2 (DOCTOR): it is easy to miss in older people because they seem sleepy rather than hot and shaky and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+[SEG0037] person_3 (PATIENT): Alright, I follow.
+[SEG0038] person_2 (DOCTOR): I'll want another look after the results
+[SEG0039] person_3 (PATIENT): Yes, that's manageable.
+[SEG0040] person_2 (DOCTOR): Anything else on your mind before you go?
+[SEG0041] person_3 (PATIENT): Great, thank you for your help.
+[SEG0042] person_2 (DOCTOR): All the best.
+
+JSON:

@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02073)
+[SEG0001] person_1 (PATIENT): Uh, hi doctor, am I too early?
+[SEG0002] person_2 (DOCTOR): No problem at all, come in. What's troubling you?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, you know, I'm just here to help with the details.
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to have you here.
+[SEG0005] person_1 (PATIENT): It's spots on my forehead and chin, mostly.
+[SEG0006] person_2 (DOCTOR): Which medicines do you take at the moment?
+[SEG0007] person_3 (FAMILY_MEMBER): It's a face wash, twice a day, doctor.
+[SEG0008] person_2 (DOCTOR): Okay, how long has this been bothering you?
+[SEG0009] person_1 (PATIENT): It's been four weeks, I'm fairly sure.
+[SEG0010] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0011] person_1 (PATIENT): It's worse with before periods and stress. I'd give it a five, you know, out of ten.
+[SEG0012] person_2 (DOCTOR): Has there been oily skin too?
+[SEG0013] person_1 (PATIENT): Yeah. Two days, I'd say.
+[SEG0014] person_2 (DOCTOR): How troublesome is it day to day?
+[SEG0015] person_1 (PATIENT): It's mild, honestly.
+[SEG0016] person_2 (DOCTOR): How about irregular periods?
+[SEG0017] person_1 (PATIENT): No irregular periods, thankfully.
+[SEG0018] person_2 (DOCTOR): Any low mood, painful cysts or scarring at all?
+[SEG0019] person_1 (PATIENT): No, none of those at all.
+[SEG0020] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0021] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0022] person_2 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0023] person_1 (PATIENT): No weakness or anything.
+[SEG0024] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0025] person_1 (PATIENT): I have thin bones.
+[SEG0026] person_2 (DOCTOR): Okay, I can see thin bones in your file as well. Any allergies to tablets, food or anything in the environment?
+[SEG0027] person_1 (PATIENT): Yes, grass pollen, it gives me itchy eyes.
+[SEG0028] person_2 (DOCTOR): Have you had any surgical procedures?
+[SEG0029] person_1 (PATIENT): I had a cataract operation in my left eye about a year ago.
+[SEG0030] person_2 (DOCTOR): Who lives with you?
+[SEG0031] person_1 (PATIENT): My partner and our baby.
+[SEG0032] person_2 (DOCTOR): Do you do any exercise?
+[SEG0033] person_1 (PATIENT): I swim twice a week.
+[SEG0034] person_2 (DOCTOR): What does a normal day of food look like?
+[SEG0035] person_1 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0036] person_2 (DOCTOR): I'll do your observations first.
+[SEG0037] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0038] person_2 (DOCTOR): Okay: BP is 126 over 76, saturation 98 percent, heart rate 67, temp 36.7 degrees, respiratory rate 15.
+[SEG0039] person_2 (DOCTOR): Right, let's have a proper look at you.
+[SEG0040] person_2 (DOCTOR): Stay as you are for a moment.
+[SEG0041] person_2 (DOCTOR): There are small blackheads and a few red spots with no deep cysts.
+[SEG0042] person_1 (PATIENT): That's alright.
+[SEG0043] person_2 (DOCTOR): Please sit back down.
+[SEG0044] person_2 (DOCTOR): Taking everything into account, the most likely explanation is mild acne.
+[SEG0045] person_1 (PATIENT): Is it dangerous, doctor?
+[SEG0046] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like mild acne. I'll start you on benzoyl peroxide gel, 5%, once a day, eight weeks. That's for acne. Have I covered everything you wanted?
+[SEG0047] person_1 (PATIENT): I think I understand everything. Thanks.
+
+JSON:

@@ -1,0 +1,71 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00311)
+[SEG0001] person_1 (NURSE): Doctor, this one's ready for you. Everything's on the chart, but I'll go through it.
+[SEG0002] person_2 (DOCTOR): Good, thank you. Welcome, tell me what's brought you in.
+[SEG0003] person_3 (PATIENT): So the thing is, I've got a fever for days.
+[SEG0004] person_2 (DOCTOR): How long has this been going on?
+[SEG0005] person_3 (PATIENT): Yeah, probably ten days. Yeah. I'd rather know what's going on than keep guessing. It's the not knowing that gets to me.
+[SEG0006] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_3 (PATIENT): so, it feels moderate to me i get some relief from paracetamol it comes and goes
+[SEG0008] person_3 (PATIENT): I was just going to say that the main thing is—
+[SEG0009] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0010] person_2 (DOCTOR): Later, thanks. Please go on. What about a dull stomach ache, have you noticed that?
+[SEG0011] person_3 (PATIENT): Yes, uh, for three days.
+[SEG0012] person_2 (DOCTOR): right, tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse
+[SEG0013] person_3 (PATIENT): Mostly moderate. Yes, eating. That makes it worse. It's every other day.
+[SEG0014] person_2 (DOCTOR): Alright, have you had a fever for days before, or is this the first time?
+[SEG0015] person_3 (PATIENT): Uh, yes, something like this happened last year, and it went away on its own.
+[SEG0016] person_4 (UNKNOWN): Yes, that's right, that's how it it was.
+[SEG0017] person_2 (DOCTOR): How about rash?
+[SEG0018] person_3 (PATIENT): No, um, no rash.
+[SEG0019] person_2 (DOCTOR): Have you noticed burning when passing urine, jaundice, cough or blood in the stool?
+[SEG0020] person_3 (PATIENT): No, no burning when passing urine, no jaundice, no cough. I was feeling weak at one point, but that went away on its own.
+[SEG0021] person_2 (DOCTOR): right, anything with your nerves, like weakness or numbness?
+[SEG0022] person_3 (PATIENT): Nothing odd there.
+[SEG0023] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0024] person_3 (PATIENT): Um, I've had diabetes for nearly five years now. I've got gout.
+[SEG0025] person_2 (DOCTOR): Anything more?
+[SEG0026] person_3 (PATIENT): I have an enlarged prostate
+[SEG0027] person_2 (DOCTOR): Is there more?
+[SEG0028] person_3 (PATIENT): Yes, heart disease.
+[SEG0029] person_2 (DOCTOR): Anything more?
+[SEG0030] person_2 (DOCTOR): Alright, heart disease, that matches what I have here. Do you have any allergies to medicines, food, anything at all?
+[SEG0031] person_3 (PATIENT): I, I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly
+[SEG0032] person_2 (DOCTOR): so, is there a a family history of anything significant?
+[SEG0033] person_3 (PATIENT): uh, my brother has asthma. Oh, my mother has migraines
+[SEG0034] person_2 (DOCTOR): Okay, tell me what you take day to day.
+[SEG0035] person_3 (PATIENT): Hmm, it's a... um, I can't remember what it's called. It's a small white one.
+[SEG0036] person_2 (DOCTOR): So, do you remember what it's for?
+[SEG0037] person_3 (PATIENT): For my sugar, I believe. My son sets them out for me, I just take what I'm given. Tamsulosin, at night for the prostate.
+[SEG0038] person_2 (DOCTOR): How much do you take?
+[SEG0039] person_3 (PATIENT): It's 0.4 milligrams.
+[SEG0040] person_2 (DOCTOR): how long have you taken that?
+[SEG0041] person_3 (PATIENT): for six months. Yeah, I'd been on allopurinol, not any more though, I stopped
+[SEG0042] person_2 (DOCTOR): How do you eat, generally?
+[SEG0043] person_3 (PATIENT): I skip breakfast most days.
+[SEG0044] person_1 (NURSE): here are the numbers, doctor. Blood pressure 116 over 80, temperature 39.1. Respiratory rate 18, heart rate 108.
+[SEG0045] person_2 (DOCTOR): Right, thanks.
+[SEG0046] person_2 (DOCTOR): Right, I'll examine you now, bear with me.
+[SEG0047] person_2 (DOCTOR): So, almost done with this part.
+[SEG0048] person_2 (DOCTOR): I can't feel your liver or spleen enlarged.
+[SEG0049] person_2 (DOCTOR): Hold that position for me.
+[SEG0050] person_2 (DOCTOR): Your tummy is a bit full and tender in the lower part.
+[SEG0051] person_2 (DOCTOR): Right, you can sit back down. Let me tell you where I've got to. This is probably typhoid fever, which we need to confirm. I want to be honest that this is an impression, not a final answer. Malaria is still possible.
+[SEG0052] person_3 (PATIENT): should I be worried about this?
+[SEG0053] person_2 (DOCTOR): It's reasonable to be concerned, but right now typhoid fever, which we need to confirm is my leading thought, not anything worse. I want blood cultures done, that's for prolonged fever.
+[SEG0054] person_5 (CLINICAL_STAFF): We have a a slot Thursday at 3:30 pm, if that works.
+[SEG0055] person_2 (DOCTOR): I'm going to order a full blood count, for fever. I'm prescribing paracetamol, 500 milligrams, every six hours if needed, for three days. You take it by mouth. It's for fever and body aches. Eat only home-cooked food and drink boiled or bottled water while this is going on. Do you have any questions?
+[SEG0056] person_3 (PATIENT): right. Thanks again
+
+JSON:

@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20435)
+[SEG0001] person_1 (PATIENT): hello doctor, sorry, I took a wrong turn on the way here
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_3 (CAREGIVER): Doctor, thank you for seeing us. Okay, so it's dark urine, doctor. He didn't wanna come, but I insisted.
+[SEG0004] person_2 (DOCTOR): how long has it been like this?
+[SEG0005] person_1 (PATIENT): I'd say about two weeks. Actually no closer to to about a week
+[SEG0006] person_2 (DOCTOR): Does anything else come with it?
+[SEG0007] person_1 (PATIENT): No appetite goes along with it, most of the time. I've also had yellow eyes.
+[SEG0008] person_2 (DOCTOR): Have you had dark urine before, or is this the first time?
+[SEG0009] person_1 (PATIENT): I had a similar thing a couple of years ago. It went away
+[SEG0010] person_2 (DOCTOR): right what do you take on a a normal day?
+[SEG0011] person_3 (CAREGIVER): he is on sumatriptan 50 milligrams when needed I give it to him he takes ramipril 5 milligrams every morning for my blood pressure
+[SEG0012] person_2 (DOCTOR): and for how long?
+[SEG0013] person_3 (CAREGIVER): About two months.
+[SEG0014] person_2 (DOCTOR): Is there anything relevant on the the family side?
+[SEG0015] person_1 (PATIENT): My grandfather had a a stroke.
+[SEG0016] person_2 (DOCTOR): How active are you?
+[SEG0017] person_1 (PATIENT): I hardly move around during the day.
+[SEG0018] person_2 (DOCTOR): what line of work are you in?
+[SEG0019] person_1 (PATIENT): I'm a bus driver, so I sit for long hours
+[SEG0020] person_2 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0021] person_1 (PATIENT): I have migraines, for about ten years
+[SEG0022] person_2 (DOCTOR): Is there anything more?
+[SEG0023] person_1 (PATIENT): I've had high blood pressure for five years now.
+[SEG0024] person_2 (DOCTOR): okay, I can see migraines and high blood pressure in your file as well. Before we go further, any allergies?
+[SEG0025] person_1 (PATIENT): I don't think I have any, no
+[SEG0026] person_2 (DOCTOR): nothing like severe abdominal pain?
+[SEG0027] person_1 (PATIENT): No. No severe abdominal pain.
+[SEG0028] person_2 (DOCTOR): Did you get fever, itching or vomiting blood?
+[SEG0029] person_1 (PATIENT): No fever, itching or vomiting blood, none of it.
+[SEG0030] person_2 (DOCTOR): Have you noticed any weakness or anything odd with your balance?
+[SEG0031] person_1 (PATIENT): nothing odd there
+[SEG0032] person_2 (DOCTOR): Let me take your readings now.
+[SEG0033] person_2 (DOCTOR): bear with me while this finishes..
+[SEG0034] person_2 (DOCTOR): Okay: oxygen saturation is 97 percent, pulse 66. And blood pressure 120 over 79, temp 36.7 degrees, height 167 centimetres, respiratory rate 17, weight 94 kilos.
+[SEG0035] person_1 (PATIENT): is that alright, doctor?
+[SEG0036] person_2 (DOCTOR): that's fine I'll explain it soon
+[SEG0037] person_2 (DOCTOR): I'll need to examine you for this, it won't take long
+[SEG0038] person_1 (PATIENT): Yeah, no problem.
+[SEG0039] person_2 (DOCTOR): does that that hurt?
+[SEG0040] person_2 (DOCTOR): the whites of your eyes are yellow and the liver edge is tender under the right ribs
+[SEG0041] person_2 (DOCTOR): That's the examination finished.
+[SEG0042] person_2 (DOCTOR): Let me tell you where I've got to. This looks most like an acute viral hepatitis.
+[SEG0043] person_1 (PATIENT): Is there something to worry about?
+[SEG0044] person_2 (DOCTOR): nothing I've seen today points to an emergency. It looks like an acute viral hepatitis, but I'd like to confirm. Let me just check I've got this right. You've had dark urine for about a week, and no severe abdominal pain or itching
+[SEG0045] person_1 (PATIENT): that's what happened, yes
+[SEG0046] person_2 (DOCTOR): I want liver blood tests done that's for jaundice. No alcohol at all and avoid paracetamol and other painkillers unless we say. The The liver clinic would be the right next step I'll refer you. Let's plan a check after the results.
+[SEG0047] person_1 (PATIENT): Sure.
+[SEG0048] person_2 (DOCTOR): okay, have I covered everything you wanted?
+[SEG0049] person_1 (PATIENT): Great, thank you for your help.
+[SEG0050] person_2 (DOCTOR): All the best.
+
+JSON:

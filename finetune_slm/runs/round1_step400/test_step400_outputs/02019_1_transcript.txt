@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02019)
+[SEG0001] person_1 (PATIENT): Morning, doctor. Is this the right room?
+[SEG0002] person_2 (DOCTOR): yes, have a seat. Tell me what's going on
+[SEG0003] person_1 (PATIENT): I've been coughing up pink frothy sputum. I'm not great at remembering details, so bear with me.
+[SEG0004] person_2 (DOCTOR): How long has this been bothering you?
+[SEG0005] person_1 (PATIENT): mm, uh, it's been one week, I'm fairly sure. I've, I've had a pounding heart too, for three weeks. And I've been sweating as well, since Friday. Hmm, about sweating, it's mild, honestly. It's on and off
+[SEG0006] person_2 (DOCTOR): what do you take on a normal day? Just so I get the full picture
+[SEG0007] person_1 (PATIENT): Metoprolol, 50 milligrams, twice a day i've never really been one for hospitals
+[SEG0008] person_2 (DOCTOR): Any previous surgeries?
+[SEG0009] person_1 (PATIENT): No surgery, no.
+[SEG0010] person_2 (DOCTOR): do you live by yourself?
+[SEG0011] person_1 (PATIENT): No, I share a house with my brother
+[SEG0012] person_2 (DOCTOR): how are your meals?
+[SEG0013] person_1 (PATIENT): I grab fast food at lunch most days
+[SEG0014] person_2 (DOCTOR): Anything you do to stay fit?
+[SEG0015] person_1 (PATIENT): I do a yoga class on Thursdays.
+[SEG0016] person_2 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0017] person_1 (PATIENT): Yes, heart failure. I looked a few things up online, and that that probably didn't help.
+[SEG0018] person_2 (DOCTOR): Understood. Let me ask about allergies, anything at all?
+[SEG0019] person_1 (PATIENT): Yes, amoxicillin. I get a rash all over.
+[SEG0020] person_2 (DOCTOR): Alright, have you noticed fever, wheeze or calf pain?
+[SEG0021] person_1 (PATIENT): I haven't had fever, wheeze or calf pain, no
+[SEG0022] person_2 (DOCTOR): Understood. Anything with your nerves, like weakness or numbness?
+[SEG0023] person_1 (PATIENT): Okay, so no, nothing like that.
+[SEG0024] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0025] person_1 (PATIENT): Skin's normal.
+[SEG0026] person_2 (DOCTOR): Let me quickly check your readings.
+[SEG0027] person_2 (DOCTOR): Okay, bear with me while this finishes...
+[SEG0028] person_2 (DOCTOR): okay: pulse 96, BP is 138 over 75.
+[SEG0029] person_2 (DOCTOR): I'll need to examine you for this, it won't take long
+[SEG0030] person_2 (DOCTOR): does that hurt?
+[SEG0031] person_2 (DOCTOR): There are crackles all the way up both lungs and you are breathing very fast.
+[SEG0032] person_2 (DOCTOR): good, you can sit up again right, here's what I'm thinking the most likely explanation is acute pulmonary oedema a severe chest infection is still possible
+[SEG0033] person_1 (PATIENT): Is this serious, doctor?
+[SEG0034] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like acute pulmonary oedema, but I'd like to confirm. I'd like to arrange a chest X-ray for pulmonary oedema. That will help us see what's going on underneath and and decide the next step.
+[SEG0035] person_3 (CLINICAL_STAFF): I can book that for Thursday at 9 am.
+[SEG0036] person_2 (DOCTOR): I'd like to arrange blood tests for pulmonary oedema. That will help us see what's going on underneath and decide the next step. I'm prescribing furosemide, 40 milligrams, once now, single dose. That should help with fluid on the lungs. Sit upright, I am giving oxygen and a water tablet injection now.
+[SEG0037] person_2 (DOCTOR): Okay, go on. I'll also refer you to the emergency team.
+[SEG0038] person_1 (PATIENT): Okay.
+[SEG0039] person_2 (DOCTOR): Come back or go to emergency straight away if the symptoms get worse. Let's review you straight away. Anything else on your mind before you go?
+[SEG0040] person_1 (PATIENT): great, thank you for your help
+
+JSON:

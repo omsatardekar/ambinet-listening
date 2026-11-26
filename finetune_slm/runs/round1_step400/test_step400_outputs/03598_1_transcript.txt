@@ -1,0 +1,50 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03598)
+[SEG0001] person_1 (PATIENT): Um, hello? Doctor? I was told to come in.
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_3 (CAREGIVER): Doctor, I'm just here to help with the details.
+[SEG0004] person_2 (DOCTOR): Yes, that's no problem at all. Please sit.
+[SEG0005] person_3 (CAREGIVER): he's been having been feeling muddled and unsteady, doctor
+[SEG0006] person_2 (DOCTOR): okay, go on
+[SEG0007] person_1 (PATIENT): Erm, I was feeling sick at one point, but that's gone now.
+[SEG0008] person_2 (DOCTOR): Right, have you been feeling muddled and unsteady at any time before this?
+[SEG0009] person_1 (PATIENT): Uh, I had a similar thing last year. It went away.
+[SEG0010] person_2 (DOCTOR): What about your medical history?
+[SEG0011] person_1 (PATIENT): I have depression, for five years.
+[SEG0012] person_2 (DOCTOR): I follow
+[SEG0013] person_1 (PATIENT): I've had high blood pressure for two years now. I did try to ignore it for a while
+[SEG0014] person_2 (DOCTOR): Okay, I can see depression in your file as well.
+[SEG0015] person_2 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0016] person_3 (CAREGIVER): He is on escitalopram, 10 milligrams, once a day for my mood, I give it to him.
+[SEG0017] person_2 (DOCTOR): Have you had any surgical procedures?
+[SEG0018] person_1 (PATIENT): Yes, I had a bunion operation, six years ago.
+[SEG0019] person_2 (DOCTOR): tell me about your routine, work, habits, that sort of thing
+[SEG0020] person_1 (PATIENT): I used to drink heavily but I stopped four years ago. I grab fast food at lunch most days. My partner and our baby. Not much, I mostly stay in these days
+[SEG0021] person_2 (DOCTOR): Are there any allergies I should be aware of? I'm asking so so that we don't miss anything.
+[SEG0022] person_1 (PATIENT): I've, I've never had an allergy
+[SEG0023] person_2 (DOCTOR): A few quick ones: fever, seizure or weakness on one side?
+[SEG0024] person_1 (PATIENT): I haven't had fever, seizure or weakness on one side, no
+[SEG0025] person_2 (DOCTOR): have you had any fall?
+[SEG0026] person_1 (PATIENT): No, you know, I haven't had any fall.
+[SEG0027] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0028] person_1 (PATIENT): Skin's normal.
+[SEG0029] person_2 (DOCTOR): I'd like to check you over now, if that's alright
+[SEG0030] person_2 (DOCTOR): Nearly finished here.
+[SEG0031] person_2 (DOCTOR): You are a bit slow and unsteady, but there is no weakness and your blood pressure is fine.
+[SEG0032] person_2 (DOCTOR): Good, you can sit up again.
+[SEG0033] person_2 (DOCTOR): So where does that leave us? My working impression is a low salt level, possibly from the new antidepressant. I'm going to order a urine test, for confusion. I'm sending you for blood tests because of confusion. We will stop the new tablet and not drink excess water until we have the result. Make sure you're drinking plenty of fluids, two to three litres a day if you can, and get proper rest.
+[SEG0034] person_2 (DOCTOR): If the symptoms get worse, that's the point to come in urgently. Let's review you in two days. Does all of that make sense?
+[SEG0035] person_1 (PATIENT): let me think, um, thank you, doctor, goodbye
+
+JSON:

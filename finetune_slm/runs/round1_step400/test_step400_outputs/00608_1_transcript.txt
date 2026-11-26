@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00608)
+[SEG0001] person_2 (DOCTOR): Hi, come on in. Wow, you look soaked. Is it still pouring out there?
+[SEG0002] person_1 (PATIENT): Pouring. And the parking garage was full, so I walked six blocks. I'm sorry, I'm a few minutes late.
+[SEG0003] person_2 (DOCTOR): Not at all. Sit, catch your breath. We have plenty of time today.
+[SEG0004] person_1 (PATIENT): Thank you. I made notes, if that's okay. I didn't want to forget anything.
+[SEG0005] person_2 (DOCTOR): Please, notes are a gift. What would you like to start with?
+[SEG0006] person_1 (PATIENT): I found a lump in my left breast, in the shower last week. I wrote down the date, and the time.
+[SEG0007] person_2 (DOCTOR): That must have been frightening. Tell me what you noticed.
+[SEG0008] person_1 (PATIENT): It's about the size of a pea, firm, on the outer side. And it's a little tender when I press it.
+[SEG0009] person_2 (DOCTOR): Thank you. And how long do you think it has been there?
+[SEG0010] person_1 (PATIENT): That's the thing, I really can't say. It might have been last month, or the month before. I only noticed it last week.
+[SEG0011] person_2 (DOCTOR): That's very common. These lumps are usually found by accident. Have you seen any fluid from the nipple?
+[SEG0012] person_1 (PATIENT): No, nothing like that.
+[SEG0013] person_2 (DOCTOR): And any change in the skin, like dimpling or puckering?
+[SEG0014] person_1 (PATIENT): No dimpling. I checked in the mirror, twice.
+[SEG0015] person_2 (DOCTOR): Good. Now, tell me about your health in general. Anything ongoing?
+[SEG0016] person_1 (PATIENT): An underactive thyroid. That's the only thing.
+[SEG0017] person_2 (DOCTOR): And what do you take for it?
+[SEG0018] person_1 (PATIENT): Levothyroxine. I think it's maybe 75 micrograms? I'd have to check the box.
+[SEG0019] person_2 (DOCTOR): That's fine, we can confirm it with your pharmacy. Once a day, in the morning?
+[SEG0020] person_1 (PATIENT): Every morning, before breakfast. I'm quite strict about that one.
+[SEG0021] person_2 (DOCTOR): Wonderful. Anything else you take regularly?
+[SEG0022] person_1 (PATIENT): The contraceptive pill, once a day, in the evening. Although, I have to be honest, I miss it some evenings.
+[SEG0023] person_2 (DOCTOR): Thank you for telling me. Is it most evenings you remember, or fewer?
+[SEG0024] person_1 (PATIENT): I take it every day, I believe. But my diary has a few gaps, so I'm not certain.
+[SEG0025] person_2 (DOCTOR): Okay. Then let's say we're not certain, and we'll come back to it.
+[SEG0026] person_1 (PATIENT): Is that important for the lump?
+[SEG0027] person_2 (DOCTOR): It can be, hormones play a role in how breast tissue behaves, which is why I ask.
+[SEG0028] person_1 (PATIENT): I see. I wrote that my aunt had breast cancer. I should have said that first.
+[SEG0029] person_2 (DOCTOR): I'm glad you did. Which side of the family is your aunt on?
+[SEG0030] person_1 (PATIENT): My mother's side. She was diagnosed in her fifties.
+[SEG0031] person_2 (DOCTOR): Thank you. Knowing that, we'll be a little more careful with you.
+[SEG0032] person_1 (PATIENT): So what do you think this is? Please be honest.
+[SEG0033] person_2 (DOCTOR): Honestly, from your description, a small, firm, tender lump, it's most likely a benign cyst. But I won't leave it at a guess.
+[SEG0034] person_1 (PATIENT): What do we do, then?
+[SEG0035] person_2 (DOCTOR): I'll order a breast ultrasound, so we can see exactly what it is. The scheduler will call you with an appointment.
+[SEG0036] person_1 (PATIENT): And if it's something worse?
+[SEG0037] person_2 (DOCTOR): Then we'd know early, and we'd act. Right now, there's nothing to suggest that, so please try not to spiral.
+[SEG0038] person_1 (PATIENT): I'll try. I keep imagining things.
+[SEG0039] person_2 (DOCTOR): I understand. I'd like to see you again next Friday, to go over the ultrasound together.
+[SEG0040] person_1 (PATIENT): Next Friday. I'll put it in my notes. Thank you for taking time, doctor.
+
+JSON:

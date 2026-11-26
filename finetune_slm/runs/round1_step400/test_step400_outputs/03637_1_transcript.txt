@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03637)
+[SEG0001] person_1 (PATIENT): Hi, is it okay to come in now?
+[SEG0002] person_2 (DOCTOR): Yes, have a seat. Tell me what's going on.
+[SEG0003] person_1 (PATIENT): Well, I've been having a poor appetite.
+[SEG0004] person_2 (DOCTOR): When did this begin?
+[SEG0005] person_1 (PATIENT): I've had it for about four days.
+[SEG0006] person_2 (DOCTOR): Sure.
+[SEG0007] person_1 (PATIENT): I've also had an irregular heartbeat.
+[SEG0008] person_2 (DOCTOR): Did you get diarrhoea, sweating or tremor?
+[SEG0009] person_1 (PATIENT): Let me think, no diarrhoea, sweating or tremor, none of it.
+[SEG0010] person_2 (DOCTOR): Has your skin been okay?
+[SEG0011] person_1 (PATIENT): Nothing on the skin, no.
+[SEG0012] person_2 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0013] person_1 (PATIENT): No, all normal there.
+[SEG0014] person_2 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0015] person_1 (PATIENT): Right, my father had bowel cancer.
+[SEG0016] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0017] person_1 (PATIENT): I look after my grandchildren most days. I swim twice a week. No, I share a house with my brother.
+[SEG0018] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0019] person_1 (PATIENT): I take metoprolol, 50 milligrams, twice a day.
+[SEG0020] person_2 (DOCTOR): Any past operations I should know about?
+[SEG0021] person_1 (PATIENT): Yes, um, I had a triple bypass, eight years ago.
+[SEG0022] person_2 (DOCTOR): What conditions have you been treated for in the past? I'll explain everything as we go along.
+[SEG0023] person_1 (PATIENT): I have heart disease. I'd rather not end up on lots of tablets if I can avoid it. I didn't want to bother you but it keeps coming back.
+[SEG0024] person_2 (DOCTOR): Have you got any known allergies?
+[SEG0025] person_1 (PATIENT): Naproxen, I'd say.
+[SEG0026] person_2 (DOCTOR): Let me take your readings now.
+[SEG0027] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0028] person_2 (DOCTOR): Okay: saturation 96 percent, blood pressure 114 over 86, respiratory rate 17. And pulse 114.
+[SEG0029] person_1 (PATIENT): Is that normal?
+[SEG0030] person_2 (DOCTOR): I'll come back to the numbers.
+[SEG0031] person_2 (DOCTOR): Listening to the whole story, my working impression is an overactive thyroid with atrial fibrillation, in an apathetic older patient.
+[SEG0032] person_1 (PATIENT): Is this serious, doctor?
+[SEG0033] person_2 (DOCTOR): It's reasonable to be concerned, but right now an overactive thyroid with atrial fibrillation, in an apathetic older patient is my leading thought, not anything worse. Let's get a thyroid test, for weight loss and irregular pulse. I'm sending you for an ECG because of irregular pulse.
+[SEG0034] person_1 (PATIENT): Well, that's fine with me.
+[SEG0035] person_2 (DOCTOR): It is easy to miss in older people because they seem sleepy rather than hot and shaky. Let's review you after the results.
+[SEG0036] person_1 (PATIENT): I mean, alright, I'll be back.
+[SEG0037] person_2 (DOCTOR): Right, that's the plan. Do you want to ask me anything?
+[SEG0038] person_1 (PATIENT): Good, thanks, I'll see you then.
+[SEG0039] person_2 (DOCTOR): All the best.
+
+JSON:

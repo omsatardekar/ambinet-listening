@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01904)
+[SEG0001] person_1 (PATIENT): Hello, doctor. May I come in?
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): It's chest pressure, mostly.
+[SEG0004] person_2 (DOCTOR): When was the first time you noticed it?
+[SEG0005] person_1 (PATIENT): Since Monday, that's when it began.
+[SEG0006] person_2 (DOCTOR): I follow. Is it a lot or only a little?
+[SEG0007] person_1 (PATIENT): Severe, I'd say.
+[SEG0008] person_2 (DOCTOR): Have you been sweating?
+[SEG0009] person_1 (PATIENT): Erm, yes, about the same, three weeks. I've been feeling faint too, for ten days.
+[SEG0010] person_2 (DOCTOR): Let me check a few things. Any fever, cough or leg swelling?
+[SEG0011] person_1 (PATIENT): None of those, you know, no.
+[SEG0012] person_2 (DOCTOR): Is your chest okay generally?
+[SEG0013] person_1 (PATIENT): Ah, no problems with breathing.
+[SEG0014] person_2 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0015] person_1 (PATIENT): I have heart disease, for nearly five years.
+[SEG0016] person_2 (DOCTOR): Yes, carry on.
+[SEG0017] person_1 (PATIENT): Oh, I've had diabetes, yes.
+[SEG0018] person_2 (DOCTOR): Okay, I can see heart disease and diabetes in your file as well. Any previous surgeries?
+[SEG0019] person_1 (PATIENT): No, not at all.
+[SEG0020] person_2 (DOCTOR): Tell me about your eating.
+[SEG0021] person_1 (PATIENT): I drink a lot of tea and snack through the day.
+[SEG0022] person_2 (DOCTOR): Are you active?
+[SEG0023] person_1 (PATIENT): I walk the dog every morning.
+[SEG0024] person_2 (DOCTOR): Do you work outside the home?
+[SEG0025] person_1 (PATIENT): I'm a hairdresser, on my feet all day.
+[SEG0026] person_2 (DOCTOR): Any allergies to tablets, food or anything in the environment?
+[SEG0027] person_1 (PATIENT): Ah, not to my knowledge, no.
+[SEG0028] person_2 (DOCTOR): What do you take on a normal day?
+[SEG0029] person_1 (PATIENT): Metoprolol. I take it twice a day.
+[SEG0030] person_2 (DOCTOR): And what strength is that?
+[SEG0031] person_1 (PATIENT): 50 milligrams, I think that's what's on the box. Glycomet, twice a day.
+[SEG0032] person_2 (DOCTOR): How much do you take?
+[SEG0033] person_1 (PATIENT): It's, It's 500 milligrams.
+[SEG0034] person_2 (DOCTOR): Let me take your readings now.
+[SEG0035] person_2 (DOCTOR): Sit still for a moment...
+[SEG0036] person_2 (DOCTOR): Okay: heart rate 107, pressure 104 over 62, temperature is 36.8 degrees.
+[SEG0037] person_2 (DOCTOR): Alright, I'll examine you in a second, make yourself comfortable.
+[SEG0038] person_2 (DOCTOR): Take a deep breath for me.
+[SEG0039] person_2 (DOCTOR): Your pulse is over one hundred and eighty and your blood pressure is low.
+[SEG0040] person_2 (DOCTOR): All finished, thank you.
+[SEG0041] person_2 (DOCTOR): Right, here's what I'm thinking. I'd lean towards a dangerous fast heart rhythm. I'll request blood tests, it'll help with arrhythmia.
+[SEG0042] person_1 (PATIENT): Do I need to prepare?
+[SEG0043] person_2 (DOCTOR): I'd like to arrange an urgent ECG for fast heart rhythm. Lie flat, I am calling the emergency team and preparing to shock the heart. I think the emergency team should see you too. Please come and see me straight away. Can you run through the plan with me quickly, just to be certain?
+[SEG0044] person_1 (PATIENT): So, I come back straight away. Is that right?
+[SEG0045] person_2 (DOCTOR): Yes, exactly right. That's everything on my side. Anything you're unsure about?
+[SEG0046] person_1 (PATIENT): Okay, so alright, thanks, take care.
+
+JSON:

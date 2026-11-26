@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02486)
+[SEG0001] person_1 (PATIENT): hi, you know, is it okay to come in now?
+[SEG0002] person_2 (DOCTOR): no problem at all, come in what's troubling you?
+[SEG0003] person_3 (FAMILY_MEMBER): Hello, you know, doctor. I'm here with them in case I can help.
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to have you here.
+[SEG0005] person_3 (FAMILY_MEMBER): We came because of a hot red swollen big toe.
+[SEG0006] person_2 (DOCTOR): how long has it been like this?
+[SEG0007] person_1 (PATIENT): it's been about four days, I'm fairly sure
+[SEG0008] person_2 (DOCTOR): How strong would you say it is?
+[SEG0009] person_1 (PATIENT): I'd give it a four, out of ten. And pain that woke me, too. As for pain that woke me, a four out of ten, I suppose. I had not being able to wear a shoe before. That's settled now, though
+[SEG0010] person_2 (DOCTOR): Let me quickly check your readings.
+[SEG0011] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0012] person_2 (DOCTOR): Okay: temp 36.8 degrees, pulse 72, pressure 116 over 77.
+[SEG0013] person_2 (DOCTOR): now I'm going to do a short physical check
+[SEG0014] person_1 (PATIENT): Fine by me.
+[SEG0015] person_2 (DOCTOR): Alright, nearly finished here.
+[SEG0016] person_2 (DOCTOR): the big toe joint is red, hot, swollen and exquisitely tender
+[SEG0017] person_2 (DOCTOR): You can relax now. Have you had any injury, rash or fever?
+[SEG0018] person_1 (PATIENT): no, none of those at all
+[SEG0019] person_2 (DOCTOR): anything different when you pass water?
+[SEG0020] person_1 (PATIENT): No changes there.
+[SEG0021] person_2 (DOCTOR): Are there any illnesses in your family?
+[SEG0022] person_1 (PATIENT): Sorry, what was I saying, my uncle has high cholesterol.
+[SEG0023] person_2 (DOCTOR): can you list what you take, tablets, creams or inhalers?
+[SEG0024] person_3 (FAMILY_MEMBER): she takes febuxostat, 80 milligrams, once a day for the gout. She is on ramipril, 5 milligrams, every morning for my blood pressure, I give it to her. It's aspirin, 75 milligrams, once a day for my heart, doctor. She takes ibuprofen, 400 milligrams, three times a day
+[SEG0025] person_2 (DOCTOR): And alcohol, how much?
+[SEG0026] person_1 (PATIENT): I only drink at family occasions.
+[SEG0027] person_2 (DOCTOR): Do you follow any particular diet?
+[SEG0028] person_1 (PATIENT): I'm vegetarian and have been for years.
+[SEG0029] person_2 (DOCTOR): do you live by yourself?
+[SEG0030] person_1 (PATIENT): No, I share a house with my brother.
+[SEG0031] person_2 (DOCTOR): Have you retired yet?
+[SEG0032] person_1 (PATIENT): I retired from the post office two years ago.
+[SEG0033] person_2 (DOCTOR): Has anyone ever diagnosed you with something? Bear with me, I'm just building up the picture.
+[SEG0034] person_1 (PATIENT): Gout, for five years. I did try to ignore it for a while.
+[SEG0035] person_2 (DOCTOR): Yes.
+[SEG0036] person_1 (PATIENT): Ah, I've had high blood pressure for nearly five years now.
+[SEG0037] person_2 (DOCTOR): Yes.
+[SEG0038] person_1 (PATIENT): Yes, heart disease.
+[SEG0039] person_2 (DOCTOR): right, so gout is already on your record. We'll keep that in mind today. What operations have you had, if any?
+[SEG0040] person_1 (PATIENT): let me think, I had part of my thyroid removed years back
+[SEG0041] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0042] person_1 (PATIENT): I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0043] person_2 (DOCTOR): so, based on the history and the examination, I can't pin this down yet we're looking at an acute gout attack or a septic joint
+[SEG0044] person_1 (PATIENT): will it it clear up?
+[SEG0045] person_2 (DOCTOR): I can't promise yet, but most people with an acute gout attack do well once it's treated properly. I think kidney function tests makes sense here, for gout treatment. I want a uric acid blood test done, that's for gout. Rest the foot, ice it, and drink plenty of water; limit beer and red meat. I'll want another look in two weeks. Is there anything you'd like me to go over again?
+[SEG0046] person_1 (PATIENT): Good, thanks, I'll see you then.
+[SEG0047] person_2 (DOCTOR): All the best.
+
+JSON:

@@ -1,0 +1,69 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03634)
+[SEG0001] person_1 (PATIENT): Right, good evening, doctor, thanks for seeing me.
+[SEG0002] person_2 (DOCTOR): Yes, have a seat. Tell me what's going on.
+[SEG0003] person_3 (CAREGIVER): Hello, doctor. I'm here with them in case I can help.
+[SEG0004] person_2 (DOCTOR): yes, that's no problem at all please sit
+[SEG0005] person_1 (PATIENT): Doctor, it's fainting once. It's getting on my nerves now.
+[SEG0006] person_2 (DOCTOR): has this been going on for long?
+[SEG0007] person_1 (PATIENT): I've had it since this morning
+[SEG0008] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0009] person_1 (PATIENT): Actually, it's mild, honestly. Honestly, every other day.
+[SEG0010] person_2 (DOCTOR): what about a faster heartbeat, have you noticed that?
+[SEG0011] person_1 (PATIENT): yeah. About a week, you know, I'd say. Mm, there's a swollen calf after a long drive as well
+[SEG0012] person_2 (DOCTOR): Have you had fainting once before, or is this the first time?
+[SEG0013] person_1 (PATIENT): Uh, I had a similar thing last year. It went away.
+[SEG0014] person_2 (DOCTOR): Have you had any fever, chest pain or coughing up blood?
+[SEG0015] person_1 (PATIENT): sorry, what was I saying, I haven't had fever, chest pain or coughing up blood, no
+[SEG0016] person_2 (DOCTOR): Any cough?
+[SEG0017] person_1 (PATIENT): No cough, thankfully.
+[SEG0018] person_3 (CAREGIVER): Actually, doctor, I did notice cough. She doesn't always say.
+[SEG0019] person_1 (PATIENT): No, I don't think I did. Maybe a little, I'm not sure.
+[SEG0020] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. How's your breathing otherwise?
+[SEG0021] person_1 (PATIENT): No problems with breathing.
+[SEG0022] person_2 (DOCTOR): any problems with your joints or muscles?
+[SEG0023] person_1 (PATIENT): No, you know, nothing there.
+[SEG0024] person_2 (DOCTOR): does your family have any medical conditions?
+[SEG0025] person_1 (PATIENT): my uncle has high cholesterol. My mother has an underactive thyroid
+[SEG0026] person_2 (DOCTOR): What about your medical history?
+[SEG0027] person_1 (PATIENT): Right, yes, heart disease. Sorry, I know I'm rambling a bit.
+[SEG0028] person_2 (DOCTOR): mm-hmm
+[SEG0029] person_1 (PATIENT): I have an underactive thyroid, for five years. I told my wife I'd come today.
+[SEG0030] person_2 (DOCTOR): Is there anything more?
+[SEG0031] person_1 (PATIENT): I have thin bones, for five years. I kept putting it off, which I know isn't sensible.
+[SEG0032] person_2 (DOCTOR): right, so so an underactive thyroid and thin bones are already on your record. We'll keep that in mind today. Are you active?
+[SEG0033] person_1 (PATIENT): I walk the dog every morning
+[SEG0034] person_2 (DOCTOR): is there someone at home?
+[SEG0035] person_1 (PATIENT): My husband and I live above the shop.
+[SEG0036] person_2 (DOCTOR): tell me your medicines, please. I'll explain everything as we go along
+[SEG0037] person_3 (CAREGIVER): she is on clopidogrel, 75 milligrams, once a day, I give it to her she takes Eltroxin, 100 micrograms, every morning oh, it's alendronate, 70 milligrams, once a week, doctor
+[SEG0038] person_2 (DOCTOR): have you ever had an operation?
+[SEG0039] person_1 (PATIENT): I, I had two stents put in my heart three years ago
+[SEG0040] person_2 (DOCTOR): Any allergies to tablets, food or anything in the environment?
+[SEG0041] person_1 (PATIENT): no known allergies
+[SEG0042] person_3 (CAREGIVER): I'm, I'm not sure that's right. I seem to recall a problem with erythromycin.
+[SEG0043] person_1 (PATIENT): really? I don't think so
+[SEG0044] person_2 (DOCTOR): Alright, so that's unclear. I'll record what each of you said.
+[SEG0045] person_2 (DOCTOR): Let me quickly check your readings.
+[SEG0046] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0047] person_2 (DOCTOR): Okay: pulse 125, saturation 98 percent, respiratory rate 18. And blood pressure 137 over 81, temperature 36.5.
+[SEG0048] person_2 (DOCTOR): Going by what you've described, it's hard to say. Possible pulmonary embolism without chest pain is one possibility and a simple faint another, and I'd rather not commit yet.
+[SEG0049] person_1 (PATIENT): I'm scared it's something bad. Is it?
+[SEG0050] person_2 (DOCTOR): I can't promise yet, but most people with possible pulmonary embolism without chest pain do well once it's treated properly. Let me just check I've got this right. You've had fainting once, since this morning, mild, and no chest pain or coughing up blood.
+[SEG0051] person_1 (PATIENT): right, yes, you've got it
+[SEG0052] person_2 (DOCTOR): I'm sending you for a CT pulmonary angiogram because of possible embolus. I'm sending you for a D-dimer because of syncope and calf swelling. Even without chest pain this needs a scan today, so please go to hospital. Please don't wait if the symptoms get worse. That's when to be seen urgently. We'll catch up straight away. Is there anything you'd like me to go over again?
+[SEG0053] person_1 (PATIENT): sorry, you know, what was I saying, alright, thanks, take care
+[SEG0054] person_2 (DOCTOR): Have a good day.
+
+JSON:

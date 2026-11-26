@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00599)
+[SEG0001] person_1 (PATIENT): Okay, so my sore throat is back again. It's like the fourth time since winter, and I'm honestly sick of it.
+[SEG0002] person_2 (DOCTOR): Four times. That's a pattern worth chasing. When did this round start?
+[SEG0003] person_1 (PATIENT): Um, a couple of weeks ago, I guess. But it's been on and off for about two months, if you count the earlier ones.
+[SEG0004] person_2 (DOCTOR): So two months of it coming and going, with this stretch being the latest. What does it feel like?
+[SEG0005] person_1 (PATIENT): Kind of scratchy, like I swallowed a handful of gravel. Worse when I first wake up.
+[SEG0006] person_2 (DOCTOR): Gravel, got it. Anything else going on, besides the throat?
+[SEG0007] person_1 (PATIENT): There's these lumps under my jaw. They feel like little peas, right here, on both sides.
+[SEG0008] person_2 (DOCTOR): Those are lymph glands. Think of them as the guard posts on the road into your head, they swell up when there's trouble in the neighborhood.
+[SEG0009] person_1 (PATIENT): Huh. That makes sense, actually.
+[SEG0010] person_2 (DOCTOR): Have you had a fever with this?
+[SEG0011] person_1 (PATIENT): Yeah, last week I had one, I was kind of shivery for a couple days. But that went away on Sunday.
+[SEG0012] person_2 (DOCTOR): Good. Fever gone, then. Any cough with it?
+[SEG0013] person_1 (PATIENT): No, not really. Just the throat.
+[SEG0014] person_2 (DOCTOR): And is swallowing hard, like food getting stuck?
+[SEG0015] person_1 (PATIENT): No, it hurts a little, but nothing gets stuck.
+[SEG0016] person_2 (DOCTOR): Okay. Let's talk about what you're taking. What's in your medicine cabinet right now?
+[SEG0017] person_1 (PATIENT): There's my blood pressure pill, lisinopril, 10 mg, once a day. I take it with my coffee.
+[SEG0018] person_2 (DOCTOR): Great. Anything else, even stuff from the drugstore?
+[SEG0019] person_1 (PATIENT): Tylenol, 500 mg, when it's bad. Probably most days, honestly. And those throat lozenges, I get through a few a day.
+[SEG0020] person_2 (DOCTOR): Okay. That's three things, then. Any allergies to medicines or anything else?
+[SEG0021] person_1 (PATIENT): Nope, no allergies that I know of. I've taken everything.
+[SEG0022] person_2 (DOCTOR): Good. Now, I'll read your numbers. Hold still for a second.
+[SEG0023] person_2 (DOCTOR): Temperature is 37.1 °C, and pulse is 76. Both nice and calm.
+[SEG0024] person_1 (PATIENT): That's good, right? I felt awful this morning.
+[SEG0025] person_2 (DOCTOR): Numbers are a snapshot. Like checking a car's dashboard at a red light, it doesn't tell you what the engine did yesterday.
+[SEG0026] person_1 (PATIENT): Ha, okay. So what do you think is going on?
+[SEG0027] person_2 (DOCTOR): Honestly, I can't say yet. It could be strep that keeps getting a foothold, and I can't rule that out. It might also be something viral that's lingering.
+[SEG0028] person_1 (PATIENT): So it's not just me being run down?
+[SEG0029] person_2 (DOCTOR): Being run down helps these things along, but let's not guess. I'd like to do a throat swab for strep today, that's quick.
+[SEG0030] person_1 (PATIENT): Is that the gagging one?
+[SEG0031] person_2 (DOCTOR): Afraid so. Two seconds and a bit of an awkward face, then it's over.
+[SEG0032] person_1 (PATIENT): Great. I'll try to look dignified.
+[SEG0033] person_2 (DOCTOR): And I'd also like to order a blood test to check for mono, since the glands have been swollen so long.
+[SEG0034] person_1 (PATIENT): Mono? Like, the kissing disease? I'm forty-one.
+[SEG0035] person_2 (DOCTOR): It's not only for teenagers. Plenty of adults get it, and it can drag on for weeks, which would fit your story.
+[SEG0036] person_1 (PATIENT): Okay. Blood draw, that's fine. When do I find out?
+[SEG0037] person_2 (DOCTOR): Swab result in a day or two, bloods a bit longer. The front desk will call you.
+[SEG0038] person_1 (PATIENT): Okay. And what do I do about the throat in the meantime?
+[SEG0039] person_2 (DOCTOR): Warm salt water, plenty of fluids, and rest. Your throat is like a sprained ankle. It heals faster if you stop walking on it.
+[SEG0040] person_1 (PATIENT): That's hard. It's a busy week coming up.
+[SEG0041] person_2 (DOCTOR): Then take as many quiet minutes as you can steal. Even small breaks help.
+[SEG0042] person_1 (PATIENT): Fine. I'll sneak some in at lunch.
+[SEG0043] person_2 (DOCTOR): I'd like to see you again in one week, to go through the results together.
+[SEG0044] person_1 (PATIENT): One week. Okay, I'll book it at the desk.
+[SEG0045] person_2 (DOCTOR): Good. And keep the Tylenol at the dose you're using, don't push past it.
+[SEG0046] person_1 (PATIENT): Right, I won't.
+[SEG0047] person_2 (DOCTOR): Anything else bugging you today?
+[SEG0048] person_1 (PATIENT): Just the parking validation, I forgot to bring the ticket. Never mind.
+[SEG0049] person_2 (DOCTOR): The front desk can stamp it for you on the way out.
+[SEG0050] person_1 (PATIENT): Sounds good. Thanks, doc.
+[SEG0051] person_2 (DOCTOR): You're welcome. Go see the nurse for the swab on your way out.
+[SEG0052] person_1 (PATIENT): Will do. Bye.
+
+JSON:

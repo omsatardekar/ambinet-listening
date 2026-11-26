@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00152)
+[SEG0001] person_1 (DOCTOR): Morning. Just put your bag down anywhere.
+[SEG0002] person_2 (PATIENT): Morning.
+[SEG0003] person_1 (DOCTOR): Right, in your own words, what's happened?
+[SEG0004] person_2 (PATIENT): Um, so... leaking urine when I cough or sneeze. That's why I came.
+[SEG0005] person_1 (DOCTOR): I'll take a few measurements first.
+[SEG0006] person_1 (DOCTOR): One second...
+[SEG0007] person_1 (DOCTOR): Okay: blood pressure 114 over 80, height 159 centimetres, temperature is 36.9 degrees, BMI works out to 36.8, respiratory rate 15, weight 93 kilos, heart rate 68, saturation 99 percent. How long have you had it?
+[SEG0008] person_2 (PATIENT): I'd say two weeks. Actually, no, closer to one week.
+[SEG0009] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0010] person_2 (PATIENT): Mostly mild. Yes, laughing. That makes it worse. So, I've also been getting up once at night, for one week.
+[SEG0011] person_1 (DOCTOR): And what about blood in the urine or burning when passing urine?
+[SEG0012] person_2 (PATIENT): No, none of those.
+[SEG0013] person_1 (DOCTOR): Alright, any back pain or difficulty emptying at all?
+[SEG0014] person_2 (PATIENT): No, no back pain or difficulty emptying.
+[SEG0015] person_1 (DOCTOR): Alright, any breathing difficulties apart from this?
+[SEG0016] person_2 (PATIENT): Breathing's normal.
+[SEG0017] person_1 (DOCTOR): Any drug or food allergies?
+[SEG0018] person_2 (PATIENT): No allergies that I know of, no.
+[SEG0019] person_1 (DOCTOR): Do you have a job?
+[SEG0020] person_2 (PATIENT): I'm a self-employed electrician.
+[SEG0021] person_1 (DOCTOR): Is anyone at home with you?
+[SEG0022] person_2 (PATIENT): I share a flat with two friends.
+[SEG0023] person_1 (DOCTOR): Are you on any regular medication?
+[SEG0024] person_2 (PATIENT): No, uh, I don't take anything regularly.
+[SEG0025] person_1 (DOCTOR): Any previous surgeries?
+[SEG0026] person_2 (PATIENT): No operations, no.
+[SEG0027] person_1 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0028] person_2 (PATIENT): No, I've never had anything serious.
+[SEG0029] person_1 (DOCTOR): Okay, a quick examination now.
+[SEG0030] person_1 (DOCTOR): I'll go gently.
+[SEG0031] person_1 (DOCTOR): No bulge is visible when you cough, and the tummy is soft.
+[SEG0032] person_1 (DOCTOR): Right, you can sit back down.
+[SEG0033] person_1 (DOCTOR): Let me tell you where I've got to. I can't pin this down yet. We're looking at stress urinary incontinence or an overactive bladder.
+[SEG0034] person_2 (PATIENT): I mean, is it something serious, doctor?
+[SEG0035] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like stress urinary incontinence, but I'd like to confirm. Let's book a bladder diary to look into urinary symptoms. Pelvic floor exercises, three sets a day, make a real difference over a couple of months. I'd like to see you again in six weeks.
+[SEG0036] person_2 (PATIENT): I'll make the appointment on my way out.
+[SEG0037] person_1 (DOCTOR): Call the clinic if you need us.
+[SEG0038] person_2 (PATIENT): No, you've explained it well. Thanks.
+
+JSON:

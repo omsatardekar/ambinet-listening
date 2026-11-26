@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00434)
+[SEG0001] person_1 (NURSE): Doctor, we're ready in room two, I've already taken the observations.
+[SEG0002] person_2 (DOCTOR): Thank you. Good morning, tell me what's been going on.
+[SEG0003] person_3 (CAREGIVER): Oh, you know, good morning, doctor. I came along to help out.
+[SEG0004] person_4 (PATIENT): It's, It's tiredness all the time, mostly.
+[SEG0005] person_2 (DOCTOR): how far back does it go? Just so I get the full picture
+[SEG0006] person_4 (PATIENT): Well, I've had it it for about three months.
+[SEG0007] person_2 (DOCTOR): Does anything make it better?
+[SEG0008] person_4 (PATIENT): Okay, you know, so I get some relief from a good night's sleep.
+[SEG0009] person_4 (PATIENT): I was just going to say that the main thing is—
+[SEG0010] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0011] person_2 (DOCTOR): Okay, later, thanks. Please go on.
+[SEG0012] person_4 (PATIENT): Oh, and a bit of weight gain.
+[SEG0013] person_2 (DOCTOR): let me check a few things. Any blood in the stool or night sweats?
+[SEG0014] person_4 (PATIENT): No, no blood in the stool, no night sweats. I did have hair falling out at one point, but that went away on its own.
+[SEG0015] person_2 (DOCTOR): Go on. Any fever, shortness of breath or low mood at all?
+[SEG0016] person_4 (PATIENT): No, uh, no fever, shortness of breath or low mood.
+[SEG0017] person_2 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0018] person_4 (PATIENT): Nothing odd there.
+[SEG0019] person_2 (DOCTOR): Any problems with your joints or muscles?
+[SEG0020] person_4 (PATIENT): No, nothing there.
+[SEG0021] person_2 (DOCTOR): Okay, any diagnoses you've been given before?
+[SEG0022] person_4 (PATIENT): Yes, diabetes.
+[SEG0023] person_2 (DOCTOR): do you drink alcohol?
+[SEG0024] person_4 (PATIENT): I don't drink at all.
+[SEG0025] person_2 (DOCTOR): What kind of work do you do?
+[SEG0026] person_4 (PATIENT): I work on a farm, it's quite physical.
+[SEG0027] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0028] person_4 (PATIENT): Uh, my uncle had colon cancer.
+[SEG0029] person_2 (DOCTOR): Any surgery in your history?
+[SEG0030] person_4 (PATIENT): I had my appendix out about eight years ago.
+[SEG0031] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0032] person_4 (PATIENT): No allergies that that I know of, no.
+[SEG0033] person_3 (CAREGIVER): I'm not sure that's right. I seem to recall a problem with codeine.
+[SEG0034] person_4 (PATIENT): Really? I don't think so.
+[SEG0035] person_2 (DOCTOR): fair enough, I'll write down both versions any regular medication?
+[SEG0036] person_4 (PATIENT): nothing, no
+[SEG0037] person_1 (NURSE): here are the numbers, doctor. BP is 113 over 72, heart rate 84, oxygen saturation is 97 percent
+[SEG0038] person_2 (DOCTOR): Okay, noted.
+[SEG0039] person_2 (DOCTOR): Okay, a quick examination now.
+[SEG0040] person_2 (DOCTOR): just relax, I'll be quick
+[SEG0041] person_2 (DOCTOR): You look a little pale in the the eyelids.
+[SEG0042] person_4 (PATIENT): no problem
+[SEG0043] person_2 (DOCTOR): Bear with me a second.
+[SEG0044] person_2 (DOCTOR): your thyroid isn't enlarged, I can't feel any lumps in your neck
+[SEG0045] person_2 (DOCTOR): Right, you can sit back down. So where does that leave us? It fits best with fatigue with no clear cause yet. We shouldn't forget an underactive thyroid. Anaemia is also on my list.
+[SEG0046] person_4 (PATIENT): Is this going to go away?
+[SEG0047] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like fatigue with no clear cause yet, but I'd like to confirm. Have you had any tests for this so far?
+[SEG0048] person_4 (PATIENT): I had a ferritin level done at another clinic a few months ago. I don't have the report with me.
+[SEG0049] person_2 (DOCTOR): I'm going to order blood tests, for fatigue.
+[SEG0050] person_4 (PATIENT): Mm, you know, okay.
+[SEG0051] person_2 (DOCTOR): I'm sending you for a thyroid test because of fatigue. Let's use vitamin D, 60000 units, once a week, for eight weeks. That's for low energy. Try to keep a regular sleep time and get some daylight in the morning. If the symptoms get worse, or you feel really unwell, please come to the emergency department. Come back in two weeks. That's everything from me. Any other questions?
+[SEG0052] person_4 (PATIENT): hmm, uh, no questions thank you
+[SEG0053] person_2 (DOCTOR): Mind how you go.
+
+JSON:

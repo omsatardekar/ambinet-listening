@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02170)
+[SEG0001] person_1 (PATIENT): Morning, doctor. Lovely to meet you.
+[SEG0002] person_2 (DOCTOR): that's fine, sit down tell me why you came
+[SEG0003] person_3 (CAREGIVER): Hmm, hello, doctor. I'm here with them in case I can help.
+[SEG0004] person_2 (DOCTOR): Absolutely, come and and sit beside them.
+[SEG0005] person_3 (CAREGIVER): sorry, what was I saying, doctor, it's been sweating that's what we're worried about
+[SEG0006] person_4 (NURSE): Here are the numbers doctor. BP is 118 over 76 saturation 93 percent pulse 84. Respiratory rate 23 temp 36.9 degrees.
+[SEG0007] person_2 (DOCTOR): good, thank you
+[SEG0008] person_2 (DOCTOR): when did this begin?
+[SEG0009] person_1 (PATIENT): Hmm, it's been going on for about four days.
+[SEG0010] person_2 (DOCTOR): how much trouble does it give you?
+[SEG0011] person_1 (PATIENT): mostly severe
+[SEG0012] person_1 (PATIENT): I was just going to say that the main thing is—
+[SEG0013] person_4 (NURSE): Sorry to cut in doctor quick question: shall I bring the trolley in now or later?
+[SEG0014] person_2 (DOCTOR): later, thanks please go on
+[SEG0015] person_1 (PATIENT): There's a pounding heart as well.
+[SEG0016] person_2 (DOCTOR): Have you been sweating at any time before this?
+[SEG0017] person_1 (PATIENT): I had a similar thing about six months ago it went away
+[SEG0018] person_2 (DOCTOR): have you had any wheeze calf pain or fever?
+[SEG0019] person_1 (PATIENT): no, you know, no wheeze, no calf pain, no fever. I did have being very breathless at one point, but that went away on its own
+[SEG0020] person_2 (DOCTOR): Right, any pins and needles or loss of strength anywhere?
+[SEG0021] person_1 (PATIENT): no weakness or anything
+[SEG0022] person_2 (DOCTOR): has your skin been okay?
+[SEG0023] person_1 (PATIENT): skin's normal
+[SEG0024] person_2 (DOCTOR): do you have any long-term conditions?
+[SEG0025] person_1 (PATIENT): High blood pressure for about ten years. I did try to ignore it for a while.
+[SEG0026] person_2 (DOCTOR): Okay go on.
+[SEG0027] person_1 (PATIENT): yes, heart failure i've had anxiety for about a year now it's a relief to finally sit down and talk about it
+[SEG0028] person_2 (DOCTOR): right, so high blood pressure and heart failure are already on your record we'll keep that in mind today right, are there any illnesses in your family?
+[SEG0029] person_1 (PATIENT): My mother had a a stroke.
+[SEG0030] person_2 (DOCTOR): has anything ever caused you a reaction? I mean any allergies
+[SEG0031] person_1 (PATIENT): I mean, no, not that I know of
+[SEG0032] person_2 (DOCTOR): Which medicines do you take at the the moment?
+[SEG0033] person_1 (PATIENT): I'm on metoprolol, 50 milligrams, twice a day.
+[SEG0034] person_2 (DOCTOR): and for how long?
+[SEG0035] person_1 (PATIENT): About about a year. Furosemide, 40 milligrams, maybe, every morning for the fluid.
+[SEG0036] person_2 (DOCTOR): is the packet here, or the prescription?
+[SEG0037] person_1 (PATIENT): Sorry what was I saying no it's at home. Escitalopram. I take it 10 milligrams once a day.
+[SEG0038] person_2 (DOCTOR): are you on your own at home?
+[SEG0039] person_1 (PATIENT): I live with my elderly mother.
+[SEG0040] person_2 (DOCTOR): do you get out much?
+[SEG0041] person_1 (PATIENT): Not much, I mostly stay in these days
+[SEG0042] person_2 (DOCTOR): alright, over here please and and I'll take a look
+[SEG0043] person_2 (DOCTOR): let me feel here
+[SEG0044] person_2 (DOCTOR): there are crackles all the way up both lungs and you are breathing very fast
+[SEG0045] person_2 (DOCTOR): please sit back down so, based on the history and and the examination, I think we're dealing with acute pulmonary oedema at this stage it could also be a severe chest infection, so we'll keep that open
+[SEG0046] person_4 (NURSE): doctor I did an ECG before they came in the result's on your screen
+[SEG0047] person_2 (DOCTOR): okay, I'll take a look at that we should do blood tests for pulmonary oedema sit upright, I am giving oxygen and a water tablet injection now and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+[SEG0048] person_1 (PATIENT): I understand
+[SEG0049] person_2 (DOCTOR): see me again straight away does all of that make sense?
+[SEG0050] person_1 (PATIENT): Right, I'll do that. Thank you, doctor.
+[SEG0051] person_2 (DOCTOR): okay have a good day
+
+JSON:

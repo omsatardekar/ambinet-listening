@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03210)
+[SEG0001] person_1 (PATIENT): Hello doctor, sorry, I took a wrong turn on the way here.
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_3 (CAREGIVER): Hello, doctor, I came in with them, if that's okay.
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to have you here.
+[SEG0005] person_1 (PATIENT): Let me think, it's a red sore wound after my operation. I thought I'd wait, but it hasn't gone.
+[SEG0006] person_2 (DOCTOR): How long has this been bothering you?
+[SEG0007] person_1 (PATIENT): It's been going on for about three months.
+[SEG0008] person_2 (DOCTOR): Mm-hmm. So, does anything else come with it?
+[SEG0009] person_1 (PATIENT): Pain around the wound goes along with it, most of the time. About pain around the wound, maybe a three out of ten on a bad day. And there's a temperature as well, three days now. With temperature, a three out of ten, I suppose. I've also had a yellow discharge, for five days.
+[SEG0010] person_2 (DOCTOR): Have you had a red sore wound after your operation before, or is this the first time?
+[SEG0011] person_1 (PATIENT): A bit, a couple of years ago. It settled by itself back then.
+[SEG0012] person_2 (DOCTOR): Tell me your medicines, please.
+[SEG0013] person_1 (PATIENT): Aspirin. I take it 75 milligrams, once a day. I'm on something called febu... febuxostat, 80 milligrams, maybe, once a day for the gout.
+[SEG0014] person_2 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0015] person_1 (PATIENT): Actually, not with me. I'll bring it next time.
+[SEG0016] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0017] person_1 (PATIENT): Yes, grass pollen. I get sneezing. I was told I'm allergic to walnuts, but I don't remember what reaction I had.
+[SEG0018] person_2 (DOCTOR): Alright, any surgery in the past?
+[SEG0019] person_1 (PATIENT): Uh, yes, I had a triple bypass, eight years ago.
+[SEG0020] person_2 (DOCTOR): What about your parents, brothers or sisters, any conditions?
+[SEG0021] person_1 (PATIENT): My brother has epilepsy. Well, my grandfather had a stroke.
+[SEG0022] person_2 (DOCTOR): What about your medical history?
+[SEG0023] person_1 (PATIENT): Yes, heart disease. Sorry, I know I'm rambling a bit.
+[SEG0024] person_2 (DOCTOR): I follow.
+[SEG0025] person_1 (PATIENT): I have gout.
+[SEG0026] person_2 (DOCTOR): Alright, gout, that matches what I have here. What's your work?
+[SEG0027] person_1 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0028] person_2 (DOCTOR): Anything you do to stay fit?
+[SEG0029] person_1 (PATIENT): I do a yoga class on Thursdays.
+[SEG0030] person_2 (DOCTOR): And calf pain, any of that?
+[SEG0031] person_1 (PATIENT): No calf pain, thankfully.
+[SEG0032] person_2 (DOCTOR): Have you had any vomiting, breathlessness or chest pain?
+[SEG0033] person_1 (PATIENT): I haven't had vomiting, breathlessness or chest pain, no.
+[SEG0034] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0035] person_1 (PATIENT): No, that's been fine.
+[SEG0036] person_4 (NURSE): Okay, so the vitals from earlier. Pulse is 89 beats a minute, pressure 116 over 78, temperature is 39.3 degrees.
+[SEG0037] person_2 (DOCTOR): Okay, noted.
+[SEG0038] person_2 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0039] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0040] person_2 (DOCTOR): The lower part of the wound is red, hot and weeping pus, and the edges have not come together.
+[SEG0041] person_2 (DOCTOR): That's all I needed to check. Let me tell you where I've got to. The most likely explanation is a surgical wound infection. Another possibility is a stitch abscess. I'd like to arrange blood tests for wound infection.
+[SEG0042] person_1 (PATIENT): That makes sense.
+[SEG0043] person_2 (DOCTOR): A wound swab is what I'd like next, for wound infection. I'll start you on flucloxacillin, 500 milligrams, four times a day, seven days. That's for wound infection. Keep it clean and dry and use fresh dressings daily.
+[SEG0044] person_2 (DOCTOR): Mm-hmm. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Do get help quickly if the symptoms get worse. I'd like to see you again in two days.
+[SEG0045] person_1 (PATIENT): Alright, uh, I'll be back.
+[SEG0046] person_2 (DOCTOR): Does all of that make sense?
+[SEG0047] person_1 (PATIENT): Alright, thanks, take care.
+[SEG0048] person_2 (DOCTOR): Look after yourself.
+
+JSON:

@@ -1,0 +1,69 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00452)
+[SEG0001] person_1 (PATIENT): Afternoon, doctor.
+[SEG0002] person_2 (DOCTOR): yes, do sit. Tell me what's been happening
+[SEG0003] person_1 (PATIENT): doctor, it's more breathlessness than usual it's getting on my nerves now i'd rather know what's going on than keep guessing
+[SEG0004] person_2 (DOCTOR): when did it it begin?
+[SEG0005] person_1 (PATIENT): ever since... since yesterday really
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is what the pattern is what helps.
+[SEG0007] person_1 (PATIENT): Okay so I get some relief from resting. I'd call it it moderate. It happens a few times a day. It's worse with stairs.
+[SEG0008] person_2 (DOCTOR): anything that tends to go along with it?
+[SEG0009] person_1 (PATIENT): A wheeze goes along with it, um, most of the time and there's poor sleep because of the cough as well, five days now
+[SEG0010] person_2 (DOCTOR): have you been coughing up green phlegm?
+[SEG0011] person_1 (PATIENT): well, yes, about the same, about four days with coughing up green phlegm, honestly, every other day the wheeze? That's been since yesterday about wheeze, it happens once or twice a day
+[SEG0012] person_2 (DOCTOR): Have you had more breathlessness than usual before or is this the first time?
+[SEG0013] person_1 (PATIENT): Okay, um, so a bit, last winter. It settled by itself back then.
+[SEG0014] person_2 (DOCTOR): so, do you have any medical conditions, anything you've been treated for?
+[SEG0015] person_1 (PATIENT): Yes high blood pressure. I have COPD for about a year.
+[SEG0016] person_2 (DOCTOR): Right, so high blood pressure is already on your record. We'll keep that in mind today. Alright, what medicines do you take regularly?
+[SEG0017] person_1 (PATIENT): oh, it's something called amlo... amlodipine, 5 milligrams, maybe, once a day for my pressure
+[SEG0018] person_2 (DOCTOR): Is the packet here, or the prescription?
+[SEG0019] person_1 (PATIENT): Not with me. I'll bring it next time. Tiotropium inhaler, once a day.
+[SEG0020] person_2 (DOCTOR): what do you do to keep active?
+[SEG0021] person_1 (PATIENT): I cycle to work most mornings
+[SEG0022] person_2 (DOCTOR): do you live alone?
+[SEG0023] person_1 (PATIENT): Yes, I live on my own
+[SEG0024] person_2 (DOCTOR): Are you still working?
+[SEG0025] person_1 (PATIENT): I'm retired now, I was a clerk for years.
+[SEG0026] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0027] person_1 (PATIENT): Okay, so my sister has epilepsy.
+[SEG0028] person_2 (DOCTOR): any previous surgeries?
+[SEG0029] person_1 (PATIENT): no never had any surgery
+[SEG0030] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0031] person_1 (PATIENT): I'm allergic to pollen, I get a runny nose. I'm allergic to ibuprofen, I get stomach pain.
+[SEG0032] person_2 (DOCTOR): Alright any fever coughing up blood or confusion?
+[SEG0033] person_1 (PATIENT): No I'd have mentioned it.
+[SEG0034] person_2 (DOCTOR): Did you get chest pain or weight loss?
+[SEG0035] person_1 (PATIENT): I haven't had chest pain or weight loss, no
+[SEG0036] person_2 (DOCTOR): Alright, is your urine normal, no changes?
+[SEG0037] person_1 (PATIENT): Nothing there, no.
+[SEG0038] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0039] person_2 (DOCTOR): okay, rest your hand here..
+[SEG0040] person_2 (DOCTOR): Okay: pressure 130 over 88 SpO2 91 percent on room air pulse is 91 beats a minute respiratory rate 25 temperature 36.9.
+[SEG0041] person_1 (PATIENT): is that normal?
+[SEG0042] person_2 (DOCTOR): I'll explain what that means shortly
+[SEG0043] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0044] person_1 (PATIENT): fine
+[SEG0045] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0046] person_2 (DOCTOR): Air entry is reduced on both sides with a prolonged breathing out phase.
+[SEG0047] person_2 (DOCTOR): tell me if anything hurts
+[SEG0048] person_2 (DOCTOR): there's some wheeze and no swelling in the legs
+[SEG0049] person_2 (DOCTOR): Right, you can sit back down. From what you've told me and what I found, I'd lean towards a a flare-up of COPD. I'd also keep pneumonia in mind.
+[SEG0050] person_1 (PATIENT): okay, so should I be worried about this?
+[SEG0051] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a flare-up of COPD, but I'd like to confirm. A sputum culture is what I'd like next, for productive cough. Let's book blood tests to look into infective exacerbation. A chest X-ray is what I'd like next, for breathlessness. I'd like you to take doxycycline, 100 milligrams, twice a day, for five days. That's for chest infection.
+[SEG0052] person_2 (DOCTOR): And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. If you become more breathless or your lips turn blue, that's the point to come in urgently. Book a review in two weeks. That's it on my side. Anything unclear?
+[SEG0053] person_1 (PATIENT): Thanks so so much, doctor.
+[SEG0054] person_2 (DOCTOR): bye for now
+
+JSON:

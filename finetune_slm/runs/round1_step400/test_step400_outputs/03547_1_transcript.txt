@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03547)
+[SEG0001] person_1 (DOCTOR): Afternoon, thanks for coming in.
+[SEG0002] person_2 (PATIENT): Hi doctor, I got here as fast as I could.
+[SEG0003] person_1 (DOCTOR): what's been worrying you?
+[SEG0004] person_2 (PATIENT): I'm here because of blurred vision on standing
+[SEG0005] person_1 (DOCTOR): are you on any regular medication?
+[SEG0006] person_2 (PATIENT): no, I'm not on anything
+[SEG0007] person_1 (DOCTOR): So, tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0008] person_2 (PATIENT): Oh, I notice it more with standing. Maybe a six out of ten on a bad day.
+[SEG0009] person_1 (DOCTOR): Have you noticed anything else alongside it?
+[SEG0010] person_2 (PATIENT): When it starts I tend to get blacking out when I stand quickly as well. About blacking out when I stand quickly, it's a few times a day. Only lying down, and it's not much.
+[SEG0011] person_1 (DOCTOR): Have you been feeling lightheaded?
+[SEG0012] person_2 (PATIENT): Yes, since last Tuesday.
+[SEG0013] person_1 (DOCTOR): And what about head injury, chest pain, seizure or palpitations?
+[SEG0014] person_2 (PATIENT): no, not a single one
+[SEG0015] person_1 (DOCTOR): Okay, on the cardiac side, anything I should know?
+[SEG0016] person_2 (PATIENT): No, that's been fine.
+[SEG0017] person_1 (DOCTOR): What about your parents, brothers or sisters, any conditions?
+[SEG0018] person_2 (PATIENT): mm, my brother has epilepsy
+[SEG0019] person_1 (DOCTOR): A few questions about your lifestyle now.
+[SEG0020] person_2 (PATIENT): No, I've never smoked in my life. I only drink at family occasions. Lots of rice, lentils and some fruit. Not much, I mostly stay in these days.
+[SEG0021] person_1 (DOCTOR): What operations have you had, if any?
+[SEG0022] person_2 (PATIENT): Yes, I had an operation for a hernia, last spring.
+[SEG0023] person_1 (DOCTOR): Tell me about any past illnesses or ongoing conditions.
+[SEG0024] person_2 (PATIENT): I have high blood pressure, for about ten years. I'd rather not end up on lots of tablets if I can avoid it.
+[SEG0025] person_1 (DOCTOR): let me ask about allergies, anything at all?
+[SEG0026] person_2 (PATIENT): not to my knowledge, no
+[SEG0027] person_1 (DOCTOR): Let me get the readings out of the way.
+[SEG0028] person_1 (DOCTOR): Okay, this won't take long...
+[SEG0029] person_1 (DOCTOR): okay: BP is 99 over 64, height 182 centimetres, heart rate 104, temperature is 37.0 degrees, weight 61 kilos
+[SEG0030] person_2 (PATIENT): is that alright, doctor?
+[SEG0031] person_1 (DOCTOR): They help me see the whole picture, more shortly.
+[SEG0032] person_1 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0033] person_2 (PATIENT): sure thing
+[SEG0034] person_1 (DOCTOR): Breathe out slowly.
+[SEG0035] person_1 (DOCTOR): Your blood pressure drops a long way when you stand and your heart sounds are normal.
+[SEG0036] person_2 (PATIENT): Yeah, no problem.
+[SEG0037] person_1 (DOCTOR): That's all I needed to check. Putting it all together, I'd lean towards medicine-induced postural hypotension. An arrhythmia is still possible. I want blood tests done, that's for syncope.
+[SEG0038] person_3 (CLINICAL_STAFF): I can book that for Tuesday at 2 pm
+[SEG0039] person_1 (DOCTOR): I'm going to order an ECG, for syncope. I'd rather check than guess, and this is the quickest way to know more
+[SEG0040] person_2 (PATIENT): Does it hurt?
+[SEG0041] person_1 (DOCTOR): we will move the prostate tablet to bedtime and you should rise slowly if you smoke, this is a good moment to think about stopping, and we can help you with that come back in two weeks
+[SEG0042] person_2 (PATIENT): alright, I'll be back
+[SEG0043] person_1 (DOCTOR): Does all of that make sense?
+[SEG0044] person_2 (PATIENT): I think I understand everything thanks
+[SEG0045] person_1 (DOCTOR): Look after yourself.
+
+JSON:

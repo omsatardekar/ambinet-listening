@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02272)
+[SEG0001] person_1 (DOCTOR): Come in, have a seat by the desk.
+[SEG0002] person_2 (PATIENT): Good morning, doctor, thank you.
+[SEG0003] person_1 (DOCTOR): What's the main thing today?
+[SEG0004] person_2 (PATIENT): I've been dealing with a hot red swollen big toe.
+[SEG0005] person_1 (DOCTOR): Did it come on recently?
+[SEG0006] person_2 (PATIENT): Since last Tuesday, that's when it began.
+[SEG0007] person_1 (DOCTOR): Is it worse at certain times?
+[SEG0008] person_2 (PATIENT): Yes, touch. That makes it worse.
+[SEG0009] person_1 (DOCTOR): Yes, carry on.
+[SEG0010] person_2 (PATIENT): Oh, and pain that woke me. Had that since last Tuesday. With pain that woke me, a five out of ten, I suppose. I've also had not being able to wear a shoe, since last night.
+[SEG0011] person_1 (DOCTOR): I follow. Have you had a hot red swollen big toe before, or is this the first time?
+[SEG0012] person_2 (PATIENT): A bit, about six months ago. It settled by itself back then.
+[SEG0013] person_1 (DOCTOR): And what about fever, rash or injury?
+[SEG0014] person_2 (PATIENT): No, not a single one.
+[SEG0015] person_1 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0016] person_2 (PATIENT): Nothing unusual, no.
+[SEG0017] person_1 (DOCTOR): What do you take on a normal day? Bear with me, I'm just building up the picture.
+[SEG0018] person_2 (PATIENT): It's allopurinol, 100 milligrams, once a day. I'm supposed to take it regularly, um, but I don't always manage. Yeah, I used to take febuxostat, but I stopped it.
+[SEG0019] person_1 (DOCTOR): Any allergies to tablets, food or anything in the environment?
+[SEG0020] person_2 (PATIENT): No allergies at all.
+[SEG0021] person_1 (DOCTOR): Do you drink alcohol?
+[SEG0022] person_2 (PATIENT): I'll have a glass of wine with dinner.
+[SEG0023] person_1 (DOCTOR): Any smoking?
+[SEG0024] person_2 (PATIENT): I've never touched a cigarette.
+[SEG0025] person_1 (DOCTOR): How active are you?
+[SEG0026] person_2 (PATIENT): I hardly move around during the day.
+[SEG0027] person_1 (DOCTOR): What's your work?
+[SEG0028] person_2 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0029] person_1 (DOCTOR): So, what does a normal day of food look like?
+[SEG0030] person_2 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0031] person_1 (DOCTOR): Do you have any long-term conditions?
+[SEG0032] person_2 (PATIENT): I've had gout, yes. It's the not knowing that gets to me.
+[SEG0033] person_1 (DOCTOR): Okay, I can see gout in your file as well.
+[SEG0034] person_3 (NURSE): Okay, so the vitals from earlier. BMI works out to 24.4, blood pressure 114 over 77, weight 69 kilos, temp 36.7 degrees, pulse is 86 beats a minute, oxygen saturation is 98 percent, height 168 centimetres.
+[SEG0035] person_1 (DOCTOR): Thanks.
+[SEG0036] person_1 (DOCTOR): Shall I start the examination?
+[SEG0037] person_1 (DOCTOR): Breathe out slowly.
+[SEG0038] person_1 (DOCTOR): The big toe joint is red, hot, swollen and exquisitely tender.
+[SEG0039] person_1 (DOCTOR): You can sit up now.
+[SEG0040] person_1 (DOCTOR): So where does that leave us? I can't pin this down yet. We're looking at an acute gout attack or a septic joint.
+[SEG0041] person_1 (DOCTOR): A uric acid blood test is what I'd like next, for gout. I'm going to order kidney function tests, for gout treatment. I'm going to put you on naproxen, 500 milligrams, twice a day with food, five days. It's for gout flare. Rest the foot, ice it, and drink plenty of water; limit beer and red meat. If you smoke, this is a good moment to think about stopping, and we can help you with that.
+[SEG0042] person_1 (DOCTOR): I'll want another look in two weeks.
+[SEG0043] person_2 (PATIENT): Yeah, okay, I'll arrange it.
+[SEG0044] person_1 (DOCTOR): That's all from me. Any questions?
+[SEG0045] person_2 (PATIENT): Okay, that makes sense. Thanks for explaining.
+
+JSON:

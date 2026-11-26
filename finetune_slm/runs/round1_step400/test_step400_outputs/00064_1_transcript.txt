@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00064)
+[SEG0001] person_1 (PATIENT): Hi, doctor, I brought my bag, is it fine to leave it here?
+[SEG0002] person_2 (DOCTOR): no trouble at all, come in. What's been bothering you?
+[SEG0003] person_1 (PATIENT): mainly a ring-shaped itchy patch there's a couple of other things, but that's the the main one
+[SEG0004] person_2 (DOCTOR): how long are we talking about?
+[SEG0005] person_1 (PATIENT): right, for four weeks, I'd say
+[SEG0006] person_2 (DOCTOR): okay, give me more detail on it, whatever comes to mind
+[SEG0007] person_1 (PATIENT): it happens every other day maybe a seven out of ten on a bad day and itching in the groin as well, since Monday
+[SEG0008] person_2 (DOCTOR): does anything bring it it on or make it worse?
+[SEG0009] person_1 (PATIENT): Yes, sweating. That makes it worse.
+[SEG0010] person_2 (DOCTOR): are you on any tablets or medication?
+[SEG0011] person_1 (PATIENT): it's Candid cream, twice a day
+[SEG0012] person_2 (DOCTOR): do you have any known allergies at all?
+[SEG0013] person_1 (PATIENT): no, none that I know of
+[SEG0014] person_2 (DOCTOR): Any medical conditions anything you've been treated for?
+[SEG0015] person_1 (PATIENT): No, none that I know of.
+[SEG0016] person_2 (DOCTOR): any previous surgeries?
+[SEG0017] person_1 (PATIENT): No nothing like that.
+[SEG0018] person_2 (DOCTOR): Anyone in the the family with similar problems or other conditions?
+[SEG0019] person_1 (PATIENT): My father had a stroke.
+[SEG0020] person_2 (DOCTOR): are you working or retired?
+[SEG0021] person_1 (PATIENT): Retired. I stopped a few years back.
+[SEG0022] person_2 (DOCTOR): what do you do to keep active?
+[SEG0023] person_1 (PATIENT): I cycle to work most mornings
+[SEG0024] person_2 (DOCTOR): Nothing like fever?
+[SEG0025] person_1 (PATIENT): Nope, no fever.
+[SEG0026] person_2 (DOCTOR): any new partner similar rash on the scalp or pain at all?
+[SEG0027] person_1 (PATIENT): Um, no, none of those.
+[SEG0028] person_2 (DOCTOR): Is your chest okay generally?
+[SEG0029] person_1 (PATIENT): no, nothing there
+[SEG0030] person_2 (DOCTOR): Before we go on a few quick readings.
+[SEG0031] person_2 (DOCTOR): hold still for me..
+[SEG0032] person_2 (DOCTOR): okay: pressure 119 over 72, weight 83 kilos, saturation 97 percent and height 170 centimetres, BMI works out to 28.7, temperature 36.9, pulse is 84 beats a minute
+[SEG0033] person_1 (PATIENT): is that okay?
+[SEG0034] person_2 (DOCTOR): I'll explain what that means shortly
+[SEG0035] person_2 (DOCTOR): okay a quick examination now
+[SEG0036] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0037] person_2 (DOCTOR): skin between the toes is white and peeling
+[SEG0038] person_2 (DOCTOR): Okay, finished. From what you've told me and what I found, I think we're dealing with a fungal skin infection at this stage.
+[SEG0039] person_1 (PATIENT): I've been thinking the worst to be honest is it bad?
+[SEG0040] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a fungal skin infection. I'd like you to take fluconazole, 150 milligrams, once a week, for two weeks. You take it by mouth. That should help with fungal infection. Take care, and call us if anything changes.
+[SEG0041] person_1 (PATIENT): okay, thank you. Bye
+
+JSON:

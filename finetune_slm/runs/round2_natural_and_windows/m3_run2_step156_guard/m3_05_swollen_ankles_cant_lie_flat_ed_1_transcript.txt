@@ -1,0 +1,117 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_05_swollen_ankles_cant_lie_flat_ed)
+[SEG0001] person_1 (DOCTOR): Hi there, I'm Dr Reyes, I'm one of the doctors in the emergency department tonight. Before we start, what would you like me to call you? Mr Kowalski, or Walter, or something else?
+[SEG0002] person_2 (PATIENT): Walt's fine.
+[SEG0003] person_1 (DOCTOR): Walt it is. And you've brought somebody with you.
+[SEG0004] person_3 (CAREGIVER): Hi, doctor. I'm Tamika, I'm Walt's home health aide. I do his mornings and some evenings, I'm the one who called the ambulance. Well, I called his daughter and she said call the ambulance.
+[SEG0005] person_2 (PATIENT): Mm-hm.
+[SEG0006] person_2 (PATIENT): It was a fuss over nothing.
+[SEG0007] person_3 (CAREGIVER): Uh, it was not nothing, Walt, you couldn't get up the step.
+[SEG0008] person_1 (DOCTOR): Okay, um, okay, I'll take both opinions. Walt, in your own words, what's going on?
+[SEG0009] person_2 (PATIENT): I'm a little short of breath. That's about it. And the ankles are puffy.
+[SEG0010] person_1 (DOCTOR): Puffy ankles and short of breath. Is the breathlessness there all the time, or does it come on with something?
+[SEG0011] person_2 (PATIENT): Um, when I walk. And when I lie down. I can't lie flat, I lie flat and it's like somebody's put a bag on my chest.
+[SEG0012] person_1 (DOCTOR): Okay.
+[SEG0013] person_1 (DOCTOR): So what do you do at night?
+[SEG0014] person_2 (PATIENT): I sleep in the recliner. Have done for a couple of days.
+[SEG0015] person_3 (CAREGIVER): Longer than that.
+[SEG0016] person_2 (PATIENT): A couple of days.
+[SEG0017] person_3 (CAREGIVER): Walt. He's been in the recliner since last week. I move the pillows for him every morning, I'd know. Before that it was three pillows, and before that two.
+[SEG0018] person_1 (DOCTOR): Yes.
+[SEG0019] person_1 (DOCTOR): Okay. So I've got a bit of a disagreement about the timing, and that's fine, it's really common. Walt, when did you first notice the ankles?
+[SEG0020] person_2 (PATIENT): Tuesday, I'd say. Tuesday, Wednesday.
+[SEG0021] person_3 (CAREGIVER): I took his socks off on the Thursday before last and they'd left a deep line, all the way round. And I said to him then. I said, Walt, that's fluid.
+[SEG0022] person_2 (PATIENT): Mm-hm.
+[SEG0023] person_2 (PATIENT): She did say it.
+[SEG0024] person_1 (DOCTOR): So, somewhere between three days and ten days. I'll write down about a week and a half, give or take, and we'll leave it there. What about last night, how was it?
+[SEG0025] person_2 (PATIENT): Bad. I woke up gasping. Once. About two in the morning. I sat on the edge of the bed and it took, I don't know, a good ten minutes, and then I went and sat in the chair.
+[SEG0026] person_1 (DOCTOR): And that's the first time you woke up like that?
+[SEG0027] person_2 (PATIENT): First time. It scared me a bit, I'm not going to lie.
+[SEG0028] person_1 (DOCTOR): Understandable. Any pain in your chest?
+[SEG0029] person_2 (PATIENT): No. Nothing like that.
+[SEG0030] person_1 (DOCTOR): No pressure, no squeezing, nothing going down your arm?
+[SEG0031] person_2 (PATIENT): No, no. I had that once before, and this isn't it.
+[SEG0032] person_1 (DOCTOR): Mm-hm.
+[SEG0033] person_1 (DOCTOR): That's what I was going to ask, can you tell me about the once before?
+[SEG0034] person_2 (PATIENT): Heart attack. Two thousand and sixteen, in the spring. They put a stent in. I was in four days.
+[SEG0035] person_1 (DOCTOR): Thank you. Any other operations, apart from the stent?
+[SEG0036] person_2 (PATIENT): Well, um, the knee. Left knee replaced in, hang on, twenty nineteen. Twenty nineteen. That's all.
+[SEG0037] person_1 (DOCTOR): Right. And at home, what medicines are you on?
+[SEG0038] person_2 (PATIENT): I take, uh, the lisinopril. Ten. And the little yellow one for the water.
+[SEG0039] person_1 (DOCTOR): What's the yellow one called, do you know?
+[SEG0040] person_2 (PATIENT): I couldn't tell you. It starts with an F, or an L. Little round one. Tamika puts it in the box.
+[SEG0041] person_3 (CAREGIVER): I don't have the bottle with me, doctor, I'm sorry. It's a small yellow tablet, he takes it in the morning, the pharmacy label says water tablet on it. I'll get his daughter to bring the bottles in.
+[SEG0042] person_1 (DOCTOR): Right.
+[SEG0043] person_1 (DOCTOR): That would be great, thank you. I'm not too worried about the exact name yet, as long as I know it's a water pill. Does he take both every day?
+[SEG0044] person_3 (CAREGIVER): Um, every day. I give them to him. Unless he's, well. He does skip the yellow one when he's going out, because of the toilets.
+[SEG0045] person_2 (PATIENT): That's sensible.
+[SEG0046] person_1 (DOCTOR): It's common, I won't tell you off. But on a day when the legs are swollen, that's when you most need it. Okay. Anything else, over the counter, anything like ibuprofen for the knee?
+[SEG0047] person_2 (PATIENT): A Tylenol now and again.
+[SEG0048] person_1 (DOCTOR): Fine. Do you live on your own, Walt?
+[SEG0049] person_2 (PATIENT): Well, um, since Dolores passed. Eight years. The aide comes in every day and my daughter every weekend.
+[SEG0050] person_1 (DOCTOR): Good support. Have you had a cough, or a fever, or a cold lately?
+[SEG0051] person_2 (PATIENT): Nope. Cough a little, in the mornings, nothing much.
+[SEG0052] person_1 (DOCTOR): Okay. I'm going to get the nurse to do your measurements now. Dan?
+[SEG0053] person_4 (NURSE): Sure. Hi, Walt, I'm Dan, I'll be looking after you. I'm going to put this clip on your finger, that's the oxygen, then the cuff on your left arm, and a thermometer in your ear. Just breathe normally. Don't talk. Don't, there we go.
+[SEG0054] person_2 (PATIENT): Sorry.
+[SEG0055] person_4 (NURSE): Okay. Oxygen is ninety-one on room air. That's lower than I want.
+[SEG0056] person_1 (DOCTOR): Okay. Let's put him on some oxygen through the little tube in the nose, two litres to start, and sit him up more. Go on.
+[SEG0057] person_4 (NURSE): Yeah.
+[SEG0058] person_4 (NURSE): Sure. There you go, Walt, this will blow a little breeze under your nose. Better?
+[SEG0059] person_2 (PATIENT): A bit.
+[SEG0060] person_4 (NURSE): Blood pressure is one forty-eight over ninety-two. Pulse is a hundred and two, and it feels a bit irregular. Respirations twenty-four. Temp thirty-six point nine.
+[SEG0061] person_1 (DOCTOR): Okay. Weight?
+[SEG0062] person_4 (NURSE): Well, uh, we haven't got him on the scale yet, he can't stand safely. The bed scale says ninety-four kilos, which is, hmm, ninety-four.
+[SEG0063] person_1 (DOCTOR): Sure.
+[SEG0064] person_1 (DOCTOR): And last time, do you know what he weighed at his clinic?
+[SEG0065] person_3 (CAREGIVER): Eighty-six, I think. In the spring. That's what he said, he was proud of it.
+[SEG0066] person_1 (DOCTOR): Okay, um, so possibly eight kilos of fluid. Walt, I'm going to listen to your chest and look at your legs, and I need you to sit as upright as you can.
+[SEG0067] person_2 (PATIENT): All right.
+[SEG0068] person_1 (DOCTOR): Deep breaths in and out through the mouth. Again. Again. Okay. And now I'm pressing on the shin, here. Can you feel that?
+[SEG0069] person_2 (PATIENT): Yeah. I feel it.
+[SEG0070] person_1 (DOCTOR): The swelling goes all the way up to the knees, both legs, and when I press, there's a dent that stays. And in the chest, there's crackling at the bottom of both lungs, like Velcro, on the right and the left. There's also a gallop on the heart, a third sound.
+[SEG0071] person_2 (PATIENT): Is that bad?
+[SEG0072] person_1 (DOCTOR): It's what I was afraid of. Let me explain, and Tamika, please jump in. When the heart can't pump as strongly as it did, the blood backs up. It backs up into the lungs, which is why you can't breathe lying flat, and it backs up into the legs, which is why you're swollen. That's what I think this is, a flare of heart failure, probably related to the heart muscle that got damaged in the heart attack. But I'm not certain yet. There are other things that could look like this, and I want to be sure we haven't missed one.
+[SEG0073] person_2 (PATIENT): What other things?
+[SEG0074] person_1 (DOCTOR): A chest infection can look similar, or a new heart rhythm problem. Your pulse feels a bit irregular and fast, so I want a tracing of your heart straight away. We'll do that now. Then a chest x-ray, and some blood tests, including one for the heart muscle and one that tells us how stretched the heart is.
+[SEG0075] person_2 (PATIENT): So three tests.
+[SEG0076] person_1 (DOCTOR): Three tests, and I'd like them done within the hour.
+[SEG0077] person_2 (PATIENT): How long am I here?
+[SEG0078] person_1 (DOCTOR): Honestly, it depends on how you respond. I'm going to give you something through the IV that helps your body get rid of the extra fluid. If your oxygen comes up, your breathing eases, and the tests are reassuring, there's a chance you could go home tonight or tomorrow with your dose changed. But if the oxygen doesn't improve, or the tests show anything worrying, I'll want you to stay in the hospital, probably for a couple of days.
+[SEG0079] person_2 (PATIENT): I don't want to stay.
+[SEG0080] person_1 (DOCTOR): I know, Walt. I'll be straight with you. If your oxygen is still low in two hours, I'm going to say stay, and I'd like you to listen.
+[SEG0081] person_2 (PATIENT): Dolores hated hospitals.
+[SEG0082] person_3 (CAREGIVER): Walt, you'll be fine.
+[SEG0083] person_1 (DOCTOR): We'll look after you. Dan, can you get the ECG machine and an IV in, please? And someone to call the lab.
+[SEG0084] person_4 (NURSE): On it. Walt, give me your arm. Little pinch.
+[SEG0085] person_2 (PATIENT): Ow. That's no little pinch.
+[SEG0086] person_4 (NURSE): Sorry about that. Got it. Tamika, you can stay right here, there's a chair behind the curtain.
+[SEG0087] person_2 (PATIENT): What's all the beeping?
+[SEG0088] person_4 (NURSE): That's just the monitor, Walt. It's telling us your heart rate and your oxygen, and it beeps every time your heart beats. If it starts shrieking, that means somebody's moved a wire, not that you're dying.
+[SEG0089] person_2 (PATIENT): Good to know.
+[SEG0090] person_1 (DOCTOR): One more thing about the IV treatment, and it's the part people don't enjoy. It makes you pass a lot of water, quickly, within half an hour, and quite a lot of it. So don't try to hold on, and don't try to get up to the bathroom by yourself, you ring the bell and Dan brings you a urinal.
+[SEG0091] person_2 (PATIENT): Right.
+[SEG0092] person_2 (PATIENT): In front of the lady?
+[SEG0093] person_3 (CAREGIVER): Walt, I've seen it all, I've been doing this nine years.
+[SEG0094] person_2 (PATIENT): That's what worries me.
+[SEG0095] person_4 (NURSE): I'll pull the curtain right round, and I'll put the bell right by your hand. Nobody's going to look.
+[SEG0096] person_3 (CAREGIVER): Thank you. Doctor, one thing. Should I tell his daughter to come now, or is it not that bad?
+[SEG0097] person_1 (DOCTOR): I'd tell her to come now. Not because I'm panicking, but because if he does stay, she'll want to be here for the talk about the plan. And ask her to bring all the bottles, and whatever paperwork he has from the heart doctor.
+[SEG0098] person_3 (CAREGIVER): Mm.
+[SEG0099] person_3 (CAREGIVER): Okay. I'll ring her. Walt, you rest.
+[SEG0100] person_2 (PATIENT): I'm resting.
+[SEG0101] person_3 (CAREGIVER): You're talking.
+[SEG0102] person_1 (DOCTOR): He's doing great. I'll be back as soon as the first results are in.
+
+JSON:

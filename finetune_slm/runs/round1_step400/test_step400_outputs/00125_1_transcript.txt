@@ -1,0 +1,74 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00125)
+[SEG0001] person_1 (DOCTOR): Morning! Make yourself comfortable.
+[SEG0002] person_2 (PATIENT): Evening, doctor.
+[SEG0003] person_1 (DOCTOR): Go ahead, tell me what's happening.
+[SEG0004] person_2 (PATIENT): Mainly terrible itching at night. There's a couple of other things, uh, but that's the main one.
+[SEG0005] person_1 (DOCTOR): How long have you had it?
+[SEG0006] person_2 (PATIENT): it's been like this since Friday
+[SEG0007] person_1 (DOCTOR): Alright, tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0008] person_2 (PATIENT): Right, I'd say moderate. Being warm in bed definitely sets it off. I'm not great at remembering details, so bear with me.
+[SEG0009] person_1 (DOCTOR): Does it come along with anything else?
+[SEG0010] person_2 (PATIENT): so, um, when it starts I tend to get scratch marks on the wrists and waist as well
+[SEG0011] person_2 (PATIENT): I was just going to say that the main thing is—
+[SEG0012] person_3 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0013] person_1 (DOCTOR): Later, thanks. Please go on.
+[SEG0014] person_2 (PATIENT): okay, um, so the scratch marks on the wrists and waist? That's been for about three months
+[SEG0015] person_1 (DOCTOR): Okay, how bad is it, would you say?
+[SEG0016] person_2 (PATIENT): I'd say severe.
+[SEG0017] person_1 (DOCTOR): Any pus or new soaps at all?
+[SEG0018] person_2 (PATIENT): no, no pus, no new soaps i did have tiny spots between my fingers at one point, but that went away on its own
+[SEG0019] person_1 (DOCTOR): Any rash on the face or fever at all?
+[SEG0020] person_2 (PATIENT): Um, uh, nothing like that, no.
+[SEG0021] person_1 (DOCTOR): how are your bowels, any trouble?
+[SEG0022] person_2 (PATIENT): oh, bowels are regular, nothing odd
+[SEG0023] person_1 (DOCTOR): Is your urine normal, no changes?
+[SEG0024] person_2 (PATIENT): Nothing there, no.
+[SEG0025] person_1 (DOCTOR): alright, have you had to to have anything operated on?
+[SEG0026] person_2 (PATIENT): Yes, I had a bypass operation, six years ago.
+[SEG0027] person_1 (DOCTOR): Right, do your parents or siblings have any long-term illnesses?
+[SEG0028] person_2 (PATIENT): Hmm, my uncle had colon cancer.
+[SEG0029] person_1 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0030] person_2 (PATIENT): it's hydrocortisone cream, when needed. Thyronorm, 50 micrograms, every morning for my thyroid
+[SEG0031] person_3 (NURSE): Doctor, our chart from the last visit lists it as 25 micrograms.
+[SEG0032] person_1 (DOCTOR): hm. Do you have the latest prescription with you?
+[SEG0033] person_2 (PATIENT): right, you know, no, I left it at home so, I'm on clopidogrel, 75 milligrams, once a day yeah, it's cetirizine, 10 milligrams, at night
+[SEG0034] person_1 (DOCTOR): and and alcohol, how much?
+[SEG0035] person_2 (PATIENT): I gave up drinking about three years ago
+[SEG0036] person_1 (DOCTOR): are you working at the moment?
+[SEG0037] person_2 (PATIENT): Yes, I'm a nurse on a busy ward.
+[SEG0038] person_1 (DOCTOR): Anything special about your diet?
+[SEG0039] person_2 (PATIENT): I try to avoid too much sugar.
+[SEG0040] person_1 (DOCTOR): Any long-term health problems I should know about?
+[SEG0041] person_2 (PATIENT): Yes, eczema. I have an underactive thyroid. Yes, heart disease.
+[SEG0042] person_1 (DOCTOR): Okay, so. Alright, an underactive thyroid, that matches what I have here.
+[SEG0043] person_1 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0044] person_2 (PATIENT): No allergies that that I know of, no.
+[SEG0045] person_3 (NURSE): okay, so the vitals from earlier. Pulse is 74 beats a minute, BP is 122 over 81.
+[SEG0046] person_1 (DOCTOR): Okay, noted.
+[SEG0047] person_1 (DOCTOR): I'll examine you now, bear with me.
+[SEG0048] person_1 (DOCTOR): Let me press here.
+[SEG0049] person_1 (DOCTOR): Tiny linear burrows between the fingers and scratched papules on the wrists.
+[SEG0050] person_1 (DOCTOR): Okay, finished. Okay, so my impression is this: This is probably scabies. It could also be an insect-bite reaction, so we'll keep that open. It could also be eczema, so we'll keep that open.
+[SEG0051] person_2 (PATIENT): I mean, you know, is this something I'll have for good?
+[SEG0052] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like scabies.
+[SEG0053] person_1 (DOCTOR): I'm prescribing permethrin cream, applied once, repeated in a week, for two applications that should help with scabies everyone in the house should be treated at the same time, and bedding washed hot and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+[SEG0054] person_2 (PATIENT): right, will do
+[SEG0055] person_1 (DOCTOR): I'd like you back in two weeks.
+[SEG0056] person_4 (CLINICAL_STAFF): I'll book your follow-up at the front desk on your way out.
+[SEG0057] person_2 (PATIENT): Yeah, okay, see you then.
+[SEG0058] person_1 (DOCTOR): Thanks for coming in.
+[SEG0059] person_2 (PATIENT): I think that's clear. Thank you for being so thorough.
+
+JSON:

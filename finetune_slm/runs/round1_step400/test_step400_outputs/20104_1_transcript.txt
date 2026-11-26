@@ -1,0 +1,64 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20104)
+[SEG0001] person_1 (PATIENT): hello doctor may I come in?
+[SEG0002] person_2 (DOCTOR): No problem at all, come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): honestly, it's a smell from the dressing, and my family pushed me to to come. I'd rather know what's going on than keep guessing
+[SEG0004] person_2 (DOCTOR): are you taking anything regularly, including from the the pharmacy?
+[SEG0005] person_1 (PATIENT): Gliclazide 80 milligrams twice a day for my sugar. I've never really been one for hospitals. I mean I'm on valsartan 80 milligrams once a day for my blood pressure.
+[SEG0006] person_2 (DOCTOR): When did you start it?
+[SEG0007] person_1 (PATIENT): for about a month sorry, what was I saying, it's rosuvastatin, 10 milligrams, at night for my cholesterol before this I was on Glycomet; that's been stopped
+[SEG0008] person_2 (DOCTOR): when did this begin?
+[SEG0009] person_1 (PATIENT): Since last night, that's when it began
+[SEG0010] person_2 (DOCTOR): Okay, how much does it limit you?
+[SEG0011] person_1 (PATIENT): Mild, I'd say. So, I've also had redness around the sore, since yesterday. Numbness in my feet was there, but it's gone away on its own
+[SEG0012] person_2 (DOCTOR): Have you had a smell from the dressing before, or is this the first time?
+[SEG0013] person_1 (PATIENT): I had a similar thing last year. It went away.
+[SEG0014] person_2 (DOCTOR): a few quick ones: calf pain, chest pain, vomiting or confusion?
+[SEG0015] person_1 (PATIENT): Hmm, uh, no, not a single one.
+[SEG0016] person_2 (DOCTOR): is your chest okay generally?
+[SEG0017] person_1 (PATIENT): Breathing's normal.
+[SEG0018] person_2 (DOCTOR): is your mobility otherwise okay?
+[SEG0019] person_1 (PATIENT): no joints are fine
+[SEG0020] person_2 (DOCTOR): What about your medical history?
+[SEG0021] person_1 (PATIENT): I've had diabetes yes. High blood pressure for about a year i looked a a few things up online and that probably didn't help i I have high cholesterol for five years
+[SEG0022] person_2 (DOCTOR): Anything else?
+[SEG0023] person_2 (DOCTOR): now some background about your lifestyle
+[SEG0024] person_1 (PATIENT): I quit smoking around ten years ago. I hardly move around during the day. I look after my grandchildren most days. I live with my elderly mother.
+[SEG0025] person_2 (DOCTOR): are there any allergies I should be aware of?
+[SEG0026] person_1 (PATIENT): okay, so I'm allergic to milk, I get stomach cramps
+[SEG0027] person_2 (DOCTOR): have you had any surgical procedures?
+[SEG0028] person_1 (PATIENT): so, yes, I had a varicose vein procedure, last year
+[SEG0029] person_2 (DOCTOR): can I check a a few measurements before we carry on?
+[SEG0030] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0031] person_2 (DOCTOR): okay: temperature is 39.4 degrees, saturation 95 percent and pulse is 96 beats a minute, blood pressure 120 over 74.
+[SEG0032] person_1 (PATIENT): Is that okay?
+[SEG0033] person_2 (DOCTOR): I'll interpret them after the examination
+[SEG0034] person_2 (DOCTOR): So, may I examine you now?
+[SEG0035] person_2 (DOCTOR): I'll listen to your chest now
+[SEG0036] person_2 (DOCTOR): The The pulses at the ankle are weak but I can feel them.
+[SEG0037] person_2 (DOCTOR): Breathe out slowly.
+[SEG0038] person_2 (DOCTOR): There is a two-centimetre ulcer on the ball of the right foot with redness around it.
+[SEG0039] person_2 (DOCTOR): That's the the examination finished.
+[SEG0040] person_2 (DOCTOR): so, based on the history and the examination, it's hard to say an infected diabetic foot ulcer is one possibility and pressure damage another, and I'd rather not commit yet
+[SEG0041] person_1 (PATIENT): what are the odds it's serious?
+[SEG0042] person_2 (DOCTOR): I can't promise yet but most people with an infected diabetic foot ulcer do well once it's treated properly. I'll request a swab from the ulcer it'll help with infected ulcer
+[SEG0043] person_1 (PATIENT): Well, uh, do I need to prepare?
+[SEG0044] person_2 (DOCTOR): We should do blood tests for infection. That will help us see what's going on underneath and decide the next step. I'll request a foot X-ray, it'll help with ulcer. I'll start you on amoxicillin/clavulanic acid, 625 milligrams, three times a day, for seven days. You take it by mouth. It's for foot infection. Keep the weight off that foot and keep the dressing dry.
+[SEG0045] person_2 (DOCTOR): Try to keep a simple diary of when it happens and what you were doing, and bring it to the next visit. We'll refer you to the foot clinic. Come back or go to emergency straight away if the redness spreads or you feel unwell with a fever.
+[SEG0046] person_1 (PATIENT): yes will do
+[SEG0047] person_2 (DOCTOR): Let's plan a check in three days. That's everything on my side. Anything you're unsure about?
+[SEG0048] person_1 (PATIENT): Thank you, that's helpful.
+[SEG0049] person_2 (DOCTOR): so, all the best
+
+JSON:

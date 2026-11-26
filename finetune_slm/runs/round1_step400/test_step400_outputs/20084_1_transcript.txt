@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20084)
+[SEG0001] person_1 (PATIENT): let me think, hi doctor, am I too early?
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_1 (PATIENT): I'm here cos of a sore on the bottom of my foot.
+[SEG0004] person_2 (DOCTOR): since when exactly?
+[SEG0005] person_1 (PATIENT): About... well, one week.
+[SEG0006] person_2 (DOCTOR): How much does it limit you?
+[SEG0007] person_1 (PATIENT): A five out of ten, I suppose. I've also been feeling feverish, for two weeks.
+[SEG0008] person_2 (DOCTOR): Let's start with the basic checks.
+[SEG0009] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0010] person_2 (DOCTOR): Okay: pressure 105 over 72, saturation 98 percent, height 156 centimetres, BMI works out to 36.6, temp 38.7 degrees, pulse is 100 beats a minute, weight 89 kilos, respiratory rate 16.
+[SEG0011] person_2 (DOCTOR): Shall I start the examination?
+[SEG0012] person_2 (DOCTOR): Does that hurt?
+[SEG0013] person_2 (DOCTOR): The pulses at the ankle are weak but I can feel them.
+[SEG0014] person_2 (DOCTOR): Breathe out slowly.
+[SEG0015] person_2 (DOCTOR): There is a two-centimetre ulcer on the ball of the right foot with redness around it.
+[SEG0016] person_2 (DOCTOR): That's the examination finished.
+[SEG0017] person_2 (DOCTOR): Have you had any chest pain or calf pain?
+[SEG0018] person_1 (PATIENT): I haven't had chest pain or calf pain, no.
+[SEG0019] person_2 (DOCTOR): Have you had any confusion or black toes?
+[SEG0020] person_1 (PATIENT): I haven't had confusion or black toes, no
+[SEG0021] person_2 (DOCTOR): Right, is your chest okay generally?
+[SEG0022] person_1 (PATIENT): no problems with breathing
+[SEG0023] person_2 (DOCTOR): Do you take any prescribed or over-the-counter medicines? Bear with me, I'm just building up the picture.
+[SEG0024] person_1 (PATIENT): I'm on gliclazide, 80 milligrams, twice a day for my sugar.
+[SEG0025] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0026] person_1 (PATIENT): I've had diabetes for five years now. I just want to get back to normal, really.
+[SEG0027] person_2 (DOCTOR): mm, okay yes, diabetes is known to us, good to have that clear do you work outside the home?
+[SEG0028] person_1 (PATIENT): I'm a hairdresser, on my feet all day
+[SEG0029] person_2 (DOCTOR): Is there someone at home?
+[SEG0030] person_1 (PATIENT): My husband and I live above the shop
+[SEG0031] person_2 (DOCTOR): do you follow any particular diet?
+[SEG0032] person_1 (PATIENT): I'm vegetarian and have been for years.
+[SEG0033] person_2 (DOCTOR): Before we go further, any allergies?
+[SEG0034] person_1 (PATIENT): I'm allergic to wheat, I get bloating.
+[SEG0035] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0036] person_1 (PATIENT): Nothing, I haven't had any operations.
+[SEG0037] person_2 (DOCTOR): Putting it all together, my working impression is an infected diabetic foot ulcer. I think a foot X-ray makes sense here, for ulcer.
+[SEG0038] person_1 (PATIENT): Do I need to prepare?
+[SEG0039] person_2 (DOCTOR): I think a swab from the ulcer makes sense here, for infected ulcer we'll begin with amoxicillin/clavulanic acid, 625 milligrams, three times a day, for seven days that's for foot infection i'll put all of this in writing so you don't have to remember it
+[SEG0040] person_1 (PATIENT): can I collect it from my own pharmacy?
+[SEG0041] person_2 (DOCTOR): Keep the weight off that foot and keep the dressing dry. If the redness spreads or you feel unwell with a fever, or you feel really unwell, please come to the emergency department.
+[SEG0042] person_1 (PATIENT): That's fine by me.
+[SEG0043] person_2 (DOCTOR): please come and see me after the swab result. That's all from me. Any questions?
+[SEG0044] person_1 (PATIENT): Right, I'll do that. Thank you, doctor.
+
+JSON:

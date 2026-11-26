@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20159)
+[SEG0001] person_1 (PATIENT): Um, uh, sorry I'm a little late, doctor.
+[SEG0002] person_2 (DOCTOR): yes, have a seat tell me what's going on
+[SEG0003] person_1 (PATIENT): yeah, um, I wanted to get a bump on my head looked at i thought it would sort itself out, but it hasn't
+[SEG0004] person_2 (DOCTOR): Has this been going on for long?
+[SEG0005] person_1 (PATIENT): It's been going on for about four days. Oh, and a headache since the fall. That's been about the same, two days.
+[SEG0006] person_2 (DOCTOR): Are you on any regular medication?
+[SEG0007] person_1 (PATIENT): Um, no, nothing at the moment.
+[SEG0008] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0009] person_1 (PATIENT): No, no conditions.
+[SEG0010] person_2 (DOCTOR): have you had any surgical procedures?
+[SEG0011] person_1 (PATIENT): I had a varicose vein procedure last year.
+[SEG0012] person_2 (DOCTOR): right, who lives with you?
+[SEG0013] person_1 (PATIENT): My partner and our baby.
+[SEG0014] person_2 (DOCTOR): Do you get out much?
+[SEG0015] person_1 (PATIENT): Not much, I mostly stay in these days.
+[SEG0016] person_2 (DOCTOR): So, what does a normal day of food look like?
+[SEG0017] person_1 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0018] person_2 (DOCTOR): Have you had any clear fluid from the nose or ear, double vision or loss of consciousness?
+[SEG0019] person_1 (PATIENT): Well, no, none that I've noticed.
+[SEG0020] person_2 (DOCTOR): How about vomiting?
+[SEG0021] person_1 (PATIENT): Ah, not that I've noticed, no vomiting.
+[SEG0022] person_2 (DOCTOR): how are your bowels, any trouble?
+[SEG0023] person_1 (PATIENT): No, that side's been fine.
+[SEG0024] person_2 (DOCTOR): anything with your heart, like skipped beats or fainting?
+[SEG0025] person_1 (PATIENT): no, nothing with my heart
+[SEG0026] person_2 (DOCTOR): Can I check a few measurements before we carry on?
+[SEG0027] person_2 (DOCTOR): Right, that's it, just a little longer...
+[SEG0028] person_2 (DOCTOR): okay: BP is 122 over 82, pulse 64. And And saturation 99 percent, temperature is 36.4 degrees
+[SEG0029] person_1 (PATIENT): Is that normal?
+[SEG0030] person_2 (DOCTOR): Alright, they help me see the whole picture, more shortly.
+[SEG0031] person_2 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0032] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0033] person_2 (DOCTOR): There is a small bruise on the forehead, the pupils are equal and reactive, and you are walking steadily.
+[SEG0034] person_1 (PATIENT): right
+[SEG0035] person_2 (DOCTOR): okay, that's enough for me. From what you've told me and what I found, my working impression is a minor head injury without worrying signs. Another possibility is a concussion. Let's use paracetamol, 1 gram, every six hours if needed, for three days. You take it by mouth. It's for headache. Someone should stay with you tonight, and no alcohol or contact sport for now
+[SEG0036] person_2 (DOCTOR): Come back or go to emergency straight away if you vomit repeatedly, become drowsy or confused, or have a fit.
+[SEG0037] person_1 (PATIENT): Okay, you know, makes sense.
+[SEG0038] person_2 (DOCTOR): that's everything on my side anything you're unsure about?
+[SEG0039] person_1 (PATIENT): Thank you, doctor, goodbye.
+
+JSON:

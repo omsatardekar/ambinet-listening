@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00133)
+[SEG0001] person_1 (DOCTOR): Good evening. Sorry to keep you waiting.
+[SEG0002] person_2 (FAMILY_MEMBER): Thank you for fitting us in, doctor.
+[SEG0003] person_1 (DOCTOR): Go ahead, tell me what's happening.
+[SEG0004] person_2 (FAMILY_MEMBER): He's been having a burning pain in the upper tummy, doctor.
+[SEG0005] person_1 (DOCTOR): When did you first notice it?
+[SEG0006] person_3 (PATIENT): About... well, about two weeks.
+[SEG0007] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0008] person_3 (PATIENT): It's mild, honestly. It settles a little with milk. An empty stomach definitely sets it off. Oh, and a sour taste in the mouth. Had that since Monday. As for sour taste in the mouth, it feels moderate to me.
+[SEG0009] person_1 (DOCTOR): Have you had bloating after meals?
+[SEG0010] person_3 (PATIENT): Yes, I have.
+[SEG0011] person_1 (DOCTOR): Is there anything medical in your background?
+[SEG0012] person_3 (PATIENT): I have arthritis in my knees, for about ten years. I have acid reflux, for nearly five years. I have heart disease, for nearly five years.
+[SEG0013] person_1 (DOCTOR): Hm, okay. Right, so acid reflux is already on your record. We'll keep that in mind today. What about alcohol?
+[SEG0014] person_3 (PATIENT): I have a couple of drinks on the weekend.
+[SEG0015] person_1 (DOCTOR): Okay, do you smoke?
+[SEG0016] person_3 (PATIENT): I stopped smoking about two years back.
+[SEG0017] person_1 (DOCTOR): Are you active at all?
+[SEG0018] person_3 (PATIENT): Barely, I'm mostly sedentary these days.
+[SEG0019] person_1 (DOCTOR): How's your diet?
+[SEG0020] person_3 (PATIENT): I'm mostly vegetarian.
+[SEG0021] person_1 (DOCTOR): What medicines do you take regularly?
+[SEG0022] person_3 (PATIENT): Paracetamol, 650 milligrams, when needed.
+[SEG0023] person_2 (FAMILY_MEMBER): He is supposed to take it when needed, but I can't say he always does.
+[SEG0024] person_3 (PATIENT): Pantoprazole, 40 milligrams, before breakfast.
+[SEG0025] person_1 (DOCTOR): So, when did you start it?
+[SEG0026] person_3 (PATIENT): For two years.
+[SEG0027] person_1 (DOCTOR): Uh-huh.
+[SEG0028] person_3 (PATIENT): Aspirin, 75 milligrams, once a day. It's the not knowing that gets to me.
+[SEG0029] person_1 (DOCTOR): Any procedures or operations?
+[SEG0030] person_3 (PATIENT): Oh, yes, I had my appendix out, about eight years ago.
+[SEG0031] person_1 (DOCTOR): Any allergies I should know about?
+[SEG0032] person_3 (PATIENT): I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0033] person_1 (DOCTOR): Any fever, black stools, jaundice or weight loss at all?
+[SEG0034] person_3 (PATIENT): Um, I haven't had fever, black stools, jaundice or weight loss, no.
+[SEG0035] person_1 (DOCTOR): Have you noticed vomiting blood or trouble swallowing?
+[SEG0036] person_3 (PATIENT): No, none of that at all.
+[SEG0037] person_1 (DOCTOR): Any trouble with the waterworks?
+[SEG0038] person_3 (PATIENT): No changes there.
+[SEG0039] person_1 (DOCTOR): Any pins and needles or loss of strength anywhere?
+[SEG0040] person_3 (PATIENT): Well, no, that's all normal.
+[SEG0041] person_4 (NURSE): Okay, so the vitals from earlier. Pulse 67, height 151 centimetres. Weight 85 kilos, oxygen saturation is 98 percent, pressure 127 over 75, respiratory rate 15.
+[SEG0042] person_1 (DOCTOR): Okay, noted.
+[SEG0043] person_1 (DOCTOR): Let me examine, it won't take long.
+[SEG0044] person_1 (DOCTOR): So, take your time, no rush.
+[SEG0045] person_1 (DOCTOR): Your tummy is soft, with mild tenderness in the upper middle part.
+[SEG0046] person_1 (DOCTOR): Take your time, no rush.
+[SEG0047] person_1 (DOCTOR): No guarding and no lumps.
+[SEG0048] person_1 (DOCTOR): So, that's all I need, thank you. Let me tell you where I've got to. I'd lean towards gastritis. Acid reflux is still possible. We should do an upper endoscopy for persistent dyspepsia.
+[SEG0049] person_3 (PATIENT): I mean, how long does that take?
+[SEG0050] person_1 (DOCTOR): We should do blood tests for dyspepsia. We should do an H. pylori test for dyspepsia. Avoid spicy, oily food and don't take anti-inflammatory painkillers on an empty stomach. Please come and see me in four weeks. Right, that's all. Go gently.
+[SEG0051] person_3 (PATIENT): No questions. Thank you.
+[SEG0052] person_1 (DOCTOR): Bye for now.
+
+JSON:

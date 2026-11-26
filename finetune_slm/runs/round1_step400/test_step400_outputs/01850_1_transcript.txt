@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01850)
+[SEG0001] person_1 (DOCTOR): Hi there, the chair's free, sit down.
+[SEG0002] person_2 (PATIENT): Afternoon, is this seat fine?
+[SEG0003] person_3 (CAREGIVER): Hello, doctor, I came in with them, if that's okay.
+[SEG0004] person_1 (DOCTOR): What's been worrying you?
+[SEG0005] person_3 (CAREGIVER): He's been having the worst headache of my life, doctor.
+[SEG0006] person_1 (DOCTOR): Tell me your medicines, please.
+[SEG0007] person_2 (PATIENT): I'm on sodium valproate, 500 milligrams, twice a day.
+[SEG0008] person_3 (CAREGIVER): Doctor, I think the last prescription for the sodium valproate was 250 milligrams. We changed it at the last visit.
+[SEG0009] person_1 (DOCTOR): Hm. Do you have the latest prescription with you?
+[SEG0010] person_2 (PATIENT): No, I left it at home. Allopurinol. I take it 100 milligrams, once a day.
+[SEG0011] person_1 (DOCTOR): How long have you been on it?
+[SEG0012] person_2 (PATIENT): Two years now.
+[SEG0013] person_1 (DOCTOR): How many days or weeks has it been?
+[SEG0014] person_2 (PATIENT): Um, it's been two weeks now. I looked a few things up online, and that probably didn't help.
+[SEG0015] person_1 (DOCTOR): How troublesome is it day to day?
+[SEG0016] person_2 (PATIENT): Hmm, it feels mild to me.
+[SEG0017] person_1 (DOCTOR): Is it constant or in episodes?
+[SEG0018] person_2 (PATIENT): It's every other day. There's vomiting as well. About vomiting, a six out of ten, I suppose. As for coming on in seconds, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0019] person_1 (DOCTOR): Have you had the worst headache of your life before, or is this the first time?
+[SEG0020] person_2 (PATIENT): Yes, something like this happened about six months ago, and it went away on its own.
+[SEG0021] person_1 (DOCTOR): A few quick ones: head injury or weakness?
+[SEG0022] person_2 (PATIENT): No head injury or weakness, none of it.
+[SEG0023] person_1 (DOCTOR): Any fever?
+[SEG0024] person_2 (PATIENT): Not that I've noticed, no fever.
+[SEG0025] person_1 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0026] person_2 (PATIENT): No rashes.
+[SEG0027] person_1 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0028] person_2 (PATIENT): My heart's been fine, as far as I know.
+[SEG0029] person_1 (DOCTOR): Before we go further, any allergies?
+[SEG0030] person_2 (PATIENT): Years back I got a rash from naproxen, so I stay away from it now.
+[SEG0031] person_1 (DOCTOR): Tell me about any past illnesses or ongoing conditions.
+[SEG0032] person_2 (PATIENT): Yes, epilepsy. I have depression, for five years.
+[SEG0033] person_1 (DOCTOR): Sure.
+[SEG0034] person_2 (PATIENT): I've got gout.
+[SEG0035] person_1 (DOCTOR): Alright, depression and gout, that matches what I have here. What about your parents, brothers or sisters, any conditions?
+[SEG0036] person_2 (PATIENT): My mother had a stroke.
+[SEG0037] person_1 (DOCTOR): Right, what's your work?
+[SEG0038] person_2 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0039] person_1 (DOCTOR): How active are you?
+[SEG0040] person_2 (PATIENT): I hardly move around during the day.
+[SEG0041] person_1 (DOCTOR): Any surgery in the past?
+[SEG0042] person_2 (PATIENT): Yes, I had my septum straightened, in my thirties.
+[SEG0043] person_1 (DOCTOR): Let me quickly check your readings.
+[SEG0044] person_1 (DOCTOR): Keep your arm relaxed for me...
+[SEG0045] person_1 (DOCTOR): Okay: pulse is 92 beats a minute, oxygen saturation is 98 percent. And temp 36.9 degrees, pressure 171 over 93.
+[SEG0046] person_2 (PATIENT): Is that normal?
+[SEG0047] person_1 (DOCTOR): I'll explain what these mean in a moment. Let me tell you where I've got to. It points towards a possible bleed around the brain. A migraine is still possible. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0048] person_2 (PATIENT): Yes, I'll bear that in mind.
+[SEG0049] person_1 (DOCTOR): For now, no new medicines or tests are needed. Have I covered everything you wanted?
+[SEG0050] person_2 (PATIENT): I, I think I understand everything. Thanks.
+[SEG0051] person_1 (DOCTOR): Alright, look after yourself.
+
+JSON:

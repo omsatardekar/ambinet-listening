@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00019)
+[SEG0001] person_1 (PATIENT): Morning, doctor, I hope I'm not interrupting.
+[SEG0002] person_2 (DOCTOR): So, yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_2 (DOCTOR): Yes, that's no problem at all. Please sit.
+[SEG0005] person_1 (PATIENT): So, I've been putting on weight over the last year, doctor.
+[SEG0006] person_2 (DOCTOR): When did you first notice it?
+[SEG0007] person_1 (PATIENT): About... well, two years. I looked a few things up online, and that probably didn't help. My family kept telling me to get it checked. I've also been snoring. And I've been feeling out of breath on stairs as well.
+[SEG0008] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0009] person_1 (PATIENT): Uh, you know, before this I was on Glycomet; that's been stopped.
+[SEG0010] person_2 (DOCTOR): So, is there anything medical in your background?
+[SEG0011] person_1 (PATIENT): I've got diabetes.
+[SEG0012] person_2 (DOCTOR): Right, right.
+[SEG0013] person_1 (PATIENT): I've had high blood pressure, yes.
+[SEG0014] person_2 (DOCTOR): Okay, so. Alright, diabetes and high blood pressure, that matches what I have here. Let's talk a little about your daily life and habits.
+[SEG0015] person_1 (PATIENT): I smoke about ten cigarettes a day. I work in an office, mostly sitting at a desk. Mostly home-cooked food, rice and vegetables. I walk for about half an hour most days.
+[SEG0016] person_2 (DOCTOR): Any operations in the past?
+[SEG0017] person_1 (PATIENT): Just a knee arthroscopy, three years ago.
+[SEG0018] person_2 (DOCTOR): How about low mood?
+[SEG0019] person_1 (PATIENT): No low mood, thankfully.
+[SEG0020] person_2 (DOCTOR): Okay, have you noticed increased thirst, chest pain or irregular periods?
+[SEG0021] person_1 (PATIENT): No increased thirst, chest pain or irregular periods, none of it.
+[SEG0022] person_2 (DOCTOR): Okay. On the cardiac side, anything I should know?
+[SEG0023] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0024] person_2 (DOCTOR): Has your skin been okay?
+[SEG0025] person_1 (PATIENT): Skin's normal.
+[SEG0026] person_2 (DOCTOR): I'll check your pressure and pulse.
+[SEG0027] person_2 (DOCTOR): Rest your hand here...
+[SEG0028] person_2 (DOCTOR): Okay: temp 36.5 degrees, height 165 centimetres, pulse 74, oxygen saturation is 99 percent, BMI works out to 30.5, weight 83 kilos, BP is 124 over 68.
+[SEG0029] person_2 (DOCTOR): Let me have a look at you.
+[SEG0030] person_1 (PATIENT): Sure.
+[SEG0031] person_2 (DOCTOR): Let me just check something.
+[SEG0032] person_2 (DOCTOR): Your waist measures about a hundred and four centimetres.
+[SEG0033] person_2 (DOCTOR): Okay, you can sit up.
+[SEG0034] person_2 (DOCTOR): Let me tell you where I've got to. I think we're dealing with weight gain with a metabolic cause that needs checking at this stage. It could also be sleep apnoea, so we'll keep that open.
+[SEG0035] person_1 (PATIENT): Is it something serious, doctor?
+[SEG0036] person_2 (DOCTOR): It's reasonable to be concerned, but right now weight gain with a metabolic cause that needs checking is my leading thought, not anything worse. I want an HbA1c done, that's for weight gain. I'm sending you for a sleep study because of snoring and sleepiness. Start with small, specific changes: smaller portions, no sugary drinks, a thirty-minute walk most days. Please come and see me after the results are back.
+[SEG0037] person_1 (PATIENT): Okay, I'll book that.
+[SEG0038] person_2 (DOCTOR): So, what are the next steps as you understand them?
+[SEG0039] person_1 (PATIENT): So, I come back after the results are back. Is that right?
+[SEG0040] person_2 (DOCTOR): Yes, exactly right. Alright, I'll see you out.
+[SEG0041] person_1 (PATIENT): No questions. Thank you.
+[SEG0042] person_2 (DOCTOR): All the best.
+
+JSON:

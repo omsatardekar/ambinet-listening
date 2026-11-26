@@ -1,0 +1,72 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00170)
+[SEG0001] person_1 (NURSE): Doctor, the the patient's with us now. I did the usual checks at the front, so just say when you want them.
+[SEG0002] person_2 (DOCTOR): Great. Hello, come in and sit down. How can I help?
+[SEG0003] person_3 (CAREGIVER): thank you for fitting us in, doctor
+[SEG0004] person_4 (PATIENT): it's swelling in my left calf i thought I'd wait, but it hasn't gone
+[SEG0005] person_2 (DOCTOR): how long has this been going on? Bear with me, I'm just building up the picture
+[SEG0006] person_4 (PATIENT): It's been going on for about two weeks.
+[SEG0007] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0008] person_4 (PATIENT): I'd say moderate. I'd say every other day. I'm not great at remembering details, so bear with me.
+[SEG0009] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0010] person_4 (PATIENT): Pain in that calf goes along with it, um, most of the time.
+[SEG0011] person_2 (DOCTOR): what about warmth in the leg, have you noticed that?
+[SEG0012] person_4 (PATIENT): yeah. About four days, I'd say
+[SEG0013] person_2 (DOCTOR): Do you work?
+[SEG0014] person_4 (PATIENT): I run a small shop, so I'm on my feet a lot
+[SEG0015] person_2 (DOCTOR): Anything special about your diet?
+[SEG0016] person_4 (PATIENT): I try to avoid too much sugar.
+[SEG0017] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0018] person_4 (PATIENT): I've got high blood pressure. Yes, arthritis in my knees.
+[SEG0019] person_2 (DOCTOR): mm-hm
+[SEG0020] person_4 (PATIENT): Eczema, for two years.
+[SEG0021] person_2 (DOCTOR): is there more?
+[SEG0022] person_2 (DOCTOR): Alright, arthritis in your knees and eczema, that matches what I have here. Any previous surgeries?
+[SEG0023] person_4 (PATIENT): Okay, so I had a lump removed from my back years ago.
+[SEG0024] person_2 (DOCTOR): what medicines are you taking at the moment?
+[SEG0025] person_4 (PATIENT): I'm on amlodipine, 5 milligrams, once a day for my pressure.
+[SEG0026] person_1 (NURSE): Doctor, our chart from the last visit lists it it as 10 milligrams.
+[SEG0027] person_2 (DOCTOR): I see. Is the most recent prescription on you?
+[SEG0028] person_4 (PATIENT): Not with me. I'll bring it it next time. It's diclofenac, 50 milligrams, when needed.
+[SEG0029] person_3 (CAREGIVER): it's meant to be when needed, though I don't see he take it every time
+[SEG0030] person_2 (DOCTOR): right, anyone in the family with similar problems or other conditions?
+[SEG0031] person_4 (PATIENT): My father had kidney stones. My mother has diabetes.
+[SEG0032] person_2 (DOCTOR): And what about recent injury to the leg, breathlessness or chest pain?
+[SEG0033] person_4 (PATIENT): um, no, not any of them
+[SEG0034] person_2 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0035] person_4 (PATIENT): no, my breathing's been fine
+[SEG0036] person_1 (NURSE): Doctor, I've got the readings for you. Heart rate 113, saturation 97 percent, blood pressure 119 over 78.
+[SEG0037] person_2 (DOCTOR): Good, thank you.
+[SEG0038] person_2 (DOCTOR): Come over here and I'll have a look.
+[SEG0039] person_4 (PATIENT): sure
+[SEG0040] person_2 (DOCTOR): hold that position for me
+[SEG0041] person_2 (DOCTOR): The right leg looks normal.
+[SEG0042] person_4 (PATIENT): Mm, okay.
+[SEG0043] person_2 (DOCTOR): tell me if anything hurts
+[SEG0044] person_2 (DOCTOR): the left calf is bigger than the right, tender along the vein
+[SEG0045] person_2 (DOCTOR): Thanks for that.
+[SEG0046] person_2 (DOCTOR): Okay, thinking it through, this looks most like a possible deep vein clot. That's my thinking for now, and it may change as we learn more. A muscle strain is also on my list. Let me repeat that back to make sure. You've had swelling in your left calf for about two weeks, moderate, and no chest pain or recent injury to the leg.
+[SEG0047] person_4 (PATIENT): mm, that's right
+[SEG0048] person_2 (DOCTOR): A D-dimer blood test is what I'd like next, for suspected DVT. I want a Doppler scan of the leg done, that's for suspected DVT. That will help us see what's going on underneath and decide the next step. Keep walking gently, and don't massage the calf. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0049] person_2 (DOCTOR): Come back or go to emergency straight away if you get chest pain or sudden breathlessness.
+[SEG0050] person_4 (PATIENT): That's clear.
+[SEG0051] person_2 (DOCTOR): Book a review in two days.
+[SEG0052] person_4 (PATIENT): I'll make the appointment on my way out.
+[SEG0053] person_2 (DOCTOR): Let me check I've been clear. What will you do once you get home?
+[SEG0054] person_4 (PATIENT): So, uh, I come back in two days. Is that right?
+[SEG0055] person_2 (DOCTOR): So, yes, exactly right. Thanks for coming in.
+[SEG0056] person_4 (PATIENT): All good here. Thank you.
+[SEG0057] person_2 (DOCTOR): Mind how you go.
+
+JSON:

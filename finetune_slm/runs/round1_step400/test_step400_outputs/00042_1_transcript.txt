@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00042)
+[SEG0001] person_1 (PATIENT): Afternoon, doctor.
+[SEG0002] person_2 (DOCTOR): that's alright, take a seat tell me why you've come
+[SEG0003] person_1 (PATIENT): I wanted to get constant thirst looked at. I'd rather know what's going on than keep guessing.
+[SEG0004] person_2 (DOCTOR): What medicines are you taking at the the moment?
+[SEG0005] person_1 (PATIENT): Okay, so I'm on metformin, 500 milligrams, twice a day. It's telmisartan, 40 milligrams, once a day.
+[SEG0006] person_2 (DOCTOR): how long are we talking about?
+[SEG0007] person_1 (PATIENT): for about three months, I'd say i'm not great at remembering details, so bear with me
+[SEG0008] person_2 (DOCTOR): anything that tends to go along with it?
+[SEG0009] person_1 (PATIENT): Tiredness goes along with it, most of the time. Oh, the Tiredness? That's been for about three months.
+[SEG0010] person_2 (DOCTOR): Have you had constant thirst before, or is this the first time?
+[SEG0011] person_1 (PATIENT): A bit, last year. It settled by itself back then.
+[SEG0012] person_2 (DOCTOR): Did you get chest pain, vomiting or weight loss?
+[SEG0013] person_1 (PATIENT): None, as far as I know.
+[SEG0014] person_2 (DOCTOR): Any sign of foot sores?
+[SEG0015] person_1 (PATIENT): I haven't noticed any foot sores.
+[SEG0016] person_2 (DOCTOR): Neurologically, anything strange?
+[SEG0017] person_1 (PATIENT): No, that's all normal.
+[SEG0018] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0019] person_1 (PATIENT): Nothing on the skin, no.
+[SEG0020] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0021] person_1 (PATIENT): Yes, diabetes.
+[SEG0022] person_2 (DOCTOR): Yes?
+[SEG0023] person_1 (PATIENT): I have high blood pressure.
+[SEG0024] person_2 (DOCTOR): okay, anything else?
+[SEG0025] person_2 (DOCTOR): Yes, diabetes is known to us, good to have that clear. So, tell me about your routine, work, habits, that sort of thing.
+[SEG0026] person_1 (PATIENT): I smoke about ten cigarettes a day. I don't drink at all. I drive a delivery van all day. Mostly home-cooked food, rice and vegetables. I walk for about half an hour most days.
+[SEG0027] person_2 (DOCTOR): Any surgery in your history?
+[SEG0028] person_1 (PATIENT): I had my gallbladder removed in 2016.
+[SEG0029] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0030] person_2 (DOCTOR): just relax your arm..
+[SEG0031] person_2 (DOCTOR): Okay: pressure 167 over 90, pulse 78, SpO2 97 percent on room air, height 164 centimetres, temperature 36.8, weight 54 kilos.
+[SEG0032] person_2 (DOCTOR): if you're comfortable, I'll examine you now
+[SEG0033] person_2 (DOCTOR): just relax, I'll be quick
+[SEG0034] person_2 (DOCTOR): your feet look fine, no ulcers or sores, and the pulses are palpable
+[SEG0035] person_2 (DOCTOR): Okay, finished. Right, here's what I'm thinking. This is probably diabetes that isn't well controlled. The reason I say that is that your story and my examination fit together.
+[SEG0036] person_1 (PATIENT): What are the chances it's something bad?
+[SEG0037] person_2 (DOCTOR): It's reasonable to be concerned, but right now diabetes that isn't well controlled is my leading thought, not anything worse.
+[SEG0038] person_2 (DOCTOR): I want kidney function tests done, that's for diabetes.
+[SEG0039] person_1 (PATIENT): Will it hurt?
+[SEG0040] person_2 (DOCTOR): Let's get an HbA1c, for diabetes control. For this, glimepiride, 1 milligrams, before breakfast, until we review. That's for blood sugar control. The pharmacy will go through the details again when you pick it up. Cut back on sweets, sugary drinks and white rice, and keep to regular meal times. A dietitian would be the right next step, I'll refer you.
+[SEG0041] person_1 (PATIENT): Okay.
+[SEG0042] person_2 (DOCTOR): I'd like you back after the results are back. So, take care, and call us if anything changes
+[SEG0043] person_1 (PATIENT): I mean, okay, thank you. Bye.
+
+JSON:

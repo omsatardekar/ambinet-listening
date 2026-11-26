@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01650)
+[SEG0001] person_1 (NURSE): All set here, doctor. Chart's updated, and I'll read the readings out when you're ready.
+[SEG0002] person_2 (DOCTOR): Alright, perfect, thanks. Hello there, so what's the trouble?
+[SEG0003] person_3 (PATIENT): So, mainly a fall and pain in my left hip. There's a couple of other things, but that's the main one. A neighbour of mine said I should see someone about it. My sister suggested writing things down, but I forgot.
+[SEG0004] person_1 (NURSE): Here are the numbers, doctor. Heart rate 70, saturation 98 percent, temperature is 36.9 degrees. BP is 125 over 80.
+[SEG0005] person_2 (DOCTOR): Okay, noted. Okay, give me more detail on it, whatever comes to mind.
+[SEG0006] person_3 (PATIENT): Moving definitely sets it off. I get some relief from lying still. It feels mild to me. Not being able to stand was there, but it's gone away on its own.
+[SEG0007] person_2 (DOCTOR): Did you get chest pain or loss of consciousness?
+[SEG0008] person_3 (PATIENT): So, no, I'd have said so.
+[SEG0009] person_2 (DOCTOR): Did you get numbness or head injury?
+[SEG0010] person_3 (PATIENT): No, not a single one.
+[SEG0011] person_2 (DOCTOR): Has your skin been okay?
+[SEG0012] person_3 (PATIENT): Skin's normal.
+[SEG0013] person_2 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0014] person_3 (PATIENT): Alendronate. I take it 70 milligrams, maybe, once a week.
+[SEG0015] person_2 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0016] person_3 (PATIENT): Not with me. I'll bring it next time. I take Asthalin inhaler, when needed for my asthma. Paracetamol, 1 gram, when needed.
+[SEG0017] person_2 (DOCTOR): Have you got any known allergies?
+[SEG0018] person_3 (PATIENT): I had a reaction to naproxen when I was younger, stomach pain, and I've avoided it since.
+[SEG0019] person_2 (DOCTOR): Any previous surgeries?
+[SEG0020] person_3 (PATIENT): No surgery, no.
+[SEG0021] person_2 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0022] person_3 (PATIENT): Sorry, what was I saying, my uncle has high cholesterol.
+[SEG0023] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0024] person_3 (PATIENT): I swim twice a week. No, I share a house with my brother. I'm a hairdresser, on my feet all day.
+[SEG0025] person_2 (DOCTOR): Do you have any long-term conditions? Take your time, there's no rush.
+[SEG0026] person_3 (PATIENT): Actually, I've got thin bones. I looked a few things up online, and that probably didn't help. I've had asthma for five years now.
+[SEG0027] person_2 (DOCTOR): I'll examine you in a second, make yourself comfortable.
+[SEG0028] person_2 (DOCTOR): Hold that for a second.
+[SEG0029] person_2 (DOCTOR): The left leg is shortened and turned outwards, and it is very painful to move.
+[SEG0030] person_2 (DOCTOR): Okay, please sit back down.
+[SEG0031] person_2 (DOCTOR): Okay, so my impression is this: It's hard to say. A probable hip fracture is one possibility and a pelvic fracture another, and I'd rather not commit yet.
+[SEG0032] person_3 (PATIENT): Is this permanent?
+[SEG0033] person_2 (DOCTOR): I can't promise yet, but most people with a probable hip fracture do well once it's treated properly.
+[SEG0034] person_2 (DOCTOR): I want blood tests done, that's for pre-operative. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. I'd like to see you again straight away.
+[SEG0035] person_3 (PATIENT): Erm, okay, I'll arrange it.
+[SEG0036] person_2 (DOCTOR): Does all of that make sense?
+[SEG0037] person_3 (PATIENT): Oh, you know, alright, thanks, take care.
+[SEG0038] person_2 (DOCTOR): All the best.
+
+JSON:

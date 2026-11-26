@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00248)
+[SEG0001] person_1 (PATIENT): Morning. Nice to finally see you, doctor.
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): I've been feeling overwhelmed at work, and I wanted to get it checked.
+[SEG0004] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0005] person_1 (PATIENT): Omeprazole, 20 milligrams, once a day.
+[SEG0006] person_2 (DOCTOR): How long have you had it?
+[SEG0007] person_1 (PATIENT): Probably two months. Yeah.
+[SEG0008] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0009] person_1 (PATIENT): Mild, I'd say. Yes, deadlines. That That makes it worse. Weekends off helps a bit.
+[SEG0010] person_2 (DOCTOR): right, does it come along with anything else?
+[SEG0011] person_1 (PATIENT): Trouble switching off at night goes along with it, most of the time. Yeah, uh, about Trouble switching off at night, moderate, really.
+[SEG0012] person_2 (DOCTOR): Have you had any thoughts of harming myself, chest pain or weight loss?
+[SEG0013] person_1 (PATIENT): I haven't had thoughts of harming myself, chest pain or weight loss, no.
+[SEG0014] person_2 (DOCTOR): okay, and and alcohol use, any of that?
+[SEG0015] person_1 (PATIENT): I haven't noticed any alcohol use.
+[SEG0016] person_2 (DOCTOR): Alright, any problems with your joints or muscles?
+[SEG0017] person_1 (PATIENT): Nothing else aches.
+[SEG0018] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0019] person_1 (PATIENT): I have acid reflux, for nearly five years.
+[SEG0020] person_2 (DOCTOR): right, right a few questions about your lifestyle now
+[SEG0021] person_1 (PATIENT): I go to the gym a couple of times a week. I eat out quite a lot, to be honest. Yes, I live on my own.
+[SEG0022] person_2 (DOCTOR): Any previous surgeries?
+[SEG0023] person_1 (PATIENT): No operations, no.
+[SEG0024] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0025] person_1 (PATIENT): Pollen. I come out in... well, sneezing.
+[SEG0026] person_2 (DOCTOR): First the numbers, if you don't mind.
+[SEG0027] person_2 (DOCTOR): One second...
+[SEG0028] person_2 (DOCTOR): Okay: pulse is 71 beats a minute, blood pressure 127 over 82, temperature is 36.6 degrees.
+[SEG0029] person_1 (PATIENT): is that normal?
+[SEG0030] person_2 (DOCTOR): I'll come back to those numbers.
+[SEG0031] person_2 (DOCTOR): So, based on your history, I think we're dealing with stress-related symptoms at this stage.
+[SEG0032] person_1 (PATIENT): Doctor, is this dangerous?
+[SEG0033] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's stress-related symptoms, and we'll know more once the blood tests is back.
+[SEG0034] person_2 (DOCTOR): Let's book blood tests to look into stress-related symptoms.
+[SEG0035] person_1 (PATIENT): How long does that take?
+[SEG0036] person_2 (DOCTOR): talking to someone, even a counsellor, helps more than people expect avoid taking any extra painkillers on top of what I'm prescribing without checking with us let's get you seen by a counsellor, I'll arrange the letter
+[SEG0037] person_1 (PATIENT): Alright, thank you.
+[SEG0038] person_2 (DOCTOR): If the symptoms get worse, or you feel really unwell, please come to the emergency department. Let's review you in four weeks. Alright, look after yourself.
+[SEG0039] person_1 (PATIENT): I appreciate it, you know, doctor.
+
+JSON:

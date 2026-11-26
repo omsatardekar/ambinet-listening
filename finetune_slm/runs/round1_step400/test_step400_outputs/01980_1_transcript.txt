@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01980)
+[SEG0001] person_1 (DOCTOR): Hello, come in. Mind the step.
+[SEG0002] person_2 (PATIENT): hmm, afternoon, is this seat fine?
+[SEG0003] person_1 (DOCTOR): what do you need help with?
+[SEG0004] person_2 (PATIENT): yeah, it's painful periods i don't know what's causing it i've never really been one for hospitals
+[SEG0005] person_1 (DOCTOR): When was the first time you noticed it?
+[SEG0006] person_2 (PATIENT): For two weeks, I'd say.
+[SEG0007] person_1 (DOCTOR): How troublesome is it day to day?
+[SEG0008] person_2 (PATIENT): Ah, maybe a six out of ten on a bad day.
+[SEG0009] person_1 (DOCTOR): Any heavy bleeding, pain with sex or bleeding between periods?
+[SEG0010] person_2 (PATIENT): Mm, no heavy bleeding, pain with sex or bleeding between periods, none of it.
+[SEG0011] person_1 (DOCTOR): Is your chest okay generally?
+[SEG0012] person_2 (PATIENT): Breathing's normal.
+[SEG0013] person_1 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0014] person_2 (PATIENT): no, no conditions
+[SEG0015] person_1 (DOCTOR): Are you on any regular medication?
+[SEG0016] person_2 (PATIENT): No, nothing at the moment.
+[SEG0017] person_1 (DOCTOR): okay, any previous surgeries?
+[SEG0018] person_2 (PATIENT): Nothing, I haven't had any operations.
+[SEG0019] person_1 (DOCTOR): Is there anything relevant on the family side?
+[SEG0020] person_2 (PATIENT): My grandfather had a stroke.
+[SEG0021] person_1 (DOCTOR): Do you follow any particular diet?
+[SEG0022] person_2 (PATIENT): I'm vegetarian and have been for years.
+[SEG0023] person_1 (DOCTOR): how active are you?
+[SEG0024] person_2 (PATIENT): I hardly move around during the day.
+[SEG0025] person_1 (DOCTOR): have you got any known allergies?
+[SEG0026] person_2 (PATIENT): Oh, years back I got a rash from erythromycin, so I stay away from it now.
+[SEG0027] person_1 (DOCTOR): Let's start with the basic checks.
+[SEG0028] person_1 (DOCTOR): Bear with me while this finishes...
+[SEG0029] person_1 (DOCTOR): Okay: saturation 98 percent, temperature 36.6, height 152 centimetres, weight 97 kilos, pulse is 67 beats a minute, BP is 117 over 75.
+[SEG0030] person_2 (PATIENT): Is that normal?
+[SEG0031] person_1 (DOCTOR): I'll come back to the numbers.
+[SEG0032] person_1 (DOCTOR): Shall I start the examination?
+[SEG0033] person_2 (PATIENT): Of course.
+[SEG0034] person_1 (DOCTOR): Look straight ahead.
+[SEG0035] person_1 (DOCTOR): your tummy is soft and not tender between periods
+[SEG0036] person_1 (DOCTOR): right, good, you can sit up again okay, thinking it through, the most likely explanation is primary dysmenorrhoea
+[SEG0037] person_2 (PATIENT): Is this permanent?
+[SEG0038] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like primary dysmenorrhoea.
+[SEG0039] person_1 (DOCTOR): You'll be taking naproxen, 250 milligrams, three times a day with food, during periods. That should help with period pain. The pharmacy will go through the details again when you pick it up. Heat, gentle exercise, and and start the tablet at the first sign of pain. Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency. Let's plan a check in three months.
+[SEG0040] person_1 (DOCTOR): I think we're done unless you have questions.
+[SEG0041] person_2 (PATIENT): Right, I'll do that. Thank you, doctor.
+[SEG0042] person_1 (DOCTOR): Look after yourself.
+
+JSON:

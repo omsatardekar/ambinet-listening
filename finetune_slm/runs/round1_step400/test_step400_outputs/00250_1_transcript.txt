@@ -1,0 +1,70 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00250)
+[SEG0001] person_1 (NURSE): Doctor, I've brought them through. The observations are done, whenever you need them.
+[SEG0002] person_2 (DOCTOR): Alright, perfect, thanks. Hello there, so what's the trouble?
+[SEG0003] person_3 (CAREGIVER): Thank you for fitting us in, doctor.
+[SEG0004] person_2 (DOCTOR): That's fine, sit down. We'll go through it together.
+[SEG0005] person_3 (CAREGIVER): She's been having trouble hearing in my left ear, doctor.
+[SEG0006] person_2 (DOCTOR): Mm-hm. Alright, would you call it mild or bad?
+[SEG0007] person_4 (PATIENT): I'd give it a three, out of ten.
+[SEG0008] person_4 (PATIENT): I was just going to say that the main thing is—
+[SEG0009] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0010] person_2 (DOCTOR): Later, thanks. Please go on. Have you had a feeling of fullness in the ear?
+[SEG0011] person_4 (PATIENT): Yes, about the same, about a month.
+[SEG0012] person_2 (DOCTOR): Would you call it mild or bad?
+[SEG0013] person_4 (PATIENT): Pretty moderate, if I'm being honest. And there's a ringing noise as well, four weeks now.
+[SEG0014] person_2 (DOCTOR): What's the pattern, is it there all day?
+[SEG0015] person_4 (PATIENT): It's, um... not exactly... well, hard to explain, I mean—
+[SEG0016] person_2 (DOCTOR): Let me put it another way: how many times in a typical day or week?
+[SEG0017] person_4 (PATIENT): I'd say a few times a day.
+[SEG0018] person_2 (DOCTOR): A few quick ones: discharge or ear pain?
+[SEG0019] person_4 (PATIENT): No, uh, none of that at all.
+[SEG0020] person_2 (DOCTOR): Yes?
+[SEG0021] person_2 (DOCTOR): A few quick ones: dizziness or facial weakness?
+[SEG0022] person_4 (PATIENT): None, as far as I know.
+[SEG0023] person_2 (DOCTOR): Has there been any headache?
+[SEG0024] person_4 (PATIENT): No headache, thankfully.
+[SEG0025] person_3 (CAREGIVER): Actually, doctor, I did notice headache. She doesn't always say.
+[SEG0026] person_4 (PATIENT): No, I don't think I did. Maybe a little, I'm not sure.
+[SEG0027] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. How's your breathing otherwise?
+[SEG0028] person_4 (PATIENT): No, nothing there.
+[SEG0029] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0030] person_4 (PATIENT): No, that's all fine.
+[SEG0031] person_2 (DOCTOR): Any previous surgeries?
+[SEG0032] person_4 (PATIENT): No operations, no.
+[SEG0033] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0034] person_4 (PATIENT): I stopped smoking about two years back. I gave up drinking about three years ago. I work night shifts at a warehouse. I try to avoid too much sugar.
+[SEG0035] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0036] person_4 (PATIENT): No, no allergies to anything.
+[SEG0037] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0038] person_4 (PATIENT): I have high blood pressure, for nearly five years. Diabetes, for nearly five years. Yes, COPD.
+[SEG0039] person_2 (DOCTOR): And then?
+[SEG0040] person_2 (DOCTOR): Right, so diabetes and COPD are already on your record. We'll keep that in mind today. Anyone in the family with similar problems or other conditions?
+[SEG0041] person_4 (PATIENT): My mother has migraines. My brother has asthma.
+[SEG0042] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0043] person_4 (PATIENT): It's a... um, I can't remember what it's called. It's a small white one.
+[SEG0044] person_2 (DOCTOR): Do you remember what it's for?
+[SEG0045] person_4 (PATIENT): For my pressure, I believe. My husband sets them out for me, I just take what I'm given. Glimepiride. I take it 2 milligrams, before breakfast for my sugar. Tiotropium inhaler. I take it once a day. Metformin I don't take anymore.
+[SEG0046] person_1 (NURSE): Here are the numbers, doctor. Temperature is 36.9 degrees, saturation 99 percent, pulse 80, BP is 108 over 77, weight 70 kilos, height 150 centimetres, BMI works out to 31.1.
+[SEG0047] person_2 (DOCTOR): Okay, noted.
+[SEG0048] person_2 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0049] person_2 (DOCTOR): Almost done with this part.
+[SEG0050] person_2 (DOCTOR): There's a lot of wax in the left ear canal, I can't see the drum.
+[SEG0051] person_2 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0052] person_2 (DOCTOR): The right ear canal and drum are normal.
+[SEG0053] person_2 (DOCTOR): That's all I need, thank you. So, based on the history and the examination, I don't have a clear answer today: hearing loss from wax is possible, and so is an inner ear problem. Let's get a hearing test, for hearing loss. The treatment will be ear drops, three times a day, for five days. That's for wax softening. Please don't use cotton buds or ear candles, they push the wax in further.
+[SEG0054] person_2 (DOCTOR): Avoid taking any extra painkillers on top of what I'm prescribing without checking with us. One warning sign to remember: the symptoms get worse. In that case don't wait. Let's review you in a week. Right, that's all. Go gently.
+[SEG0055] person_4 (PATIENT): Alright, thanks. Bye for now.
+
+JSON:

@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20090)
+[SEG0001] person_1 (PATIENT): Good evening, doctor, thanks for seeing me.
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): Mainly loud snoring. There's a couple of other things, but that's the main one. I did try to ignore it for a while.
+[SEG0004] person_2 (DOCTOR): Has this been going on for long?
+[SEG0005] person_1 (PATIENT): It's been three weeks, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): Does anything set it off?
+[SEG0007] person_1 (PATIENT): It's worse with lying on my back.
+[SEG0008] person_2 (DOCTOR): What operations have you had, if any?
+[SEG0009] person_1 (PATIENT): Just two stents put in my heart, three years ago.
+[SEG0010] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0011] person_1 (PATIENT): I've had heart disease, yes.
+[SEG0012] person_2 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0013] person_1 (PATIENT): My cousin has psoriasis.
+[SEG0014] person_2 (DOCTOR): Alright, tell me your medicines, please.
+[SEG0015] person_1 (PATIENT): Aspirin, 75 milligrams, once a day for my heart.
+[SEG0016] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0017] person_1 (PATIENT): I used to drink heavily but I stopped four years ago. I walk the dog every morning. I live with my elderly mother. I look after my grandchildren most days.
+[SEG0018] person_2 (DOCTOR): Have you noticed falling asleep while driving, choking at night or chest pain?
+[SEG0019] person_1 (PATIENT): No, no falling asleep while driving, choking at night or chest pain.
+[SEG0020] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0021] person_1 (PATIENT): Skin's normal.
+[SEG0022] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0023] person_1 (PATIENT): No, that's been fine.
+[SEG0024] person_2 (DOCTOR): Let me get the readings out of the way.
+[SEG0025] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0026] person_2 (DOCTOR): Okay: respiratory rate 17, saturation 99 percent, heart rate 73. And temperature is 36.6 degrees, pressure 151 over 99.
+[SEG0027] person_2 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0028] person_2 (DOCTOR): Look straight ahead.
+[SEG0029] person_2 (DOCTOR): Your neck is thick and the back of the throat looks crowded.
+[SEG0030] person_2 (DOCTOR): Okay, that's enough for me.
+[SEG0031] person_2 (DOCTOR): So where does that leave us? It points towards symptoms that suggest obstructive sleep apnoea. Let's book a thyroid test to look into tiredness.
+[SEG0032] person_3 (CLINICAL_STAFF): I can book that for Tuesday at 10 am.
+[SEG0033] person_1 (PATIENT): Okay, I'll be there.
+[SEG0034] person_2 (DOCTOR): Try to sleep on your side and avoid alcohol close to bedtime. We'll refer you to the sleep clinic. Come back in six weeks. That's everything on my side. Anything you're unsure about?
+[SEG0035] person_1 (PATIENT): Good, uh, thanks, I'll see you then.
+[SEG0036] person_2 (DOCTOR): See you soon.
+
+JSON:

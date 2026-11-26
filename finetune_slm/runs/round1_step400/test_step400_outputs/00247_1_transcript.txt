@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00247)
+[SEG0001] person_1 (NURSE): Okay, doctor, we're all set in here. I'll give you the numbers when you want them.
+[SEG0002] person_2 (DOCTOR): right, good, thank you. Welcome, tell me what's brought you in
+[SEG0003] person_3 (PATIENT): I wanted to to get a ring-shaped itchy patch looked at.
+[SEG0004] person_2 (DOCTOR): and when did that start?
+[SEG0005] person_3 (PATIENT): For three days, I'd say.
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_3 (PATIENT): uh, um, it sort of comes and goes. I'd call it moderate. Sweating definitely sets it off. I kept putting it off, which I know isn't sensible
+[SEG0008] person_2 (DOCTOR): Any scaly, peeling skin as well?
+[SEG0009] person_3 (PATIENT): Yes, actually.
+[SEG0010] person_2 (DOCTOR): have you had a ring-shaped itchy patch before, or is this the first time?
+[SEG0011] person_3 (PATIENT): A bit, last winter. It settled by itself back then.
+[SEG0012] person_2 (DOCTOR): Let me check a a few things. Any fever, pain, pus or similar rash on the scalp?
+[SEG0013] person_3 (PATIENT): No, no fever, pain, pus or similar rash on the scalp.
+[SEG0014] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0015] person_3 (PATIENT): Nothing else aches.
+[SEG0016] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0017] person_3 (PATIENT): My heart's been fine, uh, as far as I know.
+[SEG0018] person_2 (DOCTOR): Have you had to have anything operated on?
+[SEG0019] person_3 (PATIENT): Just a knee arthroscopy, three years ago.
+[SEG0020] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0021] person_3 (PATIENT): Oh, yes, pollen, it gives me sneezing.
+[SEG0022] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0023] person_3 (PATIENT): Diabetes, for about ten years. I've had acid reflux for five years now.
+[SEG0024] person_2 (DOCTOR): Okay, I can see acid reflux in your file as well. What's your current medication list?
+[SEG0025] person_3 (PATIENT): Glimepiride, 2 milligrams, before breakfast. I'm on omeprazole, 20 milligrams, once a day.
+[SEG0026] person_2 (DOCTOR): So, is anyone at home with you?
+[SEG0027] person_3 (PATIENT): I share a flat with two friends.
+[SEG0028] person_2 (DOCTOR): what's your diet like?
+[SEG0029] person_3 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0030] person_2 (DOCTOR): What do you do to keep active?
+[SEG0031] person_3 (PATIENT): I cycle to work most mornings
+[SEG0032] person_1 (NURSE): Here are the numbers, doctor. Respiratory rate 15, pulse is 85 beats a minute, BP is 110 over 68, temperature is 36.9 degrees.
+[SEG0033] person_2 (DOCTOR): Good, thank you.
+[SEG0034] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0035] person_3 (PATIENT): Yes, doctor.
+[SEG0036] person_2 (DOCTOR): Let me just check something.
+[SEG0037] person_2 (DOCTOR): There's a red ring-shaped scaly patch with a clearer centre in the groin crease.
+[SEG0038] person_2 (DOCTOR): Okay, you can sit up. So So where does that leave us? It points towards a fungal skin infection. Keep the area dry, wear loose cotton, and don't share towels. Look after yourself.
+[SEG0039] person_3 (PATIENT): Hmm, um, that's everything I wanted to ask. Thank you.
+
+JSON:

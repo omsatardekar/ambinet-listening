@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00367)
+[SEG0001] person_1 (DOCTOR): Hello again. Come on in.
+[SEG0002] person_2 (PATIENT): Hello. Is it okay if I sit here?
+[SEG0003] person_1 (DOCTOR): Go ahead, tell me what's happening.
+[SEG0004] person_2 (PATIENT): I wanted to get headaches in the mornings looked at.
+[SEG0005] person_1 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0006] person_2 (PATIENT): Losartan. I take it once a day.
+[SEG0007] person_1 (DOCTOR): How much do you take?
+[SEG0008] person_2 (PATIENT): 50 milligrams, I think that's what's on the box.
+[SEG0009] person_1 (DOCTOR): How far back does it go?
+[SEG0010] person_2 (PATIENT): For about three months, I'd say.
+[SEG0011] person_1 (DOCTOR): Does it come along with anything else?
+[SEG0012] person_2 (PATIENT): Occasional dizziness goes along with it, most of the time. The occasional dizziness? That's been for about three months. About occasional dizziness, it's moderate, honestly. I'd say all the time.
+[SEG0013] person_1 (DOCTOR): Have you noticed breathlessness, chest pain or weakness?
+[SEG0014] person_2 (PATIENT): No breathlessness, chest pain or weakness, none of it.
+[SEG0015] person_1 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0016] person_2 (PATIENT): No rashes.
+[SEG0017] person_1 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0018] person_2 (PATIENT): No, nothing there.
+[SEG0019] person_1 (DOCTOR): Any drug or food allergies?
+[SEG0020] person_2 (PATIENT): Yes, pollen.
+[SEG0021] person_1 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0022] person_2 (PATIENT): I've had high blood pressure for nearly five years now.
+[SEG0023] person_1 (DOCTOR): Right, so high blood pressure is already on your record. We'll keep that in mind today.
+[SEG0024] person_1 (DOCTOR): How do you eat, generally?
+[SEG0025] person_2 (PATIENT): I skip breakfast most days.
+[SEG0026] person_1 (DOCTOR): Any sport or activity?
+[SEG0027] person_2 (PATIENT): I play badminton on Sundays.
+[SEG0028] person_1 (DOCTOR): Is anyone at home with you?
+[SEG0029] person_2 (PATIENT): I share a flat with two friends.
+[SEG0030] person_1 (DOCTOR): Let me check your vitals now.
+[SEG0031] person_1 (DOCTOR): Okay, give me a moment...
+[SEG0032] person_1 (DOCTOR): Okay: height 183 centimetres, BMI works out to 23.9, temp 36.9 degrees, BP is 172 over 98, saturation 97 percent, respiratory rate 17, pulse is 86 beats a minute, weight 80 kilos.
+[SEG0033] person_1 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0034] person_2 (PATIENT): Alright.
+[SEG0035] person_1 (DOCTOR): Take your time, no rush.
+[SEG0036] person_1 (DOCTOR): There's mild pitting swelling at both ankles.
+[SEG0037] person_1 (DOCTOR): Thanks for that.
+[SEG0038] person_1 (DOCTOR): Putting it all together, this looks most like hypertension that isn't well controlled. Salt is the big one, try to keep it low even though it's hard. Do get help quickly if the symptoms get worse. Do you have any questions?
+[SEG0039] person_2 (PATIENT): No, I think that's everything. Thank you, doctor.
+[SEG0040] person_1 (DOCTOR): All the best.
+
+JSON:

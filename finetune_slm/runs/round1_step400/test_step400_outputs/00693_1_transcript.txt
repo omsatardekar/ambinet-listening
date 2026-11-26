@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00693)
+[SEG0001] person_2 (DOCTOR): Good morning, Mr Iyer. Terrible rain today. Did you manage to park? ~
+[SEG0002] person_1 (PATIENT): Good morning, doctor. Yes, thank you, third floor of the car park, very inconvenient, but I managed. ~
+[SEG0003] person_2 (DOCTOR): Always the third floor. So, the knee. Tell me from the beginning. ~
+[SEG0004] person_1 (PATIENT): Certainly. My right knee locks, sometimes it gets stuck and I cannot straighten it. This has been going on for two months.
+[SEG0005] person_2 (DOCTOR): Locks how, stuck bent?
+[SEG0006] person_1 (PATIENT): Yes, bent, about thirty degrees I think. Then I wiggle it and it clicks free.
+[SEG0007] person_2 (DOCTOR): Interesting. And does it also let you down?
+[SEG0008] person_1 (PATIENT): Yes, giving way. On the stairs mostly, going down. Last week I nearly fell at the office.
+[SEG0009] person_2 (DOCTOR): Any swelling?
+[SEG0010] person_1 (PATIENT): After badminton on Sundays, it swells up like a small football.
+[SEG0011] person_2 (DOCTOR): And pain on the stairs?
+[SEG0012] person_1 (PATIENT): Pain, yes, on the inside of the knee when I climb the stairs.
+[SEG0013] person_2 (DOCTOR): Did you fall or twist it?
+[SEG0014] person_1 (PATIENT): No fall, no twisting that I recall.
+[SEG0015] person_2 (DOCTOR): Any redness or heat over the knee?
+[SEG0016] person_1 (PATIENT): No redness, no heat.
+[SEG0017] person_2 (DOCTOR): Fever?
+[SEG0018] person_1 (PATIENT): No fever, doctor.
+[SEG0019] person_2 (DOCTOR): Let's go through your tablets.
+[SEG0020] person_1 (PATIENT): Metformin, 500 mg, twice a day, every day, I take it regularly. Well, mostly. I sometimes miss the evening one if I come home late.
+[SEG0021] person_1 (PATIENT): Amlodipine, 5 mg, once a day. And diclofenac, maybe 50 mg? When the knee is bad. I will check the packet.
+[SEG0022] person_2 (DOCTOR): Thank you. Any allergies to medicines?
+[SEG0023] person_1 (PATIENT): No allergies, none that I know of.
+[SEG0024] person_2 (DOCTOR): And your other health conditions?
+[SEG0025] person_1 (PATIENT): Type 2 diabetes, high blood pressure, and some osteoarthritis in the other knee.
+[SEG0026] person_2 (DOCTOR): Any previous operations?
+[SEG0027] person_1 (PATIENT): My appendix as a teenager, and a hernia repair in 2015.
+[SEG0028] person_2 (DOCTOR): Diabetes in the family?
+[SEG0029] person_1 (PATIENT): My mother had diabetes.
+[SEG0030] person_2 (DOCTOR): What do you do for work?
+[SEG0031] person_1 (PATIENT): I am a bank manager, so much sitting.
+[SEG0032] person_2 (DOCTOR): Do you drink?
+[SEG0033] person_1 (PATIENT): I don't drink any alcohol.
+[SEG0034] person_2 (DOCTOR): And badminton, how often?
+[SEG0035] person_1 (PATIENT): Every Sunday morning with my son. I would hate to give it up.
+[SEG0036] person_2 (DOCTOR): Right, let me see the knee. Pulse 78, blood pressure 130 over 82, temperature 36.6, oxygen 98 percent, breathing 16, and weight 80 kilos.
+[SEG0037] person_1 (PATIENT): A little high, the pressure? ~
+[SEG0038] person_2 (DOCTOR): A touch, nothing alarming. Lie back, please. I'm going to bend the knee.
+[SEG0039] person_1 (PATIENT): Ah, that is the sore spot. ~
+[SEG0040] person_2 (DOCTOR): There's tenderness along the inner joint line, and I can feel a click when I bend and rotate it.
+[SEG0041] person_1 (PATIENT): Is that the lock? ~
+[SEG0042] person_2 (DOCTOR): Possibly. Any trouble with your breathing, chest, anything like that?
+[SEG0043] person_1 (PATIENT): No, nothing at all.
+[SEG0044] person_2 (DOCTOR): My impression is a torn meniscus, the cartilage in the knee, but the scan will tell.
+[SEG0045] person_1 (PATIENT): Will I need surgery? ~
+[SEG0046] person_2 (DOCTOR): Maybe not. I'd like to arrange an MRI of the knee, and an X-ray of the knee as well.
+[SEG0047] person_1 (PATIENT): And how soon? ~
+[SEG0048] person_2 (DOCTOR): The MRI is a few weeks. I'd also like to do a blood test for your HbA1c, since the sugar affects healing.
+[SEG0049] person_1 (PATIENT): And is badminton allowed? ~
+[SEG0050] person_2 (DOCTOR): I'd rest it until the scan. Also, let's get a physiotherapist to see you.
+[SEG0051] person_1 (PATIENT): Very well. ~
+[SEG0052] person_2 (DOCTOR): If it locks again before the scan, come back sooner and we'll see you urgently.
+[SEG0053] person_1 (PATIENT): Yes, understood, thank you, doctor. ~
+
+JSON:

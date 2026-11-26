@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03531)
+[SEG0001] person_1 (PATIENT): Good afternoon, doctor.
+[SEG0002] person_2 (DOCTOR): You're alright, take a seat. What can I do for you?
+[SEG0003] person_3 (FAMILY_MEMBER): Good morning, uh, doctor. I came along to help out.
+[SEG0004] person_2 (DOCTOR): Please do. Extra information is always welcome.
+[SEG0005] person_1 (PATIENT): I wanted to get tingling in my feet looked at.
+[SEG0006] person_2 (DOCTOR): When was the first time you noticed it?
+[SEG0007] person_1 (PATIENT): I, I'd say three weeks, maybe
+[SEG0008] person_3 (FAMILY_MEMBER): it was closer to a month, doctor
+[SEG0009] person_2 (DOCTOR): okay, so roughly three to four weeks is that right?
+[SEG0010] person_1 (PATIENT): I suppose so, yes.
+[SEG0011] person_2 (DOCTOR): Alright, tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0012] person_1 (PATIENT): I'd say severe. I'd say once or twice a day.
+[SEG0013] person_2 (DOCTOR): Have you been feeling tired?
+[SEG0014] person_1 (PATIENT): Yes, for about three months.
+[SEG0015] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0016] person_2 (DOCTOR): Alright, keep your arm relaxed for me...
+[SEG0017] person_2 (DOCTOR): okay: temperature 36.6, respiratory rate 14, pulse 73, SpO2 97 percent on room air, BP is 124 over 80.
+[SEG0018] person_2 (DOCTOR): Let's move on to the examination.
+[SEG0019] person_2 (DOCTOR): Breathe out slowly.
+[SEG0020] person_2 (DOCTOR): The feeling in your feet is reduced and your balance with the eyes closed is poor.
+[SEG0021] person_2 (DOCTOR): Good, you can sit up again. Have you noticed bladder problems, diarrhoea, back pain or weight loss?
+[SEG0022] person_1 (PATIENT): no bladder problems, diarrhoea, back pain or weight loss, none of it
+[SEG0023] person_2 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0024] person_1 (PATIENT): Bowels are regular, nothing odd.
+[SEG0025] person_2 (DOCTOR): Has your skin been okay?
+[SEG0026] person_1 (PATIENT): Sorry, what was I saying, no, skin's been fine.
+[SEG0027] person_2 (DOCTOR): Any previous surgeries?
+[SEG0028] person_1 (PATIENT): so, no, I've never been operated on
+[SEG0029] person_2 (DOCTOR): What about your medical history?
+[SEG0030] person_1 (PATIENT): I've had depression, yes.
+[SEG0031] person_2 (DOCTOR): Right, so depression is already on your record. We'll keep that in mind today. So, is there any regular medication you use?
+[SEG0032] person_1 (PATIENT): no, nothing at the moment
+[SEG0033] person_2 (DOCTOR): let's talk a little about your daily life and habits
+[SEG0034] person_1 (PATIENT): I've never touched a cigarette. No, I share a house with my brother. I'm a hairdresser, on my feet all day. I'm vegetarian and have been for years.
+[SEG0035] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0036] person_1 (PATIENT): no, not that I know of
+[SEG0037] person_2 (DOCTOR): I want an HbA1c done, that's for neuropathy
+[SEG0038] person_1 (PATIENT): Right, should I have a a coeliac blood test as well?
+[SEG0039] person_2 (DOCTOR): Not right now, it it wouldn't change what we do today. Have I covered everything you wanted?
+[SEG0040] person_1 (PATIENT): That's clear, thanks.
+
+JSON:

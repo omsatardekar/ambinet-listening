@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03546)
+[SEG0001] person_1 (NURSE): Okay, doctor, we're all set in here. I'll give you the numbers when you want them.
+[SEG0002] person_2 (DOCTOR): Perfect, thanks. Hello there, so what's the trouble?
+[SEG0003] person_3 (PATIENT): Doctor, it's a tremor. It's getting on my nerves now. I've never really been one for hospitals.
+[SEG0004] person_2 (DOCTOR): Since when exactly?
+[SEG0005] person_3 (PATIENT): It's been like this since Monday. I've been reading about it online and it worried me.
+[SEG0006] person_2 (DOCTOR): Rate it for me, mild, moderate or severe?
+[SEG0007] person_3 (PATIENT): I'd give it a four, out of ten. And, And loose stools, too. And I've been sweating as well, for about a month. With sweating, it feels moderate to me. I'd been feeling agitated, but that went away.
+[SEG0008] person_2 (DOCTOR): Alright, and seizure, any of that?
+[SEG0009] person_3 (PATIENT): No, none, no seizure.
+[SEG0010] person_2 (DOCTOR): Have you had any confusion, high fever or stiffness?
+[SEG0011] person_3 (PATIENT): No confusion, high fever or stiffness, none of it.
+[SEG0012] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0013] person_3 (PATIENT): Skin's normal.
+[SEG0014] person_2 (DOCTOR): Anything unusual with passing urine?
+[SEG0015] person_3 (PATIENT): Mm, no, that's all fine.
+[SEG0016] person_2 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0017] person_3 (PATIENT): Depression, for two years. Yeah, I've had arthritis in my knees for two years now. Yes, acid reflux. I've been putting this off for weeks.
+[SEG0018] person_2 (DOCTOR): And besides that?
+[SEG0019] person_2 (DOCTOR): Right, yes, depression and acid reflux are known to us, good to have that clear. Let's run through your medicines.
+[SEG0020] person_3 (PATIENT): Diclofenac, 50 milligrams, when needed.
+[SEG0021] person_1 (NURSE): Doctor, our chart from the last visit lists it as 100 milligrams.
+[SEG0022] person_2 (DOCTOR): Okay. Have you got the newest prescription or the box with you?
+[SEG0023] person_3 (PATIENT): Actually, uh, not with me. I'll bring it next time.
+[SEG0024] person_2 (DOCTOR): So, now some background about your lifestyle.
+[SEG0025] person_3 (PATIENT): I'll have a glass of wine with dinner. No, I've never smoked in my life. I look after my grandchildren most days. No, I share a house with my brother. I drink a lot of tea and snack through the day.
+[SEG0026] person_2 (DOCTOR): Does your family have any medical conditions?
+[SEG0027] person_3 (PATIENT): My brother has epilepsy.
+[SEG0028] person_1 (NURSE): Here are the numbers, doctor. Height 151 centimetres, weight 82 kilos, temperature 36.9, pulse is 113 beats a minute, SpO2 97 percent on room air, BP is 138 over 78.
+[SEG0029] person_2 (DOCTOR): Okay, noted.
+[SEG0030] person_2 (DOCTOR): Alright, over here please and I'll take a look.
+[SEG0031] person_3 (PATIENT): Yeah, you know, no problem.
+[SEG0032] person_2 (DOCTOR): Stay as you are for a moment.
+[SEG0033] person_2 (DOCTOR): You have brisk reflexes and jerking of the ankles, and your pupils are large.
+[SEG0034] person_2 (DOCTOR): That's the examination finished.
+[SEG0035] person_2 (DOCTOR): Okay, so my impression is this: It points towards mild serotonin syndrome from combining medicines. I can't rule out anxiety yet.
+[SEG0036] person_2 (DOCTOR): I think blood tests makes sense here, for agitation and clonus. That will help us see what's going on underneath and decide the next step. We will stop the migraine tablet and watch you for several hours. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0037] person_3 (PATIENT): That's fine by me.
+[SEG0038] person_2 (DOCTOR): I'll want another look in one day. Right, that's the plan. Do you want to ask me anything?
+[SEG0039] person_3 (PATIENT): Okay, um, that makes sense. Thanks for explaining.
+
+JSON:

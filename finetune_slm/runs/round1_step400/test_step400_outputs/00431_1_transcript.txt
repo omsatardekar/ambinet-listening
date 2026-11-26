@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00431)
+[SEG0001] person_1 (PATIENT): Hi doctor, sorry, the lift was out and I had to take the stairs.
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_1 (PATIENT): Hmm, so the thing is, I've got constant thirst.
+[SEG0004] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0005] person_1 (PATIENT): Glimepiride, 2 milligrams, before breakfast for my sugar. It's losartan, 50 milligrams, once a day.
+[SEG0006] person_2 (DOCTOR): Mm-hm.
+[SEG0007] person_1 (PATIENT): Metformin I don't take anymore.
+[SEG0008] person_2 (DOCTOR): Roughly when did it start?
+[SEG0009] person_1 (PATIENT): Hm. It was either the end of last month or earlier than that. I couldn't tell you the date.
+[SEG0010] person_2 (DOCTOR): How bad is it, would you say?
+[SEG0011] person_1 (PATIENT): Moderate, really. I've been passing urine a lot too, for about a year. As for passing urine a lot, a seven out of ten, I suppose.
+[SEG0012] person_2 (DOCTOR): A few quick ones: foot sores or weight loss?
+[SEG0013] person_1 (PATIENT): None, as far as I know.
+[SEG0014] person_2 (DOCTOR): Have you noticed vomiting or fever?
+[SEG0015] person_1 (PATIENT): No, nothing there.
+[SEG0016] person_2 (DOCTOR): How's your breathing otherwise?
+[SEG0017] person_1 (PATIENT): No, my breathing's been fine.
+[SEG0018] person_2 (DOCTOR): What kind of work do you do?
+[SEG0019] person_1 (PATIENT): I work on a farm, it's quite physical.
+[SEG0020] person_2 (DOCTOR): Do you live alone?
+[SEG0021] person_1 (PATIENT): Yes, I live on my own.
+[SEG0022] person_2 (DOCTOR): How about exercise?
+[SEG0023] person_1 (PATIENT): Not really, I don't get much exercise.
+[SEG0024] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0025] person_1 (PATIENT): I have diabetes.
+[SEG0026] person_2 (DOCTOR): And then?
+[SEG0027] person_1 (PATIENT): Yes, high blood pressure.
+[SEG0028] person_2 (DOCTOR): Have you ever been under the knife?
+[SEG0029] person_1 (PATIENT): Yes, I had my gallbladder removed, in 2016. I did try to ignore it for a while.
+[SEG0030] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0031] person_1 (PATIENT): No allergies.
+[SEG0032] person_2 (DOCTOR): I'll take a few measurements first.
+[SEG0033] person_2 (DOCTOR): Almost there...
+[SEG0034] person_2 (DOCTOR): Okay: height 177 centimetres, saturation 98 percent. And respiratory rate 15, temp 36.5 degrees, BMI works out to 30.6, weight 96 kilos, pressure 144 over 98, heart rate 74.
+[SEG0035] person_1 (PATIENT): Is that normal?
+[SEG0036] person_2 (DOCTOR): Don't worry, I'll go through it in a moment.
+[SEG0037] person_2 (DOCTOR): Shall we do the examination?
+[SEG0038] person_1 (PATIENT): Mm, okay.
+[SEG0039] person_2 (DOCTOR): Let me look at this properly.
+[SEG0040] person_2 (DOCTOR): Your feet look fine, no ulcers or sores, and the pulses are palpable.
+[SEG0041] person_2 (DOCTOR): So, thanks, please take a seat again. So where does that leave us? It points towards diabetes that isn't well controlled. It could also be a medication issue, so we'll keep that open.
+[SEG0042] person_1 (PATIENT): Doctor, is this dangerous?
+[SEG0043] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's diabetes that isn't well controlled, and we'll know more once the an HbA1c is back. Let me repeat that back to make sure. You've had constant thirst, moderate, and no fever or weight loss.
+[SEG0044] person_1 (PATIENT): That's it, yes.
+[SEG0045] person_2 (DOCTOR): I'd like to arrange an HbA1c for diabetes control. I'd rather check than guess, and this is the quickest way to know more. Let's book kidney function tests to look into diabetes.
+[SEG0046] person_1 (PATIENT): Okay, uh, that's fine.
+[SEG0047] person_2 (DOCTOR): A urine protein test is what I'd like next, for diabetes. Cut back on sweets, sugary drinks and white rice, and keep to regular meal times. Check your feet every day, and never walk barefoot. Right, that's all. Go gently.
+[SEG0048] person_1 (PATIENT): One thing: no, actually that's all. Thanks.
+
+JSON:

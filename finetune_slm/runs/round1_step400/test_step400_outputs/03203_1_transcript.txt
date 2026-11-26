@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03203)
+[SEG0001] person_1 (PATIENT): Hello, doctor. May I come in?
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): I'm here because of a red sore wound after my operation.
+[SEG0004] person_2 (DOCTOR): Has this been going on for long?
+[SEG0005] person_1 (PATIENT): It's been ten days, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): Rate it for me, mild, moderate or severe?
+[SEG0007] person_1 (PATIENT): I'd say moderate.
+[SEG0008] person_2 (DOCTOR): So, have you had a temperature?
+[SEG0009] person_1 (PATIENT): Yeah. About three months, I'd say. With temperature, I'd say severe. And pain around the wound as well, since last weekend.
+[SEG0010] person_2 (DOCTOR): tell me a bit more about it: how bad it gets, how often, and whether anything makes it it better or worse
+[SEG0011] person_1 (PATIENT): I'd give it a five, out of ten. It sort of comes and goes.
+[SEG0012] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0013] person_1 (PATIENT): Acid reflux, for five years.
+[SEG0014] person_2 (DOCTOR): mm-hmm what's on your current medicine list?
+[SEG0015] person_1 (PATIENT): Omeprazole. I take it it once a day for the reflux.
+[SEG0016] person_2 (DOCTOR): do you know the dose?
+[SEG0017] person_1 (PATIENT): It's 20 milligrams. I take paracetamol, 1 gram, when needed.
+[SEG0018] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0019] person_1 (PATIENT): No, I've never smoked in my life. I drink a lot of tea and snack through the day. Yes, I work in a bakery, early starts. I swim twice a week.
+[SEG0020] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0021] person_1 (PATIENT): Cat fur. I come out in... well, wheezing.
+[SEG0022] person_2 (DOCTOR): Any sign of breathlessness?
+[SEG0023] person_1 (PATIENT): Nope, no breathlessness.
+[SEG0024] person_2 (DOCTOR): A few quick ones: calf pain, vomiting or chest pain?
+[SEG0025] person_1 (PATIENT): Well, I haven't had calf pain, vomiting or chest pain, no.
+[SEG0026] person_2 (DOCTOR): Anything unusual with passing urine?
+[SEG0027] person_1 (PATIENT): Nothing there, no.
+[SEG0028] person_2 (DOCTOR): Any pins and and needles or loss of strength anywhere?
+[SEG0029] person_1 (PATIENT): Nothing odd there.
+[SEG0030] person_2 (DOCTOR): Can I check a few measurements before we carry on?
+[SEG0031] person_2 (DOCTOR): Keep your arm relaxed for me...
+[SEG0032] person_2 (DOCTOR): Okay: pulse is 106 beats a minute, temperature 38.5, pressure 117 over 69, oxygen saturation is 97 percent, respiratory rate 18.
+[SEG0033] person_2 (DOCTOR): right, let's have a proper look at you
+[SEG0034] person_2 (DOCTOR): take a deep breath for me
+[SEG0035] person_2 (DOCTOR): The lower part of the wound is red, hot and weeping pus, and the edges have not come together.
+[SEG0036] person_2 (DOCTOR): That's the examination finished. Having listened and examined, this is probably a surgical wound infection. We shouldn't forget a stitch abscess.
+[SEG0037] person_1 (PATIENT): Will it clear up?
+[SEG0038] person_2 (DOCTOR): it's reasonable to be concerned, but right now a surgical wound infection is my leading thought, not anything worse i'll request a wound swab, it'll help with wound infection i'm sending you for blood tests cos of wound infection i'd like you to take flucloxacillin, 500 milligrams, four times a day, seven days you take it by mouth it's for wound infection
+[SEG0039] person_1 (PATIENT): Oh, can I collect it from my own pharmacy?
+[SEG0040] person_2 (DOCTOR): Keep it clean and dry and use fresh dressings daily. One warning sign to remember: the symptoms get worse. In that case don't wait.
+[SEG0041] person_1 (PATIENT): that's fine by me
+[SEG0042] person_2 (DOCTOR): come back in two days
+[SEG0043] person_1 (PATIENT): right
+[SEG0044] person_2 (DOCTOR): That's all from me. Any questions?
+[SEG0045] person_1 (PATIENT): That's clear, thanks.
+
+JSON:

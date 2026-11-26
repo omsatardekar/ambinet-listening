@@ -1,0 +1,73 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00270)
+[SEG0001] person_1 (PATIENT): So, hi doctor, sorry, the lift was out and I had to take the stairs.
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_3 (FAMILY_MEMBER): Hello, doctor. I hope it's alright if I stay in for this. Doctor, you know, it's tiny spots between my fingers. That's what we're worried about.
+[SEG0004] person_2 (DOCTOR): Roughly when did it start?
+[SEG0005] person_1 (PATIENT): Right, uh, around three days, I think.
+[SEG0006] person_3 (FAMILY_MEMBER): Yeah, hm, I'd say more like five days.
+[SEG0007] person_2 (DOCTOR): Okay, so roughly three to five days. Is that right?
+[SEG0008] person_1 (PATIENT): Yeah, roughly.
+[SEG0009] person_2 (DOCTOR): Is it mild, moderate or severe?
+[SEG0010] person_1 (PATIENT): It feels mild to me. There's trouble sleeping because of it as well.
+[SEG0011] person_2 (DOCTOR): Is it mild, moderate or severe?
+[SEG0012] person_1 (PATIENT): About a five out of ten.
+[SEG0013] person_2 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0014] person_1 (PATIENT): Well, my brother has asthma. My sister has thyroid problems.
+[SEG0015] person_2 (DOCTOR): Do you have a job?
+[SEG0016] person_1 (PATIENT): I'm a self-employed electrician.
+[SEG0017] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0018] person_1 (PATIENT): No operations, no.
+[SEG0019] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0020] person_1 (PATIENT): I've never been told I have allergies.
+[SEG0021] person_3 (FAMILY_MEMBER): Hold on, um, doctor, I think he reacted to sulfa drugs once. I'm not certain, though.
+[SEG0022] person_1 (PATIENT): Uh, maybe, but I don't recall it.
+[SEG0023] person_2 (DOCTOR): Fair enough, I'll write down both versions.
+[SEG0024] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0025] person_1 (PATIENT): Hydrocortisone cream. I take it when needed for the eczema.
+[SEG0026] person_2 (DOCTOR): Okay.
+[SEG0027] person_1 (PATIENT): Escitalopram, 10 milligrams, once a day for the anxiety. I'm on paracetamol, when needed.
+[SEG0028] person_2 (DOCTOR): And what strength is that?
+[SEG0029] person_1 (PATIENT): 650 milligrams, I think that's what's on the box. I'm on cetirizine, 10 milligrams, at night.
+[SEG0030] person_2 (DOCTOR): Roughly how long on that one?
+[SEG0031] person_1 (PATIENT): Nearly five years now.
+[SEG0032] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0033] person_1 (PATIENT): Eczema, for nearly five years.
+[SEG0034] person_2 (DOCTOR): And apart from that?
+[SEG0035] person_1 (PATIENT): I have anxiety, for nearly five years.
+[SEG0036] person_2 (DOCTOR): And apart from that?
+[SEG0037] person_1 (PATIENT): I have arthritis in my knees.
+[SEG0038] person_2 (DOCTOR): Yes, arthritis in your knees is known to us, good to have that clear. And what about fever or itching in other family members?
+[SEG0039] person_1 (PATIENT): Okay, uh, so no, no fever, no itching in other family members. I did have a rash that started in the finger webs at one point, but that went away on its own.
+[SEG0040] person_2 (DOCTOR): Any rash on the face or pus at all?
+[SEG0041] person_1 (PATIENT): No. None of those.
+[SEG0042] person_2 (DOCTOR): Did you notice any joint pain?
+[SEG0043] person_1 (PATIENT): Not at all, no joint pain.
+[SEG0044] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0045] person_1 (PATIENT): Breathing's normal.
+[SEG0046] person_2 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0047] person_1 (PATIENT): I move fine otherwise.
+[SEG0048] person_2 (DOCTOR): Let's do your observations.
+[SEG0049] person_2 (DOCTOR): Rest your hand here...
+[SEG0050] person_2 (DOCTOR): Okay: blood pressure 115 over 82, respiratory rate 14, oxygen saturation is 97 percent, pulse is 67 beats a minute.
+[SEG0051] person_2 (DOCTOR): I'll examine you now, bear with me.
+[SEG0052] person_1 (PATIENT): Sure.
+[SEG0053] person_2 (DOCTOR): Let me press here.
+[SEG0054] person_2 (DOCTOR): Tiny linear burrows between the fingers and scratched papules on the wrists.
+[SEG0055] person_2 (DOCTOR): Alright, good, that's the examination. From what you've told me and what I found, this looks most like scabies. I want to be honest that this is an impression, not a final answer. I can't rule out eczema yet. I'll start you on permethrin cream, applied once, repeated in a week, for two applications. That's for scabies. Everyone in the house should be treated at the same time, and bedding washed hot. Book a review in two weeks.
+[SEG0056] person_4 (CLINICAL_STAFF): Come by reception afterwards and I'll fix the appointment.
+[SEG0057] person_2 (DOCTOR): Okay, I think we're finished. Is everything clear?
+[SEG0058] person_1 (PATIENT): That's everything I wanted to ask. Thank you.
+
+JSON:

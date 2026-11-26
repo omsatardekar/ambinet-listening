@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00374)
+[SEG0001] person_1 (DOCTOR): Good morning. I hope the wait wasn't too long.
+[SEG0002] person_2 (PATIENT): Thanks. Sorry, I'm a little early.
+[SEG0003] person_1 (DOCTOR): Okay. Start wherever you like.
+[SEG0004] person_2 (PATIENT): So the thing is, I've got not being able to close my right eye fully.
+[SEG0005] person_1 (DOCTOR): When did it begin?
+[SEG0006] person_2 (PATIENT): It's been like this since Monday.
+[SEG0007] person_1 (DOCTOR): Anything that helps?
+[SEG0008] person_2 (PATIENT): Only eye drops, and it's not much. I've, I've also had my face drooping on the right side, since yesterday.
+[SEG0009] person_1 (DOCTOR): Have you noticed recent tick bite or headache?
+[SEG0010] person_2 (PATIENT): No. None of those.
+[SEG0011] person_1 (DOCTOR): Is your chest okay generally?
+[SEG0012] person_2 (PATIENT): No problems with breathing.
+[SEG0013] person_1 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0014] person_2 (PATIENT): Yes, pollen, it gives me a runny nose.
+[SEG0015] person_1 (DOCTOR): Any regular medication?
+[SEG0016] person_2 (PATIENT): Nothing, no.
+[SEG0017] person_1 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0018] person_2 (PATIENT): My sister has epilepsy.
+[SEG0019] person_1 (DOCTOR): Now some background about your lifestyle.
+[SEG0020] person_2 (PATIENT): No, I don't smoke and never have. I don't drink at all. Barely, I'm mostly sedentary these days. Yes, I live on my own.
+[SEG0021] person_1 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0022] person_2 (PATIENT): No, nothing, I've generally been healthy.
+[SEG0023] person_1 (DOCTOR): Before we go on, a few quick readings.
+[SEG0024] person_1 (DOCTOR): Almost there...
+[SEG0025] person_1 (DOCTOR): Okay: BP is 116 over 69, heart rate 69, oxygen saturation is 98 percent, temperature 36.7.
+[SEG0026] person_1 (DOCTOR): Come over here and I'll have a look.
+[SEG0027] person_1 (DOCTOR): Alright, a little pressure here, tell me if it's tender.
+[SEG0028] person_1 (DOCTOR): You can't wrinkle the right forehead or puff out the right cheek.
+[SEG0029] person_1 (DOCTOR): Take your time, no rush.
+[SEG0030] person_1 (DOCTOR): Left side of the face moves normally, and arm and leg strength is normal.
+[SEG0031] person_1 (DOCTOR): Good, that's the examination.
+[SEG0032] person_1 (DOCTOR): Putting it all together, my working impression is a Bell's palsy pattern.
+[SEG0033] person_2 (PATIENT): What are the chances it's something bad?
+[SEG0034] person_1 (DOCTOR): It's reasonable to be concerned, but right now a Bell's palsy pattern is my leading thought, not anything worse.
+[SEG0035] person_1 (DOCTOR): I think blood sugar testing makes sense here, for facial palsy.
+[SEG0036] person_2 (PATIENT): That sounds sensible.
+[SEG0037] person_1 (DOCTOR): Let's use prednisolone, 50 milligrams, once a day, for seven days. That should help with facial weakness.
+[SEG0038] person_2 (PATIENT): Mm, okay.
+[SEG0039] person_1 (DOCTOR): Use lubricating drops through the day and tape the eye shut at night. Don't skip meals, and try to eat smaller portions more often through the day. Please don't wait if the weakness spreads to your arm or leg, or your speech changes. That's when to be seen urgently.
+[SEG0040] person_2 (PATIENT): Okay, fair enough.
+[SEG0041] person_1 (DOCTOR): We'll catch up in a week.
+[SEG0042] person_2 (PATIENT): Sure, that's doable.
+[SEG0043] person_1 (DOCTOR): Right, that's all. Go gently.
+[SEG0044] person_2 (PATIENT): No, you've explained it well. Thanks.
+
+JSON:

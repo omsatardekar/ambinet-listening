@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00266)
+[SEG0001] person_1 (PATIENT): hello doctor, sorry, am I early?
+[SEG0002] person_2 (DOCTOR): yes do sit. Tell me what's been happening
+[SEG0003] person_1 (PATIENT): Mainly I've been feeling drowsy. That's why I came.
+[SEG0004] person_2 (DOCTOR): alright tell me what you take day to day
+[SEG0005] person_1 (PATIENT): Sodium valproate i take it 500 milligrams twice a day for the fits i'm on escitalopram 10 milligrams once a day
+[SEG0006] person_2 (DOCTOR): how long have you taken that?
+[SEG0007] person_1 (PATIENT): For about a month.
+[SEG0008] person_2 (DOCTOR): how long have you had it?
+[SEG0009] person_1 (PATIENT): I've had it for one week
+[SEG0010] person_2 (DOCTOR): How would you describe it, mild, moderate, severe?
+[SEG0011] person_1 (PATIENT): A four out of ten I suppose. Oh and a bit of confusion afterwards. That's been about the same three days. I did have a fit last month at one point but that's gone now.
+[SEG0012] person_2 (DOCTOR): Any loss of bladder control, fever, headache or weakness on one side at all?
+[SEG0013] person_1 (PATIENT): Nothing like that, no.
+[SEG0014] person_2 (DOCTOR): Have you had head injury, by any chance?
+[SEG0015] person_1 (PATIENT): no, uh, I haven't had any head injury
+[SEG0016] person_2 (DOCTOR): any muscle or joint problems besides this?
+[SEG0017] person_1 (PATIENT): no, joints are fine
+[SEG0018] person_2 (DOCTOR): So, anyone in the the family with similar problems or other conditions?
+[SEG0019] person_1 (PATIENT): Yeah, my uncle had colon cancer.
+[SEG0020] person_2 (DOCTOR): Any previous surgeries?
+[SEG0021] person_1 (PATIENT): just my gallbladder removed, in 2016
+[SEG0022] person_2 (DOCTOR): Any sport or activity?
+[SEG0023] person_1 (PATIENT): I play badminton on Sundays
+[SEG0024] person_2 (DOCTOR): Okay do you work?
+[SEG0025] person_1 (PATIENT): I run a small shop, so I'm on my feet a lot
+[SEG0026] person_2 (DOCTOR): is anyone at home with you?
+[SEG0027] person_1 (PATIENT): I share a flat with two friends
+[SEG0028] person_2 (DOCTOR): Okay, any long-term health problems I should know about?
+[SEG0029] person_1 (PATIENT): hmm you know I've had epilepsy for two years now
+[SEG0030] person_2 (DOCTOR): Okay, anything else?
+[SEG0031] person_1 (PATIENT): I have anxiety.
+[SEG0032] person_2 (DOCTOR): before we go on, a few quick readings
+[SEG0033] person_2 (DOCTOR): almost there..
+[SEG0034] person_2 (DOCTOR): Okay: temp 36.9 degrees, weight 79 kilos, pulse is 71 beats a minute, pressure 116 over 73, oxygen saturation is 99 percent, height 156 centimetres, BMI works out to to 32.5.
+[SEG0035] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0036] person_2 (DOCTOR): stay still while I have a a look
+[SEG0037] person_2 (DOCTOR): you're alert and orientated, speech is clear
+[SEG0038] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0039] person_2 (DOCTOR): reflexes and power are symmetrical on both sides
+[SEG0040] person_2 (DOCTOR): Good, that's the examination. Putting it all together, this is probably breakthrough seizure on known epilepsy. I'd also keep a provoked seizure from missed medication in mind.
+[SEG0041] person_1 (PATIENT): Should I be worried about this?
+[SEG0042] person_2 (DOCTOR): It's reasonable to be concerned, but right now breakthrough seizure on known epilepsy is my leading thought, not anything worse. Let me just check I've got this right. You've been feeling drowsy for one week, and no fever or headache.
+[SEG0043] person_1 (PATIENT): mm, that's right
+[SEG0044] person_2 (DOCTOR): let's get an EEG, for seizure i'll request a blood level of the tablet, it'll help with adherence check no driving until we've reviewed you again, I'm sorry, but that's the rule never skip the tablets, and set a phone alarm if it helps please take the tablets with food so they don't upset your stomach we'll refer you to the epilepsy clinic
+[SEG0045] person_2 (DOCTOR): An MRI of the brain is something we might do if this doesn't improve next month if you have another seizure lasting more than five minutes, that's the point to come in urgently let's review you in four weeks thanks for coming in
+[SEG0046] person_1 (PATIENT): all good here. Thank you
+
+JSON:

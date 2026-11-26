@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03107)
+[SEG0001] person_1 (PATIENT): Hello, doctor. I think it's my turn.
+[SEG0002] person_2 (DOCTOR): Yes, have a seat. Tell me what's going on.
+[SEG0003] person_1 (PATIENT): I've been dealing with ringing in the ears.
+[SEG0004] person_2 (DOCTOR): How long has it been like this?
+[SEG0005] person_1 (PATIENT): Since this morning, that's when it began. I just want to get back to normal, really.
+[SEG0006] person_2 (DOCTOR): Does anything else come with it?
+[SEG0007] person_1 (PATIENT): Hearing getting worse in both ears goes along with it, most of the time. The hearing getting worse in both ears? That's been for six months.
+[SEG0008] person_2 (DOCTOR): Let me take your readings now.
+[SEG0009] person_2 (DOCTOR): That's it, just a little longer...
+[SEG0010] person_2 (DOCTOR): Okay: height 170 centimetres, respiratory rate 14. And heart rate 73, weight 66 kilos, temp 36.5 degrees, BMI works out to 22.8, BP is 128 over 80.
+[SEG0011] person_2 (DOCTOR): Right, let's have a proper look at you.
+[SEG0012] person_2 (DOCTOR): Does that hurt?
+[SEG0013] person_2 (DOCTOR): Both ear drums look normal and the tuning fork is heard better through the bone.
+[SEG0014] person_1 (PATIENT): Fine by me.
+[SEG0015] person_2 (DOCTOR): You can relax now. Have you noticed vertigo or discharge?
+[SEG0016] person_1 (PATIENT): No, you know, none of those at all.
+[SEG0017] person_2 (DOCTOR): Any sign of ear pain?
+[SEG0018] person_1 (PATIENT): No, I haven't had any ear pain.
+[SEG0019] person_2 (DOCTOR): Neurologically, anything strange?
+[SEG0020] person_1 (PATIENT): So, um, no, that's all normal.
+[SEG0021] person_2 (DOCTOR): How about your heart, any problems like that?
+[SEG0022] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0023] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0024] person_1 (PATIENT): I take tamsulosin, at night for the prostate.
+[SEG0025] person_2 (DOCTOR): How much do you take?
+[SEG0026] person_1 (PATIENT): It's 0.4 milligrams. Well, it's metformin, 500 milligrams, twice a day. I thought it would sort itself out, but it hasn't. I wasn't sure whether to come in at all, to be honest.
+[SEG0027] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0028] person_1 (PATIENT): I've had an enlarged prostate, yes. I looked a few things up online, and that probably didn't help. I have diabetes, for five years.
+[SEG0029] person_2 (DOCTOR): Have you got any known allergies?
+[SEG0030] person_1 (PATIENT): I don't think I have any, no.
+[SEG0031] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0032] person_1 (PATIENT): I walk the dog every morning. Lots of rice, lentils and some fruit. My partner and our baby.
+[SEG0033] person_2 (DOCTOR): Putting it all together, this looks most like a conductive hearing loss, possibly otosclerosis.
+[SEG0034] person_1 (PATIENT): What are the odds it's serious?
+[SEG0035] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a conductive hearing loss, possibly otosclerosis, but I'd like to confirm.
+[SEG0036] person_2 (DOCTOR): Let's get a hearing test, for hearing loss.
+[SEG0037] person_1 (PATIENT): Where would I go for that?
+[SEG0038] person_2 (DOCTOR): A hearing aid or an operation are both options after the tests. If the symptoms get worse, or you feel really unwell, please come to the emergency department. Let's plan a check after the tests. That's all from me. Any questions?
+[SEG0039] person_1 (PATIENT): Uh, okay, that makes sense. Thanks for explaining.
+[SEG0040] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20027)
+[SEG0001] person_1 (DOCTOR): Hello, good to see you. Please sit. Have you been waiting long?
+[SEG0002] person_2 (PATIENT): only about ten minutes, no trouble
+[SEG0003] person_1 (DOCTOR): start wherever you like, I'm listening
+[SEG0004] person_2 (PATIENT): I've been dealing with yellow eyes i didn't wanna make a fuss, you know
+[SEG0005] person_1 (DOCTOR): how many days or weeks has it been?
+[SEG0006] person_2 (PATIENT): Around two weeks... no wait, it's more like about a week. Yeah, I've had dark urine too, for about two weeks.
+[SEG0007] person_1 (DOCTOR): what about tiredness, have you noticed that?
+[SEG0008] person_2 (PATIENT): Yeah, that too.
+[SEG0009] person_1 (DOCTOR): Have you had yellow eyes before or is this the first time?
+[SEG0010] person_2 (PATIENT): let me think, I had a a similar thing about six months ago it went away
+[SEG0011] person_1 (DOCTOR): let me check a few things. Any fever or itching?
+[SEG0012] person_2 (PATIENT): No, no fever or itching.
+[SEG0013] person_1 (DOCTOR): And what about confusion, bleeding or severe abdominal pain?
+[SEG0014] person_2 (PATIENT): No confusion, bleeding or severe abdominal pain, none of it.
+[SEG0015] person_1 (DOCTOR): anything with your heart, like skipped beats or fainting?
+[SEG0016] person_2 (PATIENT): no that's been fine
+[SEG0017] person_1 (DOCTOR): what's your work?
+[SEG0018] person_2 (PATIENT): I'm a plumber, lots of bending and kneeling
+[SEG0019] person_1 (DOCTOR): is there someone at home?
+[SEG0020] person_2 (PATIENT): My husband and I live above the shop
+[SEG0021] person_1 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0022] person_2 (PATIENT): Diclofenac 50 milligrams when needed. Though honestly some days I forget to take it.
+[SEG0023] person_1 (DOCTOR): Any health conditions I should have on record?
+[SEG0024] person_2 (PATIENT): Arthritis in my knees, for two years.
+[SEG0025] person_1 (DOCTOR): Hm, okay. Have you got any known allergies?
+[SEG0026] person_2 (PATIENT): not to my knowledge, no
+[SEG0027] person_1 (DOCTOR): Are there any illnesses in your family?
+[SEG0028] person_2 (PATIENT): Sorry what was I saying my grandmother had dementia. Ah uh my sister had breast cancer.
+[SEG0029] person_1 (DOCTOR): Shall I check your blood pressure and pulse?
+[SEG0030] person_1 (DOCTOR): okay, this won't take long..
+[SEG0031] person_1 (DOCTOR): okay: BP is 124 over 76 temperature 36.9 pulse is 86 beats a minute
+[SEG0032] person_2 (PATIENT): is that okay?
+[SEG0033] person_1 (DOCTOR): that's fine I'll explain it soon
+[SEG0034] person_1 (DOCTOR): could you come over to the couch, please?
+[SEG0035] person_2 (PATIENT): Okay, doctor.
+[SEG0036] person_1 (DOCTOR): Look straight ahead.
+[SEG0037] person_1 (DOCTOR): The whites of your eyes are yellow and the liver edge is tender under the right ribs.
+[SEG0038] person_1 (DOCTOR): please sit back down. Taking everything into account, my working impression is an acute viral hepatitis. The reason I say that is that your story and my examination fit together. Another possibility is a drug-related liver problem
+[SEG0039] person_2 (PATIENT): What are the odds it's serious?
+[SEG0040] person_1 (DOCTOR): It's reasonable to be concerned, but right now an acute viral hepatitis is my leading thought, not anything worse. So, to recap quickly. You've had yellow eyes for about a week, and no confusion or itching.
+[SEG0041] person_2 (PATIENT): that's it it yes
+[SEG0042] person_1 (DOCTOR): I'm gonna order a hepatitis screen for jaundice. Liver blood tests is what I'd like next for jaundice no alcohol at all and avoid paracetamol and other painkillers unless we say i'd like you to see the liver clinic as well and I'll write the referral
+[SEG0043] person_2 (PATIENT): Alright thank you.
+[SEG0044] person_1 (DOCTOR): If you become drowsy or confused, that's the point to come in urgently. See me again in one week.
+[SEG0045] person_2 (PATIENT): That's fine with me.
+[SEG0046] person_1 (DOCTOR): that's all from me. Any questions?
+[SEG0047] person_2 (PATIENT): Thank you, doctor, goodbye.
+[SEG0048] person_1 (DOCTOR): Take care now.
+
+JSON:

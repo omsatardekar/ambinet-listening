@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01360)
+[SEG0001] person_1 (PATIENT): Hello doctor, sorry, I took a wrong turn on the way here.
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_3 (CAREGIVER): Doctor, thank you for seeing us.
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to have you here.
+[SEG0005] person_3 (CAREGIVER): Well, we came because of a dry cough in the evenings.
+[SEG0006] person_2 (DOCTOR): Let me quickly check your readings.
+[SEG0007] person_2 (DOCTOR): Right, that's it, just a little longer...
+[SEG0008] person_2 (DOCTOR): Okay: BP is 111 over 76, temperature 36.9, heart rate 84, saturation 97 percent, respiratory rate 18.
+[SEG0009] person_2 (DOCTOR): How many days or weeks has it been?
+[SEG0010] person_1 (PATIENT): It's been six months now.
+[SEG0011] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0012] person_1 (PATIENT): It's every other day. A seven out of ten, I suppose. I get some relief from antihistamine. Pollen season definitely sets it off. And itchy eyes, too. I did have sneezing fits at one point, but that's gone now.
+[SEG0013] person_2 (DOCTOR): Alright, have you had a dry cough in the evenings before, or is this the first time?
+[SEG0014] person_1 (PATIENT): A bit, a couple of years ago. It settled by itself back then.
+[SEG0015] person_2 (DOCTOR): So, have you noticed fever, wheeze or shortness of breath?
+[SEG0016] person_1 (PATIENT): No fever, wheeze or shortness of breath, none of it.
+[SEG0017] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0018] person_1 (PATIENT): No, nothing with my heart.
+[SEG0019] person_2 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0020] person_1 (PATIENT): Let me think, no, nothing like that.
+[SEG0021] person_2 (DOCTOR): Do you have any chronic illnesses?
+[SEG0022] person_1 (PATIENT): Yes, acid reflux.
+[SEG0023] person_2 (DOCTOR): Okay, I can see acid reflux in your file as well.
+[SEG0024] person_2 (DOCTOR): Do you take any prescribed or over-the-counter medicines?
+[SEG0025] person_1 (PATIENT): Pantoprazole, 40 milligrams, before breakfast for my acidity. I looked a few things up online, and that probably didn't help.
+[SEG0026] person_2 (DOCTOR): What's your work?
+[SEG0027] person_1 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0028] person_2 (DOCTOR): What does a normal day of food look like?
+[SEG0029] person_1 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0030] person_2 (DOCTOR): How active are you?
+[SEG0031] person_1 (PATIENT): I hardly move around during the day.
+[SEG0032] person_2 (DOCTOR): Have you been to theatre before?
+[SEG0033] person_1 (PATIENT): I had keyhole surgery on my gallbladder two years back.
+[SEG0034] person_2 (DOCTOR): Okay, time for me to examine you.
+[SEG0035] person_2 (DOCTOR): Look straight ahead.
+[SEG0036] person_2 (DOCTOR): Your chest is clear and your nose looks a little swollen inside.
+[SEG0037] person_2 (DOCTOR): That's the examination finished. Right, here's what I'm thinking. I think we're dealing with seasonal hay fever causing the cough at this stage. I'd like you to take fluticasone nasal spray, 50 micrograms, once a day, for the season. That should help with hay fever.
+[SEG0038] person_1 (PATIENT): Thank you, um, doctor.
+[SEG0039] person_2 (DOCTOR): Book a review in a month.
+[SEG0040] person_1 (PATIENT): That's fine with me.
+[SEG0041] person_2 (DOCTOR): I think we're done unless you have questions.
+[SEG0042] person_1 (PATIENT): So, thank you, that's helpful.
+[SEG0043] person_2 (DOCTOR): Take care now.
+
+JSON:

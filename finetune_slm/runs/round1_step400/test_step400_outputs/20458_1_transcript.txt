@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20458)
+[SEG0001] person_1 (DOCTOR): good afternoon, how are you today?
+[SEG0002] person_2 (PATIENT): morning, doctor, sorry about the rush
+[SEG0003] person_3 (FAMILY_MEMBER): So, doctor, I'm just here to help with the details.
+[SEG0004] person_1 (DOCTOR): Tell me what's brought you in.
+[SEG0005] person_2 (PATIENT): It's, It's a tight feeling in my chest when I walk uphill, mostly.
+[SEG0006] person_1 (DOCTOR): Let's run through your medicines.
+[SEG0007] person_2 (PATIENT): Rosuvastatin. I take it 10 milligrams, at night for my cholesterol.
+[SEG0008] person_3 (FAMILY_MEMBER): Yeah, he is supposed to take it at night, but I can't say he always does.
+[SEG0009] person_2 (PATIENT): Simvastatin I don't take anymore.
+[SEG0010] person_1 (DOCTOR): How many days or weeks has it been?
+[SEG0011] person_2 (PATIENT): For nearly five years, I'd say.
+[SEG0012] person_1 (DOCTOR): Alright, can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0013] person_2 (PATIENT): sorry, what was I saying, it feels moderate to me it settles a little with stopping and resting i notice it more with cold weather and walking uphill honestly, all the time
+[SEG0014] person_1 (DOCTOR): Any other symptoms with it?
+[SEG0015] person_2 (PATIENT): let me think, it usually comes with a heaviness in my left arm. So, the the heaviness in my left arm? That's been for three weeks. I've been sweating with the tightness too, for four weeks
+[SEG0016] person_1 (DOCTOR): Would you say mild, moderate or severe?
+[SEG0017] person_2 (PATIENT): Hmm, maybe a three out of ten on a bad day.
+[SEG0018] person_1 (DOCTOR): Did you notice any pain at rest?
+[SEG0019] person_2 (PATIENT): I, I haven't noticed any pain at rest.
+[SEG0020] person_1 (DOCTOR): Any pain between the shoulder blades, palpitations or fainting?
+[SEG0021] person_2 (PATIENT): no, no pain between the shoulder blades, palpitations or fainting
+[SEG0022] person_1 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0023] person_2 (PATIENT): I move fine otherwise.
+[SEG0024] person_1 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0025] person_2 (PATIENT): No, um, I've never reacted to anything.
+[SEG0026] person_1 (DOCTOR): How about smoking?
+[SEG0027] person_2 (PATIENT): I smoke roughly a pack every two days.
+[SEG0028] person_1 (DOCTOR): Are you active?
+[SEG0029] person_2 (PATIENT): I walk the dog every morning.
+[SEG0030] person_1 (DOCTOR): Are you on your own at home?
+[SEG0031] person_2 (PATIENT): I live with my elderly mother
+[SEG0032] person_1 (DOCTOR): tell me about your eating
+[SEG0033] person_2 (PATIENT): I drink a lot of tea and snack through the day.
+[SEG0034] person_1 (DOCTOR): any inherited conditions that you know of in the family?
+[SEG0035] person_2 (PATIENT): My daughter has type 1 diabetes.
+[SEG0036] person_1 (DOCTOR): What operations have you had, if any?
+[SEG0037] person_2 (PATIENT): yes, I had my septum straightened, in my thirties
+[SEG0038] person_1 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0039] person_2 (PATIENT): I've had high cholesterol for nearly five years now.
+[SEG0040] person_1 (DOCTOR): mm, okay
+[SEG0041] person_1 (DOCTOR): Let me take your readings now.
+[SEG0042] person_1 (DOCTOR): Keep your arm relaxed for me...
+[SEG0043] person_1 (DOCTOR): Okay: BP is 113 over 68, pulse 74, respiratory rate 18, oxygen saturation is 97 percent.
+[SEG0044] person_1 (DOCTOR): I'll examine you in a a second, make yourself comfortable.
+[SEG0045] person_1 (DOCTOR): Does that hurt?
+[SEG0046] person_1 (DOCTOR): Heart sounds are normal, no murmur, and the chest is clear.
+[SEG0047] person_1 (DOCTOR): that's all I needed to check
+[SEG0048] person_1 (DOCTOR): So, based on the history and the the examination, it points towards exertional angina until proven otherwise. If the tightness comes, stop, sit down and use the spray under your tongue. That's all from me. Any questions?
+[SEG0049] person_2 (PATIENT): That's clear, thanks.
+[SEG0050] person_1 (DOCTOR): Have a good day.
+
+JSON:

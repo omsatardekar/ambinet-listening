@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00302)
+[SEG0001] person_1 (PATIENT): Hello, doctor. Where would you like me?
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): I wanted to get itching in the groin looked at. I didn't want to make a fuss, you know.
+[SEG0004] person_2 (DOCTOR): Since when have you had this?
+[SEG0005] person_1 (PATIENT): Ever since... since Monday, really.
+[SEG0006] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): It happens on and off. Moderate, I'd say.
+[SEG0008] person_2 (DOCTOR): has there been a ring-shaped itchy patch too?
+[SEG0009] person_1 (PATIENT): yeah. Four weeks, I'd say. About ring-shaped itchy patch, yes, sweating. That makes it worse. I've had darker skin around the patch too, you know, for about a month. About darker skin around the patch, moderate, I'd say
+[SEG0010] person_2 (DOCTOR): Let me check a a few things. Any pain or fever?
+[SEG0011] person_1 (PATIENT): None, as far as I know.
+[SEG0012] person_2 (DOCTOR): have you had any rash on the palms or similar rash on the scalp?
+[SEG0013] person_1 (PATIENT): Yeah, no, no rash on the palms or similar rash on the scalp.
+[SEG0014] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0015] person_1 (PATIENT): no, nothing with my heart
+[SEG0016] person_2 (DOCTOR): are you active at all?
+[SEG0017] person_1 (PATIENT): Barely, I'm mostly sedentary these days.
+[SEG0018] person_2 (DOCTOR): Do you have a job?
+[SEG0019] person_1 (PATIENT): I'm a self-employed electrician
+[SEG0020] person_2 (DOCTOR): do you live alone?
+[SEG0021] person_1 (PATIENT): Yes, I live on my own.
+[SEG0022] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0023] person_1 (PATIENT): I'm on metformin, 500 milligrams, twice a day. Sumatriptan. I take it 50 milligrams, when needed.
+[SEG0024] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0025] person_1 (PATIENT): Ibuprofen. I come out in... well, a rash.
+[SEG0026] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0027] person_1 (PATIENT): I have diabetes, for nearly five years.
+[SEG0028] person_2 (DOCTOR): Okay, anything else?
+[SEG0029] person_1 (PATIENT): I've had migraines for nearly five years now.
+[SEG0030] person_2 (DOCTOR): Go on. Any surgery in your history?
+[SEG0031] person_1 (PATIENT): Just cataract surgery on my right eye, last year.
+[SEG0032] person_2 (DOCTOR): Let me measure a few things.
+[SEG0033] person_2 (DOCTOR): Just relax your arm...
+[SEG0034] person_2 (DOCTOR): Okay: temperature is 36.6 degrees, blood pressure 118 over 68, heart rate 86. And oxygen saturation is 99 percent.
+[SEG0035] person_1 (PATIENT): Is that normal?
+[SEG0036] person_2 (DOCTOR): we'll put it in context in a moment
+[SEG0037] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0038] person_1 (PATIENT): Alright.
+[SEG0039] person_2 (DOCTOR): Let me press here.
+[SEG0040] person_2 (DOCTOR): Skin between the toes is white and peeling.
+[SEG0041] person_2 (DOCTOR): Let me look at this properly.
+[SEG0042] person_2 (DOCTOR): There's a red ring-shaped scaly patch with a clearer centre in the groin crease.
+[SEG0043] person_2 (DOCTOR): thanks, please take a seat again. Having listened and examined, it points towards a fungal skin infection. A skin scraping is what I'd like next, for suspected fungal infection. I'll start you on fluconazole, 150 milligrams, once a week, for two weeks. It's for fungal infection
+[SEG0044] person_1 (PATIENT): Right, understood.
+[SEG0045] person_2 (DOCTOR): Keep the area dry, wear loose cotton, and don't share towels. Please take the tablets with food so they don't upset your stomach. If the symptoms get worse, that's the point to come in urgently. Book a review in three weeks.
+[SEG0046] person_1 (PATIENT): Okay, see you then.
+[SEG0047] person_2 (DOCTOR): Alright, I'll see you out.
+[SEG0048] person_1 (PATIENT): One thing: no, actually that's all. Thanks.
+
+JSON:

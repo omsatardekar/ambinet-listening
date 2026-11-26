@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00198)
+[SEG0001] person_1 (NURSE): morning, doctor. I've settled them in, ready when you are
+[SEG0002] person_2 (DOCTOR): Thanks that's helpful. Hello please sit. What's been happening?
+[SEG0003] person_3 (PATIENT): I've been wanting to stop smoking. Sorry, I know I'm rambling a a bit. I didn't wanna make a fuss, you know.
+[SEG0004] person_1 (NURSE): Okay, so the vitals from earlier. BP is 119 over 73, pulse 76, temperature is 36.7 degrees, saturation 97 percent.
+[SEG0005] person_2 (DOCTOR): Good, thank you.
+[SEG0006] person_3 (PATIENT): I've also had a smoker's cough in the mornings, for about two weeks. With smoker's cough in the mornings, pretty mild, if I'm being honest. Oh, and cravings, mostly after meals. That's been about the same, five days. I've also had irritability when I try to cut down, for one week
+[SEG0007] person_2 (DOCTOR): have you had any alcohol problems or low mood?
+[SEG0008] person_3 (PATIENT): No. None of those.
+[SEG0009] person_2 (DOCTOR): Any coughing up blood, chest pain or weight loss?
+[SEG0010] person_3 (PATIENT): No, uh, I'd have mentioned it.
+[SEG0011] person_2 (DOCTOR): right, have you noticed any weakness, or anything odd with your balance?
+[SEG0012] person_3 (PATIENT): no nothing like that that
+[SEG0013] person_2 (DOCTOR): do you have any medical conditions, anything you've been treated for?
+[SEG0014] person_3 (PATIENT): I've had high blood pressure for two years now.
+[SEG0015] person_2 (DOCTOR): I follow
+[SEG0016] person_3 (PATIENT): COPD for five years.
+[SEG0017] person_2 (DOCTOR): understood let's go through your medication what are you taking?
+[SEG0018] person_3 (PATIENT): I take something called rami... ramipril, 5 milligrams, maybe, every morning.
+[SEG0019] person_2 (DOCTOR): did you happen to bring the the box or the paperwork?
+[SEG0020] person_3 (PATIENT): So, no, it's at home. I'd been on Tiotropium inhaler, not any more though, I stopped.
+[SEG0021] person_2 (DOCTOR): any previous surgeries?
+[SEG0022] person_3 (PATIENT): no nothing like that
+[SEG0023] person_2 (DOCTOR): before I prescribe anything, any allergies?
+[SEG0024] person_3 (PATIENT): No allergies.
+[SEG0025] person_2 (DOCTOR): tell me about your routine work habits that sort of thing
+[SEG0026] person_3 (PATIENT): A beer or two most evenings, to be honest. I drive a delivery van all day. I try to avoid too much sugar. I play badminton on Sundays.
+[SEG0027] person_2 (DOCTOR): I'd like to to examine you now.
+[SEG0028] person_2 (DOCTOR): Let me just check something.
+[SEG0029] person_2 (DOCTOR): chest sounds clear, a bit of wheeze when you breathe out hard
+[SEG0030] person_2 (DOCTOR): thanks for that. From what you've told me and what I found it points towards nicotine dependence. Another possibility is early chronic bronchitis
+[SEG0031] person_3 (PATIENT): is this something I'll have for good?
+[SEG0032] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's nicotine dependence, and we'll know more once the breathing tests is back.
+[SEG0033] person_2 (DOCTOR): I'll request breathing tests, it'll help with smoker's cough and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+[SEG0034] person_3 (PATIENT): right will do
+[SEG0035] person_2 (DOCTOR): do get help quickly if the symptoms get worse. We'll catch up in two weeks. Okay, I think we're finished. Is everything clear?
+[SEG0036] person_3 (PATIENT): I think that's clear. Thank you for being so so thorough.
+[SEG0037] person_2 (DOCTOR): take care
+
+JSON:

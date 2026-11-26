@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00181)
+[SEG0001] person_1 (DOCTOR): hello again. Come on in. You came on your own today?
+[SEG0002] person_2 (PATIENT): yes, I managed on my own
+[SEG0003] person_1 (DOCTOR): tell me what's been troubling you
+[SEG0004] person_2 (PATIENT): It's swelling in my left calf mostly.
+[SEG0005] person_1 (DOCTOR): and when did that start?
+[SEG0006] person_2 (PATIENT): Honestly I can't say exactly when it started. It might have been last month or the month before I really can't pin it down.
+[SEG0007] person_1 (DOCTOR): okay, keep going can you describe it a bit more for me? How strong it is, what the pattern is, what helps
+[SEG0008] person_2 (PATIENT): it just comes and goes. Standing definitely sets it off
+[SEG0009] person_1 (DOCTOR): anything that tends to go along with it?
+[SEG0010] person_2 (PATIENT): yeah when it starts I tend to get a bit of redness as well. The bit of redness? That's been for five days
+[SEG0011] person_1 (DOCTOR): let me check your vitals now
+[SEG0012] person_1 (DOCTOR): Hold still for me...
+[SEG0013] person_1 (DOCTOR): okay: blood pressure 128 over 78, SpO2 99 percent on room air, heart rate 105, temperature is 36.9 degrees
+[SEG0014] person_1 (DOCTOR): Let's do the the physical part now.
+[SEG0015] person_1 (DOCTOR): So tell me if anything hurts.
+[SEG0016] person_1 (DOCTOR): the right leg looks normal
+[SEG0017] person_1 (DOCTOR): that's all I need, thank you
+[SEG0018] person_1 (DOCTOR): Did you get recent injury to the leg or breathlessness?
+[SEG0019] person_2 (PATIENT): right, no, none of those
+[SEG0020] person_1 (DOCTOR): did you get chest pain or fever?
+[SEG0021] person_2 (PATIENT): No, none of those.
+[SEG0022] person_1 (DOCTOR): so so any breathing difficulties apart from this?
+[SEG0023] person_2 (PATIENT): No my breathing's been fine.
+[SEG0024] person_1 (DOCTOR): is your urine normal, no changes?
+[SEG0025] person_2 (PATIENT): nothing there, um, no
+[SEG0026] person_1 (DOCTOR): And alcohol how much?
+[SEG0027] person_2 (PATIENT): A beer or two most evenings, to be honest.
+[SEG0028] person_1 (DOCTOR): do you get any exercise?
+[SEG0029] person_2 (PATIENT): I walk for about half an hour most days
+[SEG0030] person_1 (DOCTOR): How do you eat, generally?
+[SEG0031] person_2 (PATIENT): I skip breakfast most days
+[SEG0032] person_1 (DOCTOR): so who do you live with?
+[SEG0033] person_2 (PATIENT): I live with my family, my husband and two kids.
+[SEG0034] person_1 (DOCTOR): is there a family history of anything significant?
+[SEG0035] person_2 (PATIENT): um, my sister has thyroid problems
+[SEG0036] person_1 (DOCTOR): which tablets or creams or inhalers do you use?
+[SEG0037] person_2 (PATIENT): I mean, I take diclofenac, 50 milligrams, when needed for the joint pain. I've never really been one for hospitals. I wasn't sure whether to come in at all, to be honest.
+[SEG0038] person_1 (DOCTOR): have you got any chronic problems? These questions might sound routine, but they matter
+[SEG0039] person_2 (PATIENT): I've got arthritis in my knees.
+[SEG0040] person_1 (DOCTOR): yes?
+[SEG0041] person_1 (DOCTOR): Okay I can see arthritis in your knees in your file as well. Do you have any known allergies at all? I ask because it helps me narrow things down.
+[SEG0042] person_2 (PATIENT): not that I know no
+[SEG0043] person_1 (DOCTOR): any procedures or operations?
+[SEG0044] person_2 (PATIENT): I had my gallbladder removed in 2016.
+[SEG0045] person_1 (DOCTOR): I want a D-dimer blood test done, that's for suspected DVT
+[SEG0046] person_2 (PATIENT): fine by me
+[SEG0047] person_1 (DOCTOR): I'm sending you for a Doppler scan of the leg because of suspected DVT keep walking gently, and don't massage the calf do get help quickly if you get chest pain or sudden breathlessness i'd like to see you again after the scan before we finish, can you repeat the plan back to me?
+[SEG0048] person_2 (PATIENT): So I come back after the scan. Is that right?
+[SEG0049] person_1 (DOCTOR): Yes, exactly right. Look after yourself.
+[SEG0050] person_2 (PATIENT): that's everything I wanted to ask thank you
+[SEG0051] person_1 (DOCTOR): So, see you then.
+
+JSON:

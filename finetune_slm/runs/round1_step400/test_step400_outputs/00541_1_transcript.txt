@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00541)
+[SEG0001] person_1 (PATIENT): Sorry we're late. The bus took forever, and then I forgot my backpack at the bus stop, so we had to go back.
+[SEG0002] person_3 (CAREGIVER): It's my fault, Doctor, I was still looking for the insurance card.
+[SEG0003] person_2 (DOCTOR): Not a problem at all, you're here now. Hi there, buddy. So this is your asthma check-up. Tell me how you've been breathing lately.
+[SEG0004] person_1 (PATIENT): Um, okay, I guess. Sometimes my chest feels kinda squeezy when I run around at recess.
+[SEG0005] person_2 (DOCTOR): Squeezy, I like that description. Is it like someone's hugging your chest too tight?
+[SEG0006] person_1 (PATIENT): Yeah, like that. And then I have to stop and sit down for a while.
+[SEG0007] person_2 (DOCTOR): That's helpful. How long does the squeezy feeling last when you sit down?
+[SEG0008] person_1 (PATIENT): Not long. Like, a few minutes? Then it goes away.
+[SEG0009] person_2 (DOCTOR): Okay. And what about at night? Do you ever cough when you're in bed?
+[SEG0010] person_1 (PATIENT): Sometimes I cough at night and it wakes me up. Only a little, though.
+[SEG0011] person_3 (CAREGIVER): It's more than a little, honey. I hear him coughing through the wall at least three nights a week, and some nights it goes on for a long time.
+[SEG0012] person_2 (DOCTOR): How long has the night cough been happening?
+[SEG0013] person_3 (CAREGIVER): About one month, since the weather turned cold.
+[SEG0014] person_4 (UNKNOWN): [from the hallway] He was wheezing a lot at the game on Saturday!
+[SEG0015] person_2 (DOCTOR): Sorry, I didn't catch who that was. But that's a good point to follow up on. Buddy, do you remember a whistling sound when you breathed at the game?
+[SEG0016] person_1 (PATIENT): Kind of. Like a whistly sound when I breathe out. Not all the time.
+[SEG0017] person_2 (DOCTOR): Alright. Now, has he had any fever recently, or been sick with a cold?
+[SEG0018] person_3 (CAREGIVER): No fever. He had a little sniffle a couple of weeks ago, but nothing since then.
+[SEG0019] person_2 (DOCTOR): And when he coughs, does he bring up any yellow or green phlegm?
+[SEG0020] person_1 (PATIENT): No, nothing comes up. It's just a dry cough.
+[SEG0021] person_2 (DOCTOR): Good. Let's talk about his medicines. Can you tell me what he takes and how?
+[SEG0022] person_3 (CAREGIVER): Sure. There's the fluticasone, that's the daily inhaler. He's supposed to take it twice a day, morning and night, with the spacer.
+[SEG0023] person_1 (PATIENT): I take it every day. I never forget.
+[SEG0024] person_3 (CAREGIVER): Buddy, I'm sorry, but he skips the morning one a lot. We're always rushing for the bus. Nights I make sure of.
+[SEG0025] person_2 (DOCTOR): I appreciate you both being honest. We'll come back to that. What else is he using?
+[SEG0026] person_3 (CAREGIVER): The albuterol, for when he gets wheezy. He takes it when he needs it, and I'd say maybe twice a week. And the montelukast, 5 mg chewable, at bedtime.
+[SEG0027] person_2 (DOCTOR): Alright. Any other health problems, besides the asthma? I see eczema in his chart.
+[SEG0028] person_3 (CAREGIVER): Yeah, he still gets dry patches in the elbow creases.
+[SEG0029] person_2 (DOCTOR): Okay. And any surgeries in the past?
+[SEG0030] person_3 (CAREGIVER): His mom told me he had his tonsils out when he was five.
+[SEG0031] person_2 (DOCTOR): Good to know. Does anyone in the family have asthma, that you know of?
+[SEG0032] person_3 (CAREGIVER): His dad has asthma too.
+[SEG0033] person_2 (DOCTOR): That fits the pattern, asthma often runs in families. Buddy, what do you like to do for fun, besides recess?
+[SEG0034] person_1 (PATIENT): I play soccer on Saturdays. I'm a goalie, so I don't run that much.
+[SEG0035] person_2 (DOCTOR): Let me get his numbers now. Sit tight, buddy.
+[SEG0036] person_2 (DOCTOR): Temperature is 36.9 degrees Celsius, heart rate is 92 beats per minute, and breathing rate is 20 breaths per minute.
+[SEG0037] person_2 (DOCTOR): Oxygen saturation is 98 percent, and he weighs 72 pounds today.
+[SEG0038] person_3 (CAREGIVER): Is that good, Doctor?
+[SEG0039] person_2 (DOCTOR): The numbers are all in a comfortable range, so nothing to worry about there. Now, how about his tummy and bowels, any problems there?
+[SEG0040] person_3 (CAREGIVER): No, his stomach is fine.
+[SEG0041] person_2 (DOCTOR): Great. Let me explain what I think is going on. With the squeezy chest on running, the night cough several nights a week, and the wheeze at the game, it sounds like his asthma isn't fully controlled right now.
+[SEG0042] person_3 (CAREGIVER): Is that because he misses the morning inhaler?
+[SEG0043] person_2 (DOCTOR): Very likely. The daily inhaler calms the lining of the airways, but only if it's used every day, like brushing teeth.
+[SEG0044] person_1 (PATIENT): So I have to do it every morning?
+[SEG0045] person_2 (DOCTOR): Yes, and here's a trick: keep the inhaler right next to your toothbrush, and take your puffs before you brush. Then rinse your mouth.
+[SEG0046] person_3 (CAREGIVER): That I can do. I'll put it right next to the toothbrush tonight.
+[SEG0047] person_2 (DOCTOR): Wonderful. And the albuterol, buddy: take it before soccer, every Saturday.
+[SEG0048] person_2 (DOCTOR): I'm not changing his medicines today, since I'd like to see first how he does when the daily inhaler is taken properly.
+[SEG0049] person_2 (DOCTOR): Let's see him again in six weeks, and we'll check how the cough and the squeezy chest are doing.
+[SEG0050] person_3 (CAREGIVER): I'll book it at the front desk. And if he gets bad before then?
+[SEG0051] person_2 (DOCTOR): If he needs the albuterol more than usual, or he's struggling to breathe, call us right away or go to the emergency room.
+[SEG0052] person_3 (CAREGIVER): Thank you so much, Doctor. Come on, let's get you a snack.
+
+JSON:

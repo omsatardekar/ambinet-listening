@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00392)
+[SEG0001] person_1 (PATIENT): Sorry I'm a few minutes behind, doctor.
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): Yeah, it's fever with chills. I don't know what's causing it. I've never really been one for hospitals. My sister suggested writing things down, but I forgot.
+[SEG0004] person_2 (DOCTOR): Let's do your observations.
+[SEG0005] person_2 (DOCTOR): Just relax your arm...
+[SEG0006] person_2 (DOCTOR): Okay: blood pressure 104 over 76, oxygen saturation is 96 percent, pulse is 89 beats a minute. How far back does it go?
+[SEG0007] person_1 (PATIENT): Well, around five days... no wait, it's more like three days.
+[SEG0008] person_2 (DOCTOR): And how severe is it?
+[SEG0009] person_1 (PATIENT): I'd say moderate.
+[SEG0010] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0011] person_1 (PATIENT): Terrible shaking and sweating goes along with it, most of the time. And I've been feeling very weak as well.
+[SEG0012] person_2 (DOCTOR): Let me check a few things. Any rash, diarrhoea or cough?
+[SEG0013] person_1 (PATIENT): Okay, um, so no rash, diarrhoea or cough, none of it.
+[SEG0014] person_2 (DOCTOR): And vomiting, any of that?
+[SEG0015] person_1 (PATIENT): Okay, so I haven't noticed any vomiting.
+[SEG0016] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0017] person_1 (PATIENT): No, nothing there.
+[SEG0018] person_2 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0019] person_1 (PATIENT): Um, no, nothing like that.
+[SEG0020] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0021] person_1 (PATIENT): An enlarged prostate, for about a year.
+[SEG0022] person_2 (DOCTOR): Mm. Do you have any allergies to medicines, food, anything at all?
+[SEG0023] person_1 (PATIENT): Right, no, no allergies to anything.
+[SEG0024] person_2 (DOCTOR): How about smoking?
+[SEG0025] person_1 (PATIENT): No, I don't smoke and never have.
+[SEG0026] person_2 (DOCTOR): Alright, and what do you usually eat?
+[SEG0027] person_1 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0028] person_2 (DOCTOR): What's your job?
+[SEG0029] person_1 (PATIENT): I teach at a primary school.
+[SEG0030] person_2 (DOCTOR): Any sport or activity?
+[SEG0031] person_1 (PATIENT): I play badminton on Sundays.
+[SEG0032] person_2 (DOCTOR): Alright, have you had to have anything operated on?
+[SEG0033] person_1 (PATIENT): I mean, yes, I had a hernia repair, about five years back.
+[SEG0034] person_2 (DOCTOR): What's your current medication list?
+[SEG0035] person_1 (PATIENT): Um, it's tamsulosin, 0.4 milligrams, at night.
+[SEG0036] person_2 (DOCTOR): Roughly how long on that one?
+[SEG0037] person_1 (PATIENT): Two years now. I'm on paracetamol, 500 milligrams, when needed.
+[SEG0038] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0039] person_1 (PATIENT): Go ahead.
+[SEG0040] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0041] person_2 (DOCTOR): No rash anywhere on your body that I can see.
+[SEG0042] person_2 (DOCTOR): Right, you can sit back down.
+[SEG0043] person_2 (DOCTOR): Having listened and examined, I don't have a clear answer today: malaria until proven otherwise is possible, and so is a viral illness. Let's get a malaria test, for fever after travel. I'll request blood tests, it'll help with fever. Let the lab know you travelled recently, that's important for the tests. Come back or go to emergency straight away if you get confused, very drowsy, or the shaking returns. See me again in two days.
+[SEG0044] person_2 (DOCTOR): Alright, I'll see you out.
+[SEG0045] person_1 (PATIENT): Alright, you know, thanks. Bye for now.
+
+JSON:

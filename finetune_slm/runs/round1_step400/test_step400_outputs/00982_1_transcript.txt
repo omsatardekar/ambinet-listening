@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00982)
+[SEG0001] person_3 (FAMILY_MEMBER): Hi, doctor. I'm Tanya, Zoe's mum, and this is Nan, my mum, who looks after Zoe after school. Zoe's got her mock exams, and she's been in a state. ~
+[SEG0002] person_2 (DOCTOR): Hi, Zoe. Do you want to tell me, or would you rather Mum starts? ~
+[SEG0003] person_1 (PATIENT): Mum. ~
+[SEG0004] person_3 (FAMILY_MEMBER): She's been getting these awful butterflies, and her heart races before every exam, and she's been waking up at three in the morning going over things.
+[SEG0005] person_2 (DOCTOR): Zoe, is that how it feels to you?
+[SEG0006] person_1 (PATIENT): Yeah. ~
+[SEG0007] person_2 (DOCTOR): When did it start?
+[SEG0008] person_1 (PATIENT): Dunno. Term two? Maybe?
+[SEG0009] person_4 (CAREGIVER): It was before Christmas, love.
+[SEG0010] person_3 (FAMILY_MEMBER): I thought it was after the first mock. I can't be sure.
+[SEG0011] person_2 (DOCTOR): Fine. What about sleep?
+[SEG0012] person_1 (PATIENT): Bad.
+[SEG0013] person_2 (DOCTOR): Anything running in the family, anxiety, worrying?
+[SEG0014] person_3 (FAMILY_MEMBER): Me, yes, her mum. I was anxious as a teenager.
+[SEG0015] person_2 (DOCTOR): What year are you in, Zoe?
+[SEG0016] person_1 (PATIENT): Twelve.
+[SEG0017] person_2 (DOCTOR): And outside school, what do you do?
+[SEG0018] person_1 (PATIENT): Swim. Mornings.
+[SEG0019] person_2 (DOCTOR): Let me check you. Pulse 96, blood pressure 112 over 70.
+[SEG0020] person_3 (FAMILY_MEMBER): That's a bit fast, isn't it? ~
+[SEG0021] person_2 (DOCTOR): Slightly, she's nervous being here. Zoe, show me your hands?
+[SEG0022] person_1 (PATIENT): They're always sweaty. ~
+[SEG0023] person_2 (DOCTOR): Your hands are cool and a bit clammy.
+[SEG0024] person_1 (PATIENT): Gross. ~
+[SEG0025] person_2 (DOCTOR): Here's what I think. This looks like exam anxiety, and it's very common at this age.
+[SEG0026] person_3 (FAMILY_MEMBER): Is it serious? ~
+[SEG0027] person_2 (DOCTOR): Not dangerous, but it's making life hard, and it's worth helping. ~
+[SEG0028] person_4 (CAREGIVER): What can we do? ~
+[SEG0029] person_2 (DOCTOR): A few things. For the nights, I'd like to start melatonin, 2 mg, half an hour before bed.
+[SEG0030] person_3 (FAMILY_MEMBER): Is it safe for her age? ~
+[SEG0031] person_2 (DOCTOR): For short use, yes, and I'll review it. And for the exam days, I'd like to give propranolol, 10 mg, to take an hour before an exam, only on those days.
+[SEG0032] person_3 (FAMILY_MEMBER): Will it make her drowsy? ~
+[SEG0033] person_2 (DOCTOR): Not usually. It calms the shaky, racing feeling. Zoe, you can try it on a practice day first. ~
+[SEG0034] person_1 (PATIENT): Okay. ~
+[SEG0035] person_2 (DOCTOR): And slow breathing helps. In for four, hold for four, out for six.
+[SEG0036] person_1 (PATIENT): I do that already. ~
+[SEG0037] person_2 (DOCTOR): Keep going, and cut caffeine after lunchtime.
+[SEG0038] person_1 (PATIENT): Energy drinks? ~
+[SEG0039] person_2 (DOCTOR): Those too. ~
+[SEG0040] person_1 (PATIENT): Fine. ~
+[SEG0041] person_2 (DOCTOR): I'd like to see you again in three weeks, before the real exams.
+[SEG0042] person_3 (FAMILY_MEMBER): Three weeks. Thank you, doctor. ~
+
+JSON:

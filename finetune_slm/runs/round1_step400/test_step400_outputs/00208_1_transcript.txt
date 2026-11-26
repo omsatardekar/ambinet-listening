@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00208)
+[SEG0001] person_1 (NURSE): Doctor, if you're free, we can start. I've got the numbers noted down.
+[SEG0002] person_2 (DOCTOR): Good, thank you. Welcome, tell me what's brought you in.
+[SEG0003] person_3 (CAREGIVER): Hello, you know, doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_2 (DOCTOR): Good, that'll be useful. Pull up a chair.
+[SEG0005] person_3 (CAREGIVER): Doctor, it's aching in my thighs. That's what we're worried about.
+[SEG0006] person_2 (DOCTOR): How long are we talking about?
+[SEG0007] person_4 (PATIENT): Um, it's been like this since last Tuesday.
+[SEG0008] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0009] person_4 (PATIENT): Well, it settles a little with rest. A six out of ten, I suppose. It's worse with climbing stairs. As for dark urine, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0010] person_2 (DOCTOR): So, have you had aching in your thighs before, or is this the first time?
+[SEG0011] person_4 (PATIENT): Yes, you know, something like this happened last winter, and it went away on its own.
+[SEG0012] person_1 (NURSE): Here are the numbers, doctor. Temperature 36.5, oxygen saturation is 99 percent, pulse 75, pressure 128 over 72.
+[SEG0013] person_2 (DOCTOR): Okay, noted.
+[SEG0014] person_2 (DOCTOR): Shall we do the examination?
+[SEG0015] person_4 (PATIENT): Yes, doctor.
+[SEG0016] person_2 (DOCTOR): Hold that position for me.
+[SEG0017] person_2 (DOCTOR): The muscles are mildly tender when I squeeze.
+[SEG0018] person_2 (DOCTOR): I'll go gently.
+[SEG0019] person_2 (DOCTOR): Power in the thighs is slightly reduced, four out of five.
+[SEG0020] person_2 (DOCTOR): Okay, finished.
+[SEG0021] person_2 (DOCTOR): Have you noticed joint swelling, trouble swallowing or recent heavy exercise?
+[SEG0022] person_4 (PATIENT): No, no joint swelling, no trouble swallowing, no recent heavy exercise. I did have tiredness at one point, but that went away on its own.
+[SEG0023] person_2 (DOCTOR): Have you had any fever, numbness or rash?
+[SEG0024] person_4 (PATIENT): No, none of those.
+[SEG0025] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0026] person_4 (PATIENT): No, that's been fine.
+[SEG0027] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0028] person_4 (PATIENT): Hmm, no, skin's been fine.
+[SEG0029] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0030] person_4 (PATIENT): High cholesterol, for about ten years. I've got an underactive thyroid.
+[SEG0031] person_2 (DOCTOR): How do you eat, generally?
+[SEG0032] person_4 (PATIENT): I skip breakfast most days.
+[SEG0033] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0034] person_4 (PATIENT): My father had kidney stones. Oh, my mother had high blood pressure.
+[SEG0035] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0036] person_4 (PATIENT): No, uh, none that I know of.
+[SEG0037] person_2 (DOCTOR): Any surgery in your history?
+[SEG0038] person_4 (PATIENT): Yes, I had my thyroid operated on, a long time ago.
+[SEG0039] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0040] person_4 (PATIENT): Thyroxine. I take it 75 micrograms, maybe, every morning.
+[SEG0041] person_2 (DOCTOR): Have you got the box or the prescription on you?
+[SEG0042] person_4 (PATIENT): Uh, you know, no, it's at home.
+[SEG0043] person_2 (DOCTOR): Putting it all together, it points towards muscle symptoms that may be related to the cholesterol tablet. An underactive thyroid is also on my list. Have you had any tests for this so far?
+[SEG0044] person_4 (PATIENT): Well, you know, I did have a thyroid test done last month, but the paper's at home.
+[SEG0045] person_2 (DOCTOR): We should do a vitamin D level for muscle weakness. I'd like to arrange a creatine kinase level for muscle pain. Don't stop any of your tablets on your own, we'll decide after the blood test. Try to keep a simple diary of when it happens and what you were doing, and bring it to the next visit. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0046] person_4 (PATIENT): Yes, I'll watch for that.
+[SEG0047] person_2 (DOCTOR): If the symptoms get worse, that's the point to come in urgently.
+[SEG0048] person_4 (PATIENT): Okay, fair enough.
+[SEG0049] person_2 (DOCTOR): Look after yourself.
+[SEG0050] person_4 (PATIENT): Well, you know, one thing: no, actually that's all. Thanks.
+
+JSON:

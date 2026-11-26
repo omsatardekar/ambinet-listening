@@ -1,0 +1,76 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00210)
+[SEG0001] person_1 (PATIENT): Doctor? Hi. I hope I've got the right time.
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_2 (DOCTOR): Good, that'll be useful. Pull up a chair.
+[SEG0005] person_3 (FAMILY_MEMBER): He's been having breathlessness when I lie flat, doctor.
+[SEG0006] person_2 (DOCTOR): How far back does it go?
+[SEG0007] person_1 (PATIENT): It's been about a week, I'm fairly sure.
+[SEG0008] person_2 (DOCTOR): Would you call it mild or bad?
+[SEG0009] person_1 (PATIENT): About a five out of ten.
+[SEG0010] person_2 (DOCTOR): Does anything make it better?
+[SEG0011] person_1 (PATIENT): Sitting up on pillows helps a bit.
+[SEG0012] person_2 (DOCTOR): Is it constant, or does it come and go?
+[SEG0013] person_1 (PATIENT): Honestly, every other day.
+[SEG0014] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0015] person_1 (PATIENT): Tiredness goes along with it, most of the time. The tiredness? That's been for six months. Oh, and swelling in both ankles. That's been about the same, six months.
+[SEG0016] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0017] person_1 (PATIENT): Honestly, every other day. Maybe a four out of ten on a bad day. And I've been waking up at night short of breath as well. As for waking up at night short of breath, I'd say a couple of times a week.
+[SEG0018] person_2 (DOCTOR): First the numbers, if you don't mind.
+[SEG0019] person_2 (DOCTOR): One second...
+[SEG0020] person_2 (DOCTOR): Okay: blood pressure 129 over 77, pulse is 85 beats a minute, saturation 92 percent.
+[SEG0021] person_1 (PATIENT): Is that okay?
+[SEG0022] person_2 (DOCTOR): Let's look at it together in a minute.
+[SEG0023] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0024] person_2 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0025] person_2 (DOCTOR): Neck veins are raised.
+[SEG0026] person_1 (PATIENT): Yes, doctor.
+[SEG0027] person_2 (DOCTOR): Okay, tell me if anything hurts.
+[SEG0028] person_2 (DOCTOR): I can hear crackles at the bases of both lungs.
+[SEG0029] person_2 (DOCTOR): Let me just check something.
+[SEG0030] person_2 (DOCTOR): There's pitting oedema up to the shins on both legs.
+[SEG0031] person_1 (PATIENT): Sure.
+[SEG0032] person_2 (DOCTOR): Okay, you can sit up. How about fainting?
+[SEG0033] person_1 (PATIENT): No fainting, thankfully.
+[SEG0034] person_2 (DOCTOR): Any calf pain, coughing up blood, fever or chest pain at all?
+[SEG0035] person_1 (PATIENT): No, not any of them.
+[SEG0036] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0037] person_1 (PATIENT): No, nothing there.
+[SEG0038] person_2 (DOCTOR): How are your bowels, any trouble?
+[SEG0039] person_1 (PATIENT): No, all normal there.
+[SEG0040] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0041] person_3 (FAMILY_MEMBER): He is on spironolactone, 25 milligrams, once a day for my heart, I give it to him.
+[SEG0042] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0043] person_1 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0044] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0045] person_1 (PATIENT): I've got heart failure.
+[SEG0046] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0047] person_1 (PATIENT): I've never smoked. I have a couple of drinks on the weekend. I run a small shop, so I'm on my feet a lot. I eat out quite a lot, to be honest. I play badminton on Sundays.
+[SEG0048] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0049] person_1 (PATIENT): No operations, no.
+[SEG0050] person_2 (DOCTOR): Taking everything into account, this is probably fluid overload related to the heart. It could also be a kidney problem, so we'll keep that open.
+[SEG0051] person_1 (PATIENT): Doctor, is this dangerous?
+[SEG0052] person_2 (DOCTOR): I can't promise yet, but most people with fluid overload related to the heart do well once it's treated properly. Just to be sure I understood. You've had breathlessness when you lie flat for about a week, and no coughing up blood or fainting.
+[SEG0053] person_1 (PATIENT): Yes, that's right.
+[SEG0054] person_2 (DOCTOR): Let's book an echocardiogram to look into breathlessness and swelling.
+[SEG0055] person_1 (PATIENT): Will it hurt?
+[SEG0056] person_2 (DOCTOR): I'm sending you for blood tests because of heart failure review. Let's book a chest X-ray to look into breathlessness. Weigh yourself every morning, and tell us if you put on more than two kilos in a few days. Keep the salt and the fluids moderate, no more than about one and a half litres a day.
+[SEG0057] person_2 (DOCTOR): The thing that would worry me is if the breathlessness gets worse or you can't lie down at all. If that happens, go to emergency.
+[SEG0058] person_1 (PATIENT): Yes, I'll watch for that.
+[SEG0059] person_2 (DOCTOR): I'd like you back in one week. Good. Let us know how you get on.
+[SEG0060] person_1 (PATIENT): I think that's clear. Thank you for being so thorough.
+[SEG0061] person_2 (DOCTOR): All the best.
+
+JSON:

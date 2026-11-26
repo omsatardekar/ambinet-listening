@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20011)
+[SEG0001] person_1 (PATIENT): Morning, doctor. Is this the the right room?
+[SEG0002] person_2 (DOCTOR): okay, not at all, please sit what seems to be wrong?
+[SEG0003] person_3 (CAREGIVER): Good afternoon, doctor. I look after them so I thought I'd come. Doctor, it's burning pain in the upper tummy. That's what we're worried about.
+[SEG0004] person_2 (DOCTOR): Does anything help it?
+[SEG0005] person_1 (PATIENT): It settles a little with antacids and milk.
+[SEG0006] person_1 (PATIENT): and the other thing I wanted to mention is that I can't really—
+[SEG0007] person_3 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0008] person_1 (PATIENT): I was getting to that!
+[SEG0009] person_2 (DOCTOR): Have you been feeling full quickly?
+[SEG0010] person_1 (PATIENT): mm, yes
+[SEG0011] person_4 (UNKNOWN): Yes, that's right, that's how it was.
+[SEG0012] person_2 (DOCTOR): a few quick ones: weight loss, jaundice or chest pain?
+[SEG0013] person_1 (PATIENT): No, no weight loss, no jaundice, no chest pain. I did have mild nausea at one point, but that went away on its own.
+[SEG0014] person_2 (DOCTOR): and what about black stools, difficulty swallowing or vomiting blood?
+[SEG0015] person_1 (PATIENT): I haven't had black stools, difficulty swallowing or vomiting blood, no.
+[SEG0016] person_2 (DOCTOR): Any pins and needles or loss of strength anywhere?
+[SEG0017] person_1 (PATIENT): Nothing odd there.
+[SEG0018] person_2 (DOCTOR): any rashes or skin problems otherwise?
+[SEG0019] person_1 (PATIENT): nothing on the skin, no
+[SEG0020] person_2 (DOCTOR): alright, tell me about any past illnesses or ongoing conditions
+[SEG0021] person_1 (PATIENT): I have arthritis in my knees, for nearly five years. I have acid reflux, for five years. I didn't want to make a fuss, you know. I kept putting it off, which I know isn't sensible. I have migraines.
+[SEG0022] person_2 (DOCTOR): yes. Right, so migraines is already on your record. We'll keep that in mind today
+[SEG0023] person_2 (DOCTOR): tell me your medicines, please
+[SEG0024] person_1 (PATIENT): It's a... um, I can't remember what it's called. It's a little pink tablet.
+[SEG0025] person_2 (DOCTOR): Do you remember what it's for?
+[SEG0026] person_1 (PATIENT): For the knee pain, I believe. My wife sets them out for me, I just take what I'm given. I'm on something called prop... propranolol, 40 milligrams, maybe, twice a day.
+[SEG0027] person_2 (DOCTOR): so, did you happen to bring the box or the paperwork?
+[SEG0028] person_1 (PATIENT): No, it's at home.
+[SEG0029] person_2 (DOCTOR): Have you had any surgical procedures?
+[SEG0030] person_1 (PATIENT): Okay, so so I had my tonsils removed as a teenager.
+[SEG0031] person_2 (DOCTOR): what do you do during the day?
+[SEG0032] person_1 (PATIENT): I look after my grandchildren most days.
+[SEG0033] person_2 (DOCTOR): How active are you?
+[SEG0034] person_1 (PATIENT): I hardly move around during the day.
+[SEG0035] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0036] person_1 (PATIENT): hmm, there was some antibiotic, I was told I was allergic but I couldn't tell you what it was called or what it did
+[SEG0037] person_5 (NURSE): Okay, so the vitals from earlier. Oxygen saturation is 97 percent, respiratory rate 15, BP is 126 over 72, pulse 69.
+[SEG0038] person_2 (DOCTOR): Okay, noted.
+[SEG0039] person_2 (DOCTOR): Right, let's have a proper look at you.
+[SEG0040] person_2 (DOCTOR): Breathe out slowly.
+[SEG0041] person_2 (DOCTOR): your tummy is soft with some tenderness in the upper middle part
+[SEG0042] person_1 (PATIENT): Yes, that's fine.
+[SEG0043] person_2 (DOCTOR): You can relax now.
+[SEG0044] person_2 (DOCTOR): So, based on the history and the examination, I can't pin this down yet. We're looking at dyspepsia possibly related to anti-inflammatory tablets or a stomach ulcer. Reflux is still possible.
+[SEG0045] person_1 (PATIENT): is this serious, doctor?
+[SEG0046] person_2 (DOCTOR): It's reasonable to be concerned, but right now dyspepsia possibly related to anti-inflammatory tablets is my leading thought, not anything worse. Let's book blood tests to look into dyspepsia. I'd rather check than guess, and this is the quickest way to know more. I'll request a test for the stomach germ, it'll help with dyspepsia.
+[SEG0047] person_1 (PATIENT): That's fine with me.
+[SEG0048] person_2 (DOCTOR): For this, omeprazole, 20 milligrams, once a day, for four weeks. You take it by mouth. It's for stomach acid. Please stop taking the anti-inflammatory tablets for now and use paracetamol for the pain. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0049] person_1 (PATIENT): Yes, will do.
+[SEG0050] person_2 (DOCTOR): I'd like to see you again in four weeks. Does all of that make sense?
+[SEG0051] person_1 (PATIENT): That's clear, thanks.
+
+JSON:

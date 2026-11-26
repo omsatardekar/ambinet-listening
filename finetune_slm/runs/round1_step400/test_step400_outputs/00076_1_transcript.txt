@@ -1,0 +1,74 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00076)
+[SEG0001] person_1 (NURSE): Ready for you, doctor. I'll stay in case you need anything.
+[SEG0002] person_2 (DOCTOR): Great. Hello, come in and sit down. How can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, thank you for seeing us.
+[SEG0004] person_2 (DOCTOR): of course, please stay. It's helpful to have you here
+[SEG0005] person_3 (FAMILY_MEMBER): It's, It's morning shakiness, doctor. She didn't want to come, but I insisted.
+[SEG0006] person_2 (DOCTOR): And when did that that start?
+[SEG0007] person_4 (PATIENT): about... well, about four days
+[SEG0008] person_2 (DOCTOR): Right. Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0009] person_4 (PATIENT): It happens on and off. I'd give it a seven, out of ten.
+[SEG0010] person_2 (DOCTOR): anything that tends to go along with it?
+[SEG0011] person_4 (PATIENT): An upset stomach in the mornings goes along with it, most of the time
+[SEG0012] person_4 (PATIENT): well, and the other thing I wanted to mention is that I can't really—
+[SEG0013] person_3 (FAMILY_MEMBER): Tell the doctor about the other thing, that's what worries me.
+[SEG0014] person_4 (PATIENT): I was getting to that!
+[SEG0015] person_2 (DOCTOR): That's fine, one at a time. I'll ask about everything.
+[SEG0016] person_4 (PATIENT): Yeah, the upset stomach in the mornings? That's been since yesterday.
+[SEG0017] person_2 (DOCTOR): Would you call it mild or bad?
+[SEG0018] person_4 (PATIENT): Well, it's... hard to say, it's kind of... I don't know—
+[SEG0019] person_2 (DOCTOR): Take your time. Mild, moderate, or severe, if you had to pick?
+[SEG0020] person_4 (PATIENT): it's severe, honestly. And I've been feeling guilty about it as well, for about a week
+[SEG0021] person_2 (DOCTOR): and what about vomiting blood or blackouts?
+[SEG0022] person_4 (PATIENT): No, no vomiting blood, no blackouts. I was wanting to cut down on drinking at one point, but that went away on its own.
+[SEG0023] person_2 (DOCTOR): So, have you had yellow eyes, by any chance?
+[SEG0024] person_4 (PATIENT): No. No yellow eyes.
+[SEG0025] person_2 (DOCTOR): Let me check a few things. Any seizures or thoughts of harming myself?
+[SEG0026] person_4 (PATIENT): So, no, none of those.
+[SEG0027] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0028] person_4 (PATIENT): that's normal as far as I know
+[SEG0029] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0030] person_4 (PATIENT): No, that's been fine.
+[SEG0031] person_2 (DOCTOR): Do you have any known allergies at all?
+[SEG0032] person_4 (PATIENT): I think I reacted to some antibiotic once, years ago i don't remember which one, or what happened exactly
+[SEG0033] person_2 (DOCTOR): Do your parents or siblings have any long-term illnesses?
+[SEG0034] person_4 (PATIENT): My sister has epilepsy. My grandmother had breast cancer.
+[SEG0035] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0036] person_4 (PATIENT): It's a... um, I can't remember what it's called. It's a little pink tablet.
+[SEG0037] person_2 (DOCTOR): Alright, do you remember what it's for?
+[SEG0038] person_4 (PATIENT): For my pressure, I believe. My daughter sets them out for me, I just take what I'm given. I take pantoprazole, 40 milligrams, maybe, before breakfast.
+[SEG0039] person_2 (DOCTOR): okay, is the packet here, or the prescription?
+[SEG0040] person_4 (PATIENT): No, it's at home. I had losartan at one point, but I'm off it now.
+[SEG0041] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0042] person_4 (PATIENT): I've had high blood pressure for about ten years now yes, acid reflux
+[SEG0043] person_2 (DOCTOR): Yes, high blood pressure is known to us, good to have that clear.
+[SEG0044] person_2 (DOCTOR): do you get any exercise?
+[SEG0045] person_4 (PATIENT): I walk for about half an hour most days.
+[SEG0046] person_1 (NURSE): Here are the numbers, doctor. Pulse is 81 beats a minute, BP is 116 over 76, saturation 97 percent, respiratory rate 15, temperature 36.5.
+[SEG0047] person_2 (DOCTOR): Okay, noted.
+[SEG0048] person_2 (DOCTOR): I'll examine you now, bear with me.
+[SEG0049] person_2 (DOCTOR): Almost done with this part.
+[SEG0050] person_2 (DOCTOR): Hands show a fine tremor and your abdomen is soft with no tenderness.
+[SEG0051] person_2 (DOCTOR): Right, you can sit back down. From what you've told me and what I found, this is probably alcohol use that you'd like to reduce. Alcohol-related liver strain is also on my list.
+[SEG0052] person_4 (PATIENT): I've been thinking the worst, to be honest is it bad?
+[SEG0053] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's alcohol use that you'd like to reduce, and we'll know more once the liver function tests is back. So, to recap quickly. You've had morning shakiness for about four days, and no vomiting blood or blackouts.
+[SEG0054] person_4 (PATIENT): That's it, yes.
+[SEG0055] person_2 (DOCTOR): Let's get liver function tests, for alcohol use. Let's book blood tests to look into alcohol use. That will help us see what's going on underneath and decide the next step. Plan a few alcohol-free days each week and track how much you drink. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0056] person_2 (DOCTOR): the thing that would worry me is if you have severe shaking, confusion or seizures when you cut down if that happens, go to emergency
+[SEG0057] person_4 (PATIENT): Understood.
+[SEG0058] person_2 (DOCTOR): So, good. Let us know how you get on.
+[SEG0059] person_4 (PATIENT): Thanks, that was helpful.
+
+JSON:

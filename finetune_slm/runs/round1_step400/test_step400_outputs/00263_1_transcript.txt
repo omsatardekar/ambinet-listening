@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00263)
+[SEG0001] person_1 (PATIENT): Doctor, hello, I've got my papers here, where should I put them?
+[SEG0002] person_2 (DOCTOR): No trouble at all, come in. What's been bothering you?
+[SEG0003] person_1 (PATIENT): I'm here because of yellow eyes.
+[SEG0004] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0005] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0006] person_2 (DOCTOR): Okay: BP is 112 over 80, temperature is 36.9 degrees, oxygen saturation is 97 percent. And pulse is 77 beats a minute.
+[SEG0007] person_1 (PATIENT): Is that alright, doctor?
+[SEG0008] person_2 (DOCTOR): Let's look at it together in a minute. Is this recent, or has it been a while?
+[SEG0009] person_1 (PATIENT): It's been going on for three weeks. And a dull ache on the right side of the tummy, too. About dull ache on the right side of the tummy, fatty food definitely sets it off. And there's dark urine as well, about three months now.
+[SEG0010] person_2 (DOCTOR): Have you had yellow eyes before, or is this the first time?
+[SEG0011] person_1 (PATIENT): Yes, something like this happened about six months ago, and it went away on its own.
+[SEG0012] person_2 (DOCTOR): so, and what about weight loss, swelling of the tummy or fever?
+[SEG0013] person_1 (PATIENT): No weight loss, swelling of the tummy or fever, none of it.
+[SEG0014] person_2 (DOCTOR): Let me check a few things. Any black stools, vomiting blood or confusion?
+[SEG0015] person_1 (PATIENT): Nothing like that, no.
+[SEG0016] person_2 (DOCTOR): Is your chest okay generally?
+[SEG0017] person_1 (PATIENT): No, nothing there.
+[SEG0018] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0019] person_1 (PATIENT): Hmm, I take glimepiride, 2 milligrams, before breakfast for my sugar.
+[SEG0020] person_2 (DOCTOR): How long have you taken that?
+[SEG0021] person_1 (PATIENT): About about a year. Uh, I had metformin at one point, but I'm off it now.
+[SEG0022] person_2 (DOCTOR): tell me about your health in general, any ongoing conditions?
+[SEG0023] person_1 (PATIENT): yes, high cholesterol
+[SEG0024] person_2 (DOCTOR): right
+[SEG0025] person_1 (PATIENT): Yes, diabetes.
+[SEG0026] person_2 (DOCTOR): Are you active at all?
+[SEG0027] person_1 (PATIENT): Barely, I'm mostly sedentary these days
+[SEG0028] person_2 (DOCTOR): What kind of work do you do?
+[SEG0029] person_1 (PATIENT): I work on a farm, it's quite physical.
+[SEG0030] person_2 (DOCTOR): Right, let me check a few things physically.
+[SEG0031] person_2 (DOCTOR): Bear with me a a second.
+[SEG0032] person_2 (DOCTOR): The whites of your eyes are yellow.
+[SEG0033] person_2 (DOCTOR): Let me press here.
+[SEG0034] person_2 (DOCTOR): Liver edge is just palpable and mildly tender.
+[SEG0035] person_2 (DOCTOR): Right, you can sit back down. Let me tell you where I've got to. This is probably jaundice with a cause we still need to find. That's my thinking for now, and it may change as we learn more. We shouldn't forget hepatitis.
+[SEG0036] person_2 (DOCTOR): Let's book a hepatitis screen to look into jaundice. Let's get an ultrasound of the abdomen, for jaundice. That will help us see what's going on underneath and decide the next step. Let's book liver function tests to look into jaundice.
+[SEG0037] person_1 (PATIENT): Where do I go for that?
+[SEG0038] person_2 (DOCTOR): Please avoid alcohol completely and don't take any painkillers except paracetamol, and not much of that. If you vomit blood or become drowsy or confused, or you feel really unwell, please come to the emergency department. Look after yourself.
+[SEG0039] person_1 (PATIENT): no questions. Thank you
+[SEG0040] person_2 (DOCTOR): Safe journey home.
+
+JSON:

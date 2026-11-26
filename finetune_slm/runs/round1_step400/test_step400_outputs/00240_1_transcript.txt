@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00240)
+[SEG0001] person_1 (DOCTOR): Come in, come in. Pull the door closed behind you, please.
+[SEG0002] person_2 (PATIENT): hello, uh, doctor, thank you
+[SEG0003] person_1 (DOCTOR): Tell me what's been troubling you.
+[SEG0004] person_2 (PATIENT): well, I've been having hot flushes. I'm hoping you can tell me something definite
+[SEG0005] person_1 (DOCTOR): how far back does it go?
+[SEG0006] person_2 (PATIENT): I've had it since Friday i looked a few things up online, and and that probably didn't help
+[SEG0007] person_1 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0008] person_2 (PATIENT): it's once or twice a day i notice it more with warm rooms and caffeine i'm not great at remembering details, you know, so bear with me oh, and vaginal dryness that's been about the same, six months about vaginal dryness, maybe a three out of ten on a bad day
+[SEG0009] person_1 (DOCTOR): A few measurements, then we'll continue.
+[SEG0010] person_1 (DOCTOR): Okay, give me a moment...
+[SEG0011] person_1 (DOCTOR): Okay: temperature is 36.4 degrees, pressure 113 over 78, heart rate 80. And BMI works out to 29.3, weight 95 kilos, height 180 centimetres, oxygen saturation is 98 percent.
+[SEG0012] person_1 (DOCTOR): I'd like to examine you now
+[SEG0013] person_2 (PATIENT): Okay.
+[SEG0014] person_1 (DOCTOR): Let me just check something.
+[SEG0015] person_1 (DOCTOR): blood pressure and pulse are fine, and there are no breast lumps on examination
+[SEG0016] person_2 (PATIENT): Sure.
+[SEG0017] person_1 (DOCTOR): Thanks for that. And what about heavy bleeding, weight loss, palpitations or bleeding after sex?
+[SEG0018] person_2 (PATIENT): Oh, uh, no, no heavy bleeding, weight loss, palpitations or bleeding after sex.
+[SEG0019] person_1 (DOCTOR): neurologically, anything strange?
+[SEG0020] person_2 (PATIENT): No, um, nothing like that.
+[SEG0021] person_1 (DOCTOR): Any problems with your joints or muscles?
+[SEG0022] person_2 (PATIENT): No, you know, joints are fine.
+[SEG0023] person_1 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0024] person_2 (PATIENT): Yes, dust, it gives me itchy eyes.
+[SEG0025] person_1 (DOCTOR): any long-term health problems I should know about?
+[SEG0026] person_2 (PATIENT): I've had thin bones, yes. A neighbour of mine said I should see someone about it.
+[SEG0027] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0028] person_2 (PATIENT): Uh, no, never had any surgery.
+[SEG0029] person_1 (DOCTOR): A few questions about your lifestyle now.
+[SEG0030] person_2 (PATIENT): I've never smoked. I'm mostly vegetarian. I work in an office, mostly sitting at a desk.
+[SEG0031] person_1 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0032] person_2 (PATIENT): I take alendronate, 70 milligrams, once a week
+[SEG0033] person_1 (DOCTOR): From what you've told me and what I found, it fits best with perimenopausal symptoms.
+[SEG0034] person_2 (PATIENT): Is this gonna go away?
+[SEG0035] person_1 (DOCTOR): It's reasonable to be concerned, but right now perimenopausal symptoms is my leading thought, not anything worse. We should do a thyroid test for hot flushes. I'd like to arrange blood tests for irregular periods. Layers of clothing, a fan by the bed, and cutting down on caffeine and spicy food can help the flushes.
+[SEG0036] person_2 (PATIENT): Do I need a bone density scan? I read it might help.
+[SEG0037] person_1 (DOCTOR): Right, not right now, it wouldn't change what we do today. Is there anything you wanted to ask?
+[SEG0038] person_2 (PATIENT): Oh, thanks so much, doctor.
+
+JSON:

@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00489)
+[SEG0001] person_1 (DOCTOR): Hello. Right, let's get started.
+[SEG0002] person_2 (PATIENT): good morning, doctor
+[SEG0003] person_1 (DOCTOR): What made you decide to come in?
+[SEG0004] person_2 (PATIENT): Um, you know, so... numbness in the toes. That's why I came.
+[SEG0005] person_3 (NURSE): doctor, I've got the readings for you heart rate 77, blood pressure 114 over 82, height 172 centimetres, temperature 36.8, weight 65 kilos, BMI works out to to 22.0.
+[SEG0006] person_1 (DOCTOR): Okay, noted.
+[SEG0007] person_1 (DOCTOR): Roughly when did it start?
+[SEG0008] person_2 (PATIENT): For two years, I'd say. I'd rather not end up on lots of tablets if I can avoid it. I looked a few things up online, and that probably didn't help.
+[SEG0009] person_1 (DOCTOR): What's the pattern, is it there all day?
+[SEG0010] person_2 (PATIENT): It happens every other day.
+[SEG0011] person_1 (DOCTOR): And how severe is it?
+[SEG0012] person_2 (PATIENT): Moderate, really
+[SEG0013] person_1 (DOCTOR): Anything that tends to go along with it?
+[SEG0014] person_2 (PATIENT): I mean, um, it usually comes with burning in both feet. With burning in both feet, severe, really. Yes, bedsheets touching them. That makes it worse.
+[SEG0015] person_1 (DOCTOR): have you had numbness in the toes before, or is this the first time?
+[SEG0016] person_2 (PATIENT): I mean, a bit, about six months ago it settled by itself back then
+[SEG0017] person_1 (DOCTOR): Right, any fever or foot ulcers at all?
+[SEG0018] person_2 (PATIENT): Uh, no, no fever or foot ulcers.
+[SEG0019] person_1 (DOCTOR): Have you noticed bladder problems, back pain or hand symptoms?
+[SEG0020] person_2 (PATIENT): Um, um, no, I'd have mentioned it.
+[SEG0021] person_1 (DOCTOR): Is your urine normal, no changes?
+[SEG0022] person_2 (PATIENT): No changes there.
+[SEG0023] person_1 (DOCTOR): any muscle or joint problems besides this?
+[SEG0024] person_2 (PATIENT): uh, I move fine otherwise
+[SEG0025] person_1 (DOCTOR): Is there anything medical in your background?
+[SEG0026] person_2 (PATIENT): I've had diabetes, yes.
+[SEG0027] person_1 (DOCTOR): okay, so
+[SEG0028] person_2 (PATIENT): I mean, um, I've had an underactive thyroid, yes. I wasn't sure whether to come in at all, to be honest.
+[SEG0029] person_1 (DOCTOR): Yes, diabetes is known to us, good to have that clear.
+[SEG0030] person_1 (DOCTOR): have you had any surgery before?
+[SEG0031] person_2 (PATIENT): So, um, I had a knee arthroscopy three years ago.
+[SEG0032] person_1 (DOCTOR): are you on any tablets or medication?
+[SEG0033] person_2 (PATIENT): Glycomet, 500 milligrams, twice a day for my sugar. Thyroxine. I take it 75 micrograms, every morning. So, I'm on paracetamol, 500 milligrams, when needed.
+[SEG0034] person_1 (DOCTOR): Mhm. What about allergies, to medicines or foods or anything else?
+[SEG0035] person_2 (PATIENT): none, um, as far as I'm aware
+[SEG0036] person_1 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0037] person_2 (PATIENT): Okay, um, so my mother has diabetes.
+[SEG0038] person_1 (DOCTOR): Now some background about your lifestyle.
+[SEG0039] person_2 (PATIENT): Barely, I'm mostly sedentary these days. I work night shifts at a warehouse. I try to avoid too much sugar
+[SEG0040] person_1 (DOCTOR): Shall we do the examination?
+[SEG0041] person_1 (DOCTOR): let me press here
+[SEG0042] person_1 (DOCTOR): Feeling of light touch is reduced in both feet.
+[SEG0043] person_2 (PATIENT): Yes, doctor.
+[SEG0044] person_1 (DOCTOR): All done, you can get dressed. Right, here's what I'm thinking. This looks most like peripheral neuropathy, possibly related to sugar. A vitamin B12 deficiency is still possible. A nerve conduction study is what I'd like next, for neuropathy. I'll request an HbA1c, it'll help with neuropathy. It's a a routine test and it'll give us a much clearer picture. Let's get a vitamin B12 level, for neuropathy.
+[SEG0045] person_1 (DOCTOR): I'd like you to take pregabalin, 75 milligrams, at night, for four weeks. It's for nerve pain. Check your feet every evening for cuts or blisters, you may not feel them. I'll also refer you to podiatry. The thing that would worry me is if the symptoms get worse. If that happens, go to emergency. See me again after the results are back. Good. Let us know how you get on.
+[SEG0046] person_2 (PATIENT): so, that's everything I wanted to ask. Thank you
+[SEG0047] person_1 (DOCTOR): Bye for now.
+
+JSON:

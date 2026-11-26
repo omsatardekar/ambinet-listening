@@ -1,0 +1,70 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00325)
+[SEG0001] person_1 (DOCTOR): Good morning, how are you doing today?
+[SEG0002] person_2 (PATIENT): Thanks, doctor. It's been a long few days.
+[SEG0003] person_3 (CAREGIVER): Doctor, I'm just here to help with the details.
+[SEG0004] person_1 (DOCTOR): Okay. Start wherever you like.
+[SEG0005] person_2 (PATIENT): Um, so... pain low in the pelvis. That's why I came.
+[SEG0006] person_1 (DOCTOR): Roughly when did it start?
+[SEG0007] person_2 (PATIENT): It's been one week, I'm fairly sure.
+[SEG0008] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind. It helps to be thorough at this stage.
+[SEG0009] person_2 (PATIENT): I'd say severe. I get some relief from a hot water bottle.
+[SEG0010] person_2 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0011] person_3 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0012] person_2 (PATIENT): I was getting to that! Oh, and bloating. Had that since last Tuesday.
+[SEG0013] person_1 (DOCTOR): And how severe is it?
+[SEG0014] person_2 (PATIENT): Moderate, I'd say.
+[SEG0015] person_1 (DOCTOR): Right, what about pain around your period, have you noticed that?
+[SEG0016] person_2 (PATIENT): Yes, about the same, three days.
+[SEG0017] person_1 (DOCTOR): Okay, and how severe is it?
+[SEG0018] person_2 (PATIENT): I'd give it a six, out of ten.
+[SEG0019] person_1 (DOCTOR): Is it constant, or does it come and go?
+[SEG0020] person_2 (PATIENT): It's, um... not exactly... well, hard to explain, I mean—
+[SEG0021] person_1 (DOCTOR): Let me put it another way: how many times in a typical day or week?
+[SEG0022] person_2 (PATIENT): It sort of comes and goes.
+[SEG0023] person_1 (DOCTOR): What about alcohol?
+[SEG0024] person_2 (PATIENT): I don't drink at all.
+[SEG0025] person_1 (DOCTOR): Any smoking?
+[SEG0026] person_2 (PATIENT): I stopped smoking about two years back.
+[SEG0027] person_1 (DOCTOR): How about exercise?
+[SEG0028] person_2 (PATIENT): Not really, I don't get much exercise.
+[SEG0029] person_1 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0030] person_3 (CAREGIVER): It's escitalopram, 10 milligrams, once a day, doctor. She takes mefenamic acid, 500 milligrams, when it hurts.
+[SEG0031] person_1 (DOCTOR): Okay, any diagnoses you've been given before?
+[SEG0032] person_2 (PATIENT): I have depression, for five years.
+[SEG0033] person_1 (DOCTOR): Right, any more?
+[SEG0034] person_2 (PATIENT): I've had acid reflux, yes.
+[SEG0035] person_1 (DOCTOR): Right, so acid reflux is already on your record. We'll keep that in mind today. Do you have any allergies to medicines, food, anything at all?
+[SEG0036] person_2 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0037] person_1 (DOCTOR): Let me check a few things. Any fever, vaginal discharge or burning when passing urine?
+[SEG0038] person_2 (PATIENT): Okay, so no, no fever, no vaginal discharge, no burning when passing urine. I did have pain during sex at one point, but that went away on its own.
+[SEG0039] person_1 (DOCTOR): Okay, have you noticed bleeding between periods or vomiting?
+[SEG0040] person_2 (PATIENT): I haven't had bleeding between periods or vomiting, no.
+[SEG0041] person_1 (DOCTOR): Is your mobility otherwise okay?
+[SEG0042] person_2 (PATIENT): Nothing else aches.
+[SEG0043] person_1 (DOCTOR): I'll take a few measurements first.
+[SEG0044] person_1 (DOCTOR): Just relax your arm...
+[SEG0045] person_1 (DOCTOR): Okay: weight 65 kilos, blood pressure 109 over 68. And height 182 centimetres, heart rate 67, BMI works out to 19.6, temp 36.5 degrees.
+[SEG0046] person_2 (PATIENT): Is that normal?
+[SEG0047] person_1 (DOCTOR): That's fine, we'll come to it.
+[SEG0048] person_1 (DOCTOR): Let me examine, it won't take long.
+[SEG0049] person_1 (DOCTOR): Take your time, no rush.
+[SEG0050] person_1 (DOCTOR): There's tenderness in the lower tummy on the left, and no guarding.
+[SEG0051] person_2 (PATIENT): Okay.
+[SEG0052] person_1 (DOCTOR): Right, you can sit back down. I think a pregnancy test makes sense here, for pelvic pain.
+[SEG0053] person_4 (CLINICAL_STAFF): The earliest is Friday, 9 am.
+[SEG0054] person_1 (DOCTOR): I'd like to arrange a swab test for pelvic pain. Let's get a pelvic ultrasound, for pelvic pain. A heat pad and some gentle movement help many people, and a pain diary helps me see a pattern. I'll also refer you to a gynaecologist. Thanks for coming in.
+[SEG0055] person_2 (PATIENT): Thanks, that was helpful.
+
+JSON:

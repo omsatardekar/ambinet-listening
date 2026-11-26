@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20368)
+[SEG0001] person_1 (DOCTOR): Afternoon, thanks for coming in.
+[SEG0002] person_2 (PATIENT): good morning, doctor, thank you
+[SEG0003] person_1 (DOCTOR): Where shall we begin?
+[SEG0004] person_2 (PATIENT): So So the thing is, I've got red eyes in the evening. I'd rather not end up on lots of tablets if I can avoid it.
+[SEG0005] person_1 (DOCTOR): Has this been going on for long? Bear with me, I'm just building up the picture.
+[SEG0006] person_2 (PATIENT): Uh, around about a year... no wait, it's more like nearly five years. It's a relief to finally sit down and talk about it.
+[SEG0007] person_1 (DOCTOR): ah
+[SEG0008] person_1 (DOCTOR): Any eye pain?
+[SEG0009] person_2 (PATIENT): I haven't noticed any eye pain.
+[SEG0010] person_1 (DOCTOR): Have you noticed double vision or sensitivity to light?
+[SEG0011] person_2 (PATIENT): No double vision or sensitivity to light, none of it.
+[SEG0012] person_1 (DOCTOR): Anything on the skin I should know about?
+[SEG0013] person_2 (PATIENT): Right, no, skin's been fine.
+[SEG0014] person_1 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0015] person_2 (PATIENT): Eye drops, when needed
+[SEG0016] person_1 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0017] person_2 (PATIENT): Not really, no.
+[SEG0018] person_1 (DOCTOR): before we go further, any allergies?
+[SEG0019] person_2 (PATIENT): not to my knowledge, no
+[SEG0020] person_1 (DOCTOR): Have you retired yet?
+[SEG0021] person_2 (PATIENT): I retired from the post office two years ago.
+[SEG0022] person_1 (DOCTOR): do you follow any particular diet?
+[SEG0023] person_2 (PATIENT): I'm vegetarian and have been for years.
+[SEG0024] person_1 (DOCTOR): let me get the readings out of the way
+[SEG0025] person_1 (DOCTOR): Okay, keep your arm relaxed for me...
+[SEG0026] person_1 (DOCTOR): okay: BP is 110 over 77, temperature is 36.5 degrees, pulse is 86 beats a minute, respiratory rate 16, saturation 99 percent
+[SEG0027] person_2 (PATIENT): is that normal?
+[SEG0028] person_1 (DOCTOR): Okay, they help me see the whole picture, more shortly.
+[SEG0029] person_1 (DOCTOR): Alright, I'd like to check you over now, if that's alright.
+[SEG0030] person_2 (PATIENT): Okay, doctor.
+[SEG0031] person_1 (DOCTOR): nearly finished here
+[SEG0032] person_1 (DOCTOR): The eyes are slightly red with no discharge and the front of the eye looks clear.
+[SEG0033] person_1 (DOCTOR): Thank you, you can get dressed. Putting it all together, it points towards dry eye syndrome.
+[SEG0034] person_1 (DOCTOR): An eye test is what I'd like next, for blurred vision. The result will help us decide whether anything more is needed.
+[SEG0035] person_2 (PATIENT): mm, alright
+[SEG0036] person_1 (DOCTOR): Take a screen break every twenty minutes and try to blink fully. If you lose vision or get severe eye pain, or you feel really unwell, please come to the emergency department. I'd like to see you again in four weeks. What are the next steps as you understand them?
+[SEG0037] person_2 (PATIENT): So, I come back in four weeks. Is that right?
+[SEG0038] person_1 (DOCTOR): Yes, exactly right. Is there anything you'd like me to go over again?
+[SEG0039] person_2 (PATIENT): Alright, thanks, take care.
+
+JSON:

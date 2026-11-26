@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00502)
+[SEG0001] person_2 (DOCTOR): Good afternoon. The note on the booking says nose problems and a nasal spray you can't seem to put down. Is that about right?
+[SEG0002] person_1 (PATIENT): That's right, and I'd like to be quick about it, I've got my bridge group at three and I'm already running behind.
+[SEG0003] person_3 (CAREGIVER): I'm Rosa, I help Mrs. Delgado at home four days a week. I drove her, so we can only blame me if we're late.
+[SEG0004] person_2 (DOCTOR): Nice to meet you, Rosa. So, Mrs. Delgado, tell me what the nose is doing.
+[SEG0005] person_1 (PATIENT): It's blocked. Always blocked. I can't breathe through it unless I use the spray, and then it's fine for an hour, maybe two, and then it's blocked again.
+[SEG0006] person_2 (DOCTOR): How often are you reaching for that spray?
+[SEG0007] person_1 (PATIENT): Three or four times a day. Sometimes in the night too, I keep it right by the lamp.
+[SEG0008] person_2 (DOCTOR): And how long has the nose been stuffed up like this?
+[SEG0009] person_1 (PATIENT): Oh, goodness. I don't know. A long time. Rosa, when did it start?
+[SEG0010] person_3 (CAREGIVER): I honestly couldn't say. It was already bad when I started with you, but you'd told me it was bothering you before that, so I don't know where it began.
+[SEG0011] person_1 (PATIENT): Could have been last winter. Could have been the winter before. I really can't pin it down, doctor.
+[SEG0012] person_2 (DOCTOR): That's fine, we'll work with that. Anything else going on, like mucus down the back of the throat?
+[SEG0013] person_1 (PATIENT): Yes, there's a drip down the back of my throat at night, and I wake up coughing and clearing it. That's new, that's more recent.
+[SEG0014] person_2 (DOCTOR): Any fever lately? Or nosebleeds?
+[SEG0015] person_1 (PATIENT): No fever. No nosebleeds either, thank goodness, I've got good linens and I'd like to keep them that way.
+[SEG0016] person_2 (DOCTOR): Okay. Let me make sure I have your medicines right. What are you using?
+[SEG0017] person_1 (PATIENT): The nasal spray, the oxymetazoline one. Then amlodipine, 5 mg, one a day. And metformin, 500 mg, twice a day with food.
+[SEG0018] person_3 (CAREGIVER): I put the pills in the box on Sundays, so I know she takes those. The spray is the one I can't keep track of.
+[SEG0019] person_2 (DOCTOR): Think of that spray like a rubber band. Every time you use it, the blood vessels in your nose clamp down, and when it wears off they spring back wider than before. After a while they stay stretched and swollen.
+[SEG0020] person_1 (PATIENT): So the thing that helps is the thing that's making it worse?
+[SEG0021] person_2 (DOCTOR): Pretty much. We call it rebound. Now, what are the amlodipine and metformin for?
+[SEG0022] person_1 (PATIENT): The amlodipine is for my high blood pressure, and the metformin is for type 2 diabetes. And the stomach acid, I get that too, I've had acid reflux for years.
+[SEG0023] person_2 (DOCTOR): Good to know. Any allergies I should be aware of? To medicines, or anything else?
+[SEG0024] person_1 (PATIENT): I don't think so.
+[SEG0025] person_3 (CAREGIVER): Well, wait. At the dentist two years ago she came out in something, a rash, maybe, after the numbing stuff. They weren't sure if it was the numbing stuff or her nerves. So possibly allergic, but we never found out.
+[SEG0026] person_1 (PATIENT): Oh, that. I'd forgotten that. I was so cross that day.
+[SEG0027] person_2 (DOCTOR): Okay, I'll note that as a possible reaction we haven't pinned down. We can sort that out properly. Let me take a look inside your nose. Tip your head back for me.
+[SEG0028] person_2 (DOCTOR): The lining inside is red and swollen, and there's no sign of bleeding.
+[SEG0029] person_1 (PATIENT): Is that from the spray?
+[SEG0030] person_2 (DOCTOR): Most likely it's rebound congestion from the spray, yes. Let me check your numbers quickly. Blood pressure is 138 over 82, and oxygen saturation is 97 percent.
+[SEG0031] person_1 (PATIENT): Is the blood pressure all right? Sometimes it goes up when I'm hurried.
+[SEG0032] person_2 (DOCTOR): It's a little up, nothing to worry about today. Here's my plan. I'd like to order an HbA1c blood test, because I don't have a recent sugar reading for you.
+[SEG0033] person_3 (CAREGIVER): I can bring her fasting on Thursday if that helps.
+[SEG0034] person_2 (DOCTOR): It doesn't need fasting, any morning is fine. I also want to book allergy skin testing, so we can settle that dentist question once and for all.
+[SEG0035] person_1 (PATIENT): A needle? I don't like needles.
+[SEG0036] person_2 (DOCTOR): Just tiny pricks on the forearm. Nothing like a blood draw. And if the nose isn't better after we get you off the spray, I'd consider a CT scan of the sinuses, but I'm not doing that now.
+[SEG0037] person_1 (PATIENT): Fine. So what do I do about the spray itself? I can't just stop.
+[SEG0038] person_2 (DOCTOR): Cut it down slowly. Use it in one nostril only for a week, leave the other one alone, and rinse both with warm salt water a couple of times a day.
+[SEG0039] person_3 (CAREGIVER): I'll set a timer on my phone for the rinses.
+[SEG0040] person_1 (PATIENT): Good Lord, the things you do at my age. Will I see you again?
+[SEG0041] person_2 (DOCTOR): Yes, I'd like to see you in three weeks, and we'll see how the nose has settled. Rosa, you're welcome to come along.
+[SEG0042] person_1 (PATIENT): All right. Now I really must run, doctor, the cards won't deal themselves.
+
+JSON:

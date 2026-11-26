@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20194)
+[SEG0001] person_1 (DOCTOR): Hello, come in. Mind the step.
+[SEG0002] person_2 (PATIENT): Hello, thanks for fitting me in.
+[SEG0003] person_1 (DOCTOR): How are things, what's been happening?
+[SEG0004] person_2 (PATIENT): Well, I've been having loud snoring.
+[SEG0005] person_1 (DOCTOR): Since when exactly?
+[SEG0006] person_2 (PATIENT): For nearly five years, I'd say.
+[SEG0007] person_1 (DOCTOR): Have you noticed any triggers?
+[SEG0008] person_2 (PATIENT): Lying on my back definitely sets it off. And I've been feeling sleepy during the day as well, for four weeks.
+[SEG0009] person_1 (DOCTOR): Has there been a dry mouth in the morning too?
+[SEG0010] person_2 (PATIENT): yes, about the same, nearly five years
+[SEG0011] person_3 (NURSE): Here are the numbers, doctor. SpO2 98 percent on room air, temperature 36.8, heart rate 78, blood pressure 144 over 99, respiratory rate 18.
+[SEG0012] person_1 (DOCTOR): Okay, noted.
+[SEG0013] person_1 (DOCTOR): okay, time for me to examine you
+[SEG0014] person_2 (PATIENT): Fine by me.
+[SEG0015] person_1 (DOCTOR): Take a deep breath for me.
+[SEG0016] person_1 (DOCTOR): Your neck is thick and the back of the throat looks crowded.
+[SEG0017] person_1 (DOCTOR): you can sit up now. Have you had palpitations, by any chance?
+[SEG0018] person_2 (PATIENT): No palpitations, thankfully.
+[SEG0019] person_1 (DOCTOR): yes, carry on and what about chest pain or leg swelling?
+[SEG0020] person_2 (PATIENT): So, no, no chest pain or leg swelling.
+[SEG0021] person_1 (DOCTOR): Right, is your digestion otherwise okay?
+[SEG0022] person_2 (PATIENT): No, all normal there.
+[SEG0023] person_1 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0024] person_2 (PATIENT): No rashes.
+[SEG0025] person_1 (DOCTOR): Now some background about your lifestyle.
+[SEG0026] person_2 (PATIENT): I look after my grandchildren most days. Lots of rice, lentils and some fruit. My partner and our baby.
+[SEG0027] person_1 (DOCTOR): What about your medical history?
+[SEG0028] person_2 (PATIENT): Oh, I've had diabetes, yes.
+[SEG0029] person_1 (DOCTOR): Right, so diabetes is already on your record. We'll keep that in mind today. So, has anyone in your family had anything serious?
+[SEG0030] person_2 (PATIENT): My grandmother had dementia.
+[SEG0031] person_1 (DOCTOR): do you react to any medicines or foods? Any allergies?
+[SEG0032] person_2 (PATIENT): Well, yes, tramadol. I get feeling very drowsy.
+[SEG0033] person_1 (DOCTOR): what's on your current medicine list?
+[SEG0034] person_2 (PATIENT): I'm on sitagliptin, 100 milligrams, once a day. I do miss it now and then, to be fair.
+[SEG0035] person_1 (DOCTOR): So where does that leave us? This looks most like symptoms that suggest obstructive sleep apnoea. I'd also keep poor sleep habits in mind. So, to recap quickly. You've had loud snoring for nearly five years, and and no leg swelling or chest pain.
+[SEG0036] person_2 (PATIENT): Exactly.
+[SEG0037] person_1 (DOCTOR): I'd like to arrange a thyroid test for tiredness. Try to sleep on your side and avoid alcohol close to bedtime. We'll refer you to the sleep clinic.
+[SEG0038] person_2 (PATIENT): Hmm, sure, where do I go?
+[SEG0039] person_1 (DOCTOR): Let's hold off on an overnight sleep study for now, and if there's no change in two weeks we can revisit it. Let's plan a check in six weeks. Anything else on your mind before you go?
+[SEG0040] person_2 (PATIENT): alright, thanks, take care
+[SEG0041] person_1 (DOCTOR): See you soon.
+
+JSON:

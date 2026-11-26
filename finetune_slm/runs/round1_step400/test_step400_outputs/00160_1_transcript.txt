@@ -1,0 +1,69 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00160)
+[SEG0001] person_1 (DOCTOR): Good morning. Come in, have a seat.
+[SEG0002] person_2 (PATIENT): Evening, doctor.
+[SEG0003] person_3 (CAREGIVER): Um, doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_1 (DOCTOR): Absolutely, come and sit beside them. Okay. Start wherever you like.
+[SEG0005] person_3 (CAREGIVER): She's been having severe body pain, doctor.
+[SEG0006] person_1 (DOCTOR): Roughly when did it start?
+[SEG0007] person_2 (PATIENT): It's been about two weeks, I'm fairly sure. It's the not knowing that gets to me.
+[SEG0008] person_1 (DOCTOR): On a normal day, how strong is it?
+[SEG0009] person_2 (PATIENT): A three out of ten, I suppose.
+[SEG0010] person_1 (DOCTOR): Anything that tends to go along with it?
+[SEG0011] person_2 (PATIENT): A high fever goes along with it, most of the time. As for high fever, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0012] person_1 (DOCTOR): Yes?
+[SEG0013] person_1 (DOCTOR): Any a skin rash as well?
+[SEG0014] person_2 (PATIENT): Yes, for two weeks.
+[SEG0015] person_1 (DOCTOR): Did you get cough, bleeding from the gums or blood in the stool?
+[SEG0016] person_2 (PATIENT): Hmm, I haven't had cough, bleeding from the gums or blood in the stool, no.
+[SEG0017] person_1 (DOCTOR): What about vomiting?
+[SEG0018] person_2 (PATIENT): No, no vomiting.
+[SEG0019] person_1 (DOCTOR): Anything different when you pass water?
+[SEG0020] person_2 (PATIENT): That's normal as far as I know.
+[SEG0021] person_1 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0022] person_2 (PATIENT): Nothing odd there.
+[SEG0023] person_1 (DOCTOR): A few questions about your lifestyle now.
+[SEG0024] person_2 (PATIENT): I smoke about ten cigarettes a day. I gave up drinking about three years ago. I cycle to work most mornings. Yes, I live on my own.
+[SEG0025] person_1 (DOCTOR): Any previous surgeries?
+[SEG0026] person_2 (PATIENT): No, nothing like that.
+[SEG0027] person_1 (DOCTOR): Any drug or food allergies?
+[SEG0028] person_2 (PATIENT): Yes, dust, it gives me sneezing. Yes, ibuprofen. I've no idea what the reaction was, only that I'm not supposed to have it.
+[SEG0029] person_1 (DOCTOR): Do your parents or siblings have any long-term illnesses?
+[SEG0030] person_2 (PATIENT): Uh, my father had kidney stones.
+[SEG0031] person_1 (DOCTOR): Any diagnoses you've been given before?
+[SEG0032] person_2 (PATIENT): So, I've had diabetes, yes.
+[SEG0033] person_1 (DOCTOR): Right.
+[SEG0034] person_2 (PATIENT): Yes, high blood pressure.
+[SEG0035] person_1 (DOCTOR): Are you on any tablets or medication?
+[SEG0036] person_2 (PATIENT): It's metformin, 500 milligrams, twice a day.
+[SEG0037] person_3 (CAREGIVER): It's meant to be twice a day, though I don't see she take it every time.
+[SEG0038] person_2 (PATIENT): Ramipril, 5 milligrams, every morning for my blood pressure.
+[SEG0039] person_1 (DOCTOR): How long have you been on it?
+[SEG0040] person_2 (PATIENT): For six months. I take Dolo, 650 milligrams, when I get the fever. Telmisartan I don't take anymore.
+[SEG0041] person_1 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0042] person_1 (DOCTOR): Okay, give me a moment...
+[SEG0043] person_1 (DOCTOR): Okay: temperature 38.4, saturation 97 percent. And pulse is 91 beats a minute, respiratory rate 21, BP is 115 over 76.
+[SEG0044] person_1 (DOCTOR): Right, let me check a few things physically.
+[SEG0045] person_1 (DOCTOR): Let me just check something.
+[SEG0046] person_1 (DOCTOR): There's a faint rash on your forearms, it blanches when I press.
+[SEG0047] person_1 (DOCTOR): Let me just check something.
+[SEG0048] person_1 (DOCTOR): Your tummy is soft, a little tender under the ribs on the right.
+[SEG0049] person_1 (DOCTOR): All done, you can get dressed.
+[SEG0050] person_1 (DOCTOR): Taking everything into account, this is probably a febrile illness that could be dengue. Malaria is still possible. Stop me if I've got anything wrong. You've had severe body pain for about two weeks, and no bleeding from the gums or cough.
+[SEG0051] person_2 (PATIENT): That's it, yes.
+[SEG0052] person_1 (DOCTOR): Let's book a dengue test to look into fever. Let's book a malaria test to look into fever. Drink a lot, coconut water, ORS, whatever you can manage. Let's hold off on a full blood count for now, and if there's no change in a month we can revisit it. Let's plan a check in two days. Do you have any questions?
+[SEG0053] person_2 (PATIENT): No, you've explained it well. Thanks.
+[SEG0054] person_1 (DOCTOR): Take care.
+
+JSON:

@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00083)
+[SEG0001] person_1 (PATIENT): good afternoon, doctor, the receptionist said you'd see me now
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): Good morning, doctor. I came along to help out.
+[SEG0004] person_2 (DOCTOR): Yes, that's no problem at all. Please sit.
+[SEG0005] person_1 (PATIENT): I've been feeling low most days, and I wanted to get it checked
+[SEG0006] person_2 (DOCTOR): when did you first notice it?
+[SEG0007] person_1 (PATIENT): Yeah, it's been two months, I'm fairly sure.
+[SEG0008] person_2 (DOCTOR): how intense does it get?
+[SEG0009] person_1 (PATIENT): Maybe a five out of ten on a bad day.
+[SEG0010] person_2 (DOCTOR): So, anything that tends to go along with it?
+[SEG0011] person_1 (PATIENT): It usually comes with trouble sleeping. I've also been losing interest in things I used to enjoy. The trouble sleeping? That's been for four weeks. With trouble sleeping, mostly moderate.
+[SEG0012] person_2 (DOCTOR): Let me check a few things. Any periods of unusually high energy or panic attacks?
+[SEG0013] person_1 (PATIENT): Nothing like that, no.
+[SEG0014] person_2 (DOCTOR): Any hearing voices, drinking more than usual or thoughts of harming myself?
+[SEG0015] person_1 (PATIENT): No hearing voices, drinking more than usual or thoughts of harming myself, none of it.
+[SEG0016] person_2 (DOCTOR): anything with your heart, like skipped beats or fainting?
+[SEG0017] person_1 (PATIENT): Nothing like that.
+[SEG0018] person_2 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0019] person_1 (PATIENT): Nothing else aches.
+[SEG0020] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0021] person_1 (PATIENT): no operations, no
+[SEG0022] person_2 (DOCTOR): What's your current medication list?
+[SEG0023] person_3 (FAMILY_MEMBER): He takes sertraline, 50 milligrams, once a day. He is on thyroxine, 75 micrograms, every morning for my thyroid, I give it to him.
+[SEG0024] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0025] person_1 (PATIENT): Not that I know, no.
+[SEG0026] person_3 (FAMILY_MEMBER): I'm not sure that's right. I seem to recall a problem with aspirin
+[SEG0027] person_1 (PATIENT): Maybe, but I don't recall it.
+[SEG0028] person_2 (DOCTOR): Alright, so that's unclear. I'll record what each of you said. How about smoking?
+[SEG0029] person_1 (PATIENT): No, I don't smoke and never have.
+[SEG0030] person_2 (DOCTOR): And alcohol, how much?
+[SEG0031] person_1 (PATIENT): I have a couple of drinks on the weekend.
+[SEG0032] person_2 (DOCTOR): What's your job?
+[SEG0033] person_1 (PATIENT): I teach at a primary school.
+[SEG0034] person_2 (DOCTOR): Do you live alone?
+[SEG0035] person_1 (PATIENT): Yes, I live on my own.
+[SEG0036] person_2 (DOCTOR): What's your diet like?
+[SEG0037] person_1 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0038] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0039] person_1 (PATIENT): Yes, depression. I have an underactive thyroid, for five years.
+[SEG0040] person_2 (DOCTOR): right, any more?
+[SEG0041] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0042] person_2 (DOCTOR): Okay, almost there...
+[SEG0043] person_2 (DOCTOR): okay: temperature is 36.5 degrees, heart rate 77, BP is 116 over 73.
+[SEG0044] person_2 (DOCTOR): can I examine you now?
+[SEG0045] person_2 (DOCTOR): A A little pressure here, tell me if it's tender.
+[SEG0046] person_2 (DOCTOR): You're well kempt and speaking clearly, and you maintain good eye contact.
+[SEG0047] person_2 (DOCTOR): thanks for that. So where does that leave us? I can't pin this down yet. We're looking at a depressive episode or a reaction to recent stress
+[SEG0048] person_2 (DOCTOR): Let's get a thyroid test, for low mood. I'm sending you for blood tests because of low mood. Try to keep some routine, a bit of daylight and a short walk each day. It usually takes a few weeks for the tablet to start helping, so give it time and stay in touch. I'll also refer you to a counsellor. Come back or go to emergency straight away if you have thoughts of harming yourself.
+[SEG0049] person_2 (DOCTOR): Book a review in two weeks. Is there anything you wanted to ask?
+[SEG0050] person_1 (PATIENT): no, I think that's everything thank you, doctor
+
+JSON:

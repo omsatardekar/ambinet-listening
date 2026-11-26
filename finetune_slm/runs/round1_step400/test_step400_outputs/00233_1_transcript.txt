@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00233)
+[SEG0001] person_1 (PATIENT): Hi there, is it alright if I come in now?
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_1 (PATIENT): Well, I've been having pain in the lower right tummy. I've never really been one for hospitals.
+[SEG0004] person_2 (DOCTOR): How long have you had it? I'm asking so that we don't miss anything.
+[SEG0005] person_1 (PATIENT): Probably three days. Yeah.
+[SEG0006] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): It, It settles a little with lying still. It's severe, honestly. It sort of comes and goes.
+[SEG0008] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0009] person_1 (PATIENT): When it starts I tend to get nausea as well. The nausea? That's been for one week.
+[SEG0010] person_2 (DOCTOR): Let's do your observations.
+[SEG0011] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0012] person_2 (DOCTOR): Okay: height 170 centimetres, pulse is 98 beats a minute. And pressure 112 over 67, temp 38.7 degrees, weight 68 kilos.
+[SEG0013] person_1 (PATIENT): Is that alright, doctor?
+[SEG0014] person_2 (DOCTOR): We'll put it in context in a moment.
+[SEG0015] person_2 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0016] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0017] person_2 (DOCTOR): There's tenderness in the right lower part and it hurts when I let go suddenly.
+[SEG0018] person_2 (DOCTOR): Bear with me a second.
+[SEG0019] person_2 (DOCTOR): Bowel sounds are present.
+[SEG0020] person_2 (DOCTOR): Okay, you can sit up. Have you had any blood in the stool, hernia bulge or jaundice?
+[SEG0021] person_1 (PATIENT): Well, no blood in the stool, hernia bulge or jaundice, none of it.
+[SEG0022] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0023] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0024] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0025] person_1 (PATIENT): No allergies that I know of, no.
+[SEG0026] person_2 (DOCTOR): Do you have any medical conditions I should know about? Bear with me, I'm just building up the picture.
+[SEG0027] person_1 (PATIENT): No, um, none that I know of.
+[SEG0028] person_2 (DOCTOR): And your work?
+[SEG0029] person_1 (PATIENT): I drive a delivery van all day.
+[SEG0030] person_2 (DOCTOR): Who do you live with?
+[SEG0031] person_1 (PATIENT): I live with my family, my husband and two kids.
+[SEG0032] person_2 (DOCTOR): How's your diet?
+[SEG0033] person_1 (PATIENT): I'm mostly vegetarian.
+[SEG0034] person_2 (DOCTOR): Are you on any regular medication?
+[SEG0035] person_1 (PATIENT): No, I don't take anything regularly.
+[SEG0036] person_2 (DOCTOR): Right, here's what I'm thinking. This looks most like possible appendicitis.
+[SEG0037] person_2 (DOCTOR): I think blood tests makes sense here, for abdominal pain. Please don't eat or drink anything until the surgeons have seen you. Don't skip meals, and try to eat smaller portions more often through the day. See me again after the scan.
+[SEG0038] person_1 (PATIENT): I'll make the appointment on my way out.
+[SEG0039] person_2 (DOCTOR): Can you tell me the plan back in your own words, so I know I've explained it clearly?
+[SEG0040] person_1 (PATIENT): So, I come back after the scan. Is that right?
+[SEG0041] person_2 (DOCTOR): Yes, exactly right. Okay, I think we're finished. Is everything clear?
+[SEG0042] person_1 (PATIENT): Thank you for your time.
+[SEG0043] person_2 (DOCTOR): Safe journey home.
+
+JSON:

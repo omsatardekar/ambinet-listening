@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00466)
+[SEG0001] person_1 (DOCTOR): Good afternoon. Have a seat and we'll begin.
+[SEG0002] person_2 (PATIENT): Yeah, thanks, doctor. It's been a long few days.
+[SEG0003] person_1 (DOCTOR): In your own words, what's happened?
+[SEG0004] person_2 (PATIENT): I wanted to get nausea looked at.
+[SEG0005] person_1 (DOCTOR): I'll take a few measurements first.
+[SEG0006] person_1 (DOCTOR): Almost there...
+[SEG0007] person_1 (DOCTOR): Okay: pulse is 111 beats a minute, temp 36.6 degrees, BP is 135 over 84, SpO2 98 percent on room air. Roughly when did it start?
+[SEG0008] person_2 (PATIENT): Probably about four days. Yeah.
+[SEG0009] person_1 (DOCTOR): Does it happen all the time or in spells?
+[SEG0010] person_2 (PATIENT): Honestly, every other day.
+[SEG0011] person_1 (DOCTOR): How about previous kidney stones?
+[SEG0012] person_2 (PATIENT): Nope, no previous kidney stones.
+[SEG0013] person_1 (DOCTOR): Let me check a few things. Any fever, burning when passing urine or difficulty passing urine?
+[SEG0014] person_2 (PATIENT): Nothing like that, no.
+[SEG0015] person_1 (DOCTOR): Any pins and needles or loss of strength anywhere?
+[SEG0016] person_2 (PATIENT): No, nothing like that.
+[SEG0017] person_1 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0018] person_2 (PATIENT): No, nothing there.
+[SEG0019] person_1 (DOCTOR): Do you have any allergies to medicines, food, anything at all?
+[SEG0020] person_2 (PATIENT): Not that I know, no.
+[SEG0021] person_1 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0022] person_2 (PATIENT): My father was diabetic.
+[SEG0023] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0024] person_2 (PATIENT): No, uh, never had any surgery.
+[SEG0025] person_1 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0026] person_2 (PATIENT): No, I've never had anything serious.
+[SEG0027] person_1 (DOCTOR): Any regular medication?
+[SEG0028] person_2 (PATIENT): No, I don't take anything regularly.
+[SEG0029] person_1 (DOCTOR): How about exercise?
+[SEG0030] person_2 (PATIENT): Not really, I don't get much exercise.
+[SEG0031] person_1 (DOCTOR): Do you live alone?
+[SEG0032] person_2 (PATIENT): Yes, I live on my own.
+[SEG0033] person_1 (DOCTOR): Let's do the physical part now.
+[SEG0034] person_2 (PATIENT): Fine.
+[SEG0035] person_1 (DOCTOR): Let me press here.
+[SEG0036] person_1 (DOCTOR): There's tenderness in the right loin when I tap, and your tummy is soft.
+[SEG0037] person_1 (DOCTOR): Okay, finished. Okay, thinking it through, the most likely explanation is a kidney stone.
+[SEG0038] person_1 (DOCTOR): I think kidney function tests makes sense here, for renal colic. Let's book a urine test to look into flank pain.
+[SEG0039] person_2 (PATIENT): How long does that take?
+[SEG0040] person_1 (DOCTOR): The treatment will be paracetamol, 1 gram, every six hours if needed, for three days. It's for pain.
+[SEG0041] person_2 (PATIENT): Okay, and I take that after food?
+[SEG0042] person_1 (DOCTOR): Drink three litres of water a day and try to strain your urine so we can catch the stone if it passes. Do get help quickly if you get a fever or can't pass urine at all. Come back after the scan.
+[SEG0043] person_2 (PATIENT): Alright, I'll put it in my diary.
+[SEG0044] person_1 (DOCTOR): Is there anything you wanted to ask?
+[SEG0045] person_2 (PATIENT): No, you've explained it well. Thanks.
+[SEG0046] person_1 (DOCTOR): Take care.
+
+JSON:

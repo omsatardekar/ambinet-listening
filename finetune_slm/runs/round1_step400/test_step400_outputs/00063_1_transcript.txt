@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00063)
+[SEG0001] person_1 (PATIENT): Hi doctor, sorry, the lift was out and I had to take the stairs.
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): It's a dry cough. I thought I'd wait, but it hasn't gone.
+[SEG0004] person_2 (DOCTOR): Okay, since when have you had this?
+[SEG0005] person_1 (PATIENT): It's been two weeks, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): It just comes and goes. Maybe a seven out of ten on a bad day. I've had aching all over too, for four weeks.
+[SEG0008] person_2 (DOCTOR): What about a low fever a few days ago, have you noticed that?
+[SEG0009] person_1 (PATIENT): Yes, for about three months.
+[SEG0010] person_2 (DOCTOR): Right, does it happen all the time or in spells?
+[SEG0011] person_1 (PATIENT): I'd say a few times a day.
+[SEG0012] person_2 (DOCTOR): Alright, have you had a dry cough before, or is this the first time?
+[SEG0013] person_1 (PATIENT): A bit, a couple of years ago. It settled by itself back then.
+[SEG0014] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0015] person_1 (PATIENT): Oh, no, nothing I'm aware of.
+[SEG0016] person_2 (DOCTOR): Is there a family history of anything significant?
+[SEG0017] person_1 (PATIENT): My uncle had colon cancer.
+[SEG0018] person_2 (DOCTOR): What's your current medication list?
+[SEG0019] person_1 (PATIENT): Pantoprazole, 40 milligrams, before breakfast for my acidity. I'm on ibuprofen, when it hurts.
+[SEG0020] person_2 (DOCTOR): How much do you take?
+[SEG0021] person_1 (PATIENT): 400 milligrams, I think that's what's on the box.
+[SEG0022] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0023] person_1 (PATIENT): I cycle to work most mornings. I teach at a primary school. It's just me and my wife at home now.
+[SEG0024] person_2 (DOCTOR): Any procedures or operations?
+[SEG0025] person_1 (PATIENT): Just a knee arthroscopy, three years ago.
+[SEG0026] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0027] person_1 (PATIENT): Acid reflux, for five years.
+[SEG0028] person_2 (DOCTOR): Yes?
+[SEG0029] person_2 (DOCTOR): Did you get injury to the chest, leg swelling or breathlessness at rest?
+[SEG0030] person_1 (PATIENT): Yeah, nothing like that, no.
+[SEG0031] person_2 (DOCTOR): Any sign of coughing up blood?
+[SEG0032] person_1 (PATIENT): Nope, uh, no coughing up blood.
+[SEG0033] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0034] person_1 (PATIENT): No rashes.
+[SEG0035] person_2 (DOCTOR): Right, any change in your bowel habit or your stomach generally?
+[SEG0036] person_1 (PATIENT): Nothing unusual, no.
+[SEG0037] person_2 (DOCTOR): I'll check your pressure and pulse.
+[SEG0038] person_2 (DOCTOR): Almost there...
+[SEG0039] person_2 (DOCTOR): Okay: oxygen saturation is 97 percent, pulse is 75 beats a minute, temp 36.5 degrees, pressure 113 over 82, respiratory rate 14.
+[SEG0040] person_1 (PATIENT): Is that okay?
+[SEG0041] person_2 (DOCTOR): I'll explain what that means shortly.
+[SEG0042] person_2 (DOCTOR): Shall we do the examination?
+[SEG0043] person_1 (PATIENT): Sure.
+[SEG0044] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0045] person_2 (DOCTOR): I can hear a faint rub on the left side.
+[SEG0046] person_2 (DOCTOR): Okay, you can sit up. So where does that leave us? It's hard to say. Viral pleurisy is one possibility and a chest infection another, and I'd rather not commit yet. Regular pain relief makes it easier to take deep breaths, which protects the lung. Come back after the X-ray.
+[SEG0047] person_1 (PATIENT): Okay, you know, I'll book that.
+[SEG0048] person_2 (DOCTOR): Call the clinic if you need us.
+[SEG0049] person_1 (PATIENT): Right. Thanks again.
+[SEG0050] person_2 (DOCTOR): Safe journey home.
+
+JSON:

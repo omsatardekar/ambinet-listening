@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00180)
+[SEG0001] person_1 (PATIENT): hi, you know, doctor long queue outside, but here I am
+[SEG0002] person_2 (DOCTOR): Right, yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): Honestly, it's puffiness around the eyes in the morning, and my family pushed me to to come.
+[SEG0004] person_2 (DOCTOR): are you on any regular medication?
+[SEG0005] person_1 (PATIENT): No, nothing regular.
+[SEG0006] person_2 (DOCTOR): When did it begin? I ask because it helps me narrow things down.
+[SEG0007] person_1 (PATIENT): It's been going on for about three months.
+[SEG0008] person_2 (DOCTOR): can you describe it a bit more for me? How strong it is, what the pattern is, what helps
+[SEG0009] person_1 (PATIENT): It happens once or twice a day. Pretty moderate, if I'm being honest. A neighbour of mine said I should see someone about it.
+[SEG0010] person_2 (DOCTOR): anything that tends to go along with it?
+[SEG0011] person_1 (PATIENT): Swelling in the ankles goes along with it, uh, most of the time. The Swelling in the ankles? That's been for two years.
+[SEG0012] person_2 (DOCTOR): does anything make it better?
+[SEG0013] person_1 (PATIENT): I, I get some relief from raising the legs.
+[SEG0014] person_2 (DOCTOR): any fever or breathlessness at all?
+[SEG0015] person_1 (PATIENT): No, um, I'd have mentioned it.
+[SEG0016] person_2 (DOCTOR): any nausea, reduced urine output or chest pain at all?
+[SEG0017] person_1 (PATIENT): No nausea, reduced urine output or chest pain, none of it.
+[SEG0018] person_2 (DOCTOR): Has your skin been okay?
+[SEG0019] person_1 (PATIENT): no rashes
+[SEG0020] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0021] person_1 (PATIENT): I run a small shop, so I'm on my feet a lot. I play badminton on Sundays. Yes, I live on my own.
+[SEG0022] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0023] person_1 (PATIENT): No, never had any surgery.
+[SEG0024] person_2 (DOCTOR): okay, is there anything medical in your background?
+[SEG0025] person_1 (PATIENT): Kidney disease, for about ten years i'm not great at remembering details, so so bear with me
+[SEG0026] person_2 (DOCTOR): mm. What about family history, any illnesses that run in the family?
+[SEG0027] person_1 (PATIENT): My sister has epilepsy.
+[SEG0028] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0029] person_1 (PATIENT): Yes, penicillin.
+[SEG0030] person_2 (DOCTOR): let me check your vitals now
+[SEG0031] person_2 (DOCTOR): Okay, rest your hand here...
+[SEG0032] person_2 (DOCTOR): Okay: BP is 168 over 104, temp 37.0 degrees. And pulse is 90 beats a minute, respiratory rate 15, oxygen saturation is 98 percent.
+[SEG0033] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0034] person_2 (DOCTOR): take your time, no rush
+[SEG0035] person_2 (DOCTOR): There's pitting swelling at both ankles, and your blood pressure is on the high side.
+[SEG0036] person_2 (DOCTOR): Okay, you can sit up.
+[SEG0037] person_2 (DOCTOR): Putting it all together, my working impression is progression of the kidney problem. I'd also keep a medication effect on the kidneys in mind. Alright, I don't need to add any tests or treatment at this point. Alright, I'll see you out.
+[SEG0038] person_1 (PATIENT): Well, thanks, that was helpful.
+[SEG0039] person_2 (DOCTOR): Bye for now.
+
+JSON:

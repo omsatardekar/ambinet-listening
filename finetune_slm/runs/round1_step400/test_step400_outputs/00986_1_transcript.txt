@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00986)
+[SEG0001] person_2 (DOCTOR): Hello Tamsin, come in. How far along are you now? ~
+[SEG0002] person_1 (PATIENT): Twenty-four weeks. I'm here for the asthma, the midwife said I should have a review.
+[SEG0003] person_2 (DOCTOR): Good plan. How's your breathing been?
+[SEG0004] person_1 (PATIENT): A bit wheezy at night. Not every night.
+[SEG0005] person_2 (DOCTOR): And during the day?
+[SEG0006] person_1 (PATIENT): A little short of breath on the stairs at work.
+[SEG0007] person_3 (UNKNOWN): [from the corridor] She's been coughing all week!
+[SEG0008] person_2 (DOCTOR): Sorry, who was that? ~
+[SEG0009] person_1 (PATIENT): No idea, doctor. Someone passing. ~
+[SEG0010] person_2 (DOCTOR): I'll note a voice from the corridor says you've coughed all week. Is that right?
+[SEG0011] person_1 (PATIENT): A bit, yes. A dry tickly one.
+[SEG0012] person_2 (DOCTOR): Any chest pain?
+[SEG0013] person_1 (PATIENT): No chest pain.
+[SEG0014] person_2 (DOCTOR): Fever?
+[SEG0015] person_1 (PATIENT): No fever.
+[SEG0016] person_2 (DOCTOR): Any swelling in your legs?
+[SEG0017] person_1 (PATIENT): No swelling.
+[SEG0018] person_2 (DOCTOR): What do you use for it?
+[SEG0019] person_1 (PATIENT): Budesonide, 200 micrograms, twice a day, and salbutamol when I'm wheezy.
+[SEG0020] person_2 (DOCTOR): And allergies?
+[SEG0021] person_1 (PATIENT): Penicillin. I get a rash.
+[SEG0022] person_2 (DOCTOR): Any other conditions?
+[SEG0023] person_1 (PATIENT): Asthma, since I was a kid, and hay fever.
+[SEG0024] person_2 (DOCTOR): Operations?
+[SEG0025] person_1 (PATIENT): Tonsils, when I was ten.
+[SEG0026] person_2 (DOCTOR): Asthma or allergies in the family?
+[SEG0027] person_1 (PATIENT): My mum has asthma, and my sister has eczema.
+[SEG0028] person_2 (DOCTOR): Do you smoke?
+[SEG0029] person_1 (PATIENT): Never.
+[SEG0030] person_2 (DOCTOR): What do you do for work?
+[SEG0031] person_1 (PATIENT): I'm a physiotherapist.
+[SEG0032] person_2 (DOCTOR): And exercise?
+[SEG0033] person_1 (PATIENT): Prenatal yoga, twice a week.
+[SEG0034] person_2 (DOCTOR): Let me check you. Pulse 84, blood pressure 112 over 68, temperature 36.7, oxygen 98 percent, breathing 18, and weight 72 kilos.
+[SEG0035] person_1 (PATIENT): Good? ~
+[SEG0036] person_2 (DOCTOR): Good. Take a deep breath in and out for me.
+[SEG0037] person_2 (DOCTOR): I can hear a little wheeze at the end of each breath out.
+[SEG0038] person_1 (PATIENT): That's the one. ~
+[SEG0039] person_2 (DOCTOR): Your chest is moving equally on both sides, and your heart sounds are normal.
+[SEG0040] person_1 (PATIENT): Good. ~
+[SEG0041] person_2 (DOCTOR): And there's no swelling in your ankles.
+[SEG0042] person_1 (PATIENT): That's a relief. ~
+[SEG0043] person_2 (DOCTOR): Any palpitations, any fluttering?
+[SEG0044] person_1 (PATIENT): No, nothing like that.
+[SEG0045] person_2 (DOCTOR): What I'm hearing is that your asthma control is a little worse in pregnancy, which is common.
+[SEG0046] person_1 (PATIENT): Is it safe for the baby? ~
+[SEG0047] person_2 (DOCTOR): Yes, the biggest risk to the baby is uncontrolled asthma, not the medicine. Keep using your inhalers.
+[SEG0048] person_1 (PATIENT): That's reassuring. ~
+[SEG0049] person_2 (DOCTOR): I'd like to arrange spirometry to check your lungs, and a blood count, since you're in the second trimester.
+[SEG0050] person_1 (PATIENT): Okay. ~
+[SEG0051] person_2 (DOCTOR): I'd like to see you again in four weeks.
+[SEG0052] person_1 (PATIENT): Four weeks. Thanks, doctor. ~
+
+JSON:

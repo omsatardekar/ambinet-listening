@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00303)
+[SEG0001] person_1 (NURSE): Doctor, if you're free, we can start. I've got the numbers noted down.
+[SEG0002] person_2 (DOCTOR): Perfect, thanks. Hello there, so what's the trouble?
+[SEG0003] person_3 (CAREGIVER): hello, doctor. I hope it's alright if I stay in for this
+[SEG0004] person_2 (DOCTOR): yes, that's no problem at all. Please sit
+[SEG0005] person_4 (FAMILY_MEMBER): he's been having a cough, doctor
+[SEG0006] person_2 (DOCTOR): Is this recent, or has it been a while?
+[SEG0007] person_5 (PATIENT): Ever since... since Friday, really.
+[SEG0008] person_2 (DOCTOR): do you notice anything setting it off?
+[SEG0009] person_5 (PATIENT): Yes, um, cold air. That makes it worse.
+[SEG0010] person_2 (DOCTOR): any a low fever as well?
+[SEG0011] person_5 (PATIENT): yeah. About a week, I'd say
+[SEG0012] person_2 (DOCTOR): Is it it mild, moderate or severe?
+[SEG0013] person_5 (PATIENT): Pretty moderate, if I'm being honest.
+[SEG0014] person_2 (DOCTOR): and and what about leg swelling, chest pain, weight loss or night sweats?
+[SEG0015] person_5 (PATIENT): well, no, no leg swelling, no chest pain, no weight loss. I did have a sore throat at one point, but that went away on its own
+[SEG0016] person_2 (DOCTOR): any sign of coughing up blood?
+[SEG0017] person_5 (PATIENT): Not that I've noticed, no coughing up blood.
+[SEG0018] person_2 (DOCTOR): How about your heart, any problems like that?
+[SEG0019] person_5 (PATIENT): my heart's been fine, uh, as far as I know
+[SEG0020] person_2 (DOCTOR): any procedures or operations?
+[SEG0021] person_5 (PATIENT): Right, I had a hernia repair about five years back.
+[SEG0022] person_2 (DOCTOR): Who do you live with?
+[SEG0023] person_5 (PATIENT): I live with my family, my husband and two kids.
+[SEG0024] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0025] person_5 (PATIENT): I'm allergic to penicillin, I get a rash
+[SEG0026] person_2 (DOCTOR): Moving on to to your background, any past medical history?
+[SEG0027] person_5 (PATIENT): I've had asthma for two years now.
+[SEG0028] person_2 (DOCTOR): Okay, keep going.
+[SEG0029] person_5 (PATIENT): yes, high blood pressure i wasn't sure whether to come in at all, to be honest my sister suggested writing things down, but I forgot yes, migraines a neighbour of mine said I should see someone about it
+[SEG0030] person_2 (DOCTOR): Is there more?
+[SEG0031] person_2 (DOCTOR): Yes, asthma and high blood pressure are known to us, good to have that clear. Any medication at the moment, including things from the pharmacy?
+[SEG0032] person_5 (PATIENT): Asthalin inhaler, when needed
+[SEG0033] person_4 (FAMILY_MEMBER): Yeah, that's what's prescribed, but I'm not sure he takes it every day.
+[SEG0034] person_5 (PATIENT): Telmisartan. I take it 40 milligrams, maybe, once a day for my pressure.
+[SEG0035] person_2 (DOCTOR): Okay, do you have the packet or the prescription with you?
+[SEG0036] person_5 (PATIENT): No, it's at home. I'm on sumatriptan, 50 milligrams, when needed for my migraines. Oh, I take paracetamol, 500 milligrams, when needed. Um, I'd been on Seretide inhaler, not any more though, I stopped.
+[SEG0037] person_1 (NURSE): Here are the numbers, doctor. Pulse 90, BP is 119 over 75, respiratory rate 20. Temp 38.3 degrees, saturation 96 percent.
+[SEG0038] person_2 (DOCTOR): Thanks. Okay, so my impression from what you've said is this: My working impression is a chest infection, probably viral. The reason I say that is that the way you describe it fits together. I'd also keep pneumonia in mind.
+[SEG0039] person_5 (PATIENT): I mean, what are the chances it's something bad?
+[SEG0040] person_2 (DOCTOR): I can't promise yet, but most people with a chest infection, probably viral do well once it's treated properly
+[SEG0041] person_2 (DOCTOR): I think blood tests makes sense here, for cough
+[SEG0042] person_1 (NURSE): we've already done a chest X-ray this morning, doctor
+[SEG0043] person_2 (DOCTOR): Thanks, I'll look at that. The treatment will be azithromycin, 500 milligrams, once a day, for three days. It's for chest infection. Steam and warm fluids can ease the cough, and try to sleep with your head propped up. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0044] person_5 (PATIENT): that's clear
+[SEG0045] person_2 (DOCTOR): If you become breathless or cough up blood, that's the point to come in urgently. See me again in a week. Okay, I think we're finished. Is everything clear?
+[SEG0046] person_5 (PATIENT): One thing: no, actually that's all. Thanks.
+
+JSON:

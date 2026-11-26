@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03507)
+[SEG0001] person_1 (DOCTOR): Hello, take a seat, I'll be with you in a second.
+[SEG0002] person_2 (PATIENT): Hello, doctor.
+[SEG0003] person_1 (DOCTOR): Where shall we begin?
+[SEG0004] person_2 (PATIENT): Um, so the thing is, I've got a sore spot on the front of my shin. I took the morning off to come in today.
+[SEG0005] person_1 (DOCTOR): How many days or weeks has it been?
+[SEG0006] person_2 (PATIENT): Since last weekend, that's when it began.
+[SEG0007] person_1 (DOCTOR): Mm-hmm. Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0008] person_2 (PATIENT): It's once or twice a day. It feels mild to me.
+[SEG0009] person_1 (DOCTOR): What about fever?
+[SEG0010] person_2 (PATIENT): No, I haven't had any fever.
+[SEG0011] person_1 (DOCTOR): Any swelling, injury or numbness?
+[SEG0012] person_2 (PATIENT): I haven't had swelling, injury or numbness, no.
+[SEG0013] person_1 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0014] person_2 (PATIENT): Nothing odd there.
+[SEG0015] person_1 (DOCTOR): Has your heart given you any trouble?
+[SEG0016] person_2 (PATIENT): No, nothing with my heart.
+[SEG0017] person_1 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0018] person_2 (PATIENT): No, nothing I can think of.
+[SEG0019] person_1 (DOCTOR): Okay, any previous surgeries?
+[SEG0020] person_2 (PATIENT): Nothing, I haven't had any operations.
+[SEG0021] person_1 (DOCTOR): What line of work are you in?
+[SEG0022] person_2 (PATIENT): I'm a bus driver, so I sit for long hours.
+[SEG0023] person_1 (DOCTOR): Is there someone at home?
+[SEG0024] person_2 (PATIENT): My husband and I live above the shop.
+[SEG0025] person_1 (DOCTOR): Alright, do you follow any particular diet?
+[SEG0026] person_2 (PATIENT): I'm vegetarian and have been for years.
+[SEG0027] person_1 (DOCTOR): do you react to any medicines or foods? Any allergies?
+[SEG0028] person_2 (PATIENT): Trimethoprim. I come out in... well, a rash.
+[SEG0029] person_1 (DOCTOR): Which medicines do you take at the moment?
+[SEG0030] person_2 (PATIENT): Ibuprofen. I take it 400 milligrams, when needed. It's a relief to finally sit down and talk about it.
+[SEG0031] person_1 (DOCTOR): Let me get the readings out of the way.
+[SEG0032] person_1 (DOCTOR): Nearly done with the readings...
+[SEG0033] person_1 (DOCTOR): Okay: height 177 centimetres, temp 36.7 degrees, pressure 121 over 77, pulse is 67 beats a minute, weight 88 kilos.
+[SEG0034] person_1 (DOCTOR): putting together what you've described, it points towards a possible stress fracture rather than shin splints
+[SEG0035] person_2 (PATIENT): Will it clear up?
+[SEG0036] person_1 (DOCTOR): I can't promise yet, but most people with a possible stress fracture rather than shin splints do well once it's treated properly. I'll request a vitamin D level, it'll help with stress fracture. Stop running, no impact exercise until the scan, swimming or cycling is fine. If the symptoms get worse, that's the point to come in urgently. Does all of that make sense?
+[SEG0037] person_2 (PATIENT): no, that's all thanks a lot
+
+JSON:

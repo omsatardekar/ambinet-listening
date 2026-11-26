@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00503)
+[SEG0001] person_1 (PATIENT): Well, I'm back. My wife made me come. It's the jaw again, but honestly it's not that bad, I'm sure other folks have it worse.
+[SEG0002] person_2 (DOCTOR): Let's see how it compares. Last time we talked about a tight jaw on the right side. Is that still the main thing?
+[SEG0003] person_1 (PATIENT): Yeah. My jaw feels tight, especially first thing in the morning. Like I've been clenching all night.
+[SEG0004] person_2 (DOCTOR): And the ear? You mentioned an ear ache on that side before, if I remember right.
+[SEG0005] person_1 (PATIENT): That's still going. The ear ache is a dull thing, mostly on the right. It's been about three months now. Not sharp, just there.
+[SEG0006] person_2 (DOCTOR): Three months. Does anything bring it on, or make it worse?
+[SEG0007] person_1 (PATIENT): Chewing, mostly. Steak is the worst. I had a burger on Saturday and regretted it for the rest of the day.
+[SEG0008] person_2 (DOCTOR): Ha, a burger of all things. What kind, do you remember? I'm always curious what people are eating when it flares.
+[SEG0009] person_1 (PATIENT): Just a regular pub burger with the thick bun. I had to take it apart and eat the pieces with a fork, which felt silly.
+[SEG0010] person_2 (DOCTOR): That's a pretty strong hint from your jaw, actually. How about your hearing, any trouble with that?
+[SEG0011] person_1 (PATIENT): No, hearing's fine. I'd tell you if it wasn't. My hearing's better than my wife's, to be honest.
+[SEG0012] person_2 (DOCTOR): Good. Let's go over what you're taking. You were started on a muscle relaxant last visit, yes?
+[SEG0013] person_1 (PATIENT): Right, cyclobenzaprine, 5 mg, at bedtime, every night. And I take another little white tablet in the morning, I couldn't tell you the name, my wife picks them up from the pharmacy.
+[SEG0014] person_2 (DOCTOR): The little white one, what's it for, do you know?
+[SEG0015] person_1 (PATIENT): The acid thing. For the heartburn. I think it starts with a P, or maybe an O. Sorry.
+[SEG0016] person_2 (DOCTOR): No worries, we'll check the pharmacy record afterwards. I'm curious about the cyclobenzaprine though. Every night, no problem remembering?
+[SEG0017] person_1 (PATIENT): Well, most nights. I forget it a couple of nights a week, if I'm honest. I fall asleep on the couch and then I'm too tired to go back for it.
+[SEG0018] person_2 (DOCTOR): That's very common, and I'm glad you told me. It might be why the mornings aren't better. What do you do for work again?
+[SEG0019] person_1 (PATIENT): I drive a delivery truck. Mostly local, up and down the same twenty streets.
+[SEG0020] person_2 (DOCTOR): Long hours, and gripping a wheel. Does your jaw clench when you're driving?
+[SEG0021] person_1 (PATIENT): Probably. Traffic does that to anybody. I just hadn't thought about it.
+[SEG0022] person_2 (DOCTOR): Any other conditions I should have on file? I've got the migraines and anxiety listed.
+[SEG0023] person_1 (PATIENT): And the acid reflux, which is what the little tablet is for. That's it. Oh, and my dad had arthritis, bad in his hands and his jaw, if that counts for anything.
+[SEG0024] person_2 (DOCTOR): It might. Let me measure your numbers, then I'll have a look at the joint. Your blood pressure is 132 over 84.
+[SEG0025] person_2 (DOCTOR): Pulse is 68, oxygen saturation 99 percent, breathing rate 16 a minute, and you've put on a couple of pounds, 178 now.
+[SEG0026] person_1 (PATIENT): Holiday cooking. It happens.
+[SEG0027] person_2 (DOCTOR): Now open wide and then close slowly. Put your fingers just in front of your ears.
+[SEG0028] person_2 (DOCTOR): Hm. Okay, you can relax. Here is what I think. This looks most likely like a problem with the jaw joint, probably with clenching and grinding at night adding to it.
+[SEG0029] person_1 (PATIENT): So it isn't something awful, like my ear falling apart?
+[SEG0030] person_2 (DOCTOR): No, the ear itself is probably innocent. The pain is referred from the joint, because the nerves run so close together.
+[SEG0031] person_1 (PATIENT): That's interesting. Huh. Like a neighbor's stereo coming through the wall.
+[SEG0032] person_2 (DOCTOR): Exactly like that. I'd like to order an X-ray of your jaw, a panoramic one, so we can see the joint and the teeth.
+[SEG0033] person_1 (PATIENT): Whatever you think. Is it going to hurt?
+[SEG0034] person_2 (DOCTOR): Not at all, you just stand still for a few seconds. And for the next few weeks, soft foods, no gum, and a warm cloth against the jaw in the evening.
+[SEG0035] person_1 (PATIENT): I can do that. Though no gum might be harder than no steak.
+[SEG0036] person_2 (DOCTOR): Try the cyclobenzaprine every night as well, even the couch nights, set an alarm if it helps.
+[SEG0037] person_1 (PATIENT): Fine, I'll set it on my phone. My wife will love that she was right.
+[SEG0038] person_2 (DOCTOR): I'd like to see you again in six weeks, with the X-ray report in hand.
+[SEG0039] person_1 (PATIENT): Six weeks. That's fine. Thanks, doc, take care.
+
+JSON:

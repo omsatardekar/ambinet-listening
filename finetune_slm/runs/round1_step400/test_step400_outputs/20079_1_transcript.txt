@@ -1,0 +1,78 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20079)
+[SEG0001] person_1 (NURSE): Doctor, the patient's with us now. I did the usual checks at the front, so just say when you want them.
+[SEG0002] person_2 (DOCTOR): Thanks. Hello, come in, sit down. What brings you in today?
+[SEG0003] person_3 (CAREGIVER): Morning, doctor. I'll stay and fill in anything that's missed.
+[SEG0004] person_4 (FAMILY_MEMBER): She's been having been feeling dizzy when I stand up, doctor.
+[SEG0005] person_2 (DOCTOR): What's the timeline, when did it begin?
+[SEG0006] person_5 (PATIENT): Around three days, I think.
+[SEG0007] person_3 (CAREGIVER): Okay, so I think it's been nearer five days, actually.
+[SEG0008] person_2 (DOCTOR): Okay, so roughly three to five days. Is that right?
+[SEG0009] person_5 (PATIENT): Ah, yes, somewhere around that.
+[SEG0010] person_2 (DOCTOR): Rate it for me, mild, moderate or severe?
+[SEG0011] person_5 (PATIENT): Well, it's... hard to say, it's kind of... I don't know—
+[SEG0012] person_2 (DOCTOR): Take your time. Mild, moderate, or severe, if you had to pick?
+[SEG0013] person_5 (PATIENT): It's moderate, honestly.
+[SEG0014] person_2 (DOCTOR): What brings it on?
+[SEG0015] person_5 (PATIENT): It's worse with standing up quickly.
+[SEG0016] person_5 (PATIENT): I was just going to say that the main thing is—
+[SEG0017] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0018] person_2 (DOCTOR): Later, thanks. Please go on. Have you been feeling weak?
+[SEG0019] person_5 (PATIENT): Yes, about the same, about a week.
+[SEG0020] person_2 (DOCTOR): How troublesome is it day to day?
+[SEG0021] person_5 (PATIENT): Pretty severe, if I'm being honest.
+[SEG0022] person_2 (DOCTOR): A few quick ones: palpitations, slurred speech or fainting?
+[SEG0023] person_5 (PATIENT): No, no palpitations, no slurred speech, no fainting. I did have nearly blacking out at one point, but that went away on its own.
+[SEG0024] person_2 (DOCTOR): A few quick ones: chest pain or vomiting?
+[SEG0025] person_5 (PATIENT): Nope, nothing like that.
+[SEG0026] person_2 (DOCTOR): Have you had any black stools?
+[SEG0027] person_5 (PATIENT): No. No black stools.
+[SEG0028] person_2 (DOCTOR): Is your digestion otherwise okay?
+[SEG0029] person_5 (PATIENT): No, that side's been fine.
+[SEG0030] person_2 (DOCTOR): And alcohol, how much?
+[SEG0031] person_5 (PATIENT): I'll have a glass of wine with dinner.
+[SEG0032] person_2 (DOCTOR): So, what's your work?
+[SEG0033] person_5 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0034] person_2 (DOCTOR): Are you allergic to anything? Any allergies to medicines or foods?
+[SEG0035] person_5 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0036] person_2 (DOCTOR): Have you ever had an operation?
+[SEG0037] person_5 (PATIENT): I had an operation for a hernia last spring.
+[SEG0038] person_2 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0039] person_5 (PATIENT): My father has Parkinson's disease.
+[SEG0040] person_2 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0041] person_5 (PATIENT): It's a... um, I can't remember what it's called. It's a round yellow one.
+[SEG0042] person_2 (DOCTOR): Do you remember what it's for?
+[SEG0043] person_5 (PATIENT): For my pressure, I believe. My son sets them out for me, I just take what I'm given. Escitalopram. I take it 10 milligrams, once a day. I take propranolol, 40 milligrams, twice a day for the migraine prevention.
+[SEG0044] person_3 (CAREGIVER): That's what's prescribed, but I'm not sure she takes it every day.
+[SEG0045] person_5 (PATIENT): I used to take sumatriptan, but I stopped it.
+[SEG0046] person_2 (DOCTOR): Right, what about your medical history? Just so I get the full picture.
+[SEG0047] person_5 (PATIENT): I have high blood pressure, for about a year.
+[SEG0048] person_2 (DOCTOR): And besides that?
+[SEG0049] person_5 (PATIENT): Yes, anxiety. I've had migraines, yes.
+[SEG0050] person_2 (DOCTOR): Right, so high blood pressure and migraines are already on your record. We'll keep that in mind today.
+[SEG0051] person_1 (NURSE): Here are the numbers, doctor. Heart rate 107, respiratory rate 19, temp 36.4 degrees. Blood pressure 95 over 56, oxygen saturation is 98 percent.
+[SEG0052] person_2 (DOCTOR): Thanks.
+[SEG0053] person_2 (DOCTOR): Right, let's have a proper look at you.
+[SEG0054] person_2 (DOCTOR): Does that hurt?
+[SEG0055] person_2 (DOCTOR): Heart sounds are normal and the chest is clear.
+[SEG0056] person_2 (DOCTOR): Let me feel here.
+[SEG0057] person_2 (DOCTOR): Your blood pressure drops when you stand, from the lying reading to standing.
+[SEG0058] person_2 (DOCTOR): All finished, thank you. Okay, thinking it through, this is probably postural low blood pressure, possibly related to medicines or dehydration. The reason I say that is that your story and my examination fit together. Dehydration is still possible. An abnormal heart rhythm is still possible.
+[SEG0059] person_5 (PATIENT): Is there something to worry about?
+[SEG0060] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's postural low blood pressure, possibly related to medicines or dehydration, and we'll know more once the a lying and standing blood pressure check is back. I want a lying and standing blood pressure check done, that's for dizziness. I'd like to arrange an ECG for dizziness. The result will help us decide whether anything more is needed.
+[SEG0061] person_2 (DOCTOR): Get up slowly from lying and sitting, and keep drinking fluids through the day. I'll want another look after the results are back. Does all of that make sense?
+[SEG0062] person_5 (PATIENT): I think I understand everything. Thanks.
+[SEG0063] person_2 (DOCTOR): Have a good day.
+
+JSON:

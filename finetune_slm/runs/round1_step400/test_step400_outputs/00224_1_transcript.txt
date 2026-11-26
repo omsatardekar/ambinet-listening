@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00224)
+[SEG0001] person_1 (PATIENT): Uh, doctor, hello, I've got my papers here, where should I put them?
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): I've been feeling very thirsty. It's the not knowing that gets to me. My family kept telling me to get it checked.
+[SEG0004] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0005] person_1 (PATIENT): Tiotropium inhaler. I take it once a day. Diclofenac. I take it 50 milligrams, when needed for the joint pain.
+[SEG0006] person_2 (DOCTOR): So, how long are we talking about?
+[SEG0007] person_1 (PATIENT): Since Monday, that's when it began.
+[SEG0008] person_2 (DOCTOR): Okay. And how severe is it?
+[SEG0009] person_1 (PATIENT): Severe, really.
+[SEG0010] person_2 (DOCTOR): Right, has there been tiredness too?
+[SEG0011] person_1 (PATIENT): Yeah, I've had that since Friday. And there's itching around the private area as well, four weeks now.
+[SEG0012] person_2 (DOCTOR): Okay, would you call it mild or bad?
+[SEG0013] person_1 (PATIENT): I'd say severe.
+[SEG0014] person_2 (DOCTOR): Any vomiting, fruity smell on the breath or blurred vision?
+[SEG0015] person_1 (PATIENT): No, not any of them.
+[SEG0016] person_2 (DOCTOR): Have you had any breathlessness?
+[SEG0017] person_1 (PATIENT): Definitely no breathlessness.
+[SEG0018] person_2 (DOCTOR): Okay, so. What about your tummy and bowels, anything unusual there?
+[SEG0019] person_1 (PATIENT): No, all normal there.
+[SEG0020] person_2 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0021] person_1 (PATIENT): Nothing odd there.
+[SEG0022] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0023] person_1 (PATIENT): My brother has asthma.
+[SEG0024] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0025] person_1 (PATIENT): I have COPD. I've had arthritis in my knees, yes.
+[SEG0026] person_2 (DOCTOR): Sure. Okay, I can see COPD and arthritis in your knees in your file as well. Who do you live with?
+[SEG0027] person_1 (PATIENT): I live with my family, my husband and two kids.
+[SEG0028] person_2 (DOCTOR): How about exercise?
+[SEG0029] person_1 (PATIENT): Not really, I don't get much exercise.
+[SEG0030] person_2 (DOCTOR): Are you still working?
+[SEG0031] person_1 (PATIENT): I'm retired now, I was a clerk for years.
+[SEG0032] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0033] person_2 (DOCTOR): Rest your hand here...
+[SEG0034] person_2 (DOCTOR): Okay: SpO2 99 percent on room air, pulse 76, weight 56 kilos, height 153 centimetres, temperature is 36.9 degrees, blood pressure 111 over 71.
+[SEG0035] person_1 (PATIENT): Is that normal?
+[SEG0036] person_2 (DOCTOR): They help build the picture, I'll tell you more soon.
+[SEG0037] person_2 (DOCTOR): So, I'd like to examine you now.
+[SEG0038] person_2 (DOCTOR): Let me just check something.
+[SEG0039] person_2 (DOCTOR): You're a little dry, but alert, and your breathing is normal.
+[SEG0040] person_2 (DOCTOR): Let me just check something.
+[SEG0041] person_2 (DOCTOR): Your tummy is soft and non-tender.
+[SEG0042] person_2 (DOCTOR): Thanks for that. Taking everything into account, I'd lean towards possible new-onset diabetes. A urine infection is still possible.
+[SEG0043] person_1 (PATIENT): Is this going to go away?
+[SEG0044] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like possible new-onset diabetes, but I'd like to confirm.
+[SEG0045] person_2 (DOCTOR): I want a blood sugar test done, that's for polydipsia and polyuria.
+[SEG0046] person_1 (PATIENT): Mm, okay.
+[SEG0047] person_2 (DOCTOR): I want an HbA1c done, that's for possible diabetes. Until we have the results, avoid sugary drinks and fruit juices, and keep drinking plain water. The thing that would worry me is if you start vomiting or become drowsy. If that happens, go to emergency. Let's plan a check tomorrow with the results.
+[SEG0048] person_1 (PATIENT): I mean, okay, I'll book that.
+[SEG0049] person_2 (DOCTOR): Thanks for coming in.
+[SEG0050] person_1 (PATIENT): One thing: no, actually that's all. Thanks.
+[SEG0051] person_2 (DOCTOR): Bye for now.
+
+JSON:

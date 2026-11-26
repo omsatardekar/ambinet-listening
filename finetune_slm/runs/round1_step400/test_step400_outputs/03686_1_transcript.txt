@@ -1,0 +1,50 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03686)
+[SEG0001] person_1 (PATIENT): Hi, you know, is it okay to come in now?
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_1 (PATIENT): I wanted to get a milky discharge from my breasts looked at.
+[SEG0004] person_2 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0005] person_1 (PATIENT): It's escitalopram, 10 milligrams, once a day.
+[SEG0006] person_2 (DOCTOR): How many days or weeks has it been?
+[SEG0007] person_1 (PATIENT): I've had it since last weekend.
+[SEG0008] person_2 (DOCTOR): Mm, okay. Have you had periods stopped for four months?
+[SEG0009] person_1 (PATIENT): Yeah, I've had that since Friday. About periods stopped for four months, severe, really.
+[SEG0010] person_2 (DOCTOR): Have you had weight change, by any chance?
+[SEG0011] person_1 (PATIENT): Let me think, not at all, no weight change.
+[SEG0012] person_2 (DOCTOR): Have you had any visual changes, hot flushes or positive pregnancy test?
+[SEG0013] person_1 (PATIENT): No visual changes, hot flushes or positive pregnancy test, none of it.
+[SEG0014] person_2 (DOCTOR): Sure. Your breathing, any trouble there?
+[SEG0015] person_1 (PATIENT): Breathing's normal.
+[SEG0016] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0017] person_1 (PATIENT): Lots of rice, lentils and some fruit. I live with my elderly mother. I'm a bus driver, so I sit for long hours.
+[SEG0018] person_2 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0019] person_1 (PATIENT): I have anxiety, for nearly five years.
+[SEG0020] person_2 (DOCTOR): I see, go ahead.
+[SEG0021] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0022] person_1 (PATIENT): I'm allergic to walnuts, I get my lips swelling.
+[SEG0023] person_2 (DOCTOR): Let me quickly check your readings.
+[SEG0024] person_2 (DOCTOR): So, bear with me while this finishes...
+[SEG0025] person_2 (DOCTOR): Okay: pulse is 75 beats a minute, temperature 36.6, respiratory rate 17. And blood pressure 126 over 71.
+[SEG0026] person_2 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0027] person_1 (PATIENT): Okay, doctor.
+[SEG0028] person_2 (DOCTOR): Okay, raise your arm for me.
+[SEG0029] person_2 (DOCTOR): You are not pregnant by the urine test, the breasts express a little milk, and there is no visual field loss.
+[SEG0030] person_1 (PATIENT): Yes, that's fine.
+[SEG0031] person_2 (DOCTOR): That's all I needed to check. Okay, thinking it through, it fits best with raised prolactin or a thyroid problem rather than stress.
+[SEG0032] person_1 (PATIENT): Do you think it's something serious?
+[SEG0033] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like raised prolactin or a thyroid problem rather than stress. Today I'm not changing anything. Have I covered everything you wanted?
+[SEG0034] person_1 (PATIENT): Okay, that makes sense. Thanks for explaining.
+[SEG0035] person_2 (DOCTOR): Have a good day.
+
+JSON:

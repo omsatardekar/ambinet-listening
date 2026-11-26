@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00448)
+[SEG0001] person_1 (PATIENT): Morning. Nice to finally see you, uh, doctor.
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): Mainly I've been feeling lightheaded. That's why I came.
+[SEG0004] person_2 (DOCTOR): Let's do your observations.
+[SEG0005] person_2 (DOCTOR): Hold still for me...
+[SEG0006] person_2 (DOCTOR): Okay: pulse 102, temperature is 36.6 degrees, SpO2 99 percent on room air, BP is 102 over 57.
+[SEG0007] person_1 (PATIENT): Is that okay?
+[SEG0008] person_2 (DOCTOR): Don't worry, I'll go through it in a moment.
+[SEG0009] person_2 (DOCTOR): Roughly when did it start?
+[SEG0010] person_1 (PATIENT): For one week, I'd say.
+[SEG0011] person_2 (DOCTOR): How often does it happen?
+[SEG0012] person_1 (PATIENT): Honestly, once or twice a day.
+[SEG0013] person_2 (DOCTOR): How intense does it get?
+[SEG0014] person_1 (PATIENT): It feels severe to me.
+[SEG0015] person_2 (DOCTOR): Have you found anything that eases it?
+[SEG0016] person_1 (PATIENT): Only sitting down, and it's not much.
+[SEG0017] person_2 (DOCTOR): Have you had any vomiting?
+[SEG0018] person_1 (PATIENT): Not at all, no vomiting.
+[SEG0019] person_2 (DOCTOR): Have you had any chest pain or weakness?
+[SEG0020] person_1 (PATIENT): No, no chest pain or weakness.
+[SEG0021] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0022] person_1 (PATIENT): No, nothing there.
+[SEG0023] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0024] person_1 (PATIENT): My father had kidney stones.
+[SEG0025] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0026] person_1 (PATIENT): I've had high blood pressure for two years now.
+[SEG0027] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0028] person_1 (PATIENT): Dust, I'd say.
+[SEG0029] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0030] person_1 (PATIENT): I have a couple of drinks on the weekend. I smoke about ten cigarettes a day. I work night shifts at a warehouse. I live with my family, my husband and two kids.
+[SEG0031] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0032] person_1 (PATIENT): I take ramipril, 5 milligrams, every morning for my blood pressure.
+[SEG0033] person_2 (DOCTOR): I'll examine you now, bear with me.
+[SEG0034] person_1 (PATIENT): Fine.
+[SEG0035] person_2 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0036] person_2 (DOCTOR): Heart rhythm is regular.
+[SEG0037] person_2 (DOCTOR): Thanks for that. From what you've told me and what I found, it points towards postural low blood pressure. Blood tests is what I'd like next, for dizziness.
+[SEG0038] person_3 (CLINICAL_STAFF): I can book that for Monday at 10 am.
+[SEG0039] person_2 (DOCTOR): Let's get an ECG, for dizziness. Get up in stages, sit on the edge of the bed for a minute first, and keep drinking water. A blood sugar test is something we might do if this doesn't improve in two weeks. If the symptoms get worse, or you feel really unwell, please come to the emergency department.
+[SEG0040] person_1 (PATIENT): Alright, I know what to look for.
+[SEG0041] person_2 (DOCTOR): Book a review in two weeks. Right, before we finish, can you repeat the plan back to me?
+[SEG0042] person_1 (PATIENT): So, I come back in two weeks. Is that right?
+[SEG0043] person_2 (DOCTOR): Yes, exactly right. Is there anything you wanted to ask?
+[SEG0044] person_1 (PATIENT): That's everything I wanted to ask. Thank you.
+
+JSON:

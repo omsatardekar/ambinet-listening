@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20166)
+[SEG0001] person_1 (PATIENT): Hi, doctor, I hope I'm not disturbing you.
+[SEG0002] person_2 (DOCTOR): Yes, have a seat. Tell me what's going on.
+[SEG0003] person_1 (PATIENT): It's extra hair on my chin. I thought I'd wait, but it hasn't gone.
+[SEG0004] person_2 (DOCTOR): How long has it been like this?
+[SEG0005] person_1 (PATIENT): For nearly five years, I'd say. Sorry, I know I'm rambling a bit. And I've been putting on weight as well, for two years. Right, and I've been feeling low as well. As for feeling low, I'd say moderate.
+[SEG0006] person_2 (DOCTOR): Okay, go on. Let me check a few things. Any breast discharge or being pregnant?
+[SEG0007] person_1 (PATIENT): Sorry, what was I saying, none of those, no.
+[SEG0008] person_2 (DOCTOR): A few quick ones: headaches with vision changes, pelvic pain or heavy bleeding?
+[SEG0009] person_1 (PATIENT): No, nothing to report there.
+[SEG0010] person_2 (DOCTOR): How's your breathing otherwise?
+[SEG0011] person_1 (PATIENT): No, my breathing's been fine.
+[SEG0012] person_2 (DOCTOR): Have you had any surgical procedures?
+[SEG0013] person_1 (PATIENT): Just an operation for a hernia, last spring.
+[SEG0014] person_2 (DOCTOR): What about your parents, brothers or sisters, any conditions?
+[SEG0015] person_1 (PATIENT): My uncle has high cholesterol.
+[SEG0016] person_2 (DOCTOR): So, tell me about your routine, work, habits, that sort of thing.
+[SEG0017] person_1 (PATIENT): Nothing, I'm teetotal. I have about eight cigarettes in a day. Yes, I work in a bakery, early starts. No, I share a house with my brother. I drink a lot of tea and snack through the day.
+[SEG0018] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0019] person_1 (PATIENT): I don't think I have any, no.
+[SEG0020] person_2 (DOCTOR): Let's run through your medicines.
+[SEG0021] person_1 (PATIENT): I, I take escitalopram, 10 milligrams, once a day.
+[SEG0022] person_2 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0023] person_1 (PATIENT): Um, I have anxiety. I told my wife I'd come today.
+[SEG0024] person_2 (DOCTOR): Sure. Yes, anxiety is known to us, good to have that clear. I'll do your observations first.
+[SEG0025] person_2 (DOCTOR): That's it, just a little longer...
+[SEG0026] person_2 (DOCTOR): Okay: blood pressure 112 over 72, temperature 36.5, pulse 70.
+[SEG0027] person_1 (PATIENT): Is that okay?
+[SEG0028] person_2 (DOCTOR): Alright, that's fine, I'll explain it soon.
+[SEG0029] person_2 (DOCTOR): So, could you come over to the couch, please?
+[SEG0030] person_1 (PATIENT): Of course.
+[SEG0031] person_2 (DOCTOR): I'll listen to your chest now.
+[SEG0032] person_2 (DOCTOR): There is some acne on the face and extra hair on the chin, and your blood pressure is fine.
+[SEG0033] person_2 (DOCTOR): Thank you, you can get dressed.
+[SEG0034] person_2 (DOCTOR): Putting it all together, it points towards a pattern that fits polycystic ovary syndrome.
+[SEG0035] person_1 (PATIENT): I mean, what are the odds it's serious?
+[SEG0036] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a pattern that fits polycystic ovary syndrome, and we'll watch how it goes. Today I'm not changing anything. That's everything on my side. Anything you're unsure about?
+[SEG0037] person_1 (PATIENT): I think I understand everything. Thanks.
+[SEG0038] person_2 (DOCTOR): Look after yourself.
+
+JSON:

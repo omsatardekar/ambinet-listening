@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00078)
+[SEG0001] person_1 (PATIENT): Hi, doctor. Long queue outside, but here I am.
+[SEG0002] person_2 (DOCTOR): Yes, do sit. Tell me what's been happening.
+[SEG0003] person_1 (PATIENT): I'm here because of leaking urine when I cough or sneeze.
+[SEG0004] person_2 (DOCTOR): I'll check your pressure and pulse.
+[SEG0005] person_2 (DOCTOR): Rest your hand here...
+[SEG0006] person_2 (DOCTOR): Okay: pulse 65, blood pressure 123 over 70, SpO2 99 percent on room air.
+[SEG0007] person_1 (PATIENT): Is that alright, doctor?
+[SEG0008] person_2 (DOCTOR): I'll come back to those numbers. How long are we talking about?
+[SEG0009] person_1 (PATIENT): I mean, ever since... since this morning, really.
+[SEG0010] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0011] person_1 (PATIENT): I'd say severe. Coughing and exercise definitely sets it off. I'd say all the time. I'd been needing to wear a pad, but that went away.
+[SEG0012] person_2 (DOCTOR): Let me check a few things. Any difficulty emptying or fever?
+[SEG0013] person_1 (PATIENT): No, none of those.
+[SEG0014] person_2 (DOCTOR): Mm. Did you get back pain or burning when passing urine?
+[SEG0015] person_1 (PATIENT): No, no back pain or burning when passing urine.
+[SEG0016] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0017] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0018] person_2 (DOCTOR): Any previous surgeries?
+[SEG0019] person_1 (PATIENT): No, nothing like that.
+[SEG0020] person_2 (DOCTOR): Do your parents or siblings have any long-term illnesses?
+[SEG0021] person_1 (PATIENT): My mother has diabetes.
+[SEG0022] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0023] person_1 (PATIENT): No allergies that I know of, no.
+[SEG0024] person_2 (DOCTOR): What about alcohol?
+[SEG0025] person_1 (PATIENT): A beer or two most evenings, to be honest.
+[SEG0026] person_2 (DOCTOR): Do you smoke?
+[SEG0027] person_1 (PATIENT): I stopped smoking about two years back.
+[SEG0028] person_2 (DOCTOR): Do you have a job?
+[SEG0029] person_1 (PATIENT): I'm a self-employed electrician.
+[SEG0030] person_2 (DOCTOR): What do you do to keep active?
+[SEG0031] person_1 (PATIENT): I cycle to work most mornings.
+[SEG0032] person_2 (DOCTOR): Are you living with family?
+[SEG0033] person_1 (PATIENT): I stay with my daughter and her family.
+[SEG0034] person_2 (DOCTOR): Are you on any regular medication?
+[SEG0035] person_1 (PATIENT): No, nothing regular.
+[SEG0036] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0037] person_1 (PATIENT): No, I've never had anything serious.
+[SEG0038] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0039] person_2 (DOCTOR): Almost done with this part.
+[SEG0040] person_2 (DOCTOR): No bulge is visible when you cough, and the tummy is soft.
+[SEG0041] person_2 (DOCTOR): Okay, finished. Okay, so my impression is this: The most likely explanation is stress urinary incontinence. I'd also keep a urine infection in mind. I want a urine test done, that's for urinary leakage. Let's get a bladder diary, for urinary symptoms. It's a routine test and it'll give us a much clearer picture. Pelvic floor exercises, three sets a day, make a real difference over a couple of months.
+[SEG0042] person_2 (DOCTOR): Please take the tablets with food so they don't upset your stomach. I'll also refer you to a pelvic-floor physiotherapist. Do get help quickly if the symptoms get worse. Come back in eight weeks. Ask me anything before you go.
+[SEG0043] person_1 (PATIENT): Alright, thanks. Bye for now.
+[SEG0044] person_2 (DOCTOR): Safe journey home.
+
+JSON:

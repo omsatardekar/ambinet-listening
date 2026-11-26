@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01655)
+[SEG0001] person_1 (DOCTOR): Evening. Let's get started.
+[SEG0002] person_2 (PATIENT): Hello. I hope I'm not late.
+[SEG0003] person_3 (FAMILY_MEMBER): morning doctor. I'll stay and fill in anything that's missed
+[SEG0004] person_1 (DOCTOR): Where shall we begin?
+[SEG0005] person_2 (PATIENT): I've been dealing with a very fast heartbeat
+[SEG0006] person_1 (DOCTOR): since when exactly?
+[SEG0007] person_2 (PATIENT): probably about three months yeah
+[SEG0008] person_1 (DOCTOR): tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse
+[SEG0009] person_2 (PATIENT): Well, it comes and goes. It feels moderate to me. I told myself I'd wait and see, and here I am.
+[SEG0010] person_1 (DOCTOR): any other symptoms with it?
+[SEG0011] person_2 (PATIENT): Chest pressure goes along with it most of the time. And And I've been sweating as well uh since last night. The Chest pressure? That's been for two days.
+[SEG0012] person_1 (DOCTOR): Let me check a few things. Any fever leg swelling or cough?
+[SEG0013] person_2 (PATIENT): None of those no.
+[SEG0014] person_1 (DOCTOR): Have you noticed any weakness or anything odd with your balance?
+[SEG0015] person_2 (PATIENT): No weakness or anything.
+[SEG0016] person_1 (DOCTOR): anything in your past medical history I should know?
+[SEG0017] person_2 (PATIENT): yes, heart disease. I looked a few things up online, and that probably didn't help
+[SEG0018] person_1 (DOCTOR): Ah. Any allergies to tablets, food or anything in the environment?
+[SEG0019] person_2 (PATIENT): yes, milk i get stomach cramps
+[SEG0020] person_1 (DOCTOR): Let's run through your medicines.
+[SEG0021] person_3 (FAMILY_MEMBER): she is on aspirin, 75 milligrams, once a day for my heart, I give it to her
+[SEG0022] person_1 (DOCTOR): And alcohol how much?
+[SEG0023] person_2 (PATIENT): I only drink at family occasions
+[SEG0024] person_1 (DOCTOR): And your job?
+[SEG0025] person_2 (PATIENT): I work in accounts at a hospital.
+[SEG0026] person_1 (DOCTOR): Do you get out much?
+[SEG0027] person_2 (PATIENT): Not much, I mostly stay in these days
+[SEG0028] person_1 (DOCTOR): how are your meals?
+[SEG0029] person_2 (PATIENT): I grab fast food at lunch most days.
+[SEG0030] person_1 (DOCTOR): I'll note down your vital signs first
+[SEG0031] person_1 (DOCTOR): keep your arm relaxed for me..
+[SEG0032] person_1 (DOCTOR): okay: oxygen saturation is 96 percent, pressure 95 over 59, temperature 36.9. And pulse is 111 beats a minute
+[SEG0033] person_1 (DOCTOR): I'd like to check you over now, if that's alright
+[SEG0034] person_1 (DOCTOR): tell me if that's sore
+[SEG0035] person_1 (DOCTOR): your pulse is over one hundred and eighty and and your blood pressure is low
+[SEG0036] person_1 (DOCTOR): that's the examination finished
+[SEG0037] person_1 (DOCTOR): taking everything into account, I'd lean towards a dangerous fast heart rhythm i can't rule out supraventricular tachycardia yet
+[SEG0038] person_2 (PATIENT): is it dangerous, doctor?
+[SEG0039] person_1 (DOCTOR): it's reasonable to be concerned, but right now a dangerous fast heart rhythm is my leading thought, not anything worse let's get an urgent ECG, for fast heart rhythm i'd like to arrange blood tests for arrhythmia
+[SEG0040] person_2 (PATIENT): does it it hurt?
+[SEG0041] person_1 (DOCTOR): Lie flat, I am calling the emergency team and preparing to shock the heart. We'll catch up straight away.
+[SEG0042] person_2 (PATIENT): Sure.
+[SEG0043] person_1 (DOCTOR): I think we're done unless you have questions
+[SEG0044] person_2 (PATIENT): right, I'll do that. Thank you, doctor
+[SEG0045] person_1 (DOCTOR): Goodbye for now.
+
+JSON:

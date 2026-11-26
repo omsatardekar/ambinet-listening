@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02698)
+[SEG0001] person_1 (NURSE): Doctor, I've brought them through. The observations are done, whenever you need them.
+[SEG0002] person_2 (DOCTOR): Okay, thanks. Hi, how can I help today?
+[SEG0003] person_3 (FAMILY_MEMBER): Um, doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_2 (DOCTOR): Absolutely, come and sit beside them.
+[SEG0005] person_4 (PATIENT): Ah, doctor, it's bloody diarrhoea. It's getting on my nerves now. I told my wife I'd come today.
+[SEG0006] person_2 (DOCTOR): Is it there all the time or does it come and go?
+[SEG0007] person_4 (PATIENT): I'd say on and off.
+[SEG0008] person_2 (DOCTOR): What about vomiting, have you noticed that?
+[SEG0009] person_4 (PATIENT): Yes, for one week. As for vomiting, it's on and off. And I've been feeling very unwell as well.
+[SEG0010] person_2 (DOCTOR): Did you get fever, chest pain or hernia?
+[SEG0011] person_4 (PATIENT): No fever, chest pain or hernia, none of it.
+[SEG0012] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0013] person_4 (PATIENT): No changes there.
+[SEG0014] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0015] person_4 (PATIENT): I mean, no, I've never been operated on.
+[SEG0016] person_2 (DOCTOR): Which medicines do you take at the moment?
+[SEG0017] person_4 (PATIENT): Actually, um, it's warfarin, 3 milligrams, in the evening for the blood thinning. Mm, it's metoprolol, 50 milligrams, twice a day.
+[SEG0018] person_1 (NURSE): Doctor, our chart from the last visit lists it as 25 milligrams.
+[SEG0019] person_2 (DOCTOR): Hm, that's different. Is the latest prescription anywhere near you?
+[SEG0020] person_4 (PATIENT): I don't think I have it with me.
+[SEG0021] person_2 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0022] person_4 (PATIENT): My son has asthma.
+[SEG0023] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0024] person_4 (PATIENT): I do a yoga class on Thursdays. My partner and our baby. I'm vegetarian and have been for years.
+[SEG0025] person_2 (DOCTOR): So, have you got any known allergies?
+[SEG0026] person_4 (PATIENT): Okay, so no, I'm not allergic to anything.
+[SEG0027] person_3 (FAMILY_MEMBER): Actually, um, I remember he had some kind of reaction to tramadol before. I couldn't swear to it.
+[SEG0028] person_4 (PATIENT): I don't remember that.
+[SEG0029] person_2 (DOCTOR): So, fair enough, I'll write down both versions. Tell me about any past illnesses or ongoing conditions.
+[SEG0030] person_4 (PATIENT): I've got an irregular heartbeat. I've been putting this off for weeks. Ah, I've had heart failure, yes.
+[SEG0031] person_2 (DOCTOR): I follow.
+[SEG0032] person_4 (PATIENT): Arthritis in my knees, for about ten years.
+[SEG0033] person_2 (DOCTOR): Okay, I can see an irregular heartbeat and heart failure in your file as well.
+[SEG0034] person_1 (NURSE): Here are the numbers, doctor. Oxygen saturation is 97 percent, pulse is 126 beats a minute, blood pressure 118 over 79.
+[SEG0035] person_2 (DOCTOR): Good, thank you.
+[SEG0036] person_2 (DOCTOR): I'll examine you in a second, make yourself comfortable.
+[SEG0037] person_2 (DOCTOR): Let me feel here.
+[SEG0038] person_2 (DOCTOR): Your pulse is irregular, the tummy is soft but terribly painful, and the pain is out of proportion to what I find.
+[SEG0039] person_2 (DOCTOR): Okay, that's enough for me.
+[SEG0040] person_2 (DOCTOR): Okay, so my impression is this: This is probably possible bowel ischaemia. The reason I say that is that your story and my examination fit together. Another possibility is a bowel obstruction.
+[SEG0041] person_4 (PATIENT): What are the odds it's serious?
+[SEG0042] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like possible bowel ischaemia, but I'd like to confirm. I'm going to order urgent blood tests, for severe abdominal pain. I think an urgent CT angiogram makes sense here, for possible bowel ischaemia. This is an emergency, you are going to hospital now. I'll also refer you to the surgical team.
+[SEG0043] person_2 (DOCTOR): And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. See me again straight away. That's everything on my side. Anything you're unsure about?
+[SEG0044] person_4 (PATIENT): No, that's all. Thanks a lot.
+
+JSON:

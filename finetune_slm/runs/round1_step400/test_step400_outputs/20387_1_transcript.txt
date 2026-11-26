@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20387)
+[SEG0001] person_1 (PATIENT): Hello, doctor. May I come in?
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What seems to be wrong?
+[SEG0003] person_3 (CAREGIVER): Doctor, I'm just here to help with the details. We came because of a bump on my head.
+[SEG0004] person_2 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0005] person_3 (CAREGIVER): She takes amlodipine, 5 milligrams, once a day.
+[SEG0006] person_2 (DOCTOR): How long have you been on it?
+[SEG0007] person_3 (CAREGIVER): About a year now. She is on mirtazapine, 15 milligrams, at night, I give it to her.
+[SEG0008] person_1 (PATIENT): So, I'd been on fluoxetine, not any more though, I stopped.
+[SEG0009] person_2 (DOCTOR): When did this begin? Just so I get the full picture.
+[SEG0010] person_1 (PATIENT): Oh, it's been about two weeks, I'm fairly sure. I mean, you know, I've also been feeling dizzy.
+[SEG0011] person_2 (DOCTOR): How strong would you say it is?
+[SEG0012] person_1 (PATIENT): It's moderate, honestly. I've also had a sore neck, since Friday.
+[SEG0013] person_2 (DOCTOR): Have you had a bit of nausea?
+[SEG0014] person_1 (PATIENT): Yes, um, for about a week. As for bit of nausea, pretty moderate, if I'm being honest.
+[SEG0015] person_2 (DOCTOR): Have you had any double vision, confusion or loss of consciousness?
+[SEG0016] person_1 (PATIENT): I haven't had double vision, confusion or loss of consciousness, no.
+[SEG0017] person_2 (DOCTOR): Any vomiting or weakness?
+[SEG0018] person_1 (PATIENT): Okay, so no vomiting or weakness, none of it.
+[SEG0019] person_2 (DOCTOR): Alright, any rashes or skin problems otherwise?
+[SEG0020] person_1 (PATIENT): I mean, nothing on the skin, no.
+[SEG0021] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0022] person_1 (PATIENT): Nothing like that.
+[SEG0023] person_2 (DOCTOR): Tell me about any past illnesses or ongoing conditions.
+[SEG0024] person_1 (PATIENT): Mm, I've had high blood pressure for about a year now. I've never really been one for hospitals. I took the morning off to come in today. Depression, for nearly five years.
+[SEG0025] person_2 (DOCTOR): So, is there anything more?
+[SEG0026] person_2 (DOCTOR): Alright, high blood pressure, that matches what I have here.
+[SEG0027] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0028] person_1 (PATIENT): No known allergies.
+[SEG0029] person_3 (CAREGIVER): I mean, hold on, doctor, I think she reacted to amoxicillin once. I'm not certain, though.
+[SEG0030] person_1 (PATIENT): Really? I don't think so.
+[SEG0031] person_2 (DOCTOR): Fair enough, I'll write down both versions. Have you ever had an operation?
+[SEG0032] person_1 (PATIENT): I had part of my thyroid removed years back.
+[SEG0033] person_2 (DOCTOR): Tell me about your eating.
+[SEG0034] person_1 (PATIENT): I drink a lot of tea and snack through the day.
+[SEG0035] person_2 (DOCTOR): Okay, are you active?
+[SEG0036] person_1 (PATIENT): I walk the dog every morning.
+[SEG0037] person_2 (DOCTOR): Let me quickly check your readings.
+[SEG0038] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0039] person_2 (DOCTOR): Okay: oxygen saturation is 99 percent, pulse is 80 beats a minute. And BP is 113 over 72, temp 36.9 degrees.
+[SEG0040] person_2 (DOCTOR): Alright, I'd like to check you over now, if that's alright.
+[SEG0041] person_1 (PATIENT): Yes, that's fine.
+[SEG0042] person_2 (DOCTOR): Alright, stay as you are for a moment.
+[SEG0043] person_2 (DOCTOR): There is a small bruise on the forehead, the pupils are equal and reactive, and you are walking steadily.
+[SEG0044] person_2 (DOCTOR): All finished, thank you. Putting it all together, my working impression is a minor head injury without worrying signs. That's my thinking for now, and it may change as we learn more. We shouldn't forget a neck strain.
+[SEG0045] person_1 (PATIENT): Sorry, uh, what was I saying, is it dangerous, doctor?
+[SEG0046] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a minor head injury without worrying signs, and we'll watch how it goes.
+[SEG0047] person_2 (DOCTOR): The treatment will be paracetamol, 1 gram, every six hours if needed, for three days. That should help with headache.
+[SEG0048] person_1 (PATIENT): That's simple enough.
+[SEG0049] person_2 (DOCTOR): Someone should stay with you tonight, and no alcohol or contact sport for now. I'll want another look if the headache gets worse. Does all of that make sense?
+[SEG0050] person_1 (PATIENT): Great, thank you for your help.
+
+JSON:

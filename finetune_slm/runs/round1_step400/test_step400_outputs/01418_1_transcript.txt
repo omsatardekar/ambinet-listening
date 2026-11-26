@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01418)
+[SEG0001] person_1 (DOCTOR): Afternoon, thanks for coming in.
+[SEG0002] person_2 (PATIENT): Hi doctor, I got here as fast as I could.
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, I'll sit in if that's okay, I know what's been happening.
+[SEG0004] person_1 (DOCTOR): absolutely, come and and sit beside them how are things, what's been happening?
+[SEG0005] person_3 (FAMILY_MEMBER): um, it's a red warm patch on my shin, doctor. She didn't want to come, but I insisted
+[SEG0006] person_1 (DOCTOR): okay, what do you take on a a normal day?
+[SEG0007] person_2 (PATIENT): I take carbamazepine, twice a day.
+[SEG0008] person_1 (DOCTOR): Okay, how much do you take?
+[SEG0009] person_2 (PATIENT): 200 milligrams. It's metformin, 500 milligrams, twice a day for my sugar. I'm on metoprolol, 50 milligrams, twice a day.
+[SEG0010] person_1 (DOCTOR): Is it bearing on you a lot?
+[SEG0011] person_2 (PATIENT): I'd say moderate.
+[SEG0012] person_1 (DOCTOR): Is there anything else with it?
+[SEG0013] person_2 (PATIENT): It usually comes with a sore leg. The sore leg? That's been for two weeks. With sore leg, pretty severe, if I'm being honest. I notice it more with walking. I was feeling shivery at one point, but that's gone now.
+[SEG0014] person_1 (DOCTOR): Any sign of rash elsewhere?
+[SEG0015] person_2 (PATIENT): Nope, no rash elsewhere.
+[SEG0016] person_3 (FAMILY_MEMBER): Actually, doctor, I did notice rash elsewhere. She doesn't always say.
+[SEG0017] person_2 (PATIENT): no, I don't think I did. Maybe a little, I'm not sure
+[SEG0018] person_1 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. Any cut or shortness of breath at all?
+[SEG0019] person_2 (PATIENT): Nope, nothing like that.
+[SEG0020] person_1 (DOCTOR): Any trouble with the waterworks?
+[SEG0021] person_2 (PATIENT): no changes there
+[SEG0022] person_1 (DOCTOR): Alright, any breathing difficulties apart from this?
+[SEG0023] person_2 (PATIENT): No problems with breathing.
+[SEG0024] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0025] person_2 (PATIENT): Nothing, I haven't had any operations.
+[SEG0026] person_1 (DOCTOR): is there anything relevant on the family side?
+[SEG0027] person_2 (PATIENT): Actually, my aunt has rheumatoid arthritis. My brother has epilepsy.
+[SEG0028] person_1 (DOCTOR): Tell me about any past illnesses or ongoing conditions.
+[SEG0029] person_2 (PATIENT): Epilepsy, for nearly five years. I have diabetes. I have heart disease.
+[SEG0030] person_1 (DOCTOR): And besides that?
+[SEG0031] person_1 (DOCTOR): okay, I can see heart disease in your file as well have you got any known allergies?
+[SEG0032] person_2 (PATIENT): I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0033] person_1 (DOCTOR): Now some background about your lifestyle.
+[SEG0034] person_2 (PATIENT): I used to drink heavily but I stopped four years ago. I quit smoking around ten years ago. I swim twice a week. Lots of rice, lentils and some fruit
+[SEG0035] person_4 (NURSE): Doctor, I've got the readings for you. Heart rate 95, respiratory rate 16. Saturation 97 percent, BP is 104 over 68, temperature is 38.1 degrees.
+[SEG0036] person_1 (DOCTOR): Thanks.
+[SEG0037] person_1 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0038] person_1 (DOCTOR): Take a deep breath for me.
+[SEG0039] person_1 (DOCTOR): the shin is red, warm and tender with a clear edge, and I've marked it it with a pen
+[SEG0040] person_2 (PATIENT): right
+[SEG0041] person_1 (DOCTOR): Good, you can sit up again.
+[SEG0042] person_1 (DOCTOR): Taking everything into account, I don't have a clear answer today: cellulitis of the leg is possible, and so is a blood clot in the leg.
+[SEG0043] person_2 (PATIENT): Is there something to worry about?
+[SEG0044] person_1 (DOCTOR): It's reasonable to be concerned, but right now cellulitis of the leg is my leading thought, not anything worse. I'd like to arrange blood tests for cellulitis.
+[SEG0045] person_2 (PATIENT): um, that's fine with me
+[SEG0046] person_1 (DOCTOR): You'll be taking flucloxacillin, 500 milligrams, four times a day, seven days. That should help with cellulitis. Keep the leg raised and come back if the redness goes past the pen line. See me again in two days. I think we're done unless you have questions.
+[SEG0047] person_2 (PATIENT): I think I understand everything. Thanks
+[SEG0048] person_1 (DOCTOR): See you soon.
+
+JSON:

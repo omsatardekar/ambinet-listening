@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03526)
+[SEG0001] person_1 (PATIENT): Hmm, good evening, doctor, thanks for seeing me.
+[SEG0002] person_2 (DOCTOR): Yes, have a a seat. Tell me what's going on.
+[SEG0003] person_3 (FAMILY_MEMBER): Morning, doctor. I'll stay and fill in anything that's missed.
+[SEG0004] person_2 (DOCTOR): Yes, that's no problem at all. Please sit.
+[SEG0005] person_3 (FAMILY_MEMBER): He's been having tingling in my feet, doctor.
+[SEG0006] person_2 (DOCTOR): what's the timeline, when did it begin?
+[SEG0007] person_1 (PATIENT): About... well, four weeks.
+[SEG0008] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0009] person_1 (PATIENT): Honestly, once or twice a day. It feels severe to me.
+[SEG0010] person_2 (DOCTOR): Any mild bloating as well?
+[SEG0011] person_1 (PATIENT): mm, yes i've also had being unsteady
+[SEG0012] person_2 (DOCTOR): Is it a lot or only a little?
+[SEG0013] person_1 (PATIENT): It's moderate, honestly.
+[SEG0014] person_2 (DOCTOR): Let me check a few things. Any weight loss, diarrhoea or back pain?
+[SEG0015] person_1 (PATIENT): Mm, uh, nope, nothing like that.
+[SEG0016] person_2 (DOCTOR): Any sign of bladder problems?
+[SEG0017] person_1 (PATIENT): Not at all, no bladder problems.
+[SEG0018] person_2 (DOCTOR): how are your joints, any aches elsewhere?
+[SEG0019] person_1 (PATIENT): no, joints are fine
+[SEG0020] person_2 (DOCTOR): So, are you allergic to to anything? Any allergies to medicines or foods?
+[SEG0021] person_1 (PATIENT): yes, milk, it gives me a rash
+[SEG0022] person_2 (DOCTOR): Do you have any chronic illnesses? These questions might sound routine, but they matter.
+[SEG0023] person_1 (PATIENT): Gout, for nearly five years.
+[SEG0024] person_2 (DOCTOR): Right, so gout is already on your record. We'll keep that in mind today. Do you follow any particular diet?
+[SEG0025] person_1 (PATIENT): I'm vegetarian and have been for years
+[SEG0026] person_2 (DOCTOR): Anything you do to stay fit?
+[SEG0027] person_1 (PATIENT): I do a yoga class on Thursdays
+[SEG0028] person_2 (DOCTOR): Are you in work at the moment?
+[SEG0029] person_1 (PATIENT): Yes, I work in a bakery, early starts
+[SEG0030] person_2 (DOCTOR): Is there any regular medication you use?
+[SEG0031] person_1 (PATIENT): no, I'm not on anything
+[SEG0032] person_2 (DOCTOR): Have you been to to theatre before?
+[SEG0033] person_1 (PATIENT): I had a mole taken off my arm a few years ago. I wasn't sure whether to come in at all, to be honest.
+[SEG0034] person_2 (DOCTOR): let me get the readings out of the way
+[SEG0035] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0036] person_2 (DOCTOR): Okay: heart rate 83, pressure 125 over 69. And saturation 99 percent, temperature 36.6.
+[SEG0037] person_1 (PATIENT): Is that okay?
+[SEG0038] person_2 (DOCTOR): So, I'll come back to the numbers.
+[SEG0039] person_2 (DOCTOR): Let's move on to the examination.
+[SEG0040] person_2 (DOCTOR): So, take a a deep breath for me.
+[SEG0041] person_2 (DOCTOR): The feeling in your feet is reduced and your balance with the eyes closed is poor.
+[SEG0042] person_2 (DOCTOR): that's all I needed to check. Right, here's what I'm thinking. This is probably a possible gut-related cause of nerve symptoms
+[SEG0043] person_1 (PATIENT): Well, do you think it's something serious?
+[SEG0044] person_2 (DOCTOR): I can't promise yet, but most people with a possible gut-related cause of nerve symptoms do well once it's treated properly.
+[SEG0045] person_2 (DOCTOR): A B12 level is what I'd like next, for neuropathy. That will help us see what's going on underneath and decide the next step. Please keep eating gluten normally until the coeliac test is done. Avoid taking any extra painkillers on top of what I'm prescribing without checking with us. Please come and see me after the results. Anything else on your mind before you go?
+[SEG0046] person_1 (PATIENT): Um, I think I understand everything. Thanks.
+
+JSON:

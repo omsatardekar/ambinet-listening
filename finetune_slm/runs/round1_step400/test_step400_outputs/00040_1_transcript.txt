@@ -1,0 +1,73 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00040)
+[SEG0001] person_1 (PATIENT): Good afternoon, doctor, the receptionist said you'd see me now.
+[SEG0002] person_2 (DOCTOR): Yes, do sit. Tell me what's been happening.
+[SEG0003] person_1 (PATIENT): So the thing is, I've got tingling in my fingers.
+[SEG0004] person_2 (DOCTOR): When did it begin?
+[SEG0005] person_1 (PATIENT): It's been five days now.
+[SEG0006] person_2 (DOCTOR): What about an ache in the wrist, have you noticed that?
+[SEG0007] person_1 (PATIENT): Yes, about the same, six months. With ache in the wrist, I'd say moderate. It's a couple of times a week. Oh, and numbness in the thumb and first two fingers.
+[SEG0008] person_2 (DOCTOR): Does it happen all the time or in spells?
+[SEG0009] person_1 (PATIENT): Honestly, once or twice a day. I've been waking up at night with pins and needles too, you know, since Monday.
+[SEG0010] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0011] person_1 (PATIENT): I'm on thyroxine, every morning.
+[SEG0012] person_2 (DOCTOR): And what strength is that?
+[SEG0013] person_1 (PATIENT): It's 75 micrograms.
+[SEG0014] person_2 (DOCTOR): Since when have you been taking it?
+[SEG0015] person_1 (PATIENT): For two months. Metformin, twice a day.
+[SEG0016] person_2 (DOCTOR): How much do you take?
+[SEG0017] person_1 (PATIENT): 500 milligrams, I think that's what's on the box. Atorvastatin. I take it 20 milligrams, at night. I do miss it now and then, to be fair. I'd been on rosuvastatin, not any more though, I stopped.
+[SEG0018] person_2 (DOCTOR): Do you get any exercise?
+[SEG0019] person_1 (PATIENT): I walk for about half an hour most days.
+[SEG0020] person_2 (DOCTOR): What's your diet like?
+[SEG0021] person_1 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0022] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0023] person_1 (PATIENT): Right, I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0024] person_2 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0025] person_1 (PATIENT): My uncle had colon cancer. Okay, you know, so my mother has migraines.
+[SEG0026] person_2 (DOCTOR): Any surgery in your history?
+[SEG0027] person_1 (PATIENT): I had my appendix out about eight years ago.
+[SEG0028] person_2 (DOCTOR): What about your general health, any conditions you're being treated for? I ask because it helps me narrow things down.
+[SEG0029] person_1 (PATIENT): I have an underactive thyroid, for about ten years.
+[SEG0030] person_2 (DOCTOR): Understood.
+[SEG0031] person_1 (PATIENT): I've got diabetes.
+[SEG0032] person_2 (DOCTOR): Anything more?
+[SEG0033] person_1 (PATIENT): I've got high cholesterol.
+[SEG0034] person_2 (DOCTOR): Understood. Alright, diabetes and high cholesterol, that matches what I have here. Any headache or weakness in the legs at all?
+[SEG0035] person_1 (PATIENT): No headache or weakness in the legs, none of it.
+[SEG0036] person_2 (DOCTOR): Have you had any neck pain, trouble walking or bladder problems?
+[SEG0037] person_1 (PATIENT): No neck pain, trouble walking or bladder problems, none of it.
+[SEG0038] person_2 (DOCTOR): Any swelling in the joints?
+[SEG0039] person_1 (PATIENT): No. No swelling in the joints.
+[SEG0040] person_2 (DOCTOR): How about your heart, any problems like that?
+[SEG0041] person_1 (PATIENT): Nothing like that.
+[SEG0042] person_2 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0043] person_1 (PATIENT): Okay, so no problems with breathing.
+[SEG0044] person_2 (DOCTOR): Let me measure a few things.
+[SEG0045] person_2 (DOCTOR): Rest your hand here...
+[SEG0046] person_2 (DOCTOR): Okay: temperature 36.7, BP is 123 over 70. And heart rate 64, SpO2 97 percent on room air.
+[SEG0047] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0048] person_1 (PATIENT): Fine.
+[SEG0049] person_2 (DOCTOR): Take your time, no rush.
+[SEG0050] person_2 (DOCTOR): Bending the wrist for a minute brings on the numbness.
+[SEG0051] person_2 (DOCTOR): Let me look at this properly.
+[SEG0052] person_2 (DOCTOR): Tapping over the wrist reproduces the tingling.
+[SEG0053] person_2 (DOCTOR): That's all I need, thank you. Right, here's what I'm thinking. The most likely explanation is carpal tunnel syndrome. I can't rule out a pinched nerve in the neck yet. I think a blood sugar test makes sense here, for neuropathy screen. I'd like to arrange a nerve conduction study for hand numbness. Take short breaks from typing and keep the wrist straight. Do get help quickly if the symptoms get worse.
+[SEG0054] person_2 (DOCTOR): See me again after the results are back.
+[SEG0055] person_1 (PATIENT): Alright, I'll put it in my diary.
+[SEG0056] person_2 (DOCTOR): Okay, I think we're finished. Is everything clear?
+[SEG0057] person_1 (PATIENT): One thing: no, actually that's all. Thanks.
+[SEG0058] person_2 (DOCTOR): See you then.
+
+JSON:

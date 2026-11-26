@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00953)
+[SEG0001] person_2 (DOCTOR): Good to see you again, Dana. It's about three weeks since we last spoke. How have things been since the accident? ~
+[SEG0002] person_1 (PATIENT): Okay. Not great. I keep having these, I guess flashbacks? I see the truck, the lights, I'm back on the road.
+[SEG0003] person_2 (DOCTOR): How often?
+[SEG0004] person_1 (PATIENT): A couple of times a week. It started... I don't know. A month after? Maybe two? I can't really say.
+[SEG0005] person_2 (DOCTOR): And at night?
+[SEG0006] person_1 (PATIENT): Nightmares. Bad ones. I wake up sweating, and I'm scared to go back to sleep.
+[SEG0007] person_2 (DOCTOR): Have you had any thoughts of harming yourself?
+[SEG0008] person_1 (PATIENT): No. No, nothing like that.
+[SEG0009] person_2 (DOCTOR): Are you drinking more than you used to?
+[SEG0010] person_1 (PATIENT): No, not really. A glass of wine, same as always.
+[SEG0011] person_2 (DOCTOR): Let's go through your medications.
+[SEG0012] person_1 (PATIENT): Sertraline, 50 mg, once a day. Prazosin, 1 mg, at night, for the nightmares. And ibuprofen, 400 mg, when my leg aches.
+[SEG0013] person_2 (DOCTOR): Do you take the sertraline every day?
+[SEG0014] person_1 (PATIENT): Every day. Well, most days. I forget it if I'm in a rush.
+[SEG0015] person_2 (DOCTOR): Okay. Thanks for being straight with me. Any allergies?
+[SEG0016] person_1 (PATIENT): Penicillin. Hives.
+[SEG0017] person_2 (DOCTOR): Any other health problems?
+[SEG0018] person_1 (PATIENT): Anxiety, I guess. Before all this.
+[SEG0019] person_2 (DOCTOR): And the accident, you had surgery on the leg, I believe?
+[SEG0020] person_1 (PATIENT): Yeah. A rod put in my left shin, four months ago.
+[SEG0021] person_2 (DOCTOR): How's the leg? ~
+[SEG0022] person_1 (PATIENT): Better. Sore if I walk a long way. ~
+[SEG0023] person_2 (DOCTOR): Let me look at you, Dana. You seem restless, shifting a lot in the chair.
+[SEG0024] person_1 (PATIENT): Yeah. I can't sit still. ~
+[SEG0025] person_2 (DOCTOR): Any chest pain or palpitations between the flashbacks?
+[SEG0026] person_1 (PATIENT): No, nothing, I'm fine between them.
+[SEG0027] person_2 (DOCTOR): That's helpful. What you're describing, the flashbacks, the nightmares and the jumpiness, fits post-traumatic stress after the accident.
+[SEG0028] person_1 (PATIENT): PTSD? Like soldiers? ~
+[SEG0029] person_2 (DOCTOR): It's not just soldiers. Anyone who has been through something frightening can have it. ~
+[SEG0030] person_1 (PATIENT): Is it going to go away? ~
+[SEG0031] person_2 (DOCTOR): For most people, yes, with treatment. Keep taking your sertraline every day. It works best taken regularly.
+[SEG0032] person_1 (PATIENT): I'll set an alarm. ~
+[SEG0033] person_2 (DOCTOR): Good idea. I'd like to see you again in two weeks.
+[SEG0034] person_1 (PATIENT): Two weeks. Okay. ~
+[SEG0035] person_2 (DOCTOR): And if it gets worse before then, ring the clinic. Don't wait. ~
+[SEG0036] person_1 (PATIENT): I will. ~
+
+JSON:

@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02093)
+[SEG0001] person_1 (PATIENT): Hello doctor, sorry, I took a wrong turn on the way here.
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): Actually, mainly a hot red swollen big toe. There's a couple of other things, but that's the the main one.
+[SEG0004] person_2 (DOCTOR): So, since when exactly?
+[SEG0005] person_1 (PATIENT): it's been three days now i didn't want to make a fuss, you know, you know
+[SEG0006] person_2 (DOCTOR): sure how troublesome is it it day to day?
+[SEG0007] person_1 (PATIENT): mostly severe
+[SEG0008] person_2 (DOCTOR): Any other symptoms with it?
+[SEG0009] person_1 (PATIENT): Not being able to wear a shoe goes along with it, most of the time.
+[SEG0010] person_2 (DOCTOR): Has there been pain that woke you too?
+[SEG0011] person_1 (PATIENT): Yes, about the same, two days. The not being able to wear a shoe? That's been for three weeks.
+[SEG0012] person_2 (DOCTOR): have you had a hot red swollen big toe before, or is this the first time?
+[SEG0013] person_1 (PATIENT): I had a similar thing about six months ago. It went away.
+[SEG0014] person_2 (DOCTOR): Have you noticed fever, rash or injury?
+[SEG0015] person_1 (PATIENT): none of those, no
+[SEG0016] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0017] person_1 (PATIENT): no, that's been fine
+[SEG0018] person_2 (DOCTOR): Tell me about your eating.
+[SEG0019] person_1 (PATIENT): I drink a lot of tea and snack through the day.
+[SEG0020] person_2 (DOCTOR): Are you on your own at home?
+[SEG0021] person_1 (PATIENT): I live with my elderly mother.
+[SEG0022] person_2 (DOCTOR): are you in work at the moment?
+[SEG0023] person_1 (PATIENT): Yes, I work in a bakery, early starts.
+[SEG0024] person_2 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0025] person_1 (PATIENT): Yes, high blood pressure.
+[SEG0026] person_2 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0027] person_1 (PATIENT): Ibuprofen. I take it 400 milligrams, three times a day.
+[SEG0028] person_2 (DOCTOR): is that long-standing?
+[SEG0029] person_1 (PATIENT): About two months.
+[SEG0030] person_2 (DOCTOR): Are you allergic to anything? Any allergies to medicines or foods?
+[SEG0031] person_1 (PATIENT): Erm, you know, yes, naproxen. I've no idea what the reaction was, only that I'm not supposed to have it.
+[SEG0032] person_2 (DOCTOR): Let me take your readings now.
+[SEG0033] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0034] person_2 (DOCTOR): Okay: SpO2 97 percent on room air, pulse is 67 beats a minute, temp 36.6 degrees, pressure 128 over 69.
+[SEG0035] person_2 (DOCTOR): right, let's have a proper look at you
+[SEG0036] person_2 (DOCTOR): alright, raise your arm for me
+[SEG0037] person_2 (DOCTOR): The big toe joint is red, hot, swollen and exquisitely tender.
+[SEG0038] person_2 (DOCTOR): you can sit up now. Okay, thinking it through, this is probably an acute gout attack
+[SEG0039] person_1 (PATIENT): Is this permanent?
+[SEG0040] person_2 (DOCTOR): I understand the worry at the the moment I'd say it's an acute gout attack, and we'll know more once the a uric acid blood test is back i'm gonna order a uric acid blood test, for gout it's a routine test and it'll give us a much clearer picture i'll request kidney function tests, it'll help with gout treatment rest the foot, ice it, and drink plenty of water; limit beer and red meat
+[SEG0041] person_2 (DOCTOR): One warning sign to remember: the symptoms get worse. In that case don't wait.
+[SEG0042] person_1 (PATIENT): Yes, will do.
+[SEG0043] person_2 (DOCTOR): Come back in two weeks.
+[SEG0044] person_1 (PATIENT): Sure.
+[SEG0045] person_2 (DOCTOR): right, that's the plan do you want to ask me anything?
+[SEG0046] person_1 (PATIENT): That's clear, uh, thanks.
+
+JSON:

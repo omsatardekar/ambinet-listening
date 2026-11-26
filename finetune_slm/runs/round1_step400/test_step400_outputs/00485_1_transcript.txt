@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00485)
+[SEG0001] person_1 (PATIENT): Good evening, doctor, thank you for staying late.
+[SEG0002] person_2 (DOCTOR): Right, no trouble at all, come in. What's been bothering you?
+[SEG0003] person_1 (PATIENT): It's, It's trouble reading small print, mostly.
+[SEG0004] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0005] person_1 (PATIENT): Holding it further away helps a bit. Pretty mild, if I'm being honest. And there's blurry vision as well, two years now.
+[SEG0006] person_2 (DOCTOR): Sure. Let me check a few things. Any redness, eye pain or flashes of light?
+[SEG0007] person_1 (PATIENT): Nothing like that, no.
+[SEG0008] person_2 (DOCTOR): How about floaters?
+[SEG0009] person_1 (PATIENT): I haven't noticed any floaters.
+[SEG0010] person_2 (DOCTOR): Okay, anything with your nerves, like weakness or numbness?
+[SEG0011] person_1 (PATIENT): Okay, so no weakness or anything.
+[SEG0012] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0013] person_1 (PATIENT): No, skin's been fine.
+[SEG0014] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0015] person_1 (PATIENT): None, as far as I'm aware.
+[SEG0016] person_2 (DOCTOR): So, any previous surgeries?
+[SEG0017] person_1 (PATIENT): No operations, no.
+[SEG0018] person_2 (DOCTOR): Does anything run in the family?
+[SEG0019] person_1 (PATIENT): My mother has diabetes.
+[SEG0020] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0021] person_1 (PATIENT): I skip breakfast most days. I stay with my daughter and her family. I play badminton on Sundays.
+[SEG0022] person_2 (DOCTOR): So, any long-term health problems I should know about? I'll explain everything as we go along.
+[SEG0023] person_1 (PATIENT): High blood pressure, for two years. I've had diabetes, yes. A neighbour of mine said I should see someone about it. I've never really been one for hospitals.
+[SEG0024] person_2 (DOCTOR): Alright, diabetes, that matches what I have here. What medicines do you take regularly?
+[SEG0025] person_1 (PATIENT): I take losartan, 50 milligrams, once a day. Glycomet. I take it 500 milligrams, twice a day.
+[SEG0026] person_2 (DOCTOR): I see.
+[SEG0027] person_1 (PATIENT): I used to take telmisartan, but I stopped it.
+[SEG0028] person_2 (DOCTOR): Before we go on, a few quick readings.
+[SEG0029] person_2 (DOCTOR): Just relax your arm...
+[SEG0030] person_2 (DOCTOR): Okay: blood pressure 113 over 77, heart rate 85, temp 36.7 degrees, SpO2 98 percent on room air.
+[SEG0031] person_2 (DOCTOR): Okay, a quick examination now.
+[SEG0032] person_2 (DOCTOR): Almost done with this part.
+[SEG0033] person_2 (DOCTOR): Vision without glasses is six over twelve in both eyes.
+[SEG0034] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0035] person_2 (DOCTOR): The lens looks a little cloudy on both sides.
+[SEG0036] person_2 (DOCTOR): Thanks, please take a seat again. Having listened and examined, it fits best with a refractive problem or early cataracts. I'd also keep diabetic eye changes in mind.
+[SEG0037] person_1 (PATIENT): Is this going to go away?
+[SEG0038] person_2 (DOCTOR): It's reasonable to be concerned, but right now a refractive problem or early cataracts is my leading thought, not anything worse.
+[SEG0039] person_2 (DOCTOR): We should do an eye pressure check for blurred vision.
+[SEG0040] person_3 (CLINICAL_STAFF): I can book that for Friday at 2 pm.
+[SEG0041] person_1 (PATIENT): Friday, that works for me.
+[SEG0042] person_2 (DOCTOR): We should do a dilated eye examination for blurred vision. Get a proper glasses test, and keep your sugar and blood pressure well controlled for your eyes. I'd like to see you again in four weeks.
+[SEG0043] person_1 (PATIENT): Good, um, I'll come back then.
+[SEG0044] person_2 (DOCTOR): How would you describe the plan, so we're on the same page?
+[SEG0045] person_1 (PATIENT): So, I come back in four weeks. Is that right?
+[SEG0046] person_2 (DOCTOR): Yes, exactly right. Look after yourself.
+[SEG0047] person_1 (PATIENT): Nothing more from me, thanks.
+
+JSON:

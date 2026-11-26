@@ -1,0 +1,70 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00719)
+[SEG0001] person_1 (PATIENT): Sorry we're late, doctor. Rosa got lost in the parking lot, and I wouldn't have come at all, it's just a foot check. ~
+[SEG0002] person_2 (DOCTOR): No problem, Mr Dale. How are you feeling about the feet, from your side? ~
+[SEG0003] person_1 (PATIENT): They're fine. I have a little blister on the left heel, that's all, it came up last week from my work boots.
+[SEG0004] person_3 (CAREGIVER): It's been a week, doctor, and it's not healing. And his heels are cracked, they've been cracked all winter.
+[SEG0005] person_2 (DOCTOR): Rosa, thank you. Any numbness or tingling in the feet, Mr Dale?
+[SEG0006] person_1 (PATIENT): No, no numbness. My feet feel fine.
+[SEG0007] person_3 (CAREGIVER): Frank, you couldn't feel the bathwater yesterday, I had to tell you it was too hot. You never feel it on your feet.
+[SEG0008] person_1 (PATIENT): I felt it. It was a bit warm, that's all. ~
+[SEG0009] person_2 (DOCTOR): I'll write both down. Any fever or chills?
+[SEG0010] person_1 (PATIENT): No fever.
+[SEG0011] person_2 (DOCTOR): What about the legs, cramps?
+[SEG0012] person_1 (PATIENT): Cramps in the calves at night, on and off.
+[SEG0013] person_2 (DOCTOR): And your energy?
+[SEG0014] person_1 (PATIENT): Tired. But I'm old.
+[SEG0015] person_2 (DOCTOR): Let's go through your medications.
+[SEG0016] person_1 (PATIENT): Insulin glargine, 20 units, at bedtime. Metformin, 1000 mg, twice a day, I never miss it. Atorvastatin, 40 mg, at night. And lisinopril, 10 mg, once a day.
+[SEG0017] person_3 (CAREGIVER): The insulin is 24 units, Frank, I draw it up myself. And you skip the evening metformin, at least three times a week.
+[SEG0018] person_1 (PATIENT): It's 20. And I take the metformin. Mostly.
+[SEG0019] person_2 (DOCTOR): So the insulin dose is 20 or 24 units, and I'll check with the pharmacy. Any allergies, Mr Dale?
+[SEG0020] person_1 (PATIENT): Sulfa. I got hives from it.
+[SEG0021] person_2 (DOCTOR): What conditions do you have?
+[SEG0022] person_1 (PATIENT): Type 2 diabetes, fifteen years. High blood pressure. And high cholesterol.
+[SEG0023] person_2 (DOCTOR): Any operations?
+[SEG0024] person_1 (PATIENT): My right second toe was amputated, in 2021.
+[SEG0025] person_2 (DOCTOR): Diabetes in the family?
+[SEG0026] person_1 (PATIENT): My mother had it.
+[SEG0027] person_2 (DOCTOR): Do you smoke?
+[SEG0028] person_1 (PATIENT): I quit smoking six years ago.
+[SEG0029] person_2 (DOCTOR): Alcohol?
+[SEG0030] person_1 (PATIENT): A beer on Fridays.
+[SEG0031] person_2 (DOCTOR): What did you do for work?
+[SEG0032] person_1 (PATIENT): Trucker, thirty years. Retired.
+[SEG0033] person_2 (DOCTOR): And at home?
+[SEG0034] person_1 (PATIENT): I live with Rosa, she's my daughter-in-law, she looks after me.
+[SEG0035] person_2 (DOCTOR): Let me check you. Blood pressure 138 over 82, pulse 78, temperature 36.9, oxygen 97 percent, breathing 16, and weight 98 kilos.
+[SEG0036] person_1 (PATIENT): All good. ~
+[SEG0037] person_2 (DOCTOR): Take your socks off, please. Rosa, can you help?
+[SEG0038] person_3 (CAREGIVER): Of course. ~
+[SEG0039] person_2 (DOCTOR): There's a blister on the left heel, about two centimetres, with no redness around it.
+[SEG0040] person_3 (CAREGIVER): Is it infected? ~
+[SEG0041] person_2 (DOCTOR): Not that I can see. The skin on both heels is dry and cracked.
+[SEG0042] person_1 (PATIENT): Told you, nothing serious. ~
+[SEG0043] person_2 (DOCTOR): Now I'll touch your soles with a thin plastic fibre. Tell me when you feel it.
+[SEG0044] person_1 (PATIENT): Yes. Yes. Hm. ~
+[SEG0045] person_2 (DOCTOR): You couldn't feel it on the left sole at all, and only some of the right. So the sensation in the feet is reduced.
+[SEG0046] person_1 (PATIENT): Is it? ~
+[SEG0047] person_3 (CAREGIVER): That's what I said. ~
+[SEG0048] person_2 (DOCTOR): Any trouble breathing?
+[SEG0049] person_1 (PATIENT): No, nothing at all.
+[SEG0050] person_2 (DOCTOR): This blister looks like a pressure blister from the boots, but because of your diabetes I want to be careful.
+[SEG0051] person_3 (CAREGIVER): What do we do? ~
+[SEG0052] person_2 (DOCTOR): I'd like to arrange an HbA1c, and an X-ray of the left foot.
+[SEG0053] person_1 (PATIENT): Fine. ~
+[SEG0054] person_2 (DOCTOR): Wear soft shoes, check your feet every day, Rosa too. I'd like to see you again in two weeks.
+[SEG0055] person_3 (CAREGIVER): Two weeks. I'll keep an eye on it. ~
+
+JSON:

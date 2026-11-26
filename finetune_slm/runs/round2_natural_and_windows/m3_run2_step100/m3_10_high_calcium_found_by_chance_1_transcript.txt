@@ -1,0 +1,136 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_10_high_calcium_found_by_chance)
+[SEG0001] person_1 (FAMILY_MEMBER): Hi, doctor. Sorry. Mum's got her result back from the lab, the one from the checkup, and the girl on the phone said it was high and you wanted to see her, so we came straight over.
+[SEG0002] person_2 (PATIENT): Which result?
+[SEG0003] person_1 (FAMILY_MEMBER): Your blood, Mum. The calcium.
+[SEG0004] person_2 (PATIENT): Is it the sugar?
+[SEG0005] person_1 (FAMILY_MEMBER): It's the calcium. It's the one from your checkup.
+[SEG0006] person_3 (DOCTOR): Good afternoon, Mrs Okafor. Hello, I'm Dr Lindqvist. And you are?
+[SEG0007] person_1 (FAMILY_MEMBER): Michael, I'm her son. I drove her.
+[SEG0008] person_3 (DOCTOR): Thanks for coming, Michael. This is Nurse Tom, he'll be doing some quick checks. Mrs Okafor, did you understand what the lab said?
+[SEG0009] person_2 (PATIENT): Something was high. I thought maybe it was my sugar, my sister has the sugar.
+[SEG0010] person_3 (DOCTOR): It's a different test. It was your calcium, the amount of calcium in your blood, and it's a little higher than we like, so I wanted to look at you. How have you been in yourself?
+[SEG0011] person_2 (PATIENT): Oh, you know. The usual.
+[SEG0012] person_3 (DOCTOR): What's the usual?
+[SEG0013] person_2 (PATIENT): Tired. Tired and a bit achy. And I've been so thirsty. It's been, I can't stop, I've got a bottle of water by every chair.
+[SEG0014] person_3 (DOCTOR): Okay.
+[SEG0015] person_3 (DOCTOR): Okay. Thirsty. Tell me more about that.
+[SEG0016] person_2 (PATIENT): I drink and drink. I get up in the night, three, four times. And I'm going all the time. Like a tap.
+[SEG0017] person_3 (DOCTOR): Passing a lot of water as well.
+[SEG0018] person_2 (PATIENT): Yes. I never used to. I had a nice long sleep, before.
+[SEG0019] person_3 (DOCTOR): How long has this been going on?
+[SEG0020] person_2 (PATIENT): Some time. A month? It's hard to say.
+[SEG0021] person_1 (FAMILY_MEMBER): Er, she told me about it at the beginning of the summer, Mum, you said you were drinking more at Auntie Grace's.
+[SEG0022] person_2 (PATIENT): Did I? Perhaps. I don't remember what I said.
+[SEG0023] person_3 (DOCTOR): That's all right. A month or two, then, or longer. Is there anything else that feels different from your normal self?
+[SEG0024] person_2 (PATIENT): A funny feeling.
+[SEG0025] person_3 (DOCTOR): A funny feeling. Can you tell me about it, anywhere in particular?
+[SEG0026] person_2 (PATIENT): In my tummy. Not pain exactly. Heavy. And I'm bunged up. I haven't been right for a week, you know, down there.
+[SEG0027] person_3 (DOCTOR): Constipated.
+[SEG0028] person_2 (PATIENT): Yes. That. A week, nearly.
+[SEG0029] person_3 (DOCTOR): Any vomiting, or feeling sick?
+[SEG0030] person_2 (PATIENT): I feel a bit sick in the morning. But I've not been sick.
+[SEG0031] person_3 (DOCTOR): Any confusion, forgetting things, feeling muddled?
+[SEG0032] person_2 (PATIENT): Muddled? No. No, I know exactly where I am. I'm in the doctor's. With my son.
+[SEG0033] person_1 (FAMILY_MEMBER): She's been a bit forgetful, I think.
+[SEG0034] person_2 (PATIENT): I've not.
+[SEG0035] person_1 (FAMILY_MEMBER): Well, uh, you rang me three times on Sunday about the same thing, Mum.
+[SEG0036] person_2 (PATIENT): That's because you didn't ring back.
+[SEG0037] person_3 (DOCTOR): We'll both be fair about it. I'll keep an eye on how you're thinking while you're with me. Have you had any aches in particular places? Bones, muscles?
+[SEG0038] person_2 (PATIENT): In my back, a dull one. And the hands, but they're always bad. The arthritis. It's worse in the cold, but the cold's not here yet, so I don't know.
+[SEG0039] person_3 (DOCTOR): Right.
+[SEG0040] person_3 (DOCTOR): How long have you had the arthritis in your hands?
+[SEG0041] person_2 (PATIENT): Since I was sixty, so nearly twenty years.
+[SEG0042] person_3 (DOCTOR): Okay. And what are you taking at the moment, for that or anything else?
+[SEG0043] person_2 (PATIENT): Nothing much. I have the calcium and D, the white ones, from the chemist, for my bones. My daughter-in-law got them for me.
+[SEG0044] person_3 (DOCTOR): And what's the dose on those, do you know?
+[SEG0045] person_2 (PATIENT): One a day. A thousand, I think it says on the front.
+[SEG0046] person_1 (FAMILY_MEMBER): Mum, it's two. You take two in the morning, with breakfast. The box says five hundred each.
+[SEG0047] person_2 (PATIENT): It's one.
+[SEG0048] person_1 (FAMILY_MEMBER): I fill the weekly pot, Mum, I put two in. You said you'd take them, and the pot's empty at the end of the week.
+[SEG0049] person_2 (PATIENT): Yeah.
+[SEG0050] person_2 (PATIENT): Then I've taken two. If it's empty.
+[SEG0051] person_3 (DOCTOR): I'd like to see the box, if someone can bring it in. Whatever the dose, I want to get it exactly right, because it's relevant. Any other tablets or remedies, cream, anything you rub on, herbal tea?
+[SEG0052] person_2 (PATIENT): No. Just a paracetamol if my hands are bad.
+[SEG0053] person_3 (DOCTOR): Okay. Allergies, to any medicine?
+[SEG0054] person_2 (PATIENT): None. I've never had any.
+[SEG0055] person_3 (DOCTOR): And your health in the past?
+[SEG0056] person_2 (PATIENT): Well, uh, only the arthritis. I had my tonsils out as a girl. Oh, and I had a lump in my breast once, a long time ago, but it was nothing.
+[SEG0057] person_3 (DOCTOR): Okay. I'll make a note. What did you work as?
+[SEG0058] person_2 (PATIENT): I was the cook at the primary school. Forty years. They gave me a clock when I left, it stopped on the first day.
+[SEG0059] person_1 (FAMILY_MEMBER): Mm-hm.
+[SEG0060] person_1 (FAMILY_MEMBER): She cooked for four hundred children every day.
+[SEG0061] person_3 (DOCTOR): That's a lot of fish fingers.
+[SEG0062] person_2 (PATIENT): And custard. The custard was famous.
+[SEG0063] person_3 (DOCTOR): Ha.
+[SEG0064] person_3 (DOCTOR): Right. Let's get Tom to do some measurements, and then I'll examine you. Is that all right?
+[SEG0065] person_2 (PATIENT): Yes, dear.
+[SEG0066] person_4 (NURSE): Okay, Mrs Okafor, arm out for me. Sleeve up a bit. This might squeeze. Try to relax your arm completely.
+[SEG0067] person_2 (PATIENT): I never can.
+[SEG0068] person_4 (NURSE): Blood pressure one thirty-four over eighty. Pulse seventy-four, it's regular. And the temperature is thirty-six point seven.
+[SEG0069] person_3 (DOCTOR): Thank you, Tom. Mrs Okafor, I'd like to feel your tummy, if I may. Lie back on the couch, and tell me if it's tender. I'll press gently in a few places.
+[SEG0070] person_2 (PATIENT): Okay.
+[SEG0071] person_2 (PATIENT): It's a bit cold.
+[SEG0072] person_3 (DOCTOR): Is that sore? Here?
+[SEG0073] person_2 (PATIENT): A little. Yes. Not a lot.
+[SEG0074] person_3 (DOCTOR): And deeper down, on the left? You can say if it hurts.
+[SEG0075] person_2 (PATIENT): Ooh. That's tender. That's the funny feeling place.
+[SEG0076] person_3 (DOCTOR): Okay. The belly is soft, but it's tender when I press deeply, on the left side, and there's no lump that I can feel. The other things I looked at seem fine. Can you sit up for me?
+[SEG0077] person_2 (PATIENT): Is it serious?
+[SEG0078] person_3 (DOCTOR): Mrs Okafor, I don't want to guess at an answer today. Your calcium is high, and being thirsty, passing lots of water, feeling washed out, being bunged up, and the vague aches, all of those can come with a high calcium. What I don't know is why it's high, and I don't want to put a label on something I can't be sure of.
+[SEG0079] person_1 (FAMILY_MEMBER): But you'll find out.
+[SEG0080] person_3 (DOCTOR): I'd like to understand it properly, yes. I'd also want to understand it in the right order. And I'd like to hear a bit more about what you've been eating and drinking, in case there's an easy explanation.
+[SEG0081] person_2 (PATIENT): Mm-hm.
+[SEG0082] person_2 (PATIENT): I eat everything. I like my cheese.
+[SEG0083] person_3 (DOCTOR): Cheese, milk?
+[SEG0084] person_2 (PATIENT): Milk in my tea. A glass of milk at night. I find it settles me. And yoghurt.
+[SEG0085] person_3 (DOCTOR): And you said you've got a bottle of water by every chair. How much is that, in a day?
+[SEG0086] person_2 (PATIENT): Oh, I couldn't say. A lot. Two big bottles? Three. And tea.
+[SEG0087] person_3 (DOCTOR): Okay. Michael, would you be able to collect the calcium box and bring it in, with all her other bottles of anything, even the creams?
+[SEG0088] person_1 (FAMILY_MEMBER): I'll go now, it's fifteen minutes.
+[SEG0089] person_3 (DOCTOR): Please, take your time, there's no rush.
+[SEG0090] person_2 (PATIENT): He's a good boy.
+[SEG0091] person_3 (DOCTOR): He is. While he's gone, I'd like to ask you one more thing, Mrs Okafor, which isn't about your body. How has your mood been?
+[SEG0092] person_2 (PATIENT): I've been a bit low. Since the summer. My sister Grace has been poorly, and I can't get over to see her. I worry.
+[SEG0093] person_3 (DOCTOR): Mm.
+[SEG0094] person_3 (DOCTOR): That counts. I'm sorry about Grace.
+[SEG0095] person_2 (PATIENT): She's got the sugar, you see. I thought that's what I had.
+[SEG0096] person_3 (DOCTOR): Not the same test, no. Thank you for telling me. Let's wait for Michael.
+[SEG0097] person_1 (FAMILY_MEMBER): Okay, I'm back. I brought the lot. The calcium and D, the paracetamol, and there's a tub of those cod liver capsules she's got in the cupboard that I didn't know about.
+[SEG0098] person_2 (PATIENT): Right.
+[SEG0099] person_2 (PATIENT): Oh, those. Those are old.
+[SEG0100] person_3 (DOCTOR): Thank you, Michael. Let me look. The calcium and vitamin D, it says here on the label, take one or two tablets daily. Each tablet, five hundred milligrams of calcium, and some vitamin D. And the cod liver oil capsules, how often are those?
+[SEG0101] person_2 (PATIENT): When I remember. With my breakfast.
+[SEG0102] person_1 (FAMILY_MEMBER): She never mentioned them to me.
+[SEG0103] person_2 (PATIENT): You never asked, Michael.
+[SEG0104] person_3 (DOCTOR): Right. So I can't tell you whether it's been one tablet or two, I only know that it could have been up to two, plus the cod liver oil, plus milk and cheese and yoghurt. And I'm not going to jump to a conclusion on that, because I don't know yet that it's the cause. But I am going to ask you for one thing, and it's a safe thing to do. I'd like you to stop the calcium and vitamin D tablets and the cod liver capsules, for now. Put them in the cupboard.
+[SEG0105] person_2 (PATIENT): Stop my bone tablets?
+[SEG0106] person_3 (DOCTOR): Just pause them. Your bones aren't going to crumble in a few days. But when the calcium in the blood is high, adding more won't help, even if only a little.
+[SEG0107] person_2 (PATIENT): I see.
+[SEG0108] person_3 (DOCTOR): And keep drinking the water. I want you to carry on, it's doing you good, it helps the body get rid of extra. Michael, if she gets more muddled than she is now, if she's very sleepy, can't keep anything down, can't wake properly, or if she's in pain in her side or her tummy that's severe, don't wait for anything, take her to the emergency room.
+[SEG0109] person_1 (FAMILY_MEMBER): Mm.
+[SEG0110] person_1 (FAMILY_MEMBER): Okay. Okay. Is it, I mean, is it cancer?
+[SEG0111] person_3 (DOCTOR): That's the question I'd expect you to be asking, Michael, and I'm not going to brush it off. A high calcium has a number of possible causes. Some are very ordinary, like too many supplements or an overactive gland in the neck, which is common in women of your mother's age. Some are less ordinary. I really can't tell you which it is from sitting here, and I don't want to frighten you or give false comfort.
+[SEG0112] person_1 (FAMILY_MEMBER): Fair enough.
+[SEG0113] person_2 (PATIENT): Are you saying I've got cancer?
+[SEG0114] person_3 (DOCTOR): No, Mrs Okafor. I'm saying I don't know yet what's causing it, and nothing I've found today tells me it's something serious. That's the honest position. You're alert, you're talking clearly, you're eating, your examination is mostly reassuring.
+[SEG0115] person_2 (PATIENT): I'd like to go home.
+[SEG0116] person_3 (DOCTOR): Of course. You can go home today. Michael, will you keep the water by her chair and make sure she goes for the bathroom regularly?
+[SEG0117] person_1 (FAMILY_MEMBER): Yes. She'll be at mine for a few days, I've made up the back bedroom.
+[SEG0118] person_2 (PATIENT): I am not moving into your back bedroom.
+[SEG0119] person_1 (FAMILY_MEMBER): Just for the weekend, Mum.
+[SEG0120] person_2 (PATIENT): The weekend. And the custard's mine.
+[SEG0121] person_3 (DOCTOR): The custard is yours.
+
+JSON:

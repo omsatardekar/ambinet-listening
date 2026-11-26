@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20310)
+[SEG0001] person_1 (PATIENT): hi, is it okay to come in now?
+[SEG0002] person_2 (DOCTOR): So, yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): I'm here because of irregular periods.
+[SEG0004] person_2 (DOCTOR): Since when exactly?
+[SEG0005] person_1 (PATIENT): about... well, nearly five years
+[SEG0006] person_2 (DOCTOR): Would you say mild, moderate or severe?
+[SEG0007] person_1 (PATIENT): Mostly severe.
+[SEG0008] person_2 (DOCTOR): What about spots on your face, have you noticed that?
+[SEG0009] person_1 (PATIENT): Mm, yes.
+[SEG0010] person_2 (DOCTOR): Has there been any hot flushes?
+[SEG0011] person_1 (PATIENT): Nope, no hot flushes.
+[SEG0012] person_2 (DOCTOR): Let me check a few things. Any pelvic pain, being pregnant or heavy bleeding?
+[SEG0013] person_1 (PATIENT): erm, no, I haven't had any of them
+[SEG0014] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0015] person_1 (PATIENT): Let me think, no, nothing with my heart.
+[SEG0016] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0017] person_1 (PATIENT): No, nothing at all.
+[SEG0018] person_2 (DOCTOR): Let me ask about allergies, anything at all? These questions might sound routine, but they matter.
+[SEG0019] person_1 (PATIENT): No known allergies.
+[SEG0020] person_2 (DOCTOR): Is there any regular medication you use?
+[SEG0021] person_1 (PATIENT): no, nothing at the moment
+[SEG0022] person_2 (DOCTOR): any previous surgeries?
+[SEG0023] person_1 (PATIENT): No surgery, no.
+[SEG0024] person_2 (DOCTOR): Do you do any exercise?
+[SEG0025] person_1 (PATIENT): I swim twice a week.
+[SEG0026] person_2 (DOCTOR): Do you live by yourself?
+[SEG0027] person_1 (PATIENT): No, I share a house with my brother.
+[SEG0028] person_2 (DOCTOR): time for your numbers, if that's okay
+[SEG0029] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0030] person_2 (DOCTOR): okay: temperature is 36.6 degrees, SpO2 99 percent on room air, pressure 121 over 70, heart rate 79.
+[SEG0031] person_1 (PATIENT): Is that okay?
+[SEG0032] person_2 (DOCTOR): So, that's fine, I'll explain it soon.
+[SEG0033] person_2 (DOCTOR): I'll examine you in a second, make yourself comfortable.
+[SEG0034] person_2 (DOCTOR): Let me feel here.
+[SEG0035] person_2 (DOCTOR): There is some acne on the face and extra hair on the chin, and your blood pressure is fine.
+[SEG0036] person_2 (DOCTOR): Thank you, you can get dressed.
+[SEG0037] person_2 (DOCTOR): I think a pelvic ultrasound makes sense here, for irregular periods. I think hormone blood tests makes sense here, for irregular periods. I'll start you on metformin, 500 milligrams, once a day with food, for three months. It's for cycle regulation and weight. Regular exercise and a small weight loss can make cycles more regular
+[SEG0038] person_2 (DOCTOR): keep an eye out, and if you get very heavy bleeding or severe pelvic pain, call us the same day or go to emergency book a review after the scan
+[SEG0039] person_1 (PATIENT): I mean, that's fine with me.
+[SEG0040] person_2 (DOCTOR): so, is there anything you'd like me to go over again?
+[SEG0041] person_1 (PATIENT): good, thanks, I'll see you then
+[SEG0042] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

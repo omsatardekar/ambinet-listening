@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00290)
+[SEG0001] person_1 (PATIENT): morning, you know, doctor, I hope I'm not interrupting
+[SEG0002] person_2 (DOCTOR): yes, come in, take a a seat what can I do for you today?
+[SEG0003] person_1 (PATIENT): Well, you know, I've been having pain in my lower back.
+[SEG0004] person_2 (DOCTOR): how long has this been going on? It helps to be thorough at this stage
+[SEG0005] person_1 (PATIENT): Around three days... no wait, you know, it's more like two days.
+[SEG0006] person_2 (DOCTOR): Does anything bring it it on or make it worse?
+[SEG0007] person_1 (PATIENT): Sitting for long and bending definitely sets it off
+[SEG0008] person_2 (DOCTOR): have you had numbness in the legs, by any chance?
+[SEG0009] person_1 (PATIENT): Not at all, no numbness in the legs.
+[SEG0010] person_2 (DOCTOR): Let me check a a few things. Any weight loss, bladder problems or fever?
+[SEG0011] person_1 (PATIENT): no, no weight loss, bladder problems or fever
+[SEG0012] person_2 (DOCTOR): Is your chest okay generally?
+[SEG0013] person_1 (PATIENT): No problems with breathing.
+[SEG0014] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0015] person_1 (PATIENT): Skin's normal.
+[SEG0016] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0017] person_1 (PATIENT): No, nothing, I've generally been healthy.
+[SEG0018] person_2 (DOCTOR): Do you exercise at all?
+[SEG0019] person_1 (PATIENT): I go to the gym a couple of times a week.
+[SEG0020] person_2 (DOCTOR): do you have a job?
+[SEG0021] person_1 (PATIENT): I'm a self-employed electrician
+[SEG0022] person_2 (DOCTOR): Any regular medication?
+[SEG0023] person_1 (PATIENT): nothing, uh, no
+[SEG0024] person_2 (DOCTOR): first the numbers, if you don't mind
+[SEG0025] person_2 (DOCTOR): Okay, give me a a moment...
+[SEG0026] person_2 (DOCTOR): Okay: temp 36.4 degrees, pulse is 75 beats a minute, oxygen saturation is 98 percent, BP is 113 over 73.
+[SEG0027] person_1 (PATIENT): Is that normal?
+[SEG0028] person_2 (DOCTOR): So, I'll come back to those numbers.
+[SEG0029] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0030] person_2 (DOCTOR): Let me look at this properly.
+[SEG0031] person_2 (DOCTOR): Straight leg raise is negative on both sides and power in the legs is normal.
+[SEG0032] person_2 (DOCTOR): Let me look at this properly.
+[SEG0033] person_2 (DOCTOR): there's tenderness over the muscles on the right of the lower back
+[SEG0034] person_2 (DOCTOR): Right, you can sit back down.
+[SEG0035] person_2 (DOCTOR): Having listened and examined, my working impression is mechanical low back pain. Let's book an MRI of the lumbar spine to look into persistent back pain.
+[SEG0036] person_1 (PATIENT): So, does it need any preparation?
+[SEG0037] person_2 (DOCTOR): I'm sending you for an X-ray of the lower back because of back pain. It's a routine test and and it'll give us a much clearer picture.
+[SEG0038] person_1 (PATIENT): Does it need any preparation?
+[SEG0039] person_2 (DOCTOR): Let's use paracetamol, 650 milligrams, three times a day, for one week. It's for back pain. Staying gently active heals back pain faster than bed rest, so keep moving. Every hour, get up and stretch if you're at a desk.
+[SEG0040] person_2 (DOCTOR): Okay. Avoid taking any extra painkillers on top of what I'm prescribing without checking with us. We'll catch up in two weeks. Alright, I'll see you out.
+[SEG0041] person_1 (PATIENT): Well, no, I think that's everything. Thank you, doctor.
+[SEG0042] person_2 (DOCTOR): Bye for now.
+
+JSON:

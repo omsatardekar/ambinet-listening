@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20018)
+[SEG0001] person_1 (DOCTOR): Hi there, the chair's free, sit down.
+[SEG0002] person_2 (PATIENT): hello, doctor
+[SEG0003] person_1 (DOCTOR): What's been worrying you?
+[SEG0004] person_2 (PATIENT): uh, I'm here because of loud snoring my family kept telling me to get it checked i'm not great at remembering details, so bear with me
+[SEG0005] person_1 (DOCTOR): When was the first time you noticed it?
+[SEG0006] person_2 (PATIENT): For about a month, I'd say.
+[SEG0007] person_1 (DOCTOR): Is there anything else with it?
+[SEG0008] person_2 (PATIENT): When it starts I tend to get my partner noticing pauses in my breathing as well. And a dry mouth in the morning, too. With dry mouth in the morning, severe, I'd say.
+[SEG0009] person_1 (DOCTOR): Have you had loud snoring before, or is this the first time?
+[SEG0010] person_2 (PATIENT): A bit, a couple of years ago. It settled by itself back then.
+[SEG0011] person_1 (DOCTOR): do you have any long-term conditions?
+[SEG0012] person_2 (PATIENT): Yes, high blood pressure.
+[SEG0013] person_1 (DOCTOR): Sure.
+[SEG0014] person_2 (PATIENT): I've had diabetes for about ten years now i wasn't sure whether to to come in at all, to be honest
+[SEG0015] person_1 (DOCTOR): Understood. Okay, I can see diabetes in your file as well.
+[SEG0016] person_1 (DOCTOR): alright, tell me about your routine, work, habits, that sort of thing
+[SEG0017] person_2 (PATIENT): I'm vegetarian and have been for years. No, I share a house with my brother. Yes, I work in a bakery, early starts
+[SEG0018] person_1 (DOCTOR): any inherited conditions that you know of in the family?
+[SEG0019] person_2 (PATIENT): let me think, um, my mother had a stroke
+[SEG0020] person_1 (DOCTOR): What's on your current medicine list?
+[SEG0021] person_2 (PATIENT): I take telmisartan, 40 milligrams, once a day for my pressure. I take gliclazide, 80 milligrams, twice a day.
+[SEG0022] person_1 (DOCTOR): Any leg swelling, chest pain, palpitations or low mood at all?
+[SEG0023] person_2 (PATIENT): No, none of those at all.
+[SEG0024] person_1 (DOCTOR): Did you notice any choking at night?
+[SEG0025] person_2 (PATIENT): I haven't noticed any choking at night.
+[SEG0026] person_1 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0027] person_2 (PATIENT): No, that side's been fine.
+[SEG0028] person_3 (NURSE): Doctor, I've got the readings for you. Blood pressure 162 over 90, weight 95 kilos. BMI works out to 32.9, pulse 85, respiratory rate 14, oxygen saturation is 99 percent, temp 36.7 degrees, height 170 centimetres.
+[SEG0029] person_1 (DOCTOR): Good, thank you.
+[SEG0030] person_1 (DOCTOR): Alright, over here please and and I'll take a look.
+[SEG0031] person_1 (DOCTOR): Breathe out slowly.
+[SEG0032] person_1 (DOCTOR): Your neck is thick and the back of the throat looks crowded.
+[SEG0033] person_2 (PATIENT): Yeah, no problem.
+[SEG0034] person_1 (DOCTOR): Good, you can sit up again.
+[SEG0035] person_1 (DOCTOR): Okay, thinking it through, it it points towards symptoms that suggest obstructive sleep apnoea. I want to be honest that this is an impression, not a final answer. Another possibility is an under-active thyroid.
+[SEG0036] person_2 (PATIENT): oh, is there something to worry about?
+[SEG0037] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like symptoms that suggest obstructive sleep apnoea, but I'd like to confirm. I think a thyroid test makes sense here, for tiredness. An overnight sleep study is what I'd like next, for suspected sleep apnoea. It's a routine test and it'll give us a much clearer picture. Try to sleep on your side and avoid alcohol close to bedtime. I think the sleep clinic should see you too.
+[SEG0038] person_1 (DOCTOR): if you feel sleepy while driving, that's the point to come in urgently we'll catch up after the sleep study have I covered everything you wanted?
+[SEG0039] person_2 (PATIENT): alright, thanks, take care
+
+JSON:

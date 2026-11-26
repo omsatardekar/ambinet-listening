@@ -1,0 +1,113 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_20_diabetes_screening_symptom_diary)
+[SEG0001] person_1 (DOCTOR): Good morning, Mrs Iyer, come and sit. The booking says "screening for diabetes, sister recently diagnosed," so let me start there. Is that right?
+[SEG0002] person_2 (PATIENT): Good morning, doctor. Yes, that is the reason. I have brought some notes, I hope you don't mind. I have typed them. It is easier for me than to rely on memory.
+[SEG0003] person_1 (DOCTOR): Not at all, notes are very welcome. And who is with you?
+[SEG0004] person_3 (CAREGIVER): Good morning, doctor. I am Latha, I am helping Madam at home, since her knee surgery. I live in. I came to carry the bag and to help if there is any difficulty.
+[SEG0005] person_1 (DOCTOR): Welcome, Latha. And this is Nurse Priyanka, who will be taking your readings. Mrs Iyer, tell me what has made you concerned about diabetes.
+[SEG0006] person_2 (PATIENT): Yeah.
+[SEG0007] person_2 (PATIENT): Well, um, my younger sister, Kamala, in Pune, was diagnosed last month. Her sugar was three hundred and ten on a random test, she was admitted for two days. She is sixty-four, I am sixty-eight. I thought, if she is diabetic, perhaps I should check, because I am the elder and we have the same parents, and I have been noticing a few things.
+[SEG0008] person_1 (DOCTOR): I see.
+[SEG0009] person_1 (DOCTOR): Good thinking. Let me hear the things. You've written them down?
+[SEG0010] person_2 (PATIENT): Yes. I started a diary three weeks ago when she told me. Shall I read?
+[SEG0011] person_1 (DOCTOR): Please.
+[SEG0012] person_2 (PATIENT): Okay. Entry one, the fourth of November, at night, around ten-thirty. Tingling in the toes of both feet. Duration, approximately twenty minutes. Entry two, the seventh of November, same time. Tingling again, more in the right foot. Entry three, the eleventh. Tingling, and I noted also that my vision was a little blurred when reading the newspaper in the evening, after six, with the lamp on.
+[SEG0013] person_1 (DOCTOR): Okay.
+[SEG0014] person_1 (DOCTOR): Is the blurring in one eye or both?
+[SEG0015] person_2 (PATIENT): Both, as far as I can say. I covered one eye at a time on the eleventh and it was similar. It cleared after I rested my eyes for ten minutes.
+[SEG0016] person_1 (DOCTOR): Yes.
+[SEG0017] person_1 (DOCTOR): And you've had cataract surgery, I see.
+[SEG0018] person_2 (PATIENT): Well, um, the right eye, in two thousand twenty-one. The left is due next year. The ophthalmologist said both eyes were otherwise healthy at the last check, in March.
+[SEG0019] person_1 (DOCTOR): Mm.
+[SEG0020] person_1 (DOCTOR): Good. And how many times in total have you had the tingling?
+[SEG0021] person_2 (PATIENT): Five times in three weeks. The most recent was Sunday.
+[SEG0022] person_3 (CAREGIVER): Er, it was Saturday, Madam. Sunday you were at the temple.
+[SEG0023] person_2 (PATIENT): Saturday, then. Thank you, Latha. I will correct the diary.
+[SEG0024] person_1 (DOCTOR): Any other symptoms? Thirst, passing urine often?
+[SEG0025] person_2 (PATIENT): I have been thirstier, slightly, but it has been warm. Urine is the same as usual, I get up once at night, that is all. I recorded it.
+[SEG0026] person_1 (DOCTOR): Any weight loss?
+[SEG0027] person_2 (PATIENT): No. In fact, I have put on a little since the knee, because of less activity. I will tell you the numbers when the nurse measures.
+[SEG0028] person_1 (DOCTOR): Tiredness?
+[SEG0029] person_2 (PATIENT): Well, uh, some tiredness in the afternoons, I would not say unusual. I take a short rest.
+[SEG0030] person_1 (DOCTOR): Cuts or sores that are slow to heal?
+[SEG0031] person_2 (PATIENT): None. Latha, have you noticed?
+[SEG0032] person_3 (CAREGIVER): No, Madam. The cut on your finger from the vegetables healed in five days.
+[SEG0033] person_1 (DOCTOR): That's useful. Now, any medical conditions that you have?
+[SEG0034] person_2 (PATIENT): Hypothyroidism, for twelve years. And hypertension, and mild arthritis in the knees, that is why the surgery was done on the left.
+[SEG0035] person_1 (DOCTOR): And medicines?
+[SEG0036] person_2 (PATIENT): I take three. Amlodipine five milligrams in the morning. Levothyroxine fifty micrograms on an empty stomach, half an hour before breakfast. And a calcium supplement, with vitamin D, after dinner. I have the details of each one on my sheet.
+[SEG0037] person_1 (DOCTOR): Right.
+[SEG0038] person_1 (DOCTOR): Great. Any allergies to medicines?
+[SEG0039] person_2 (PATIENT): Ah. This is where I am not sure. After the first knee operation, in two thousand nineteen, I developed itching, all over, on the third day. The anaesthetist said it might be the antibiotic they gave, or the painkiller. They stopped both, and it went. But nobody ever told me which one.
+[SEG0040] person_1 (DOCTOR): Do you remember the name of either?
+[SEG0041] person_2 (PATIENT): No. I asked for the discharge summary, but it only said "possible drug reaction, itching".
+[SEG0042] person_1 (DOCTOR): Okay. I'll record it as a possible drug reaction, cause unknown, either an antibiotic or a painkiller. I'd ask the hospital for the notes, so we can find out.
+[SEG0043] person_2 (PATIENT): I will write to them. Latha will post it.
+[SEG0044] person_3 (CAREGIVER): Yes, Madam.
+[SEG0045] person_3 (CAREGIVER): Doctor, Madam also eats sweets after dinner. Every night, one or two laddoos.
+[SEG0046] person_2 (PATIENT): Latha.
+[SEG0047] person_3 (CAREGIVER): It is true, Madam.
+[SEG0048] person_2 (PATIENT): One. It is one. Perhaps two on festival days.
+[SEG0049] person_1 (DOCTOR): Let's note one a night, on average. And what's your diet generally, Mrs Iyer?
+[SEG0050] person_2 (PATIENT): Vegetarian. Rice at lunch, rotis at dinner, plenty of dal. Fruit in the afternoon. Curd with lunch. Tea twice a day with sugar, a teaspoon each.
+[SEG0051] person_1 (DOCTOR): Good, thank you for being honest. There's room for a small swap or two later, if the test says so, but I won't change anything until we know.
+[SEG0052] person_2 (PATIENT): Understood.
+[SEG0053] person_1 (DOCTOR): Anything in the family besides your sister?
+[SEG0054] person_2 (PATIENT): Our father had diabetes in his late fifties. Our mother did not. Another sister, in Chennai, has pressure but not sugar.
+[SEG0055] person_1 (DOCTOR): Alright. What did you do before retirement?
+[SEG0056] person_2 (PATIENT): I was a bank manager. Thirty-four years, nationalised bank. I retired seven years ago.
+[SEG0057] person_1 (DOCTOR): Do you exercise?
+[SEG0058] person_2 (PATIENT): I walk twenty minutes in the morning, when the knee allows. And yoga, for half an hour.
+[SEG0059] person_2 (PATIENT): Doctor, I have a question about the cataract. The eye doctor mentioned that diabetes can affect the retina. If I do have it, will the left eye surgery be a problem?
+[SEG0060] person_1 (DOCTOR): Good question. It would not stop the surgery, but the eye team would want your sugar controlled first, and they'd look at the back of the eye more closely. If the test is normal, nothing changes.
+[SEG0061] person_2 (PATIENT): I see. I will inform Dr Rao if there is a change.
+[SEG0062] person_1 (DOCTOR): Please do. Okay. Nurse, would you take the measurements, please?
+[SEG0063] person_4 (NURSE): Of course. Mrs Iyer, please sit up straight, rest your arm on the table. Blood pressure first. I'll try not to talk.
+[SEG0064] person_4 (NURSE): One thirty-eight over eighty-four. Pulse seventy-two. Now, if you could step on the scale. Shoes off, please, Latha will hold your bag.
+[SEG0065] person_4 (NURSE): Seventy-one kilos. Last time, in March, you were sixty-eight.
+[SEG0066] person_2 (PATIENT): Yes, three kilos. As I said.
+[SEG0067] person_1 (DOCTOR): Thank you, Priyanka. Mrs Iyer, I'd like to look at your feet. Would you take off your shoes and socks, and sit on the couch?
+[SEG0068] person_2 (PATIENT): Latha, please.
+[SEG0069] person_1 (DOCTOR): First I'll feel the pulses on top of the foot, and behind the ankle. Both feet. Good, I can feel those clearly on both sides. Now I'm going to touch your toes lightly with a bit of cotton wool. Close your eyes and say yes each time you feel it.
+[SEG0070] person_2 (PATIENT): Yes. Yes. Yes. Yes.
+[SEG0071] person_1 (DOCTOR): And with this little nylon thread, pressing on the sole. Yes each time.
+[SEG0072] person_2 (PATIENT): Yes. Yes. Yes. Yes. Yes.
+[SEG0073] person_1 (DOCTOR): Feeling is normal on both feet, there are no sores, and the skin is healthy. That's a good sign. Now let me listen to your heart and lungs.
+[SEG0074] person_1 (DOCTOR): Heart sounds normal, regular. Chest clear. Thank you.
+[SEG0075] person_2 (PATIENT): Is that good?
+[SEG0076] person_1 (DOCTOR): So, um, far, yes. Let me tell you what I think and what I'd like to do. Your symptoms, the tingling at night and the occasional blurred vision, can be early signs of diabetes, but they can also be caused by other things. Your thyroid, a low B12, your knee, your reading glasses. I can't say it's diabetes from this alone. So we need a test.
+[SEG0077] person_2 (PATIENT): Yes. That is why I came.
+[SEG0078] person_1 (DOCTOR): I can offer you three options. One, a fasting blood sugar, you don't eat after dinner and we take blood in the morning. Two, an HbA1c, which shows your average sugar over three months and doesn't need fasting. Three, a glucose tolerance test, where you drink a sugary drink and we test at intervals over two hours. I'd suggest we do the first two together, since they're easy. If those are borderline, we can do the third.
+[SEG0079] person_2 (PATIENT): Okay.
+[SEG0080] person_2 (PATIENT): That is reasonable. When can I do it?
+[SEG0081] person_1 (DOCTOR): The nurse can take both on Thursday morning. Come before nine, nothing to eat from the night before, only water. Take your thyroid tablet after the blood is drawn, on that one day.
+[SEG0082] person_2 (PATIENT): Yeah.
+[SEG0083] person_2 (PATIENT): I will wait until the blood is drawn for the levothyroxine. Noted. Latha, please make a note.
+[SEG0084] person_3 (CAREGIVER): Yes, Madam. Thursday, before nine.
+[SEG0085] person_1 (DOCTOR): And I'd like to see you in two weeks, with the results, and we can talk. If the sugar is up, there's a lot we can do early. If it's normal, we should repeat every year or so, because of your sister and father.
+[SEG0086] person_2 (PATIENT): Two weeks. I will keep the diary until then, if you wish.
+[SEG0087] person_1 (DOCTOR): Please do. Keep recording the tingling and the vision, with the time. That's very helpful, it's the first time anyone has brought me a diary like that.
+[SEG0088] person_3 (CAREGIVER): Doctor, one more thing from me. Madam does not like to say, but her knee is paining at night also, and she wakes up. Maybe that is the tingling.
+[SEG0089] person_2 (PATIENT): Mm-hm.
+[SEG0090] person_2 (PATIENT): Latha, I did not wish to trouble the doctor with that.
+[SEG0091] person_1 (DOCTOR): No, it's helpful, Latha. If the knee wakes her at night, that may be part of the story. Mrs Iyer, is the pain in the knee, or the foot?
+[SEG0092] person_2 (PATIENT): Uh, the knee. And the tingling is separate, in the toes. I have been careful to distinguish them in the diary.
+[SEG0093] person_1 (DOCTOR): Good, that's a very clear distinction. I'll note both. If your blood tests are normal, the knee and the sleep are the next thing we'd look at.
+[SEG0094] person_2 (PATIENT): Very good. Thank you, doctor.
+[SEG0095] person_3 (CAREGIVER): Thank you, doctor.
+[SEG0096] person_4 (NURSE): Mrs Iyer, I'll give you the form with Thursday's time on it, and a card with the clinic number. Please keep it with your diary.
+[SEG0097] person_2 (PATIENT): I will keep them together. It is how I keep everything.
+[SEG0098] person_2 (PATIENT): Thank you, doctor. It is how I managed forty years in the bank.
+
+JSON:

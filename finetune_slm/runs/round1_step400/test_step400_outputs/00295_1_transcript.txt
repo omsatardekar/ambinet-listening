@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00295)
+[SEG0001] person_1 (PATIENT): Good morning, doctor. Can I come in?
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_3 (CAREGIVER): Hello, doctor, I came in with them, if that's okay.
+[SEG0004] person_2 (DOCTOR): Alright, of course, please stay. It's helpful to have you here.
+[SEG0005] person_3 (CAREGIVER): He's been having been feeling low most days, doctor.
+[SEG0006] person_2 (DOCTOR): Roughly when did it start?
+[SEG0007] person_1 (PATIENT): It's been about a year now. As for losing interest in things I used to enjoy, I honestly can't say when that began. It might have been last month or the month before. About losing interest in things I used to enjoy, a seven out of ten, I suppose.
+[SEG0008] person_2 (DOCTOR): So, any poor appetite as well?
+[SEG0009] person_1 (PATIENT): Yes, I have. So, I've also had trouble sleeping, for two months.
+[SEG0010] person_2 (DOCTOR): I'll check your pressure and pulse.
+[SEG0011] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0012] person_2 (DOCTOR): Okay: heart rate 65, pressure 108 over 74.
+[SEG0013] person_1 (PATIENT): Is that okay?
+[SEG0014] person_2 (DOCTOR): That's fine, we'll come to it.
+[SEG0015] person_2 (DOCTOR): Shall we do the examination?
+[SEG0016] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0017] person_2 (DOCTOR): You're well kempt and speaking clearly, and you maintain good eye contact.
+[SEG0018] person_2 (DOCTOR): Thanks for that. Any periods of unusually high energy, hearing voices, drinking more than usual or weight loss at all?
+[SEG0019] person_1 (PATIENT): No periods of unusually high energy, hearing voices, drinking more than usual or weight loss, none of it.
+[SEG0020] person_2 (DOCTOR): What about thoughts of harming myself?
+[SEG0021] person_1 (PATIENT): No, none, no thoughts of harming myself.
+[SEG0022] person_2 (DOCTOR): How about your heart, any problems like that?
+[SEG0023] person_1 (PATIENT): Right, my heart's been fine, as far as I know.
+[SEG0024] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0025] person_1 (PATIENT): So, I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0026] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0027] person_1 (PATIENT): I've got an underactive thyroid. Depression, for about ten years.
+[SEG0028] person_2 (DOCTOR): Mm-hm. Alright, an underactive thyroid and depression, that matches what I have here.
+[SEG0029] person_2 (DOCTOR): And your work?
+[SEG0030] person_1 (PATIENT): I drive a delivery van all day.
+[SEG0031] person_2 (DOCTOR): Anything special about your diet?
+[SEG0032] person_1 (PATIENT): I try to avoid too much sugar.
+[SEG0033] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0034] person_3 (CAREGIVER): It's thyroxine, 75 micrograms, every morning, doctor.
+[SEG0035] person_2 (DOCTOR): Go on.
+[SEG0036] person_1 (PATIENT): I used to take sertraline, but I stopped it.
+[SEG0037] person_2 (DOCTOR): Have you had any surgery before?
+[SEG0038] person_1 (PATIENT): Yes, I had a hernia repair, about five years back.
+[SEG0039] person_2 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0040] person_1 (PATIENT): My father had kidney stones.
+[SEG0041] person_2 (DOCTOR): Okay, so my impression is this: I'd lean towards a depressive episode. That's my thinking for now, and it may change as we learn more. A reaction to recent stress is still possible.
+[SEG0042] person_1 (PATIENT): What are the chances it's something bad?
+[SEG0043] person_2 (DOCTOR): It's reasonable to be concerned, but right now a depressive episode is my leading thought, not anything worse. I'm sending you for a thyroid test because of low mood. I'm sending you for blood tests because of low mood.
+[SEG0044] person_1 (PATIENT): Okay, that's fine.
+[SEG0045] person_2 (DOCTOR): It usually takes a few weeks for the tablet to start helping, so give it time and stay in touch. I'll also refer you to a counsellor.
+[SEG0046] person_1 (PATIENT): Okay.
+[SEG0047] person_2 (DOCTOR): I'll want another look in two weeks. Do you have any questions?
+[SEG0048] person_1 (PATIENT): I mean, thanks so much, doctor.
+
+JSON:

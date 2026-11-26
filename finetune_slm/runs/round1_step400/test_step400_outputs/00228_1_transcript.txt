@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00228)
+[SEG0001] person_1 (PATIENT): Hi doctor, uh, sorry, the lift was out and I had to take the stairs.
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_1 (PATIENT): I've, I've been feeling low most days. I did try to ignore it for a while
+[SEG0004] person_2 (DOCTOR): And when did that start?
+[SEG0005] person_1 (PATIENT): Hmm, it's been three weeks, I'm fairly sure. I'd rather know what's going on than keep guessing.
+[SEG0006] person_2 (DOCTOR): How intense does it it get?
+[SEG0007] person_1 (PATIENT): maybe a six out of ten on a bad day. And there's no energy as well, uh, two years now. As for no energy, about a three out of ten
+[SEG0008] person_2 (DOCTOR): Any poor appetite as well?
+[SEG0009] person_1 (PATIENT): Yes, for four weeks.
+[SEG0010] person_2 (DOCTOR): Have you been feeling low most days at any time before this?
+[SEG0011] person_1 (PATIENT): Yes, uh, something like this happened about six months ago, and it went away on its own.
+[SEG0012] person_2 (DOCTOR): How's your diet?
+[SEG0013] person_1 (PATIENT): I'm mostly vegetarian
+[SEG0014] person_2 (DOCTOR): Are you living with family?
+[SEG0015] person_1 (PATIENT): I stay with my daughter and her family.
+[SEG0016] person_2 (DOCTOR): any allergies I should know about?
+[SEG0017] person_1 (PATIENT): I think I reacted to some antibiotic once, years ago i don't remember which one, or what happened exactly
+[SEG0018] person_2 (DOCTOR): Any previous surgeries?
+[SEG0019] person_1 (PATIENT): No operations, no.
+[SEG0020] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0021] person_1 (PATIENT): Thyroxine, 75 micrograms, every morning it's escitalopram, once a day for my mood
+[SEG0022] person_2 (DOCTOR): Do you know the the dose?
+[SEG0023] person_1 (PATIENT): 10 milligrams, I think that's what's on the box. It's paracetamol, 650 milligrams, when needed.
+[SEG0024] person_2 (DOCTOR): any diagnoses you've been given before?
+[SEG0025] person_1 (PATIENT): An underactive thyroid, for about a year. So, I have depression, for about ten years. Yes, arthritis in my knees.
+[SEG0026] person_2 (DOCTOR): sure. Alright, depression, that matches what I have here. A few quick ones: weight loss or panic attacks?
+[SEG0027] person_1 (PATIENT): no, none of those
+[SEG0028] person_2 (DOCTOR): Has there been any hearing voices?
+[SEG0029] person_1 (PATIENT): Um, I haven't noticed any hearing voices.
+[SEG0030] person_2 (DOCTOR): A few quick ones: thoughts of harming myself or drinking more than usual?
+[SEG0031] person_1 (PATIENT): Well, um, no thoughts of harming myself or drinking more than usual, none of it.
+[SEG0032] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0033] person_1 (PATIENT): I mean, um, that's normal as far as I know.
+[SEG0034] person_2 (DOCTOR): A few measurements, then we'll continue.
+[SEG0035] person_2 (DOCTOR): Hold still for me...
+[SEG0036] person_2 (DOCTOR): Okay: temperature is 36.9 degrees, heart rate 77, saturation 98 percent. And BP is 108 over 74.
+[SEG0037] person_2 (DOCTOR): Can I examine you now?
+[SEG0038] person_2 (DOCTOR): Alright, stay still while I have a look.
+[SEG0039] person_2 (DOCTOR): you're well kempt and speaking clearly, and you maintain good eye contact
+[SEG0040] person_2 (DOCTOR): Okay, you can sit up.
+[SEG0041] person_2 (DOCTOR): Right, here's what I'm thinking. It fits best with a depressive episode. We shouldn't forget an underactive thyroid. Stop me if I've got anything wrong. You've been feeling low most days for three weeks, and no thoughts of harming myself or weight loss.
+[SEG0042] person_1 (PATIENT): That's it, yes.
+[SEG0043] person_2 (DOCTOR): Try to keep some routine, a bit of daylight and a short walk each day. That's it on my side. Anything unclear?
+[SEG0044] person_1 (PATIENT): All good here. Thank you.
+
+JSON:

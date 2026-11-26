@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00952)
+[SEG0001] person_4 (NURSE): Dr Hughes, this is Arlo, he's five, and his mum is here about his snoring. I'll leave you to it. ~
+[SEG0002] person_2 (DOCTOR): Thanks, nurse. Hello Arlo, hello Mum. What's been going on? ~
+[SEG0003] person_3 (FAMILY_MEMBER): He snores. Properly, like a lorry. It's been about a year, getting worse.
+[SEG0004] person_1 (PATIENT): I don't snore. ~
+[SEG0005] person_3 (FAMILY_MEMBER): You do, sweetheart. I recorded it, I've got it on my phone. ~
+[SEG0006] person_2 (DOCTOR): Could I hear a bit of it? ~
+[SEG0007] person_3 (FAMILY_MEMBER): Of course. Here you go. ~
+[SEG0008] person_2 (DOCTOR): Goodness. That's loud. Does he stop breathing at all, in the night?
+[SEG0009] person_3 (FAMILY_MEMBER): Sometimes it sounds like he pauses. Not for long. A few seconds.
+[SEG0010] person_2 (DOCTOR): Does he have a fever at the moment?
+[SEG0011] person_3 (FAMILY_MEMBER): No fever, no.
+[SEG0012] person_2 (DOCTOR): Any trouble swallowing?
+[SEG0013] person_3 (FAMILY_MEMBER): None, he eats like a horse.
+[SEG0014] person_2 (DOCTOR): And during the day, how's he? ~
+[SEG0015] person_3 (FAMILY_MEMBER): A bit cranky by the afternoon. He used to nap, and he doesn't now. ~
+[SEG0016] person_2 (DOCTOR): And does he ever wake up grumpy or tired? ~
+[SEG0017] person_3 (FAMILY_MEMBER): Yes, he's often grumpy first thing. ~
+[SEG0018] person_2 (DOCTOR): Is there a history of tonsil problems, Mum?
+[SEG0019] person_3 (FAMILY_MEMBER): He's had tonsillitis twice, last year.
+[SEG0020] person_2 (DOCTOR): Where's he at in school?
+[SEG0021] person_3 (FAMILY_MEMBER): Reception, at the village primary.
+[SEG0022] person_2 (DOCTOR): Arlo, can you open your mouth wide like a lion? ~
+[SEG0023] person_1 (PATIENT): Roar! ~
+[SEG0024] person_2 (DOCTOR): Perfect. Can you do it again? ~
+[SEG0025] person_1 (PATIENT): Roar! ~
+[SEG0026] person_2 (DOCTOR): Thank you, I can see. Mum, I'm going to explain what I'm looking for. Tonsils sit at the back of the throat. In some children, they are very big. ~
+[SEG0027] person_3 (FAMILY_MEMBER): Are his big? ~
+[SEG0028] person_2 (DOCTOR): I'll tell you after I've explained what the options are. Sometimes big tonsils can narrow the airway at night. ~
+[SEG0029] person_3 (FAMILY_MEMBER): Is that what's causing the snoring? ~
+[SEG0030] person_2 (DOCTOR): It might be. I won't put a label on it today. I'd like to arrange an overnight oxygen level test at home, so we can see how he breathes while he sleeps.
+[SEG0031] person_3 (FAMILY_MEMBER): How does that work? ~
+[SEG0032] person_2 (DOCTOR): A small sensor goes on his toe, and it records through the night. The nurse will give you the kit. ~
+[SEG0033] person_4 (NURSE): I'll get it ready for you, Mrs Webb. ~
+[SEG0034] person_3 (FAMILY_MEMBER): And then? ~
+[SEG0035] person_2 (DOCTOR): Then we'll know whether it's a simple snore or whether it affects his sleep. ~
+[SEG0036] person_3 (FAMILY_MEMBER): That makes sense. Thank you. ~
+[SEG0037] person_2 (DOCTOR): Arlo, you were a very good lion. ~
+[SEG0038] person_1 (PATIENT): Rrrr! ~
+
+JSON:

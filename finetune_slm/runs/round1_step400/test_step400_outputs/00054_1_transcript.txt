@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00054)
+[SEG0001] person_1 (PATIENT): Hi, doctor, I brought my bag, is it fine to leave it here?
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_1 (PATIENT): I'm here because of a weak urine stream.
+[SEG0004] person_2 (DOCTOR): When did you first notice it?
+[SEG0005] person_1 (PATIENT): Yeah, um, it's been about a month, I'm fairly sure. I've also had dribbling at the end, for about three months.
+[SEG0006] person_2 (DOCTOR): Let me measure a few things.
+[SEG0007] person_2 (DOCTOR): Just relax your arm...
+[SEG0008] person_2 (DOCTOR): Okay: pulse 66, temp 36.7 degrees, respiratory rate 16, saturation 97 percent, blood pressure 120 over 71.
+[SEG0009] person_1 (PATIENT): Is that okay?
+[SEG0010] person_2 (DOCTOR): I'll come back to those numbers.
+[SEG0011] person_2 (DOCTOR): Did you get burning when passing urine, weight loss, blood in the urine or fever?
+[SEG0012] person_1 (PATIENT): Nothing like that, no.
+[SEG0013] person_2 (DOCTOR): How's your breathing otherwise?
+[SEG0014] person_1 (PATIENT): No problems with breathing.
+[SEG0015] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0016] person_1 (PATIENT): My heart's been fine, um, as far as I know.
+[SEG0017] person_2 (DOCTOR): Is anyone at home with you?
+[SEG0018] person_1 (PATIENT): I share a flat with two friends.
+[SEG0019] person_2 (DOCTOR): And your work?
+[SEG0020] person_1 (PATIENT): I drive a delivery van all day.
+[SEG0021] person_2 (DOCTOR): How do you eat, generally?
+[SEG0022] person_1 (PATIENT): I skip breakfast most days.
+[SEG0023] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0024] person_1 (PATIENT): Diabetes, for two years.
+[SEG0025] person_2 (DOCTOR): Ah. Right, do you have any allergies to medicines, food, anything at all?
+[SEG0026] person_1 (PATIENT): None, as far as I'm aware.
+[SEG0027] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0028] person_1 (PATIENT): Glimepiride. I take it 2 milligrams, before breakfast. Sorry, I know I'm rambling a bit. I told myself I'd wait and see, and here I am.
+[SEG0029] person_2 (DOCTOR): Let me tell you where I've got to. I'd lean towards an enlarged prostate causing urinary symptoms.
+[SEG0030] person_2 (DOCTOR): Let's book an ultrasound of the bladder and prostate to look into urinary symptoms. I'm sending you for kidney function tests because of urinary symptoms.
+[SEG0031] person_1 (PATIENT): Alright, um, when would that be?
+[SEG0032] person_2 (DOCTOR): I'd like you to take tamsulosin, 0.4 milligrams, at night, for four weeks. That should help with urinary symptoms.
+[SEG0033] person_1 (PATIENT): Right, understood.
+[SEG0034] person_2 (DOCTOR): Cut back on tea and coffee after the afternoon and go before you sleep. I'll also refer you to the urology clinic. Let's hold off on a urine test for now, and if there's no change in two weeks we can revisit it. If the symptoms get worse, that's the point to come in urgently. Let's plan a check in four weeks.
+[SEG0035] person_1 (PATIENT): Okay, see you then.
+[SEG0036] person_2 (DOCTOR): Do you have any questions?
+[SEG0037] person_1 (PATIENT): Right, uh, I appreciate it, doctor.
+
+JSON:

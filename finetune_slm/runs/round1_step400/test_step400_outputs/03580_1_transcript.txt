@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03580)
+[SEG0001] person_1 (PATIENT): Morning, uh, doctor. Lovely to meet you.
+[SEG0002] person_2 (DOCTOR): Come in. Please sit. How can I help you?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to have you here.
+[SEG0005] person_3 (FAMILY_MEMBER): Doctor, it's been feeling tired. That's what we're worried about.
+[SEG0006] person_2 (DOCTOR): How long has this been bothering you?
+[SEG0007] person_1 (PATIENT): Around about a month, I think.
+[SEG0008] person_3 (FAMILY_MEMBER): I think it's been nearer about two months, actually.
+[SEG0009] person_2 (DOCTOR): Okay, so roughly one to two months. Is that right?
+[SEG0010] person_1 (PATIENT): I suppose so, yes.
+[SEG0011] person_2 (DOCTOR): How strong would you say it is?
+[SEG0012] person_1 (PATIENT): It feels moderate to me. I've also had tingling in my feet, since this morning. Being unsteady was there, but it's gone away on its own.
+[SEG0013] person_2 (DOCTOR): A few quick ones: diarrhoea, weight loss, back pain or bladder problems?
+[SEG0014] person_1 (PATIENT): Actually, no, no diarrhoea, weight loss, back pain or bladder problems.
+[SEG0015] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0016] person_1 (PATIENT): No, that's all fine.
+[SEG0017] person_2 (DOCTOR): Are there any illnesses in your family?
+[SEG0018] person_1 (PATIENT): My mother had a stroke.
+[SEG0019] person_2 (DOCTOR): Any past operations I should know about?
+[SEG0020] person_1 (PATIENT): Yes, I had a mole taken off my arm, a few years ago.
+[SEG0021] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0022] person_1 (PATIENT): I used to drink heavily but I stopped four years ago. I hardly move around during the day. I'm a hairdresser, on my feet all day. My partner and our baby.
+[SEG0023] person_2 (DOCTOR): Has anything ever caused you a reaction? I mean any allergies.
+[SEG0024] person_1 (PATIENT): No, not that I know of.
+[SEG0025] person_2 (DOCTOR): What about your medical history?
+[SEG0026] person_1 (PATIENT): I have gout. I told my wife I'd come today.
+[SEG0027] person_2 (DOCTOR): Mm-hmm.
+[SEG0028] person_1 (PATIENT): I have arthritis in my knees, for five years.
+[SEG0029] person_2 (DOCTOR): Right, so gout and arthritis in your knees are already on your record. We'll keep that in mind today. Tell me your medicines, please.
+[SEG0030] person_1 (PATIENT): Allopurinol, 100 milligrams, once a day. I'm on diclofenac, 50 milligrams, when needed. I'd rather know what's going on than keep guessing.
+[SEG0031] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0032] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0033] person_2 (DOCTOR): Okay: temperature is 36.7 degrees, pulse is 80 beats a minute, pressure 124 over 68.
+[SEG0034] person_2 (DOCTOR): Now I'm going to do a short physical check.
+[SEG0035] person_1 (PATIENT): That's alright.
+[SEG0036] person_2 (DOCTOR): Raise your arm for me.
+[SEG0037] person_2 (DOCTOR): The feeling in your feet is reduced and your balance with the eyes closed is poor.
+[SEG0038] person_1 (PATIENT): That's alright.
+[SEG0039] person_2 (DOCTOR): Thank you, you can get dressed. From what you've told me and what I found, this looks most like a possible gut-related cause of nerve symptoms.
+[SEG0040] person_1 (PATIENT): Yeah, is there something to worry about?
+[SEG0041] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a possible gut-related cause of nerve symptoms, but I'd like to confirm.
+[SEG0042] person_2 (DOCTOR): Let's book a B12 level to look into neuropathy. It's a routine test and it'll give us a much clearer picture.
+[SEG0043] person_1 (PATIENT): Should I have an HbA1c as well?
+[SEG0044] person_2 (DOCTOR): Not right now, it wouldn't change what we do today. Do get help quickly if the symptoms get worse. So, does all of that make sense?
+[SEG0045] person_1 (PATIENT): Alright, thanks, take care.
+[SEG0046] person_2 (DOCTOR): Okay, look after yourself.
+
+JSON:

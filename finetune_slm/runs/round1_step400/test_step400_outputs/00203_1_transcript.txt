@@ -1,0 +1,71 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00203)
+[SEG0001] person_1 (DOCTOR): Good afternoon. Take a seat, please.
+[SEG0002] person_2 (PATIENT): Hi.
+[SEG0003] person_3 (CAREGIVER): Thank you for fitting us in, doctor.
+[SEG0004] person_1 (DOCTOR): What seems to be the problem?
+[SEG0005] person_3 (CAREGIVER): It's, It's trouble hearing in my left ear, doctor. She didn't want to come, but I insisted.
+[SEG0006] person_1 (DOCTOR): How long has this been going on?
+[SEG0007] person_2 (PATIENT): For four weeks, I'd say.
+[SEG0008] person_1 (DOCTOR): And how severe is it?
+[SEG0009] person_2 (PATIENT): Severe, I'd say.
+[SEG0010] person_1 (DOCTOR): Have you had a feeling of fullness in the ear?
+[SEG0011] person_2 (PATIENT): Oh, yes, about the same, nearly five years. As for difficulty following conversation in crowds, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0012] person_1 (DOCTOR): And how severe is it?
+[SEG0013] person_2 (PATIENT): It, It feels moderate to me.
+[SEG0014] person_1 (DOCTOR): Have you had trouble hearing in your left ear before, or is this the first time?
+[SEG0015] person_2 (PATIENT): Yes, something like this happened a couple of years ago, and it went away on its own.
+[SEG0016] person_1 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0017] person_2 (PATIENT): My sister has epilepsy. Well, my father had a stroke.
+[SEG0018] person_1 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0019] person_2 (PATIENT): Yes, high blood pressure. I have diabetes.
+[SEG0020] person_1 (DOCTOR): Right, any more?
+[SEG0021] person_2 (PATIENT): I have epilepsy, for about a year.
+[SEG0022] person_1 (DOCTOR): Okay, I can see high blood pressure in your file as well.
+[SEG0023] person_1 (DOCTOR): Okay, any previous surgeries?
+[SEG0024] person_2 (PATIENT): Yes, I had a knee arthroscopy, three years ago.
+[SEG0025] person_1 (DOCTOR): Do you live alone?
+[SEG0026] person_2 (PATIENT): Yes, I live on my own.
+[SEG0027] person_1 (DOCTOR): What's your job?
+[SEG0028] person_2 (PATIENT): I teach at a primary school.
+[SEG0029] person_1 (DOCTOR): Anything special about your diet?
+[SEG0030] person_2 (PATIENT): I try to avoid too much sugar.
+[SEG0031] person_1 (DOCTOR): What medicines do you take regularly?
+[SEG0032] person_2 (PATIENT): Okay, so I take telmisartan, 40 milligrams, once a day for my pressure. I take Glycomet, 500 milligrams, twice a day. Right, I'm on levetiracetam, 500 milligrams, twice a day for the seizures.
+[SEG0033] person_1 (DOCTOR): Has there been any dizziness?
+[SEG0034] person_2 (PATIENT): No. No dizziness.
+[SEG0035] person_3 (CAREGIVER): Um, actually, doctor, I did notice dizziness. She doesn't always say.
+[SEG0036] person_2 (PATIENT): No, you know, I don't think I did. Maybe a little, I'm not sure.
+[SEG0037] person_1 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. Any facial weakness, discharge or headache?
+[SEG0038] person_2 (PATIENT): No, you know, no facial weakness, discharge or headache.
+[SEG0039] person_1 (DOCTOR): Is your urine normal, no changes?
+[SEG0040] person_2 (PATIENT): No changes there.
+[SEG0041] person_1 (DOCTOR): Let me check your vitals now.
+[SEG0042] person_1 (DOCTOR): Hold still for me...
+[SEG0043] person_1 (DOCTOR): Okay: BP is 117 over 81, oxygen saturation is 97 percent, temperature is 36.5 degrees, pulse is 71 beats a minute.
+[SEG0044] person_2 (PATIENT): Is that alright, um, doctor?
+[SEG0045] person_1 (DOCTOR): They help build the picture, I'll tell you more soon.
+[SEG0046] person_1 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0047] person_1 (DOCTOR): Almost done with this part.
+[SEG0048] person_1 (DOCTOR): There's a lot of wax in the left ear canal, I can't see the drum.
+[SEG0049] person_1 (DOCTOR): Bear with me a second.
+[SEG0050] person_1 (DOCTOR): The right ear canal and drum are normal.
+[SEG0051] person_1 (DOCTOR): Thanks, please take a seat again. So, based on the history and the examination, I don't have a clear answer today: hearing loss from wax is possible, and so is age-related hearing loss.
+[SEG0052] person_2 (PATIENT): Do you think it's serious?
+[SEG0053] person_1 (DOCTOR): I can't promise yet, but most people with hearing loss from wax do well once it's treated properly. We should do a hearing test for hearing loss. The treatment will be ear drops, three times a day, for five days. That should help with wax softening. Please don't use cotton buds or ear candles, they push the wax in further.
+[SEG0054] person_1 (DOCTOR): Mm-hm. Thanks for coming in.
+[SEG0055] person_2 (PATIENT): No questions. Thank you.
+[SEG0056] person_1 (DOCTOR): All the best.
+
+JSON:

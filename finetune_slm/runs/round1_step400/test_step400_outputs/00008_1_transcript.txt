@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00008)
+[SEG0001] person_1 (PATIENT): um, hello, doctor it's my turn, I think
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_1 (PATIENT): yeah, it's blood in my urine i don't know what's causing it
+[SEG0004] person_2 (DOCTOR): and when did that start?
+[SEG0005] person_1 (PATIENT): It's been like this since last night.
+[SEG0006] person_2 (DOCTOR): What about a mild ache in the back, have you noticed that?
+[SEG0007] person_1 (PATIENT): Right, yes, about the the same, five days.
+[SEG0008] person_2 (DOCTOR): any difficulty passing urine, weight loss, flank pain or recent injury?
+[SEG0009] person_1 (PATIENT): No, none of that at all.
+[SEG0010] person_2 (DOCTOR): Neurologically, anything strange?
+[SEG0011] person_1 (PATIENT): no, that's all normal
+[SEG0012] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0013] person_1 (PATIENT): skin's normal
+[SEG0014] person_2 (DOCTOR): have you had any previous surgeries?
+[SEG0015] person_1 (PATIENT): Um, no, nothing like that.
+[SEG0016] person_2 (DOCTOR): Right, are you still working?
+[SEG0017] person_1 (PATIENT): I'm retired now, I was a clerk for years
+[SEG0018] person_2 (DOCTOR): What do you do to keep active?
+[SEG0019] person_1 (PATIENT): I cycle to work most mornings.
+[SEG0020] person_2 (DOCTOR): Do you have any known allergies at all?
+[SEG0021] person_1 (PATIENT): Pollen i come out in... well, sneezing
+[SEG0022] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0023] person_1 (PATIENT): I'm on losartan, 50 milligrams, once a day
+[SEG0024] person_2 (DOCTOR): Okay, keep going. Do you have any medical conditions, anything you've been treated for?
+[SEG0025] person_1 (PATIENT): Right, I have high blood pressure, for about a year.
+[SEG0026] person_2 (DOCTOR): Okay, keep going.
+[SEG0027] person_2 (DOCTOR): Before we go on, a few quick readings.
+[SEG0028] person_2 (DOCTOR): Almost there...
+[SEG0029] person_2 (DOCTOR): Okay: BP is 120 over 78, SpO2 99 percent on room air, heart rate 74.
+[SEG0030] person_2 (DOCTOR): come over here and I'll have a look
+[SEG0031] person_2 (DOCTOR): I'll go gently.
+[SEG0032] person_2 (DOCTOR): Abdomen is soft, no masses, and no tenderness in the loins.
+[SEG0033] person_1 (PATIENT): Okay, ready.
+[SEG0034] person_2 (DOCTOR): Good, that's the examination. Having listened and examined, I'm honestly not certain yet. It could be blood in the urine that needs full investigation, or it might be a urine infection. I'll request a CT scan of the kidneys and bladder, it'll help with haematuria.
+[SEG0035] person_1 (PATIENT): mm, okay
+[SEG0036] person_2 (DOCTOR): I'll request a urine culture, it'll help with haematuria. Keep drinking plenty of water, and let us know quickly if you pass clots or can't pass urine. Avoid taking any extra painkillers on top of what I'm prescribing without checking with us. If you can't pass urine or pass large clots, or you feel really unwell, please come to the emergency department. Come back in two weeks. Okay, I think we're finished. Is everything clear?
+[SEG0037] person_1 (PATIENT): Right. Thanks again.
+[SEG0038] person_2 (DOCTOR): See you then.
+
+JSON:

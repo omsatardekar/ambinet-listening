@@ -1,0 +1,74 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01225)
+[SEG0001] person_1 (PATIENT): Hi doctor, am I too early?
+[SEG0002] person_2 (DOCTOR): Okay, not at all, please sit. What seems to be wrong?
+[SEG0003] person_1 (PATIENT): So the thing is, I've got taking a lot of tablets.
+[SEG0004] person_2 (DOCTOR): Okay, did it come on recently?
+[SEG0005] person_1 (PATIENT): Let me think, it's been going on for five days.
+[SEG0006] person_2 (DOCTOR): Rate it for me, mild, moderate or severe?
+[SEG0007] person_1 (PATIENT): Ah, I'd call it moderate.
+[SEG0008] person_2 (DOCTOR): Does anything else come with it?
+[SEG0009] person_1 (PATIENT): Uh, when it starts I tend to get tummy pain as well.
+[SEG0010] person_2 (DOCTOR): Have you been feeling very low?
+[SEG0011] person_1 (PATIENT): Yes, uh, I have. Hmm, you know, about feeling very low, a eight out of ten, I suppose.
+[SEG0012] person_2 (DOCTOR): Have you been feeling sick?
+[SEG0013] person_1 (PATIENT): Mm, yes. As for feeling sick, a three out of ten, I suppose.
+[SEG0014] person_2 (DOCTOR): Have you had taking a lot of tablets before, or is this the first time?
+[SEG0015] person_1 (PATIENT): Sorry, what was I saying, yes, something like this happened last year, and it went away on its own.
+[SEG0016] person_2 (DOCTOR): Let's start with the basic checks.
+[SEG0017] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0018] person_2 (DOCTOR): Okay: BP is 128 over 73, pulse is 84 beats a minute.
+[SEG0019] person_1 (PATIENT): Okay, uh, so is that alright, doctor?
+[SEG0020] person_2 (DOCTOR): Right, we'll go over that shortly.
+[SEG0021] person_2 (DOCTOR): Okay, I'd like to check you over now, if that's alright.
+[SEG0022] person_2 (DOCTOR): Stay as you are for a moment.
+[SEG0023] person_2 (DOCTOR): You are awake and alert, with some tenderness under the right ribs.
+[SEG0024] person_2 (DOCTOR): That's the examination finished.
+[SEG0025] person_2 (DOCTOR): Did you get chest pain or drowsiness?
+[SEG0026] person_1 (PATIENT): No, no chest pain or drowsiness.
+[SEG0027] person_2 (DOCTOR): Has your skin been okay?
+[SEG0028] person_1 (PATIENT): Skin's normal.
+[SEG0029] person_2 (DOCTOR): Do you have any long-term conditions?
+[SEG0030] person_1 (PATIENT): I've got depression.
+[SEG0031] person_2 (DOCTOR): And besides that?
+[SEG0032] person_1 (PATIENT): Yes, an irregular heartbeat.
+[SEG0033] person_2 (DOCTOR): Anything else?
+[SEG0034] person_1 (PATIENT): I've got heart disease.
+[SEG0035] person_2 (DOCTOR): Right, so depression is already on your record. We'll keep that in mind today. Do you drink alcohol?
+[SEG0036] person_1 (PATIENT): Nothing, I'm teetotal.
+[SEG0037] person_2 (DOCTOR): Are you active?
+[SEG0038] person_1 (PATIENT): I walk the dog every morning.
+[SEG0039] person_2 (DOCTOR): Right, tell me about your eating.
+[SEG0040] person_1 (PATIENT): I drink a lot of tea and snack through the day.
+[SEG0041] person_2 (DOCTOR): Has anything ever caused you a reaction? I mean any allergies.
+[SEG0042] person_1 (PATIENT): I'm allergic to tramadol, I get feeling very drowsy.
+[SEG0043] person_2 (DOCTOR): Have you ever had an operation?
+[SEG0044] person_1 (PATIENT): Just a triple bypass, eight years ago.
+[SEG0045] person_2 (DOCTOR): Tell me your medicines, please.
+[SEG0046] person_1 (PATIENT): Oh, it's mirtazapine, 15 milligrams, at night. Warfarin. I take it 3 milligrams, maybe, in the evening.
+[SEG0047] person_2 (DOCTOR): Is the packet here, or the prescription?
+[SEG0048] person_1 (PATIENT): No, it's at home. Uh, um, before this I was on bisoprolol; that's been stopped.
+[SEG0049] person_2 (DOCTOR): Right, here's what I'm thinking. The most likely explanation is a significant paracetamol overdose needing urgent treatment. That's my thinking for now, and it may change as we learn more. A mixed overdose is still possible. I'll request liver function tests, it'll help with overdose. A paracetamol level is what I'd like next, for overdose.
+[SEG0050] person_1 (PATIENT): When would that take place?
+[SEG0051] person_2 (DOCTOR): I'd like you to take acetylcysteine, per protocol, over 21 hours, per protocol. It's for paracetamol overdose. You need to stay in hospital for treatment, and someone will speak to you about how you are feeling. I'll also refer you to the emergency team.
+[SEG0052] person_1 (PATIENT): Okay.
+[SEG0053] person_2 (DOCTOR): And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. One warning sign to remember: the symptoms get worse. In that case don't wait.
+[SEG0054] person_1 (PATIENT): Yes, I'll bear that in mind.
+[SEG0055] person_2 (DOCTOR): Book a review straight away.
+[SEG0056] person_1 (PATIENT): I can manage that.
+[SEG0057] person_2 (DOCTOR): Have I covered everything you wanted?
+[SEG0058] person_1 (PATIENT): That's clear, thanks.
+[SEG0059] person_2 (DOCTOR): See you soon.
+
+JSON:

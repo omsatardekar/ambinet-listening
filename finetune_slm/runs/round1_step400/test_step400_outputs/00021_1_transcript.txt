@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00021)
+[SEG0001] person_1 (NURSE): Doctor, the patient's with us now. I did the usual checks at the front, so just say when you want them.
+[SEG0002] person_2 (DOCTOR): Thanks, that's helpful. Hello, please sit. What's been happening?
+[SEG0003] person_3 (FAMILY_MEMBER): Morning, doctor. I'll stay and and fill in anything that's missed.
+[SEG0004] person_2 (DOCTOR): that's fine, sit down. We'll go through it together
+[SEG0005] person_3 (FAMILY_MEMBER): Oh, you know, we came because of breathlessness on the stairs.
+[SEG0006] person_2 (DOCTOR): Alright, and when did that start?
+[SEG0007] person_4 (PATIENT): well, it's been going on for ten days
+[SEG0008] person_2 (DOCTOR): Right.
+[SEG0009] person_4 (PATIENT): I was just going to say that the main thing is—
+[SEG0010] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0011] person_2 (DOCTOR): Later, thanks. Please go on.
+[SEG0012] person_4 (PATIENT): I've had a racing heart sometimes too, for about three months. So, I've had dizziness too, for three days.
+[SEG0013] person_2 (DOCTOR): Is it mild, moderate or severe?
+[SEG0014] person_4 (PATIENT): Well, it feels mild to me.
+[SEG0015] person_2 (DOCTOR): Any black stools, chest pain or weight loss?
+[SEG0016] person_4 (PATIENT): No, no black stools, no chest pain, no weight loss. I was feeling tired at one point, but that went away on its own.
+[SEG0017] person_2 (DOCTOR): Any heavy periods or blood in the stool at all?
+[SEG0018] person_4 (PATIENT): Right, I haven't had heavy periods or blood in the stool, no.
+[SEG0019] person_2 (DOCTOR): Any problems with your joints or muscles?
+[SEG0020] person_4 (PATIENT): I move fine otherwise.
+[SEG0021] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0022] person_4 (PATIENT): So, I've had acid reflux for two years now.
+[SEG0023] person_2 (DOCTOR): okay, I can see acid reflux in your file as well
+[SEG0024] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0025] person_3 (FAMILY_MEMBER): Hmm, he takes omeprazole, 20 milligrams, once a day.
+[SEG0026] person_2 (DOCTOR): And for how long?
+[SEG0027] person_3 (FAMILY_MEMBER): For two months.
+[SEG0028] person_4 (PATIENT): Pantoprazole I don't take anymore.
+[SEG0029] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0030] person_4 (PATIENT): I used to smoke but I quit five years ago. I gave up drinking about three years ago. Not really, I don't get much exercise.
+[SEG0031] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0032] person_4 (PATIENT): hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did
+[SEG0033] person_2 (DOCTOR): Any procedures or operations?
+[SEG0034] person_4 (PATIENT): Well, yes, I had my gallbladder removed, in 2016.
+[SEG0035] person_1 (NURSE): Okay, so the vitals from earlier. Saturation 96 percent, heart rate 108. Temp 37.1 degrees, respiratory rate 20, blood pressure 134 over 78.
+[SEG0036] person_2 (DOCTOR): Okay, noted.
+[SEG0037] person_2 (DOCTOR): Come over here and I'll have a look.
+[SEG0038] person_2 (DOCTOR): let me press here
+[SEG0039] person_2 (DOCTOR): Heart sounds are normal, I don't hear any murmur.
+[SEG0040] person_2 (DOCTOR): okay, stay still while I have a look
+[SEG0041] person_2 (DOCTOR): Your eyelids are pale inside.
+[SEG0042] person_2 (DOCTOR): okay, you can sit up so, based on the history and and the examination, it fits best with anaemia of some kind a thyroid problem is also on my list
+[SEG0043] person_4 (PATIENT): uh, is this something I'll have for good?
+[SEG0044] person_2 (DOCTOR): nothing I've seen today points to an emergency. It looks like anaemia of some kind, but I'd like to confirm. Let's get a full blood count, for pallor
+[SEG0045] person_4 (PATIENT): does it need any preparation?
+[SEG0046] person_2 (DOCTOR): I'll request a ferritin level, it'll help with possible iron deficiency.
+[SEG0047] person_4 (PATIENT): okay, that's fine
+[SEG0048] person_2 (DOCTOR): What I'm giving you is ferrous sulfate, 200 milligrams, once a day, for three months. That should help with possible iron deficiency. Iron can darken the stools and bother the stomach, so take it after food. Cut down on salt and fried food for now, it really does make a difference. A vitamin B12 level is something we might do if this doesn't improve next month.
+[SEG0049] person_2 (DOCTOR): keep an eye out, and if the symptoms get worse, call us the same day or go to emergency. Let's review you after the results are back. Okay, we're done for today. Take care
+[SEG0050] person_4 (PATIENT): I appreciate it, uh, doctor
+[SEG0051] person_2 (DOCTOR): All the best.
+
+JSON:

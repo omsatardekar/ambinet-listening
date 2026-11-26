@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00134)
+[SEG0001] person_1 (NURSE): Afternoon, doctor. They're in and comfortable, and I have the measurements ready.
+[SEG0002] person_2 (DOCTOR): Thanks, that's helpful. Hello, please sit. What's been happening?
+[SEG0003] person_3 (CAREGIVER): Doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_2 (DOCTOR): That's fine, sit down. We'll go through it together.
+[SEG0005] person_4 (PATIENT): Honestly, it's sharp pain in the left chest when I breathe in, and my family pushed me to come.
+[SEG0006] person_2 (DOCTOR): When did it begin?
+[SEG0007] person_4 (PATIENT): Since last weekend, that's when it began.
+[SEG0008] person_2 (DOCTOR): And how severe is it?
+[SEG0009] person_4 (PATIENT): Mostly moderate.
+[SEG0010] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0011] person_4 (PATIENT): When it starts I tend to get a low fever a few days ago as well.
+[SEG0012] person_4 (PATIENT): I was just going to say that the main thing is—
+[SEG0013] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0014] person_2 (DOCTOR): Later, thanks. Please go on. Is it constant, or does it come and go?
+[SEG0015] person_4 (PATIENT): It's every other day.
+[SEG0016] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0017] person_4 (PATIENT): Hmm, you know, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0018] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0019] person_3 (CAREGIVER): She takes apixaban, twice a day.
+[SEG0020] person_2 (DOCTOR): How much do you take?
+[SEG0021] person_3 (CAREGIVER): 5 milligrams. She is on ibuprofen, 400 milligrams, when it hurts, I give it to her.
+[SEG0022] person_4 (PATIENT): I was on diclofenac before. I stopped taking it.
+[SEG0023] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0024] person_4 (PATIENT): Yes, arthritis in my knees. A neighbour of mine said I should see someone about it. I kept putting it off, which I know isn't sensible. I've had an irregular heartbeat, yes.
+[SEG0025] person_2 (DOCTOR): Okay, I can see arthritis in your knees in your file as well. Anything special about your diet?
+[SEG0026] person_4 (PATIENT): I try to avoid too much sugar.
+[SEG0027] person_2 (DOCTOR): Alright, are you active at all?
+[SEG0028] person_4 (PATIENT): Barely, I'm mostly sedentary these days.
+[SEG0029] person_2 (DOCTOR): Okay, have you had any surgery before?
+[SEG0030] person_4 (PATIENT): Oh, I had a hernia repair about five years back.
+[SEG0031] person_2 (DOCTOR): So, how about leg swelling?
+[SEG0032] person_4 (PATIENT): Not at all, no leg swelling.
+[SEG0033] person_2 (DOCTOR): Did you get palpitations or injury to the chest?
+[SEG0034] person_4 (PATIENT): So, no, no palpitations, no injury to the chest. I did have aching all over at one point, but that went away on its own.
+[SEG0035] person_2 (DOCTOR): Have you noticed recent long travel, breathlessness at rest or coughing up blood?
+[SEG0036] person_4 (PATIENT): No, no recent long travel, breathlessness at rest or coughing up blood.
+[SEG0037] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0038] person_4 (PATIENT): Skin's normal.
+[SEG0039] person_2 (DOCTOR): Neurologically, anything strange?
+[SEG0040] person_4 (PATIENT): No, that's all normal.
+[SEG0041] person_1 (NURSE): Doctor, I've got the readings for you. Oxygen saturation is 98 percent, BP is 108 over 77, temperature is 36.7 degrees, pulse 65, respiratory rate 17.
+[SEG0042] person_2 (DOCTOR): Okay, noted.
+[SEG0043] person_2 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0044] person_2 (DOCTOR): Almost done with this part.
+[SEG0045] person_2 (DOCTOR): Air entry is equal on both sides.
+[SEG0046] person_2 (DOCTOR): Almost done with this part.
+[SEG0047] person_2 (DOCTOR): I can hear a faint rub on the left side.
+[SEG0048] person_2 (DOCTOR): Okay, finished.
+[SEG0049] person_2 (DOCTOR): Having listened and examined, it fits best with viral pleurisy. The reason I say that is that your story and my examination fit together. It could also be a chest infection, so we'll keep that open. We shouldn't forget a clot in the lung that we should rule out. Regular pain relief makes it easier to take deep breaths, which protects the lung. Right, look after yourself.
+[SEG0050] person_4 (PATIENT): No questions. Thank you.
+
+JSON:

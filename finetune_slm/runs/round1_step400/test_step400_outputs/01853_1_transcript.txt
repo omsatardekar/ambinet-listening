@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01853)
+[SEG0001] person_1 (DOCTOR): Morning, come on through.
+[SEG0002] person_2 (PATIENT): Evening, doctor.
+[SEG0003] person_1 (DOCTOR): What's the problem?
+[SEG0004] person_2 (PATIENT): I'm here cos of painful periods.
+[SEG0005] person_1 (DOCTOR): Tell me your medicines, please.
+[SEG0006] person_2 (PATIENT): It's Seretide inhaler, twice a day for my asthma. Though honestly, some days I forget to take it. Ibuprofen, 400 milligrams, with food when needed.
+[SEG0007] person_1 (DOCTOR): How long has that been going on?
+[SEG0008] person_2 (PATIENT): Two years now.
+[SEG0009] person_1 (DOCTOR): Did it come on recently?
+[SEG0010] person_2 (PATIENT): It's been about four days now.
+[SEG0011] person_1 (DOCTOR): Is it bearing on you a lot?
+[SEG0012] person_2 (PATIENT): It feels mild to me.
+[SEG0013] person_1 (DOCTOR): anything that improves it?
+[SEG0014] person_2 (PATIENT): I get some relief from a hot water bottle.
+[SEG0015] person_1 (DOCTOR): Right, is there anything else with it?
+[SEG0016] person_2 (PATIENT): It usually comes with a dull ache in my back. I've also been feeling sick on the first day, for about two weeks. With feeling sick on the first day, moderate, I'd say. It happens once or twice a day. About dull ache in my back, severe, I'd say. I'd say on and off.
+[SEG0017] person_1 (DOCTOR): Did you get bleeding between periods, pain with sex or fever?
+[SEG0018] person_2 (PATIENT): no, I haven't had any of them
+[SEG0019] person_1 (DOCTOR): How about heavy bleeding?
+[SEG0020] person_2 (PATIENT): no, no heavy bleeding
+[SEG0021] person_1 (DOCTOR): Understood. Your breathing, any trouble there?
+[SEG0022] person_2 (PATIENT): no, my breathing's been fine
+[SEG0023] person_1 (DOCTOR): Anything on the skin I should know about?
+[SEG0024] person_2 (PATIENT): No rashes.
+[SEG0025] person_1 (DOCTOR): alright, are there any illnesses in your family?
+[SEG0026] person_2 (PATIENT): my daughter has type 1 diabetes
+[SEG0027] person_1 (DOCTOR): And your job?
+[SEG0028] person_2 (PATIENT): I work in accounts at a hospital.
+[SEG0029] person_1 (DOCTOR): Do you live by yourself?
+[SEG0030] person_2 (PATIENT): No, I share a house with my brother
+[SEG0031] person_1 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0032] person_2 (PATIENT): No, nothing as far as I know.
+[SEG0033] person_1 (DOCTOR): right, has anyone ever diagnosed you with something?
+[SEG0034] person_2 (PATIENT): I've had asthma for about a year now
+[SEG0035] person_1 (DOCTOR): okay, I can see asthma in your file as well
+[SEG0036] person_1 (DOCTOR): anything surgical in your history?
+[SEG0037] person_2 (PATIENT): just a mole taken off my arm, a few years ago
+[SEG0038] person_1 (DOCTOR): I'll note down your vital signs first.
+[SEG0039] person_1 (DOCTOR): Keep your arm relaxed for me...
+[SEG0040] person_1 (DOCTOR): Okay: temperature 36.6, pressure 117 over 77, saturation 99 percent. And pulse 80.
+[SEG0041] person_2 (PATIENT): Is that okay?
+[SEG0042] person_1 (DOCTOR): They help me see the whole picture, more shortly.
+[SEG0043] person_1 (DOCTOR): I'll need to to examine you for this, it won't take long
+[SEG0044] person_2 (PATIENT): Of course.
+[SEG0045] person_1 (DOCTOR): Stay as you are for a moment.
+[SEG0046] person_1 (DOCTOR): Your tummy is soft and not tender between periods.
+[SEG0047] person_1 (DOCTOR): Thank you, you can get dressed. Taking everything into account, this is probably primary dysmenorrhoea.
+[SEG0048] person_1 (DOCTOR): Heat, gentle exercise, and start the tablet at the first sign of pain.
+[SEG0049] person_1 (DOCTOR): understood make sure you're drinking plenty of fluids, two to three litres a day if you can, and get proper rest let's review you in three months
+[SEG0050] person_2 (PATIENT): Yes, you know, that's manageable.
+[SEG0051] person_1 (DOCTOR): is there anything you'd like me to to go over again?
+[SEG0052] person_2 (PATIENT): I mean, thank you, doctor, goodbye.
+
+JSON:

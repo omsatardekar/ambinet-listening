@@ -1,0 +1,69 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00103)
+[SEG0001] person_1 (DOCTOR): Hello, come through.
+[SEG0002] person_2 (PATIENT): Good morning, doctor.
+[SEG0003] person_3 (CAREGIVER): Okay, so hello, doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_1 (DOCTOR): Go ahead, tell me what's happening.
+[SEG0005] person_3 (CAREGIVER): We came because of swollen ankles in the evening.
+[SEG0006] person_1 (DOCTOR): When did you first notice it?
+[SEG0007] person_2 (PATIENT): For two months, I'd say.
+[SEG0008] person_1 (DOCTOR): Is there anything that takes the edge off?
+[SEG0009] person_2 (PATIENT): It settles a little with raising the legs.
+[SEG0010] person_1 (DOCTOR): Is it mild, moderate or severe?
+[SEG0011] person_2 (PATIENT): Mild, I'd say.
+[SEG0012] person_1 (DOCTOR): Does anything bring it on or make it worse?
+[SEG0013] person_2 (PATIENT): Standing all day definitely sets it off.
+[SEG0014] person_1 (DOCTOR): Anything that tends to go along with it?
+[SEG0015] person_2 (PATIENT): When it starts I tend to get a heavy feeling in the legs as well. I've also had a flushed face sometimes. As for flushed face sometimes, a seven out of ten, I suppose.
+[SEG0016] person_1 (DOCTOR): What's your current medication list?
+[SEG0017] person_2 (PATIENT): Glycomet, 500 milligrams, twice a day for my sugar.
+[SEG0018] person_3 (CAREGIVER): It's meant to be twice a day, though I don't see he take it every time.
+[SEG0019] person_1 (DOCTOR): Do you have any allergies to medicines, food, anything at all?
+[SEG0020] person_2 (PATIENT): I've never been told I have allergies.
+[SEG0021] person_3 (CAREGIVER): I'm not sure that's right. I seem to recall a problem with ibuprofen.
+[SEG0022] person_2 (PATIENT): Maybe, but I don't recall it.
+[SEG0023] person_1 (DOCTOR): Alright, so that's unclear. I'll record what each of you said. Moving on to your background, any past medical history?
+[SEG0024] person_2 (PATIENT): High blood pressure, for nearly five years. Diabetes, for two years.
+[SEG0025] person_1 (DOCTOR): Right, so high blood pressure is already on your record. We'll keep that in mind today. Do you live alone?
+[SEG0026] person_2 (PATIENT): Yes, I live on my own.
+[SEG0027] person_1 (DOCTOR): Okay, how's your diet?
+[SEG0028] person_2 (PATIENT): I'm mostly vegetarian.
+[SEG0029] person_1 (DOCTOR): Have you ever been under the knife?
+[SEG0030] person_2 (PATIENT): I had my appendix out about eight years ago.
+[SEG0031] person_1 (DOCTOR): Any chest pain, weight gain or breathlessness lying flat at all?
+[SEG0032] person_2 (PATIENT): No, none of those.
+[SEG0033] person_1 (DOCTOR): Alright, did you get reduced urine or calf pain?
+[SEG0034] person_2 (PATIENT): No, nothing there.
+[SEG0035] person_1 (DOCTOR): What about one leg more swollen than the other?
+[SEG0036] person_2 (PATIENT): Nope, uh, no one leg more swollen than the other.
+[SEG0037] person_1 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0038] person_2 (PATIENT): Nothing unusual, no.
+[SEG0039] person_1 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0040] person_2 (PATIENT): No, that's all normal.
+[SEG0041] person_4 (NURSE): Here are the numbers, doctor. Pulse 77, SpO2 98 percent on room air, pressure 164 over 99, respiratory rate 17, temperature is 36.7 degrees.
+[SEG0042] person_1 (DOCTOR): Thanks.
+[SEG0043] person_1 (DOCTOR): Let me examine, it won't take long.
+[SEG0044] person_2 (PATIENT): Fine.
+[SEG0045] person_1 (DOCTOR): Let me look at this properly.
+[SEG0046] person_1 (DOCTOR): Chest is clear and the neck veins aren't raised.
+[SEG0047] person_1 (DOCTOR): Let me look at this properly.
+[SEG0048] person_1 (DOCTOR): Mild pitting swelling around both ankles, equal on both sides.
+[SEG0049] person_1 (DOCTOR): That's all I need, thank you.
+[SEG0050] person_1 (DOCTOR): Okay, so my impression is this: It fits best with ankle swelling possibly from a blood pressure tablet. We shouldn't forget heart-related fluid retention. Let me repeat that back to make sure. You've had swollen ankles in the evening for two months, mild, and no breathlessness lying flat or reduced urine.
+[SEG0051] person_2 (PATIENT): Yes, you've got it.
+[SEG0052] person_1 (DOCTOR): Let's get kidney function tests, for leg swelling. I think a urine protein test makes sense here, for leg swelling. Raise your legs when you're sitting and try compression socks. Let's review you in three weeks. Right, that's all. Go gently.
+[SEG0053] person_2 (PATIENT): Thanks, that was helpful.
+[SEG0054] person_1 (DOCTOR): Bye for now.
+
+JSON:

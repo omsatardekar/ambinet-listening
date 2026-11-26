@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20343)
+[SEG0001] person_1 (DOCTOR): Hello, come in. Mind the step.
+[SEG0002] person_2 (PATIENT): Morning, you know, doctor, sorry about the rush.
+[SEG0003] person_1 (DOCTOR): So what can I do for you?
+[SEG0004] person_2 (PATIENT): I've been waking up with a headache, and I wanted to get it checked.
+[SEG0005] person_1 (DOCTOR): What do you take on a normal day?
+[SEG0006] person_2 (PATIENT): I'm on Glycomet, 500 milligrams, twice a day. Though honestly, some days I forget to take it. I'm on ramipril, 5 milligrams, every morning. I'm on aspirin, 75 milligrams, once a day.
+[SEG0007] person_1 (DOCTOR): Has this been going on for long?
+[SEG0008] person_2 (PATIENT): It's been about three months, I'm fairly sure.
+[SEG0009] person_1 (DOCTOR): Right, right. Is it bearing on you a lot?
+[SEG0010] person_2 (PATIENT): I'd say mild.
+[SEG0011] person_1 (DOCTOR): What about loud snoring, have you noticed that?
+[SEG0012] person_2 (PATIENT): Yes, for about a year. Let me think, I did have my partner noticing pauses in my breathing at one point, but that's gone now.
+[SEG0013] person_1 (DOCTOR): Have you been waking up with a headache at any time before this?
+[SEG0014] person_2 (PATIENT): I had a similar thing last year. It went away.
+[SEG0015] person_1 (DOCTOR): What about chest pain?
+[SEG0016] person_2 (PATIENT): Nope, no chest pain.
+[SEG0017] person_1 (DOCTOR): And what about palpitations, falling asleep while driving, leg swelling or low mood?
+[SEG0018] person_2 (PATIENT): No, no palpitations, falling asleep while driving, leg swelling or low mood.
+[SEG0019] person_1 (DOCTOR): So, anything different when you pass water?
+[SEG0020] person_2 (PATIENT): No changes there.
+[SEG0021] person_1 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0022] person_2 (PATIENT): My heart's been fine, you know, as far as I know.
+[SEG0023] person_1 (DOCTOR): Any previous surgeries?
+[SEG0024] person_2 (PATIENT): No, I've never been operated on.
+[SEG0025] person_1 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0026] person_2 (PATIENT): No, you know, not that I know of.
+[SEG0027] person_1 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0028] person_2 (PATIENT): I gave up cigarettes last spring. No, I share a house with my brother. I work in accounts at a hospital. Lots of rice, lentils and some fruit.
+[SEG0029] person_1 (DOCTOR): Does your family have any medical conditions?
+[SEG0030] person_2 (PATIENT): My brother has epilepsy.
+[SEG0031] person_1 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0032] person_2 (PATIENT): I've had diabetes, yes. I've been reading about it online and it worried me. High blood pressure, for about ten years. I just want to get back to normal, really. Yes, heart disease.
+[SEG0033] person_1 (DOCTOR): Right, and anything else to add?
+[SEG0034] person_1 (DOCTOR): Okay, I can see high blood pressure in your file as well.
+[SEG0035] person_1 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0036] person_2 (PATIENT): Okay, doctor.
+[SEG0037] person_1 (DOCTOR): Take a deep breath for me.
+[SEG0038] person_1 (DOCTOR): Your neck is thick and the back of the throat looks crowded.
+[SEG0039] person_1 (DOCTOR): That's the examination finished. Right, here's what I'm thinking. I'd lean towards symptoms that suggest obstructive sleep apnoea. Poor sleep habits is still possible.
+[SEG0040] person_2 (PATIENT): Ah, do you think it's something serious?
+[SEG0041] person_1 (DOCTOR): It's reasonable to be concerned, but right now symptoms that suggest obstructive sleep apnoea is my leading thought, not anything worse. So, to recap quickly. You've been waking up with a headache for about three months, mild, and no leg swelling or chest pain.
+[SEG0042] person_2 (PATIENT): That's it, yes.
+[SEG0043] person_1 (DOCTOR): I'm sending you for a thyroid test because of tiredness.
+[SEG0044] person_3 (CLINICAL_STAFF): We have a slot Friday at 10 am, if that works.
+[SEG0045] person_1 (DOCTOR): I'm sending you for an overnight sleep study because of suspected sleep apnoea. Try to sleep on your side and avoid alcohol close to bedtime. The sleep clinic would be the right next step, I'll refer you.
+[SEG0046] person_2 (PATIENT): So, sure, where do I go?
+[SEG0047] person_1 (DOCTOR): I'd like you back after the sleep study.
+[SEG0048] person_2 (PATIENT): Sure.
+[SEG0049] person_1 (DOCTOR): I think we're done unless you have questions.
+[SEG0050] person_2 (PATIENT): Alright, thanks, take care.
+
+JSON:

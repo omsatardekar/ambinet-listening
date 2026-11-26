@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00379)
+[SEG0001] person_1 (PATIENT): um, good afternoon, doctor, the receptionist said you'd see me now
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_3 (FAMILY_MEMBER): good morning, doctor i came along to help out
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to have you here.
+[SEG0005] person_1 (PATIENT): I wanted to get foamy urine looked at
+[SEG0006] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0007] person_3 (FAMILY_MEMBER): It's Glycomet, 500 milligrams, twice a day for my sugar, doctor. He takes diclofenac, 50 milligrams, when I get pain.
+[SEG0008] person_2 (DOCTOR): Mm-hm.
+[SEG0009] person_1 (PATIENT): I had glimepiride at one point, but I'm off it now.
+[SEG0010] person_2 (DOCTOR): How long have you had it?
+[SEG0011] person_1 (PATIENT): I'd say three days, maybe.
+[SEG0012] person_3 (FAMILY_MEMBER): It was closer to five days, doctor.
+[SEG0013] person_2 (DOCTOR): Okay, so roughly three to five days. Is that right?
+[SEG0014] person_1 (PATIENT): oh, yes, somewhere around that that
+[SEG0015] person_2 (DOCTOR): Right.
+[SEG0016] person_1 (PATIENT): Oh, and tiredness. That's been about the same, two years.
+[SEG0017] person_2 (DOCTOR): A few quick ones: reduced urine output, chest pain, breathlessness or blood in the urine?
+[SEG0018] person_1 (PATIENT): I mean, no. None of those.
+[SEG0019] person_2 (DOCTOR): Did you notice any fever?
+[SEG0020] person_1 (PATIENT): Nope, no fever.
+[SEG0021] person_2 (DOCTOR): neurologically, anything strange?
+[SEG0022] person_1 (PATIENT): Well, no weakness or anything.
+[SEG0023] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0024] person_1 (PATIENT): Hmm, no, skin's been fine.
+[SEG0025] person_2 (DOCTOR): What about operations, anything like that?
+[SEG0026] person_1 (PATIENT): just a a knee arthroscopy, three years ago
+[SEG0027] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0028] person_1 (PATIENT): I used to smoke but I quit five years ago. I don't drink at all. I skip breakfast most days. I share a flat with two friends. I walk for about half an hour most days
+[SEG0029] person_2 (DOCTOR): Do your parents or siblings have any long-term illnesses?
+[SEG0030] person_1 (PATIENT): my father was diabetic
+[SEG0031] person_2 (DOCTOR): Right, have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0032] person_1 (PATIENT): Well, no, nothing I'm aware of.
+[SEG0033] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0034] person_1 (PATIENT): I've, I've had kidney disease for about a year now.
+[SEG0035] person_2 (DOCTOR): Is there more?
+[SEG0036] person_1 (PATIENT): I have diabetes, for about ten years.
+[SEG0037] person_2 (DOCTOR): And apart from that?
+[SEG0038] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0039] person_2 (DOCTOR): Hold still for me...
+[SEG0040] person_2 (DOCTOR): Okay: BP is 161 over 93, saturation 96 percent, temperature is 36.4 degrees. And pulse 94.
+[SEG0041] person_2 (DOCTOR): if you're comfortable, I'll examine you now
+[SEG0042] person_2 (DOCTOR): let me just check something
+[SEG0043] person_2 (DOCTOR): there's pitting swelling at both ankles, and your blood pressure is on the high side
+[SEG0044] person_2 (DOCTOR): Good, that's the examination.
+[SEG0045] person_2 (DOCTOR): let's book an ultrasound of the kidneys to look into chronic kidney disease keep an eye on salt and protein portions, a dietitian can help with the specifics. A urine protein test is something we might do if this doesn't improve in two weeks if the symptoms get worse, that's the point to come in urgently
+[SEG0046] person_1 (PATIENT): Yes, I'll keep that in mind.
+[SEG0047] person_2 (DOCTOR): Come back after the results are back. Can you run through the plan with me quickly, just to be certain?
+[SEG0048] person_1 (PATIENT): So, I come back after the results are back. Is that right?
+[SEG0049] person_2 (DOCTOR): yes, exactly right any last questions?
+[SEG0050] person_1 (PATIENT): Okay, so no, I think that's everything. Thank you, doctor.
+[SEG0051] person_2 (DOCTOR): Safe journey home.
+
+JSON:

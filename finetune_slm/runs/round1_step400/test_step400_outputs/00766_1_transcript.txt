@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00766)
+[SEG0001] person_3 (FAMILY_MEMBER): Morning, doctor. I'm Dad's daughter, Kate. He's here for his repeat prescription review, he says he feels well.
+[SEG0002] person_1 (PATIENT): I do feel well. I don't see why we had to come. ~
+[SEG0003] person_2 (DOCTOR): It's good to hear, Mr Sutcliffe. It's a routine check, so don't worry. How's your breathing?
+[SEG0004] person_1 (PATIENT): Fine. A bit puffed on the hill, that's all.
+[SEG0005] person_3 (FAMILY_MEMBER): Dad, you stop three times on the hill.
+[SEG0006] person_2 (DOCTOR): Kate, thanks for saying so. Any swelling in your ankles, Mr Sutcliffe?
+[SEG0007] person_1 (PATIENT): A little at night, maybe. It goes by morning.
+[SEG0008] person_2 (DOCTOR): Any chest pain?
+[SEG0009] person_1 (PATIENT): No. None.
+[SEG0010] person_2 (DOCTOR): Dizziness, or fainting?
+[SEG0011] person_1 (PATIENT): No, nothing like that.
+[SEG0012] person_2 (DOCTOR): Waking at night short of breath?
+[SEG0013] person_1 (PATIENT): No. I sleep like a baby.
+[SEG0014] person_2 (DOCTOR): What tablets are you taking at the moment?
+[SEG0015] person_3 (FAMILY_MEMBER): Furosemide, 40 mg, once a day, in the morning. That's the water tablet.
+[SEG0016] person_2 (DOCTOR): Any allergies?
+[SEG0017] person_1 (PATIENT): Codeine, it makes me sick as a dog.
+[SEG0018] person_2 (DOCTOR): Your conditions?
+[SEG0019] person_3 (FAMILY_MEMBER): He has heart failure, diagnosed two years ago, and high blood pressure.
+[SEG0020] person_2 (DOCTOR): Any heart problems in the family?
+[SEG0021] person_1 (PATIENT): My father died of a heart attack at sixty.
+[SEG0022] person_2 (DOCTOR): And who looks after you at home?
+[SEG0023] person_1 (PATIENT): I live with Kate and her husband now, since my wife died.
+[SEG0024] person_2 (DOCTOR): Let me check you. Pulse, pressure, and your weight. ~
+[SEG0025] person_1 (PATIENT): Go on. ~
+[SEG0026] person_2 (DOCTOR): Pulse 74, blood pressure 128 over 76, oxygen 96 percent, weight 82 kilos.
+[SEG0027] person_3 (FAMILY_MEMBER): Is that more than last time? ~
+[SEG0028] person_2 (DOCTOR): It's up by two kilos from three months ago, which could be fluid. Let me look at your ankles and listen to your chest. ~
+[SEG0029] person_1 (PATIENT): Fine.
+[SEG0030] person_2 (DOCTOR): There's mild swelling above both ankles, and your chest has a few crackles at the bottom of both lungs.
+[SEG0031] person_3 (FAMILY_MEMBER): Is that bad? ~
+[SEG0032] person_2 (DOCTOR): It's mild, but it fits with a little fluid build-up, so I'd say your heart failure is stable but slightly fluid-overloaded.
+[SEG0033] person_1 (PATIENT): I feel fine. ~
+[SEG0034] person_2 (DOCTOR): Many people do, until it builds. I'd like to keep the same tablets for now, and ask you to weigh yourself every morning.
+[SEG0035] person_3 (FAMILY_MEMBER): Should I write it down? ~
+[SEG0036] person_2 (DOCTOR): Yes, same scales, same time, after the toilet. If your weight goes up by two kilos in three days, ring us.
+[SEG0037] person_3 (FAMILY_MEMBER): I'll keep a chart. ~
+[SEG0038] person_2 (DOCTOR): Cut down on salt, and don't add any at the table.
+[SEG0039] person_1 (PATIENT): My wife used to say that. ~
+[SEG0040] person_2 (DOCTOR): She was right. I'd like to see you again in four weeks, to check your weight and your ankles.
+[SEG0041] person_1 (PATIENT): Four weeks. Fine. Thank you. ~
+[SEG0042] person_3 (FAMILY_MEMBER): Thanks, doctor. ~
+
+JSON:

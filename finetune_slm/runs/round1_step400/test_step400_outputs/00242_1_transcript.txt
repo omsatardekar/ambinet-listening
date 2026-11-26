@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00242)
+[SEG0001] person_1 (PATIENT): Good afternoon, doctor, the receptionist said you'd see me now.
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): I've, I've been getting breathless walking short distances. I looked a few things up online, and that probably didn't help. I'm hoping you can tell me something definite.
+[SEG0004] person_2 (DOCTOR): How long has this been going on?
+[SEG0005] person_1 (PATIENT): Probably three weeks. Yeah.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): Only stopping to rest, and it's not much. Maybe a seven out of ten on a bad day. Walking uphill definitely sets it off.
+[SEG0008] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0009] person_1 (PATIENT): It, It usually comes with tiredness.
+[SEG0010] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0011] person_1 (PATIENT): I'm on amlodipine, 5 milligrams, once a day for my pressure.
+[SEG0012] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0013] person_1 (PATIENT): I have high blood pressure, for nearly five years. I did try to ignore it for a while.
+[SEG0014] person_2 (DOCTOR): Any operations in the past?
+[SEG0015] person_1 (PATIENT): Yes, I had a hernia repair, about five years back.
+[SEG0016] person_2 (DOCTOR): Is anyone at home with you?
+[SEG0017] person_1 (PATIENT): I share a flat with two friends.
+[SEG0018] person_2 (DOCTOR): And your work?
+[SEG0019] person_1 (PATIENT): I drive a delivery van all day.
+[SEG0020] person_2 (DOCTOR): How do you eat, generally?
+[SEG0021] person_1 (PATIENT): I skip breakfast most days.
+[SEG0022] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0023] person_1 (PATIENT): No, no allergies to anything.
+[SEG0024] person_2 (DOCTOR): Any leg swelling, night sweats or chest pain at all?
+[SEG0025] person_1 (PATIENT): No, no leg swelling, night sweats or chest pain.
+[SEG0026] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0027] person_1 (PATIENT): Nothing else aches.
+[SEG0028] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0029] person_2 (DOCTOR): Right, rest your hand here...
+[SEG0030] person_2 (DOCTOR): Okay: saturation 91 percent, temperature 37.0, pulse 85. And respiratory rate 20, pressure 128 over 73.
+[SEG0031] person_1 (PATIENT): Is that okay?
+[SEG0032] person_2 (DOCTOR): I'll explain what that means shortly.
+[SEG0033] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0034] person_2 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0035] person_2 (DOCTOR): There are fine crackles at the bases of both lungs.
+[SEG0036] person_2 (DOCTOR): Bear with me a second.
+[SEG0037] person_2 (DOCTOR): No clubbing in the fingers.
+[SEG0038] person_1 (PATIENT): Fine.
+[SEG0039] person_2 (DOCTOR): Okay, finished. I think breathing tests makes sense here, for chronic breathlessness. Try a daily walk and note how far you get before you need to stop. Cut down on salt and fried food for now, it really does make a difference. I'd like you to see a chest physician as well, and I'll write the referral.
+[SEG0040] person_1 (PATIENT): Alright, thank you.
+[SEG0041] person_2 (DOCTOR): If it hasn't settled in two weeks, we'd think about a CT scan of the chest, but not now. Take care, and call us if anything changes.
+[SEG0042] person_1 (PATIENT): No, I think that's everything. Thank you, doctor.
+
+JSON:

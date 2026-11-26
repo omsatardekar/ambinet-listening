@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03667)
+[SEG0001] person_1 (PATIENT): Doctor? Hello, I hope this is the right time.
+[SEG0002] person_2 (DOCTOR): Yes, have a seat. Tell me what's going on.
+[SEG0003] person_3 (FAMILY_MEMBER): hello, doctor i hope it's alright if I stay in for this uh, doctor, it's back pain that doesn't go away that's what we're worried about
+[SEG0004] person_2 (DOCTOR): Alright, did it come on recently?
+[SEG0005] person_1 (PATIENT): it's been about a week, I'm fairly sure
+[SEG0006] person_2 (DOCTOR): How often do you get it?
+[SEG0007] person_1 (PATIENT): Honestly, on and off.
+[SEG0008] person_2 (DOCTOR): I follow have you been feeling tired and run down?
+[SEG0009] person_1 (PATIENT): okay, so yes, about the same, about a week. I was losing a bit of weight at one point, but that's gone now
+[SEG0010] person_2 (DOCTOR): any breathlessness or high fever?
+[SEG0011] person_1 (PATIENT): None of those, no.
+[SEG0012] person_2 (DOCTOR): Any leg weakness or chest pain?
+[SEG0013] person_1 (PATIENT): Right, none of those, no.
+[SEG0014] person_2 (DOCTOR): Okay, any change in your bowel habit or your stomach generally?
+[SEG0015] person_1 (PATIENT): No, that side's been fine.
+[SEG0016] person_2 (DOCTOR): So, tell me your medicines, please. Take your time, there's no rush.
+[SEG0017] person_3 (FAMILY_MEMBER): It's telmisartan, once a day, doctor.
+[SEG0018] person_2 (DOCTOR): Alright, how much do you take?
+[SEG0019] person_3 (FAMILY_MEMBER): it's 40 milligrams she takes Eltroxin, 100 micrograms, every morning for my thyroid
+[SEG0020] person_2 (DOCTOR): Do you have any long-term conditions?
+[SEG0021] person_1 (PATIENT): Mm, I've got high blood pressure. I didn't want to make a fuss, you know. An underactive thyroid, for about ten years.
+[SEG0022] person_2 (DOCTOR): Okay, I can see an underactive thyroid in your file as well. Are there any allergies I should be aware of?
+[SEG0023] person_1 (PATIENT): Grass pollen. I come out in... well, itchy eyes.
+[SEG0024] person_2 (DOCTOR): a few questions about your lifestyle now
+[SEG0025] person_1 (PATIENT): No, I've never smoked in my life. I'll have a glass of wine with dinner. I do a yoga class on Thursdays. I grab fast food at lunch most days. I'm a plumber, lots of bending and kneeling.
+[SEG0026] person_2 (DOCTOR): Have you been to theatre before?
+[SEG0027] person_1 (PATIENT): Just keyhole surgery on my gallbladder, two years back.
+[SEG0028] person_2 (DOCTOR): I'll do your observations first.
+[SEG0029] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0030] person_2 (DOCTOR): Okay: SpO2 97 percent on room air, blood pressure 107 over 76, temp 38.8 degrees, pulse is 90 beats a minute.
+[SEG0031] person_1 (PATIENT): Is that okay?
+[SEG0032] person_2 (DOCTOR): Don't worry, we'll discuss it in a second.
+[SEG0033] person_2 (DOCTOR): Let's move on to the examination.
+[SEG0034] person_1 (PATIENT): Okay, doctor.
+[SEG0035] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0036] person_2 (DOCTOR): there is a soft heart murmur you've not had before and a small tender spot on the fingertip
+[SEG0037] person_2 (DOCTOR): good, you can sit up again
+[SEG0038] person_2 (DOCTOR): So, based on the history and the examination, it points towards possible infection of the heart valve causing back and general symptoms. Let's book blood cultures to look into possible endocarditis. I'd like to arrange an echocardiogram for new murmur. This is not an ordinary back strain, so I want tests today. Do get help quickly if the symptoms get worse. Anything else on your mind before you go?
+[SEG0039] person_1 (PATIENT): Actually, no, that's all. Thanks a lot.
+
+JSON:

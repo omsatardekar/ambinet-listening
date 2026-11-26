@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01576)
+[SEG0001] person_1 (PATIENT): Hello doctor, sorry, I took a wrong turn on the way here.
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): I'm here because of a barking cough. I'd rather not end up on lots of tablets if I can avoid it.
+[SEG0004] person_2 (DOCTOR): Since when exactly?
+[SEG0005] person_1 (PATIENT): Uh, probably about four days. Yeah. I've been putting this off for weeks.
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): Right, it's worse with night. A eight out of ten, I suppose. It happens on and off.
+[SEG0008] person_2 (DOCTOR): And what about blue lips, noisy breathing when resting, difficulty swallowing or drooling?
+[SEG0009] person_1 (PATIENT): No, nothing to report there.
+[SEG0010] person_2 (DOCTOR): Has your skin been okay?
+[SEG0011] person_1 (PATIENT): No, skin's been fine.
+[SEG0012] person_2 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0013] person_1 (PATIENT): Nothing unusual, no.
+[SEG0014] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0015] person_1 (PATIENT): Let me think, um, nothing, I haven't had any operations.
+[SEG0016] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0017] person_1 (PATIENT): Not really, no.
+[SEG0018] person_2 (DOCTOR): Do you take any regular medication?
+[SEG0019] person_1 (PATIENT): No, I'm not on anything.
+[SEG0020] person_2 (DOCTOR): What's your work?
+[SEG0021] person_1 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0022] person_2 (DOCTOR): Do you follow any particular diet?
+[SEG0023] person_1 (PATIENT): I'm vegetarian and have been for years.
+[SEG0024] person_2 (DOCTOR): Has anything ever caused you a reaction? I mean any allergies.
+[SEG0025] person_1 (PATIENT): No allergies at all.
+[SEG0026] person_2 (DOCTOR): Let's start with the basic checks.
+[SEG0027] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0028] person_2 (DOCTOR): Okay: saturation 99 percent, temperature 36.7, pulse is 84 beats a minute, respiratory rate 18, BP is 127 over 74.
+[SEG0029] person_2 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0030] person_2 (DOCTOR): I'm just checking this side.
+[SEG0031] person_2 (DOCTOR): He is playful, breathing comfortably at rest, and I can't hear any noisy breathing now.
+[SEG0032] person_2 (DOCTOR): Please sit back down.
+[SEG0033] person_2 (DOCTOR): So, based on the history and the examination, this looks most like mild croup.
+[SEG0034] person_1 (PATIENT): Is it dangerous, doctor?
+[SEG0035] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's mild croup, and we'll watch how it goes. You'll be taking dexamethasone, 0.15 mg per kg, once, single dose. That should help with croup. Keep him calm, sit him upright, and give fluids. Keep an eye out, and if he makes a noisy sound when resting or struggles to breathe, call us the same day or go to emergency. Book a review if no better in two days.
+[SEG0036] person_2 (DOCTOR): How would you describe the plan, so we're on the same page?
+[SEG0037] person_1 (PATIENT): So, I take the dexamethasone, 0.15 mg per kg, once and come back if no better in two days. Is that right?
+[SEG0038] person_2 (DOCTOR): Yes, exactly right. Have I covered everything you wanted?
+[SEG0039] person_1 (PATIENT): No, that's all. Thanks a lot.
+[SEG0040] person_2 (DOCTOR): Take care now.
+
+JSON:

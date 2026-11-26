@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00344)
+[SEG0001] person_1 (NURSE): Doctor, I've brought them through. The observations are done, whenever you need them.
+[SEG0002] person_2 (DOCTOR): Okay, thanks. Hi, how can I help today?
+[SEG0003] person_3 (PATIENT): Mainly a mole that has changed. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): When did you first notice it? Just so I get the full picture.
+[SEG0005] person_3 (PATIENT): It's been like this since last Tuesday.
+[SEG0006] person_2 (DOCTOR): Alright, what about a bit of itching on it, have you noticed that?
+[SEG0007] person_3 (PATIENT): Yes, I have. About bit of itching on it, honestly, once or twice a day.
+[SEG0008] person_2 (DOCTOR): Have you had a mole that has changed before, or is this the first time?
+[SEG0009] person_3 (PATIENT): I had a similar thing last winter. It went away.
+[SEG0010] person_2 (DOCTOR): Let me check a few things. Any history of skin cancer, fever or lumps in the armpit?
+[SEG0011] person_3 (PATIENT): I haven't had history of skin cancer, fever or lumps in the armpit, no.
+[SEG0012] person_2 (DOCTOR): Okay, have you had any pain or history of sunburn?
+[SEG0013] person_3 (PATIENT): I haven't had pain or history of sunburn, no.
+[SEG0014] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0015] person_3 (PATIENT): No, joints are fine.
+[SEG0016] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0017] person_3 (PATIENT): My heart's been fine, as far as I know.
+[SEG0018] person_2 (DOCTOR): Alright, do you drink alcohol?
+[SEG0019] person_3 (PATIENT): I gave up drinking about three years ago.
+[SEG0020] person_2 (DOCTOR): Any smoking?
+[SEG0021] person_3 (PATIENT): I stopped smoking about two years back.
+[SEG0022] person_2 (DOCTOR): Do you exercise at all?
+[SEG0023] person_3 (PATIENT): I go to the gym a couple of times a week.
+[SEG0024] person_2 (DOCTOR): What's your job?
+[SEG0025] person_3 (PATIENT): I teach at a primary school.
+[SEG0026] person_2 (DOCTOR): Anything special about your diet?
+[SEG0027] person_3 (PATIENT): I try to avoid too much sugar.
+[SEG0028] person_2 (DOCTOR): Any regular medication?
+[SEG0029] person_3 (PATIENT): No, nothing regular.
+[SEG0030] person_2 (DOCTOR): Have you had to have anything operated on?
+[SEG0031] person_3 (PATIENT): Yes, I had my appendix out, about eight years ago.
+[SEG0032] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0033] person_3 (PATIENT): Yes, shellfish. I get vomiting.
+[SEG0034] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0035] person_3 (PATIENT): I have high cholesterol, for nearly five years.
+[SEG0036] person_2 (DOCTOR): Yes, high cholesterol is known to us, good to have that clear.
+[SEG0037] person_1 (NURSE): Okay, so the vitals from earlier. Saturation 97 percent, heart rate 73, pressure 113 over 68.
+[SEG0038] person_2 (DOCTOR): Good, thank you.
+[SEG0039] person_2 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0040] person_3 (PATIENT): Sure.
+[SEG0041] person_2 (DOCTOR): I'll go gently.
+[SEG0042] person_2 (DOCTOR): I can't feel any glands in the armpit.
+[SEG0043] person_2 (DOCTOR): Right, you can sit back down. So where does that leave us? My working impression is a pigmented lesion that needs to be looked at more closely. I want to be honest that this is an impression, not a final answer. An atypical mole is also on my list. Please use sunscreen and cover up in the midday sun, and check your skin once a month. Alright, I'll see you out.
+[SEG0044] person_3 (PATIENT): That's everything I wanted to ask. Thank you.
+[SEG0045] person_2 (DOCTOR): See you then.
+
+JSON:

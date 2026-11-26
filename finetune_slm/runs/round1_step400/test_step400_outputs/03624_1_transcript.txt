@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03624)
+[SEG0001] person_1 (PATIENT): right, sorry, doctor, shall I sit here?
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What seems to be wrong?
+[SEG0003] person_3 (FAMILY_MEMBER): I mean, doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_2 (DOCTOR): right that's fine sit down we'll go through it together
+[SEG0005] person_1 (PATIENT): I I wanted to get periods stopped for four months looked at. I'm hoping you can tell me something definite.
+[SEG0006] person_2 (DOCTOR): has this been going on for long?
+[SEG0007] person_1 (PATIENT): around three weeks I think
+[SEG0008] person_3 (FAMILY_MEMBER): Hm you know I'd say more like a month.
+[SEG0009] person_2 (DOCTOR): okay so roughly three to to four weeks is that right?
+[SEG0010] person_1 (PATIENT): Yeah roughly.
+[SEG0011] person_2 (DOCTOR): Ah. Is it bearing on you a a lot?
+[SEG0012] person_1 (PATIENT): hmm, about a three out of ten and a milky discharge from my breasts, too i've, I've also had headaches sorry, what was I saying, about headaches, mostly moderate as for being told it was just stress, I honestly can't say when that began it might have been last month or the month before
+[SEG0013] person_2 (DOCTOR): have you had periods stopped for four months before, or is this the first time?
+[SEG0014] person_1 (PATIENT): I had a similar thing about six months ago. It It went away.
+[SEG0015] person_2 (DOCTOR): can I check a few measurements before we carry on?
+[SEG0016] person_2 (DOCTOR): okay this won't take long..
+[SEG0017] person_2 (DOCTOR): okay: respiratory rate 17 BP is 119 over 72. And pulse 76 oxygen saturation is 98 percent temp 36.9 degrees
+[SEG0018] person_2 (DOCTOR): Now I'm going to do a short physical check.
+[SEG0019] person_2 (DOCTOR): let me feel here
+[SEG0020] person_2 (DOCTOR): you are not pregnant by the urine test the breasts express a little milk and there is no visual field loss
+[SEG0021] person_2 (DOCTOR): Good, you can sit up again. How about weight change?
+[SEG0022] person_1 (PATIENT): nope uh no weight change
+[SEG0023] person_2 (DOCTOR): And And what about visual changes hot flushes or positive pregnancy test?
+[SEG0024] person_1 (PATIENT): Ah, um, no, nothing to to report there.
+[SEG0025] person_2 (DOCTOR): How are your bowels, any trouble?
+[SEG0026] person_1 (PATIENT): no, uh, all normal there
+[SEG0027] person_2 (DOCTOR): How's your breathing otherwise?
+[SEG0028] person_1 (PATIENT): No, uh, nothing there.
+[SEG0029] person_2 (DOCTOR): Are there any illnesses in your family?
+[SEG0030] person_1 (PATIENT): my son has asthma my daughter has type 1 diabetes
+[SEG0031] person_2 (DOCTOR): any previous surgeries?
+[SEG0032] person_1 (PATIENT): no, not at all
+[SEG0033] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0034] person_3 (FAMILY_MEMBER): She takes escitalopram, 10 milligrams, once a day for my mood. She is on allopurinol, 100 milligrams, once a day for the gout, I give it to her. She is on lamotrigine, 100 milligrams, twice a day, I give it it to her.
+[SEG0035] person_2 (DOCTOR): what conditions have you been treated for in the the past?
+[SEG0036] person_1 (PATIENT): I have depression. I didn't want to bother you but it keeps coming back. Um, I've had gout, yes
+[SEG0037] person_2 (DOCTOR): I follow.
+[SEG0038] person_1 (PATIENT): I've got epilepsy
+[SEG0039] person_2 (DOCTOR): yes depression is known to us good to have that clear. Okay do you react to any medicines or foods? Any allergies?
+[SEG0040] person_1 (PATIENT): yes, walnuts, it gives me hives yes, cat fur i get sneezing
+[SEG0041] person_2 (DOCTOR): how active are you?
+[SEG0042] person_1 (PATIENT): I hardly move around during the day
+[SEG0043] person_2 (DOCTOR): Who lives with you?
+[SEG0044] person_1 (PATIENT): My partner and our baby
+[SEG0045] person_2 (DOCTOR): okay, thinking it through, I'd lean towards raised prolactin or a thyroid problem rather than stress. Polycystic ovary syndrome is also on my list
+[SEG0046] person_1 (PATIENT): I mean, uh, do you think it's something serious?
+[SEG0047] person_2 (DOCTOR): It's reasonable to be concerned but right now raised prolactin or a thyroid problem rather than stress is my leading thought not anything worse.
+[SEG0048] person_2 (DOCTOR): An MRI of the pituitary is what I'd like next, for possible prolactinoma the result will help us decide whether anything more is needed we should do a prolactin and thyroid blood test for galactorrhoea
+[SEG0049] person_1 (PATIENT): Mm, alright.
+[SEG0050] person_2 (DOCTOR): don't stress about stress as the cause, the tests will tell us please come and see me after the results tell me what you've taken from all that, so I can fill in any gaps
+[SEG0051] person_1 (PATIENT): So, I come back after the results. Is that right?
+[SEG0052] person_2 (DOCTOR): Yes exactly right. Have I covered everything you wanted?
+[SEG0053] person_1 (PATIENT): So, no, that's all. Thanks a lot.
+
+JSON:

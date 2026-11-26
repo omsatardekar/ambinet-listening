@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01034)
+[SEG0001] person_1 (PATIENT): Sorry I'm a little late doctor.
+[SEG0002] person_2 (DOCTOR): No problem at all, come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): honestly, it's scaly red plaques on my elbows, and my family pushed me to come
+[SEG0004] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0005] person_2 (DOCTOR): okay, this won't take long..
+[SEG0006] person_2 (DOCTOR): okay: temp 36.9 degrees, respiratory rate 14, pulse 81, SpO2 97 percent on room air, BP is 111 over 77.
+[SEG0007] person_1 (PATIENT): is that normal?
+[SEG0008] person_2 (DOCTOR): I'll explain what these mean in a moment did it come on recently?
+[SEG0009] person_1 (PATIENT): It's been about four days now.
+[SEG0010] person_2 (DOCTOR): does anything help it?
+[SEG0011] person_1 (PATIENT): it settles a little with moisturiser
+[SEG0012] person_2 (DOCTOR): How much trouble does it give you?
+[SEG0013] person_1 (PATIENT): Pretty mild if I'm being honest.
+[SEG0014] person_2 (DOCTOR): has there been pitted nails too?
+[SEG0015] person_1 (PATIENT): Yes, uh, for about two weeks.
+[SEG0016] person_2 (DOCTOR): have you had scaly red plaques on your elbows before or is this the first time?
+[SEG0017] person_1 (PATIENT): A bit a couple of years ago. It settled by itself back then.
+[SEG0018] person_2 (DOCTOR): A few quick ones: joint pain, fever or pus?
+[SEG0019] person_1 (PATIENT): no, nothing to report there
+[SEG0020] person_2 (DOCTOR): Is your urine normal no changes?
+[SEG0021] person_1 (PATIENT): that's normal as far as I know
+[SEG0022] person_2 (DOCTOR): are there any allergies I should be aware of?
+[SEG0023] person_1 (PATIENT): Wheat. I come out in... well itchy skin.
+[SEG0024] person_2 (DOCTOR): have you been to theatre before?
+[SEG0025] person_1 (PATIENT): yes, I had my tonsils removed, as a teenager
+[SEG0026] person_2 (DOCTOR): so, do you have any chronic illnesses?
+[SEG0027] person_1 (PATIENT): Gout for nearly five years i told myself I'd wait and and see and here I am i've had migraines yes
+[SEG0028] person_2 (DOCTOR): yes gout is known to us good to have that clear now some background about your lifestyle
+[SEG0029] person_1 (PATIENT): I'm a bus driver, so I sit for long hours. I drink a lot of tea and snack through the day. I live with my elderly mother.
+[SEG0030] person_2 (DOCTOR): are you taking anything regularly, including from the pharmacy?
+[SEG0031] person_1 (PATIENT): Actually, it's sumatriptan, 50 milligrams, when needed. I've been reading about it online and it it worried me. I'm hoping you can tell me something definite.
+[SEG0032] person_2 (DOCTOR): since when have you been taking it?
+[SEG0033] person_1 (PATIENT): For about a month.
+[SEG0034] person_2 (DOCTOR): sure
+[SEG0035] person_2 (DOCTOR): Alright over here please and I'll take a look.
+[SEG0036] person_2 (DOCTOR): I'm just checking this side
+[SEG0037] person_2 (DOCTOR): there are well-defined silvery plaques on both elbows and a few pits in the nails
+[SEG0038] person_2 (DOCTOR): So please sit back down.
+[SEG0039] person_2 (DOCTOR): from what you've told me and what I found this is probably plaque psoriasis
+[SEG0040] person_1 (PATIENT): is this permanent?
+[SEG0041] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's plaque psoriasis, and we'll watch how it goes. Let me just check I've got this right. You've had scaly red plaques on your elbows for about four days, mild, and no pus or fever
+[SEG0042] person_1 (PATIENT): That's it yes.
+[SEG0043] person_2 (DOCTOR): we'll begin with calcipotriol and betamethasone, 50 micrograms/0.5 mg per g, once a day, four weeks it's for psoriasis keep the skin well moisturised and avoid picking the plaques the thing that would worry me is if you get painful or swollen joints if that that happens, go to emergency let's review you in four weeks that's all from me any questions?
+[SEG0044] person_1 (PATIENT): alright, thanks, take care
+[SEG0045] person_2 (DOCTOR): take care now
+
+JSON:

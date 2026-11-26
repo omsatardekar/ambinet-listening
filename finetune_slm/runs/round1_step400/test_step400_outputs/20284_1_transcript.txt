@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20284)
+[SEG0001] person_1 (DOCTOR): hello, sorry about the delay, do sit
+[SEG0002] person_2 (CAREGIVER): Doctor, I'm just here to help with the details.
+[SEG0003] person_1 (DOCTOR): yes, that's no problem at all please sit start wherever you like, I'm listening
+[SEG0004] person_2 (CAREGIVER): Erm, it's the room spinning, doctor. She didn't want to come, but I insisted.
+[SEG0005] person_1 (DOCTOR): has this been going on for long?
+[SEG0006] person_3 (PATIENT): Around ten days... no wait, it's more like two days.
+[SEG0007] person_1 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0008] person_3 (PATIENT): yes, turning my head that makes it worse it's severe, honestly it just comes and goes
+[SEG0009] person_1 (DOCTOR): Any nausea and vomiting as well?
+[SEG0010] person_3 (PATIENT): Yes, actually. Um, about nausea and vomiting, it comes and goes. There's being unsteady as well. Sorry, what was I saying, with being unsteady, about a seven out of ten. Mm, I did have a recent cold at one point, but that's gone now.
+[SEG0011] person_1 (DOCTOR): time for your numbers, if that's okay
+[SEG0012] person_1 (DOCTOR): Sit still for a moment...
+[SEG0013] person_1 (DOCTOR): Okay: BP is 119 over 71, pulse is 77 beats a minute, temperature 36.5.
+[SEG0014] person_1 (DOCTOR): Could you come over to the couch, please?
+[SEG0015] person_3 (PATIENT): Of course.
+[SEG0016] person_1 (DOCTOR): hold that for a second
+[SEG0017] person_1 (DOCTOR): I can see a fine jerking of the eyes to the left and your walking is a little unsteady.
+[SEG0018] person_1 (DOCTOR): Please sit back down. Have you noticed slurred speech, ringing in the ears, hearing loss or headache?
+[SEG0019] person_3 (PATIENT): No, none of those at all.
+[SEG0020] person_1 (DOCTOR): Did you notice any double vision?
+[SEG0021] person_3 (PATIENT): I mean, I haven't noticed any double vision.
+[SEG0022] person_1 (DOCTOR): Has your skin been okay?
+[SEG0023] person_3 (PATIENT): Skin's normal.
+[SEG0024] person_1 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0025] person_3 (PATIENT): Yes, tramadol. I get feeling very drowsy. Yes, trimethoprim.
+[SEG0026] person_1 (DOCTOR): Do you have any chronic illnesses?
+[SEG0027] person_3 (PATIENT): I've, I've got high blood pressure. I've got epilepsy.
+[SEG0028] person_1 (DOCTOR): Alright, high blood pressure and epilepsy, that matches what I have here. So, tell me about your routine, work, habits, that sort of thing.
+[SEG0029] person_3 (PATIENT): I've never touched a cigarette. I'll have a glass of wine with dinner. I work in accounts at a hospital. My partner and our baby. I drink a lot of tea and snack through the day.
+[SEG0030] person_1 (DOCTOR): What's on your current medicine list?
+[SEG0031] person_3 (PATIENT): Amlodipine, 5 milligrams, once a day
+[SEG0032] person_2 (CAREGIVER): Hmm, doctor, I think the last prescription for the amlodipine was 2.5 milligrams. We changed it at the last visit.
+[SEG0033] person_1 (DOCTOR): Okay. Have you got the newest prescription or the the box with you?
+[SEG0034] person_3 (PATIENT): erm, you know, no, I left it at home. Carbamazepine, 200 milligrams, twice a day
+[SEG0035] person_1 (DOCTOR): Roughly how long on that one?
+[SEG0036] person_3 (PATIENT): Nearly five years now.
+[SEG0037] person_1 (DOCTOR): so, based on the history and the examination, this looks most like an inner-ear balance problem such as vestibular neuritis. I'd also keep a problem in the brain stem in mind
+[SEG0038] person_3 (PATIENT): Do you think it's something serious?
+[SEG0039] person_1 (DOCTOR): it's reasonable to be concerned, but right now an inner-ear balance problem such as vestibular neuritis is my leading thought, not anything worse
+[SEG0040] person_1 (DOCTOR): I think a positional test makes sense here, for vertigo. I think blood tests makes sense here, for dizziness. I'd like you to take prochlorperazine, 5 milligrams, three times a day, for three days. You take it by mouth. It's for nausea and vertigo. It's a commonly used medicine and most people tolerate it well. Start moving around gently as soon as you can, since resting too long slows recovery.
+[SEG0041] person_1 (DOCTOR): and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+[SEG0042] person_3 (PATIENT): Okay, makes sense.
+[SEG0043] person_1 (DOCTOR): is there anything you'd like me to go over again?
+[SEG0044] person_3 (PATIENT): That's clear, thanks.
+[SEG0045] person_1 (DOCTOR): goodbye for now
+
+JSON:

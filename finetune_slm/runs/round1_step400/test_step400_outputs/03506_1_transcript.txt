@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03506)
+[SEG0001] person_1 (PATIENT): Good afternoon, uh, doctor.
+[SEG0002] person_2 (DOCTOR): No problem at all, come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): I've been dealing with an itchy red rash on the chest.
+[SEG0004] person_2 (DOCTOR): How long has this been bothering you?
+[SEG0005] person_1 (PATIENT): Ever since... since yesterday, really.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): Erm, you know, it happens on and off. Pretty mild, if I'm being honest.
+[SEG0008] person_2 (DOCTOR): Does anything else come with it?
+[SEG0009] person_1 (PATIENT): It usually comes with a mild temperature. The mild temperature? That's been for three weeks.
+[SEG0010] person_2 (DOCTOR): Do you take any regular medication?
+[SEG0011] person_1 (PATIENT): No, none.
+[SEG0012] person_2 (DOCTOR): Any previous surgeries?
+[SEG0013] person_1 (PATIENT): Erm, no, not at all.
+[SEG0014] person_2 (DOCTOR): Do you have any medical conditions I should know about? I'm asking so that we don't miss anything.
+[SEG0015] person_1 (PATIENT): No, no conditions.
+[SEG0016] person_2 (DOCTOR): Right, how are your meals?
+[SEG0017] person_1 (PATIENT): I grab fast food at lunch most days.
+[SEG0018] person_2 (DOCTOR): And your job?
+[SEG0019] person_1 (PATIENT): I work in accounts at a hospital.
+[SEG0020] person_2 (DOCTOR): What about your parents, brothers or sisters, any conditions?
+[SEG0021] person_1 (PATIENT): My sister had breast cancer.
+[SEG0022] person_2 (DOCTOR): What about blistering?
+[SEG0023] person_1 (PATIENT): Okay, so not at all, no blistering.
+[SEG0024] person_2 (DOCTOR): Have you had any mouth sores, facial swelling or breathing difficulty?
+[SEG0025] person_1 (PATIENT): No, uh, none of those at all.
+[SEG0026] person_2 (DOCTOR): I follow. Alright, how are your bowels, any trouble?
+[SEG0027] person_1 (PATIENT): Bowels are regular, uh, nothing odd.
+[SEG0028] person_2 (DOCTOR): Let me get the readings out of the way.
+[SEG0029] person_2 (DOCTOR): That's it, just a little longer...
+[SEG0030] person_2 (DOCTOR): Okay: respiratory rate 18, oxygen saturation is 97 percent. And heart rate 78, BP is 120 over 68, temperature 36.5.
+[SEG0031] person_2 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0032] person_1 (PATIENT): Right.
+[SEG0033] person_2 (DOCTOR): Raise your arm for me.
+[SEG0034] person_2 (DOCTOR): There is a fine pink rash across the chest and arms, with no blistering and the mouth is clear.
+[SEG0035] person_2 (DOCTOR): That's the examination finished.
+[SEG0036] person_2 (DOCTOR): Putting it all together, this looks most like a drug rash probably from allopurinol.
+[SEG0037] person_1 (PATIENT): Is it dangerous, doctor?
+[SEG0038] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a drug rash probably from allopurinol, and we'll know more once the blood tests is back. I'm sending you for blood tests because of drug rash. You'll be taking cetirizine, 10 milligrams, once a day, one week. That's for itch.
+[SEG0039] person_1 (PATIENT): Mm, uh, alright.
+[SEG0040] person_2 (DOCTOR): Please stop the allopurinol and don't restart it until we've spoken to the clinic. Please come and see me in three days.
+[SEG0041] person_1 (PATIENT): Sure.
+[SEG0042] person_2 (DOCTOR): Anything else on your mind before you go?
+[SEG0043] person_1 (PATIENT): No, that's all. Thanks a lot.
+
+JSON:

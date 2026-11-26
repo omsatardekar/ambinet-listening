@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20147)
+[SEG0001] person_1 (NURSE): Doctor, your next patient is here. I've done the basics, I'll read them out in a moment.
+[SEG0002] person_2 (DOCTOR): Right, great. Hello, come in and sit down. How can I help?
+[SEG0003] person_3 (PATIENT): I've been feeling dizzy. I just want to get back to normal, really.
+[SEG0004] person_2 (DOCTOR): Since when exactly?
+[SEG0005] person_3 (PATIENT): Ever since... since last weekend, really.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_3 (PATIENT): Pretty mild, if I'm being honest. I'd say a few times a day.
+[SEG0008] person_2 (DOCTOR): Have you had a bump on your head?
+[SEG0009] person_3 (PATIENT): Yes, for about four days. There was a headache since the fall, yes, but that went away.
+[SEG0010] person_2 (DOCTOR): Any clear fluid from the nose or ear, confusion or double vision?
+[SEG0011] person_3 (PATIENT): No, I'd have said so.
+[SEG0012] person_2 (DOCTOR): Any loss of consciousness or weakness?
+[SEG0013] person_3 (PATIENT): No loss of consciousness or weakness, none of it.
+[SEG0014] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0015] person_3 (PATIENT): Nothing like that.
+[SEG0016] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0017] person_3 (PATIENT): I'm a bus driver, so I sit for long hours. I swim twice a week. My husband and I live above the shop.
+[SEG0018] person_2 (DOCTOR): Right, what's on your current medicine list?
+[SEG0019] person_3 (PATIENT): Amlodipine. I take it once a day for my pressure.
+[SEG0020] person_2 (DOCTOR): How much do you take?
+[SEG0021] person_3 (PATIENT): 5 milligrams, I think that's what's on the box.
+[SEG0022] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0023] person_3 (PATIENT): Nothing, you know, I haven't had any operations.
+[SEG0024] person_2 (DOCTOR): What about your medical history?
+[SEG0025] person_3 (PATIENT): High blood pressure, for nearly five years.
+[SEG0026] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0027] person_3 (PATIENT): Plasters. I come out in... well, a red itchy rash.
+[SEG0028] person_1 (NURSE): Doctor, I've got the readings for you. Pressure 119 over 74, saturation 98 percent, pulse 83. Respiratory rate 16, temp 36.6 degrees.
+[SEG0029] person_2 (DOCTOR): Thanks.
+[SEG0030] person_2 (DOCTOR): Right, could you come over to the couch, please?
+[SEG0031] person_2 (DOCTOR): Hold that for a second.
+[SEG0032] person_2 (DOCTOR): There is a small bruise on the forehead, the pupils are equal and reactive, and you are walking steadily.
+[SEG0033] person_2 (DOCTOR): That's the examination finished. So where does that leave us? This looks most like a minor head injury without worrying signs.
+[SEG0034] person_3 (PATIENT): Okay, so what are the odds it's serious?
+[SEG0035] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a minor head injury without worrying signs. Let's use paracetamol, 1 gram, every six hours if needed, for three days. That should help with headache.
+[SEG0036] person_3 (PATIENT): Fine, I'll begin it.
+[SEG0037] person_2 (DOCTOR): Someone should stay with you tonight, and no alcohol or contact sport for now. The thing that would worry me is if you vomit repeatedly, become drowsy or confused, or have a fit. If that happens, go to emergency. I'd like to see you again if the headache gets worse. Have I covered everything you wanted?
+[SEG0038] person_3 (PATIENT): I think I understand everything. Thanks.
+[SEG0039] person_2 (DOCTOR): Have a good day.
+
+JSON:

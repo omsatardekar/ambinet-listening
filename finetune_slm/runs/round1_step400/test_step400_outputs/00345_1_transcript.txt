@@ -1,0 +1,75 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00345)
+[SEG0001] person_1 (NURSE): Afternoon doctor. They're in and comfortable and I have the measurements ready.
+[SEG0002] person_2 (DOCTOR): Thank you. Good morning, tell me what's been going on.
+[SEG0003] person_3 (CAREGIVER): Oh doctor I've come along because I know the history if it helps.
+[SEG0004] person_2 (DOCTOR): that's fine, sit down we'll go through it together
+[SEG0005] person_3 (CAREGIVER): he's been having an urgent need to go sometimes, doctor
+[SEG0006] person_2 (DOCTOR): When did you first notice it?
+[SEG0007] person_4 (PATIENT): for three weeks, I'd say
+[SEG0008] person_2 (DOCTOR): How bad is it would you say?
+[SEG0009] person_4 (PATIENT): Pretty moderate if I'm being honest.
+[SEG0010] person_2 (DOCTOR): okay, does it come along with anything else?
+[SEG0011] person_4 (PATIENT): hmm, it usually comes with leaking urine when I cough or sneeze the leaking urine when I cough or sneeze? That's been since last Tuesday
+[SEG0012] person_2 (DOCTOR): And alcohol, how much?
+[SEG0013] person_4 (PATIENT): A beer or two most evenings, to be honest
+[SEG0014] person_2 (DOCTOR): tell me about your work
+[SEG0015] person_4 (PATIENT): I'm a software engineer, so I'm at a screen all day.
+[SEG0016] person_2 (DOCTOR): do you get any exercise?
+[SEG0017] person_4 (PATIENT): I walk for about half an hour most days
+[SEG0018] person_2 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0019] person_4 (PATIENT): I've had diabetes yes. Yes high blood pressure.
+[SEG0020] person_2 (DOCTOR): uh-huh
+[SEG0021] person_4 (PATIENT): I've got heart disease. I kept putting it off which I know isn't sensible.
+[SEG0022] person_2 (DOCTOR): Alright high blood pressure and heart disease that matches what I have here. Have you had any surgery before?
+[SEG0023] person_4 (PATIENT): I had my gallbladder removed in 2016
+[SEG0024] person_2 (DOCTOR): alright, what's your current medication list?
+[SEG0025] person_4 (PATIENT): Glimepiride 2 milligrams maybe before breakfast for my sugar
+[SEG0026] person_2 (DOCTOR): have you got the box or the prescription on you?
+[SEG0027] person_4 (PATIENT): hmm, not with me i'll bring it next time i'm on aspirin, 75 milligrams, once a day for my heart
+[SEG0028] person_3 (CAREGIVER): That's what's prescribed but I'm not sure he takes it every day.
+[SEG0029] person_2 (DOCTOR): does anything run in the family?
+[SEG0030] person_4 (PATIENT): my father had kidney stones
+[SEG0031] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0032] person_4 (PATIENT): no allergies
+[SEG0033] person_3 (CAREGIVER): Hold on, doctor, I think he reacted to ibuprofen once. I'm not certain, though.
+[SEG0034] person_4 (PATIENT): Really? I don't think so.
+[SEG0035] person_2 (DOCTOR): Alright, so that's unclear. I'll record what each of you said. Alright, any fever or burning when passing urine at all?
+[SEG0036] person_4 (PATIENT): no, no fever, no burning when passing urine i did have a heavy dragging feeling low down at one point, but that that went away on its own
+[SEG0037] person_2 (DOCTOR): Any difficulty emptying?
+[SEG0038] person_4 (PATIENT): No no difficulty emptying.
+[SEG0039] person_2 (DOCTOR): Have you had any constipation or blood in the urine?
+[SEG0040] person_4 (PATIENT): Um no no constipation or blood in the urine.
+[SEG0041] person_2 (DOCTOR): any change in your bowel habit or your stomach generally?
+[SEG0042] person_4 (PATIENT): bowels are regular nothing odd
+[SEG0043] person_2 (DOCTOR): how's your breathing otherwise?
+[SEG0044] person_4 (PATIENT): no, my breathing's been fine
+[SEG0045] person_1 (NURSE): doctor, I've got the readings for you weight 90 kilos, height 162 centimetres, pulse 83. BP is 128 over 70, saturation 98 percent, temperature is 36.8 degrees
+[SEG0046] person_2 (DOCTOR): Good, thank you.
+[SEG0047] person_2 (DOCTOR): shall we do the examination?
+[SEG0048] person_2 (DOCTOR): I'll go gently.
+[SEG0049] person_2 (DOCTOR): No bulge is visible when you cough and the the tummy is soft.
+[SEG0050] person_2 (DOCTOR): right, you can sit back down
+[SEG0051] person_2 (DOCTOR): taking everything into account, I'd lean towards stress urinary incontinence. Another possibility is a urine infection. A bladder diary is what I'd like next, for urinary symptoms. I'd rather check than guess, and this is the quickest way to know more
+[SEG0052] person_1 (NURSE): doctor I did a urine test before they came in the result's on your screen
+[SEG0053] person_2 (DOCTOR): thanks I'll look at that. Pelvic floor exercises three sets a day make a real difference over a couple of months
+[SEG0054] person_2 (DOCTOR): yes?
+[SEG0055] person_2 (DOCTOR): And please bring the latest prescription or the medicine boxes to the next visit so we can settle the dose.
+[SEG0056] person_4 (PATIENT): Yes, I'll watch for that.
+[SEG0057] person_2 (DOCTOR): I'll want another look in six weeks
+[SEG0058] person_4 (PATIENT): good I'll come back then
+[SEG0059] person_2 (DOCTOR): that's everything from me any other questions?
+[SEG0060] person_4 (PATIENT): thanks so much, doctor
+
+JSON:

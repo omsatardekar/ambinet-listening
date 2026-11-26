@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00137)
+[SEG0001] person_1 (DOCTOR): Good morning. Come in, have a seat.
+[SEG0002] person_2 (PATIENT): Thanks, doctor. It's been a a long few days.
+[SEG0003] person_1 (DOCTOR): so, what's been going on?
+[SEG0004] person_2 (PATIENT): Mainly a high fever. There's a couple of other things, uh, but that's the main one. I told myself I'd wait and see, and here I am.
+[SEG0005] person_1 (DOCTOR): how long are we talking about?
+[SEG0006] person_2 (PATIENT): I mean, it's been ten days, I'm fairly sure.
+[SEG0007] person_1 (DOCTOR): how much is it bothering you?
+[SEG0008] person_2 (PATIENT): I'd say moderate.
+[SEG0009] person_1 (DOCTOR): Any vomiting, cough or blood in the stool at all?
+[SEG0010] person_2 (PATIENT): No, um, none of that at all.
+[SEG0011] person_1 (DOCTOR): anything on the the skin I should know about?
+[SEG0012] person_2 (PATIENT): no rashes
+[SEG0013] person_1 (DOCTOR): Neurologically, anything strange?
+[SEG0014] person_2 (PATIENT): no, nothing like that
+[SEG0015] person_1 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0016] person_2 (PATIENT): no, none that I know of
+[SEG0017] person_1 (DOCTOR): how about smoking?
+[SEG0018] person_2 (PATIENT): I smoke, yes, around five a day.
+[SEG0019] person_1 (DOCTOR): And alcohol, how much?
+[SEG0020] person_2 (PATIENT): A beer or two most evenings, to be honest
+[SEG0021] person_1 (DOCTOR): do you live alone?
+[SEG0022] person_2 (PATIENT): Yes, I live on my own
+[SEG0023] person_1 (DOCTOR): What's your job?
+[SEG0024] person_2 (PATIENT): I teach at a primary school
+[SEG0025] person_1 (DOCTOR): Are you on any regular medication?
+[SEG0026] person_2 (PATIENT): no, nothing regular
+[SEG0027] person_1 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0028] person_2 (PATIENT): I don't have any known medication allergies.
+[SEG0029] person_1 (DOCTOR): Let's do the physical part now.
+[SEG0030] person_1 (DOCTOR): Let me press here.
+[SEG0031] person_1 (DOCTOR): Your tummy is soft, a little tender under the ribs on the right.
+[SEG0032] person_1 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0033] person_1 (DOCTOR): There's a faint rash on your forearms, it blanches when I press.
+[SEG0034] person_1 (DOCTOR): Thanks for that.
+[SEG0035] person_1 (DOCTOR): So where does that leave us? It points towards a viral fever, possibly dengue. I'm sending you for a full blood count because of platelet count. We'll begin with paracetamol, 500 milligrams, every six hours if needed, for three days. You take it by mouth. That's for fever and body aches.
+[SEG0036] person_2 (PATIENT): fine, uh, I'll start it
+[SEG0037] person_1 (DOCTOR): Drink a lot, coconut water, ORS, whatever you can manage.
+[SEG0038] person_1 (DOCTOR): Hm, okay. Avoid taking any extra painkillers on top of what I'm prescribing without checking with us. One warning sign to remember: you notice any bleeding or you can't keep fluids down. In that case don't wait. I'll want another look after the results are back. That's it on my side. Anything unclear?
+[SEG0039] person_2 (PATIENT): Alright, thanks. Bye for now.
+
+JSON:

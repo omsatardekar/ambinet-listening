@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03190)
+[SEG0001] person_1 (PATIENT): Doctor, hi, where would you like me to put my coat?
+[SEG0002] person_2 (DOCTOR): yes, have a seat. Tell me what's going on
+[SEG0003] person_3 (CAREGIVER): Sorry, what was I saying, thank you for fitting us in, doctor.
+[SEG0004] person_1 (PATIENT): I'm here because of hearing getting worse in both ears.
+[SEG0005] person_2 (DOCTOR): How long has it been like this?
+[SEG0006] person_1 (PATIENT): Ever since... since Monday, really. I didn't want to make a fuss, you know.
+[SEG0007] person_2 (DOCTOR): So, rate it for me, mild, moderate or severe?
+[SEG0008] person_1 (PATIENT): I'd say moderate. Let me think, I've also had ringing in the ears.
+[SEG0009] person_2 (DOCTOR): Is it there all the time or does it come and go?
+[SEG0010] person_1 (PATIENT): It's on and off. I've had hearing better in a noisy room too, for about a month.
+[SEG0011] person_2 (DOCTOR): Right, any discharge, ear pain or facial weakness?
+[SEG0012] person_1 (PATIENT): no, no discharge, ear pain or facial weakness
+[SEG0013] person_2 (DOCTOR): And vertigo, any of that?
+[SEG0014] person_1 (PATIENT): Definitely no vertigo.
+[SEG0015] person_2 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0016] person_1 (PATIENT): Right, no, that's all normal.
+[SEG0017] person_2 (DOCTOR): Tell me about your eating.
+[SEG0018] person_1 (PATIENT): I drink a lot of tea and snack through the day
+[SEG0019] person_2 (DOCTOR): and and your job?
+[SEG0020] person_1 (PATIENT): I work in accounts at a hospital.
+[SEG0021] person_2 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0022] person_3 (CAREGIVER): He takes alendronate, 70 milligrams, once a week. He takes naproxen, 250 milligrams, twice a day.
+[SEG0023] person_2 (DOCTOR): anything in your past medical history I should know?
+[SEG0024] person_1 (PATIENT): I've got thin bones.
+[SEG0025] person_2 (DOCTOR): sure
+[SEG0026] person_1 (PATIENT): I've got arthritis in my knees. I have an irregular heartbeat, for nearly five years.
+[SEG0027] person_2 (DOCTOR): Right, so an irregular heartbeat is already on your record. We'll keep that in mind today. Does your family have any medical conditions?
+[SEG0028] person_1 (PATIENT): My sister had breast cancer. My brother has epilepsy.
+[SEG0029] person_2 (DOCTOR): have you had any previous surgeries?
+[SEG0030] person_1 (PATIENT): No, not at all.
+[SEG0031] person_2 (DOCTOR): Are you allergic to anything? Any allergies to medicines or foods?
+[SEG0032] person_1 (PATIENT): I think I reacted to some antibiotic once, uh, years ago. I don't remember which one, or what happened exactly.
+[SEG0033] person_2 (DOCTOR): Let me get the readings out of the the way.
+[SEG0034] person_2 (DOCTOR): nearly done with the readings..
+[SEG0035] person_2 (DOCTOR): Okay: temperature is 36.6 degrees, pulse 66, saturation 99 percent. And BP is 114 over 68.
+[SEG0036] person_2 (DOCTOR): Let's move on to the examination.
+[SEG0037] person_2 (DOCTOR): I'll listen to your chest now
+[SEG0038] person_2 (DOCTOR): Both ear drums look normal and the tuning fork is heard better through the bone.
+[SEG0039] person_2 (DOCTOR): All finished, thank you. Putting it all together, this is probably a conductive hearing loss, possibly otosclerosis. The reason I say that is that your story and my examination fit together. It could also be wax, so we'll keep that open.
+[SEG0040] person_2 (DOCTOR): A hearing aid or an operation are both options after the tests. That's all from me. Any questions?
+[SEG0041] person_1 (PATIENT): Um, thank you, that's helpful.
+
+JSON:

@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00121)
+[SEG0001] person_1 (PATIENT): Morning, doctor, I hope I'm not interrupting.
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): So, uh, I've been dealing with trouble sleeping.
+[SEG0004] person_2 (DOCTOR): How far back does it go?
+[SEG0005] person_1 (PATIENT): Around nearly five years... no wait, it's more like two years.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): only a warm bath, and it's not much i notice it more with screens at night and worrying a six out of ten, I suppose i took the morning off to come in today i thought it would sort itself out, but it hasn't i've also been feeling exhausted in the day, for three weeks as for feeling exhausted in the day, severe, I'd say
+[SEG0008] person_2 (DOCTOR): what medicines do you take regularly?
+[SEG0009] person_1 (PATIENT): It's, It's escitalopram, 10 milligrams, once a day.
+[SEG0010] person_2 (DOCTOR): what about family history, any illnesses that run in the family?
+[SEG0011] person_1 (PATIENT): My father had kidney stones.
+[SEG0012] person_2 (DOCTOR): Any previous surgeries?
+[SEG0013] person_1 (PATIENT): No operations, no.
+[SEG0014] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0015] person_1 (PATIENT): I've had anxiety, yes.
+[SEG0016] person_2 (DOCTOR): alright, anxiety, that matches what I have here
+[SEG0017] person_2 (DOCTOR): what about allergies, to medicines or foods or anything else?
+[SEG0018] person_1 (PATIENT): I don't have any known medication allergies.
+[SEG0019] person_2 (DOCTOR): what do you do for work?
+[SEG0020] person_1 (PATIENT): I work in an office, mostly sitting at a desk.
+[SEG0021] person_2 (DOCTOR): what do you do to keep active?
+[SEG0022] person_1 (PATIENT): I cycle to work most mornings.
+[SEG0023] person_2 (DOCTOR): what's your diet like?
+[SEG0024] person_1 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0025] person_2 (DOCTOR): Any restless legs, night sweats or low mood?
+[SEG0026] person_1 (PATIENT): No, I'd have mentioned it.
+[SEG0027] person_2 (DOCTOR): has your skin been okay?
+[SEG0028] person_1 (PATIENT): Skin's normal.
+[SEG0029] person_2 (DOCTOR): how are your bowels, any trouble?
+[SEG0030] person_1 (PATIENT): Nothing unusual, no.
+[SEG0031] person_2 (DOCTOR): let me check your vitals now
+[SEG0032] person_2 (DOCTOR): Rest your hand here...
+[SEG0033] person_2 (DOCTOR): Okay: temperature is 36.9 degrees, SpO2 99 percent on room air, blood pressure 118 over 76. And pulse is 67 beats a minute.
+[SEG0034] person_2 (DOCTOR): So, based on your history, the the most likely explanation is insomnia, probably stress-related. Let's get a sleep study, for insomnia. I'm going to order a thyroid test, for insomnia.
+[SEG0035] person_1 (PATIENT): Alright, when would that be?
+[SEG0036] person_2 (DOCTOR): Same wake-up time every day, no screens in the hour before bed, and no coffee after lunch. Please don't wait if the symptoms get worse. That's when to be seen urgently. Let's review you in a month. That's it on my side. Anything unclear?
+[SEG0037] person_1 (PATIENT): Um, I think that's clear. Thank you for being so thorough.
+
+JSON:

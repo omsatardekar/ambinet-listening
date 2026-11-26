@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02484)
+[SEG0001] person_1 (PATIENT): sorry, doctor, shall I sit here?
+[SEG0002] person_2 (DOCTOR): that's fine, sit down tell me why you came
+[SEG0003] person_1 (PATIENT): it's being very breathless, mostly
+[SEG0004] person_2 (DOCTOR): let me quickly check your readings
+[SEG0005] person_2 (DOCTOR): Alright, keep your arm relaxed for me...
+[SEG0006] person_2 (DOCTOR): Okay: respiratory rate 22, pressure 125 over 89, pulse 85. And temperature is 36.9 degrees. Did it come on recently?
+[SEG0007] person_1 (PATIENT): I've had it for three days
+[SEG0008] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0009] person_1 (PATIENT): sorry, what was I saying, I get some relief from sitting up. Lying flat definitely sets it off. As for sweating, I honestly can't say when that began. It might have been last month or the month before
+[SEG0010] person_2 (DOCTOR): a few quick ones: calf pain or fever?
+[SEG0011] person_1 (PATIENT): No, you know, nothing to report there.
+[SEG0012] person_2 (DOCTOR): Nothing like wheeze?
+[SEG0013] person_1 (PATIENT): no, none, no wheeze
+[SEG0014] person_2 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0015] person_1 (PATIENT): No, nothing there.
+[SEG0016] person_2 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0017] person_1 (PATIENT): No, all normal there.
+[SEG0018] person_2 (DOCTOR): Have you had any surgical procedures?
+[SEG0019] person_1 (PATIENT): Just a mole taken off my arm, a few years ago.
+[SEG0020] person_2 (DOCTOR): Tell me your medicines, please.
+[SEG0021] person_1 (PATIENT): Mm, uh, it's furosemide, 40 milligrams, every morning. Though honestly, some days I forget to take it.
+[SEG0022] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0023] person_1 (PATIENT): Yes, heart failure. I've got high blood pressure.
+[SEG0024] person_2 (DOCTOR): Okay, go on. Right, so heart failure is already on your record. We'll keep that in mind today.
+[SEG0025] person_2 (DOCTOR): tell me about your routine, work, habits, that sort of thing
+[SEG0026] person_1 (PATIENT): I've never touched a cigarette. I only drink at family occasions. I drink a lot of tea and snack through the day. I swim twice a week. My husband and I live above the shop.
+[SEG0027] person_2 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0028] person_2 (DOCTOR): hold that for a second
+[SEG0029] person_2 (DOCTOR): There are crackles all the way up both lungs and and you are breathing very fast.
+[SEG0030] person_2 (DOCTOR): You can sit up now.
+[SEG0031] person_2 (DOCTOR): from what you've told me and what I found, it points towards acute pulmonary oedema. It could also be a severe chest infection, so we'll keep that open. An ECG is what I'd like next, for pulmonary oedema. The The result will help us decide whether anything more is needed. I think a chest X-ray makes sense here, for pulmonary oedema. Sit upright, I am giving oxygen and a water tablet injection now
+[SEG0032] person_2 (DOCTOR): We'll refer you to to the emergency team.
+[SEG0033] person_1 (PATIENT): Alright, thank you.
+[SEG0034] person_2 (DOCTOR): let's hold off on blood tests for now, and if there's no change in two weeks we can revisit it i'd like you back straight away i think we're done unless you have questions
+[SEG0035] person_1 (PATIENT): Great, thank you for your help.
+[SEG0036] person_2 (DOCTOR): Take care now.
+
+JSON:

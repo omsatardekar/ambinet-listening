@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00243)
+[SEG0001] person_1 (PATIENT): Hello, doctor. It's my turn, I think.
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): It's breathlessness on the stairs, mostly. A neighbour of mine said I should see someone about it.
+[SEG0004] person_2 (DOCTOR): I'll check your pressure and pulse.
+[SEG0005] person_2 (DOCTOR): Just relax your arm...
+[SEG0006] person_2 (DOCTOR): Okay: pulse 123, SpO2 96 percent on room air, blood pressure 133 over 81. When did you first notice it?
+[SEG0007] person_1 (PATIENT): About... well, three weeks.
+[SEG0008] person_2 (DOCTOR): Is it constant, or does it come and go?
+[SEG0009] person_1 (PATIENT): Honestly, all the time. I've also been feeling tired.
+[SEG0010] person_2 (DOCTOR): let me check a few things any blood in the stool or heavy periods?
+[SEG0011] person_1 (PATIENT): No blood in the stool or heavy periods, none of it.
+[SEG0012] person_2 (DOCTOR): So, a few quick ones: fainting, chest pain or black stools?
+[SEG0013] person_1 (PATIENT): No, no fainting, chest pain or black stools.
+[SEG0014] person_2 (DOCTOR): on the cardiac side, anything I should know?
+[SEG0015] person_1 (PATIENT): nothing like that
+[SEG0016] person_2 (DOCTOR): Any regular medication?
+[SEG0017] person_1 (PATIENT): Nothing, no.
+[SEG0018] person_2 (DOCTOR): anything special about your diet?
+[SEG0019] person_1 (PATIENT): I try to avoid too much sugar
+[SEG0020] person_2 (DOCTOR): Who do you live with?
+[SEG0021] person_1 (PATIENT): I live with my family, my husband and two kids.
+[SEG0022] person_2 (DOCTOR): are you active at all?
+[SEG0023] person_1 (PATIENT): Barely, I'm mostly sedentary these days
+[SEG0024] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0025] person_1 (PATIENT): Acid reflux, for about a year
+[SEG0026] person_2 (DOCTOR): so, have you had to have anything operated on?
+[SEG0027] person_1 (PATIENT): I had my gallbladder removed in 2016 i'm hoping you can tell me something definite
+[SEG0028] person_2 (DOCTOR): right, are there any allergies on your record that I should check?
+[SEG0029] person_1 (PATIENT): right, I've never been told I have allergies
+[SEG0030] person_2 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0031] person_1 (PATIENT): Okay.
+[SEG0032] person_2 (DOCTOR): Let me just check something.
+[SEG0033] person_2 (DOCTOR): Heart sounds are normal, I don't hear any murmur.
+[SEG0034] person_1 (PATIENT): Yes, doctor.
+[SEG0035] person_2 (DOCTOR): That's fine, sit up.
+[SEG0036] person_2 (DOCTOR): So where does that leave us? I think we're dealing with anaemia of some kind at this stage. I can't rule out a thyroid problem yet.
+[SEG0037] person_2 (DOCTOR): I want a ferritin level done, that's for possible iron deficiency.
+[SEG0038] person_1 (PATIENT): Does it need any preparation?
+[SEG0039] person_2 (DOCTOR): A vitamin B12 level is what I'd like next, for possible deficiency
+[SEG0040] person_1 (PATIENT): Where do I go for that?
+[SEG0041] person_2 (DOCTOR): I'd like you to take ferrous sulfate, 200 milligrams, once a day, for three months. That should help with possible iron deficiency. Iron can darken the stools and bother the stomach, so take it after food. We'll catch up after the results are back.
+[SEG0042] person_1 (PATIENT): sure, that's doable
+[SEG0043] person_2 (DOCTOR): Is there anything you wanted to ask?
+[SEG0044] person_1 (PATIENT): All good here. Thank you.
+
+JSON:

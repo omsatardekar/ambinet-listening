@@ -1,0 +1,71 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00026)
+[SEG0001] person_1 (DOCTOR): Okay, welcome. Let's see what's going on.
+[SEG0002] person_2 (PATIENT): Morning.
+[SEG0003] person_3 (CAREGIVER): Thank you for fitting us in, doctor.
+[SEG0004] person_1 (DOCTOR): Right, what's the trouble?
+[SEG0005] person_3 (CAREGIVER): Doctor, it's headaches in the evening. That's what we're worried about.
+[SEG0006] person_1 (DOCTOR): When did you first notice it?
+[SEG0007] person_2 (PATIENT): It's been about four days, I'm fairly sure.
+[SEG0008] person_1 (DOCTOR): So, how intense does it get?
+[SEG0009] person_2 (PATIENT): It's severe, honestly.
+[SEG0010] person_1 (DOCTOR): Okay, does it come along with anything else?
+[SEG0011] person_2 (PATIENT): Trouble switching off at night goes along with it, most of the time.
+[SEG0012] person_1 (DOCTOR): Has there been a knot in your stomach too?
+[SEG0013] person_2 (PATIENT): Yes, I have.
+[SEG0014] person_1 (DOCTOR): Have you had headaches in the evening before, or is this the first time?
+[SEG0015] person_2 (PATIENT): Yes, um, something like this happened about six months ago, and it went away on its own.
+[SEG0016] person_4 (UNKNOWN): Yes, that's right, that's how it was.
+[SEG0017] person_1 (DOCTOR): Have you noticed chest pain or weight loss?
+[SEG0018] person_2 (PATIENT): No, no chest pain or weight loss.
+[SEG0019] person_1 (DOCTOR): Any alcohol use, thoughts of harming myself or fainting?
+[SEG0020] person_2 (PATIENT): No, nothing there.
+[SEG0021] person_1 (DOCTOR): Any sign of panic attacks?
+[SEG0022] person_2 (PATIENT): No, I haven't had any panic attacks.
+[SEG0023] person_1 (DOCTOR): Is your urine normal, no changes?
+[SEG0024] person_2 (PATIENT): No changes there.
+[SEG0025] person_1 (DOCTOR): Has your skin been okay?
+[SEG0026] person_2 (PATIENT): Nothing on the skin, no.
+[SEG0027] person_1 (DOCTOR): Any previous surgeries?
+[SEG0028] person_2 (PATIENT): Yes, I had my appendix out, about eight years ago.
+[SEG0029] person_1 (DOCTOR): Any diagnoses you've been given before?
+[SEG0030] person_2 (PATIENT): Well, I've had anxiety for about a year now. Yes, acid reflux.
+[SEG0031] person_1 (DOCTOR): Okay, I can see acid reflux in your file as well. What about alcohol?
+[SEG0032] person_2 (PATIENT): I gave up drinking about three years ago.
+[SEG0033] person_1 (DOCTOR): Anything special about your diet?
+[SEG0034] person_2 (PATIENT): I try to avoid too much sugar.
+[SEG0035] person_1 (DOCTOR): Do you have any known allergies at all?
+[SEG0036] person_2 (PATIENT): No allergies that I know of, no.
+[SEG0037] person_1 (DOCTOR): Does anything run in the family?
+[SEG0038] person_2 (PATIENT): My sister has epilepsy.
+[SEG0039] person_1 (DOCTOR): Right, are you on any tablets or medication?
+[SEG0040] person_2 (PATIENT): Escitalopram. I take it once a day for the anxiety.
+[SEG0041] person_1 (DOCTOR): Do you know the dose?
+[SEG0042] person_2 (PATIENT): It's 10 milligrams.
+[SEG0043] person_1 (DOCTOR): Roughly how long on that one?
+[SEG0044] person_2 (PATIENT): About two years. Pantoprazole, 40 milligrams, before breakfast for my acidity. Paracetamol. I take it 500 milligrams, when needed. I had omeprazole at one point, but I'm off it now.
+[SEG0045] person_5 (NURSE): Here are the numbers, doctor. Pulse 65, BP is 113 over 82. SpO2 98 percent on room air, temperature is 36.4 degrees.
+[SEG0046] person_1 (DOCTOR): Thanks. Putting together what you've described, it points towards stress-related symptoms. I'd also keep an anxiety disorder in mind. Another possibility is a depressive episode.
+[SEG0047] person_2 (PATIENT): Oh, um, what are the chances it's something bad?
+[SEG0048] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like stress-related symptoms, but I'd like to confirm. Let me just check I've got this right. You've had headaches in the evening for about four days, severe, and no panic attacks or weight loss.
+[SEG0049] person_2 (PATIENT): Mm, that's right.
+[SEG0050] person_1 (DOCTOR): I think blood tests makes sense here, for stress-related symptoms.
+[SEG0051] person_6 (CLINICAL_STAFF): I can book that for Thursday at 10 am.
+[SEG0052] person_2 (PATIENT): So, okay, I'll be there.
+[SEG0053] person_1 (DOCTOR): Talking to someone, even a counsellor, helps more than people expect. Block out proper breaks in the day, and one evening a week that's yours. Please take the tablets with food so they don't upset your stomach. I'll also refer you to a counsellor.
+[SEG0054] person_2 (PATIENT): Sure, where do I go?
+[SEG0055] person_1 (DOCTOR): Please don't wait if the symptoms get worse. That's when to be seen urgently. Please come and see me in a month. That's everything from me. Any other questions?
+[SEG0056] person_2 (PATIENT): Nothing more from me, thanks.
+
+JSON:

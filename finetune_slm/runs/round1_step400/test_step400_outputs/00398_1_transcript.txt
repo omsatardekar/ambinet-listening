@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00398)
+[SEG0001] person_1 (PATIENT): Good afternoon, um, doctor, the receptionist said you'd see me now.
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): I've, I've been coughing after exercise, and I wanted to get it checked.
+[SEG0004] person_2 (DOCTOR): When did it begin?
+[SEG0005] person_1 (PATIENT): It's been like this since last night. Sorry, uh, I know I'm rambling a bit.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): Running definitely sets it off. It happens a few times a day. Moderate, I'd say. I get some relief from resting. And there's a runny nose in the mornings as well, about three months now. A mild wheeze at times was there, but it's gone away on its own.
+[SEG0008] person_3 (NURSE): Here are the numbers, doctor. Saturation 97 percent, blood pressure 126 over 72, temperature is 36.5 degrees. Pulse 66, respiratory rate 15.
+[SEG0009] person_2 (DOCTOR): Okay, noted.
+[SEG0010] person_2 (DOCTOR): Let me have a look at you.
+[SEG0011] person_2 (DOCTOR): I'll go gently.
+[SEG0012] person_2 (DOCTOR): A faint wheeze when you breathe out forcefully.
+[SEG0013] person_2 (DOCTOR): Okay, finished.
+[SEG0014] person_2 (DOCTOR): Did you get heartburn, weight loss, fever or chest pain?
+[SEG0015] person_1 (PATIENT): Yeah, no, none of those.
+[SEG0016] person_2 (DOCTOR): Have you had night sweats, by any chance?
+[SEG0017] person_1 (PATIENT): Hmm, not at all, no night sweats.
+[SEG0018] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0019] person_1 (PATIENT): Nothing like that.
+[SEG0020] person_2 (DOCTOR): Alright, any trouble with the waterworks?
+[SEG0021] person_1 (PATIENT): Well, um, no, that's all fine.
+[SEG0022] person_2 (DOCTOR): Have you had any surgery before?
+[SEG0023] person_1 (PATIENT): I mean, uh, yes, I had a hysterectomy, about twelve years ago. A neighbour of mine said I should see someone about it. My sister suggested writing things down, but I forgot.
+[SEG0024] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0025] person_1 (PATIENT): Oh, yes, eggs, it gives me a rash.
+[SEG0026] person_2 (DOCTOR): What's your current medication list?
+[SEG0027] person_1 (PATIENT): I take hydrocortisone cream, when needed. So, I'm on apixaban, 5 milligrams, twice a day for the heart rhythm.
+[SEG0028] person_3 (NURSE): Doctor, our chart from the last visit lists it as 10 milligrams.
+[SEG0029] person_2 (DOCTOR): So, I see. Is the most recent prescription on you?
+[SEG0030] person_1 (PATIENT): So, um, not with me. I'll bring it next time.
+[SEG0031] person_2 (DOCTOR): Alright, tell me about your health in general, any ongoing conditions?
+[SEG0032] person_1 (PATIENT): Uh, I've got eczema. I'd rather know what's going on than keep guessing.
+[SEG0033] person_2 (DOCTOR): Right, any more?
+[SEG0034] person_1 (PATIENT): Yes, an irregular heartbeat.
+[SEG0035] person_2 (DOCTOR): Alright, an irregular heartbeat, that matches what I have here. Okay, are you living with family?
+[SEG0036] person_1 (PATIENT): I stay with my daughter and her family.
+[SEG0037] person_2 (DOCTOR): How do you eat, generally?
+[SEG0038] person_1 (PATIENT): I skip breakfast most days.
+[SEG0039] person_2 (DOCTOR): So where does that leave us? The most likely explanation is cough-variant asthma. I can't rule out reflux-related cough yet.
+[SEG0040] person_1 (PATIENT): What are the chances it's something bad?
+[SEG0041] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like cough-variant asthma, but I'd like to confirm.
+[SEG0042] person_2 (DOCTOR): I'm going to order a peak flow reading, for chronic cough. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Okay, I think we're finished. Is everything clear?
+[SEG0043] person_1 (PATIENT): Hmm, I think that's clear. Thank you for being so thorough.
+
+JSON:

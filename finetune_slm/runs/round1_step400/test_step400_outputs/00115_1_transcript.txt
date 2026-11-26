@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00115)
+[SEG0001] person_1 (PATIENT): Um, hi there, is it alright if I come in now?
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): So, I've been passing out once last week, doctor. Sorry, I know I'm rambling a bit.
+[SEG0004] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0005] person_1 (PATIENT): So, you know, it's losartan, 50 milligrams, once a day for my blood pressure. I'm on omeprazole, 20 milligrams, once a day for the reflux. My sister suggested writing things down, but I forgot.
+[SEG0006] person_2 (DOCTOR): Okay, how far back does it go?
+[SEG0007] person_1 (PATIENT): Okay, so it's been two weeks, I'm fairly sure. I looked a few things up online, and that probably didn't help. I'm not great at remembering details, so bear with me.
+[SEG0008] person_2 (DOCTOR): Okay, anything you do that brings it on?
+[SEG0009] person_1 (PATIENT): So, yes, standing for long. That makes it worse.
+[SEG0010] person_2 (DOCTOR): On a normal day, how strong is it?
+[SEG0011] person_1 (PATIENT): Pretty mild, if I'm being honest. Oh, and a bump on my head after. That's been about the same, five days. Hmm, and blurred vision beforehand as well, since Friday.
+[SEG0012] person_2 (DOCTOR): Let me check a few things. Any confusion afterwards, tongue biting, palpitations or loss of bladder control?
+[SEG0013] person_1 (PATIENT): No, no confusion afterwards, tongue biting, palpitations or loss of bladder control.
+[SEG0014] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0015] person_1 (PATIENT): Breathing's normal.
+[SEG0016] person_2 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0017] person_1 (PATIENT): My uncle had colon cancer.
+[SEG0018] person_2 (DOCTOR): Do you have any known allergies at all?
+[SEG0019] person_1 (PATIENT): No, nothing I'm aware of.
+[SEG0020] person_2 (DOCTOR): Have you had to have anything operated on?
+[SEG0021] person_1 (PATIENT): Just a lump removed from my back, years ago.
+[SEG0022] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0023] person_1 (PATIENT): I drive a delivery van all day. I'm mostly vegetarian. I play badminton on Sundays.
+[SEG0024] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0025] person_1 (PATIENT): I've got high blood pressure. Acid reflux, for nearly five years.
+[SEG0026] person_2 (DOCTOR): Go on.
+[SEG0027] person_3 (NURSE): Here are the numbers, doctor. Respiratory rate 15, heart rate 71, BP is 121 over 80. Oxygen saturation is 97 percent.
+[SEG0028] person_2 (DOCTOR): Good, thank you.
+[SEG0029] person_2 (DOCTOR): Can I examine you now?
+[SEG0030] person_1 (PATIENT): Okay.
+[SEG0031] person_2 (DOCTOR): So, just relax, I'll be quick.
+[SEG0032] person_2 (DOCTOR): No murmurs on listening.
+[SEG0033] person_2 (DOCTOR): So, thanks, please take a seat again. Let me tell you where I've got to. It points towards a simple faint, probably reflex-related. Just to be sure I understood. You've been passing out once last week for two weeks, mild, and no palpitations or confusion afterwards.
+[SEG0034] person_1 (PATIENT): Yes, that's right.
+[SEG0035] person_2 (DOCTOR): I'd like to arrange blood tests for syncope. Drink enough water and avoid standing still for long stretches, and sit if you feel it coming. I'd like to see you again after the results are back. Thanks for coming in.
+[SEG0036] person_1 (PATIENT): That's everything I wanted to ask. Thank you.
+[SEG0037] person_2 (DOCTOR): All the best.
+
+JSON:

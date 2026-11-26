@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01008)
+[SEG0001] person_1 (PATIENT): Sorry, what was I saying, hello doctor, sorry, I took a wrong turn on the way here.
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_1 (PATIENT): Mainly a red warm patch on my shin. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): So, how long has it been like this?
+[SEG0005] person_1 (PATIENT): I've had it for ten days
+[SEG0006] person_2 (DOCTOR): What eases it, if anything?
+[SEG0007] person_1 (PATIENT): Only elevation, and it's not much.
+[SEG0008] person_2 (DOCTOR): I'll note down your vital signs first.
+[SEG0009] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0010] person_2 (DOCTOR): okay: saturation 98 percent, pulse 88. And temp 39.0 degrees, BP is 105 over 71.
+[SEG0011] person_2 (DOCTOR): Could you come over to the couch, please?
+[SEG0012] person_1 (PATIENT): of course
+[SEG0013] person_2 (DOCTOR): Nearly finished here.
+[SEG0014] person_2 (DOCTOR): the shin is red, warm and tender with a clear edge, and I've marked it with a pen
+[SEG0015] person_2 (DOCTOR): That's all I needed to check. Let me check a few things. Any shortness of breath, cut or rash elsewhere?
+[SEG0016] person_1 (PATIENT): no, I haven't had any of them
+[SEG0017] person_2 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0018] person_1 (PATIENT): No, all normal there.
+[SEG0019] person_2 (DOCTOR): before we go further, any allergies?
+[SEG0020] person_1 (PATIENT): no known allergies
+[SEG0021] person_2 (DOCTOR): did you ever have any procedures done?
+[SEG0022] person_1 (PATIENT): I had part of my thyroid removed years back
+[SEG0023] person_2 (DOCTOR): Is there any regular medication you use?
+[SEG0024] person_1 (PATIENT): no, none
+[SEG0025] person_2 (DOCTOR): Alright, are you on your own at home?
+[SEG0026] person_1 (PATIENT): I live with my elderly mother.
+[SEG0027] person_2 (DOCTOR): What does a normal day of food look like?
+[SEG0028] person_1 (PATIENT): Lots of rice, lentils and some fruit
+[SEG0029] person_2 (DOCTOR): What's your work?
+[SEG0030] person_1 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0031] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0032] person_1 (PATIENT): no, I've always been fairly healthy
+[SEG0033] person_2 (DOCTOR): Let me tell you where I've got to. It fits best with cellulitis of the leg.
+[SEG0034] person_1 (PATIENT): Is this serious, doctor?
+[SEG0035] person_2 (DOCTOR): I can't promise yet, but most people with cellulitis of the leg do well once it's treated properly. I'm sending you for blood tests because of cellulitis. I'll start you on flucloxacillin, 500 milligrams, four times a day, seven days. You take it by mouth. That should help with cellulitis. Keep the leg raised and come back if the redness goes past the pen line. If the symptoms get worse, that's the point to come in urgently.
+[SEG0036] person_1 (PATIENT): Okay, makes sense.
+[SEG0037] person_2 (DOCTOR): let's plan a a check in two days
+[SEG0038] person_1 (PATIENT): I'll note it in my calendar.
+[SEG0039] person_2 (DOCTOR): Right, anything else on your mind before you go?
+[SEG0040] person_1 (PATIENT): Good, thanks, I'll see you then.
+
+JSON:

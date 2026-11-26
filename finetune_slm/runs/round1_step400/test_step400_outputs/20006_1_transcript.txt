@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20006)
+[SEG0001] person_1 (DOCTOR): hi, sit anywhere you like
+[SEG0002] person_2 (PATIENT): afternoon, is this seat fine?
+[SEG0003] person_1 (DOCTOR): What's the main thing today?
+[SEG0004] person_2 (PATIENT): Yeah, you know, it's nausea and vomiting. I don't know what's causing it.
+[SEG0005] person_1 (DOCTOR): Has this been going on for long?
+[SEG0006] person_2 (PATIENT): For five days, I'd say. I didn't want to make a fuss, you know.
+[SEG0007] person_1 (DOCTOR): how strong would you say it is?
+[SEG0008] person_2 (PATIENT): About a eight out of ten.
+[SEG0009] person_1 (DOCTOR): What about being unsteady, have you noticed that?
+[SEG0010] person_2 (PATIENT): Yeah. Two days, I'd say. Uh, as for being unsteady, moderate, really. A recent cold was there, but it's gone away on its own.
+[SEG0011] person_1 (DOCTOR): Have you had nausea and vomiting before, or is this the first time?
+[SEG0012] person_2 (PATIENT): Erm, a bit, a couple of years ago. It settled by itself back then.
+[SEG0013] person_1 (DOCTOR): did you get double vision or hearing loss?
+[SEG0014] person_2 (PATIENT): No, no double vision or hearing loss.
+[SEG0015] person_1 (DOCTOR): did you get weakness or headache?
+[SEG0016] person_2 (PATIENT): I mean, no, no weakness or headache.
+[SEG0017] person_1 (DOCTOR): anything with your heart, like skipped beats or fainting?
+[SEG0018] person_2 (PATIENT): No, nothing with my heart.
+[SEG0019] person_1 (DOCTOR): Anything different when you pass water?
+[SEG0020] person_2 (PATIENT): I mean, no, that's all fine.
+[SEG0021] person_1 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0022] person_2 (PATIENT): I have high blood pressure, for about ten years.
+[SEG0023] person_1 (DOCTOR): okay, can you list what you take, tablets, creams or inhalers?
+[SEG0024] person_2 (PATIENT): I take amlodipine, 5 milligrams, once a day for my pressure.
+[SEG0025] person_1 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0026] person_2 (PATIENT): I work in accounts at a hospital. I do a yoga class on Thursdays. I'm vegetarian and have been for years
+[SEG0027] person_1 (DOCTOR): Any allergies to tablets, food or anything in the environment? Bear with me, I'm just building up the picture.
+[SEG0028] person_2 (PATIENT): No, I've never reacted to anything.
+[SEG0029] person_1 (DOCTOR): Anything surgical in your history?
+[SEG0030] person_2 (PATIENT): Okay, so yes, I had an operation for a hernia, last spring.
+[SEG0031] person_1 (DOCTOR): Let me quickly check your readings.
+[SEG0032] person_1 (DOCTOR): sit still for a moment..
+[SEG0033] person_1 (DOCTOR): Okay: temperature is 36.6 degrees, pulse 65. And respiratory rate 16, blood pressure 114 over 81.
+[SEG0034] person_1 (DOCTOR): I'll examine you in a second, make yourself comfortable.
+[SEG0035] person_1 (DOCTOR): Stay as you are for a moment.
+[SEG0036] person_1 (DOCTOR): I can see a fine jerking of the eyes to the left and your walking is a little unsteady.
+[SEG0037] person_1 (DOCTOR): That's all I needed to to check.
+[SEG0038] person_1 (DOCTOR): having listened and examined, it fits best with an inner-ear balance problem such as vestibular neuritis. Benign positional vertigo is also on my list
+[SEG0039] person_2 (PATIENT): is this serious, uh, doctor?
+[SEG0040] person_1 (DOCTOR): It's reasonable to be concerned, but right now an inner-ear balance problem such as vestibular neuritis is my leading thought, not anything worse. Stop me if I've got anything wrong. You've had nausea and vomiting for five days, and no weakness or headache.
+[SEG0041] person_2 (PATIENT): yes, that's right
+[SEG0042] person_1 (DOCTOR): Blood tests is what I'd like next, for dizziness. For this, prochlorperazine, 5 milligrams, three times a day, for three days. That's for nausea and vertigo.
+[SEG0043] person_2 (PATIENT): Is that safe with my other medicines?
+[SEG0044] person_1 (DOCTOR): start moving around gently as soon as you can, since resting too long slows recovery i think the balance clinic should see you too we'll catch up if it isn't settling in five days right, that's the plan do you want to ask me anything?
+[SEG0045] person_2 (PATIENT): Thank you, that's helpful.
+[SEG0046] person_1 (DOCTOR): Take care now.
+
+JSON:

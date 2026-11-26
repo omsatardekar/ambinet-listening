@@ -1,0 +1,70 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00808)
+[SEG0001] person_1 (PATIENT): So, my left calf. It cramps up when I walk, just a couple of blocks, and I have to stop. Two blocks, no, maybe three.
+[SEG0002] person_2 (DOCTOR): Like a charley horse?
+[SEG0003] person_1 (PATIENT): Kind of, but it's more of a squeeze, and it goes away if I stand still for a few minutes.
+[SEG0004] person_2 (DOCTOR): When did this start?
+[SEG0005] person_1 (PATIENT): Oh. Last fall. Or was it the winter before? I really couldn't tell you, it kind of crept up.
+[SEG0006] person_2 (DOCTOR): Anything else in the leg?
+[SEG0007] person_1 (PATIENT): My left foot gets cold. Colder than the right. And it aches at night, in the arch, and I hang it over the side of the bed and that helps.
+[SEG0008] person_2 (DOCTOR): Do your legs feel tired?
+[SEG0009] person_1 (PATIENT): Heavy, yes, by evening.
+[SEG0010] person_2 (DOCTOR): Any chest pain when you walk?
+[SEG0011] person_1 (PATIENT): No chest pain.
+[SEG0012] person_2 (DOCTOR): Short of breath?
+[SEG0013] person_1 (PATIENT): Not really, no.
+[SEG0014] person_2 (DOCTOR): Swelling in the legs?
+[SEG0015] person_1 (PATIENT): No swelling.
+[SEG0016] person_2 (DOCTOR): Any back pain, shooting down the leg?
+[SEG0017] person_1 (PATIENT): No, it's just the calf.
+[SEG0018] person_2 (DOCTOR): Numbness?
+[SEG0019] person_1 (PATIENT): No numbness.
+[SEG0020] person_2 (DOCTOR): What do you take?
+[SEG0021] person_1 (PATIENT): Atorvastatin, maybe 40 mg, at night. And lisinopril, 10 mg, every day. Well, most days. I forget it sometimes when I'm travelling.
+[SEG0022] person_2 (DOCTOR): So most days. Allergies?
+[SEG0023] person_1 (PATIENT): Contrast dye, from a scan. I'm allergic, they told me, but I can't remember what happened.
+[SEG0024] person_2 (DOCTOR): History?
+[SEG0025] person_1 (PATIENT): High cholesterol, high blood pressure, and pre-diabetes.
+[SEG0026] person_2 (DOCTOR): Surgery?
+[SEG0027] person_1 (PATIENT): Knee scope, in 2012.
+[SEG0028] person_2 (DOCTOR): Family?
+[SEG0029] person_1 (PATIENT): My father lost a leg to circulation trouble. My mother had a stroke.
+[SEG0030] person_2 (DOCTOR): Do you smoke?
+[SEG0031] person_1 (PATIENT): A pack a day for thirty years. I'm trying to quit.
+[SEG0032] person_2 (DOCTOR): Drink?
+[SEG0033] person_1 (PATIENT): A couple of beers on weekends.
+[SEG0034] person_2 (DOCTOR): Do you exercise?
+[SEG0035] person_1 (PATIENT): I walk the dog, but I can't go far. That's how it got noticed.
+[SEG0036] person_2 (DOCTOR): Let me check you. Blood pressure 148 over 88, pulse 82, temperature 36.8, oxygen 97 percent, breathing 16, and weight 96 kilos.
+[SEG0037] person_1 (PATIENT): That's high, huh? ~
+[SEG0038] person_2 (DOCTOR): A bit. Now let me feel for the pulses in your feet. Think of the artery as a garden hose.
+[SEG0039] person_1 (PATIENT): A hose? ~
+[SEG0040] person_2 (DOCTOR): If the hose is kinked or clogged, the water doesn't reach the end. I can feel a pulse in your right foot, but I can't feel a pulse at the left foot.
+[SEG0041] person_1 (PATIENT): Oh. ~
+[SEG0042] person_2 (DOCTOR): And the left foot is cooler than the right, and a bit shiny.
+[SEG0043] person_1 (PATIENT): That's what I noticed. ~
+[SEG0044] person_2 (DOCTOR): Any trouble with your breathing?
+[SEG0045] person_1 (PATIENT): No, nothing like that.
+[SEG0046] person_2 (DOCTOR): What I think is happening is narrowing of the arteries in the leg.
+[SEG0047] person_1 (PATIENT): Is that the hose? ~
+[SEG0048] person_2 (DOCTOR): Exactly. I'd like to arrange a test comparing the blood pressure in your ankle and your arm, an ultrasound of the leg arteries, and blood tests for cholesterol and sugar.
+[SEG0049] person_1 (PATIENT): When can that happen? ~
+[SEG0050] person_2 (DOCTOR): Reception will book them. And I'd like to start clopidogrel, 75 mg, once a day, to thin the blood.
+[SEG0051] person_1 (PATIENT): Okay. ~
+[SEG0052] person_2 (DOCTOR): The biggest thing you can do is stop smoking. It's like pouring sludge in the hose.
+[SEG0053] person_1 (PATIENT): I know. I will. ~
+[SEG0054] person_2 (DOCTOR): I'd like to see you again in two weeks.
+[SEG0055] person_1 (PATIENT): Two weeks. Thanks, doc. ~
+
+JSON:

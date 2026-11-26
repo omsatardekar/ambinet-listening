@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03064)
+[SEG0001] person_1 (DOCTOR): Hi, sit anywhere you like.
+[SEG0002] person_2 (PATIENT): Evening, doctor.
+[SEG0003] person_1 (DOCTOR): Was it a long journey this morning?
+[SEG0004] person_2 (PATIENT): Not too bad, the roads were quiet.
+[SEG0005] person_1 (DOCTOR): What's been worrying you?
+[SEG0006] person_2 (PATIENT): Honestly, it's hearing getting worse in both ears, and my family pushed me to come.
+[SEG0007] person_1 (DOCTOR): Okay, how many days or weeks has it been?
+[SEG0008] person_2 (PATIENT): It's been going on for four weeks.
+[SEG0009] person_1 (DOCTOR): Right, I'll do your observations first.
+[SEG0010] person_1 (DOCTOR): Keep your arm relaxed for me...
+[SEG0011] person_1 (DOCTOR): Okay: saturation 97 percent, pulse 75, temperature is 36.7 degrees, blood pressure 117 over 70.
+[SEG0012] person_2 (PATIENT): Is that alright, doctor?
+[SEG0013] person_1 (DOCTOR): We'll go over that shortly.
+[SEG0014] person_1 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0015] person_2 (PATIENT): Okay, doctor.
+[SEG0016] person_1 (DOCTOR): I'm just checking this side.
+[SEG0017] person_1 (DOCTOR): Both ear drums look normal and the tuning fork is heard better through the bone.
+[SEG0018] person_1 (DOCTOR): Thank you, you can get dressed. And what about ear pain or facial weakness?
+[SEG0019] person_2 (PATIENT): No, nothing to report there.
+[SEG0020] person_1 (DOCTOR): And what about discharge or vertigo?
+[SEG0021] person_2 (PATIENT): None of those, no.
+[SEG0022] person_1 (DOCTOR): Is your chest okay generally?
+[SEG0023] person_2 (PATIENT): No, nothing there.
+[SEG0024] person_1 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0025] person_2 (PATIENT): No, nothing as far as I know.
+[SEG0026] person_1 (DOCTOR): What do you do during the day?
+[SEG0027] person_2 (PATIENT): I look after my grandchildren most days.
+[SEG0028] person_1 (DOCTOR): How active are you?
+[SEG0029] person_2 (PATIENT): I hardly move around during the day.
+[SEG0030] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0031] person_2 (PATIENT): No surgery, no.
+[SEG0032] person_1 (DOCTOR): Tell me about any past illnesses or ongoing conditions.
+[SEG0033] person_2 (PATIENT): Eczema, for five years.
+[SEG0034] person_1 (DOCTOR): Right, right. Yes, eczema is known to us, good to have that clear.
+[SEG0035] person_1 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0036] person_2 (PATIENT): Hydrocortisone cream, when needed.
+[SEG0037] person_1 (DOCTOR): From what you've told me and what I found, I think we're dealing with a conductive hearing loss, possibly otosclerosis at this stage. We should do a CT scan of the ears for possible otosclerosis. That will help us see what's going on underneath and decide the next step.
+[SEG0038] person_2 (PATIENT): How long will it take?
+[SEG0039] person_1 (DOCTOR): A hearing aid or an operation are both options after the tests. The ENT clinic would be the right next step, I'll refer you. Come back or go to emergency straight away if the symptoms get worse.
+[SEG0040] person_2 (PATIENT): Alright, I follow.
+[SEG0041] person_1 (DOCTOR): Come back after the tests. Does all of that make sense?
+[SEG0042] person_2 (PATIENT): I think I understand everything. Thanks.
+
+JSON:

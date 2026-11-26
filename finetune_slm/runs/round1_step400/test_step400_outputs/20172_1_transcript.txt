@@ -1,0 +1,47 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20172)
+[SEG0001] person_1 (PATIENT): Hello, doctor. May I come in?
+[SEG0002] person_2 (DOCTOR): Yes, have a seat. Tell me what's going on.
+[SEG0003] person_1 (PATIENT): So the thing is, I've got burning pain in the upper tummy.
+[SEG0004] person_2 (DOCTOR): I'll do your observations first.
+[SEG0005] person_2 (DOCTOR): Sit still for a moment...
+[SEG0006] person_2 (DOCTOR): Okay: pressure 128 over 70, oxygen saturation is 98 percent, pulse 67. Okay, when was the first time you noticed it?
+[SEG0007] person_1 (PATIENT): Actually, it's been like this since last Tuesday.
+[SEG0008] person_2 (DOCTOR): Is it worse at certain times?
+[SEG0009] person_1 (PATIENT): Yes, empty stomach and spicy food. That makes it worse.
+[SEG0010] person_2 (DOCTOR): Any jaundice, black stools or vomiting blood at all?
+[SEG0011] person_1 (PATIENT): Well, no, no jaundice, black stools or vomiting blood.
+[SEG0012] person_2 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0013] person_1 (PATIENT): No, nothing there.
+[SEG0014] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0015] person_1 (PATIENT): No, I've always been fairly healthy.
+[SEG0016] person_2 (DOCTOR): Before we go further, any allergies?
+[SEG0017] person_1 (PATIENT): So, no allergies at all.
+[SEG0018] person_2 (DOCTOR): Any regular medication, tablets or creams?
+[SEG0019] person_1 (PATIENT): No, I'm not on anything.
+[SEG0020] person_2 (DOCTOR): Any previous surgeries?
+[SEG0021] person_1 (PATIENT): No surgery, no.
+[SEG0022] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0023] person_1 (PATIENT): I used to drink heavily but I stopped four years ago. I work in accounts at a hospital. I live with my elderly mother.
+[SEG0024] person_2 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0025] person_2 (DOCTOR): Stay as you are for a moment.
+[SEG0026] person_2 (DOCTOR): Your tummy is soft with some tenderness in the upper middle part.
+[SEG0027] person_2 (DOCTOR): Okay, that's enough for me. Putting it all together, I can't pin this down yet. We're looking at dyspepsia possibly related to anti-inflammatory tablets or reflux.
+[SEG0028] person_1 (PATIENT): Do you think it's something serious?
+[SEG0029] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's dyspepsia possibly related to anti-inflammatory tablets, and we'll know more once the blood tests is back. So, to recap quickly. You've had burning pain in the upper tummy, since last Tuesday, and no vomiting blood or black stools.
+[SEG0030] person_1 (PATIENT): Mm, that's right.
+[SEG0031] person_2 (DOCTOR): I'd like to arrange blood tests for dyspepsia. I'd like you to take omeprazole, 20 milligrams, once a day, for four weeks. That's for stomach acid. Please stop taking the anti-inflammatory tablets for now and use paracetamol for the pain. The thing that would worry me is if you pass black stools or vomit blood. If that happens, go to emergency. I'll want another look after the test result. So, I think we're done unless you have questions.
+[SEG0032] person_1 (PATIENT): Good, thanks, I'll see you then.
+
+JSON:

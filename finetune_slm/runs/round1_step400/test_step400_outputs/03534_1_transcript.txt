@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03534)
+[SEG0001] person_1 (PATIENT): Hello, doctor. I think it's my turn.
+[SEG0002] person_2 (DOCTOR): Okay, yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): Mainly a headache. There's a couple of other things, but that's the main one. Work has been very busy so I kept ignoring it.
+[SEG0004] person_2 (DOCTOR): How many days or weeks has it been?
+[SEG0005] person_1 (PATIENT): It's been going on for four weeks.
+[SEG0006] person_2 (DOCTOR): Alright, how strong would you say it is?
+[SEG0007] person_1 (PATIENT): It's mild, honestly. I've had cramps too, for about a week. With cramps, it happens all the time.
+[SEG0008] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0009] person_1 (PATIENT): I walk the dog every morning. I'm a hairdresser, on my feet all day. No, I share a house with my brother.
+[SEG0010] person_2 (DOCTOR): Any previous surgeries?
+[SEG0011] person_1 (PATIENT): Nothing, um, I haven't had any operations.
+[SEG0012] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0013] person_1 (PATIENT): No, nothing I can think of.
+[SEG0014] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0015] person_1 (PATIENT): Sorry, what was I saying, no, nothing as far as I know.
+[SEG0016] person_2 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0017] person_1 (PATIENT): My grandfather had a stroke.
+[SEG0018] person_2 (DOCTOR): Any regular medication at all?
+[SEG0019] person_1 (PATIENT): Nothing regular, no.
+[SEG0020] person_2 (DOCTOR): Have you noticed weakness on one side, fever or seizure?
+[SEG0021] person_1 (PATIENT): No, no weakness on one side, fever or seizure.
+[SEG0022] person_2 (DOCTOR): How are your bowels, any trouble?
+[SEG0023] person_1 (PATIENT): Nothing unusual, no.
+[SEG0024] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0025] person_1 (PATIENT): No, skin's been fine.
+[SEG0026] person_3 (NURSE): Okay, so the vitals from earlier. Pressure 128 over 77, oxygen saturation is 99 percent, temp 36.7 degrees. Heart rate 85.
+[SEG0027] person_2 (DOCTOR): Good, thank you.
+[SEG0028] person_2 (DOCTOR): Right, let's have a proper look at you.
+[SEG0029] person_1 (PATIENT): Yes, that's fine.
+[SEG0030] person_2 (DOCTOR): Look straight ahead.
+[SEG0031] person_2 (DOCTOR): You are a bit slow and unsteady, but there is no weakness and your blood pressure is fine.
+[SEG0032] person_2 (DOCTOR): Alright, that's all I needed to check.
+[SEG0033] person_2 (DOCTOR): Having listened and examined, my working impression is a low salt level, possibly from the new antidepressant.
+[SEG0034] person_2 (DOCTOR): I want blood tests done, that's for confusion. We will stop the new tablet and not drink excess water until we have the result. Avoid taking any extra painkillers on top of what I'm prescribing without checking with us. Please don't wait if the symptoms get worse. That's when to be seen urgently. I'd like to see you again in two days.
+[SEG0035] person_1 (PATIENT): Good, I'll return then.
+[SEG0036] person_2 (DOCTOR): Have I covered everything you wanted?
+[SEG0037] person_1 (PATIENT): Good, uh, thanks, I'll see you then.
+[SEG0038] person_2 (DOCTOR): Have a good day.
+
+JSON:

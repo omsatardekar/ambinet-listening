@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00098)
+[SEG0001] person_1 (PATIENT): Good morning, you know, doctor. Can I come in?
+[SEG0002] person_2 (DOCTOR): No trouble at all, come in. What's been bothering you?
+[SEG0003] person_1 (PATIENT): I've been feeling low most days, and I wanted to get it checked.
+[SEG0004] person_2 (DOCTOR): How far back does it go?
+[SEG0005] person_1 (PATIENT): It's been about three months, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): how much is it bothering you?
+[SEG0007] person_1 (PATIENT): Mostly severe. Um, I've also been losing interest in things I used to enjoy, for about a year.
+[SEG0008] person_2 (DOCTOR): Any weight loss or thoughts of harming myself at all?
+[SEG0009] person_1 (PATIENT): yeah, no weight loss or thoughts of harming myself, none of it
+[SEG0010] person_2 (DOCTOR): Have you had any drinking more than usual?
+[SEG0011] person_1 (PATIENT): I, I haven't noticed any drinking more than usual
+[SEG0012] person_2 (DOCTOR): anything unusual with passing urine?
+[SEG0013] person_1 (PATIENT): No changes there.
+[SEG0014] person_2 (DOCTOR): alright, do you have any allergies to medicines, food, anything at all?
+[SEG0015] person_1 (PATIENT): okay, so not that I know, no
+[SEG0016] person_2 (DOCTOR): Any smoking?
+[SEG0017] person_1 (PATIENT): I stopped smoking about two years back.
+[SEG0018] person_2 (DOCTOR): tell me about your work
+[SEG0019] person_1 (PATIENT): I'm a software engineer, so I'm at a screen all day.
+[SEG0020] person_2 (DOCTOR): what do you do to keep active?
+[SEG0021] person_1 (PATIENT): I cycle to work most mornings.
+[SEG0022] person_2 (DOCTOR): Is anyone at home with you?
+[SEG0023] person_1 (PATIENT): I share a flat with two friends.
+[SEG0024] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0025] person_1 (PATIENT): Yeah, no, never had any surgery.
+[SEG0026] person_2 (DOCTOR): Right, do you have any medical conditions I should know about?
+[SEG0027] person_1 (PATIENT): No, nothing, I've generally been healthy.
+[SEG0028] person_2 (DOCTOR): Any regular medication?
+[SEG0029] person_1 (PATIENT): No, I don't take anything regularly.
+[SEG0030] person_3 (NURSE): okay, so the vitals from earlier pulse is 75 beats a minute, oxygen saturation is 99 percent, weight 71 kilos, pressure 116 over 82, height 162 centimetres, temp 36.8 degrees
+[SEG0031] person_2 (DOCTOR): Okay, noted.
+[SEG0032] person_2 (DOCTOR): So, shall we do the examination?
+[SEG0033] person_1 (PATIENT): Okay, you know, ready.
+[SEG0034] person_2 (DOCTOR): Let me press here.
+[SEG0035] person_2 (DOCTOR): You're well kempt and speaking clearly, and you maintain good eye contact.
+[SEG0036] person_2 (DOCTOR): All done, you can get dressed.
+[SEG0037] person_2 (DOCTOR): So where does that leave us? I think we're dealing with a depressive episode at this stage. That's my thinking for now, and it may change as we learn more. Today I'm not changing anything. That's it on my side. Anything unclear?
+[SEG0038] person_1 (PATIENT): Hmm, one thing: no, actually that's all. Thanks.
+[SEG0039] person_2 (DOCTOR): See you then.
+
+JSON:

@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00259)
+[SEG0001] person_1 (PATIENT): Hello, doctor. Where would you like me?
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): Hmm, doctor, I'm just here to help with the details.
+[SEG0004] person_2 (DOCTOR): Absolutely, come and sit beside them.
+[SEG0005] person_1 (PATIENT): Doctor, it's a strange episode where I blanked out. It's getting on my nerves now.
+[SEG0006] person_2 (DOCTOR): How long has this been going on?
+[SEG0007] person_1 (PATIENT): I mean, it's been going on for about four days.
+[SEG0008] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0009] person_1 (PATIENT): Um, pretty severe, if I'm being honest. I notice it more with lack of sleep.
+[SEG0010] person_2 (DOCTOR): Okay, have you had staring spells that others noticed?
+[SEG0011] person_1 (PATIENT): Yeah, uh, that too. With staring spells that others noticed, about a three out of ten.
+[SEG0012] person_2 (DOCTOR): Have you noticed tongue biting, head injury or jerking movements?
+[SEG0013] person_1 (PATIENT): No, no tongue biting, head injury or jerking movements.
+[SEG0014] person_2 (DOCTOR): Did you notice any losing control of the bladder?
+[SEG0015] person_1 (PATIENT): No. No losing control of the bladder.
+[SEG0016] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0017] person_1 (PATIENT): Yeah, no, joints are fine.
+[SEG0018] person_2 (DOCTOR): Any operations in the past?
+[SEG0019] person_1 (PATIENT): I mean, just a knee arthroscopy, three years ago.
+[SEG0020] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0021] person_1 (PATIENT): No, nothing, I've generally been healthy.
+[SEG0022] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0023] person_1 (PATIENT): Penicillin, I'd say.
+[SEG0024] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0025] person_1 (PATIENT): I walk for about half an hour most days. I work in an office, mostly sitting at a desk. I live with my family, my husband and two kids.
+[SEG0026] person_2 (DOCTOR): Okay, are you on any regular medication?
+[SEG0027] person_1 (PATIENT): Hmm, no, I don't take anything regularly.
+[SEG0028] person_2 (DOCTOR): I'll take a few measurements first.
+[SEG0029] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0030] person_2 (DOCTOR): Okay: temperature 36.7, heart rate 73. And SpO2 99 percent on room air, BP is 123 over 68.
+[SEG0031] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0032] person_2 (DOCTOR): Let me press here.
+[SEG0033] person_2 (DOCTOR): You're alert, speech is normal and cranial nerves are intact.
+[SEG0034] person_2 (DOCTOR): Good, that's the examination.
+[SEG0035] person_2 (DOCTOR): Right, here's what I'm thinking. I can't pin this down yet. We're looking at a possible focal seizure that needs investigating or a faint. I'm going to order an MRI of the brain, for possible seizure. Don't drive until we've looked into this. I'd like you to see the neurology clinic as well, and I'll write the referral.
+[SEG0036] person_1 (PATIENT): Alright, thank you.
+[SEG0037] person_2 (DOCTOR): Book a review after the results are back. Okay, we're done for today. Take care.
+[SEG0038] person_1 (PATIENT): No questions. Thank you.
+[SEG0039] person_2 (DOCTOR): Right, see you then.
+
+JSON:

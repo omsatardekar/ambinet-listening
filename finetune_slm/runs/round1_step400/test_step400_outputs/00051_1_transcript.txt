@@ -1,0 +1,72 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00051)
+[SEG0001] person_1 (PATIENT): hi there, uh, is it alright if I come in now?
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_3 (FAMILY_MEMBER): hello, doctor, I came in with them, if that's okay
+[SEG0004] person_2 (DOCTOR): That's fine, sit down. We'll go through it together.
+[SEG0005] person_3 (FAMILY_MEMBER): We came because of red scaly patches on my elbows.
+[SEG0006] person_2 (DOCTOR): When did it begin?
+[SEG0007] person_1 (PATIENT): I've had it for two months. I did try to ignore it for a while
+[SEG0008] person_2 (DOCTOR): tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse
+[SEG0009] person_1 (PATIENT): Sunlight helps a bit. Cold weather definitely sets it off. A eight out of ten, you know, I suppose. As for itching, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0010] person_2 (DOCTOR): What about pitted nails, have you noticed that?
+[SEG0011] person_1 (PATIENT): well, um, yes, about the same, nearly five years
+[SEG0012] person_2 (DOCTOR): Ah. Have you had red scaly patches on your elbows before, or is this the the first time?
+[SEG0013] person_1 (PATIENT): I had a similar thing last year. It went away.
+[SEG0014] person_2 (DOCTOR): Can I take your vitals now?
+[SEG0015] person_2 (DOCTOR): One second...
+[SEG0016] person_2 (DOCTOR): Okay: saturation 97 percent, pressure 108 over 75, temp 36.9 degrees, heart rate 73.
+[SEG0017] person_2 (DOCTOR): shall we do the examination?
+[SEG0018] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0019] person_2 (DOCTOR): A few small pits in the fingernails.
+[SEG0020] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0021] person_2 (DOCTOR): Well-defined thick silvery plaques over both elbows and knees.
+[SEG0022] person_2 (DOCTOR): All done, you can get dressed. Right, have you had any sore throat before it started or fever?
+[SEG0023] person_1 (PATIENT): I haven't had sore throat before it started or fever, no.
+[SEG0024] person_2 (DOCTOR): Any new medicines, weeping or joint swelling at all?
+[SEG0025] person_1 (PATIENT): no, uh, no new medicines, weeping or joint swelling
+[SEG0026] person_2 (DOCTOR): Alright, how about your heart, any problems like that?
+[SEG0027] person_1 (PATIENT): Nothing like that.
+[SEG0028] person_2 (DOCTOR): is your urine normal, no changes?
+[SEG0029] person_1 (PATIENT): that's normal as far as I know
+[SEG0030] person_2 (DOCTOR): Right, any diagnoses you've been given before?
+[SEG0031] person_1 (PATIENT): Yes, high blood pressure.
+[SEG0032] person_2 (DOCTOR): go on
+[SEG0033] person_1 (PATIENT): I have diabetes.
+[SEG0034] person_2 (DOCTOR): Mhm.
+[SEG0035] person_2 (DOCTOR): a a few questions about your lifestyle now
+[SEG0036] person_1 (PATIENT): A beer or two most evenings, to be honest. I'm mostly vegetarian. I walk for about half an hour most days.
+[SEG0037] person_2 (DOCTOR): have you had any surgery before?
+[SEG0038] person_1 (PATIENT): just a knee arthroscopy, three years ago
+[SEG0039] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0040] person_1 (PATIENT): I don't have any known medication allergies.
+[SEG0041] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0042] person_1 (PATIENT): Amlodipine. I take it 5 milligrams, once a day for my pressure
+[SEG0043] person_3 (FAMILY_MEMBER): Hmm, uh, doctor, I think the last prescription for the amlodipine was 2.5 milligrams. We changed it at the last visit.
+[SEG0044] person_2 (DOCTOR): Okay. Have you got the newest prescription or the box with you?
+[SEG0045] person_1 (PATIENT): Not with me. I'll bring it next time. Glimepiride. I take it 2 milligrams, before breakfast. Coconut oil. I take it daily. Sorry, I know I'm rambling a bit. My family kept telling me to get it checked.
+[SEG0046] person_2 (DOCTOR): is there a family history of anything significant?
+[SEG0047] person_1 (PATIENT): My sister has thyroid problems.
+[SEG0048] person_2 (DOCTOR): so, based on the history and the examination, it fits best with plaque psoriasis another possibility is a fungal infection
+[SEG0049] person_1 (PATIENT): Doctor, um, is this dangerous?
+[SEG0050] person_2 (DOCTOR): I can't promise yet, but most people with plaque psoriasis do well once it's treated properly let me just check I've got this right you've had red scaly patches on your elbows for two months, and no sore throat before it started or fever
+[SEG0051] person_1 (PATIENT): Yes, that's right.
+[SEG0052] person_2 (DOCTOR): We should do blood tests for baseline before treatment. You'll be taking calcipotriol-betamethasone gel, once a day, for four weeks. That should help with psoriasis.
+[SEG0053] person_1 (PATIENT): Mm, okay.
+[SEG0054] person_2 (DOCTOR): A little sunlight helps psoriasis, but avoid sunburn. Moisturise often. Cut back on tea, coffee and fizzy drinks for a couple of weeks and see how things settle. I'll also refer you to a dermatologist. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. One warning sign to remember: the symptoms get worse. In that case don't wait. Come back in four weeks.
+[SEG0055] person_2 (DOCTOR): Call the clinic if you need us.
+[SEG0056] person_1 (PATIENT): Right. Thanks again.
+[SEG0057] person_2 (DOCTOR): So, goodbye.
+
+JSON:

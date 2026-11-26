@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00395)
+[SEG0001] person_1 (PATIENT): Hello doctor, sorry, am I early?
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): Um, so... tiredness all the time. That's why I came. I looked a few things up online, and that probably didn't help.
+[SEG0004] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0005] person_1 (PATIENT): Metformin. I take it 500 milligrams, twice a day. Well, I do miss it now and then, to be fair.
+[SEG0006] person_2 (DOCTOR): How long have you had it?
+[SEG0007] person_1 (PATIENT): For about two weeks, I'd say.
+[SEG0008] person_2 (DOCTOR): Right, anything that tends to go along with it?
+[SEG0009] person_1 (PATIENT): Hair falling out goes along with it, most of the time.
+[SEG0010] person_2 (DOCTOR): And then?
+[SEG0011] person_2 (DOCTOR): Have you noticed fever or blood in the stool?
+[SEG0012] person_1 (PATIENT): Yeah, um, no, none of those.
+[SEG0013] person_2 (DOCTOR): Have you noticed low mood, chest pain or night sweats?
+[SEG0014] person_1 (PATIENT): None, as far as I know.
+[SEG0015] person_2 (DOCTOR): How about your heart, any problems like that?
+[SEG0016] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0017] person_2 (DOCTOR): Any problems with your joints or muscles?
+[SEG0018] person_1 (PATIENT): No, joints are fine.
+[SEG0019] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0020] person_1 (PATIENT): I have diabetes, for nearly five years.
+[SEG0021] person_2 (DOCTOR): Do you drink alcohol?
+[SEG0022] person_1 (PATIENT): I don't drink at all.
+[SEG0023] person_2 (DOCTOR): Do you smoke?
+[SEG0024] person_1 (PATIENT): No, I don't smoke and never have.
+[SEG0025] person_2 (DOCTOR): What's your diet like?
+[SEG0026] person_1 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0027] person_2 (DOCTOR): Are you working at the moment?
+[SEG0028] person_1 (PATIENT): Yes, I'm a nurse on a busy ward.
+[SEG0029] person_2 (DOCTOR): Are you living with family?
+[SEG0030] person_1 (PATIENT): I stay with my daughter and her family.
+[SEG0031] person_2 (DOCTOR): Any previous surgeries?
+[SEG0032] person_1 (PATIENT): Oh, yes, I had my tonsils out, when I was a child.
+[SEG0033] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0034] person_1 (PATIENT): So, my mother has diabetes.
+[SEG0035] person_2 (DOCTOR): Come over here and I'll have a look.
+[SEG0036] person_2 (DOCTOR): Let me just check something.
+[SEG0037] person_2 (DOCTOR): Your thyroid isn't enlarged, I can't feel any lumps in your neck.
+[SEG0038] person_2 (DOCTOR): Right, you can sit back down.
+[SEG0039] person_2 (DOCTOR): From what you've told me and what I found, I'd lean towards persistent tiredness, possibly from low iron.
+[SEG0040] person_1 (PATIENT): Doctor, is this dangerous?
+[SEG0041] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like persistent tiredness, possibly from low iron.
+[SEG0042] person_1 (PATIENT): Should I have blood tests as well?
+[SEG0043] person_2 (DOCTOR): Not at this point, no. It isn't indicated yet. I don't need to add any tests or treatment at this point. Good. Let us know how you get on.
+[SEG0044] person_1 (PATIENT): I think that's clear. Thank you for being so thorough.
+
+JSON:

@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20259)
+[SEG0001] person_1 (PATIENT): Hi, doctor, I hope I'm not disturbing you.
+[SEG0002] person_2 (DOCTOR): No problem at all, come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): So the thing is, I've got pain after sitting for a while.
+[SEG0004] person_2 (DOCTOR): Alright, how many days or weeks has it been?
+[SEG0005] person_1 (PATIENT): Around two weeks... no wait, it's more like three weeks.
+[SEG0006] person_2 (DOCTOR): Any fever?
+[SEG0007] person_1 (PATIENT): No, no fever.
+[SEG0008] person_2 (DOCTOR): Have you noticed joint pain elsewhere, injury or back pain?
+[SEG0009] person_1 (PATIENT): Nope, nothing like that.
+[SEG0010] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0011] person_1 (PATIENT): So, my heart's been fine, as far as I know.
+[SEG0012] person_2 (DOCTOR): Do you take any regular medication?
+[SEG0013] person_1 (PATIENT): nothing regular, no
+[SEG0014] person_2 (DOCTOR): Any previous surgeries?
+[SEG0015] person_1 (PATIENT): no, not at all
+[SEG0016] person_2 (DOCTOR): who lives with you?
+[SEG0017] person_1 (PATIENT): My partner and our baby.
+[SEG0018] person_2 (DOCTOR): Have you retired yet?
+[SEG0019] person_1 (PATIENT): I retired from the post office two years ago.
+[SEG0020] person_2 (DOCTOR): Anything you do to stay fit?
+[SEG0021] person_1 (PATIENT): I do a yoga class on Thursdays
+[SEG0022] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0023] person_1 (PATIENT): I've never had an allergy.
+[SEG0024] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0025] person_1 (PATIENT): No, nothing I can think of.
+[SEG0026] person_2 (DOCTOR): Let me quickly check your readings.
+[SEG0027] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0028] person_2 (DOCTOR): okay: pulse 79, temp 36.5 degrees, blood pressure 112 over 74, respiratory rate 15.
+[SEG0029] person_2 (DOCTOR): Could you come over to the couch, please?
+[SEG0030] person_2 (DOCTOR): right, raise your arm for me
+[SEG0031] person_2 (DOCTOR): There is a sore spot at the inner front of the heel bone and pulling the toes back makes it worse.
+[SEG0032] person_2 (DOCTOR): Alright, you can relax now. So where does that leave us? My working impression is plantar fasciitis. So, to recap quickly. You've had pain after sitting for a while for three weeks, and no injury or back pain.
+[SEG0033] person_1 (PATIENT): That's it, yes.
+[SEG0034] person_2 (DOCTOR): I'd like to arrange a foot X-ray for heel pain.
+[SEG0035] person_1 (PATIENT): how long will it take?
+[SEG0036] person_2 (DOCTOR): The treatment will be ibuprofen gel, three times a day, for two weeks. It's for heel pain.
+[SEG0037] person_1 (PATIENT): should I take that with food?
+[SEG0038] person_2 (DOCTOR): Stretch the calf and the sole of the foot before getting out of bed and wear cushioned shoes. Book a review in six weeks. Does all of that make sense?
+[SEG0039] person_1 (PATIENT): Alright, thanks, take care.
+[SEG0040] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

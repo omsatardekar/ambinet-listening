@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00204)
+[SEG0001] person_1 (PATIENT): Good evening, doctor, thank you for staying late.
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_3 (CAREGIVER): Yeah, hello, doctor, I came in with them, if that's okay.
+[SEG0004] person_2 (DOCTOR): Please do. Extra information is always welcome.
+[SEG0005] person_1 (PATIENT): So, So the thing is, I've got itching.
+[SEG0006] person_2 (DOCTOR): Since when have you had this?
+[SEG0007] person_1 (PATIENT): About... well, about a month.
+[SEG0008] person_2 (DOCTOR): How intense does it get?
+[SEG0009] person_1 (PATIENT): It's mild, honestly. I've had scaling on the scalp too, for about three months. Hmm, uh, as for red scaly patches on my elbows, I honestly can't say when that began. It might have been last month or the month before. About red scaly patches on my elbows, maybe a three out of ten on a bad day. Yes, cold weather and stress. That makes it worse.
+[SEG0010] person_1 (PATIENT): Stiff fingers in the morning was there, you know, but it's gone away on its own.
+[SEG0011] person_2 (DOCTOR): Okay, did you get fever, eye redness or weeping?
+[SEG0012] person_1 (PATIENT): No, no fever, eye redness or weeping.
+[SEG0013] person_2 (DOCTOR): Did you get joint swelling or sore throat before it started?
+[SEG0014] person_1 (PATIENT): No, I'd have mentioned it.
+[SEG0015] person_2 (DOCTOR): Any pins and needles or loss of strength anywhere?
+[SEG0016] person_1 (PATIENT): No, that's all normal.
+[SEG0017] person_2 (DOCTOR): Any previous surgeries?
+[SEG0018] person_1 (PATIENT): No operations, no.
+[SEG0019] person_2 (DOCTOR): Anything special about your diet?
+[SEG0020] person_1 (PATIENT): I try to avoid too much sugar.
+[SEG0021] person_2 (DOCTOR): Okay, do you exercise at all?
+[SEG0022] person_1 (PATIENT): I go to the gym a couple of times a week.
+[SEG0023] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0024] person_1 (PATIENT): So, I have diabetes. Sorry, I know I'm rambling a bit. I have high blood pressure, for about a year.
+[SEG0025] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0026] person_1 (PATIENT): Yes, aspirin, it gives me a rash. Yes, I'm allergic to sulfa drugs.
+[SEG0027] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0028] person_1 (PATIENT): It's amlodipine, 5 milligrams, once a day.
+[SEG0029] person_3 (CAREGIVER): Uh, it's meant to be once a day, though I don't see she take it every time.
+[SEG0030] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0031] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0032] person_2 (DOCTOR): Okay: temp 36.4 degrees, pulse is 70 beats a minute, pressure 122 over 72, oxygen saturation is 98 percent.
+[SEG0033] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0034] person_2 (DOCTOR): Hold that position for me.
+[SEG0035] person_2 (DOCTOR): A few small pits in the fingernails.
+[SEG0036] person_2 (DOCTOR): Let me press here.
+[SEG0037] person_2 (DOCTOR): Well-defined thick silvery plaques over both elbows and knees.
+[SEG0038] person_2 (DOCTOR): That's fine, sit up. Taking everything into account, this looks most like plaque psoriasis. I'd also keep eczema in mind. A little sunlight helps psoriasis, but avoid sunburn. Moisturise often.
+[SEG0039] person_2 (DOCTOR): Right. We'll catch up in six weeks. Right, ask me anything before you go.
+[SEG0040] person_1 (PATIENT): I, I think that's clear. Thank you for being so thorough.
+
+JSON:

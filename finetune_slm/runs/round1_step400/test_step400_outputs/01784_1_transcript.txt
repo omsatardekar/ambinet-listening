@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01784)
+[SEG0001] person_1 (DOCTOR): Evening. Let's get started.
+[SEG0002] person_2 (PATIENT): Hi doctor, you know, I got here as fast as I could.
+[SEG0003] person_1 (DOCTOR): What do you need help with?
+[SEG0004] person_2 (PATIENT): I've been dealing with coming on in seconds.
+[SEG0005] person_1 (DOCTOR): When did this begin?
+[SEG0006] person_2 (PATIENT): Around three weeks... no wait, it's more like four weeks. I'm hoping you can tell me something definite. There's the worst headache of my life as well.
+[SEG0007] person_1 (DOCTOR): Is it there all the time or does it come and go?
+[SEG0008] person_2 (PATIENT): It's all the time.
+[SEG0009] person_1 (DOCTOR): Have you got any known allergies?
+[SEG0010] person_2 (PATIENT): Yes, milk, it gives me a rash.
+[SEG0011] person_1 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0012] person_2 (PATIENT): I take carvedilol, 6.25 milligrams, twice a day.
+[SEG0013] person_1 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0014] person_2 (PATIENT): Let me think, my father had bowel cancer.
+[SEG0015] person_1 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0016] person_2 (PATIENT): I've never touched a cigarette. I swim twice a week. My husband and I live above the shop. I'm a plumber, lots of bending and kneeling.
+[SEG0017] person_1 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0018] person_2 (PATIENT): I have heart failure, for five years.
+[SEG0019] person_1 (DOCTOR): Any previous surgeries?
+[SEG0020] person_2 (PATIENT): No, I've never been operated on.
+[SEG0021] person_1 (DOCTOR): Any weakness, head injury or fever?
+[SEG0022] person_2 (PATIENT): No weakness, head injury or fever, none of it.
+[SEG0023] person_1 (DOCTOR): Is your chest okay generally?
+[SEG0024] person_2 (PATIENT): Breathing's normal.
+[SEG0025] person_1 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0026] person_2 (PATIENT): My heart's been fine, as far as I know.
+[SEG0027] person_1 (DOCTOR): Let me take your readings now.
+[SEG0028] person_1 (DOCTOR): Sit still for a moment...
+[SEG0029] person_1 (DOCTOR): Okay: BP is 171 over 96, temperature 36.6. And respiratory rate 15, pulse is 90 beats a minute.
+[SEG0030] person_1 (DOCTOR): Could you come over to the couch, please?
+[SEG0031] person_2 (PATIENT): Sure thing.
+[SEG0032] person_1 (DOCTOR): I'm just checking this side.
+[SEG0033] person_1 (DOCTOR): Your neck is stiff and you are very sensitive to light.
+[SEG0034] person_1 (DOCTOR): You can sit up now.
+[SEG0035] person_1 (DOCTOR): Taking everything into account, it fits best with a possible bleed around the brain. Another possibility is a migraine.
+[SEG0036] person_2 (PATIENT): Is it dangerous, doctor?
+[SEG0037] person_1 (DOCTOR): I understand the worry. At the moment I'd say it's a possible bleed around the brain, and we'll know more once the an urgent CT scan of the head is back.
+[SEG0038] person_1 (DOCTOR): I'd like to arrange an urgent CT scan of the head for thunderclap headache. This needs an emergency scan, an ambulance is on its way. Cut down on salt and fried food for now, it really does make a difference. I'm going to send a referral to the emergency team. I'd like to see you again straight away. That's everything on my side. Anything you're unsure about?
+[SEG0039] person_2 (PATIENT): Thank you, doctor, goodbye.
+
+JSON:

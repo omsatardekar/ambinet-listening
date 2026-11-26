@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01220)
+[SEG0001] person_1 (DOCTOR): So, hi there, the chair's free, sit down.
+[SEG0002] person_2 (PATIENT): Let me think, you know, hello. I hope I'm not late.
+[SEG0003] person_1 (DOCTOR): Weather's turned, hasn't it?
+[SEG0004] person_2 (PATIENT): It has. I got caught in the rain walking over.
+[SEG0005] person_1 (DOCTOR): What's the problem?
+[SEG0006] person_2 (PATIENT): Mainly I've been feeling sick. That's why I came. I didn't want to bother you but it keeps coming back. I'd rather not end up on lots of tablets if I can avoid it.
+[SEG0007] person_1 (DOCTOR): How many days or weeks has it been?
+[SEG0008] person_2 (PATIENT): For two months, I'd say.
+[SEG0009] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind. Take your time, there's no rush.
+[SEG0010] person_2 (PATIENT): Severe, really. It's on and off.
+[SEG0011] person_1 (DOCTOR): Let me check a few things. Any drowsiness or chest pain?
+[SEG0012] person_2 (PATIENT): Mm, I haven't had drowsiness or chest pain, no.
+[SEG0013] person_1 (DOCTOR): Is your mobility otherwise okay?
+[SEG0014] person_2 (PATIENT): No, you know, joints are fine.
+[SEG0015] person_1 (DOCTOR): Do you take any regular medication?
+[SEG0016] person_2 (PATIENT): No, none.
+[SEG0017] person_1 (DOCTOR): What do you do during the day?
+[SEG0018] person_2 (PATIENT): I look after my grandchildren most days.
+[SEG0019] person_1 (DOCTOR): Is there someone at home?
+[SEG0020] person_2 (PATIENT): My husband and I live above the shop.
+[SEG0021] person_1 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0022] person_2 (PATIENT): No, nothing I can think of.
+[SEG0023] person_1 (DOCTOR): Have you got any known allergies?
+[SEG0024] person_2 (PATIENT): Yes, cat fur. I get wheezing.
+[SEG0025] person_1 (DOCTOR): Let me quickly check your readings.
+[SEG0026] person_1 (DOCTOR): That's it, just a little longer...
+[SEG0027] person_1 (DOCTOR): Okay: BP is 110 over 71, heart rate 83, temperature is 36.5 degrees.
+[SEG0028] person_1 (DOCTOR): I'll examine you in a second, make yourself comfortable.
+[SEG0029] person_2 (PATIENT): Okay, doctor.
+[SEG0030] person_1 (DOCTOR): Tell me if that's sore.
+[SEG0031] person_1 (DOCTOR): You are awake and alert, with some tenderness under the right ribs.
+[SEG0032] person_2 (PATIENT): Okay, doctor.
+[SEG0033] person_1 (DOCTOR): All finished, thank you. From what you've told me and what I found, I think we're dealing with a significant paracetamol overdose needing urgent treatment at this stage.
+[SEG0034] person_2 (PATIENT): Well, what are the odds it's serious?
+[SEG0035] person_1 (DOCTOR): It's reasonable to be concerned, but right now a significant paracetamol overdose needing urgent treatment is my leading thought, not anything worse. Let's get a paracetamol level, for overdose. That will help us see what's going on underneath and decide the next step. I'd like you to take acetylcysteine, per protocol, over 21 hours, per protocol. That's for paracetamol overdose.
+[SEG0036] person_1 (DOCTOR): You need to stay in hospital for treatment, and someone will speak to you about how you are feeling. Right, that's the plan. Do you want to ask me anything?
+[SEG0037] person_2 (PATIENT): Good, thanks, I'll see you then.
+[SEG0038] person_1 (DOCTOR): Have a good day.
+
+JSON:

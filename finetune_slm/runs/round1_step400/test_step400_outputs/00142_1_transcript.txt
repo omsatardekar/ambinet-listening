@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00142)
+[SEG0001] person_1 (DOCTOR): Good evening. Sorry to keep you waiting.
+[SEG0002] person_2 (PATIENT): Hello. Is it okay if I sit here?
+[SEG0003] person_1 (DOCTOR): Okay. Start wherever you like.
+[SEG0004] person_2 (PATIENT): mainly blurry vision there's a couple of other things, but that's the main one
+[SEG0005] person_1 (DOCTOR): Before we go on, a a few quick readings.
+[SEG0006] person_1 (DOCTOR): Hold still for me...
+[SEG0007] person_1 (DOCTOR): okay: pulse is 64 beats a minute, temperature 36.4, pressure 112 over 75.
+[SEG0008] person_1 (DOCTOR): When did it begin?
+[SEG0009] person_2 (PATIENT): for about a month, I'd say
+[SEG0010] person_1 (DOCTOR): ah. Anything that that helps?
+[SEG0011] person_2 (PATIENT): It settles a little with squinting.
+[SEG0012] person_1 (DOCTOR): what makes it worse, if anything?
+[SEG0013] person_2 (PATIENT): It's worse with reading.
+[SEG0014] person_1 (DOCTOR): Have you had any redness, flashes of light or eye pain?
+[SEG0015] person_2 (PATIENT): I haven't had redness, flashes of light or eye pain, no.
+[SEG0016] person_1 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0017] person_2 (PATIENT): No, nothing like that.
+[SEG0018] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0019] person_2 (PATIENT): No, never had any surgery.
+[SEG0020] person_1 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0021] person_2 (PATIENT): I've had diabetes, yes. I wasn't sure whether to come in at all, to be honest.
+[SEG0022] person_1 (DOCTOR): I follow. What medicines do you take regularly?
+[SEG0023] person_2 (PATIENT): Glycomet, 500 milligrams, twice a day for my sugar.
+[SEG0024] person_1 (DOCTOR): Do you drink alcohol?
+[SEG0025] person_2 (PATIENT): A beer or two most evenings, to be honest.
+[SEG0026] person_1 (DOCTOR): Do you smoke?
+[SEG0027] person_2 (PATIENT): No, I don't smoke and never have.
+[SEG0028] person_1 (DOCTOR): do you get any exercise?
+[SEG0029] person_2 (PATIENT): I walk for about half an hour most days.
+[SEG0030] person_1 (DOCTOR): Right, are you still working?
+[SEG0031] person_2 (PATIENT): I'm retired now, I was a clerk for years
+[SEG0032] person_1 (DOCTOR): before I prescribe anything, any allergies?
+[SEG0033] person_2 (PATIENT): Yeah, not that I know, no.
+[SEG0034] person_1 (DOCTOR): I'd like to examine you now
+[SEG0035] person_1 (DOCTOR): stay still while I have a look
+[SEG0036] person_1 (DOCTOR): the lens looks a little cloudy on both sides
+[SEG0037] person_1 (DOCTOR): Let me press here.
+[SEG0038] person_1 (DOCTOR): Vision without glasses is six over twelve in both eyes.
+[SEG0039] person_2 (PATIENT): Okay, ready.
+[SEG0040] person_1 (DOCTOR): all done, you can get dressed
+[SEG0041] person_1 (DOCTOR): So where does that leave us? It points towards a refractive problem or early cataracts.
+[SEG0042] person_1 (DOCTOR): I'd like to arrange a dilated eye examination for blurred vision. Get a proper glasses test, and keep your sugar and blood pressure well controlled for your eyes. Let's plan a check in four weeks. Look after yourself.
+[SEG0043] person_2 (PATIENT): one thing: no, you know, actually that's all thanks
+
+JSON:

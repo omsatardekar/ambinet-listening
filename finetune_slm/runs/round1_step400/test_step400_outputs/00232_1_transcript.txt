@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00232)
+[SEG0001] person_1 (NURSE): Doctor, the patient's with us now. I did the usual checks at the front, so just say when you want them.
+[SEG0002] person_2 (DOCTOR): perfect, thanks hello there, so what's the trouble?
+[SEG0003] person_3 (PATIENT): Um, so... numbness on the left side of my face. That's why I came.
+[SEG0004] person_1 (NURSE): Doctor, I've got the readings for you. Pulse 92, temperature 36.5, pressure 148 over 95.
+[SEG0005] person_2 (DOCTOR): Thanks. And when did that start?
+[SEG0006] person_3 (PATIENT): About... well, ten days.
+[SEG0007] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0008] person_3 (PATIENT): I'd give it a three, out of ten. It's a couple of times a week. Um, I've also had tiredness, for five days.
+[SEG0009] person_2 (DOCTOR): did you get chest pain or palpitations?
+[SEG0010] person_3 (PATIENT): Right, I haven't had chest pain or palpitations, no.
+[SEG0011] person_2 (DOCTOR): Mm. And loss of vision, any of that?
+[SEG0012] person_3 (PATIENT): Not that I've noticed, no loss of vision.
+[SEG0013] person_2 (DOCTOR): okay, so how's your breathing otherwise?
+[SEG0014] person_3 (PATIENT): Breathing's normal.
+[SEG0015] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0016] person_3 (PATIENT): uh, I have high cholesterol, for about a year
+[SEG0017] person_2 (DOCTOR): Mm.
+[SEG0018] person_2 (DOCTOR): Alright, do you have any allergies to medicines, food, anything at all?
+[SEG0019] person_3 (PATIENT): Years back I got stomach pain from ibuprofen, so I stay away from it now.
+[SEG0020] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0021] person_3 (PATIENT): Oh, I'm on rosuvastatin, 10 milligrams, at night.
+[SEG0022] person_2 (DOCTOR): now some background about your lifestyle
+[SEG0023] person_3 (PATIENT): I stopped smoking about two years back. I eat out quite a lot, to be honest. Not really, I don't get much exercise. It's just me and my wife at home now.
+[SEG0024] person_2 (DOCTOR): right, let me check a few things physically
+[SEG0025] person_2 (DOCTOR): Let me look at this properly.
+[SEG0026] person_2 (DOCTOR): There's mild drooping at the left corner of your mouth.
+[SEG0027] person_2 (DOCTOR): Bear with me a second.
+[SEG0028] person_2 (DOCTOR): grip strength is a little weaker on the left
+[SEG0029] person_2 (DOCTOR): Thanks, please take a a seat again.
+[SEG0030] person_2 (DOCTOR): So where does that leave us? This is probably a possible mini-stroke, which we need to investigate urgently. I wanna be honest that this is an impression, not a final answer.
+[SEG0031] person_3 (PATIENT): So, is this something I'll have for good?
+[SEG0032] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a possible mini-stroke, which we need to investigate urgently, and we'll know more once the a carotid scan is back. Let me just check I've got this right. You've had numbness on the left side of your face for ten days, and no chest pain or palpitations.
+[SEG0033] person_3 (PATIENT): yes, you've got it
+[SEG0034] person_2 (DOCTOR): Let's get a carotid scan, for possible stroke.
+[SEG0035] person_3 (PATIENT): Will it hurt?
+[SEG0036] person_2 (DOCTOR): what I'm giving you is clopidogrel, 75 milligrams, once a day, until we review you take it by mouth that's for stroke prevention don't drive for now, and bring someone with you to the the next visit i'll also refer you to the stroke clinic let's plan a check after the results are back
+[SEG0037] person_3 (PATIENT): Good, uh, I'll come back then.
+[SEG0038] person_2 (DOCTOR): That's everything from me. Any other questions?
+[SEG0039] person_3 (PATIENT): Thanks, that was helpful.
+
+JSON:

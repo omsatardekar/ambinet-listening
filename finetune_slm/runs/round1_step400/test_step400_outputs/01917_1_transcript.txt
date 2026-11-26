@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01917)
+[SEG0001] person_1 (PATIENT): mm hi doctor I hope I'm not disturbing you
+[SEG0002] person_2 (DOCTOR): that's fine, sit down tell me why you came
+[SEG0003] person_3 (CAREGIVER): right, uh, hello, doctor, I came in with them, if that's okay
+[SEG0004] person_2 (DOCTOR): good, that'll be useful. Pull up a chair
+[SEG0005] person_1 (PATIENT): so So the thing is I've got neck pain after a car crash
+[SEG0006] person_2 (DOCTOR): has this been going on for long?
+[SEG0007] person_1 (PATIENT): probably about a week. Yeah. My sister suggested writing things down, but I forgot. I told my wife I'd come today
+[SEG0008] person_2 (DOCTOR): can you describe it a bit more for me? How strong it is what the pattern is what helps
+[SEG0009] person_1 (PATIENT): it's worse with turning i'd say mild it's a couple of times a week
+[SEG0010] person_2 (DOCTOR): any a headache as well?
+[SEG0011] person_1 (PATIENT): Yes, that started yesterday.
+[SEG0012] person_2 (DOCTOR): how strong would you say it is?
+[SEG0013] person_1 (PATIENT): I'd say moderate oh, and shoulder tightness that's been about the same, three days as for shoulder tightness, I'd give it a four, out of ten
+[SEG0014] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0015] person_2 (DOCTOR): nearly done with the readings..
+[SEG0016] person_2 (DOCTOR): okay: SpO2 99 percent on room air temp 36.6 degrees and BP is 110 over 70 pulse 74.
+[SEG0017] person_1 (PATIENT): is that normal?
+[SEG0018] person_2 (DOCTOR): We'll look at it together shortly.
+[SEG0019] person_2 (DOCTOR): Let me look at the area I'll be gentle.
+[SEG0020] person_2 (DOCTOR): nearly finished here
+[SEG0021] person_2 (DOCTOR): there is muscle tenderness either side of the neck and no tenderness over the bones
+[SEG0022] person_2 (DOCTOR): thank you, you can get dressed. Any numbness in the arms, weakness or chest pain at all?
+[SEG0023] person_1 (PATIENT): So, none of those, no.
+[SEG0024] person_2 (DOCTOR): Has there been any loss of consciousness?
+[SEG0025] person_1 (PATIENT): No loss of consciousness, thankfully.
+[SEG0026] person_2 (DOCTOR): Understood. And your skin, any changes there?
+[SEG0027] person_1 (PATIENT): No rashes.
+[SEG0028] person_2 (DOCTOR): so, anything different when you pass water?
+[SEG0029] person_1 (PATIENT): nothing there, no
+[SEG0030] person_2 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0031] person_1 (PATIENT): let me think I have epilepsy for about ten years. I've had COPD yes. It's the not knowing that gets to me. Actually I've had migraines for five years now
+[SEG0032] person_2 (DOCTOR): yes, migraines is known to us, good to have that clear
+[SEG0033] person_2 (DOCTOR): are you allergic to anything? Any allergies to to medicines or foods?
+[SEG0034] person_1 (PATIENT): No known allergies.
+[SEG0035] person_3 (CAREGIVER): Actually, I remember he had some kinda reaction to diclofenac before. I couldn't swear to it.
+[SEG0036] person_1 (PATIENT): I don't remember that
+[SEG0037] person_2 (DOCTOR): alright so that's unclear. I'll record what each of you said. Tell me about your routine work habits that sort of thing
+[SEG0038] person_1 (PATIENT): I have about eight cigarettes in a day. Nothing, I'm teetotal. Yes, I work in a bakery, early starts. I'm vegetarian and have been for years.
+[SEG0039] person_2 (DOCTOR): what do you take on a normal day?
+[SEG0040] person_1 (PATIENT): Lamotrigine, 100 milligrams, twice a day for the fits.
+[SEG0041] person_3 (CAREGIVER): right, that's what's prescribed, but I'm not sure he takes it it every day
+[SEG0042] person_1 (PATIENT): I'm on Tiotropium inhaler, once a day
+[SEG0043] person_2 (DOCTOR): is that that long-standing?
+[SEG0044] person_1 (PATIENT): About a year now. Sumatriptan i take it 50 milligrams, maybe, when needed
+[SEG0045] person_2 (DOCTOR): do you have the packet or the prescription with you?
+[SEG0046] person_1 (PATIENT): no, um, it's at home
+[SEG0047] person_2 (DOCTOR): okay thinking it through this looks most like whiplash-type neck strain that's my thinking for now and it may change as we learn more another possibility is a cervical spine injury
+[SEG0048] person_1 (PATIENT): do you think it's something serious?
+[SEG0049] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like whiplash-type neck strain.
+[SEG0050] person_2 (DOCTOR): the treatment will be naproxen, 500 milligrams, twice a day with food, one week you take it by mouth that should help with neck pain
+[SEG0051] person_1 (PATIENT): How soon will it work?
+[SEG0052] person_2 (DOCTOR): keep your neck moving gently and avoid a collar and please bring the latest prescription or the medicine boxes to the next visit so we can settle the dose book a review if not better in two weeks so that's all from me any questions?
+[SEG0053] person_1 (PATIENT): right, no, that's all thanks a lot
+
+JSON:

@@ -1,0 +1,64 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00052)
+[SEG0001] person_1 (NURSE): all set here, doctor chart's updated, and I'll read the readings out when you're ready
+[SEG0002] person_2 (DOCTOR): great. Hello, come in and sit down. How can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, uh, I've come along cos I know the history, if it helps.
+[SEG0004] person_2 (DOCTOR): Please do. Extra information is always welcome.
+[SEG0005] person_4 (PATIENT): yeah, it's pain in my right ankle i don't know what's causing it
+[SEG0006] person_2 (DOCTOR): and when did that start?
+[SEG0007] person_4 (PATIENT): About about a month, give or take.
+[SEG0008] person_3 (FAMILY_MEMBER): Yeah, uh, hm, I'd say more like about two months.
+[SEG0009] person_2 (DOCTOR): Okay, so roughly one to two months. Is that right?
+[SEG0010] person_4 (PATIENT): That That sounds about right.
+[SEG0011] person_2 (DOCTOR): What's the pattern, is it there all day?
+[SEG0012] person_4 (PATIENT): I'd say once or twice a day.
+[SEG0013] person_4 (PATIENT): Uh, uh, I was just going to say that that the main thing is—
+[SEG0014] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0015] person_2 (DOCTOR): Later, thanks. Please go on.
+[SEG0016] person_4 (PATIENT): And difficulty walking, too.
+[SEG0017] person_1 (NURSE): doctor, I've got the readings for you temp 36.7 degrees, pulse is 81 beats a minute bP is 110 over 68, saturation 97 percent
+[SEG0018] person_2 (DOCTOR): Good, thank you. Any numbness, pain at the back of the heel or fever at all?
+[SEG0019] person_4 (PATIENT): No, uh, no numbness, no pain at the back of the heel, no fever. I did have bruising at one point, but that went away on its own.
+[SEG0020] person_2 (DOCTOR): Any pain in the knee or pop or crack at all?
+[SEG0021] person_4 (PATIENT): Um, no pain in the knee or pop or crack, none of it.
+[SEG0022] person_2 (DOCTOR): Neurologically, anything strange?
+[SEG0023] person_4 (PATIENT): no, um, that's all normal
+[SEG0024] person_2 (DOCTOR): Do you have any allergies to medicines, food, anything at all? I'm asking so that we don't miss anything.
+[SEG0025] person_4 (PATIENT): Right, none, as far as I'm aware.
+[SEG0026] person_2 (DOCTOR): Any operations in the past?
+[SEG0027] person_4 (PATIENT): I had my thyroid operated on a long time ago. I took the morning off to come in today.
+[SEG0028] person_2 (DOCTOR): any diagnoses you've been given before?
+[SEG0029] person_4 (PATIENT): I've had anxiety, yes. Heart failure, for about a year.
+[SEG0030] person_2 (DOCTOR): Right, any more?
+[SEG0031] person_4 (PATIENT): I've had high blood pressure, yes. A neighbour of mine said I should see someone about it.
+[SEG0032] person_2 (DOCTOR): Right, yes, anxiety is known to us, good to have that clear. Anyone in the family with similar problems or other conditions?
+[SEG0033] person_4 (PATIENT): My father was diabetic. My mother has migraines.
+[SEG0034] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0035] person_4 (PATIENT): Hmm, it's a... um, I can't remember what it's called. It's a small white one.
+[SEG0036] person_2 (DOCTOR): do you remember what it's for?
+[SEG0037] person_4 (PATIENT): Uh, uh, for the fluid, I believe. My wife sets them out for me, I just take what I'm given. Ramipril. I take it 5 milligrams, every morning for my blood pressure. Volini spray, a few times a day.
+[SEG0038] person_2 (DOCTOR): so, are you working or retired?
+[SEG0039] person_4 (PATIENT): Retired. I stopped a few years back.
+[SEG0040] person_2 (DOCTOR): And what do you usually eat?
+[SEG0041] person_4 (PATIENT): Mostly home-cooked food, rice and vegetables
+[SEG0042] person_2 (DOCTOR): Listening to the whole story, this is probably an ankle sprain. The reason I say that is that the way you describe it it fits together. I can't rule out a small fracture yet. Another possibility is a ligament tear.
+[SEG0043] person_4 (PATIENT): Do you think it's serious?
+[SEG0044] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's an ankle sprain, and we'll know more once the an X-ray of the ankle is back
+[SEG0045] person_1 (NURSE): I've already done an X-ray of the ankle, it's ready for you.
+[SEG0046] person_2 (DOCTOR): perfect. I'll start you on paracetamol, 650 milligrams, three times a day, for three days. That's for ankle pain. Rest, ice for twenty minutes at a time, a compression bandage and keep the foot up. If the symptoms get worse, or you feel really unwell, please come to the emergency department
+[SEG0047] person_4 (PATIENT): okay, uh, I'll remember
+[SEG0048] person_2 (DOCTOR): See me again in ten days. Do you have any questions?
+[SEG0049] person_4 (PATIENT): oh, thanks, that was helpful
+
+JSON:

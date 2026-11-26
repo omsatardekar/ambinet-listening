@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02213)
+[SEG0001] person_1 (PATIENT): hi, doctor, I hope I'm not disturbing you
+[SEG0002] person_2 (DOCTOR): of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): I've been coughing up pink frothy sputum, and I wanted to get it checked
+[SEG0004] person_2 (DOCTOR): since when exactly? I ask because it helps me narrow things down
+[SEG0005] person_1 (PATIENT): I've had it for about a week. I've never really been one for hospitals. My family kept telling me to get it checked
+[SEG0006] person_2 (DOCTOR): Right, how much trouble does it it give you?
+[SEG0007] person_1 (PATIENT): it feels severe to me
+[SEG0008] person_2 (DOCTOR): okay, how frequently does it come?
+[SEG0009] person_1 (PATIENT): It's all the time.
+[SEG0010] person_2 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0011] person_1 (PATIENT): Wheat. I come out in... well, itchy skin.
+[SEG0012] person_2 (DOCTOR): do you have any medical conditions I should know about?
+[SEG0013] person_1 (PATIENT): no, no conditions
+[SEG0014] person_2 (DOCTOR): Is there someone at home?
+[SEG0015] person_1 (PATIENT): My husband and I live above the shop.
+[SEG0016] person_2 (DOCTOR): What do you do during the day?
+[SEG0017] person_1 (PATIENT): I look after my grandchildren most days.
+[SEG0018] person_2 (DOCTOR): alright, are you on any regular medication?
+[SEG0019] person_1 (PATIENT): Actually no nothing at the moment.
+[SEG0020] person_2 (DOCTOR): Have you had any fever or calf pain?
+[SEG0021] person_1 (PATIENT): No, nothing to report there.
+[SEG0022] person_2 (DOCTOR): Have you had any wheeze?
+[SEG0023] person_1 (PATIENT): Definitely no wheeze.
+[SEG0024] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0025] person_1 (PATIENT): I move fine otherwise.
+[SEG0026] person_2 (DOCTOR): okay, how are your bowels, any trouble?
+[SEG0027] person_1 (PATIENT): Nothing unusual, no.
+[SEG0028] person_2 (DOCTOR): let me get the readings out of the way
+[SEG0029] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0030] person_2 (DOCTOR): okay: blood pressure 126 over 86, temp 37.5 degrees. And SpO2 90 percent on room air, pulse 99.
+[SEG0031] person_2 (DOCTOR): shall I start the examination?
+[SEG0032] person_1 (PATIENT): that's alright
+[SEG0033] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0034] person_2 (DOCTOR): There are crackles all the way up both lungs and you are breathing very fast.
+[SEG0035] person_2 (DOCTOR): You can sit up now. Putting it all together, this looks most like acute pulmonary oedema.
+[SEG0036] person_2 (DOCTOR): I'd like to arrange an ECG for pulmonary oedema. I'd like to arrange blood tests for pulmonary oedema. Let's use furosemide, 40 milligrams, once now, single dose. It's for fluid on the lungs. Sit upright, I am giving oxygen and a water tablet injection now. Make sure you're drinking plenty of fluids, two to three litres a day if you can, and get proper rest
+[SEG0037] person_2 (DOCTOR): A chest X-ray is something we might do if this doesn't improve in a month please don't wait if the symptoms get worse that's when to be seen urgently please come and see me straight away
+[SEG0038] person_1 (PATIENT): Actually uh okay I'll arrange it.
+[SEG0039] person_2 (DOCTOR): Is there anything you'd like me to go over again?
+[SEG0040] person_1 (PATIENT): alright thanks take care
+[SEG0041] person_2 (DOCTOR): all the best
+
+JSON:

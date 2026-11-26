@@ -1,0 +1,77 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03528)
+[SEG0001] person_1 (DOCTOR): Hi, sit anywhere you like.
+[SEG0002] person_2 (PATIENT): Hi there.
+[SEG0003] person_3 (CAREGIVER): Good afternoon, doctor. I look after them so I thought I'd come.
+[SEG0004] person_1 (DOCTOR): Is the form from the front desk all filled in?
+[SEG0005] person_2 (PATIENT): I think so, I handed it in at the counter.
+[SEG0006] person_1 (DOCTOR): What's the problem?
+[SEG0007] person_3 (CAREGIVER): She's been losing weight, doctor.
+[SEG0008] person_1 (DOCTOR): When did this begin?
+[SEG0009] person_2 (PATIENT): I'd say three days, maybe.
+[SEG0010] person_3 (CAREGIVER): I think it's been nearer five days, actually.
+[SEG0011] person_1 (DOCTOR): Okay, so roughly three to five days. Is that right?
+[SEG0012] person_2 (PATIENT): I suppose so, yes.
+[SEG0013] person_1 (DOCTOR): Is there anything else with it?
+[SEG0014] person_2 (PATIENT): When it starts I tend to get a poor appetite as well.
+[SEG0015] person_2 (PATIENT): I was just going to say that the main thing is—
+[SEG0016] person_4 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0017] person_1 (DOCTOR): Later, thanks. Please go on.
+[SEG0018] person_2 (PATIENT): The poor appetite? That's been for about three months. And I've been feeling weak as well.
+[SEG0019] person_1 (DOCTOR): Right, how troublesome is it day to day?
+[SEG0020] person_2 (PATIENT): Pretty moderate, if I'm being honest.
+[SEG0021] person_1 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0022] person_2 (PATIENT): Not to my knowledge, no.
+[SEG0023] person_1 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0024] person_2 (PATIENT): Uh, um, my daughter has type 1 diabetes.
+[SEG0025] person_1 (DOCTOR): Have you been to theatre before?
+[SEG0026] person_2 (PATIENT): Just keyhole surgery on my gallbladder, two years back.
+[SEG0027] person_1 (DOCTOR): What about alcohol?
+[SEG0028] person_2 (PATIENT): I only drink at family occasions.
+[SEG0029] person_1 (DOCTOR): How about smoking?
+[SEG0030] person_2 (PATIENT): No, I've never smoked in my life.
+[SEG0031] person_1 (DOCTOR): Are you on your own at home?
+[SEG0032] person_2 (PATIENT): I live with my elderly mother.
+[SEG0033] person_1 (DOCTOR): Do you have any long-term conditions?
+[SEG0034] person_2 (PATIENT): Yes, acid reflux. I have anxiety, for nearly five years.
+[SEG0035] person_1 (DOCTOR): Okay, tell me your medicines, please.
+[SEG0036] person_2 (PATIENT): It's omeprazole, 20 milligrams, once a day.
+[SEG0037] person_1 (DOCTOR): Right, how long have you taken that?
+[SEG0038] person_2 (PATIENT): For two months. I take escitalopram, once a day.
+[SEG0039] person_1 (DOCTOR): And what strength is that?
+[SEG0040] person_2 (PATIENT): It's 10 milligrams.
+[SEG0041] person_1 (DOCTOR): Nothing like diarrhoea?
+[SEG0042] person_2 (PATIENT): No. No diarrhoea.
+[SEG0043] person_3 (CAREGIVER): Actually, doctor, I did notice diarrhoea. She doesn't always say.
+[SEG0044] person_2 (PATIENT): No, I don't think I did. Maybe a little, I'm not sure.
+[SEG0045] person_1 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. Did you get sweating, tremor or heat intolerance?
+[SEG0046] person_2 (PATIENT): Um, no sweating, tremor or heat intolerance, none of it.
+[SEG0047] person_1 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0048] person_2 (PATIENT): No, that's all normal.
+[SEG0049] person_4 (NURSE): Here are the numbers, doctor. Temperature 36.9, pressure 115 over 75, weight 70 kilos. Height 182 centimetres, heart rate 109, BMI works out to 21.1.
+[SEG0050] person_1 (DOCTOR): Good, thank you.
+[SEG0051] person_1 (DOCTOR): Okay, time for me to examine you.
+[SEG0052] person_1 (DOCTOR): Let me feel here.
+[SEG0053] person_1 (DOCTOR): Your pulse is fast and irregular and the thyroid feels slightly enlarged.
+[SEG0054] person_1 (DOCTOR): You can sit up now. From what you've told me and what I found, I can't pin this down yet. We're looking at an overactive thyroid with atrial fibrillation, in an apathetic older patient or depression. It could also be a cancer, so we'll keep that open.
+[SEG0055] person_2 (PATIENT): Uh, will it clear up?
+[SEG0056] person_1 (DOCTOR): I can't promise yet, but most people with an overactive thyroid with atrial fibrillation, in an apathetic older patient do well once it's treated properly. Stop me if I've got anything wrong. You've been losing weight, and no sweating or heat intolerance.
+[SEG0057] person_2 (PATIENT): That's what happened, yes.
+[SEG0058] person_4 (NURSE): I've already done an ECG, it's ready for you.
+[SEG0059] person_1 (DOCTOR): Okay, I'll take a look at that. I think a thyroid test makes sense here, for weight loss and irregular pulse. It is easy to miss in older people because they seem sleepy rather than hot and shaky. I'd like to see you again after the results.
+[SEG0060] person_2 (PATIENT): That's fine with me.
+[SEG0061] person_1 (DOCTOR): That's all from me. Any questions?
+[SEG0062] person_2 (PATIENT): Great, thank you for your help.
+
+JSON:

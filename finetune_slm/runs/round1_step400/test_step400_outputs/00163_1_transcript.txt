@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00163)
+[SEG0001] person_1 (PATIENT): Excuse me, doctor, should I sit here?
+[SEG0002] person_2 (DOCTOR): Right, yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): Mainly sharp heel pain with my first steps in the morning. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): Before we go on, a few quick readings.
+[SEG0005] person_2 (DOCTOR): Rest your hand here...
+[SEG0006] person_2 (DOCTOR): Okay: weight 74 kilos, temperature is 36.6 degrees, pressure 124 over 69, respiratory rate 18, height 155 centimetres, heart rate 84.
+[SEG0007] person_2 (DOCTOR): How long have you had it?
+[SEG0008] person_1 (PATIENT): For ten days, I'd say.
+[SEG0009] person_2 (DOCTOR): And how severe is it?
+[SEG0010] person_1 (PATIENT): Uh, I'd call it severe.
+[SEG0011] person_2 (DOCTOR): And what about recent injury, swelling or pain in other joints?
+[SEG0012] person_1 (PATIENT): No recent injury, swelling or pain in other joints, none of it.
+[SEG0013] person_2 (DOCTOR): What about numbness in the foot?
+[SEG0014] person_1 (PATIENT): No, uh, no numbness in the foot.
+[SEG0015] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0016] person_1 (PATIENT): No problems with breathing.
+[SEG0017] person_2 (DOCTOR): Do you live alone?
+[SEG0018] person_1 (PATIENT): Yes, I live on my own.
+[SEG0019] person_2 (DOCTOR): How's your diet?
+[SEG0020] person_1 (PATIENT): I'm mostly vegetarian.
+[SEG0021] person_2 (DOCTOR): Any sport or activity?
+[SEG0022] person_1 (PATIENT): I play badminton on Sundays.
+[SEG0023] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0024] person_1 (PATIENT): No operations, no.
+[SEG0025] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0026] person_1 (PATIENT): Yes, diabetes.
+[SEG0027] person_2 (DOCTOR): Okay, what about allergies, to medicines or foods or anything else?
+[SEG0028] person_1 (PATIENT): Oh, not that I know, no.
+[SEG0029] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0030] person_1 (PATIENT): Glimepiride, 2 milligrams, before breakfast for my sugar. Volini gel. I take it twice a day. I'd rather not end up on lots of tablets if I can avoid it. It's the not knowing that gets to me.
+[SEG0031] person_2 (DOCTOR): Come over here and I'll have a look.
+[SEG0032] person_1 (PATIENT): Okay.
+[SEG0033] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0034] person_2 (DOCTOR): The ankle and foot move fully.
+[SEG0035] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0036] person_2 (DOCTOR): Pressing on the inner heel brings on the pain.
+[SEG0037] person_1 (PATIENT): Okay, ready.
+[SEG0038] person_2 (DOCTOR): Right, you can sit back down. Right, here's what I'm thinking. The most likely explanation is plantar fasciitis.
+[SEG0039] person_1 (PATIENT): Okay, so is this something I'll have for good?
+[SEG0040] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like plantar fasciitis, but I'd like to confirm. Stop me if I've got anything wrong. You've had sharp heel pain with your first steps in the morning for ten days, severe, and no numbness in the foot or pain in other joints.
+[SEG0041] person_1 (PATIENT): Yes, uh, you've got it.
+[SEG0042] person_2 (DOCTOR): I'm sending you for an X-ray of the foot because of heel pain.
+[SEG0043] person_1 (PATIENT): Will it hurt?
+[SEG0044] person_2 (DOCTOR): Roll the sole over a bottle and stretch the calf against a wall twice a day. If the symptoms get worse, or you feel really unwell, please come to the emergency department. I'll want another look in six weeks. Ask me anything before you go.
+[SEG0045] person_1 (PATIENT): One thing: no, actually that's all. Thanks.
+[SEG0046] person_2 (DOCTOR): Right, goodbye.
+
+JSON:

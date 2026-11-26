@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20138)
+[SEG0001] person_1 (PATIENT): Sorry, uh, doctor, shall I sit here?
+[SEG0002] person_2 (DOCTOR): Alright, of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): Honestly, it's pain in my heel, and my family pushed me to come.
+[SEG0004] person_2 (DOCTOR): How long has it been like this?
+[SEG0005] person_1 (PATIENT): Probably two years. Yeah.
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): I'd give it a six, out of ten. It comes and goes.
+[SEG0008] person_2 (DOCTOR): Any back pain, fever or swelling at all?
+[SEG0009] person_1 (PATIENT): Nope, nothing like that.
+[SEG0010] person_2 (DOCTOR): So, has your heart given you any trouble?
+[SEG0011] person_1 (PATIENT): No, that's been fine.
+[SEG0012] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0013] person_1 (PATIENT): Skin's normal.
+[SEG0014] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0015] person_1 (PATIENT): No, I've always been fairly healthy.
+[SEG0016] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0017] person_1 (PATIENT): I'll have a glass of wine with dinner. I have about eight cigarettes in a day. I work in accounts at a hospital. I live with my elderly mother. Lots of rice, lentils and some fruit.
+[SEG0018] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0019] person_1 (PATIENT): Nothing, I haven't had any operations.
+[SEG0020] person_2 (DOCTOR): Before we go further, any allergies?
+[SEG0021] person_1 (PATIENT): I'm allergic to walnuts, I get my lips swelling.
+[SEG0022] person_2 (DOCTOR): Tell me your medicines, please.
+[SEG0023] person_1 (PATIENT): Insoles. I take it every day.
+[SEG0024] person_2 (DOCTOR): Can I check a few measurements before we carry on?
+[SEG0025] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0026] person_2 (DOCTOR): Okay: pressure 124 over 73, respiratory rate 17. And temperature 36.9, pulse is 68 beats a minute, oxygen saturation is 99 percent.
+[SEG0027] person_1 (PATIENT): Is that normal?
+[SEG0028] person_2 (DOCTOR): Don't worry, we'll discuss it in a second.
+[SEG0029] person_2 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0030] person_2 (DOCTOR): So, look straight ahead.
+[SEG0031] person_2 (DOCTOR): There is a sore spot at the inner front of the heel bone and pulling the toes back makes it worse.
+[SEG0032] person_2 (DOCTOR): Please sit back down.
+[SEG0033] person_2 (DOCTOR): Let me tell you where I've got to. I'd lean towards plantar fasciitis.
+[SEG0034] person_1 (PATIENT): Will it clear up?
+[SEG0035] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's plantar fasciitis, and we'll know more once the a foot X-ray is back. Let's get a foot X-ray, for heel pain.
+[SEG0036] person_1 (PATIENT): Is that done today?
+[SEG0037] person_2 (DOCTOR): Let's use ibuprofen gel, three times a day, for two weeks. That should help with heel pain. Stretch the calf and the sole of the foot before getting out of bed and wear cushioned shoes. Come back in six weeks.
+[SEG0038] person_1 (PATIENT): I'll book it on my way out.
+[SEG0039] person_2 (DOCTOR): Anything else on your mind before you go?
+[SEG0040] person_1 (PATIENT): That's clear, thanks.
+[SEG0041] person_2 (DOCTOR): Take care now.
+
+JSON:

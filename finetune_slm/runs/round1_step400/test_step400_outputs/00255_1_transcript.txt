@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00255)
+[SEG0001] person_1 (DOCTOR): afternoon take the chair by the the desk
+[SEG0002] person_2 (PATIENT): Thank you.
+[SEG0003] person_1 (DOCTOR): is this your first time with this clinic?
+[SEG0004] person_2 (PATIENT): mm, first time with this one, yes a friend recommended it
+[SEG0005] person_1 (DOCTOR): tell me what's been troubling you
+[SEG0006] person_2 (PATIENT): okay, so mainly a ringing noise. There's a couple of other things, but that's the main one
+[SEG0007] person_1 (DOCTOR): and and when did that start?
+[SEG0008] person_2 (PATIENT): so, it's been two months now
+[SEG0009] person_1 (DOCTOR): how often does it happen?
+[SEG0010] person_2 (PATIENT): I'd say once or twice a day
+[SEG0011] person_1 (DOCTOR): does it come along with anything else?
+[SEG0012] person_2 (PATIENT): When it starts I tend to to get difficulty following conversation in crowds as well. I mean the difficulty following conversation in crowds? That's been for nearly five years. With difficulty following conversation in crowds it feels mild to me. I've also been turning the TV up. As for trouble hearing in my left ear I honestly can't say when that began. It might have been last month or the month before.
+[SEG0013] person_1 (DOCTOR): What medicines do you take regularly?
+[SEG0014] person_2 (PATIENT): Glimepiride i take it 2 milligrams before breakfast
+[SEG0015] person_1 (DOCTOR): is that that long-standing?
+[SEG0016] person_2 (PATIENT): About three months now. Ramipril 5 milligrams every morning for my blood pressure i did try to ignore it for a while a neighbour of mine said I should see someone about it
+[SEG0017] person_1 (DOCTOR): go on
+[SEG0018] person_2 (PATIENT): I take sodium valproate, 500 milligrams, twice a day for the fits.
+[SEG0019] person_3 (NURSE): doctor, our chart from the last visit lists it as 250 milligrams
+[SEG0020] person_1 (DOCTOR): Hm. Do you have the latest prescription with you?
+[SEG0021] person_2 (PATIENT): okay, so I don't think I have it with me
+[SEG0022] person_1 (DOCTOR): have you had to to have anything operated on?
+[SEG0023] person_2 (PATIENT): um, I had a knee arthroscopy three years ago
+[SEG0024] person_1 (DOCTOR): Okay, tell me about your routine, work, habits, that sort of thing.
+[SEG0025] person_2 (PATIENT): I used to smoke but I quit five years ago. I walk for about half an hour most days. I run a small shop, so I'm on my feet a lot. I eat out quite a lot, to be honest
+[SEG0026] person_1 (DOCTOR): any long-term health problems I should know about?
+[SEG0027] person_2 (PATIENT): I've I've got diabetes.
+[SEG0028] person_1 (DOCTOR): right
+[SEG0029] person_2 (PATIENT): High blood pressure, for about a year. Epilepsy, for five years.
+[SEG0030] person_1 (DOCTOR): okay, I can see diabetes in your file as well. Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0031] person_2 (PATIENT): well, you know, none, as far as I'm aware
+[SEG0032] person_1 (DOCTOR): does anything run in the family?
+[SEG0033] person_2 (PATIENT): My mother has migraines. Okay uh so my sister has epilepsy.
+[SEG0034] person_1 (DOCTOR): let me check a few things. Any discharge or facial weakness?
+[SEG0035] person_2 (PATIENT): no, I'd have mentioned it
+[SEG0036] person_1 (DOCTOR): let me check a few things. Any dizziness, ear pain or headache?
+[SEG0037] person_2 (PATIENT): Hmm, um, no, no dizziness, ear pain or headache.
+[SEG0038] person_1 (DOCTOR): anything on the the skin I should know about?
+[SEG0039] person_2 (PATIENT): skin's normal
+[SEG0040] person_3 (NURSE): doctor, I've got the the readings for you bP is 112 over 76, temperature 36.6, oxygen saturation is 97 percent heart rate 74.
+[SEG0041] person_1 (DOCTOR): Okay, noted. Let me tell you where I've got to. My working impression is hearing loss from wax. That's my thinking for now, and it may change as we learn more. Age-related hearing loss is still possible.
+[SEG0042] person_2 (PATIENT): I've been thinking the worst to be honest is it bad?
+[SEG0043] person_1 (DOCTOR): it's reasonable to be concerned, but right now hearing loss from wax is my leading thought, not anything worse we should do a hearing test for hearing loss i'll start you on ear drops, three times a day, for five days that should help with wax softening
+[SEG0044] person_2 (PATIENT): right, understood
+[SEG0045] person_1 (DOCTOR): please don't use cotton buds or ear candles they push the wax in further. And please bring the latest prescription or the medicine boxes to the next visit so we can settle the the dose. Come back after the hearing test. Let me check I've been clear. What will you do once you get home?
+[SEG0046] person_2 (PATIENT): So, I come back after the hearing test. Is that right?
+[SEG0047] person_1 (DOCTOR): Yes exactly right. Any last questions?
+[SEG0048] person_2 (PATIENT): well okay thank you bye
+
+JSON:

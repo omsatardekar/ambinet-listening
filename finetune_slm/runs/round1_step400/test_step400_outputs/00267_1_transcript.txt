@@ -1,0 +1,69 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00267)
+[SEG0001] person_1 (NURSE): doctor, if you're free, we can start. I've got the numbers noted down
+[SEG0002] person_2 (DOCTOR): great hello, come in and sit down how can I help?
+[SEG0003] person_3 (CAREGIVER): good morning, doctor. I came along to help out. It's been losing weight without trying, doctor. She didn't wanna come, but I insisted
+[SEG0004] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0005] person_4 (PATIENT): It's a... um, um, I can't remember what it's called. It's a little pink tablet.
+[SEG0006] person_2 (DOCTOR): Okay, do you remember what it's for?
+[SEG0007] person_4 (PATIENT): Okay, so for my sugar, I believe. My wife sets them out for me, I just take what I'm given. Escitalopram. I take it 10 milligrams, once a day. Asthalin inhaler, when needed for my asthma. I mean, I take iron tablets, once a day for my blood count.
+[SEG0008] person_2 (DOCTOR): how long have you taken that?
+[SEG0009] person_4 (PATIENT): for two years
+[SEG0010] person_2 (DOCTOR): Hm, okay. How long have you had it?
+[SEG0011] person_4 (PATIENT): for two days, I'd say
+[SEG0012] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0013] person_4 (PATIENT): when it starts I tend to get night sweats as well
+[SEG0014] person_4 (PATIENT): And, And the other thing I wanted to mention is that I can't really—
+[SEG0015] person_3 (CAREGIVER): Uh, tell the doctor about the other thing, that's what worries me.
+[SEG0016] person_4 (PATIENT): hmm, I was getting to that!
+[SEG0017] person_2 (DOCTOR): That's fine, one at a time. I'll ask about everything.
+[SEG0018] person_4 (PATIENT): as for loss of appetite, I honestly can't say when that began it might have been last month or the month before
+[SEG0019] person_5 (UNKNOWN): yes, exactly like that
+[SEG0020] person_2 (DOCTOR): Let me check a few things. Any lumps in the neck, diarrhoea or coughing up blood?
+[SEG0021] person_4 (PATIENT): no, nothing there
+[SEG0022] person_2 (DOCTOR): Let me check a few things. Any blood in the stool, chest pain or shortness of breath?
+[SEG0023] person_4 (PATIENT): Nothing like that, no.
+[SEG0024] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0025] person_4 (PATIENT): breathing's normal
+[SEG0026] person_2 (DOCTOR): How about smoking?
+[SEG0027] person_4 (PATIENT): I smoke about ten cigarettes a day
+[SEG0028] person_2 (DOCTOR): Do you get any exercise?
+[SEG0029] person_4 (PATIENT): I walk for about half an hour most days.
+[SEG0030] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0031] person_4 (PATIENT): no operations, um, no
+[SEG0032] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0033] person_4 (PATIENT): I have diabetes, for nearly five years. I'd rather not end up on lots of tablets if I can avoid it. I wasn't sure whether to come in at all, to be honest. Anxiety, for about ten years. I've had asthma, yes. I've never really been one for hospitals. Low haemoglobin, for two years.
+[SEG0034] person_2 (DOCTOR): right, so diabetes and anxiety are already on your record we'll keep that in mind today are there any allergies on your record that I should check?
+[SEG0035] person_4 (PATIENT): Hmm, um, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0036] person_2 (DOCTOR): what about family history, any illnesses that run in the family?
+[SEG0037] person_4 (PATIENT): My sister has epilepsy.
+[SEG0038] person_1 (NURSE): Here are the numbers, doctor. BP is 106 over 73, weight 98 kilos. Height 178 centimetres, heart rate 94.
+[SEG0039] person_2 (DOCTOR): Good, thank you.
+[SEG0040] person_2 (DOCTOR): Come over here and I'll have a look.
+[SEG0041] person_4 (PATIENT): Okay, ready.
+[SEG0042] person_2 (DOCTOR): bear with me a second
+[SEG0043] person_2 (DOCTOR): I can feel a couple of small glands in your neck, not tender.
+[SEG0044] person_2 (DOCTOR): Take your time, no rush.
+[SEG0045] person_2 (DOCTOR): Air entry is a bit reduced at the top of the right lung.
+[SEG0046] person_2 (DOCTOR): okay, finished so, based on the history and the examination, I'd lean towards an infection or something chronic going on, I can't say what yet we shouldn't forget tuberculosis
+[SEG0047] person_4 (PATIENT): Well, should I be worried about this?
+[SEG0048] person_2 (DOCTOR): It's reasonable to be concerned, but right now an infection or something chronic going on, I can't say what yet is my leading thought, not anything worse. Just to be sure I understood. You've been losing weight without trying for two days, and no lumps in the neck or diarrhoea.
+[SEG0049] person_4 (PATIENT): Exactly.
+[SEG0050] person_2 (DOCTOR): Okay, have you had any tests for this so far?
+[SEG0051] person_4 (PATIENT): I did have a chest X-ray done last year, but the paper's at home.
+[SEG0052] person_2 (DOCTOR): We should do a sputum test for chronic cough. Let's get blood tests, for weight loss. Weigh yourself once a week at the same time and note it down. Please take the tablets with food so they don't upset your stomach. I'll also refer you to the chest clinic. One warning sign to remember: you cough up blood or get breathless. In that case don't wait. I'd like you back in a week.
+[SEG0053] person_2 (DOCTOR): Is there anything you wanted to ask?
+[SEG0054] person_4 (PATIENT): That's everything I wanted to ask. Thank you.
+
+JSON:

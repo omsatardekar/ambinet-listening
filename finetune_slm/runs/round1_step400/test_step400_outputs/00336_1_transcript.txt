@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00336)
+[SEG0001] person_1 (PATIENT): I mean, sorry, doctor, I couldn't find the door at first.
+[SEG0002] person_2 (DOCTOR): No trouble at all, come in. What's been bothering you?
+[SEG0003] person_1 (PATIENT): Yeah, it's sneezing fits. I don't know what's causing it. I told myself I'd wait and see, and here I am.
+[SEG0004] person_2 (DOCTOR): since when have you had this?
+[SEG0005] person_1 (PATIENT): I'd say about two weeks. Actually, no, closer to three weeks
+[SEG0006] person_2 (DOCTOR): okay, give me more detail on it, whatever comes to mind
+[SEG0007] person_1 (PATIENT): It's all the time. I notice it more with dust and early mornings. A three out of ten, I suppose.
+[SEG0008] person_2 (DOCTOR): Okay, any rash, wheezing or shortness of breath at all?
+[SEG0009] person_1 (PATIENT): No. None of those.
+[SEG0010] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0011] person_1 (PATIENT): nothing like that
+[SEG0012] person_2 (DOCTOR): any previous surgeries?
+[SEG0013] person_1 (PATIENT): Yes, I had cataract surgery on my right eye, last year.
+[SEG0014] person_2 (DOCTOR): Do you have any known allergies at all?
+[SEG0015] person_1 (PATIENT): No allergies.
+[SEG0016] person_2 (DOCTOR): So, do you have any medical conditions I should know about?
+[SEG0017] person_1 (PATIENT): no, none that I know of
+[SEG0018] person_2 (DOCTOR): any regular medication?
+[SEG0019] person_1 (PATIENT): nothing, no
+[SEG0020] person_2 (DOCTOR): do you live alone?
+[SEG0021] person_1 (PATIENT): Yes, I live on my own.
+[SEG0022] person_2 (DOCTOR): Any sport or activity?
+[SEG0023] person_1 (PATIENT): I play badminton on Sundays.
+[SEG0024] person_2 (DOCTOR): I'll check your pressure and pulse.
+[SEG0025] person_2 (DOCTOR): almost there..
+[SEG0026] person_2 (DOCTOR): Okay: temperature is 36.8 degrees, blood pressure 126 over 80, respiratory rate 14. And oxygen saturation is 98 percent, pulse 79.
+[SEG0027] person_1 (PATIENT): Is that normal?
+[SEG0028] person_2 (DOCTOR): We'll put it it in context in a moment.
+[SEG0029] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0030] person_2 (DOCTOR): Take your time, no rush.
+[SEG0031] person_2 (DOCTOR): chest is clear, no wheeze
+[SEG0032] person_2 (DOCTOR): Take your time, no rush.
+[SEG0033] person_2 (DOCTOR): The inside of your nose is pale and swollen.
+[SEG0034] person_2 (DOCTOR): Okay, you can sit up.
+[SEG0035] person_2 (DOCTOR): Okay, thinking it through, it fits best with allergic rhinitis. I want to be honest that this is an impression, not a final answer.
+[SEG0036] person_1 (PATIENT): Is this something I'll have for good?
+[SEG0037] person_2 (DOCTOR): I can't promise yet, but most people with allergic rhinitis do well once it's treated properly
+[SEG0038] person_2 (DOCTOR): I think an allergy test makes sense here, for allergic rhinitis.
+[SEG0039] person_3 (CLINICAL_STAFF): We have a slot Monday at 11:30 am, if that works.
+[SEG0040] person_1 (PATIENT): Okay, so okay, I'll be there.
+[SEG0041] person_2 (DOCTOR): I'm prescribing levocetirizine, 5 milligrams, at night, for two weeks. You take it by mouth. It's for allergy symptoms
+[SEG0042] person_1 (PATIENT): Alright, I'll collect it today.
+[SEG0043] person_2 (DOCTOR): keep the windows closed in the early morning and wash the bedsheets weekly in hot water make sure you're drinking plenty of fluids, two to three litres a day if you can, and get proper rest one warning sign to remember: the symptoms get worse in that case don't wait
+[SEG0044] person_1 (PATIENT): Understood.
+[SEG0045] person_2 (DOCTOR): Please come and see me in four weeks.
+[SEG0046] person_1 (PATIENT): Okay, I'll book that.
+[SEG0047] person_2 (DOCTOR): good. Let us know how you get on
+[SEG0048] person_1 (PATIENT): alright, thanks bye for now
+
+JSON:

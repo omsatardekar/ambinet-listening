@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00375)
+[SEG0001] person_1 (PATIENT): Well, hi, doctor. Is this the right room?
+[SEG0002] person_2 (DOCTOR): Alright, that's alright, take a seat. Tell me why you've come.
+[SEG0003] person_3 (FAMILY_MEMBER): Yeah, good morning, doctor. I came along to help out.
+[SEG0004] person_1 (PATIENT): so the thing is, um, I've got a strange episode where I blanked out. I took the morning off to come in today
+[SEG0005] person_2 (DOCTOR): How far back does it go?
+[SEG0006] person_1 (PATIENT): Hmm, for about two weeks, I'd say.
+[SEG0007] person_2 (DOCTOR): how intense does it get?
+[SEG0008] person_1 (PATIENT): Yeah, it feels moderate to me.
+[SEG0009] person_2 (DOCTOR): Does anything bring it on or make it worse?
+[SEG0010] person_1 (PATIENT): I mean, yes, lack of sleep. That makes it worse. Uh, you know, I've been feeling groggy afterwards too. Hmm, as for feeling groggy afterwards, it feels severe to me.
+[SEG0011] person_2 (DOCTOR): has there been any alcohol before it?
+[SEG0012] person_1 (PATIENT): Um, no, none, no alcohol before it.
+[SEG0013] person_2 (DOCTOR): a few quick ones: tongue biting, fever or losing control of the bladder?
+[SEG0014] person_1 (PATIENT): Okay, uh, so I haven't had tongue biting, fever or losing control of the bladder, no.
+[SEG0015] person_2 (DOCTOR): any muscle or joint problems besides this?
+[SEG0016] person_1 (PATIENT): Nothing else aches.
+[SEG0017] person_2 (DOCTOR): alright, how about your heart, any problems like that?
+[SEG0018] person_1 (PATIENT): No, uh, nothing with my heart.
+[SEG0019] person_2 (DOCTOR): What do you do for work?
+[SEG0020] person_1 (PATIENT): I work in an office, mostly sitting at a desk.
+[SEG0021] person_2 (DOCTOR): How's your diet?
+[SEG0022] person_1 (PATIENT): I'm mostly vegetarian.
+[SEG0023] person_2 (DOCTOR): okay, tell me what you take day to day
+[SEG0024] person_1 (PATIENT): Escitalopram i take it 10 milligrams, once a day
+[SEG0025] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0026] person_1 (PATIENT): Uh, uh, I've had anxiety for about a year now.
+[SEG0027] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0028] person_1 (PATIENT): oh, um, my brother has asthma
+[SEG0029] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0030] person_2 (DOCTOR): Just relax your arm...
+[SEG0031] person_2 (DOCTOR): Okay: SpO2 99 percent on room air, temp 36.5 degrees, pressure 108 over 72, pulse 69, respiratory rate 14.
+[SEG0032] person_2 (DOCTOR): Right, let me check a few things physically.
+[SEG0033] person_2 (DOCTOR): stay still while I have a look
+[SEG0034] person_2 (DOCTOR): you're alert, speech is normal and cranial nerves are intact
+[SEG0035] person_1 (PATIENT): No problem.
+[SEG0036] person_2 (DOCTOR): All done, you can get dressed. Okay, so my impression is this: This looks most like a possible focal seizure that needs investigating. The reason I say that is that your story and my examination fit together. It could also be a faint, so we'll keep that open. Let's book an MRI of the brain to look into possible seizure.
+[SEG0037] person_2 (DOCTOR): I'll request an EEG, it'll help with possible seizure. That will help us see what's going on underneath and decide the next step. Don't drive until we've looked into this. I'd like you to see the neurology clinic as well, and I'll write the referral. Blood tests is something we might do if this doesn't improve next month. I'd like to see you again after the results are back
+[SEG0038] person_1 (PATIENT): Sure, um, that's doable.
+[SEG0039] person_2 (DOCTOR): Thanks for coming in.
+[SEG0040] person_1 (PATIENT): Alright, thanks. Bye for now.
+[SEG0041] person_2 (DOCTOR): All the best.
+
+JSON:

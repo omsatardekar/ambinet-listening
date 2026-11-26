@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00261)
+[SEG0001] person_1 (PATIENT): Good evening, doctor, thank you for staying late.
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_3 (CAREGIVER): hello, doctor i hope it's alright if I stay in for this
+[SEG0004] person_1 (PATIENT): Yeah, it's a routine check-up. I don't know what's causing it.
+[SEG0005] person_1 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0006] person_3 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0007] person_1 (PATIENT): I was getting to that!
+[SEG0008] person_2 (DOCTOR): Have you had a few skipped meals?
+[SEG0009] person_1 (PATIENT): yes, I have. Occasional tiredness was there, but it's gone away on its own
+[SEG0010] person_4 (NURSE): Here are the numbers, doctor. Pulse 67, SpO2 99 percent on room air, pressure 122 over 81.
+[SEG0011] person_2 (DOCTOR): thanks
+[SEG0012] person_2 (DOCTOR): Alright, if you're comfortable, I'll examine you now.
+[SEG0013] person_1 (PATIENT): mm, okay
+[SEG0014] person_2 (DOCTOR): Let me look at this properly.
+[SEG0015] person_2 (DOCTOR): Heart and lung sounds are normal.
+[SEG0016] person_1 (PATIENT): Fine.
+[SEG0017] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0018] person_2 (DOCTOR): your tummy is soft with no tenderness
+[SEG0019] person_2 (DOCTOR): that's fine, sit up have you noticed shortness of breath or persistent cough?
+[SEG0020] person_1 (PATIENT): I haven't had shortness of breath or persistent cough, no
+[SEG0021] person_2 (DOCTOR): Has there been any low mood?
+[SEG0022] person_1 (PATIENT): no, I haven't had any low mood
+[SEG0023] person_2 (DOCTOR): have you noticed chest pain, blood in the stool or weight loss?
+[SEG0024] person_1 (PATIENT): No, no chest pain, blood in the stool or weight loss.
+[SEG0025] person_2 (DOCTOR): Okay, any trouble with the waterworks?
+[SEG0026] person_1 (PATIENT): well, that's normal as far as I know
+[SEG0027] person_2 (DOCTOR): Do you exercise at all?
+[SEG0028] person_1 (PATIENT): I go to the gym a couple of times a week.
+[SEG0029] person_2 (DOCTOR): tell me about your health in general, any ongoing conditions? Bear with me, I'm just building up the picture
+[SEG0030] person_1 (PATIENT): Yes, diabetes. I've had high blood pressure, yes.
+[SEG0031] person_2 (DOCTOR): Okay, I can see diabetes in your file as well. Any relatives with health problems I should be aware of?
+[SEG0032] person_1 (PATIENT): my brother has asthma
+[SEG0033] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0034] person_1 (PATIENT): it's a... um, I can't remember what it's called. It's a little pink tablet
+[SEG0035] person_2 (DOCTOR): do you remember what it's for?
+[SEG0036] person_1 (PATIENT): For my sugar, I believe. My husband sets them out for me, I just take what I'm given. Telmisartan. I take it 40 milligrams, once a day.
+[SEG0037] person_3 (CAREGIVER): she is supposed to take it once a day, but I can't say she always does
+[SEG0038] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0039] person_1 (PATIENT): I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly
+[SEG0040] person_2 (DOCTOR): Taking everything into account, I think we're dealing with generally well, nothing worrying today at this stage. The reason I say that is that your story and my examination fit together. I can't rule out a tendency towards high cholesterol yet.
+[SEG0041] person_1 (PATIENT): I've been thinking the worst, to be honest. Is it bad?
+[SEG0042] person_2 (DOCTOR): I can't promise yet, but most people with generally well, nothing worrying today do well once it's treated properly. I'm going to order a lipid profile, for health screening. The result will help us decide whether anything more is needed. An HbA1c is what I'd like next, for health screening.
+[SEG0043] person_1 (PATIENT): Does it need any preparation?
+[SEG0044] person_2 (DOCTOR): Keep up regular exercise, around a hundred and fifty minutes a week, and go easy on processed food.
+[SEG0045] person_1 (PATIENT): can you send me for blood tests?
+[SEG0046] person_2 (DOCTOR): I don't think that's needed at this stage, the history doesn't call for it. Come back after the results are back. Right, any last questions?
+[SEG0047] person_1 (PATIENT): Okay, thank you. Bye.
+
+JSON:

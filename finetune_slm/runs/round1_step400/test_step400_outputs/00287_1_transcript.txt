@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00287)
+[SEG0001] person_1 (NURSE): Doctor, if you're free, we can start. I've got the numbers noted down.
+[SEG0002] person_2 (DOCTOR): Thank you. Good morning, tell me what's been going on.
+[SEG0003] person_3 (PATIENT): I'm, I'm here because of a blocked feeling in the ear. A neighbour of mine said I should see someone about it. I did try to ignore it for a while.
+[SEG0004] person_2 (DOCTOR): How long have you had it?
+[SEG0005] person_3 (PATIENT): So, I've had it since this morning.
+[SEG0006] person_2 (DOCTOR): On a normal day, how strong is it?
+[SEG0007] person_3 (PATIENT): Okay, so I'd give it a three, out of ten.
+[SEG0008] person_2 (DOCTOR): Has there been a fever too?
+[SEG0009] person_3 (PATIENT): Yes, um, I have. Uh, you know, I had muffled hearing before. That's settled now, though.
+[SEG0010] person_2 (DOCTOR): Let me check a few things. Any discharge from the ear, facial weakness or swelling behind the ear?
+[SEG0011] person_3 (PATIENT): Right, I haven't had discharge from the ear, facial weakness or swelling behind the ear, no.
+[SEG0012] person_2 (DOCTOR): What about ringing?
+[SEG0013] person_3 (PATIENT): No ringing, thankfully.
+[SEG0014] person_2 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0015] person_3 (PATIENT): Nothing odd there.
+[SEG0016] person_2 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0017] person_3 (PATIENT): Yes, asthma.
+[SEG0018] person_2 (DOCTOR): Yes, asthma is known to us, good to have that clear. Do you work?
+[SEG0019] person_3 (PATIENT): I run a small shop, so I'm on my feet a lot.
+[SEG0020] person_2 (DOCTOR): Who's at home with you?
+[SEG0021] person_3 (PATIENT): It's just me and my wife at home now.
+[SEG0022] person_2 (DOCTOR): Anything special about your diet?
+[SEG0023] person_3 (PATIENT): I try to avoid too much sugar.
+[SEG0024] person_2 (DOCTOR): Right, what about family history, any illnesses that run in the family?
+[SEG0025] person_3 (PATIENT): My father had a heart attack.
+[SEG0026] person_2 (DOCTOR): Have you had any surgery before?
+[SEG0027] person_3 (PATIENT): Yes, uh, I had my gallbladder removed, in 2016.
+[SEG0028] person_2 (DOCTOR): Tell me what you take day to day. These questions might sound routine, but they matter.
+[SEG0029] person_3 (PATIENT): Seretide inhaler. I take it twice a day. I looked a few things up online, and that probably didn't help.
+[SEG0030] person_2 (DOCTOR): Is that long-standing?
+[SEG0031] person_3 (PATIENT): For two months.
+[SEG0032] person_1 (NURSE): Okay, so the vitals from earlier. Respiratory rate 20, pulse is 108 beats a minute, oxygen saturation is 96 percent. Pressure 116 over 69.
+[SEG0033] person_2 (DOCTOR): Thanks.
+[SEG0034] person_2 (DOCTOR): Let me have a look at you.
+[SEG0035] person_2 (DOCTOR): Alright, just relax, I'll be quick.
+[SEG0036] person_2 (DOCTOR): The right eardrum looks red and bulging.
+[SEG0037] person_2 (DOCTOR): Let me press here.
+[SEG0038] person_2 (DOCTOR): The left ear looks normal.
+[SEG0039] person_2 (DOCTOR): So, good, that's the examination. From what you've told me and what I found, this is probably a middle ear infection. I can't rule out an outer ear infection yet.
+[SEG0040] person_2 (DOCTOR): For this, azithromycin, 500 milligrams, once a day, for three days. That's for ear infection. Keep the ear dry for now and don't put anything in it, including cotton buds. A short walk every day, even twenty minutes, will help more than you'd think. If you get discharge, swelling behind the ear or the pain gets much worse, or you feel really unwell, please come to the emergency department. Let's plan a check in a week.
+[SEG0041] person_2 (DOCTOR): Okay, I think we're finished. Is everything clear?
+[SEG0042] person_3 (PATIENT): No questions. Thank you.
+
+JSON:

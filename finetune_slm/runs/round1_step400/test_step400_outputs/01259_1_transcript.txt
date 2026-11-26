@@ -1,0 +1,64 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01259)
+[SEG0001] person_1 (NURSE): Morning doctor. I've settled them in ready when you are.
+[SEG0002] person_2 (DOCTOR): Perfect, thanks. Hello there, so what's the trouble?
+[SEG0003] person_3 (CAREGIVER): Good morning, doctor. I came along to help out.
+[SEG0004] person_2 (DOCTOR): of course, please stay it's helpful to have you here
+[SEG0005] person_4 (PATIENT): I've, I've been feeling a bit muddled
+[SEG0006] person_2 (DOCTOR): when was the first time you noticed it?
+[SEG0007] person_4 (PATIENT): About a week, give or take.
+[SEG0008] person_3 (CAREGIVER): ah, hm, I'd say more like two weeks
+[SEG0009] person_2 (DOCTOR): okay so roughly one to two weeks is that right?
+[SEG0010] person_4 (PATIENT): that sounds about right
+[SEG0011] person_2 (DOCTOR): rate it for me, mild, moderate or severe?
+[SEG0012] person_4 (PATIENT): Mostly mild.
+[SEG0013] person_2 (DOCTOR): what about dizziness on standing, have you noticed that?
+[SEG0014] person_4 (PATIENT): Actually, yes, for six months.
+[SEG0015] person_2 (DOCTOR): is it constant or in episodes?
+[SEG0016] person_4 (PATIENT): I'd say on and off
+[SEG0017] person_5 (UNKNOWN): Yes, exactly like that.
+[SEG0018] person_2 (DOCTOR): Any chest pain or falls at all?
+[SEG0019] person_4 (PATIENT): No no chest pain no falls. I did have constipation at one point but that went away on its own.
+[SEG0020] person_2 (DOCTOR): have you had fever by any chance?
+[SEG0021] person_4 (PATIENT): no, I haven't had any fever
+[SEG0022] person_2 (DOCTOR): anything unusual with passing urine?
+[SEG0023] person_4 (PATIENT): no that's all fine
+[SEG0024] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0025] person_4 (PATIENT): I've got an enlarged prostate. High blood pressure for nearly five years
+[SEG0026] person_2 (DOCTOR): Okay, go on. So, yes, an enlarged prostate is known to us, good to have that clear.
+[SEG0027] person_2 (DOCTOR): Which medicines do you take at the moment?
+[SEG0028] person_4 (PATIENT): I take tamsulosin, at night
+[SEG0029] person_2 (DOCTOR): And what strength is that?
+[SEG0030] person_4 (PATIENT): 0.4 milligrams, I think that's what's on the box it's lisinopril, 10 milligrams, once a day it's a sleeping tablet, 3.75 milligrams, at night i, I'd been on hydrochlorothiazide, not any more though, I stopped
+[SEG0031] person_2 (DOCTOR): has anything ever caused you a reaction? I mean any allergies
+[SEG0032] person_4 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0033] person_2 (DOCTOR): a few questions about your lifestyle now
+[SEG0034] person_4 (PATIENT): Nothing, I'm teetotal. I quit smoking around ten years ago. Lots of rice, lentils and some fruit. I walk the dog every morning.
+[SEG0035] person_2 (DOCTOR): any previous surgeries?
+[SEG0036] person_4 (PATIENT): no never
+[SEG0037] person_1 (NURSE): Here are the the numbers doctor. Pressure 94 over 57 SpO2 99 percent on room air heart rate 111.
+[SEG0038] person_2 (DOCTOR): okay, noted
+[SEG0039] person_2 (DOCTOR): I'd like to check you over now, if that's alright
+[SEG0040] person_4 (PATIENT): Yeah no problem.
+[SEG0041] person_2 (DOCTOR): let me feel here
+[SEG0042] person_2 (DOCTOR): your blood pressure drops a little on standing
+[SEG0043] person_2 (DOCTOR): thank you you can get dressed. Having listened and examined I'd lean towards side effects from several medicines taken together. It could also be dehydration so we'll keep that open
+[SEG0044] person_4 (PATIENT): is this serious, doctor?
+[SEG0045] person_2 (DOCTOR): It's reasonable to be concerned, but right now side effects from several medicines taken together is my leading thought, not anything worse. I'm going to order a medication review, for polypharmacy. Blood tests is what I'd like next, for dizziness.
+[SEG0046] person_4 (PATIENT): right, understood
+[SEG0047] person_2 (DOCTOR): We will stop the sleeping tablet slowly over two weeks. We'll refer you to the pharmacist. One warning sign to remember: the symptoms get worse. In that case don't wait. Please come and see me in two weeks. Does all of that make sense?
+[SEG0048] person_4 (PATIENT): Great, thank you for your help.
+[SEG0049] person_2 (DOCTOR): all the best
+
+JSON:

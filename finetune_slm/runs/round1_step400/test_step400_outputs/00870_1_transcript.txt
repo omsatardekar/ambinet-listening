@@ -1,0 +1,50 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00870)
+[SEG0001] person_1 (PATIENT): Hello, doctor. It's my fingers. They go tingly when I'm typing. And sometimes at night. Where was I? Oh, yes, the right hand, mostly.
+[SEG0002] person_2 (DOCTOR): Take your time. Which fingers are affected?
+[SEG0003] person_1 (PATIENT): The thumb, the next two fingers. Not the little one.
+[SEG0004] person_2 (DOCTOR): How long has this been happening?
+[SEG0005] person_1 (PATIENT): About two months. It started when I took on the extra work. I type all day.
+[SEG0006] person_2 (DOCTOR): Does it wake you up at night?
+[SEG0007] person_1 (PATIENT): Yes, the fingers go numb, and I shake my hand to get them back.
+[SEG0008] person_2 (DOCTOR): Any weakness, dropping things?
+[SEG0009] person_1 (PATIENT): I dropped a mug last week. And my grip feels weak.
+[SEG0010] person_2 (DOCTOR): Any pain in the neck, or down the arm?
+[SEG0011] person_1 (PATIENT): No. No neck pain. Just the hand.
+[SEG0012] person_2 (DOCTOR): Any allergies to medicines?
+[SEG0013] person_1 (PATIENT): None.
+[SEG0014] person_2 (DOCTOR): Any other conditions?
+[SEG0015] person_1 (PATIENT): An underactive thyroid.
+[SEG0016] person_2 (DOCTOR): Any operations?
+[SEG0017] person_1 (PATIENT): My wisdom teeth, a few years ago.
+[SEG0018] person_2 (DOCTOR): Pulse and temperature first. ~
+[SEG0019] person_1 (PATIENT): Right. ~
+[SEG0020] person_2 (DOCTOR): Pulse 70, temperature 36.5.
+[SEG0021] person_1 (PATIENT): Fine? ~
+[SEG0022] person_2 (DOCTOR): Fine. Now, I'm going to tap on your wrist, and I'd like you to bend your wrist for a minute.
+[SEG0023] person_1 (PATIENT): Oh! There, the tingling! ~
+[SEG0024] person_2 (DOCTOR): That brings on your symptoms, and the muscle at the base of your thumb is slightly weaker on the right.
+[SEG0025] person_1 (PATIENT): What is it? ~
+[SEG0026] person_2 (DOCTOR): This looks like carpal tunnel syndrome, a squeezed nerve at the wrist, but I can't rule out a neck cause, or low thyroid levels contributing.
+[SEG0027] person_1 (PATIENT): Do I need an operation? ~
+[SEG0028] person_2 (DOCTOR): Not yet. Most people improve with a wrist splint worn at night.
+[SEG0029] person_1 (PATIENT): Where do I get one? ~
+[SEG0030] person_2 (DOCTOR): The pharmacy, or I can arrange it. And I'd like to arrange a blood test, to check your thyroid and sugar.
+[SEG0031] person_1 (PATIENT): Fine. ~
+[SEG0032] person_2 (DOCTOR): Take breaks from typing every half hour, keep your wrist straight, and check your desk set-up.
+[SEG0033] person_1 (PATIENT): Okay. ~
+[SEG0034] person_2 (DOCTOR): If it doesn't improve in six weeks, or you get constant numbness or weakness, I'll arrange nerve tests and a specialist review.
+[SEG0035] person_1 (PATIENT): Right. Thank you. ~
+
+JSON:

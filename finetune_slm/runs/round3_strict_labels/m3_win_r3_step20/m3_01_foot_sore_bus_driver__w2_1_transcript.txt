@@ -1,0 +1,70 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_01_foot_sore_bus_driver)
+[SEG0001] person_2 (DOCTOR): And the cholesterol?
+[SEG0002] person_1 (PATIENT): Same time. They found it together when I did the full check up.
+[SEG0003] person_2 (DOCTOR): Right.
+[SEG0004] person_2 (DOCTOR): Now work. You're a bus driver, you said, so what's the day like?
+[SEG0005] person_1 (PATIENT): Six in the morning to three, sometimes a split. Sitting, sitting, then the stand at the depot. And lunch from a tiffin, rice, dal, some sabzi, fruit if my wife puts it in. Tea with sugar, I know, I know, the sugar.
+[SEG0006] person_2 (DOCTOR): Mm.
+[SEG0007] person_2 (DOCTOR): We'll come back to the tea. Okay, let's get your checks done, and then I'll look at the foot. Nurse?
+[SEG0008] person_3 (NURSE): Mr Deshmukh, can you give me your arm? I'll start with the temperature, under the tongue is fine.
+[SEG0009] person_1 (PATIENT): Yes.
+[SEG0010] person_3 (NURSE): Thirty-eight point three.
+[SEG0011] person_2 (DOCTOR): That's a proper fever. How are you feeling just sitting here?
+[SEG0012] person_1 (PATIENT): A little tired, a little cold. But it's fine.
+[SEG0013] person_3 (NURSE): Cuff on now. Stay still for me and don't talk, please.
+[SEG0014] person_1 (PATIENT): Sorry.
+[SEG0015] person_3 (NURSE): One oh nine over seventy-seven. That's low for you, your last one was one forty.
+[SEG0016] person_2 (DOCTOR): Hm. And the pulse?
+[SEG0017] person_3 (NURSE): Eighty-eight, and regular. Weight is fifty-two kilos on the scale, and that's nearly seven less than in March.
+[SEG0018] person_1 (PATIENT): Fifty-two! My trousers, madam, I told you.
+[SEG0019] person_2 (DOCTOR): Seven kilos in six months is a lot, Mr Deshmukh, it's not all good news. Okay, shoes and socks off for me, both, and lie back on the couch if you can.
+[SEG0020] person_1 (PATIENT): Mm-hm.
+[SEG0021] person_1 (PATIENT): Yes. The sock is a bit stuck.
+[SEG0022] person_2 (DOCTOR): Okay, careful, careful, let me. Oh. Yes.
+[SEG0023] person_3 (NURSE): Oh dear. Doctor, that's, can I get the dressing tray?
+[SEG0024] person_2 (DOCTOR): Please. Mr Deshmukh, that isn't a blister. Can you feel me pressing here?
+[SEG0025] person_1 (PATIENT): Where?
+[SEG0026] person_2 (DOCTOR): Here, on your ankle.
+[SEG0027] person_1 (PATIENT): Slightly. A bit. Not much. Is it bad?
+[SEG0028] person_2 (DOCTOR): Let me finish looking. The pulses at the ankle are weak but I can feel them. There's an ulcer on the ball of your right foot, about two centimetres across, and the skin round it is red and warm and swollen. There's some discharge on the old plaster.
+[SEG0029] person_1 (PATIENT): Two centimetres, that's like a coin.
+[SEG0030] person_2 (DOCTOR): Roughly, yes. A smaller coin.
+[SEG0031] person_1 (PATIENT): But it doesn't hurt.
+[SEG0032] person_2 (DOCTOR): That's the diabetes. The nerves in your feet don't tell you when something is wrong, which is why the numbness and why you can drive eight hours on it. The skin breaks down underneath you and you don't know.
+[SEG0033] person_1 (PATIENT): Mm.
+[SEG0034] person_2 (DOCTOR): It looks infected to me. With the fever and the redness, and you being diabetic, that's what I think we're dealing with, an infected diabetic foot ulcer. The pressure from the shoe and from the pedals has probably made it worse, or started it, so some of it may simply be damage from the pressure, but the fever says infection.
+[SEG0035] person_1 (PATIENT): Uh, so what do I do, tell me, madam. I have the late shift tomorrow.
+[SEG0036] person_2 (DOCTOR): You won't be driving tomorrow, I'm sorry. I'll write you off for now.
+[SEG0037] person_1 (PATIENT): Ah, but the roster.
+[SEG0038] person_2 (DOCTOR): The roster will manage. I want to do some blood tests today, to see how high the infection is and to check your sugar and your kidneys, because that matters for the antibiotic. And the nurse will take a swab from the ulcer, so we know what's growing.
+[SEG0039] person_3 (NURSE): Right.
+[SEG0040] person_3 (NURSE): I'll do the swab after I clean it, Mr Deshmukh, it won't hurt, you'll hardly feel it.
+[SEG0041] person_1 (PATIENT): That I believe.
+[SEG0042] person_2 (DOCTOR): And I'm going to start you on an antibiotic today without waiting for the swab, it's called amoxicillin with clavulanic acid, six hundred and twenty-five milligrams, three times a day for seven days, with food.
+[SEG0043] person_1 (PATIENT): Okay.
+[SEG0044] person_1 (PATIENT): Three times, with food, fine.
+[SEG0045] person_2 (DOCTOR): If the swab shows something different we'll change it. Keep the foot dry, keep the dressing on, don't walk around barefoot even at home. And no new shoes, wear the old ones, or sandals with a strap.
+[SEG0046] person_1 (PATIENT): Mm-hm.
+[SEG0047] person_1 (PATIENT): The old ones are worse.
+[SEG0048] person_2 (DOCTOR): Then we'll talk to the foot clinic about proper insoles. Now listen carefully. If the redness starts to creep up the foot, or up the leg, or if the fever gets worse, or you start feeling unwell, shivering, confused, you come in the same day, don't wait for your wife to ring me.
+[SEG0049] person_1 (PATIENT): She will ring you anyway.
+[SEG0050] person_2 (DOCTOR): Good. I'd like to see you in the clinic in two days for the dressing, either way. Do you have any questions?
+[SEG0051] person_1 (PATIENT): One, only one. Will they cut it? The foot? My cousin in Nashik lost two toes.
+[SEG0052] person_2 (DOCTOR): I can't promise anything today, and I won't pretend it's nothing, but we've caught it at a stage where tablets and dressings should be enough. That's the plan, anyway. Which is why I'm cross that nobody saw it for weeks.
+[SEG0053] person_1 (PATIENT): I know. I know. I will tell her she was right.
+[SEG0054] person_2 (DOCTOR): You can tell her from me as well. Nurse, can we get him booked in for Saturday morning, I'm in until noon?
+[SEG0055] person_3 (NURSE): I'll put him down for ten. Mr Deshmukh, come with me, and we'll do the blood now and then the dressing, and I'll give you the leaflet with the numbers.
+[SEG0056] person_1 (PATIENT): Thank you, doctor. Thank you. And sorry again for being late.
+[SEG0057] person_2 (DOCTOR): You're not late, you're early. By about three weeks.

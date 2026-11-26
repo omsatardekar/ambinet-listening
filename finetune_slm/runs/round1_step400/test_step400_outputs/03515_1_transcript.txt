@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03515)
+[SEG0001] person_1 (PATIENT): Hi doctor, am I too early?
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What seems to be wrong?
+[SEG0003] person_3 (FAMILY_MEMBER): Thank you for fitting us in, doctor.
+[SEG0004] person_2 (DOCTOR): That's fine, sit down. We'll go through it together.
+[SEG0005] person_3 (FAMILY_MEMBER): Actually, doctor, it's a tremor. That's what we're worried about.
+[SEG0006] person_2 (DOCTOR): Can you tell me when it first started?
+[SEG0007] person_1 (PATIENT): I, I'd say two weeks, maybe.
+[SEG0008] person_3 (FAMILY_MEMBER): Well, I think it's been nearer three weeks, actually.
+[SEG0009] person_2 (DOCTOR): Okay, so roughly two to three weeks. Is that right?
+[SEG0010] person_1 (PATIENT): Yeah, roughly.
+[SEG0011] person_2 (DOCTOR): How strong would you say it is?
+[SEG0012] person_1 (PATIENT): Pretty severe, if I'm being honest. I've, I've been feeling agitated too.
+[SEG0013] person_2 (DOCTOR): How much does it limit you?
+[SEG0014] person_1 (PATIENT): Erm, I'd give it a three, out of ten. Oh, and loose stools. Um, about loose stools, it's severe, honestly. I'd say once or twice a day.
+[SEG0015] person_2 (DOCTOR): Let me check a few things. Any stiffness or seizure?
+[SEG0016] person_1 (PATIENT): No, nothing to report there.
+[SEG0017] person_2 (DOCTOR): Have you noticed high fever or confusion?
+[SEG0018] person_1 (PATIENT): Um, I haven't had high fever or confusion, no.
+[SEG0019] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0020] person_1 (PATIENT): So, no, joints are fine.
+[SEG0021] person_2 (DOCTOR): Any surgery in the past?
+[SEG0022] person_1 (PATIENT): Yes, I had keyhole surgery on my gallbladder, two years back.
+[SEG0023] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0024] person_1 (PATIENT): I only drink at family occasions. I gave up cigarettes last spring. I do a yoga class on Thursdays. I grab fast food at lunch most days. I look after my grandchildren most days.
+[SEG0025] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0026] person_3 (FAMILY_MEMBER): Um, it's allopurinol, 100 milligrams, once a day, doctor.
+[SEG0027] person_2 (DOCTOR): Is that long-standing?
+[SEG0028] person_3 (FAMILY_MEMBER): About two months.
+[SEG0029] person_2 (DOCTOR): Has anything ever caused you a reaction? I mean any allergies.
+[SEG0030] person_1 (PATIENT): I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0031] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0032] person_1 (PATIENT): I have depression, for five years. It's the not knowing that gets to me. I have gout.
+[SEG0033] person_2 (DOCTOR): Alright, gout, that matches what I have here. Putting together what you've described, the most likely explanation is mild serotonin syndrome from combining medicines. I'd also keep anxiety in mind.
+[SEG0034] person_1 (PATIENT): I'm scared it's something bad. Is it?
+[SEG0035] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like mild serotonin syndrome from combining medicines, but I'd like to confirm.
+[SEG0036] person_2 (DOCTOR): I'll request blood tests, it'll help with agitation and clonus. I'd rather check than guess, and this is the quickest way to know more. We will stop the migraine tablet and watch you for several hours. If you smoke, this is a good moment to think about stopping, and we can help you with that. Please don't wait if the symptoms get worse. That's when to be seen urgently. Book a review in one day.
+[SEG0037] person_2 (DOCTOR): Does all of that make sense?
+[SEG0038] person_1 (PATIENT): That's clear, thanks.
+[SEG0039] person_2 (DOCTOR): Okay, have a good day.
+
+JSON:

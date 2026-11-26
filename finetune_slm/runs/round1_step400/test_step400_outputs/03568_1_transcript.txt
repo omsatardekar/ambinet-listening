@@ -1,0 +1,74 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03568)
+[SEG0001] person_1 (DOCTOR): Right, thanks for waiting, come in.
+[SEG0002] person_2 (CAREGIVER): Thank you for fitting us in, doctor.
+[SEG0003] person_1 (DOCTOR): That's fine, sit down. We'll go through it together. Was parking alright?
+[SEG0004] person_3 (PATIENT): Not great, I ended up a few streets away.
+[SEG0005] person_1 (DOCTOR): Where shall we begin?
+[SEG0006] person_3 (PATIENT): It's a headache. I thought I'd wait, but it hasn't gone.
+[SEG0007] person_1 (DOCTOR): When was the first time you noticed it?
+[SEG0008] person_3 (PATIENT): I've had it since yesterday.
+[SEG0009] person_1 (DOCTOR): I follow. Rate it for me, mild, moderate or severe?
+[SEG0010] person_3 (PATIENT): Mild, I'd say.
+[SEG0011] person_3 (PATIENT): I was just going to say that the main thing is—
+[SEG0012] person_4 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0013] person_1 (DOCTOR): Later, thanks. Please go on.
+[SEG0014] person_3 (PATIENT): And I've been feeling muddled and unsteady as well, since Friday.
+[SEG0015] person_4 (NURSE): Doctor, I've got the readings for you. Pulse is 75 beats a minute, respiratory rate 16, SpO2 99 percent on room air, BP is 111 over 82.
+[SEG0016] person_1 (DOCTOR): Good, thank you.
+[SEG0017] person_1 (DOCTOR): I'll examine you in a second, make yourself comfortable.
+[SEG0018] person_1 (DOCTOR): Look straight ahead.
+[SEG0019] person_1 (DOCTOR): You are a bit slow and unsteady, but there is no weakness and your blood pressure is fine.
+[SEG0020] person_1 (DOCTOR): Good, you can sit up again. Did you get weakness on one side, fall, seizure or fever?
+[SEG0021] person_3 (PATIENT): No, no weakness on one side, no fall, no seizure. I did have cramps at one point, but that went away on its own.
+[SEG0022] person_1 (DOCTOR): Anything on the skin I should know about?
+[SEG0023] person_3 (PATIENT): Nothing on the skin, no.
+[SEG0024] person_1 (DOCTOR): Anything different when you pass water?
+[SEG0025] person_3 (PATIENT): Oh, no, that's all fine.
+[SEG0026] person_1 (DOCTOR): Has anything ever caused you a reaction? I mean any allergies.
+[SEG0027] person_3 (PATIENT): I, I don't think I have any, no.
+[SEG0028] person_2 (CAREGIVER): Actually, I remember she had some kind of reaction to tramadol before. I couldn't swear to it.
+[SEG0029] person_3 (PATIENT): Right, I don't remember that.
+[SEG0030] person_1 (DOCTOR): Alright, so that's unclear. I'll record what each of you said. What conditions have you been treated for in the past?
+[SEG0031] person_3 (PATIENT): I have depression, for two years. I've had high blood pressure for about a year now.
+[SEG0032] person_1 (DOCTOR): Yes.
+[SEG0033] person_3 (PATIENT): I've had arthritis in my knees for about a year now.
+[SEG0034] person_1 (DOCTOR): Alright, depression and high blood pressure, that matches what I have here. Have you had any previous surgeries?
+[SEG0035] person_3 (PATIENT): No, not at all.
+[SEG0036] person_1 (DOCTOR): Which medicines do you take at the moment?
+[SEG0037] person_3 (PATIENT): I take sertraline, 50 milligrams, once a day for my mood. I take something called losa... losartan, 50 milligrams, maybe, once a day for my blood pressure.
+[SEG0038] person_1 (DOCTOR): Have you got the box or the prescription on you?
+[SEG0039] person_3 (PATIENT): Not with me. I'll bring it next time.
+[SEG0040] person_3 (PATIENT): It's a... um, I can't remember what it's called. It's a little pink tablet.
+[SEG0041] person_1 (DOCTOR): Do you remember what it's for?
+[SEG0042] person_3 (PATIENT): For the joint pain, I believe. My daughter sets them out for me, I just take what I'm given. I, I used to take valsartan, but I stopped it.
+[SEG0043] person_1 (DOCTOR): So, are there any illnesses in your family?
+[SEG0044] person_3 (PATIENT): My brother has epilepsy.
+[SEG0045] person_1 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0046] person_3 (PATIENT): I'll have a glass of wine with dinner. I smoke roughly a pack every two days. I'm a hairdresser, on my feet all day.
+[SEG0047] person_1 (DOCTOR): Okay, thinking it through, it fits best with a low salt level, possibly from the new antidepressant. The reason I say that is that your story and my examination fit together. I'd also keep a urine infection in mind. Dehydration is still possible.
+[SEG0048] person_3 (PATIENT): Is it dangerous, doctor?
+[SEG0049] person_1 (DOCTOR): I can't promise yet, but most people with a low salt level, possibly from the new antidepressant do well once it's treated properly. Just to be sure I understood. You've had a headache, since yesterday, mild, and no weakness on one side or fever.
+[SEG0050] person_3 (PATIENT): Correct.
+[SEG0051] person_1 (DOCTOR): Let's book blood tests to look into confusion. A urine test is what I'd like next, for confusion.
+[SEG0052] person_3 (PATIENT): Mm, alright.
+[SEG0053] person_1 (DOCTOR): We will stop the new tablet and not drink excess water until we have the result. Try to get to bed and wake up at the same time each day, and keep your phone away from the bed. The older people's clinic would be the right next step, I'll refer you. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0054] person_3 (PATIENT): Yes, I'll bear that in mind.
+[SEG0055] person_1 (DOCTOR): If the symptoms get worse, that's the point to come in urgently.
+[SEG0056] person_3 (PATIENT): Yes, I'll bear that in mind.
+[SEG0057] person_1 (DOCTOR): See me again in two days. I think we're done unless you have questions.
+[SEG0058] person_3 (PATIENT): Thank you, that's helpful.
+[SEG0059] person_1 (DOCTOR): Have a good day.
+
+JSON:

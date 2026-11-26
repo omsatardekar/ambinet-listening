@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00002)
+[SEG0001] person_1 (DOCTOR): Hello, come through.
+[SEG0002] person_2 (PATIENT): evening, doctor
+[SEG0003] person_1 (DOCTOR): What made you decide to come in?
+[SEG0004] person_2 (PATIENT): So, I've been feeling a bit dizzy after taking all my tablets, doctor.
+[SEG0005] person_1 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0006] person_2 (PATIENT): Atorvastatin, 20 milligrams, at night. It's metformin, 500 milligrams, twice a day for my sugar. Though honestly, some days I forget to take it. Aspirin, 75 milligrams, once a day
+[SEG0007] person_1 (DOCTOR): since when have you been taking it?
+[SEG0008] person_2 (PATIENT): For two months.
+[SEG0009] person_1 (DOCTOR): right, when did it begin?
+[SEG0010] person_2 (PATIENT): Okay, so it's been like this since Monday.
+[SEG0011] person_1 (DOCTOR): How bad is it, would you say?
+[SEG0012] person_2 (PATIENT): I, I'd give it a seven, out of ten.
+[SEG0013] person_1 (DOCTOR): have you had dry mouth?
+[SEG0014] person_2 (PATIENT): Yes, actually.
+[SEG0015] person_1 (DOCTOR): How intense does it get?
+[SEG0016] person_2 (PATIENT): Mild, really.
+[SEG0017] person_1 (DOCTOR): And And then?
+[SEG0018] person_2 (PATIENT): I've been feeling confused about which tablets to take too. Yeah, I did have an upset stomach at one point, but that's gone now
+[SEG0019] person_1 (DOCTOR): So, a few quick ones: vomiting, black stools or fainting?
+[SEG0020] person_2 (PATIENT): No. None of those.
+[SEG0021] person_1 (DOCTOR): let me check a few things. Any falls, low mood or chest pain?
+[SEG0022] person_2 (PATIENT): No, no falls, low mood or chest pain.
+[SEG0023] person_1 (DOCTOR): Is your urine normal, no changes?
+[SEG0024] person_2 (PATIENT): No changes there.
+[SEG0025] person_1 (DOCTOR): Do you have any known allergies at all?
+[SEG0026] person_2 (PATIENT): I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0027] person_1 (DOCTOR): Have you ever been under the knife?
+[SEG0028] person_2 (PATIENT): Yes, I had a stent put in my heart, two years ago.
+[SEG0029] person_1 (DOCTOR): Now some background about your lifestyle.
+[SEG0030] person_2 (PATIENT): I gave up drinking about three years ago. I used to smoke but I quit five years ago. I'm a software engineer, so I'm at a screen all day. Yes, I live on my own.
+[SEG0031] person_1 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0032] person_2 (PATIENT): my father had kidney stones my mother has migraines
+[SEG0033] person_1 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0034] person_2 (PATIENT): High cholesterol, for two years. I kept putting it off, which I know isn't sensible. I took the morning off to come in today. I have diabetes, for about a year. I thought it would sort itself out, but it hasn't. I've never really been one for hospitals. I've got heart disease.
+[SEG0035] person_1 (DOCTOR): okay, I can see diabetes in your file as well i'll take a few measurements first
+[SEG0036] person_1 (DOCTOR): Almost there...
+[SEG0037] person_1 (DOCTOR): Okay: respiratory rate 16, temperature 36.8, pulse is 65 beats a minute, oxygen saturation is 97 percent, BP is 125 over 74. Stop me if I've got anything wrong. You've been feeling a bit dizzy after taking all your tablets, since Monday, and no chest pain or low mood.
+[SEG0038] person_2 (PATIENT): mm, um, that's right
+[SEG0039] person_1 (DOCTOR): An ECG is what I'd like next, for dizziness. I think blood tests makes sense here, for medication review. Bring every box and bottle you have at home to the next visit, even the herbal ones, and we'll sort them together. Call the clinic if you need us.
+[SEG0040] person_2 (PATIENT): No questions. Thank you.
+
+JSON:

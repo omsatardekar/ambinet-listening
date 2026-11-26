@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00123)
+[SEG0001] person_1 (PATIENT): Hi, you know, doctor. Long queue outside, but here I am.
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_3 (CAREGIVER): Doctor, I'm just here to help with the details.
+[SEG0004] person_2 (DOCTOR): Please do. Extra information is always welcome.
+[SEG0005] person_1 (PATIENT): Um, so... pain in my left wrist after a fall. That's why I came. It's the not knowing that gets to me. I wasn't sure whether to come in at all, to be honest.
+[SEG0006] person_2 (DOCTOR): What about swelling, have you noticed that?
+[SEG0007] person_1 (PATIENT): Yeah, I've had that since Friday. So, you know, about swelling, mild, really. It settles a little with ice.
+[SEG0008] person_2 (DOCTOR): Any sign of pain in the shoulder?
+[SEG0009] person_1 (PATIENT): No, you know, I haven't had any pain in the shoulder.
+[SEG0010] person_2 (DOCTOR): Okay, so. Have you noticed loss of consciousness, deformity or numbness?
+[SEG0011] person_1 (PATIENT): I mean, no, no loss of consciousness, deformity or numbness.
+[SEG0012] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0013] person_1 (PATIENT): Right, nothing on the skin, no.
+[SEG0014] person_2 (DOCTOR): Neurologically, anything strange?
+[SEG0015] person_1 (PATIENT): Um, no, that's all normal.
+[SEG0016] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0017] person_3 (CAREGIVER): He is on alendronate, 70 milligrams, once a week, I give it to him. He takes diclofenac, 50 milligrams, when needed.
+[SEG0018] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0019] person_1 (PATIENT): I don't drink at all. I share a flat with two friends. Mostly home-cooked food, rice and vegetables.
+[SEG0020] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0021] person_1 (PATIENT): My father had a stroke.
+[SEG0022] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0023] person_1 (PATIENT): I mean, I've had thin bones for nearly five years now. Oh, I've had arthritis in my knees for nearly five years now.
+[SEG0024] person_2 (DOCTOR): I see. Alright, thin bones, that matches what I have here. What about allergies, to medicines or foods or anything else? It helps to be thorough at this stage.
+[SEG0025] person_1 (PATIENT): Oh, no, nothing I'm aware of.
+[SEG0026] person_2 (DOCTOR): I'll take a few measurements first.
+[SEG0027] person_2 (DOCTOR): Almost there...
+[SEG0028] person_2 (DOCTOR): Okay: pulse 85, height 179 centimetres, respiratory rate 18, SpO2 99 percent on room air, weight 63 kilos, temperature 36.9, blood pressure 119 over 73.
+[SEG0029] person_2 (DOCTOR): I'd like to examine you now.
+[SEG0030] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0031] person_2 (DOCTOR): There's swelling and tenderness at the base of the thumb side of the wrist.
+[SEG0032] person_2 (DOCTOR): Let me press here.
+[SEG0033] person_2 (DOCTOR): Fingers have good colour and the pulses are fine.
+[SEG0034] person_2 (DOCTOR): Okay, you can sit up. Okay, so my impression is this: It fits best with a wrist sprain, but a small fracture is possible. I think an X-ray of the wrist makes sense here, for wrist injury.
+[SEG0035] person_1 (PATIENT): Okay, that's fine.
+[SEG0036] person_2 (DOCTOR): For this, paracetamol, 650 milligrams, three times a day, for five days. You take it by mouth. That's for wrist pain.
+[SEG0037] person_1 (PATIENT): Uh, fine, I'll start it.
+[SEG0038] person_2 (DOCTOR): I'd like you to wear a splint until the X-ray result is confirmed and keep the hand raised. I think the orthopaedic clinic should see you too. I'd like to see you again after the X-ray. Okay, I think we're finished. Is everything clear?
+[SEG0039] person_1 (PATIENT): No questions. Thank you.
+[SEG0040] person_2 (DOCTOR): Mind how you go.
+
+JSON:

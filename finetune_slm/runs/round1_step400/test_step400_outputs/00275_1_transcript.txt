@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00275)
+[SEG0001] person_1 (PATIENT): Sorry I'm a few minutes behind, doctor.
+[SEG0002] person_2 (DOCTOR): yes, come in, take a seat what can I do for you today?
+[SEG0003] person_3 (FAMILY_MEMBER): Hello, doctor, I came in with them, if that's okay.
+[SEG0004] person_2 (DOCTOR): That's fine, sit down. We'll go through it it together.
+[SEG0005] person_1 (PATIENT): it's a burning in the chest after meals, mostly
+[SEG0006] person_2 (DOCTOR): how bad is it, would you say?
+[SEG0007] person_1 (PATIENT): Severe, really oh, and a sour taste in the mouth that's been about the same, nearly five years as for sour taste in the mouth, I'd say a couple of times a week i did have a hoarse voice in the mornings at one point, but that's gone now
+[SEG0008] person_2 (DOCTOR): Have you had any coughing up blood, night sweats, shortness of breath or trouble swallowing?
+[SEG0009] person_1 (PATIENT): No, not any of them.
+[SEG0010] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0011] person_1 (PATIENT): Skin's normal.
+[SEG0012] person_2 (DOCTOR): Any surgery in your history?
+[SEG0013] person_1 (PATIENT): Yes, I had a hysterectomy, about twelve years ago.
+[SEG0014] person_2 (DOCTOR): Do you have any known allergies at all?
+[SEG0015] person_1 (PATIENT): None, as far as I'm aware.
+[SEG0016] person_2 (DOCTOR): what's your job?
+[SEG0017] person_1 (PATIENT): I teach at a primary school.
+[SEG0018] person_2 (DOCTOR): And what do you usually eat?
+[SEG0019] person_1 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0020] person_2 (DOCTOR): who's at home with you?
+[SEG0021] person_1 (PATIENT): It's just me and my wife at home now.
+[SEG0022] person_2 (DOCTOR): do you have any medical conditions, anything you've been treated for?
+[SEG0023] person_1 (PATIENT): Yes, asthma.
+[SEG0024] person_2 (DOCTOR): Right. Right, so asthma is already on your record. We'll keep that in mind today. Any medication at the moment, including things from the pharmacy?
+[SEG0025] person_3 (FAMILY_MEMBER): she is on Asthalin inhaler, when needed, I give it to her
+[SEG0026] person_2 (DOCTOR): Okay, can I take your vitals now?
+[SEG0027] person_2 (DOCTOR): Just relax your arm...
+[SEG0028] person_2 (DOCTOR): Okay: BP is 125 over 79, temperature 36.6, heart rate 75. And saturation 97 percent, respiratory rate 14.
+[SEG0029] person_1 (PATIENT): is that okay?
+[SEG0030] person_2 (DOCTOR): Let's look at it together in a minute.
+[SEG0031] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0032] person_2 (DOCTOR): I'll go gently.
+[SEG0033] person_2 (DOCTOR): Chest is clear and the throat looks a little red at the back.
+[SEG0034] person_2 (DOCTOR): that's fine, sit up
+[SEG0035] person_2 (DOCTOR): So, based on the history and the examination, I can't pin this down yet. We're looking at a cough driven by acid reflux or cough-variant asthma.
+[SEG0036] person_1 (PATIENT): um, is this going to go away?
+[SEG0037] person_2 (DOCTOR): It's reasonable to be concerned, but right now a cough driven by acid reflux is my leading thought, not anything worse.
+[SEG0038] person_2 (DOCTOR): I think a chest X-ray makes sense here, for chronic cough. Let's get breathing tests, for chronic cough. For this, pantoprazole, 40 milligrams, before breakfast, for four weeks. It's for reflux. Don't eat for two or three hours before lying down, and raise the head of the bed a little. Don't skip meals, and try to eat smaller portions more often through the day. Please don't wait if the symptoms get worse. That's when to be seen urgently
+[SEG0039] person_1 (PATIENT): okay, I understand
+[SEG0040] person_2 (DOCTOR): Please come and see me in a month. Okay, we're done for today. Take care.
+[SEG0041] person_1 (PATIENT): Um, thanks so much, doctor.
+
+JSON:

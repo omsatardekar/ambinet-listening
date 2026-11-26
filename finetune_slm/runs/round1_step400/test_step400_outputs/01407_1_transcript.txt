@@ -1,0 +1,49 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01407)
+[SEG0001] person_1 (PATIENT): Mm, hi, doctor, I hope I'm not disturbing you.
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What seems to be wrong?
+[SEG0003] person_1 (PATIENT): Yeah, it's sudden hearing loss in one ear. I don't know what's causing it.
+[SEG0004] person_2 (DOCTOR): since when exactly?
+[SEG0005] person_1 (PATIENT): Uh, I've had it for about a week.
+[SEG0006] person_2 (DOCTOR): Any other symptoms with it?
+[SEG0007] person_1 (PATIENT): When it starts I tend to get a blocked feeling as well. Uh, the blocked feeling? That's been for about a month.
+[SEG0008] person_2 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0009] person_1 (PATIENT): no allergies at all
+[SEG0010] person_2 (DOCTOR): Okay, a few questions about your lifestyle now.
+[SEG0011] person_1 (PATIENT): Not much, I mostly stay in these days. Lots of rice, lentils and some fruit. No, I share a house with my brother.
+[SEG0012] person_2 (DOCTOR): What conditions have you been treated for in the the past? Take your time, there's no rush.
+[SEG0013] person_1 (PATIENT): I have migraines, for two years i told my wife I'd come today. High cholesterol, for five years
+[SEG0014] person_2 (DOCTOR): Alright, high cholesterol, that matches what I have here. Which medicines do you take at the moment?
+[SEG0015] person_1 (PATIENT): Sumatriptan. I take it 50 milligrams, when needed for my migraines. Uh, I'm on atorvastatin, 20 milligrams, at night.
+[SEG0016] person_2 (DOCTOR): Mm, okay. Any previous surgeries?
+[SEG0017] person_1 (PATIENT): No, you know, I've never been operated on.
+[SEG0018] person_2 (DOCTOR): Right, any ear pain, facial weakness or dizziness at all?
+[SEG0019] person_1 (PATIENT): Nope, nothing like that.
+[SEG0020] person_2 (DOCTOR): How about discharge?
+[SEG0021] person_1 (PATIENT): No, I haven't had any discharge.
+[SEG0022] person_2 (DOCTOR): right, how are your bowels, any trouble?
+[SEG0023] person_1 (PATIENT): Nothing unusual, no.
+[SEG0024] person_3 (NURSE): Doctor, I've got the readings for you. Pulse is 83 beats a minute, saturation 98 percent, height 155 centimetres. Respiratory rate 15, pressure 126 over 78, weight 79 kilos, temperature 36.8.
+[SEG0025] person_2 (DOCTOR): okay, noted
+[SEG0026] person_2 (DOCTOR): May I examine you now?
+[SEG0027] person_1 (PATIENT): Right.
+[SEG0028] person_2 (DOCTOR): Take a deep breath for me.
+[SEG0029] person_2 (DOCTOR): The ear drum looks normal and the tuning fork is heard louder in the other ear.
+[SEG0030] person_2 (DOCTOR): so, good, you can sit up again having listened and examined, this is probably sudden hearing loss needing urgent treatment i can't rule out a wax or fluid blockage yet
+[SEG0031] person_1 (PATIENT): Is this permanent?
+[SEG0032] person_2 (DOCTOR): I can't promise yet, but most people with sudden hearing loss needing urgent treatment do well once it's treated properly.
+[SEG0033] person_2 (DOCTOR): I'd like to arrange an MRI scan for sudden hearing loss. So, anything else on your mind before you go?
+[SEG0034] person_1 (PATIENT): Great, thank you for your help.
+
+JSON:

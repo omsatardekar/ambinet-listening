@@ -1,0 +1,49 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00931)
+[SEG0001] person_3 (CAREGIVER): Doctor, I'm Lena's aunt, I look after her while her mum is working abroad. She's got swollen glands in her neck and she's exhausted, and it's been weeks.
+[SEG0002] person_2 (DOCTOR): Thank you for bringing her. Lena, how are you feeling? ~
+[SEG0003] person_1 (PATIENT): Tired. All the time. I can't concentrate at school.
+[SEG0004] person_2 (DOCTOR): Where are the swollen glands?
+[SEG0005] person_1 (PATIENT): Both sides of my neck. They're sore when I touch them.
+[SEG0006] person_2 (DOCTOR): How long have you had them?
+[SEG0007] person_1 (PATIENT): Three weeks, I think.
+[SEG0008] person_3 (CAREGIVER): Longer, I think. Closer to four weeks, since her birthday.
+[SEG0009] person_2 (DOCTOR): I'll note three to four weeks. Have you had a sore throat, or a fever?
+[SEG0010] person_1 (PATIENT): The sore throat was last week, but it's gone. No fever.
+[SEG0011] person_2 (DOCTOR): Any rash, night sweats or weight loss?
+[SEG0012] person_1 (PATIENT): No rash. No sweats. I don't think I've lost weight.
+[SEG0013] person_2 (DOCTOR): What have you been taking?
+[SEG0014] person_1 (PATIENT): Paracetamol, 500 mg, when I get a headache. And the antibiotic, penicillin, I had it for a sore throat.
+[SEG0015] person_2 (DOCTOR): Did you finish the penicillin?
+[SEG0016] person_1 (PATIENT): I think so. Mostly.
+[SEG0017] person_3 (CAREGIVER): I'm not sure she did. I found a few tablets in her bag.
+[SEG0018] person_2 (DOCTOR): Thank you for being honest. Do you have any allergies, Lena?
+[SEG0019] person_3 (CAREGIVER): She had a rash on amoxicillin when she was a toddler, her mum told me. We've avoided it since.
+[SEG0020] person_2 (DOCTOR): Noted. Any other conditions?
+[SEG0021] person_1 (PATIENT): Asthma. And I get eczema sometimes.
+[SEG0022] person_3 (CAREGIVER): She had her tonsils out at six.
+[SEG0023] person_2 (DOCTOR): Thank you. Let me check your pulse and temperature. ~
+[SEG0024] person_1 (PATIENT): Okay.
+[SEG0025] person_2 (DOCTOR): Pulse 82, temperature 36.8.
+[SEG0026] person_3 (CAREGIVER): Is that all right? ~
+[SEG0027] person_2 (DOCTOR): Normal. I'd like to feel the glands in your neck, under the arms, and your tummy. ~
+[SEG0028] person_1 (PATIENT): It tickles.
+[SEG0029] person_2 (DOCTOR): I'm going to arrange a blood test to look at glandular fever and a full blood count.
+[SEG0030] person_1 (PATIENT): Needles? ~
+[SEG0031] person_2 (DOCTOR): Just a small one. If it is glandular fever, rest and fluids are the main treatment.
+[SEG0032] person_3 (CAREGIVER): How long will she be off school? ~
+[SEG0033] person_2 (DOCTOR): Let's see the result first. And I'd like to see her again in a week to go through it.
+[SEG0034] person_3 (CAREGIVER): Thank you. ~
+
+JSON:

@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00355)
+[SEG0001] person_1 (DOCTOR): Hello there. Please, sit.
+[SEG0002] person_2 (PATIENT): Hi. Thanks.
+[SEG0003] person_3 (FAMILY_MEMBER): doctor, I'm just here to help with the details
+[SEG0004] person_1 (DOCTOR): That's fine, sit down. We'll go through it it together. Right, what's the trouble?
+[SEG0005] person_3 (FAMILY_MEMBER): Doctor, it's a dry cough and fever. That's what we're worried about.
+[SEG0006] person_1 (DOCTOR): When did you first notice it?
+[SEG0007] person_2 (PATIENT): It's been like this since last weekend.
+[SEG0008] person_1 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0009] person_2 (PATIENT): Uh, I'd say severe. Only paracetamol, and it's not much. It's all the time. My family kept telling me to get it checked.
+[SEG0010] person_1 (DOCTOR): Okay, does it come along with anything else?
+[SEG0011] person_2 (PATIENT): It usually comes with body aches. I mean, you know, the body aches? That's been since Monday.
+[SEG0012] person_1 (DOCTOR): How bad is it, would you say?
+[SEG0013] person_2 (PATIENT): I'd say mild. And And there's tiredness as well, about four days now
+[SEG0014] person_1 (DOCTOR): Any shortness of breath or rash?
+[SEG0015] person_2 (PATIENT): No, um, nothing there.
+[SEG0016] person_1 (DOCTOR): Sure. Let me check a few things. Any vomiting or diarrhoea?
+[SEG0017] person_2 (PATIENT): No, none of that at all.
+[SEG0018] person_1 (DOCTOR): anything different when you pass water?
+[SEG0019] person_2 (PATIENT): Nothing there, no.
+[SEG0020] person_1 (DOCTOR): do your parents or siblings have any long-term illnesses?
+[SEG0021] person_2 (PATIENT): My grandmother had breast cancer.
+[SEG0022] person_1 (DOCTOR): Right, a few questions about your lifestyle now.
+[SEG0023] person_2 (PATIENT): I play badminton on Sundays. I share a flat with two friends. I'm a software engineer, so I'm at a screen all day
+[SEG0024] person_1 (DOCTOR): So, any allergies I should know about?
+[SEG0025] person_2 (PATIENT): I'm allergic to eggs, I get a rash.
+[SEG0026] person_1 (DOCTOR): Are you on any regular medication?
+[SEG0027] person_2 (PATIENT): No, nothing regular.
+[SEG0028] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0029] person_2 (PATIENT): okay, so no, nothing like that
+[SEG0030] person_1 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0031] person_2 (PATIENT): No, nothing, I've generally been healthy.
+[SEG0032] person_1 (DOCTOR): First the numbers, if you don't mind.
+[SEG0033] person_1 (DOCTOR): One second...
+[SEG0034] person_1 (DOCTOR): Okay: respiratory rate 19, oxygen saturation is 98 percent, pressure 120 over 70, temp 39.3 degrees, pulse 89.
+[SEG0035] person_2 (PATIENT): Is that that okay?
+[SEG0036] person_1 (DOCTOR): Don't worry, I'll go through it in a moment.
+[SEG0037] person_1 (DOCTOR): okay, a quick examination now
+[SEG0038] person_2 (PATIENT): sure
+[SEG0039] person_1 (DOCTOR): Let me just check something.
+[SEG0040] person_1 (DOCTOR): Throat is mildly red.
+[SEG0041] person_1 (DOCTOR): Thanks, please take a seat again. Okay, thinking it through, it points towards a viral respiratory illness, possibly COVID-19. Another possibility is a common cold. I think a COVID test makes sense here, for viral respiratory illness. I think a pulse oximeter reading makes sense here, for respiratory symptoms. For this, paracetamol, 500 milligrams, every six hours if needed, for three days. You take it by mouth. That's for fever and aches.
+[SEG0042] person_2 (PATIENT): Alright, I'll collect it today.
+[SEG0043] person_1 (DOCTOR): Stay home until you're fever-free and wear a mask around others for a few days. A short walk every day, even twenty minutes, will help more than you'd think. Come back or go to emergency straight away if you become short of breath. We'll catch up if it's not better in five days. Okay, we're done for today. Take care.
+[SEG0044] person_2 (PATIENT): I appreciate it, doctor
+[SEG0045] person_1 (DOCTOR): Okay, take care.
+
+JSON:

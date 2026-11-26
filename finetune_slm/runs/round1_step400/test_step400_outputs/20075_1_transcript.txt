@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20075)
+[SEG0001] person_1 (PATIENT): hello doctor, sorry, I took a wrong turn on the way here
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What seems to be wrong?
+[SEG0003] person_1 (PATIENT): It's numbness in my feet. I thought I'd wait, but it hasn't gone.
+[SEG0004] person_2 (DOCTOR): Have you noticed anything else alongside it?
+[SEG0005] person_1 (PATIENT): When it starts I tend to get redness around the sore as well. The redness around the sore? That's been for ten days.
+[SEG0006] person_2 (DOCTOR): Let me check a few things. Any pain at rest in the leg, vomiting, confusion or calf pain?
+[SEG0007] person_1 (PATIENT): Let me think, none of those, no.
+[SEG0008] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0009] person_1 (PATIENT): Nothing there, no.
+[SEG0010] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0011] person_1 (PATIENT): sorry, what was I saying, no, nothing with my heart
+[SEG0012] person_2 (DOCTOR): Alright, tell me your medicines, please.
+[SEG0013] person_1 (PATIENT): Metformin. I take it twice a day for my sugar.
+[SEG0014] person_2 (DOCTOR): And what strength is that?
+[SEG0015] person_1 (PATIENT): 500 milligrams.
+[SEG0016] person_2 (DOCTOR): Have you got any known allergies?
+[SEG0017] person_1 (PATIENT): Let me think, no, I've never reacted to anything.
+[SEG0018] person_2 (DOCTOR): What about alcohol?
+[SEG0019] person_1 (PATIENT): I used to drink heavily but I stopped four years ago.
+[SEG0020] person_2 (DOCTOR): do you smoke?
+[SEG0021] person_1 (PATIENT): I gave up cigarettes last spring.
+[SEG0022] person_2 (DOCTOR): How active are you?
+[SEG0023] person_1 (PATIENT): I hardly move around during the day
+[SEG0024] person_2 (DOCTOR): What do you do during the day?
+[SEG0025] person_1 (PATIENT): I look after my grandchildren most days.
+[SEG0026] person_2 (DOCTOR): are you on your own at home?
+[SEG0027] person_1 (PATIENT): I live with my elderly mother
+[SEG0028] person_2 (DOCTOR): Any surgery in the past?
+[SEG0029] person_1 (PATIENT): Mm, I had my septum straightened in my thirties. Work has been very busy so I kept ignoring it.
+[SEG0030] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0031] person_1 (PATIENT): Well, I've had diabetes, yes. I just want to get back to normal, really. I wasn't sure whether to come in at all, to be honest.
+[SEG0032] person_2 (DOCTOR): I follow. Right, so diabetes is already on your record. We'll keep that in mind today. Are there any illnesses in your family?
+[SEG0033] person_1 (PATIENT): Let me think, my father has Parkinson's disease.
+[SEG0034] person_3 (NURSE): okay, so the vitals from earlier. Pulse is 94 beats a minute, height 152 centimetres. Pressure 119 over 70, weight 66 kilos, BMI works out to 28.6, respiratory rate 16, temp 39.2 degrees
+[SEG0035] person_2 (DOCTOR): Alright, good, thank you.
+[SEG0036] person_2 (DOCTOR): Let's move on to the examination.
+[SEG0037] person_2 (DOCTOR): Raise your arm for me.
+[SEG0038] person_2 (DOCTOR): There is a two-centimetre ulcer on the ball of the right foot with redness around it.
+[SEG0039] person_2 (DOCTOR): Stay as you are for a moment.
+[SEG0040] person_2 (DOCTOR): The pulses at the ankle are weak but I can feel them.
+[SEG0041] person_1 (PATIENT): Yes, you know, that's fine.
+[SEG0042] person_2 (DOCTOR): Good, you can sit up again. Putting it all together, I'd lean towards an infected diabetic foot ulcer. Poor circulation to the foot is still possible.
+[SEG0043] person_2 (DOCTOR): I'm going to order a swab from the ulcer, for infected ulcer. I'll request blood tests, it'll help with infection. What I'm giving you is amoxicillin/clavulanic acid, 625 milligrams, three times a day, for seven days. That's for foot infection. It's a commonly used medicine and most people tolerate it well.
+[SEG0044] person_1 (PATIENT): So, is that safe with my other medicines?
+[SEG0045] person_2 (DOCTOR): Keep the weight off that foot and keep the dressing dry. I'd like you to see the foot clinic as well, and I'll write the referral. Come back in three days. Is there anything you'd like me to go over again?
+[SEG0046] person_1 (PATIENT): okay, so thank you, that's helpful
+[SEG0047] person_2 (DOCTOR): See you soon.
+
+JSON:

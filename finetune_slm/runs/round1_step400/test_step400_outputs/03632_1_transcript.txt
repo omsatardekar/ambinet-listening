@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03632)
+[SEG0001] person_1 (DOCTOR): Afternoon, thanks for coming in.
+[SEG0002] person_2 (PATIENT): Ah, good morning, doctor, thank you.
+[SEG0003] person_1 (DOCTOR): Did the receptionist sort you out quickly?
+[SEG0004] person_2 (PATIENT): Yes, she was lovely about it.
+[SEG0005] person_1 (DOCTOR): What's the main thing today?
+[SEG0006] person_2 (PATIENT): so, mainly a bump on the head yesterday there's a couple of other things, but that's the main one
+[SEG0007] person_1 (DOCTOR): when was the first time you noticed it?
+[SEG0008] person_2 (PATIENT): about... well, about a month
+[SEG0009] person_1 (DOCTOR): Let me check a few things. Any seizure, drowsiness or vomiting?
+[SEG0010] person_2 (PATIENT): No seizure, drowsiness or vomiting, none of it.
+[SEG0011] person_1 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0012] person_2 (PATIENT): My heart's been fine, as far as I know.
+[SEG0013] person_1 (DOCTOR): okay, which medicines do you take at the moment?
+[SEG0014] person_2 (PATIENT): Thyroxine, every morning.
+[SEG0015] person_1 (DOCTOR): Do you know the dose?
+[SEG0016] person_2 (PATIENT): 75 micrograms. It's a blood thinner, 5 milligrams, twice a day.
+[SEG0017] person_1 (DOCTOR): What about your medical history?
+[SEG0018] person_2 (PATIENT): Yes, an irregular heartbeat.
+[SEG0019] person_1 (DOCTOR): Mm, okay.
+[SEG0020] person_2 (PATIENT): I've had an underactive thyroid, yes.
+[SEG0021] person_1 (DOCTOR): hm, okay. Yes, an underactive thyroid is known to us, good to have that clear. Is there someone at home?
+[SEG0022] person_2 (PATIENT): My husband and I live above the shop.
+[SEG0023] person_1 (DOCTOR): Anything you do to stay fit?
+[SEG0024] person_2 (PATIENT): I do a yoga class on Thursdays.
+[SEG0025] person_1 (DOCTOR): Does your family have any medical conditions?
+[SEG0026] person_2 (PATIENT): my uncle has high cholesterol
+[SEG0027] person_1 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0028] person_1 (DOCTOR): nearly done with the readings..
+[SEG0029] person_1 (DOCTOR): Okay: pressure 118 over 78, heart rate 86, weight 89 kilos, SpO2 99 percent on room air, BMI works out to 29.1, height 175 centimetres.
+[SEG0030] person_2 (PATIENT): Is that alright, doctor?
+[SEG0031] person_1 (DOCTOR): We'll go over that shortly.
+[SEG0032] person_1 (DOCTOR): Right, let's have a proper look at you.
+[SEG0033] person_1 (DOCTOR): take a deep breath for me
+[SEG0034] person_1 (DOCTOR): You are alert and orientated with a small bruise on the forehead and normal limb strength.
+[SEG0035] person_1 (DOCTOR): So, that's all I needed to check.
+[SEG0036] person_1 (DOCTOR): Having listened and examined, it fits best with a minor head injury but on a blood thinner, which needs a scan. I want a CT scan of the head done, that's for head injury on anticoagulant. Even though you feel fine, a blood thinner means we scan, delayed bleeding can happen. Let's plan a check today.
+[SEG0037] person_2 (PATIENT): right
+[SEG0038] person_1 (DOCTOR): That's everything on my side. Anything you're unsure about?
+[SEG0039] person_2 (PATIENT): Okay, that makes sense. Thanks for explaining.
+[SEG0040] person_1 (DOCTOR): Goodbye for now.
+
+JSON:

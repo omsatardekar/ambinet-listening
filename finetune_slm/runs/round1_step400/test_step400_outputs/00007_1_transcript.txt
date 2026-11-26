@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00007)
+[SEG0001] person_1 (PATIENT): Uh, hello? Doctor? They told me to come straight in.
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_1 (PATIENT): Right, I've been dealing with cramping pain in the lower tummy.
+[SEG0004] person_2 (DOCTOR): When did it begin?
+[SEG0005] person_1 (PATIENT): Probably three weeks. Yeah.
+[SEG0006] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): Yeah, pretty severe, if I'm being honest. Certain foods and stress definitely sets it off.
+[SEG0008] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0009] person_1 (PATIENT): It usually comes with a feeling of not emptying fully.
+[SEG0010] person_2 (DOCTOR): How much is it bothering you?
+[SEG0011] person_1 (PATIENT): It's moderate, honestly.
+[SEG0012] person_2 (DOCTOR): Mm.
+[SEG0013] person_1 (PATIENT): As for passing a lot of wind, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0014] person_2 (DOCTOR): Have you had cramping pain in the lower tummy before, or is this the first time?
+[SEG0015] person_1 (PATIENT): A bit, a couple of years ago. It settled by itself back then.
+[SEG0016] person_2 (DOCTOR): Can I take your vitals now?
+[SEG0017] person_2 (DOCTOR): Rest your hand here...
+[SEG0018] person_2 (DOCTOR): Okay: pulse 70, saturation 97 percent, temperature is 37.0 degrees, respiratory rate 14, pressure 127 over 77.
+[SEG0019] person_1 (PATIENT): I mean, is that alright, doctor?
+[SEG0020] person_2 (DOCTOR): I'll explain what that means shortly.
+[SEG0021] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0022] person_2 (DOCTOR): Let me look at this properly.
+[SEG0023] person_2 (DOCTOR): Soft tummy, a bit tender on the left lower side, no masses.
+[SEG0024] person_2 (DOCTOR): Okay, you can sit up. Okay, have you had any blood in the stool, weight loss, family history of bowel cancer or night-time diarrhoea?
+[SEG0025] person_1 (PATIENT): No. None of those.
+[SEG0026] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0027] person_1 (PATIENT): No, my breathing's been fine.
+[SEG0028] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0029] person_1 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0030] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0031] person_1 (PATIENT): It's pantoprazole, 40 milligrams, before breakfast.
+[SEG0032] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0033] person_1 (PATIENT): I gave up drinking about three years ago. I smoke, yes, around five a day. I share a flat with two friends. I eat out quite a lot, to be honest. Barely, I'm mostly sedentary these days.
+[SEG0034] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0035] person_1 (PATIENT): I've had acid reflux, yes.
+[SEG0036] person_2 (DOCTOR): Mm-hm.
+[SEG0037] person_1 (PATIENT): I've got anxiety.
+[SEG0038] person_2 (DOCTOR): Hm, okay. Okay, I can see anxiety in your file as well.
+[SEG0039] person_2 (DOCTOR): Have you ever been under the knife?
+[SEG0040] person_1 (PATIENT): Just a C-section, about ten years ago.
+[SEG0041] person_2 (DOCTOR): So where does that leave us? It fits best with irritable bowel syndrome as a working diagnosis. I can't rule out coeliac disease yet.
+[SEG0042] person_2 (DOCTOR): Any scans or blood work done already?
+[SEG0043] person_1 (PATIENT): I had a coeliac test done at another clinic a few months ago. I don't have the report with me.
+[SEG0044] person_2 (DOCTOR): I'd like to arrange a stool calprotectin for bowel symptoms.
+[SEG0045] person_3 (CLINICAL_STAFF): We have a slot Friday at 10 am, if that works.
+[SEG0046] person_2 (DOCTOR): We should do blood tests for bowel symptoms. It's a routine test and it'll give us a much clearer picture.
+[SEG0047] person_1 (PATIENT): Okay, that's fine.
+[SEG0048] person_2 (DOCTOR): The treatment will be mebeverine, 135 milligrams, three times a day, for four weeks. You take it by mouth. That's for abdominal cramps. Note down what you ate before the bad days, it often reveals a pattern. That's it on my side. Anything unclear?
+[SEG0049] person_1 (PATIENT): Thanks so much, doctor.
+[SEG0050] person_2 (DOCTOR): All the best.
+
+JSON:

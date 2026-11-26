@@ -1,0 +1,74 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00317)
+[SEG0001] person_1 (PATIENT): Hello? Doctor? They told me to come straight in.
+[SEG0002] person_2 (DOCTOR): Yes do sit. Tell me what's been happening.
+[SEG0003] person_3 (CAREGIVER): yeah, good morning, doctor i came along to help out
+[SEG0004] person_2 (DOCTOR): That's fine, sit down. We'll go through it together.
+[SEG0005] person_3 (CAREGIVER): she's been feeling lightheaded doctor
+[SEG0006] person_4 (NURSE): here are the numbers, doctor. Temperature is 36.7 degrees, SpO2 99 percent on room air, heart rate 96. Respiratory rate 18, pressure 96 over 66.
+[SEG0007] person_2 (DOCTOR): okay, noted so, roughly when did it start?
+[SEG0008] person_1 (PATIENT): okay, so I'd say a week, maybe
+[SEG0009] person_3 (CAREGIVER): I, I think it's been nearer two weeks, actually.
+[SEG0010] person_2 (DOCTOR): Okay, so roughly one to two weeks. Is that right?
+[SEG0011] person_1 (PATIENT): That sounds about right.
+[SEG0012] person_2 (DOCTOR): how intense does it get?
+[SEG0013] person_1 (PATIENT): Mostly moderate.
+[SEG0014] person_2 (DOCTOR): Is there anything that takes the edge off?
+[SEG0015] person_1 (PATIENT): Sitting down helps a a bit.
+[SEG0016] person_2 (DOCTOR): Does it happen all the time or in spells?
+[SEG0017] person_1 (PATIENT): it's a couple of times a week
+[SEG0018] person_2 (DOCTOR): Is there anything that triggers it?
+[SEG0019] person_1 (PATIENT): I I notice it more with standing up and hot weather.
+[SEG0020] person_2 (DOCTOR): What about nearly passing out, have you noticed that?
+[SEG0021] person_1 (PATIENT): Mm, you know, yes.
+[SEG0022] person_2 (DOCTOR): alright have you had blurred vision for a few seconds?
+[SEG0023] person_1 (PATIENT): Mm yes. Uh as for blurred vision for a few seconds it feels severe to me.
+[SEG0024] person_2 (DOCTOR): Have you been feeling lightheaded at any time before this?
+[SEG0025] person_1 (PATIENT): I mean, uh, a bit, about six months ago. It settled by itself back then
+[SEG0026] person_2 (DOCTOR): did you get palpitations, weakness or slurred speech?
+[SEG0027] person_1 (PATIENT): no, uh, none of that at all
+[SEG0028] person_2 (DOCTOR): Did you get vomiting, fainting completely or chest pain?
+[SEG0029] person_1 (PATIENT): no, none of that that at all
+[SEG0030] person_2 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0031] person_1 (PATIENT): Nothing unusual, no.
+[SEG0032] person_2 (DOCTOR): so, has your heart given you any trouble?
+[SEG0033] person_1 (PATIENT): nothing like that that
+[SEG0034] person_2 (DOCTOR): let's talk a little about your daily life and habits
+[SEG0035] person_1 (PATIENT): A beer or two most evenings, to be honest. I've never smoked. I'm a software engineer, so I'm at a screen all day. I live with my family, my husband and two kids
+[SEG0036] person_2 (DOCTOR): before I prescribe anything any allergies?
+[SEG0037] person_1 (PATIENT): I had a reaction to aspirin when I was younger wheezing and I've avoided it since.
+[SEG0038] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0039] person_1 (PATIENT): uh, I take metformin, 500 milligrams, maybe, twice a day for my sugar
+[SEG0040] person_2 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0041] person_1 (PATIENT): Right, no, it's at home.
+[SEG0042] person_2 (DOCTOR): have you got any chronic problems?
+[SEG0043] person_1 (PATIENT): So, I've had diabetes for about ten years now.
+[SEG0044] person_2 (DOCTOR): yes?
+[SEG0045] person_2 (DOCTOR): right, so diabetes is already on your record we'll keep that in mind today
+[SEG0046] person_2 (DOCTOR): Right, let me check a a few things physically.
+[SEG0047] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0048] person_2 (DOCTOR): Heart rhythm is regular.
+[SEG0049] person_2 (DOCTOR): tell me if anything hurts
+[SEG0050] person_2 (DOCTOR): Your blood pressure drops when you stand, I'll note that.
+[SEG0051] person_2 (DOCTOR): that's all I need, thank you
+[SEG0052] person_2 (DOCTOR): Okay, so so my impression is this: This is probably postural low blood pressure. I'd also keep a heart rhythm problem in mind.
+[SEG0053] person_1 (PATIENT): do you think it's serious?
+[SEG0054] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like postural low blood pressure, but I'd like to confirm. We should do an ECG for dizziness. Let's get a blood sugar test, for dizziness. I'd rather check than guess, and this is the quickest way to know more. Get up in stages, sit on the edge of the bed for a minute first, and keep drinking water.
+[SEG0055] person_2 (DOCTOR): And And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0056] person_1 (PATIENT): Right, um, will do.
+[SEG0057] person_2 (DOCTOR): That's it on my side. Anything unclear?
+[SEG0058] person_1 (PATIENT): Hmm, no questions. Thank you.
+[SEG0059] person_2 (DOCTOR): Goodbye.
+
+JSON:

@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01860)
+[SEG0001] person_1 (PATIENT): Oh, hello, doctor. May I come in?
+[SEG0002] person_2 (DOCTOR): of course, leave it there how can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): hmm, uh, thank you for fitting us in, doctor
+[SEG0004] person_1 (PATIENT): Yeah, it's loose stools with blood. I don't know what's causing it.
+[SEG0005] person_2 (DOCTOR): how many days or weeks has it been?
+[SEG0006] person_1 (PATIENT): sorry what was I saying for about two weeks I'd say
+[SEG0007] person_2 (DOCTOR): How troublesome is it day to day?
+[SEG0008] person_1 (PATIENT): I'd call it mild
+[SEG0009] person_2 (DOCTOR): Okay, any tiredness as well?
+[SEG0010] person_1 (PATIENT): yeah. About a month, uh, I'd say there was cramping tummy pain, yes, but that went away
+[SEG0011] person_2 (DOCTOR): Are there any allergies I should be aware of? Take your time, there's no rush.
+[SEG0012] person_1 (PATIENT): ah, no, not that I know of
+[SEG0013] person_2 (DOCTOR): any regular medication at all?
+[SEG0014] person_1 (PATIENT): No, none.
+[SEG0015] person_2 (DOCTOR): Do you do any exercise?
+[SEG0016] person_1 (PATIENT): I swim twice a week
+[SEG0017] person_2 (DOCTOR): are you in work at the the moment?
+[SEG0018] person_1 (PATIENT): Yes, I work in a bakery, early starts
+[SEG0019] person_2 (DOCTOR): has anyone ever diagnosed you with something? Take your time, there's no rush
+[SEG0020] person_1 (PATIENT): Okay, so so I have asthma, for about ten years. My sister suggested writing things down, but I forgot.
+[SEG0021] person_2 (DOCTOR): right, so asthma is already on your record we'll keep that in mind today
+[SEG0022] person_2 (DOCTOR): Are there any illnesses in your family?
+[SEG0023] person_1 (PATIENT): my grandmother had dementia
+[SEG0024] person_2 (DOCTOR): right, have you had any weight loss, vomiting or fever?
+[SEG0025] person_1 (PATIENT): No weight loss, vomiting or fever, none of it.
+[SEG0026] person_2 (DOCTOR): Did you notice any joint pain?
+[SEG0027] person_1 (PATIENT): no. No joint pain
+[SEG0028] person_2 (DOCTOR): right, how's your breathing otherwise?
+[SEG0029] person_1 (PATIENT): no, you know, my breathing's been fine
+[SEG0030] person_2 (DOCTOR): let me get the readings out of the way
+[SEG0031] person_2 (DOCTOR): Keep your arm relaxed for me...
+[SEG0032] person_2 (DOCTOR): Okay: oxygen saturation is 98 percent blood pressure 115 over 78. And pulse is 78 beats a minute temp 36.6 degrees respiratory rate 14.
+[SEG0033] person_1 (PATIENT): Is that normal?
+[SEG0034] person_2 (DOCTOR): we'll go over that shortly
+[SEG0035] person_2 (DOCTOR): I'll need to examine you for this it won't take long
+[SEG0036] person_2 (DOCTOR): look straight ahead
+[SEG0037] person_2 (DOCTOR): There is tenderness in the lower right tummy and no guarding.
+[SEG0038] person_2 (DOCTOR): You can relax now. Taking everything into account, my working impression is a flare of inflammatory bowel disease.
+[SEG0039] person_1 (PATIENT): Erm uh I'm scared it's something bad. Is it?
+[SEG0040] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a flare of inflammatory bowel disease, and we'll know more once the the blood tests is back.
+[SEG0041] person_2 (DOCTOR): Blood tests is what I'd like next, for flare. A stool test is what I'd like next, for bloody diarrhoea i'm prescribing prednisolone, 40 milligrams, once a day, one week then reduce that's for inflammatory bowel flare keep up your fluids and call the IBD nurse if you get a fever avoid taking any extra painkillers on top of what I'm prescribing without checking with us i think the IBD nurse should see you too
+[SEG0042] person_2 (DOCTOR): if the symptoms get worse, or you feel really unwell, please come to to the emergency department. I'd like you back in two weeks. Is there anything you'd like me to go over again?
+[SEG0043] person_1 (PATIENT): right, um, I'll do that. Thank you, doctor
+
+JSON:

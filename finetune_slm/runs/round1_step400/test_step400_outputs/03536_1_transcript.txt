@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03536)
+[SEG0001] person_1 (DOCTOR): Hello, take a seat, I'll be with you in a second.
+[SEG0002] person_2 (PATIENT): morning, doctor, sorry about the rush
+[SEG0003] person_1 (DOCTOR): so what can I do for you?
+[SEG0004] person_2 (PATIENT): mainly I've been feeling muddled and unsteady. That's why I came. I kept putting it off, which I know isn't sensible
+[SEG0005] person_1 (DOCTOR): can you tell me when it first started?
+[SEG0006] person_2 (PATIENT): For about a week, I'd say.
+[SEG0007] person_1 (DOCTOR): Sure. What about a headache, have you noticed that?
+[SEG0008] person_2 (PATIENT): yeah, I've had that since this morning
+[SEG0009] person_1 (DOCTOR): How often do you get it?
+[SEG0010] person_2 (PATIENT): It happens on and off.
+[SEG0011] person_1 (DOCTOR): let me check a few things. Any fall, weakness on one side or seizure?
+[SEG0012] person_2 (PATIENT): Well, no fall, weakness on one side or seizure, none of it.
+[SEG0013] person_1 (DOCTOR): Nothing like fever?
+[SEG0014] person_2 (PATIENT): No. No fever.
+[SEG0015] person_1 (DOCTOR): Is your digestion otherwise okay?
+[SEG0016] person_2 (PATIENT): nothing unusual, no
+[SEG0017] person_1 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0018] person_2 (PATIENT): No, no conditions.
+[SEG0019] person_1 (DOCTOR): a few questions about your lifestyle now
+[SEG0020] person_2 (PATIENT): No, I share a house with my brother. I work in accounts at a hospital. I do a yoga class on Thursdays.
+[SEG0021] person_1 (DOCTOR): Is there any regular medication you use?
+[SEG0022] person_2 (PATIENT): Oh, no, I don't take any tablets.
+[SEG0023] person_1 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0024] person_2 (PATIENT): I've never had an allergy.
+[SEG0025] person_1 (DOCTOR): Let me get the readings out of the the way.
+[SEG0026] person_1 (DOCTOR): Keep your arm relaxed for me...
+[SEG0027] person_1 (DOCTOR): Okay: temperature 36.6, BP is 120 over 82, saturation 97 percent, pulse is 64 beats a minute.
+[SEG0028] person_1 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0029] person_1 (DOCTOR): nearly finished here
+[SEG0030] person_1 (DOCTOR): You are a bit slow and unsteady, but there is no weakness and your blood pressure is fine.
+[SEG0031] person_2 (PATIENT): Of course.
+[SEG0032] person_1 (DOCTOR): Okay, that's enough for me. So, based on the history and the examination, I think we're dealing with a low salt level, possibly from the new antidepressant at this stage.
+[SEG0033] person_2 (PATIENT): Is this serious, doctor?
+[SEG0034] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a low salt level, possibly from the new antidepressant. We will stop the new tablet and not drink excess water until we have the result.
+[SEG0035] person_1 (DOCTOR): Right, right. That's all from me. Any questions?
+[SEG0036] person_2 (PATIENT): No, that's all. Thanks a lot.
+
+JSON:

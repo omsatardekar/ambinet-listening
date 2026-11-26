@@ -1,0 +1,86 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00106)
+[SEG0001] person_1 (PATIENT): Hi there, is it alright if I come in now?
+[SEG0002] person_2 (DOCTOR): So, that's alright, take a seat. Tell me why you've come.
+[SEG0003] person_3 (CAREGIVER): Doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_2 (DOCTOR): Good, that'll be useful. Pull up a chair.
+[SEG0005] person_1 (PATIENT): So, mainly a very painful, swollen big toe. There's a couple of other things, but that's the main one.
+[SEG0006] person_2 (DOCTOR): When did it begin? I ask because it helps me narrow things down.
+[SEG0007] person_1 (PATIENT): I mean, it's been two weeks now.
+[SEG0008] person_2 (DOCTOR): How would you describe it, mild, moderate, severe?
+[SEG0009] person_1 (PATIENT): Well, it's... hard to say, it's kind of... I don't know—
+[SEG0010] person_2 (DOCTOR): Take your time. Mild, moderate, or severe, if you had to pick?
+[SEG0011] person_1 (PATIENT): Severe, really.
+[SEG0012] person_2 (DOCTOR): What's the pattern, is it there all day?
+[SEG0013] person_1 (PATIENT): It's, um... not exactly... well, hard to explain, I mean—
+[SEG0014] person_2 (DOCTOR): Let me put it another way: how many times in a typical day or week?
+[SEG0015] person_1 (PATIENT): It's on and off.
+[SEG0016] person_1 (PATIENT): Right, and the other thing I wanted to mention is that I can't really—
+[SEG0017] person_3 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0018] person_1 (PATIENT): I was getting to that!
+[SEG0019] person_2 (DOCTOR): Have you had a low fever?
+[SEG0020] person_1 (PATIENT): Yeah, um, that too.
+[SEG0021] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0022] person_1 (PATIENT): Maybe a three out of ten on a bad day. It comes and goes.
+[SEG0023] person_2 (DOCTOR): Any recent illness or trauma to the toe?
+[SEG0024] person_1 (PATIENT): Right, no, no recent illness, no trauma to the toe. I did have warmth in the toe at one point, but that went away on its own.
+[SEG0025] person_2 (DOCTOR): And what about rash or chills?
+[SEG0026] person_1 (PATIENT): No rash or chills, none of it.
+[SEG0027] person_2 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0028] person_1 (PATIENT): No, all normal there.
+[SEG0029] person_2 (DOCTOR): So, your breathing, any trouble there?
+[SEG0030] person_1 (PATIENT): Breathing's normal.
+[SEG0031] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0032] person_1 (PATIENT): I've had kidney disease, yes. I have gout, for about ten years.
+[SEG0033] person_2 (DOCTOR): Right, right.
+[SEG0034] person_1 (PATIENT): I have high blood pressure. It's a relief to finally sit down and talk about it.
+[SEG0035] person_2 (DOCTOR): Right, so kidney disease and gout are already on your record. We'll keep that in mind today.
+[SEG0036] person_2 (DOCTOR): What about alcohol?
+[SEG0037] person_1 (PATIENT): A beer or two most evenings, to be honest.
+[SEG0038] person_2 (DOCTOR): And your work?
+[SEG0039] person_1 (PATIENT): I drive a delivery van all day.
+[SEG0040] person_2 (DOCTOR): Right, what medicines are you taking at the moment?
+[SEG0041] person_1 (PATIENT): Um, uh, it's allopurinol, 100 milligrams, once a day for the gout.
+[SEG0042] person_3 (CAREGIVER): Doctor, I think the last prescription for the allopurinol was 50 milligrams. We changed it at the last visit.
+[SEG0043] person_2 (DOCTOR): I see. Is the most recent prescription on you?
+[SEG0044] person_1 (PATIENT): No, you know, I left it at home. Telmisartan, 40 milligrams, once a day.
+[SEG0045] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0046] person_1 (PATIENT): I've never been told I have allergies.
+[SEG0047] person_3 (CAREGIVER): I'm not sure that's right. I seem to recall a problem with penicillin.
+[SEG0048] person_1 (PATIENT): Really? I don't think so.
+[SEG0049] person_2 (DOCTOR): Alright, so that's unclear. I'll record what each of you said. Does anything run in the family?
+[SEG0050] person_1 (PATIENT): My brother has asthma. My mother has migraines.
+[SEG0051] person_2 (DOCTOR): I'll check your pressure and pulse.
+[SEG0052] person_2 (DOCTOR): Right, rest your hand here...
+[SEG0053] person_2 (DOCTOR): Okay: oxygen saturation is 97 percent, height 156 centimetres, temperature 37.0. And BP is 111 over 71, BMI works out to 32.1, heart rate 75, weight 78 kilos.
+[SEG0054] person_1 (PATIENT): Is that alright, doctor?
+[SEG0055] person_2 (DOCTOR): We'll put it in context in a moment.
+[SEG0056] person_2 (DOCTOR): Okay, a quick examination now.
+[SEG0057] person_2 (DOCTOR): Let me press here.
+[SEG0058] person_2 (DOCTOR): The big toe joint is red, hot, swollen and extremely tender to touch.
+[SEG0059] person_2 (DOCTOR): Right, you can sit back down. Let me tell you where I've got to. I'm honestly not certain yet. It could be an acute gout flare, or it might be septic arthritis. Pseudogout is also on my list.
+[SEG0060] person_1 (PATIENT): Uh, what are the chances it's something bad?
+[SEG0061] person_2 (DOCTOR): I can't promise yet, but most people with an acute gout flare do well once it's treated properly.
+[SEG0062] person_2 (DOCTOR): I'll request a uric acid level, it'll help with suspected gout.
+[SEG0063] person_4 (CLINICAL_STAFF): I can book that for Tuesday at 2 pm.
+[SEG0064] person_2 (DOCTOR): Let's get kidney function tests, for gout. Cut right back on red meat, organ meats, beer and sugary drinks, and drink plenty of water. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0065] person_1 (PATIENT): Got it, thank you.
+[SEG0066] person_2 (DOCTOR): The thing that would worry me is if the joint gets hotter or you develop a fever. If that happens, go to emergency.
+[SEG0067] person_1 (PATIENT): Yeah, got it, thank you.
+[SEG0068] person_2 (DOCTOR): I'll want another look in two weeks. Can you tell me the plan back in your own words, so I know I've explained it clearly?
+[SEG0069] person_1 (PATIENT): So, uh, I come back in two weeks. Is that right?
+[SEG0070] person_2 (DOCTOR): Yes, exactly right. Any last questions?
+[SEG0071] person_1 (PATIENT): No questions. Thank you.
+
+JSON:

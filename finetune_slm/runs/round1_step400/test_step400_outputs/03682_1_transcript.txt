@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03682)
+[SEG0001] person_1 (NURSE): Okay, doctor, we're all set in here. I'll give you the numbers when you want them.
+[SEG0002] person_2 (DOCTOR): Thanks. Hello, come in, sit down. What brings you in today?
+[SEG0003] person_3 (PATIENT): Erm, so the thing is, I've got blacking out when I stand quickly.
+[SEG0004] person_2 (DOCTOR): How long has this been bothering you?
+[SEG0005] person_3 (PATIENT): I've, I've had it for two months.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_3 (PATIENT): Let me think, it settles a little with lying down. It happens all the time. I notice it more with standing.
+[SEG0008] person_2 (DOCTOR): So, has there been a new prostate tablet too?
+[SEG0009] person_3 (PATIENT): Yes, I have. As for new prostate tablet, it feels severe to me. Uh, and there's blurred vision on standing as well, ten days now.
+[SEG0010] person_2 (DOCTOR): Let me check a few things. Any seizure, palpitations, head injury or chest pain?
+[SEG0011] person_3 (PATIENT): None of those, no.
+[SEG0012] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0013] person_3 (PATIENT): My heart's been fine, as far as I know.
+[SEG0014] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0015] person_3 (PATIENT): Nothing there, no.
+[SEG0016] person_2 (DOCTOR): Any allergies to tablets, food or anything in the environment?
+[SEG0017] person_3 (PATIENT): No allergies at all.
+[SEG0018] person_2 (DOCTOR): Do you have any chronic illnesses?
+[SEG0019] person_3 (PATIENT): Yes, an enlarged prostate.
+[SEG0020] person_2 (DOCTOR): What operations have you had, if any?
+[SEG0021] person_3 (PATIENT): Uh, yes, I had my appendix taken out, when I was in my twenties.
+[SEG0022] person_2 (DOCTOR): Which medicines do you take at the moment?
+[SEG0023] person_3 (PATIENT): Tamsulosin, 0.4 milligrams, at night.
+[SEG0024] person_2 (DOCTOR): What about alcohol?
+[SEG0025] person_3 (PATIENT): Nothing, I'm teetotal.
+[SEG0026] person_2 (DOCTOR): Any smoking?
+[SEG0027] person_3 (PATIENT): I gave up cigarettes last spring.
+[SEG0028] person_2 (DOCTOR): Right, who lives with you?
+[SEG0029] person_3 (PATIENT): My partner and our baby.
+[SEG0030] person_2 (DOCTOR): Have you retired yet?
+[SEG0031] person_3 (PATIENT): I retired from the post office two years ago.
+[SEG0032] person_2 (DOCTOR): How active are you?
+[SEG0033] person_3 (PATIENT): I hardly move around during the day.
+[SEG0034] person_2 (DOCTOR): Does your family have any medical conditions?
+[SEG0035] person_3 (PATIENT): My cousin has psoriasis.
+[SEG0036] person_1 (NURSE): Okay, so the vitals from earlier. SpO2 97 percent on room air, BP is 96 over 59, pulse 97, temp 36.5 degrees.
+[SEG0037] person_2 (DOCTOR): Okay, noted.
+[SEG0038] person_2 (DOCTOR): Now I'm going to do a short physical check.
+[SEG0039] person_3 (PATIENT): Of course.
+[SEG0040] person_2 (DOCTOR): Breathe out slowly.
+[SEG0041] person_2 (DOCTOR): Your blood pressure drops a long way when you stand and your heart sounds are normal.
+[SEG0042] person_2 (DOCTOR): Right, that's all I needed to check. Putting it all together, this looks most like medicine-induced postural hypotension. I can't rule out an arrhythmia yet.
+[SEG0043] person_3 (PATIENT): I'm scared it's something bad. Is it?
+[SEG0044] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like medicine-induced postural hypotension, but I'd like to confirm. I'm sending you for blood tests because of syncope.
+[SEG0045] person_1 (NURSE): Doctor, I did an ECG before they came in, the result's on your screen.
+[SEG0046] person_2 (DOCTOR): Great, that's useful. We will move the prostate tablet to bedtime and you should rise slowly. Try to get to bed and wake up at the same time each day, and keep your phone away from the bed. Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency. I'll want another look in two weeks. Have I covered everything you wanted?
+[SEG0047] person_3 (PATIENT): Alright, thanks, take care.
+
+JSON:

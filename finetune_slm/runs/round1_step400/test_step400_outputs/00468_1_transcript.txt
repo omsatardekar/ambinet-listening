@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00468)
+[SEG0001] person_1 (PATIENT): Hello? Doctor? They told me to come straight in.
+[SEG0002] person_2 (DOCTOR): Yes, do sit. Tell me what's been happening.
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_2 (DOCTOR): Absolutely, come and sit beside them.
+[SEG0005] person_1 (PATIENT): Mainly I've been putting on weight over the last year. That's why I came.
+[SEG0006] person_2 (DOCTOR): How long have you had it?
+[SEG0007] person_1 (PATIENT): About... well, two months.
+[SEG0008] person_2 (DOCTOR): Has there been sore knees too?
+[SEG0009] person_1 (PATIENT): Yes, actually.
+[SEG0010] person_2 (DOCTOR): Have you been feeling sleepy in the day?
+[SEG0011] person_1 (PATIENT): Oh, um, yes, for about a month.
+[SEG0012] person_2 (DOCTOR): And what about low mood, chest pain or heat intolerance?
+[SEG0013] person_1 (PATIENT): Hmm, nothing like that, no.
+[SEG0014] person_2 (DOCTOR): What about palpitations?
+[SEG0015] person_1 (PATIENT): Right, not at all, no palpitations.
+[SEG0016] person_3 (FAMILY_MEMBER): Actually, doctor, I did notice palpitations. He doesn't always say.
+[SEG0017] person_1 (PATIENT): No, I don't think I did. Maybe a little, I'm not sure.
+[SEG0018] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. Has your skin been okay?
+[SEG0019] person_1 (PATIENT): Skin's normal.
+[SEG0020] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0021] person_3 (FAMILY_MEMBER): Okay, so he is on amlodipine, 5 milligrams, once a day for my pressure, I give it to him. He is on Glycomet, 500 milligrams, twice a day, I give it to him.
+[SEG0022] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0023] person_1 (PATIENT): No operations, you know, no.
+[SEG0024] person_2 (DOCTOR): Are you working at the moment?
+[SEG0025] person_1 (PATIENT): Yes, I'm a nurse on a busy ward.
+[SEG0026] person_2 (DOCTOR): And what do you usually eat?
+[SEG0027] person_1 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0028] person_2 (DOCTOR): Do you have any allergies to medicines, food, anything at all?
+[SEG0029] person_1 (PATIENT): Right, none, as far as I'm aware.
+[SEG0030] person_3 (FAMILY_MEMBER): Actually, you know, I remember he had some kind of reaction to aspirin before. I couldn't swear to it.
+[SEG0031] person_1 (PATIENT): I don't remember that.
+[SEG0032] person_2 (DOCTOR): Okay, I'll note both of those. Any diagnoses you've been given before?
+[SEG0033] person_1 (PATIENT): I have high cholesterol, for about ten years. I mean, I have high blood pressure, for about ten years.
+[SEG0034] person_2 (DOCTOR): Hm, okay.
+[SEG0035] person_1 (PATIENT): I have diabetes, for about ten years. I've never really been one for hospitals.
+[SEG0036] person_2 (DOCTOR): Yes, high blood pressure is known to us, good to have that clear.
+[SEG0037] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0038] person_2 (DOCTOR): Almost there...
+[SEG0039] person_2 (DOCTOR): Okay: height 179 centimetres, SpO2 97 percent on room air, heart rate 64, temperature 37.0, respiratory rate 14, weight 65 kilos, BMI works out to 20.3, BP is 115 over 71.
+[SEG0040] person_1 (PATIENT): Is that okay?
+[SEG0041] person_2 (DOCTOR): Right, I'll explain what that means shortly.
+[SEG0042] person_2 (DOCTOR): Okay, a quick examination now.
+[SEG0043] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0044] person_2 (DOCTOR): Your waist measures about a hundred and four centimetres.
+[SEG0045] person_2 (DOCTOR): Right, good, that's the examination. Having listened and examined, I think we're dealing with weight gain with a metabolic cause that needs checking at this stage. I want to be honest that this is an impression, not a final answer. Sleep apnoea is also on my list. I want a sleep study done, that's for snoring and sleepiness. Let's get a lipid profile, for metabolic risk. I'll request an HbA1c, it'll help with weight gain.
+[SEG0046] person_2 (DOCTOR): Start with small, specific changes: smaller portions, no sugary drinks, a thirty-minute walk most days. A dietitian would be the right next step, I'll refer you. Let's hold off on a thyroid test for now, and if there's no change in a month we can revisit it. One warning sign to remember: the symptoms get worse. In that case don't wait.
+[SEG0047] person_1 (PATIENT): That's clear.
+[SEG0048] person_2 (DOCTOR): We'll catch up after the results are back. Thanks for coming in.
+[SEG0049] person_1 (PATIENT): Thank you for your time.
+[SEG0050] person_2 (DOCTOR): See you then.
+
+JSON:

@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03505)
+[SEG0001] person_1 (DOCTOR): Good morning, grab a seat.
+[SEG0002] person_2 (PATIENT): Hi there.
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, I'll sit in if that's okay, I know what's been happening.
+[SEG0004] person_1 (DOCTOR): Where shall we begin?
+[SEG0005] person_3 (FAMILY_MEMBER): He's been having fainting once, doctor.
+[SEG0006] person_2 (PATIENT): Actually, and there's a bit breathless since as well, about three months now.
+[SEG0007] person_1 (DOCTOR): So, is it there all the time or does it come and go?
+[SEG0008] person_2 (PATIENT): It comes and goes.
+[SEG0009] person_1 (DOCTOR): What about a faster heartbeat, have you noticed that?
+[SEG0010] person_2 (PATIENT): Yes, um, actually.
+[SEG0011] person_1 (DOCTOR): Right, any a swollen calf after a long drive as well?
+[SEG0012] person_2 (PATIENT): Actually, yeah. Three weeks, I'd say.
+[SEG0013] person_1 (DOCTOR): Have you had fainting once before, or is this the first time?
+[SEG0014] person_2 (PATIENT): A bit, last winter. It settled by itself back then.
+[SEG0015] person_1 (DOCTOR): Which medicines do you take at the moment?
+[SEG0016] person_2 (PATIENT): It's iron tablets, once a day. Eltroxin, 100 micrograms, maybe, every morning.
+[SEG0017] person_1 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0018] person_2 (PATIENT): No, you know, it's at home. The contraceptive pill. I take it daily.
+[SEG0019] person_1 (DOCTOR): What about your medical history?
+[SEG0020] person_2 (PATIENT): Low haemoglobin, for five years. High cholesterol, for nearly five years. I've had an underactive thyroid, yes. My sister suggested writing things down, but I forgot.
+[SEG0021] person_1 (DOCTOR): Alright, an underactive thyroid, that matches what I have here.
+[SEG0022] person_1 (DOCTOR): Are you on your own at home?
+[SEG0023] person_2 (PATIENT): I live with my elderly mother.
+[SEG0024] person_1 (DOCTOR): How active are you?
+[SEG0025] person_2 (PATIENT): I hardly move around during the day.
+[SEG0026] person_1 (DOCTOR): Do you work outside the home?
+[SEG0027] person_2 (PATIENT): I'm a hairdresser, on my feet all day.
+[SEG0028] person_1 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0029] person_2 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0030] person_1 (DOCTOR): Okay, any coughing up blood, cough, fever or chest pain at all?
+[SEG0031] person_2 (PATIENT): No, I'd have said so.
+[SEG0032] person_1 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0033] person_2 (PATIENT): No, skin's been fine.
+[SEG0034] person_1 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0035] person_2 (PATIENT): Hmm, bowels are regular, nothing odd.
+[SEG0036] person_1 (DOCTOR): I'll do your observations first.
+[SEG0037] person_1 (DOCTOR): Okay, this won't take long...
+[SEG0038] person_1 (DOCTOR): Okay: temperature is 36.8 degrees, respiratory rate 20, saturation 99 percent. And heart rate 113, blood pressure 115 over 74.
+[SEG0039] person_1 (DOCTOR): Shall I start the examination?
+[SEG0040] person_1 (DOCTOR): Does that hurt?
+[SEG0041] person_1 (DOCTOR): Your oxygen is lower than expected for someone so young and the left calf is a little swollen.
+[SEG0042] person_1 (DOCTOR): You can sit up now. Okay, thinking it through, my working impression is possible pulmonary embolism without chest pain. I'd also keep a simple faint in mind.
+[SEG0043] person_2 (PATIENT): Is there something to worry about?
+[SEG0044] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like possible pulmonary embolism without chest pain, but I'd like to confirm. I'm going to order a CT pulmonary angiogram, for possible embolus.
+[SEG0045] person_2 (PATIENT): Sorry, what was I saying, okay, I'll do it.
+[SEG0046] person_1 (DOCTOR): I'm going to order a D-dimer, for syncope and calf swelling. Even without chest pain this needs a scan today, so please go to hospital. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0047] person_2 (PATIENT): Okay, makes sense.
+[SEG0048] person_1 (DOCTOR): I'll want another look straight away. I think we're done unless you have questions.
+[SEG0049] person_2 (PATIENT): Yeah, uh, good, thanks, I'll see you then.
+[SEG0050] person_1 (DOCTOR): See you soon.
+
+JSON:

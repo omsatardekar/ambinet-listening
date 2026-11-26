@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00304)
+[SEG0001] person_1 (PATIENT): Hello? Doctor? They told me to come straight in.
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_3 (CAREGIVER): So, um, doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_2 (DOCTOR): Absolutely, come and sit beside them.
+[SEG0005] person_1 (PATIENT): Mainly I've been feeling lightheaded. That's why I came.
+[SEG0006] person_2 (DOCTOR): Since when have you had this?
+[SEG0007] person_1 (PATIENT): About three weeks, give or take.
+[SEG0008] person_3 (CAREGIVER): So, it was closer to a month, doctor.
+[SEG0009] person_2 (DOCTOR): Okay, so roughly three to four weeks. Is that right?
+[SEG0010] person_1 (PATIENT): Yes, somewhere around that.
+[SEG0011] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0012] person_1 (PATIENT): It just comes and goes. It's worse with standing up and hot weather. I'd call it severe.
+[SEG0013] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0014] person_1 (PATIENT): Nearly passing out goes along with it, most of the time. Hmm, and there's a pounding in the head as well, about two weeks now.
+[SEG0015] person_2 (DOCTOR): Have you been sweating?
+[SEG0016] person_1 (PATIENT): Yes, I have.
+[SEG0017] person_2 (DOCTOR): Right, and what about weakness, slurred speech or fainting completely?
+[SEG0018] person_1 (PATIENT): Um, no, none of those.
+[SEG0019] person_2 (DOCTOR): Has there been any vomiting?
+[SEG0020] person_1 (PATIENT): No, I haven't had any vomiting.
+[SEG0021] person_2 (DOCTOR): Alright, how's your breathing otherwise?
+[SEG0022] person_1 (PATIENT): No, my breathing's been fine.
+[SEG0023] person_2 (DOCTOR): How about your heart, any problems like that?
+[SEG0024] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0025] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0026] person_1 (PATIENT): Diabetes, for nearly five years. So, I have high blood pressure, for five years. I'd rather not end up on lots of tablets if I can avoid it.
+[SEG0027] person_2 (DOCTOR): Right, so diabetes and high blood pressure are already on your record. We'll keep that in mind today. Tell me about your routine, work, habits, that sort of thing.
+[SEG0028] person_1 (PATIENT): I've never smoked. I don't drink at all. I skip breakfast most days. I live with my family, my husband and two kids.
+[SEG0029] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0030] person_1 (PATIENT): I take telmisartan, 40 milligrams, once a day.
+[SEG0031] person_3 (CAREGIVER): Doctor, I think the last prescription for the telmisartan was 20 milligrams. We changed it at the last visit.
+[SEG0032] person_2 (DOCTOR): Alright. Did you bring the up-to-date prescription?
+[SEG0033] person_1 (PATIENT): Oh, I don't think I have it with me. I used to take metformin, but I stopped it.
+[SEG0034] person_2 (DOCTOR): Right, any previous surgeries?
+[SEG0035] person_1 (PATIENT): So, no, nothing like that.
+[SEG0036] person_2 (DOCTOR): Let's do your observations.
+[SEG0037] person_2 (DOCTOR): Almost there...
+[SEG0038] person_2 (DOCTOR): Okay: temp 36.7 degrees, pulse is 103 beats a minute, respiratory rate 19. And oxygen saturation is 99 percent, blood pressure 93 over 58.
+[SEG0039] person_1 (PATIENT): Is that alright, uh, doctor?
+[SEG0040] person_2 (DOCTOR): Let's look at it together in a minute.
+[SEG0041] person_2 (DOCTOR): Right, let me check a few things physically.
+[SEG0042] person_2 (DOCTOR): Bear with me a second.
+[SEG0043] person_2 (DOCTOR): Your blood pressure drops when you stand, I'll note that.
+[SEG0044] person_1 (PATIENT): Alright.
+[SEG0045] person_2 (DOCTOR): Bear with me a second.
+[SEG0046] person_2 (DOCTOR): Heart rhythm is regular.
+[SEG0047] person_1 (PATIENT): Okay.
+[SEG0048] person_2 (DOCTOR): All done, you can get dressed. Taking everything into account, the most likely explanation is postural low blood pressure. We shouldn't forget a heart rhythm problem.
+[SEG0049] person_2 (DOCTOR): Let's get an ECG, for dizziness. I think blood tests makes sense here, for dizziness. Get up in stages, sit on the edge of the bed for a minute first, and keep drinking water. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. The thing that would worry me is if the symptoms get worse. If that happens, go to emergency.
+[SEG0050] person_2 (DOCTOR): I'd like to see you again in two weeks. Thanks for coming in.
+[SEG0051] person_1 (PATIENT): Nothing more from me, thanks.
+[SEG0052] person_2 (DOCTOR): Safe journey home.
+
+JSON:

@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20470)
+[SEG0001] person_1 (PATIENT): erm doctor hi where would you like me to put my coat?
+[SEG0002] person_2 (DOCTOR): yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): um, it's breathlessness on exertion. I thought I'd wait, but it hasn't gone
+[SEG0004] person_2 (DOCTOR): How long has it it been like this?
+[SEG0005] person_1 (PATIENT): about... well, about a month
+[SEG0006] person_2 (DOCTOR): can you describe it a bit more for me? How strong it is, what the pattern is, what helps
+[SEG0007] person_1 (PATIENT): Um, it happens a few times a day. Pretty mild, if I'm being honest. I'd rather know what's going on than keep guessing.
+[SEG0008] person_2 (DOCTOR): have you been sweating with the tightness?
+[SEG0009] person_1 (PATIENT): yeah. Two months, I'd say. About sweating with the tightness, it comes and goes. And there's a heaviness in my left arm as well, uh, four weeks now
+[SEG0010] person_2 (DOCTOR): have you had any pain at rest?
+[SEG0011] person_1 (PATIENT): Right, not that I've noticed, no pain at rest.
+[SEG0012] person_2 (DOCTOR): and what about palpitations, fainting or cough?
+[SEG0013] person_1 (PATIENT): erm, you know, no, not a single one
+[SEG0014] person_2 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0015] person_1 (PATIENT): No weakness or anything.
+[SEG0016] person_2 (DOCTOR): anything different when you pass water?
+[SEG0017] person_1 (PATIENT): sorry, what was I saying, that's normal as far as I know
+[SEG0018] person_2 (DOCTOR): what do you take on a normal day?
+[SEG0019] person_1 (PATIENT): I take atorvastatin, 20 milligrams, at night for my cholesterol. Ramipril, 5 milligrams, every morning for my blood pressure.
+[SEG0020] person_2 (DOCTOR): have you had any previous surgeries?
+[SEG0021] person_1 (PATIENT): no, uh, never
+[SEG0022] person_2 (DOCTOR): Anything you do to stay fit?
+[SEG0023] person_1 (PATIENT): I do a yoga class on Thursdays
+[SEG0024] person_2 (DOCTOR): What line of work are you in?
+[SEG0025] person_1 (PATIENT): I'm a bus driver, so I sit for long hours
+[SEG0026] person_2 (DOCTOR): are you on your own at home?
+[SEG0027] person_1 (PATIENT): I live with my elderly mother
+[SEG0028] person_2 (DOCTOR): Do you have any long-term conditions?
+[SEG0029] person_1 (PATIENT): I have high cholesterol. I've, I've had high blood pressure, yes.
+[SEG0030] person_2 (DOCTOR): Mm-hmm. So, has anything ever caused you a reaction? I mean any allergies.
+[SEG0031] person_1 (PATIENT): no uh I've never reacted to anything
+[SEG0032] person_2 (DOCTOR): okay time for your numbers if that's okay
+[SEG0033] person_2 (DOCTOR): keep your arm relaxed for me..
+[SEG0034] person_2 (DOCTOR): okay: temp 36.7 degrees heart rate 82 BP is 126 over 78. And respiratory rate 15 SpO2 97 percent on room air
+[SEG0035] person_1 (PATIENT): Is that okay?
+[SEG0036] person_2 (DOCTOR): they help me see the whole picture, more shortly
+[SEG0037] person_2 (DOCTOR): Alright, over here please and I'll take a look.
+[SEG0038] person_1 (PATIENT): okay doctor
+[SEG0039] person_2 (DOCTOR): breathe out slowly
+[SEG0040] person_2 (DOCTOR): Heart sounds are normal, no murmur, and the chest is clear.
+[SEG0041] person_2 (DOCTOR): you can relax now okay today I'm not changing anything is there anything you'd like me to go over again?
+[SEG0042] person_1 (PATIENT): okay that that makes sense. Thanks for explaining
+[SEG0043] person_2 (DOCTOR): have a good day
+
+JSON:

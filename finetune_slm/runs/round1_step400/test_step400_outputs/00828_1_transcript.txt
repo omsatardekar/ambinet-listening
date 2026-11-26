@@ -1,0 +1,69 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00828)
+[SEG0001] person_1 (PATIENT): Okay, so I kept a log. My right knee swelled up five days ago after a long day kneeling on a tile floor, and it hasn't gone down. I have the dates on my phone.
+[SEG0002] person_2 (DOCTOR): Good, thanks. Show me when you're ready. Is it only swollen, or is it painful too?
+[SEG0003] person_1 (PATIENT): Painful, yes, it hurts in the knee. But I can't tell you when exactly the pain started. I wrote the swelling date, not the pain. I think the pain came first, maybe two days before. Maybe not.
+[SEG0004] person_2 (DOCTOR): That's fine. Does it feel stiff?
+[SEG0005] person_1 (PATIENT): Stiff after sitting in the truck, yes. Takes a minute to straighten.
+[SEG0006] person_2 (DOCTOR): Is it warm?
+[SEG0007] person_1 (PATIENT): Warm to the touch, compared to the left. I checked with the back of my hand.
+[SEG0008] person_2 (DOCTOR): And where does it hurt most?
+[SEG0009] person_1 (PATIENT): Right at the front, over the kneecap. Tender when I press.
+[SEG0010] person_2 (DOCTOR): Any fever?
+[SEG0011] person_1 (PATIENT): No fever, I took it last night.
+[SEG0012] person_2 (DOCTOR): Redness?
+[SEG0013] person_1 (PATIENT): No redness.
+[SEG0014] person_2 (DOCTOR): Does the knee lock?
+[SEG0015] person_1 (PATIENT): No locking.
+[SEG0016] person_2 (DOCTOR): Did you fall or twist it?
+[SEG0017] person_1 (PATIENT): No fall, no twist.
+[SEG0018] person_2 (DOCTOR): Chills or sweats?
+[SEG0019] person_1 (PATIENT): No chills.
+[SEG0020] person_2 (DOCTOR): What medications are you taking?
+[SEG0021] person_1 (PATIENT): Ibuprofen, maybe 400 mg, three times a day, for the knee. Metformin, 500 mg, twice a day, breakfast and dinner, though I skip some dinners. Lisinopril, 10 mg, once a day. And omeprazole, 20 mg, once a day.
+[SEG0022] person_2 (DOCTOR): Okay. Any allergies?
+[SEG0023] person_1 (PATIENT): Penicillin. My lips swelled up.
+[SEG0024] person_2 (DOCTOR): Medical history?
+[SEG0025] person_1 (PATIENT): Type 2 diabetes and high blood pressure.
+[SEG0026] person_2 (DOCTOR): Surgery?
+[SEG0027] person_1 (PATIENT): Left knee scope in 2015. And a right shoulder surgery in 2019.
+[SEG0028] person_2 (DOCTOR): Family?
+[SEG0029] person_1 (PATIENT): My father has gout. My mother has arthritis.
+[SEG0030] person_2 (DOCTOR): What do you do for work?
+[SEG0031] person_1 (PATIENT): Flooring installer, mostly tile. So a lot of kneeling.
+[SEG0032] person_2 (DOCTOR): Alcohol?
+[SEG0033] person_1 (PATIENT): Two beers after work, most days.
+[SEG0034] person_3 (CLINICAL_STAFF): Doc, the blood draw tray is ready whenever you want it. ~
+[SEG0035] person_2 (DOCTOR): Thanks, give me five minutes. Let me check you. Temperature 37.9, blood pressure 132 over 84, pulse 84.
+[SEG0036] person_1 (PATIENT): Is the temperature high? ~
+[SEG0037] person_2 (DOCTOR): Slightly. Let me see the knee.
+[SEG0038] person_1 (PATIENT): Careful. ~
+[SEG0039] person_2 (DOCTOR): There's swelling over the front of the right knee, like a bag of fluid in front of the kneecap.
+[SEG0040] person_1 (PATIENT): That's what I've been looking at. ~
+[SEG0041] person_2 (DOCTOR): It's warm, and tender over the kneecap itself. The knee still bends fully, though.
+[SEG0042] person_1 (PATIENT): It bends, yes. ~
+[SEG0043] person_2 (DOCTOR): Any trouble with your breathing, chest?
+[SEG0044] person_1 (PATIENT): No, nothing at all, my chest is fine.
+[SEG0045] person_2 (DOCTOR): This could be bursitis from kneeling, but I can't rule out an infection in the bursa, given the warmth and the temperature.
+[SEG0046] person_1 (PATIENT): Infection? From kneeling? ~
+[SEG0047] person_2 (DOCTOR): It happens when the skin gets broken. I'd like to arrange blood tests, including inflammation markers, and an X-ray of the knee.
+[SEG0048] person_3 (CLINICAL_STAFF): I can draw the bloods now, if you like. ~
+[SEG0049] person_2 (DOCTOR): Please. And I'd like to do an ultrasound of the knee, and I may need to draw some fluid out with a needle.
+[SEG0050] person_1 (PATIENT): Sounds unpleasant. ~
+[SEG0051] person_2 (DOCTOR): It's quick. Stop the ibuprofen on an empty stomach, and rest the knee, no kneeling for now.
+[SEG0052] person_1 (PATIENT): That's a week's pay gone. ~
+[SEG0053] person_2 (DOCTOR): I'd like to see you again in two days.
+[SEG0054] person_1 (PATIENT): Two days. I'll be here. ~
+
+JSON:

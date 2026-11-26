@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01538)
+[SEG0001] person_1 (PATIENT): Hello, um, doctor. I think it's my turn.
+[SEG0002] person_2 (DOCTOR): You're alright, take a seat. What can I do for you?
+[SEG0003] person_1 (PATIENT): Yeah, it's a fall and pain in my left hip. I don't know what's causing it.
+[SEG0004] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0005] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0006] person_2 (DOCTOR): Okay: respiratory rate 18, BP is 126 over 71. And pulse is 67 beats a minute, SpO2 98 percent on room air. Alright, has this been going on for long?
+[SEG0007] person_1 (PATIENT): Just since yesterday.
+[SEG0008] person_2 (DOCTOR): So, how strong would you say it is?
+[SEG0009] person_1 (PATIENT): Pretty moderate, if I'm being honest.
+[SEG0010] person_2 (DOCTOR): Okay, is it accompanied by anything?
+[SEG0011] person_1 (PATIENT): When it starts I tend to get pain in my groin as well. So, as for pain in my groin, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0012] person_2 (DOCTOR): Is it constant or in episodes?
+[SEG0013] person_1 (PATIENT): I'd say a couple of times a week.
+[SEG0014] person_2 (DOCTOR): Alright, have you had head injury, by any chance?
+[SEG0015] person_1 (PATIENT): No head injury, thankfully.
+[SEG0016] person_2 (DOCTOR): Understood. Did you get numbness, loss of consciousness or chest pain?
+[SEG0017] person_1 (PATIENT): So, no numbness, loss of consciousness or chest pain, none of it.
+[SEG0018] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0019] person_1 (PATIENT): Mm, um, that's normal as far as I know.
+[SEG0020] person_2 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0021] person_1 (PATIENT): No problems with breathing.
+[SEG0022] person_2 (DOCTOR): Any past operations I should know about?
+[SEG0023] person_1 (PATIENT): Just a wisdom tooth extraction under sedation, five years ago.
+[SEG0024] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0025] person_1 (PATIENT): I've had thin bones for nearly five years now. I kept putting it off, which I know isn't sensible. I just want to get back to normal, really.
+[SEG0026] person_2 (DOCTOR): Hm, okay. Do you take any prescribed or over-the-counter medicines?
+[SEG0027] person_1 (PATIENT): I, I take alendronate, 70 milligrams, once a week for my bones.
+[SEG0028] person_2 (DOCTOR): How long have you been on it?
+[SEG0029] person_1 (PATIENT): For about a month. Paracetamol. I take it 1 gram, when needed.
+[SEG0030] person_2 (DOCTOR): How are your meals?
+[SEG0031] person_1 (PATIENT): I grab fast food at lunch most days.
+[SEG0032] person_2 (DOCTOR): Are you active?
+[SEG0033] person_1 (PATIENT): I walk the dog every morning.
+[SEG0034] person_2 (DOCTOR): What about your parents, brothers or sisters, any conditions?
+[SEG0035] person_1 (PATIENT): My mother has an underactive thyroid.
+[SEG0036] person_2 (DOCTOR): Have you got any known allergies?
+[SEG0037] person_1 (PATIENT): Plasters. I come out in... well, a red itchy rash.
+[SEG0038] person_2 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0039] person_1 (PATIENT): Fine by me.
+[SEG0040] person_2 (DOCTOR): So, breathe out slowly.
+[SEG0041] person_2 (DOCTOR): The left leg is shortened and turned outwards, and it is very painful to move.
+[SEG0042] person_2 (DOCTOR): That's the examination finished. So where does that leave us? I'm honestly not certain yet. It could be a probable hip fracture, or it might be a pelvic fracture. I'll request an X-ray of the hip, it'll help with hip fracture.
+[SEG0043] person_3 (CLINICAL_STAFF): The earliest is Thursday, 3:30 pm.
+[SEG0044] person_2 (DOCTOR): I'll request blood tests, it'll help with pre-operative. For this, morphine, 2.5 milligrams, now, single dose. That's for hip pain. The pharmacy will go through the details again when you pick it up. Lie still, I am arranging an ambulance and pain relief. A short walk every day, even twenty minutes, will help more than you'd think. I'll also refer you to the orthopaedic team.
+[SEG0045] person_1 (PATIENT): Alright, you know, thank you.
+[SEG0046] person_2 (DOCTOR): Come back straight away.
+[SEG0047] person_1 (PATIENT): I'll note it in my calendar.
+[SEG0048] person_2 (DOCTOR): Have I covered everything you wanted?
+[SEG0049] person_1 (PATIENT): Right, I'll do that. Thank you, doctor.
+[SEG0050] person_2 (DOCTOR): Take care now.
+
+JSON:

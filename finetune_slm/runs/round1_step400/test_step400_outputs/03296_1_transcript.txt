@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03296)
+[SEG0001] person_1 (DOCTOR): Hi there, the chair's free, sit down. Did you find the place alright?
+[SEG0002] person_2 (PATIENT): yes, it was easy enough the parking was the hard part
+[SEG0003] person_1 (DOCTOR): what's the the main thing today?
+[SEG0004] person_2 (PATIENT): It's a yellow discharge. I thought I'd wait, but it hasn't gone.
+[SEG0005] person_1 (DOCTOR): Has this been going on for long?
+[SEG0006] person_2 (PATIENT): Erm, it's been going on for two weeks. I've never really been one for hospitals.
+[SEG0007] person_1 (DOCTOR): Any a red sore wound after your operation as well?
+[SEG0008] person_2 (PATIENT): yes, you know, for two months. I had pain around the wound before. That's settled now, though
+[SEG0009] person_1 (DOCTOR): What conditions have you been treated for in the the past?
+[SEG0010] person_2 (PATIENT): Yes, acid reflux.
+[SEG0011] person_1 (DOCTOR): do you work outside the home?
+[SEG0012] person_2 (PATIENT): I'm a hairdresser, on my feet all day.
+[SEG0013] person_1 (DOCTOR): how active are you?
+[SEG0014] person_2 (PATIENT): I hardly move around during the day.
+[SEG0015] person_1 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0016] person_2 (PATIENT): Yes, plasters, it gives me a red itchy rash.
+[SEG0017] person_1 (DOCTOR): tell me your medicines, please
+[SEG0018] person_2 (PATIENT): I take pantoprazole, 40 milligrams, before breakfast.
+[SEG0019] person_1 (DOCTOR): is that long-standing?
+[SEG0020] person_2 (PATIENT): About about a year. Let me think, I take paracetamol, when needed.
+[SEG0021] person_1 (DOCTOR): how much do you take?
+[SEG0022] person_2 (PATIENT): It's, It's 1 gram.
+[SEG0023] person_1 (DOCTOR): How long have you taken that?
+[SEG0024] person_2 (PATIENT): Nearly five years now. Ah, I used to take lansoprazole, but I stopped it.
+[SEG0025] person_1 (DOCTOR): any chest pain?
+[SEG0026] person_2 (PATIENT): No chest pain, thankfully.
+[SEG0027] person_1 (DOCTOR): Let me check a few things. Any vomiting, breathlessness or calf pain?
+[SEG0028] person_2 (PATIENT): I haven't had vomiting, breathlessness or calf pain, no.
+[SEG0029] person_1 (DOCTOR): okay, your breathing, any trouble there?
+[SEG0030] person_2 (PATIENT): I mean, no, my breathing's been fine
+[SEG0031] person_1 (DOCTOR): Let me quickly check your readings.
+[SEG0032] person_1 (DOCTOR): That's it, just a a little longer...
+[SEG0033] person_1 (DOCTOR): Okay: respiratory rate 19, blood pressure 123 over 74, heart rate 99, temperature is 38.5 degrees.
+[SEG0034] person_1 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0035] person_1 (DOCTOR): Stay as you are for a moment.
+[SEG0036] person_1 (DOCTOR): The lower part of the wound is red, hot and weeping pus, and and the edges have not come together.
+[SEG0037] person_1 (DOCTOR): That's the examination finished. Having listened and examined, the most likely explanation is a surgical wound infection. A stitch abscess is still possible.
+[SEG0038] person_2 (PATIENT): Erm, is this serious, doctor?
+[SEG0039] person_1 (DOCTOR): I understand the worry. At the moment I'd say it's a surgical wound infection, and we'll know more once the a wound swab is back. So, to recap quickly. You've had a yellow discharge for two weeks, and no vomiting or calf pain.
+[SEG0040] person_2 (PATIENT): Correct.
+[SEG0041] person_1 (DOCTOR): A wound swab is what I'd like next, for wound infection. I'd rather check than guess, and this is the quickest way to know more. We should do blood tests for wound infection. I'll start you on flucloxacillin, 500 milligrams, four times a day, seven days. That should help with wound infection. It's a commonly used medicine and most people tolerate it well. Keep it clean and dry and use fresh dressings daily.
+[SEG0042] person_1 (DOCTOR): don't skip meals, and try to eat smaller portions more often through the day please don't wait if the symptoms get worse that's when to be seen urgently right, that's the plan do you want to ask me anything?
+[SEG0043] person_2 (PATIENT): uh, thank you, doctor, goodbye
+
+JSON:

@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00469)
+[SEG0001] person_1 (NURSE): Doctor, your next patient is here. I've done the basics, I'll read them out in a moment.
+[SEG0002] person_2 (DOCTOR): Thank you. Right, hello, what's the problem?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, thank you for seeing us.
+[SEG0004] person_2 (DOCTOR): That's fine, sit down. We'll go through it together.
+[SEG0005] person_3 (FAMILY_MEMBER): He's been feeling anxious most of the day, doctor.
+[SEG0006] person_2 (DOCTOR): How long are we talking about?
+[SEG0007] person_4 (PATIENT): I'm not sure when it began, to be honest. Some weeks ago, but I can't say how many.
+[SEG0008] person_2 (DOCTOR): What makes it worse, if anything?
+[SEG0009] person_4 (PATIENT): I notice it more with work and crowded places.
+[SEG0010] person_2 (DOCTOR): How would you describe it, mild, moderate, severe?
+[SEG0011] person_4 (PATIENT): I'd call it moderate.
+[SEG0012] person_2 (DOCTOR): Does anything settle it?
+[SEG0013] person_4 (PATIENT): Deep breathing helps a bit. Oh, and trouble falling asleep. I've also been feeling on edge.
+[SEG0014] person_1 (NURSE): Doctor, I've got the readings for you. Temperature 36.5, heart rate 84, blood pressure 121 over 72. Respiratory rate 18.
+[SEG0015] person_2 (DOCTOR): Thanks.
+[SEG0016] person_2 (DOCTOR): Okay, if you're comfortable, I'll examine you now.
+[SEG0017] person_2 (DOCTOR): Let me just check something.
+[SEG0018] person_2 (DOCTOR): Pulse is regular and you're breathing comfortably right now.
+[SEG0019] person_2 (DOCTOR): Okay, that's fine, sit up. Any fainting, chest pain on exertion or weight loss at all?
+[SEG0020] person_4 (PATIENT): Hmm, I haven't had fainting, chest pain on exertion or weight loss, no.
+[SEG0021] person_2 (DOCTOR): Any low mood or alcohol use at all?
+[SEG0022] person_4 (PATIENT): No, not any of them.
+[SEG0023] person_2 (DOCTOR): Has your skin been okay?
+[SEG0024] person_4 (PATIENT): No rashes.
+[SEG0025] person_2 (DOCTOR): Alright, any regular medication?
+[SEG0026] person_4 (PATIENT): No, I don't take anything regularly.
+[SEG0027] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0028] person_4 (PATIENT): I eat out quite a lot, to be honest. Yes, I live on my own. I drive a delivery van all day.
+[SEG0029] person_2 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0030] person_4 (PATIENT): My father had a heart attack.
+[SEG0031] person_2 (DOCTOR): Have you had any surgery before?
+[SEG0032] person_4 (PATIENT): Just my tonsils out, when I was a child. I took the morning off to come in today.
+[SEG0033] person_2 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0034] person_4 (PATIENT): I have anxiety, for about ten years. Yes, asthma.
+[SEG0035] person_2 (DOCTOR): Okay. Yes, anxiety is known to us, good to have that clear.
+[SEG0036] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0037] person_4 (PATIENT): No allergies that I know of, no.
+[SEG0038] person_2 (DOCTOR): Putting it all together, this looks most like an anxiety disorder. I'd also keep a heart rhythm cause in mind.
+[SEG0039] person_4 (PATIENT): Is this something I'll have for good?
+[SEG0040] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's an anxiety disorder, and we'll know more once the an ECG is back.
+[SEG0041] person_1 (NURSE): I've already done an ECG, it's ready for you.
+[SEG0042] person_2 (DOCTOR): Thanks, I'll look at that. I'd like to arrange a thyroid test for anxiety. We'll begin with escitalopram, 5 milligrams, once a day, for two weeks then review. You take it by mouth. That should help with anxiety. Slow breathing, in for four and out for six, for a few minutes whenever it builds up. I'll want another look in two weeks.
+[SEG0043] person_4 (PATIENT): Okay, see you then.
+[SEG0044] person_2 (DOCTOR): That's everything from me. Any other questions?
+[SEG0045] person_4 (PATIENT): Okay, thank you. Bye.
+[SEG0046] person_2 (DOCTOR): Mind how you go.
+
+JSON:

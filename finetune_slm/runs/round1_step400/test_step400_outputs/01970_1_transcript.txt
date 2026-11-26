@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01970)
+[SEG0001] person_1 (PATIENT): Hello doctor, sorry, I took a wrong turn on the way here.
+[SEG0002] person_2 (DOCTOR): So, you're alright, take a seat. What can I do for you?
+[SEG0003] person_1 (PATIENT): Yeah, it's a barking cough. I don't know what's causing it. My family kept telling me to get it checked. I didn't want to make a fuss, you know.
+[SEG0004] person_2 (DOCTOR): Can I check a few measurements before we carry on?
+[SEG0005] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0006] person_2 (DOCTOR): Okay: heart rate 71, pressure 108 over 73, temperature is 36.7 degrees. And SpO2 97 percent on room air, respiratory rate 15.
+[SEG0007] person_1 (PATIENT): Is that alright, doctor?
+[SEG0008] person_2 (DOCTOR): That's fine, I'll explain it soon. Has this been going on for long?
+[SEG0009] person_1 (PATIENT): It's been about three months now. A neighbour of mine said I should see someone about it.
+[SEG0010] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0011] person_1 (PATIENT): Steamy bathroom helps a bit. A seven out of ten, I suppose. I'd rather know what's going on than keep guessing.
+[SEG0012] person_2 (DOCTOR): Is it accompanied by anything?
+[SEG0013] person_1 (PATIENT): It usually comes with a hoarse voice. The hoarse voice? That's been for about two weeks.
+[SEG0014] person_2 (DOCTOR): Did you get drooling, noisy breathing when resting or difficulty swallowing?
+[SEG0015] person_1 (PATIENT): None of those, no.
+[SEG0016] person_2 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0017] person_1 (PATIENT): Bowels are regular, nothing odd.
+[SEG0018] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0019] person_1 (PATIENT): No, no conditions.
+[SEG0020] person_2 (DOCTOR): How are your meals?
+[SEG0021] person_1 (PATIENT): I grab fast food at lunch most days.
+[SEG0022] person_2 (DOCTOR): Are you in work at the moment?
+[SEG0023] person_1 (PATIENT): Yes, I work in a bakery, early starts.
+[SEG0024] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0025] person_1 (PATIENT): Okay, so not to my knowledge, no.
+[SEG0026] person_2 (DOCTOR): Are you on any regular medication?
+[SEG0027] person_1 (PATIENT): No, none.
+[SEG0028] person_2 (DOCTOR): Okay, time for me to examine you.
+[SEG0029] person_2 (DOCTOR): Hold that for a second.
+[SEG0030] person_2 (DOCTOR): He is playful, breathing comfortably at rest, and I can't hear any noisy breathing now.
+[SEG0031] person_2 (DOCTOR): That's all I needed to check.
+[SEG0032] person_2 (DOCTOR): Having listened and examined, the most likely explanation is mild croup.
+[SEG0033] person_1 (PATIENT): Will it clear up?
+[SEG0034] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's mild croup, and we'll watch how it goes. So, to recap quickly. You've had a barking cough for about three months, and no difficulty swallowing or drooling.
+[SEG0035] person_1 (PATIENT): That's what happened, yes.
+[SEG0036] person_2 (DOCTOR): The treatment will be dexamethasone, 0.15 mg per kg, once, single dose. It's for croup.
+[SEG0037] person_1 (PATIENT): Should I take that with food?
+[SEG0038] person_2 (DOCTOR): Keep him calm, sit him upright, and give fluids. Do get help quickly if he makes a noisy sound when resting or struggles to breathe. Anything else on your mind before you go?
+[SEG0039] person_1 (PATIENT): Alright, thanks, take care.
+[SEG0040] person_2 (DOCTOR): Look after yourself.
+
+JSON:

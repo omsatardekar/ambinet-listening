@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00225)
+[SEG0001] person_1 (NURSE): Doctor, the patient's with us now. I did the usual checks at the front, so just say when you want them.
+[SEG0002] person_2 (DOCTOR): Okay, great. Hello, come in and sit down. How can I help?
+[SEG0003] person_3 (PATIENT): Honestly, it's numbness on the left side of my face, and my family pushed me to come. I'd rather not end up on lots of tablets if I can avoid it. I'm hoping you can tell me something definite.
+[SEG0004] person_2 (DOCTOR): How far back does it go?
+[SEG0005] person_3 (PATIENT): Probably five days. Yeah.
+[SEG0006] person_2 (DOCTOR): tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse
+[SEG0007] person_3 (PATIENT): Yeah, I'd say moderate. It happens a few times a day.
+[SEG0008] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0009] person_3 (PATIENT): When it starts I tend to get headache as well.
+[SEG0010] person_2 (DOCTOR): a few quick ones: fall, chest pain, palpitations or confusion?
+[SEG0011] person_3 (PATIENT): Okay, so I haven't had fall, chest pain, palpitations or confusion, no.
+[SEG0012] person_2 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0013] person_3 (PATIENT): no problems with breathing
+[SEG0014] person_2 (DOCTOR): have you got any chronic problems?
+[SEG0015] person_3 (PATIENT): I have high cholesterol. I've never really been one for hospitals.
+[SEG0016] person_2 (DOCTOR): Anything special about your diet?
+[SEG0017] person_3 (PATIENT): I try to avoid too much sugar.
+[SEG0018] person_2 (DOCTOR): So, who do you live with?
+[SEG0019] person_3 (PATIENT): I live with my family, my husband and two kids
+[SEG0020] person_2 (DOCTOR): Alright, what's your current medication list?
+[SEG0021] person_3 (PATIENT): Rosuvastatin. I take it 10 milligrams, at night
+[SEG0022] person_2 (DOCTOR): I see. Are there any allergies on your record that I should check?
+[SEG0023] person_3 (PATIENT): Um, not that I know, no.
+[SEG0024] person_1 (NURSE): Doctor, I've got the readings for you. Weight 97 kilos, pulse is 72 beats a minute, oxygen saturation is 99 percent, temp 36.7 degrees, height 161 centimetres, BP is 158 over 104.
+[SEG0025] person_2 (DOCTOR): thanks
+[SEG0026] person_2 (DOCTOR): shall we do the examination?
+[SEG0027] person_2 (DOCTOR): Hold that position for me.
+[SEG0028] person_2 (DOCTOR): There's mild drooping at the left corner of your mouth.
+[SEG0029] person_2 (DOCTOR): okay, you can sit up
+[SEG0030] person_2 (DOCTOR): Having listened and examined, I don't have a clear answer today: a possible mini-stroke, which we need to investigate urgently is possible, and so is a pinched nerve.
+[SEG0031] person_3 (PATIENT): is this something I'll have for good?
+[SEG0032] person_2 (DOCTOR): nothing I've seen today points to an emergency it looks like a possible mini-stroke, which we need to investigate urgently, but I'd like to confirm
+[SEG0033] person_2 (DOCTOR): I'm going to order an ECG, for possible stroke. I'm going to put you on clopidogrel, 75 milligrams, once a day, until we review. You take it by mouth. It's for stroke prevention. Don't drive for now, and bring someone with you to the next visit. Don't skip meals, and try to eat smaller portions more often through the day.
+[SEG0034] person_2 (DOCTOR): let's hold off on an MRI of the brain for now, and if there's no change in two weeks we can revisit it let's plan a check after the results are back
+[SEG0035] person_3 (PATIENT): Okay, uh, see you then.
+[SEG0036] person_2 (DOCTOR): How would you describe the plan, so we're on the same page?
+[SEG0037] person_3 (PATIENT): So, you know, I take the clopidogrel, 75 milligrams, once a day and come back after the results are back. Is that right?
+[SEG0038] person_2 (DOCTOR): Yes, exactly right. Okay, we're done for today. Take care.
+[SEG0039] person_3 (PATIENT): No questions. Thank you.
+[SEG0040] person_2 (DOCTOR): bye for now
+
+JSON:

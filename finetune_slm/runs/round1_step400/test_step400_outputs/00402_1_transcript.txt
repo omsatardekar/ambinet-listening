@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00402)
+[SEG0001] person_1 (PATIENT): sorry, doctor, I couldn't find the door at first
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_3 (CAREGIVER): Hello doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_2 (DOCTOR): please do extra information is always welcome
+[SEG0005] person_3 (CAREGIVER): um, uh, we came because of pain under the right ribs after fatty meals
+[SEG0006] person_2 (DOCTOR): before we go on, a a few quick readings
+[SEG0007] person_2 (DOCTOR): hold still for me..
+[SEG0008] person_2 (DOCTOR): okay: pulse is 77 beats a minute, SpO2 99 percent on room air, pressure 109 over 79.
+[SEG0009] person_1 (PATIENT): is that okay?
+[SEG0010] person_2 (DOCTOR): I'll interpret it once I've examined you
+[SEG0011] person_2 (DOCTOR): When did you first notice it?
+[SEG0012] person_1 (PATIENT): about a week, give or take
+[SEG0013] person_3 (CAREGIVER): It, It was closer to two weeks, doctor.
+[SEG0014] person_2 (DOCTOR): okay so roughly one to two weeks. Is that right?
+[SEG0015] person_1 (PATIENT): yes, somewhere around that
+[SEG0016] person_2 (DOCTOR): mm-hm tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse bear with me, I'm just building up the picture
+[SEG0017] person_1 (PATIENT): Fatty food definitely sets it off. I get some relief from lying still. I've also had bloating. With bloating, I'd say severe. And, And I've been belching as well, for ten days
+[SEG0018] person_2 (DOCTOR): How would you describe it mild moderate severe?
+[SEG0019] person_1 (PATIENT): I'd call it mild.
+[SEG0020] person_2 (DOCTOR): let me check a few things. Any pale stools, dark urine, fever or weight loss?
+[SEG0021] person_1 (PATIENT): No, no pale stools, dark urine, fever or weight loss.
+[SEG0022] person_2 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0023] person_1 (PATIENT): Breathing's normal.
+[SEG0024] person_2 (DOCTOR): anything unusual with passing urine?
+[SEG0025] person_1 (PATIENT): no changes there
+[SEG0026] person_2 (DOCTOR): any drug or food allergies?
+[SEG0027] person_1 (PATIENT): No, nothing I'm aware of.
+[SEG0028] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0029] person_1 (PATIENT): I've had diabetes, yes. Sorry, I know I'm rambling a bit
+[SEG0030] person_2 (DOCTOR): okay, so
+[SEG0031] person_1 (PATIENT): Yes, high cholesterol.
+[SEG0032] person_2 (DOCTOR): Right, any more?
+[SEG0033] person_2 (DOCTOR): yes diabetes is known to us good to have that clear tell me what you take day to day
+[SEG0034] person_3 (CAREGIVER): Oh, he takes metformin, 500 milligrams, twice a day.
+[SEG0035] person_1 (PATIENT): Um, I used to take rosuvastatin, but I stopped it.
+[SEG0036] person_2 (DOCTOR): Have you had to to have anything operated on?
+[SEG0037] person_1 (PATIENT): um, you know, just my tonsils out, when I was a child
+[SEG0038] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0039] person_1 (PATIENT): I smoke about ten cigarettes a day. I cycle to work most mornings. I'm mostly vegetarian
+[SEG0040] person_2 (DOCTOR): shall we do the the examination?
+[SEG0041] person_1 (PATIENT): sure
+[SEG0042] person_2 (DOCTOR): Let me just check something.
+[SEG0043] person_2 (DOCTOR): Mild tenderness under the right ribs, and no pain when you breathe in while I press.
+[SEG0044] person_2 (DOCTOR): Okay, stay still while I have a look.
+[SEG0045] person_2 (DOCTOR): The rest of the tummy is soft.
+[SEG0046] person_1 (PATIENT): no problem
+[SEG0047] person_2 (DOCTOR): okay, finished putting it all together, I'd lean towards gallstone pain. Gastritis is also on my list
+[SEG0048] person_1 (PATIENT): is it something serious, doctor?
+[SEG0049] person_2 (DOCTOR): I understand the worry at the moment I'd say it's gallstone pain and we'll know more once the an ultrasound of the abdomen is back
+[SEG0050] person_2 (DOCTOR): I'm sending you for an ultrasound of the abdomen cos of right upper quadrant pain. I'd like to arrange liver function tests for right upper quadrant pain. Smaller lower-fat meals will probably keep the pain down until we've seen the scan. Come back after the scan
+[SEG0051] person_1 (PATIENT): That works for me.
+[SEG0052] person_2 (DOCTOR): alright, I'll see you out
+[SEG0053] person_1 (PATIENT): alright, thanks bye for now
+
+JSON:

@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00418)
+[SEG0001] person_1 (PATIENT): Doctor, hello, I've got my papers here, where should I put them?
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_3 (FAMILY_MEMBER): Morning, doctor. I'll stay and fill in anything that's missed.
+[SEG0004] person_2 (DOCTOR): Good, that'll be useful. Pull up a chair.
+[SEG0005] person_3 (FAMILY_MEMBER): he's been having muffled hearing, doctor
+[SEG0006] person_2 (DOCTOR): How far back does it go?
+[SEG0007] person_1 (PATIENT): I mean, I've had it since Friday. I kept putting it off, which I know isn't sensible.
+[SEG0008] person_2 (DOCTOR): On a normal day, how strong is it?
+[SEG0009] person_1 (PATIENT): Well, it feels severe to me.
+[SEG0010] person_2 (DOCTOR): Okay, anything that tends to go along with it?
+[SEG0011] person_1 (PATIENT): When it starts I tend to get a fever as well. The fever? That's been for three days.
+[SEG0012] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0013] person_1 (PATIENT): Uh, it's paracetamol, 500 milligrams, when needed.
+[SEG0014] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0015] person_1 (PATIENT): No, no allergies to anything.
+[SEG0016] person_2 (DOCTOR): What kind of work do you do?
+[SEG0017] person_1 (PATIENT): I work on a farm, it's quite physical
+[SEG0018] person_2 (DOCTOR): How's your diet?
+[SEG0019] person_1 (PATIENT): I'm mostly vegetarian
+[SEG0020] person_2 (DOCTOR): Who do you live with?
+[SEG0021] person_1 (PATIENT): I live with my family, my husband and two kids.
+[SEG0022] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0023] person_1 (PATIENT): No, you know, none that I know of.
+[SEG0024] person_2 (DOCTOR): what about operations, anything like that?
+[SEG0025] person_1 (PATIENT): So, just a lump removed from my back, years ago.
+[SEG0026] person_2 (DOCTOR): A few quick ones: discharge from the ear or swelling behind the ear?
+[SEG0027] person_1 (PATIENT): I mean, um, no discharge from the ear or swelling behind the ear, none of it.
+[SEG0028] person_2 (DOCTOR): Let me check a few things. Any ringing, facial weakness or dizziness?
+[SEG0029] person_1 (PATIENT): No, not any of them.
+[SEG0030] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0031] person_1 (PATIENT): Nothing like that.
+[SEG0032] person_2 (DOCTOR): is your mobility otherwise okay?
+[SEG0033] person_1 (PATIENT): Oh, no, joints are fine.
+[SEG0034] person_2 (DOCTOR): Before we go on, a few quick readings.
+[SEG0035] person_2 (DOCTOR): one second..
+[SEG0036] person_2 (DOCTOR): Okay: blood pressure 122 over 80, saturation 96 percent, heart rate 88. And respiratory rate 16, temp 39.0 degrees.
+[SEG0037] person_2 (DOCTOR): Can I examine you now?
+[SEG0038] person_2 (DOCTOR): bear with me a second
+[SEG0039] person_2 (DOCTOR): The left ear looks normal.
+[SEG0040] person_2 (DOCTOR): Bear with me a second.
+[SEG0041] person_2 (DOCTOR): The right eardrum looks red and bulging.
+[SEG0042] person_2 (DOCTOR): Good, that's the examination.
+[SEG0043] person_2 (DOCTOR): putting it all together, I think we're dealing with a middle ear infection at this stage it could also be a wax blockage, so we'll keep that open
+[SEG0044] person_1 (PATIENT): do you think it's serious?
+[SEG0045] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a middle ear infection, and we'll watch how it goes.
+[SEG0046] person_2 (DOCTOR): I'll start you on amoxicillin, 500 milligrams, three times a day, for five days. That should help with ear infection
+[SEG0047] person_1 (PATIENT): Well, is that safe with my other things?
+[SEG0048] person_2 (DOCTOR): Keep the ear dry for now and don't put anything in it, including cotton buds. I'll want another look in a week.
+[SEG0049] person_1 (PATIENT): I mean, I'll make the appointment on my way out.
+[SEG0050] person_2 (DOCTOR): Any last questions?
+[SEG0051] person_1 (PATIENT): I mean, uh, no questions. Thank you.
+
+JSON:

@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03611)
+[SEG0001] person_1 (PATIENT): Hello, doctor. May I come in?
+[SEG0002] person_2 (DOCTOR): Yes, have a seat. Tell me what's going on.
+[SEG0003] person_1 (PATIENT): I've been dealing with night sweats.
+[SEG0004] person_2 (DOCTOR): How long has it been like this?
+[SEG0005] person_1 (PATIENT): It's been going on for two days. Work has been very busy so I kept ignoring it.
+[SEG0006] person_2 (DOCTOR): Yes, carry on. Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): About a seven out of ten. It's every other day.
+[SEG0008] person_2 (DOCTOR): Any back pain that doesn't go away as well?
+[SEG0009] person_1 (PATIENT): Yeah, you know, I've had that since yesterday.
+[SEG0010] person_2 (DOCTOR): Alright, are there any allergies I should be aware of?
+[SEG0011] person_1 (PATIENT): No, not that I know of.
+[SEG0012] person_2 (DOCTOR): How are your meals?
+[SEG0013] person_1 (PATIENT): I grab fast food at lunch most days.
+[SEG0014] person_2 (DOCTOR): Are you active?
+[SEG0015] person_1 (PATIENT): I walk the dog every morning.
+[SEG0016] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0017] person_1 (PATIENT): No, I've always been fairly healthy.
+[SEG0018] person_2 (DOCTOR): Have you had any surgical procedures?
+[SEG0019] person_1 (PATIENT): Sorry, you know, what was I saying, just a varicose vein procedure, last year.
+[SEG0020] person_2 (DOCTOR): Any regular medication at all?
+[SEG0021] person_1 (PATIENT): No, nothing at the moment.
+[SEG0022] person_2 (DOCTOR): Have you noticed chest pain, leg weakness or breathlessness?
+[SEG0023] person_1 (PATIENT): Okay, so no, nothing to report there.
+[SEG0024] person_2 (DOCTOR): And high fever, any of that?
+[SEG0025] person_1 (PATIENT): Okay, so not that I've noticed, no high fever.
+[SEG0026] person_2 (DOCTOR): Alright, any breathing difficulties apart from this?
+[SEG0027] person_1 (PATIENT): No, uh, nothing there.
+[SEG0028] person_2 (DOCTOR): Let me get the readings out of the way.
+[SEG0029] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0030] person_2 (DOCTOR): Okay: heart rate 98, temp 38.4 degrees, SpO2 97 percent on room air, blood pressure 107 over 74, respiratory rate 22.
+[SEG0031] person_2 (DOCTOR): May I examine you now?
+[SEG0032] person_1 (PATIENT): Right.
+[SEG0033] person_2 (DOCTOR): Raise your arm for me.
+[SEG0034] person_2 (DOCTOR): There is a soft heart murmur you've not had before and a small tender spot on the fingertip.
+[SEG0035] person_2 (DOCTOR): Please sit back down. Okay, thinking it through, it fits best with possible infection of the heart valve causing back and general symptoms. I'd like to arrange an MRI of the spine for persistent back pain with systemic symptoms. This is not an ordinary back strain, so I want tests today. We'll refer you to the medical admissions unit.
+[SEG0036] person_1 (PATIENT): Alright, thank you.
+[SEG0037] person_2 (DOCTOR): Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency. That's everything on my side. Anything you're unsure about?
+[SEG0038] person_1 (PATIENT): No, uh, that's all. Thanks a lot.
+[SEG0039] person_2 (DOCTOR): Alright, see you soon.
+
+JSON:

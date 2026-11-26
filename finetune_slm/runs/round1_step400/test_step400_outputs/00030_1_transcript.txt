@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00030)
+[SEG0001] person_1 (DOCTOR): Good afternoon. Have a seat and we'll begin.
+[SEG0002] person_2 (PATIENT): Hmm, hello. Is it okay if I sit here?
+[SEG0003] person_1 (DOCTOR): Go ahead, tell me what's happening.
+[SEG0004] person_2 (PATIENT): It's, It's a painful band of blisters on the left side of my chest, mostly. I thought it would sort itself out, but it hasn't.
+[SEG0005] person_1 (DOCTOR): When did you first notice it?
+[SEG0006] person_2 (PATIENT): Since last night, that's when it began.
+[SEG0007] person_1 (DOCTOR): Does it happen all the time or in spells?
+[SEG0008] person_2 (PATIENT): I'd say every other day.
+[SEG0009] person_1 (DOCTOR): Anything that helps?
+[SEG0010] person_2 (PATIENT): It, It settles a little with cool cloths.
+[SEG0011] person_1 (DOCTOR): How much is it bothering you?
+[SEG0012] person_2 (PATIENT): Maybe a five out of ten on a bad day.
+[SEG0013] person_1 (DOCTOR): Have you had burning pain before the rash came?
+[SEG0014] person_2 (PATIENT): Yes, about the same, about four days. There's a mild fever as well.
+[SEG0015] person_1 (DOCTOR): Did you get rash on the other side, immune problems, blurred vision or rash on the face?
+[SEG0016] person_2 (PATIENT): Nothing like that, no.
+[SEG0017] person_1 (DOCTOR): Is your mobility otherwise okay?
+[SEG0018] person_2 (PATIENT): No, joints are fine.
+[SEG0019] person_1 (DOCTOR): Are you active at all?
+[SEG0020] person_2 (PATIENT): Barely, I'm mostly sedentary these days.
+[SEG0021] person_1 (DOCTOR): Who's at home with you?
+[SEG0022] person_2 (PATIENT): It's just me and my wife at home now.
+[SEG0023] person_1 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0024] person_2 (PATIENT): I've, I've had diabetes for about a year now. High blood pressure, for about a year.
+[SEG0025] person_1 (DOCTOR): Mm.
+[SEG0026] person_2 (PATIENT): Yes, anxiety.
+[SEG0027] person_1 (DOCTOR): I follow. Yes, diabetes and anxiety are known to us, good to have that clear. What medicines do you take regularly?
+[SEG0028] person_2 (PATIENT): I'm on Glycomet, 500 milligrams, twice a day. I'm not great at remembering details, so bear with me. I, I take ramipril, 5 milligrams, every morning. It's escitalopram, 10 milligrams, once a day.
+[SEG0029] person_1 (DOCTOR): Alright, have you had any previous surgeries?
+[SEG0030] person_2 (PATIENT): I mean, no, nothing like that.
+[SEG0031] person_3 (NURSE): Here are the numbers, doctor. Oxygen saturation is 97 percent, temperature 36.9, BP is 124 over 68. Heart rate 84, respiratory rate 14.
+[SEG0032] person_1 (DOCTOR): Good, thank you.
+[SEG0033] person_1 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0034] person_1 (DOCTOR): Alright, almost done with this part.
+[SEG0035] person_1 (DOCTOR): Grouped blisters on a red base along one rib on the left, not crossing the midline.
+[SEG0036] person_1 (DOCTOR): Okay, you can sit up.
+[SEG0037] person_1 (DOCTOR): Okay, thinking it through, the most likely explanation is shingles.
+[SEG0038] person_2 (PATIENT): Do you think it's serious?
+[SEG0039] person_1 (DOCTOR): I understand the worry. At the moment I'd say it's shingles, and we'll watch how it goes. For this, paracetamol, 1 gram, every six hours if needed, for five days. It's for pain. For this, aciclovir, 800 milligrams, five times a day, for seven days. That should help with shingles.
+[SEG0040] person_2 (PATIENT): Hmm, is that safe with my other things?
+[SEG0041] person_1 (DOCTOR): Keep the blisters clean and covered, and avoid contact with anyone pregnant or newborn until they crust. If the rash spreads to your face or eye, that's the point to come in urgently. Okay, I think we're finished. Is everything clear?
+[SEG0042] person_2 (PATIENT): No, I think that's everything. Thank you, doctor.
+
+JSON:

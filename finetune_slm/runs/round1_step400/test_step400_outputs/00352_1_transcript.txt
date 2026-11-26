@@ -1,0 +1,64 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00352)
+[SEG0001] person_1 (DOCTOR): Right, come in and get settled.
+[SEG0002] person_2 (PATIENT): Hello.
+[SEG0003] person_1 (DOCTOR): Okay, go ahead, tell me what's happening.
+[SEG0004] person_2 (PATIENT): Uh, um, honestly, it's dizziness when I stand up, and my family pushed me to come. My family kept telling me to get it checked.
+[SEG0005] person_1 (DOCTOR): Alright, since when have you had this?
+[SEG0006] person_2 (PATIENT): It's been about a week, I'm fairly sure. I've never really been one for hospitals. I told myself I'd wait and see, and here I am.
+[SEG0007] person_1 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0008] person_2 (PATIENT): About a five out of ten. Honestly, once or twice a day. Standing up quickly definitely sets it off.
+[SEG0009] person_1 (DOCTOR): Has there been dark urine too?
+[SEG0010] person_2 (PATIENT): Yeah, that too. As for very dry mouth, I honestly can't say when that began. It might have been last month or the month before. I mean, with very dry mouth, it feels mild to me. I had loose motions before. That's settled now, though.
+[SEG0011] person_1 (DOCTOR): Have you had any vomiting, fever, confusion or blood in the stool?
+[SEG0012] person_2 (PATIENT): So, I haven't had vomiting, fever, confusion or blood in the stool, no.
+[SEG0013] person_1 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0014] person_2 (PATIENT): uh, no, nothing with my heart
+[SEG0015] person_1 (DOCTOR): And your skin, any changes there?
+[SEG0016] person_2 (PATIENT): no, skin's been fine
+[SEG0017] person_1 (DOCTOR): Any long-term health problems I should know about?
+[SEG0018] person_2 (PATIENT): I have high blood pressure, for about ten years i have diabetes
+[SEG0019] person_1 (DOCTOR): Right. Right, so high blood pressure is already on your record. We'll keep that in mind today.
+[SEG0020] person_1 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0021] person_2 (PATIENT): Losartan, 50 milligrams, once a day. I take something called glyc... Glycomet, 500 milligrams, maybe, twice a day.
+[SEG0022] person_1 (DOCTOR): Is the packet here, or the prescription?
+[SEG0023] person_2 (PATIENT): no, it's at home. ORS i take it whenever I remember
+[SEG0024] person_1 (DOCTOR): Any drug or food allergies?
+[SEG0025] person_2 (PATIENT): None, as far as I'm aware.
+[SEG0026] person_1 (DOCTOR): have you ever been under the the knife?
+[SEG0027] person_2 (PATIENT): okay, so I had my appendix out about eight years ago
+[SEG0028] person_1 (DOCTOR): Is anyone at home with you?
+[SEG0029] person_2 (PATIENT): I share a flat with two friends
+[SEG0030] person_1 (DOCTOR): What kind of work do you do?
+[SEG0031] person_2 (PATIENT): I work on a farm, it's quite physical
+[SEG0032] person_1 (DOCTOR): What do you do to keep active?
+[SEG0033] person_2 (PATIENT): I cycle to work most mornings.
+[SEG0034] person_1 (DOCTOR): I'll check your pressure and pulse.
+[SEG0035] person_1 (DOCTOR): Rest your hand here...
+[SEG0036] person_1 (DOCTOR): okay: SpO2 97 percent on room air, heart rate 101, BP is 94 over 62.
+[SEG0037] person_2 (PATIENT): Is that okay?
+[SEG0038] person_1 (DOCTOR): I'll come back to those numbers.
+[SEG0039] person_1 (DOCTOR): can I examine you now?
+[SEG0040] person_2 (PATIENT): Okay.
+[SEG0041] person_1 (DOCTOR): Let me look at this properly.
+[SEG0042] person_1 (DOCTOR): Your mouth is quite dry and the skin is a little slow to spring back.
+[SEG0043] person_1 (DOCTOR): Thanks for that. From what you've told me and what I found, my working impression is mild dehydration. I can't rule out an electrolyte imbalance yet. I think a kidney function test makes sense here, for dehydration.
+[SEG0044] person_2 (PATIENT): mm, okay
+[SEG0045] person_1 (DOCTOR): Let's book blood salts to look into dehydration.
+[SEG0046] person_2 (PATIENT): is that done here?
+[SEG0047] person_1 (DOCTOR): Small, frequent sips are better than a big glass at once, and keep going even if you don't feel thirsty. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. We'll catch up next week. Call the clinic if you need us.
+[SEG0048] person_2 (PATIENT): No questions. Thank you.
+[SEG0049] person_1 (DOCTOR): all the best
+
+JSON:

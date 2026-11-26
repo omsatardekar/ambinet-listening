@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03564)
+[SEG0001] person_1 (PATIENT): morning, doctor. Lovely to to meet you
+[SEG0002] person_2 (DOCTOR): yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): um, so... back pain that doesn't go away that's why I came
+[SEG0004] person_2 (DOCTOR): Did it come on recently?
+[SEG0005] person_1 (PATIENT): About... well, about three months.
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): It It happens all the time. I'd call it mild.
+[SEG0008] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0009] person_2 (DOCTOR): Sit still for a moment...
+[SEG0010] person_2 (DOCTOR): okay: heart rate 91, temperature 39.0, BP is 111 over 68.
+[SEG0011] person_1 (PATIENT): is that normal?
+[SEG0012] person_2 (DOCTOR): That's fine, I'll explain it soon.
+[SEG0013] person_2 (DOCTOR): Could you come over to the couch, please?
+[SEG0014] person_1 (PATIENT): of course
+[SEG0015] person_2 (DOCTOR): Nearly finished here.
+[SEG0016] person_2 (DOCTOR): there is a soft heart murmur you've not had before and a small tender spot on the fingertip
+[SEG0017] person_2 (DOCTOR): That's the examination finished.
+[SEG0018] person_2 (DOCTOR): A few quick ones: breathlessness or high fever?
+[SEG0019] person_1 (PATIENT): no, no breathlessness or high fever
+[SEG0020] person_2 (DOCTOR): Let me check a few things. Any leg weakness or chest pain?
+[SEG0021] person_1 (PATIENT): No, not a single one.
+[SEG0022] person_2 (DOCTOR): Is your urine normal, no changes?
+[SEG0023] person_1 (PATIENT): no, that's all fine
+[SEG0024] person_2 (DOCTOR): Right, any previous surgeries?
+[SEG0025] person_1 (PATIENT): No, not at all.
+[SEG0026] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0027] person_1 (PATIENT): I have high blood pressure
+[SEG0028] person_2 (DOCTOR): Right, right.
+[SEG0029] person_2 (DOCTOR): Which medicines do you take at the moment? It helps to be thorough at this stage.
+[SEG0030] person_1 (PATIENT): It's metoprolol, 50 milligrams, twice a day.
+[SEG0031] person_2 (DOCTOR): Tell me about your eating.
+[SEG0032] person_1 (PATIENT): I drink a lot of tea and snack through the day
+[SEG0033] person_2 (DOCTOR): Do you get out much?
+[SEG0034] person_1 (PATIENT): Not much, I mostly stay in these days.
+[SEG0035] person_2 (DOCTOR): So, do you react to any medicines or foods? Any allergies?
+[SEG0036] person_1 (PATIENT): Years back I got wheezing from diclofenac, so I stay away from it now.
+[SEG0037] person_2 (DOCTOR): Okay, thinking it through, this is probably possible infection of the heart valve causing back and general symptoms.
+[SEG0038] person_2 (DOCTOR): Let's book blood cultures to look into possible endocarditis. This is not an ordinary back strain, so I want tests today. A short walk every day, even twenty minutes, will help more than you'd think. The medical admissions unit would be the right next step, I'll refer you.
+[SEG0039] person_1 (PATIENT): alright, thank you
+[SEG0040] person_2 (DOCTOR): keep an eye out, and if the symptoms get worse, call us the same day or go to emergency i'd like to see you again straight away have I covered everything you wanted?
+[SEG0041] person_1 (PATIENT): That's clear, thanks.
+
+JSON:

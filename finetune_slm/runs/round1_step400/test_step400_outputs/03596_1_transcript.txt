@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03596)
+[SEG0001] person_1 (PATIENT): hi doctor, am I too early?
+[SEG0002] person_2 (DOCTOR): that's fine, sit down. Tell me why you came
+[SEG0003] person_1 (PATIENT): doctor, it's periods stopped for four months it's getting on my nerves now
+[SEG0004] person_2 (DOCTOR): How long has it been like this?
+[SEG0005] person_1 (PATIENT): Since this morning, that's when it began. Sorry, I know I'm rambling a bit.
+[SEG0006] person_2 (DOCTOR): Sure. Is it a lot or only a little?
+[SEG0007] person_1 (PATIENT): I'd call it mild.
+[SEG0008] person_2 (DOCTOR): Is it accompanied by anything?
+[SEG0009] person_1 (PATIENT): It usually comes with a milky discharge from my breasts. Hmm, and being told it was just stress as well, since yesterday.
+[SEG0010] person_2 (DOCTOR): So, have you had periods stopped for four months before, or is this the first time?
+[SEG0011] person_1 (PATIENT): A bit, about six months ago. It settled by itself back then.
+[SEG0012] person_2 (DOCTOR): Let me check a few things. Any positive pregnancy test, visual changes or weight change?
+[SEG0013] person_1 (PATIENT): none of those, no
+[SEG0014] person_2 (DOCTOR): Any hot flushes?
+[SEG0015] person_1 (PATIENT): No, I haven't had any hot flushes.
+[SEG0016] person_2 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0017] person_1 (PATIENT): No, um, nothing like that.
+[SEG0018] person_2 (DOCTOR): what's on your current medicine list?
+[SEG0019] person_1 (PATIENT): it's bisoprolol, 2.5 milligrams, once a day. Thyroxine, 75 micrograms, every morning
+[SEG0020] person_2 (DOCTOR): are there any illnesses in your family?
+[SEG0021] person_1 (PATIENT): My uncle has high cholesterol.
+[SEG0022] person_2 (DOCTOR): Alright, have you been to theatre before?
+[SEG0023] person_1 (PATIENT): Just a bunion operation, six years ago.
+[SEG0024] person_2 (DOCTOR): Tell me about any past illnesses or ongoing conditions.
+[SEG0025] person_1 (PATIENT): Yes, an irregular heartbeat.
+[SEG0026] person_2 (DOCTOR): I follow.
+[SEG0027] person_1 (PATIENT): actually, I have an underactive thyroid, for about ten years
+[SEG0028] person_2 (DOCTOR): And besides that?
+[SEG0029] person_2 (DOCTOR): alright, an irregular heartbeat, that matches what I have here how are your meals?
+[SEG0030] person_1 (PATIENT): I grab fast food at lunch most days
+[SEG0031] person_2 (DOCTOR): Anything you do to to stay fit?
+[SEG0032] person_1 (PATIENT): I do a yoga class on Thursdays.
+[SEG0033] person_2 (DOCTOR): let me quickly check your readings
+[SEG0034] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0035] person_2 (DOCTOR): Okay: pressure 125 over 79, saturation 99 percent, temperature is 36.6 degrees, pulse 86.
+[SEG0036] person_2 (DOCTOR): Alright, now I'm going to do a short physical check.
+[SEG0037] person_2 (DOCTOR): Does that hurt?
+[SEG0038] person_2 (DOCTOR): You are not pregnant by the urine test, the breasts express a little milk, and and there is no visual field loss.
+[SEG0039] person_2 (DOCTOR): That's the examination finished.
+[SEG0040] person_2 (DOCTOR): Let's get a prolactin and thyroid blood test, for galactorrhoea. We should do an MRI of the pituitary for possible prolactinoma. The result will help us decide whether anything more is needed.
+[SEG0041] person_1 (PATIENT): that makes sense
+[SEG0042] person_2 (DOCTOR): don't stress about stress as the cause, the tests will tell us. Let's get you seen by the endocrine clinic, I'll arrange the letter
+[SEG0043] person_1 (PATIENT): Sure, where do I go?
+[SEG0044] person_2 (DOCTOR): we'll catch up after the results
+[SEG0045] person_1 (PATIENT): yes, that's manageable
+[SEG0046] person_2 (DOCTOR): Alright, does all of that make sense?
+[SEG0047] person_1 (PATIENT): Alright, thanks, take care.
+[SEG0048] person_2 (DOCTOR): Take care now.
+
+JSON:

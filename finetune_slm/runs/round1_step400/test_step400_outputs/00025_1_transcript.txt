@@ -1,0 +1,71 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00025)
+[SEG0001] person_1 (PATIENT): I mean, good afternoon, doctor, the receptionist said you'd see me now.
+[SEG0002] person_2 (DOCTOR): No trouble at all, come in. What's been bothering you?
+[SEG0003] person_1 (PATIENT): I've been feeling very thirsty.
+[SEG0004] person_2 (DOCTOR): Since when have you had this?
+[SEG0005] person_1 (PATIENT): It's been one week, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): I'd say severe. Only drinking water, and it's not much.
+[SEG0008] person_2 (DOCTOR): Have you been going to the toilet a lot, even at night?
+[SEG0009] person_1 (PATIENT): Yes, actually. I've also had itching around the private area, for about a month.
+[SEG0010] person_2 (DOCTOR): Would you call it mild or bad?
+[SEG0011] person_1 (PATIENT): It feels moderate to me.
+[SEG0012] person_2 (DOCTOR): A few quick ones: fever or blurred vision?
+[SEG0013] person_1 (PATIENT): No, uh, not any of them.
+[SEG0014] person_2 (DOCTOR): Okay, so. So, any fruity smell on the breath, breathlessness or abdominal pain at all?
+[SEG0015] person_1 (PATIENT): No, not any of them.
+[SEG0016] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0017] person_1 (PATIENT): Nothing like that.
+[SEG0018] person_2 (DOCTOR): What about alcohol?
+[SEG0019] person_1 (PATIENT): I don't drink at all.
+[SEG0020] person_2 (DOCTOR): Any smoking?
+[SEG0021] person_1 (PATIENT): I used to smoke but I quit five years ago.
+[SEG0022] person_2 (DOCTOR): Who's at home with you?
+[SEG0023] person_1 (PATIENT): It's just me and my wife at home now.
+[SEG0024] person_2 (DOCTOR): How do you eat, generally?
+[SEG0025] person_1 (PATIENT): I skip breakfast most days.
+[SEG0026] person_2 (DOCTOR): Do you get any exercise?
+[SEG0027] person_1 (PATIENT): I walk for about half an hour most days.
+[SEG0028] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0029] person_1 (PATIENT): I've got an irregular heartbeat. I've had an underactive thyroid, yes. High cholesterol, for two years.
+[SEG0030] person_2 (DOCTOR): Yes, an irregular heartbeat and high cholesterol are known to us, good to have that clear. Is there a family history of anything significant?
+[SEG0031] person_1 (PATIENT): My father had kidney stones.
+[SEG0032] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0033] person_1 (PATIENT): No, no allergies to anything.
+[SEG0034] person_2 (DOCTOR): Any previous surgeries?
+[SEG0035] person_1 (PATIENT): No operations, no.
+[SEG0036] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0037] person_1 (PATIENT): It's apixaban, 5 milligrams, twice a day. It's Thyronorm, every morning for my thyroid.
+[SEG0038] person_2 (DOCTOR): And what strength is that?
+[SEG0039] person_1 (PATIENT): 50 micrograms. Rosuvastatin. I take it 10 milligrams, at night.
+[SEG0040] person_2 (DOCTOR): Let me measure a few things.
+[SEG0041] person_2 (DOCTOR): Just relax your arm...
+[SEG0042] person_2 (DOCTOR): Okay: heart rate 68, weight 92 kilos, BP is 128 over 70. And BMI works out to 39.3, SpO2 97 percent on room air, height 153 centimetres, respiratory rate 16.
+[SEG0043] person_1 (PATIENT): Is that okay?
+[SEG0044] person_2 (DOCTOR): Okay, they help build the picture, I'll tell you more soon.
+[SEG0045] person_2 (DOCTOR): Right, let me check a few things physically.
+[SEG0046] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0047] person_2 (DOCTOR): You're a little dry, but alert, and your breathing is normal.
+[SEG0048] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0049] person_2 (DOCTOR): Your tummy is soft and non-tender.
+[SEG0050] person_2 (DOCTOR): Good, that's the examination.
+[SEG0051] person_2 (DOCTOR): Okay, so my impression is this: I don't have a clear answer today: possible new-onset diabetes is possible, and so is diabetes insipidus.
+[SEG0052] person_1 (PATIENT): Should I be worried about this?
+[SEG0053] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like possible new-onset diabetes, but I'd like to confirm.
+[SEG0054] person_2 (DOCTOR): I want a blood sugar test done, that's for polydipsia and polyuria. That will help us see what's going on underneath and decide the next step. I'd like to arrange an HbA1c for possible diabetes. Until we have the results, avoid sugary drinks and fruit juices, and keep drinking plain water. Come back or go to emergency straight away if you start vomiting or become drowsy. Please come and see me after the results are back.
+[SEG0055] person_2 (DOCTOR): Look after yourself.
+[SEG0056] person_1 (PATIENT): All good here. Thank you.
+
+JSON:

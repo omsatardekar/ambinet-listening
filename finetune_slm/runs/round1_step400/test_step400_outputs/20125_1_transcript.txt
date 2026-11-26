@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20125)
+[SEG0001] person_1 (PATIENT): Yeah um hi doctor am I too early?
+[SEG0002] person_2 (DOCTOR): come in please sit how can I help you?
+[SEG0003] person_1 (PATIENT): well I've been having pale stools
+[SEG0004] person_2 (DOCTOR): Do you take any regular medication?
+[SEG0005] person_1 (PATIENT): no, nothing at the moment
+[SEG0006] person_2 (DOCTOR): did it it come on recently?
+[SEG0007] person_1 (PATIENT): It's been three days now. I've also had tiredness.
+[SEG0008] person_2 (DOCTOR): have you had any vomiting blood, confusion or severe abdominal pain?
+[SEG0009] person_1 (PATIENT): no, none that I've noticed
+[SEG0010] person_2 (DOCTOR): on the cardiac side, anything I should know?
+[SEG0011] person_1 (PATIENT): nothing like that that
+[SEG0012] person_2 (DOCTOR): how are your joints, any aches elsewhere?
+[SEG0013] person_1 (PATIENT): erm no joints are fine
+[SEG0014] person_2 (DOCTOR): Right, any previous surgeries?
+[SEG0015] person_1 (PATIENT): no, I've never been operated on
+[SEG0016] person_2 (DOCTOR): any allergies to tablets food or anything in the the environment?
+[SEG0017] person_1 (PATIENT): I've never had an allergy.
+[SEG0018] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0019] person_1 (PATIENT): No, nothing at all.
+[SEG0020] person_2 (DOCTOR): so now some background about your lifestyle
+[SEG0021] person_1 (PATIENT): Lots of rice, lentils and some fruit. I live with my elderly mother. I look after my grandchildren most days
+[SEG0022] person_2 (DOCTOR): Let's start with the the basic checks.
+[SEG0023] person_2 (DOCTOR): that's it, just a little longer..
+[SEG0024] person_2 (DOCTOR): okay: pulse is 64 beats a minute, blood pressure 124 over 82. And temperature is 36.7 degrees, respiratory rate 17, saturation 99 percent
+[SEG0025] person_2 (DOCTOR): Shall I start the examination?
+[SEG0026] person_1 (PATIENT): right
+[SEG0027] person_2 (DOCTOR): So does that hurt?
+[SEG0028] person_2 (DOCTOR): The whites of your eyes are yellow and the liver edge is tender under the right ribs.
+[SEG0029] person_2 (DOCTOR): thank you, you can get dressed okay, so so my impression is this: I'd lean towards an acute viral hepatitis
+[SEG0030] person_2 (DOCTOR): I want liver blood tests done, that's for jaundice
+[SEG0031] person_1 (PATIENT): do I need to prepare?
+[SEG0032] person_2 (DOCTOR): No alcohol at all and avoid paracetamol and other painkillers unless we say. Make sure you're drinking plenty of fluids, two to three litres a day if you can, and get proper rest. I'm going to send a referral to the liver clinic.
+[SEG0033] person_1 (PATIENT): Sure where do I go?
+[SEG0034] person_2 (DOCTOR): keep an eye out, and if you become drowsy or confused, call us the same day or go to to emergency see me again after the results that's everything on my side anything you're unsure about?
+[SEG0035] person_1 (PATIENT): No, that's all. Thanks a lot.
+[SEG0036] person_2 (DOCTOR): See you soon.
+
+JSON:

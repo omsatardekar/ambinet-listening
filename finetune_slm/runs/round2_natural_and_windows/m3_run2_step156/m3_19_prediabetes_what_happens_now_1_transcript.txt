@@ -1,0 +1,130 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_19_prediabetes_what_happens_now)
+[SEG0001] person_1 (PATIENT): Sorry. Sorry I'm late, there was an accident on the Pacific Highway, I rang the surgery but it went to the machine. Is it bad? The result? Did you see it? I've been awake since four. Am I diabetic?
+[SEG0002] person_2 (FAMILY_MEMBER): Mark. Let the woman say hello.
+[SEG0003] person_1 (PATIENT): Sorry. Hello.
+[SEG0004] person_3 (DOCTOR): Hello, Mark, it's fine, you're only a few minutes behind. Come and sit down. I'm Dr Okoro, we haven't met, I'm covering for Dr Lang this week. And this must be Mrs Kelly?
+[SEG0005] person_2 (FAMILY_MEMBER): Julie. Julie, hi. I thought I'd come, because he's, well, you can see.
+[SEG0006] person_3 (DOCTOR): I can see. Take a breath, Mark. Pop your jacket on the back of the chair. Right, I've got the result in front of me. Before I tell you what it says, what do you already know about it?
+[SEG0007] person_1 (PATIENT): Er, just that the lady on the phone said it was high. And my dad was diabetic, so I know what that means. Well, I don't, but I've seen what it did to him.
+[SEG0008] person_3 (DOCTOR): Right.
+[SEG0009] person_3 (DOCTOR): Okay. Thank you. Then let me tell you straight, and then we'll go through what it means. The blood test that looks at your average sugar over the last three months is called HbA1c. Yours was six point one. Anything under five point seven is normal, and anything over six and a half is diabetes. Yours is between the two, in what we call the pre-diabetes range.
+[SEG0010] person_1 (PATIENT): So I'm diabetic.
+[SEG0011] person_3 (DOCTOR): No. You're not diabetic, you're in the range where your sugar is above normal but under the line for diabetes. It's a warning, not a diagnosis.
+[SEG0012] person_1 (PATIENT): A warning.
+[SEG0013] person_3 (DOCTOR): Does that make sense?
+[SEG0014] person_1 (PATIENT): Not diabetic. But close.
+[SEG0015] person_3 (DOCTOR): Closer than we'd like, yes. But this is a warning you can do something about, and many people turn it right back.
+[SEG0016] person_2 (FAMILY_MEMBER): See, I told you it wasn't the end of the world.
+[SEG0017] person_1 (PATIENT): You said it was probably nothing, Julie, that's not the same.
+[SEG0018] person_3 (DOCTOR): Can I ask how you've been feeling lately? The test was a routine one, I understand, but I'd like to hear whether you've noticed anything.
+[SEG0019] person_1 (PATIENT): Okay.
+[SEG0020] person_1 (PATIENT): Tired. I've been really tired.
+[SEG0021] person_3 (DOCTOR): How long?
+[SEG0022] person_1 (PATIENT): A month. About a month. Maybe a bit more.
+[SEG0023] person_2 (FAMILY_MEMBER): Uh, since the winter. It's been since the winter, since you changed jobs. You come home and fall asleep in front of the cricket.
+[SEG0024] person_1 (PATIENT): Mm-hm.
+[SEG0025] person_1 (PATIENT): That's because it's the cricket.
+[SEG0026] person_3 (DOCTOR): Honestly, it could be either. Let's say a few months. Tell me about the new job, what do you do?
+[SEG0027] person_1 (PATIENT): I'm a site supervisor now. For a building company. Before I was on the tools, I was a carpenter, so I was on my feet all day. Now it's a ute and a laptop and meetings. I sit more.
+[SEG0028] person_2 (FAMILY_MEMBER): Right.
+[SEG0029] person_2 (FAMILY_MEMBER): And he's got the pressure of it. Phone calls at night.
+[SEG0030] person_1 (PATIENT): It's fine.
+[SEG0031] person_2 (FAMILY_MEMBER): Well, um, it's not fine, you wake up at three and write lists.
+[SEG0032] person_3 (DOCTOR): Is that right, Mark?
+[SEG0033] person_1 (PATIENT): Sometimes. I wake up and I think about the schedule. Yeah.
+[SEG0034] person_3 (DOCTOR): Sleep matters for this. When you're short of sleep and stressed, your body makes more of the hormones that push your sugar up, and you crave sugary food the next day.
+[SEG0035] person_1 (PATIENT): That's the biscuits.
+[SEG0036] person_3 (DOCTOR): That's the biscuits, and not because you're weak.
+[SEG0037] person_3 (DOCTOR): What else?
+[SEG0038] person_1 (PATIENT): Thirsty. Thirsty a lot. I have a two-litre water bottle at my desk and I've got through it by lunchtime.
+[SEG0039] person_3 (DOCTOR): Okay. Are you passing more water than usual, or getting up in the night to go to the toilet?
+[SEG0040] person_1 (PATIENT): No. No more than usual. Once, maybe.
+[SEG0041] person_3 (DOCTOR): Any blurred vision, or things looking misty?
+[SEG0042] person_1 (PATIENT): No. My eyes are fine. I had them tested in the summer, the optometrist said I was fine for another two years.
+[SEG0043] person_3 (DOCTOR): Good. Any tingling in the feet, or sores that are slow to heal?
+[SEG0044] person_1 (PATIENT): No, nothing like that.
+[SEG0045] person_3 (DOCTOR): Chest pain?
+[SEG0046] person_1 (PATIENT): Uh, no chest pain. I did think about it, at four this morning. I got up and checked my pulse.
+[SEG0047] person_3 (DOCTOR): What did it say?
+[SEG0048] person_1 (PATIENT): Seventy-something. I don't know. It was normal.
+[SEG0049] person_3 (DOCTOR): That's reassuring. Does worry keep you up often?
+[SEG0050] person_1 (PATIENT): Lately. Since the call.
+[SEG0051] person_3 (DOCTOR): Mm.
+[SEG0052] person_1 (PATIENT): Well, um, it's just, I keep thinking, it's my fault. I eat rubbish. I'm sitting all day. I've got this belly. I know it's my fault.
+[SEG0053] person_3 (DOCTOR): Yes.
+[SEG0054] person_3 (DOCTOR): I don't think it's about fault, Mark. Do you mind if I weigh you and check your blood pressure, and then we'll talk about what to do?
+[SEG0055] person_1 (PATIENT): Okay. Yes. Please.
+[SEG0056] person_3 (DOCTOR): Ninety-four kilos. Your height was one seventy-eight at your last visit, so that makes your body mass index about twenty-nine and a half, which is slightly overweight. And your blood pressure is one twenty-eight over eighty-two, which is a touch above ideal but fine.
+[SEG0057] person_1 (PATIENT): Is that bad?
+[SEG0058] person_3 (DOCTOR): It's a bit over, nothing to worry about. So, here's the picture. Your sugar is creeping up. You've got some extra weight around the middle, that's the kind that matters most for sugar, and your family history. Put those together and it's no surprise. But I want to say something about your dad. What was he like when he was your age?
+[SEG0059] person_1 (PATIENT): Um, he was already being treated for it at fifty. He lost his foot at sixty-two. He died at seventy-one. I was the one who looked after him at the end.
+[SEG0060] person_3 (DOCTOR): Mm-hm.
+[SEG0061] person_3 (DOCTOR): I'm sorry. That's a lot to carry, and no wonder you were awake at four.
+[SEG0062] person_1 (PATIENT): Yeah.
+[SEG0063] person_2 (FAMILY_MEMBER): Well, um, he doesn't talk about it. He keeps it all in.
+[SEG0064] person_3 (DOCTOR): Would it help to talk about it, Mark? Or is today about the plan?
+[SEG0065] person_1 (PATIENT): Er, the plan. For now. I might want to talk another day.
+[SEG0066] person_3 (DOCTOR): That's fine. The offer stands, and so does the door.
+[SEG0067] person_3 (DOCTOR): But I want you to hear this, because it's true. You're fifty-two, and you've caught it at the stage where it can be turned around. The research on this is really strong. People who lose five to ten percent of their body weight, and move more, cut their chance of developing diabetes by more than half.
+[SEG0068] person_1 (PATIENT): Half.
+[SEG0069] person_3 (DOCTOR): More than half. Five percent of ninety-four kilos is under five kilos. That's two stone, or thereabouts. That's not a crash diet. That's what you'd lose by cutting out the biscuits and walking half an hour a day.
+[SEG0070] person_2 (FAMILY_MEMBER): Mm.
+[SEG0071] person_2 (FAMILY_MEMBER): He loves his biscuits. And the pub on Fridays.
+[SEG0072] person_1 (PATIENT): It's two beers.
+[SEG0073] person_2 (FAMILY_MEMBER): And the chips.
+[SEG0074] person_1 (PATIENT): Okay, okay.
+[SEG0075] person_3 (DOCTOR): Look, nobody's perfect. Let's pick two or three things, not twenty. What do you eat for breakfast?
+[SEG0076] person_1 (PATIENT): Toast. White. With jam. And coffee with two sugars.
+[SEG0077] person_3 (DOCTOR): One easy swap there. Wholegrain toast, or porridge, and cut the sugar in the coffee down to one, then half. And lunch?
+[SEG0078] person_1 (PATIENT): Sandwich from the servo. Or a pie, if I'm on site.
+[SEG0079] person_3 (DOCTOR): Lunch is harder, I know. Maybe a salad in the sandwich, an apple instead of the chips. What about dinner?
+[SEG0080] person_2 (FAMILY_MEMBER): I cook. Mostly meat and two veg. The potatoes are generous.
+[SEG0081] person_2 (FAMILY_MEMBER): I can do that. I've been wanting to anyway, I just didn't know whether he'd eat it.
+[SEG0082] person_1 (PATIENT): I'd eat it.
+[SEG0083] person_2 (FAMILY_MEMBER): You said it was rabbit food last time.
+[SEG0084] person_1 (PATIENT): It was rabbit food. With no sauce.
+[SEG0085] person_3 (DOCTOR): Julie, a nice sauce is fine. It's the portion of potato and the amount of veg that we're changing, not the flavour. A smaller portion of potato and bigger of veg is the swap there. It doesn't have to be dramatic. And movement. What would you realistically do?
+[SEG0086] person_1 (PATIENT): Walk the dog. We've got a dog, but I sort of let Julie do it.
+[SEG0087] person_2 (FAMILY_MEMBER): He lets me do it.
+[SEG0088] person_1 (PATIENT): I'll do the evening one. Thirty minutes.
+[SEG0089] person_3 (DOCTOR): That's perfect. Thirty minutes a day is the target. And over the next six months, the main aim is to lose a few kilos, maybe five. I'd like to repeat the blood test in six months and see where you are.
+[SEG0090] person_1 (PATIENT): Six months. And if it's gone up?
+[SEG0091] person_3 (DOCTOR): Then we'd talk about the next steps. But I'd expect it to come down, if you stick at it.
+[SEG0092] person_1 (PATIENT): Will I have to go on injections? Like Dad?
+[SEG0093] person_3 (DOCTOR): No. Not at this stage, and not if we do this right. Your dad's story doesn't have to be your story.
+[SEG0094] person_1 (PATIENT): Okay.
+[SEG0095] person_2 (FAMILY_MEMBER): Mark. Did you hear that?
+[SEG0096] person_1 (PATIENT): Yeah. I did. Thanks, doctor. I feel a bit better. A bit lighter.
+[SEG0097] person_2 (FAMILY_MEMBER): What can I do? Besides hiding the biscuits.
+[SEG0098] person_3 (DOCTOR): Honestly, that helps. Do the shopping together, and cook it together, if he's willing. Walk with him at the start, it's easier when it's a habit with someone. And don't nag, because it backfires.
+[SEG0099] person_2 (FAMILY_MEMBER): I do nag.
+[SEG0100] person_3 (DOCTOR): Everybody does. Try to nag about the walk, not about the biscuit. And Mark, if you slip, one bad weekend doesn't undo the good ones. The average over three months is what we measure, not the Friday.
+[SEG0101] person_1 (PATIENT): Three months, like a report card.
+[SEG0102] person_3 (DOCTOR): A bit like a report card, but kind. And it's your numbers against your own numbers, not against anyone else.
+[SEG0103] person_1 (PATIENT): That I can live with.
+[SEG0104] person_3 (DOCTOR): And when you're lying awake at three, try this: get up, write the one thing you're worried about on a pad by the bed, and tell yourself it'll be there at eight. It gets the list out of your head.
+[SEG0105] person_1 (PATIENT): Right.
+[SEG0106] person_1 (PATIENT): I've got a pad. Julie bought it.
+[SEG0107] person_2 (FAMILY_MEMBER): I bought it six months ago.
+[SEG0108] person_1 (PATIENT): And I've never used it. I'll use it.
+[SEG0109] person_3 (DOCTOR): Good. Any other questions?
+[SEG0110] person_1 (PATIENT): Well, um, just one. Is it all right if I still have the pub on Fridays?
+[SEG0111] person_3 (DOCTOR): One or two, yes. Not five.
+[SEG0112] person_1 (PATIENT): Two. I can do two.
+[SEG0113] person_3 (DOCTOR): Right. Julie will help you with the plan, I'll have a note ready at reception with the date for the repeat blood test, and everything we said today.
+[SEG0114] person_2 (FAMILY_MEMBER): Mm.
+[SEG0115] person_2 (FAMILY_MEMBER): Thanks, doctor. He's been a different bloke in the last ten minutes.
+
+JSON:

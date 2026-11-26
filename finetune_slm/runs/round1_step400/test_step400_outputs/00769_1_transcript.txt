@@ -1,0 +1,46 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00769)
+[SEG0001] person_1 (PATIENT): Morning! It's my hands again. The arthritis. It flared up, since the cold weather started, and I'm back to square one.
+[SEG0002] person_2 (DOCTOR): I'm sorry to hear that. Which joints, and how bad?
+[SEG0003] person_1 (PATIENT): The knuckles and the base of my thumbs, both hands. Stiff and sore, especially in the morning. I can't open jars.
+[SEG0004] person_2 (DOCTOR): How long does the morning stiffness last?
+[SEG0005] person_1 (PATIENT): An hour, an hour and a half. It was ten minutes in the summer.
+[SEG0006] person_2 (DOCTOR): Any swelling or redness, or fever?
+[SEG0007] person_1 (PATIENT): A bit of swelling in the knuckles. No redness. No fever.
+[SEG0008] person_2 (DOCTOR): Any pain in other joints, like your knees, hips or spine?
+[SEG0009] person_1 (PATIENT): No, my knees are okay. Just the hands.
+[SEG0010] person_2 (DOCTOR): Any rash or dry eyes?
+[SEG0011] person_1 (PATIENT): No rash. My eyes are fine.
+[SEG0012] person_2 (DOCTOR): What are you taking, and how did the treatment go after our last visit?
+[SEG0013] person_1 (PATIENT): A gel for the thumbs, I can't remember the name, I got it from the pharmacy. And naproxen, maybe 250 mg, twice a day, on and off.
+[SEG0014] person_2 (DOCTOR): So the gel you can't name, and naproxen 250 mg twice a day as you recall it. Any other history?
+[SEG0015] person_1 (PATIENT): Osteoarthritis diagnosed years ago, and I had a stomach ulcer once.
+[SEG0016] person_2 (DOCTOR): Do you have any allergies?
+[SEG0017] person_1 (PATIENT): Years ago, a rash from penicillin, but I've avoided it ever since.
+[SEG0018] person_2 (DOCTOR): Thank you. Let me look at your hands. Put them on the table, palms down. ~
+[SEG0019] person_1 (PATIENT): Here.
+[SEG0020] person_2 (DOCTOR): There's bony swelling of the end joints and the base of both thumbs, and tenderness with a bit of warmth in two knuckles, no redness.
+[SEG0021] person_1 (PATIENT): Is it getting worse? ~
+[SEG0022] person_2 (DOCTOR): It's an osteoarthritis flare, as you say, but with the long morning stiffness and warm knuckles, I can't rule out an inflammatory arthritis, such as rheumatoid, on top of it.
+[SEG0023] person_1 (PATIENT): Rheumatoid! Oh no. ~
+[SEG0024] person_2 (DOCTOR): It's a possibility, not a diagnosis. The key difference is the length of the morning stiffness, which is over an hour for you. ~
+[SEG0025] person_1 (PATIENT): What do we do? ~
+[SEG0026] person_2 (DOCTOR): Keep using the gel, warm your hands in the morning, and wear thin gloves in cold weather.
+[SEG0027] person_1 (PATIENT): I always forget gloves. ~
+[SEG0028] person_2 (DOCTOR): Put a pair by the front door. And take the naproxen with food only.
+[SEG0029] person_1 (PATIENT): Right. ~
+[SEG0030] person_2 (DOCTOR): If the knuckle swelling gets worse, you get new swelling in other joints, or the stiffness lasts all morning, come back to see me and I'll arrange blood tests and a referral.
+[SEG0031] person_1 (PATIENT): I will. Thanks, doctor. ~
+
+JSON:

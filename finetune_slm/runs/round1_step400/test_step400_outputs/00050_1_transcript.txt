@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00050)
+[SEG0001] person_1 (PATIENT): Morning. Nice to finally see you, doctor.
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): So, I'm here because of tingling in the feet.
+[SEG0004] person_2 (DOCTOR): since when have you had this?
+[SEG0005] person_1 (PATIENT): Since Friday, that's when it began
+[SEG0006] person_2 (DOCTOR): is it mild, moderate or severe?
+[SEG0007] person_1 (PATIENT): I'd give it a seven, out of ten.
+[SEG0008] person_2 (DOCTOR): Have you had a sore tongue?
+[SEG0009] person_1 (PATIENT): Yeah, I've had that since this morning.
+[SEG0010] person_2 (DOCTOR): Let's do your observations.
+[SEG0011] person_2 (DOCTOR): Alright, almost there...
+[SEG0012] person_2 (DOCTOR): Okay: pressure 115 over 75, SpO2 99 percent on room air. And temperature is 36.7 degrees, pulse 71.
+[SEG0013] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0014] person_2 (DOCTOR): I'll go gently
+[SEG0015] person_2 (DOCTOR): Gentle pressure over the shin bone is tender.
+[SEG0016] person_2 (DOCTOR): Let me just check something.
+[SEG0017] person_2 (DOCTOR): The tongue looks smooth and a little red.
+[SEG0018] person_2 (DOCTOR): Okay, finished.
+[SEG0019] person_2 (DOCTOR): Alright, any weight loss, breathlessness or poor diet?
+[SEG0020] person_1 (PATIENT): No, um, not any of them.
+[SEG0021] person_2 (DOCTOR): anything unusual with passing urine?
+[SEG0022] person_1 (PATIENT): that's normal as far as I know
+[SEG0023] person_2 (DOCTOR): do you have any medical conditions I should know about?
+[SEG0024] person_1 (PATIENT): No, um, nothing, I've generally been healthy.
+[SEG0025] person_2 (DOCTOR): what about allergies, to medicines or foods or anything else?
+[SEG0026] person_1 (PATIENT): I mean, you know, not that I know, no.
+[SEG0027] person_2 (DOCTOR): okay, anyone in the family with similar problems or other conditions?
+[SEG0028] person_1 (PATIENT): My sister has epilepsy.
+[SEG0029] person_2 (DOCTOR): okay, are you on any regular medication?
+[SEG0030] person_1 (PATIENT): Um, no, I don't take anything regularly.
+[SEG0031] person_2 (DOCTOR): What do you do for work?
+[SEG0032] person_1 (PATIENT): I work in an office, mostly sitting at a desk.
+[SEG0033] person_2 (DOCTOR): Right, who's at home with you?
+[SEG0034] person_1 (PATIENT): It's just me and my wife at home now.
+[SEG0035] person_2 (DOCTOR): do you exercise at all?
+[SEG0036] person_1 (PATIENT): I go to the gym a couple of times a week.
+[SEG0037] person_2 (DOCTOR): okay, so my impression is this: The most likely explanation is a vitamin deficiency. Let's book a vitamin D level to look into bone aches. I'm going to put you on vitamin D, 60000 units, once a week, for eight weeks. That should help with possible deficiency. Some midday sunlight on the arms for fifteen minutes helps. I'd like you back after the results are back
+[SEG0038] person_2 (DOCTOR): right, how would you describe the plan, so we're on the same page?
+[SEG0039] person_1 (PATIENT): So, I come back after the results are back. Is that right?
+[SEG0040] person_2 (DOCTOR): Yes, exactly right. Okay, that's everything from me. Any other questions?
+[SEG0041] person_1 (PATIENT): I appreciate it, uh, doctor.
+[SEG0042] person_2 (DOCTOR): bye for now
+
+JSON:

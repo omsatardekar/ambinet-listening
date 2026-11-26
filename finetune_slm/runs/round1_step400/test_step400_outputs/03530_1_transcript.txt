@@ -1,0 +1,73 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03530)
+[SEG0001] person_1 (DOCTOR): Hi, sit anywhere you like.
+[SEG0002] person_2 (PATIENT): Hmm, morning, doctor, sorry about the rush.
+[SEG0003] person_1 (DOCTOR): what would you like to start with today?
+[SEG0004] person_2 (PATIENT): Yeah, it's back pain that doesn't go away. I don't know what's causing it.
+[SEG0005] person_1 (DOCTOR): Right, how long has it been like this?
+[SEG0006] person_2 (PATIENT): okay, so it's been going on for two weeks
+[SEG0007] person_1 (DOCTOR): How much trouble does it give you?
+[SEG0008] person_2 (PATIENT): I'd give it a eight, out of ten.
+[SEG0009] person_2 (PATIENT): I was just going to say that the main thing is—
+[SEG0010] person_3 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0011] person_1 (DOCTOR): later, thanks. Please go on
+[SEG0012] person_2 (PATIENT): There's night sweats as well.
+[SEG0013] person_1 (DOCTOR): How often do you get it?
+[SEG0014] person_2 (PATIENT): Well, um, it's, um... not exactly... well, hard to explain, I mean—
+[SEG0015] person_1 (DOCTOR): Let me put it another way: how many times in a typical day or week?
+[SEG0016] person_2 (PATIENT): it comes and goes. As for losing a bit of weight, I honestly can't say when that began. It might have been last month or the month before
+[SEG0017] person_1 (DOCTOR): a few quick ones: high fever or leg weakness?
+[SEG0018] person_2 (PATIENT): No, you know, no high fever, no leg weakness. I was feeling tired and run down at one point, but that went away on its own.
+[SEG0019] person_1 (DOCTOR): A few quick ones: chest pain or breathlessness?
+[SEG0020] person_2 (PATIENT): nope, nothing like that
+[SEG0021] person_1 (DOCTOR): Any trouble with the waterworks?
+[SEG0022] person_2 (PATIENT): No, um, that's all fine.
+[SEG0023] person_1 (DOCTOR): Your breathing, any trouble there?
+[SEG0024] person_2 (PATIENT): No problems with breathing.
+[SEG0025] person_1 (DOCTOR): Anything in your past medical history I should know?
+[SEG0026] person_2 (PATIENT): Sorry, what was I saying, I've had an irregular heartbeat for about ten years now. I've got anxiety. I kept putting it off, which I know isn't sensible.
+[SEG0027] person_1 (DOCTOR): So, can you list what you take, tablets, creams or inhalers?
+[SEG0028] person_2 (PATIENT): I'm on warfarin, 3 milligrams, in the evening.
+[SEG0029] person_2 (PATIENT): Well, uh, it's a... um, I can't remember what it's called. It's a round yellow one.
+[SEG0030] person_1 (DOCTOR): Do you remember what it's for?
+[SEG0031] person_2 (PATIENT): For the anxiety, I believe. My son sets them out for me, I just take what I'm given.
+[SEG0032] person_1 (DOCTOR): any inherited conditions that you know of in the family?
+[SEG0033] person_2 (PATIENT): My uncle has high cholesterol. I mean, my cousin has psoriasis.
+[SEG0034] person_1 (DOCTOR): okay, before we go further, any allergies?
+[SEG0035] person_2 (PATIENT): no, you know, nothing as far as I know
+[SEG0036] person_1 (DOCTOR): and alcohol, how much?
+[SEG0037] person_2 (PATIENT): I used to drink heavily but I stopped four years ago.
+[SEG0038] person_1 (DOCTOR): and your job?
+[SEG0039] person_2 (PATIENT): I work in accounts at a hospital
+[SEG0040] person_1 (DOCTOR): what does a normal day of food look like?
+[SEG0041] person_2 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0042] person_3 (NURSE): Doctor, I've got the readings for you. Temperature 38.7, pulse 106, pressure 107 over 79.
+[SEG0043] person_1 (DOCTOR): thanks
+[SEG0044] person_1 (DOCTOR): Shall I start the examination?
+[SEG0045] person_2 (PATIENT): Fine by me.
+[SEG0046] person_1 (DOCTOR): Look straight ahead.
+[SEG0047] person_1 (DOCTOR): There is a soft heart murmur you've not had before and a small tender spot on the fingertip.
+[SEG0048] person_1 (DOCTOR): That's the examination finished. From what you've told me and what I found, it fits best with possible infection of the heart valve causing back and general symptoms. Another possibility is a muscle strain.
+[SEG0049] person_2 (PATIENT): Uh, what are the odds it's serious?
+[SEG0050] person_1 (DOCTOR): I can't promise yet, but most people with possible infection of the heart valve causing back and general symptoms do well once it's treated properly. I'll request an echocardiogram, it'll help with new murmur.
+[SEG0051] person_4 (CLINICAL_STAFF): The earliest is Thursday, 2 pm.
+[SEG0052] person_2 (PATIENT): Okay, I'll be there.
+[SEG0053] person_1 (DOCTOR): I'm sending you for blood cultures because of possible endocarditis. I'd rather check than guess, and this is the quickest way to know more.
+[SEG0054] person_2 (PATIENT): does it hurt?
+[SEG0055] person_1 (DOCTOR): this is not an ordinary back strain, so I want tests today let's get you seen by the medical admissions unit, I'll arrange the letter keep an eye out, and if the symptoms get worse, call us the same day or go to emergency
+[SEG0056] person_2 (PATIENT): Okay, I'll look out for that.
+[SEG0057] person_1 (DOCTOR): right, that's the plan. Do you want to ask me anything?
+[SEG0058] person_2 (PATIENT): I think I understand everything. Thanks.
+
+JSON:

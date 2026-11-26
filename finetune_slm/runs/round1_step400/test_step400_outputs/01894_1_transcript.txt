@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01894)
+[SEG0001] person_1 (PATIENT): Actually, hi, doctor, I came as soon as they called me.
+[SEG0002] person_2 (DOCTOR): Come in. Please sit. How can I help you?
+[SEG0003] person_3 (FAMILY_MEMBER): I mean, uh, doctor, I've come along because I know the history, if it helps. We came because of painful periods.
+[SEG0004] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0005] person_2 (DOCTOR): So, that's it, just a little longer...
+[SEG0006] person_2 (DOCTOR): Okay: pressure 127 over 81, temperature is 36.7 degrees, SpO2 97 percent on room air, respiratory rate 16, pulse 86.
+[SEG0007] person_1 (PATIENT): Mm, is that alright, doctor?
+[SEG0008] person_2 (DOCTOR): Don't worry, we'll discuss it in a second. Right, tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0009] person_1 (PATIENT): Yes, first two days. That makes it worse. I'd say a few times a day. It feels mild to me. Oh, and a dull ache in my back. That's been about the same, about two weeks. About dull ache in my back, it happens all the time.
+[SEG0010] person_2 (DOCTOR): I see, go ahead. Any bleeding between periods, fever, pain with sex or heavy bleeding?
+[SEG0011] person_1 (PATIENT): Actually, uh, no bleeding between periods, fever, pain with sex or heavy bleeding, none of it.
+[SEG0012] person_2 (DOCTOR): Is your chest okay generally?
+[SEG0013] person_1 (PATIENT): No problems with breathing.
+[SEG0014] person_2 (DOCTOR): How about your heart, any problems like that?
+[SEG0015] person_1 (PATIENT): No, that's been fine.
+[SEG0016] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0017] person_1 (PATIENT): I have an irregular heartbeat.
+[SEG0018] person_2 (DOCTOR): Alright, an irregular heartbeat, that matches what I have here. Has anything ever caused you a reaction? I mean any allergies.
+[SEG0019] person_1 (PATIENT): Right, yes, erythromycin. I get bad stomach cramps.
+[SEG0020] person_2 (DOCTOR): Any surgery in the past?
+[SEG0021] person_1 (PATIENT): I, I had an operation for a hernia last spring. I did try to ignore it for a while.
+[SEG0022] person_2 (DOCTOR): How active are you?
+[SEG0023] person_1 (PATIENT): I hardly move around during the day.
+[SEG0024] person_2 (DOCTOR): What does a normal day of food look like?
+[SEG0025] person_1 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0026] person_2 (DOCTOR): Which medicines do you take at the moment?
+[SEG0027] person_3 (FAMILY_MEMBER): Hmm, she takes bisoprolol, 2.5 milligrams, once a day.
+[SEG0028] person_2 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0029] person_2 (DOCTOR): Breathe out slowly.
+[SEG0030] person_2 (DOCTOR): Your tummy is soft and not tender between periods.
+[SEG0031] person_2 (DOCTOR): Okay, that's all I needed to check. Right, here's what I'm thinking. It points towards primary dysmenorrhoea. Let me just check I've got this right. You've had painful periods, mild, and no heavy bleeding or bleeding between periods.
+[SEG0032] person_1 (PATIENT): Correct.
+[SEG0033] person_2 (DOCTOR): I'm prescribing naproxen, 250 milligrams, three times a day with food, during periods. It's for period pain.
+[SEG0034] person_1 (PATIENT): Okay, uh, I understand.
+[SEG0035] person_2 (DOCTOR): Heat, gentle exercise, and start the tablet at the first sign of pain. Come back in three months. Right, that's the plan. Do you want to ask me anything?
+[SEG0036] person_1 (PATIENT): Uh, alright, thanks, take care.
+
+JSON:

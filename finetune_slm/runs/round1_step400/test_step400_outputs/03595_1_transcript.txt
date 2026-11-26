@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03595)
+[SEG0001] person_1 (PATIENT): ah, morning, doctor lovely to meet you
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_1 (PATIENT): Mainly fainting once. There's a couple of other things, you know, but that's the main one.
+[SEG0004] person_2 (DOCTOR): Since when exactly?
+[SEG0005] person_1 (PATIENT): around about three months... no wait, uh, it's more like six months
+[SEG0006] person_2 (DOCTOR): okay, give me more detail on it, whatever comes to mind
+[SEG0007] person_1 (PATIENT): I'd say a couple of times a week. Pretty moderate, if I'm being honest. I didn't want to make a fuss, you know.
+[SEG0008] person_2 (DOCTOR): Is it accompanied by anything?
+[SEG0009] person_1 (PATIENT): When it starts I tend to get a faster heartbeat as well. The faster heartbeat? That's been for three weeks.
+[SEG0010] person_2 (DOCTOR): Can I check a few measurements before we carry on?
+[SEG0011] person_2 (DOCTOR): Alright, sit still for a moment...
+[SEG0012] person_2 (DOCTOR): Okay: temp 37.1 degrees, blood pressure 126 over 73. And And SpO2 97 percent on room air, pulse 116, respiratory rate 20.
+[SEG0013] person_2 (DOCTOR): Let's move on to the examination.
+[SEG0014] person_2 (DOCTOR): Hold that for a second.
+[SEG0015] person_2 (DOCTOR): Your oxygen is lower than expected for someone so young and the left calf is a little swollen.
+[SEG0016] person_2 (DOCTOR): okay, that's enough for me
+[SEG0017] person_2 (DOCTOR): Did you get coughing up blood, fever or chest pain?
+[SEG0018] person_1 (PATIENT): Uh, no, I'd have said so.
+[SEG0019] person_2 (DOCTOR): Have you had any cough?
+[SEG0020] person_1 (PATIENT): No, no cough.
+[SEG0021] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0022] person_1 (PATIENT): Nothing there, no.
+[SEG0023] person_2 (DOCTOR): Are there any illnesses in your family?
+[SEG0024] person_1 (PATIENT): my daughter has type 1 diabetes
+[SEG0025] person_2 (DOCTOR): Right, anything surgical in your history?
+[SEG0026] person_1 (PATIENT): yes, I had my tonsils removed, as a teenager
+[SEG0027] person_2 (DOCTOR): Do you work outside the home?
+[SEG0028] person_1 (PATIENT): I'm a hairdresser, on my feet all day
+[SEG0029] person_2 (DOCTOR): How are your meals?
+[SEG0030] person_1 (PATIENT): I grab fast food at lunch most days.
+[SEG0031] person_2 (DOCTOR): So, can you list what you take, tablets, creams or inhalers?
+[SEG0032] person_1 (PATIENT): The contraceptive pill, daily
+[SEG0033] person_2 (DOCTOR): Mm-hmm.
+[SEG0034] person_1 (PATIENT): I, I'd been on propranolol, not any more though, I stopped.
+[SEG0035] person_2 (DOCTOR): Do you have any long-term conditions?
+[SEG0036] person_1 (PATIENT): I've, I've had migraines, yes.
+[SEG0037] person_2 (DOCTOR): Right, so migraines is already on your record. We'll keep that in mind today. Okay, thinking it through, this is probably possible pulmonary embolism without chest pain. It could also be a simple faint, so we'll keep that open.
+[SEG0038] person_1 (PATIENT): is it dangerous, doctor?
+[SEG0039] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's possible pulmonary embolism without chest pain, and we'll know more once the a D-dimer is back. We should do a D-dimer for syncope and calf swelling. Even without chest pain this needs a scan today, so please go to hospital. Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency. I'd like to see you again straight away.
+[SEG0040] person_2 (DOCTOR): right, that's the plan do you want to ask me anything?
+[SEG0041] person_1 (PATIENT): Uh, you know, no, that's all. Thanks a lot.
+[SEG0042] person_2 (DOCTOR): Have a good day.
+
+JSON:

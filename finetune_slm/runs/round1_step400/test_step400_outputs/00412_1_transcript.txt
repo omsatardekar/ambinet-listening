@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00412)
+[SEG0001] person_1 (PATIENT): Morning. Nice to finally see you, doctor.
+[SEG0002] person_2 (DOCTOR): That's alright, take a seat. Tell me why you've come.
+[SEG0003] person_1 (PATIENT): I've been dealing with a very painful, swollen big toe.
+[SEG0004] person_2 (DOCTOR): And when did that start?
+[SEG0005] person_1 (PATIENT): Since Friday, that's when it began.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): It's, It's a couple of times a week. I notice it more with the bedsheet touching it. Mostly severe. And there's warmth in the toe as well, two weeks now. And a low fever as well, since this morning.
+[SEG0008] person_2 (DOCTOR): Did you get rash, trauma to the toe or recent illness?
+[SEG0009] person_1 (PATIENT): No, nothing there.
+[SEG0010] person_2 (DOCTOR): So, anything with your heart, like skipped beats or fainting?
+[SEG0011] person_1 (PATIENT): No, that's been fine.
+[SEG0012] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0013] person_1 (PATIENT): Years back I got a rash from ibuprofen, so I stay away from it now.
+[SEG0014] person_2 (DOCTOR): Alright, any diagnoses you've been given before?
+[SEG0015] person_1 (PATIENT): High blood pressure, for about a year.
+[SEG0016] person_2 (DOCTOR): And apart from that?
+[SEG0017] person_1 (PATIENT): I've got kidney disease.
+[SEG0018] person_2 (DOCTOR): Alright, high blood pressure, that matches what I have here.
+[SEG0019] person_2 (DOCTOR): Right, how do you eat, generally?
+[SEG0020] person_1 (PATIENT): I skip breakfast most days.
+[SEG0021] person_2 (DOCTOR): And what do you do for a living?
+[SEG0022] person_1 (PATIENT): I work night shifts at a warehouse.
+[SEG0023] person_2 (DOCTOR): What do you do to keep active?
+[SEG0024] person_1 (PATIENT): I cycle to work most mornings.
+[SEG0025] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0026] person_1 (PATIENT): I take losartan, once a day.
+[SEG0027] person_2 (DOCTOR): So, and what strength is that?
+[SEG0028] person_1 (PATIENT): 50 milligrams.
+[SEG0029] person_2 (DOCTOR): So, before we go on, a few quick readings.
+[SEG0030] person_2 (DOCTOR): Rest your hand here...
+[SEG0031] person_2 (DOCTOR): Okay: BP is 125 over 73, SpO2 98 percent on room air, temp 36.6 degrees, heart rate 78.
+[SEG0032] person_1 (PATIENT): Is that okay?
+[SEG0033] person_2 (DOCTOR): I'll explain what that means shortly.
+[SEG0034] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0035] person_2 (DOCTOR): I'll go gently.
+[SEG0036] person_2 (DOCTOR): The big toe joint is red, hot, swollen and extremely tender to touch.
+[SEG0037] person_2 (DOCTOR): That's all I need, thank you.
+[SEG0038] person_2 (DOCTOR): I'm sending you for kidney function tests because of gout. Let's get a uric acid level, for suspected gout. We'll begin with colchicine, 0.5 milligrams, twice a day, for five days. That should help with gout flare. Cut right back on red meat, organ meats, beer and sugary drinks, and drink plenty of water. Don't skip meals, and try to eat smaller portions more often through the day. Book a review in a week.
+[SEG0039] person_2 (DOCTOR): Okay, I think we're finished. Is everything clear?
+[SEG0040] person_1 (PATIENT): Alright, thanks. Bye for now.
+
+JSON:

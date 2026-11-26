@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01017)
+[SEG0001] person_1 (DOCTOR): Hello, come in. Mind the step.
+[SEG0002] person_2 (CAREGIVER): Good morning, doctor. I came along to help out.
+[SEG0003] person_1 (DOCTOR): Lovely day outside, isn't it?
+[SEG0004] person_3 (PATIENT): It is, I almost forgot I was coming here.
+[SEG0005] person_1 (DOCTOR): Alright, tell me what's brought you in.
+[SEG0006] person_4 (FAMILY_MEMBER): It's weakness in my right arm, doctor. He didn't want to come, but I insisted.
+[SEG0007] person_1 (DOCTOR): Is it a lot or only a little?
+[SEG0008] person_3 (PATIENT): It feels moderate to me.
+[SEG0009] person_3 (PATIENT): I was just going to say that the main thing is—
+[SEG0010] person_5 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0011] person_1 (DOCTOR): Later, thanks. Please go on.
+[SEG0012] person_3 (PATIENT): Hmm, I've also had slurred speech. Um, I did have a sudden headache at one point, but that's gone now.
+[SEG0013] person_1 (DOCTOR): Have you had weakness in your right arm before, or is this the first time?
+[SEG0014] person_3 (PATIENT): Hmm, a bit, about six months ago. It settled by itself back then.
+[SEG0015] person_1 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0016] person_3 (PATIENT): Yeah, uh, not to my knowledge, no.
+[SEG0017] person_1 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0018] person_3 (PATIENT): So, my sister had breast cancer.
+[SEG0019] person_1 (DOCTOR): Have you had any surgical procedures?
+[SEG0020] person_3 (PATIENT): Yes, I had a meniscus repair on my knee, four years ago.
+[SEG0021] person_1 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0022] person_3 (PATIENT): Amlodipine, 5 milligrams, once a day.
+[SEG0023] person_4 (FAMILY_MEMBER): So, he is supposed to take it once a day, but I can't say he always does.
+[SEG0024] person_3 (PATIENT): Hmm, it's hydrocortisone cream, when needed. I'd rather not end up on lots of tablets if I can avoid it. I had telmisartan at one point, but I'm off it now.
+[SEG0025] person_1 (DOCTOR): Anything in your past medical history I should know?
+[SEG0026] person_3 (PATIENT): I have high blood pressure. I have an irregular heartbeat, for nearly five years. I've had eczema for five years now. I've never really been one for hospitals.
+[SEG0027] person_1 (DOCTOR): Okay, I can see an irregular heartbeat in your file as well. How about smoking?
+[SEG0028] person_3 (PATIENT): I've never touched a cigarette.
+[SEG0029] person_1 (DOCTOR): Is there someone at home?
+[SEG0030] person_3 (PATIENT): My husband and I live above the shop.
+[SEG0031] person_1 (DOCTOR): Have you had any seizure, fever or loss of consciousness?
+[SEG0032] person_3 (PATIENT): I haven't had seizure, fever or loss of consciousness, no.
+[SEG0033] person_1 (DOCTOR): Your breathing, any trouble there?
+[SEG0034] person_3 (PATIENT): Breathing's normal.
+[SEG0035] person_5 (NURSE): Doctor, I've got the readings for you. BP is 159 over 101, heart rate 90. Saturation 98 percent, temperature 36.7.
+[SEG0036] person_1 (DOCTOR): Okay, noted.
+[SEG0037] person_1 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0038] person_1 (DOCTOR): Hold that for a second.
+[SEG0039] person_1 (DOCTOR): Your right face droops, your right arm is weak and your speech is slurred.
+[SEG0040] person_1 (DOCTOR): Thank you, you can get dressed. Okay, thinking it through, it fits best with a possible stroke, within the treatment window. A migraine with aura is still possible.
+[SEG0041] person_3 (PATIENT): Is it dangerous, doctor?
+[SEG0042] person_1 (DOCTOR): I can't promise yet, but most people with a possible stroke, within the treatment window do well once it's treated properly. I think a blood sugar test makes sense here, for stroke symptoms. I'll request an urgent CT scan of the head, it'll help with possible stroke.
+[SEG0043] person_3 (PATIENT): Is that done today?
+[SEG0044] person_1 (DOCTOR): Call an ambulance now, you need hospital immediately. Make sure you're drinking plenty of fluids, two to three litres a day if you can, and get proper rest. Let's get you seen by the stroke team, I'll arrange the letter. I'll want another look straight away. What are the next steps as you understand them?
+[SEG0045] person_3 (PATIENT): So, uh, I come back straight away. Is that right?
+[SEG0046] person_1 (DOCTOR): Yes, exactly right. Anything else on your mind before you go?
+[SEG0047] person_3 (PATIENT): Good, thanks, I'll see you then.
+[SEG0048] person_1 (DOCTOR): Goodbye for now.
+
+JSON:

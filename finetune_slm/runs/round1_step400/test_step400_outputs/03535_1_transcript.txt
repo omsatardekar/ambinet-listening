@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03535)
+[SEG0001] person_1 (PATIENT): Doctor, hi, where would you like me to put my coat?
+[SEG0002] person_2 (DOCTOR): Okay, you're alright, take a seat. What can I do for you?
+[SEG0003] person_1 (PATIENT): Uh, I've been dealing with a sore spot on the front of my shin.
+[SEG0004] person_2 (DOCTOR): When was the first time you noticed it?
+[SEG0005] person_1 (PATIENT): I'm not sure when it began, you know, to be honest. Some weeks ago, but I can't say how many.
+[SEG0006] person_2 (DOCTOR): Rate it for me, mild, moderate or severe?
+[SEG0007] person_1 (PATIENT): Well, a seven out of ten, I suppose.
+[SEG0008] person_2 (DOCTOR): Is there something that settles it?
+[SEG0009] person_1 (PATIENT): It settles a little with rest. Oh, uh, and being told it was shin splints. Oh, and pain at night. That's been about the same, one week.
+[SEG0010] person_2 (DOCTOR): Right, how frequently does it come?
+[SEG0011] person_1 (PATIENT): Honestly, on and off.
+[SEG0012] person_2 (DOCTOR): Alright, have you noticed swelling, numbness or injury?
+[SEG0013] person_1 (PATIENT): I haven't had swelling, numbness or injury, no.
+[SEG0014] person_2 (DOCTOR): Have you had fever, by any chance?
+[SEG0015] person_1 (PATIENT): I haven't noticed any fever.
+[SEG0016] person_2 (DOCTOR): How's your breathing otherwise?
+[SEG0017] person_1 (PATIENT): Oh, no, my breathing's been fine.
+[SEG0018] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0019] person_1 (PATIENT): I've had thin bones, yes. Yeah, I've had heart failure, yes. Sorry, I know I'm rambling a bit. I've got gout.
+[SEG0020] person_2 (DOCTOR): Yes, thin bones and heart failure are known to us, good to have that clear.
+[SEG0021] person_2 (DOCTOR): Have you been to theatre before?
+[SEG0022] person_1 (PATIENT): Just my septum straightened, in my thirties.
+[SEG0023] person_2 (DOCTOR): Tell me your medicines, please.
+[SEG0024] person_1 (PATIENT): It's alendronate, once a week.
+[SEG0025] person_2 (DOCTOR): How much do you take?
+[SEG0026] person_1 (PATIENT): 70 milligrams. Let me think, I take metoprolol, 50 milligrams, twice a day. Febuxostat. I take it 80 milligrams, maybe, once a day.
+[SEG0027] person_2 (DOCTOR): Is the packet here, or the prescription?
+[SEG0028] person_1 (PATIENT): Ah, no, it's at home. It's ibuprofen, 400 milligrams, when needed.
+[SEG0029] person_3 (NURSE): Doctor, our chart from the last visit lists it as 200 milligrams.
+[SEG0030] person_2 (DOCTOR): Okay. Have you got the newest prescription or the box with you?
+[SEG0031] person_1 (PATIENT): Yeah, I don't think I have it with me.
+[SEG0032] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0033] person_1 (PATIENT): I only drink at family occasions. I've never touched a cigarette. I drink a lot of tea and snack through the day. I hardly move around during the day. I live with my elderly mother.
+[SEG0034] person_2 (DOCTOR): Have you got any known allergies?
+[SEG0035] person_1 (PATIENT): Cat fur. I come out in... well, sneezing.
+[SEG0036] person_3 (NURSE): Doctor, I've got the readings for you. BP is 119 over 70, saturation 98 percent, pulse is 76 beats a minute.
+[SEG0037] person_2 (DOCTOR): Okay, noted.
+[SEG0038] person_2 (DOCTOR): Alright, over here please and I'll take a look.
+[SEG0039] person_1 (PATIENT): Fine by me.
+[SEG0040] person_2 (DOCTOR): Nearly finished here.
+[SEG0041] person_2 (DOCTOR): There is a very localised tender spot on the bone and hopping on that leg hurts.
+[SEG0042] person_2 (DOCTOR): You can sit up now. Let me just check I've got this right. You've had a sore spot on the front of your shin, and no fever or numbness.
+[SEG0043] person_1 (PATIENT): Mm, that's right.
+[SEG0044] person_2 (DOCTOR): Let's book an MRI of the shin to look into possible stress fracture. Let's book a vitamin D level to look into stress fracture.
+[SEG0045] person_1 (PATIENT): Where would I go for that?
+[SEG0046] person_2 (DOCTOR): Stop running, no impact exercise until the scan, swimming or cycling is fine. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. The thing that would worry me is if the symptoms get worse. If that happens, go to emergency. Let's review you after the scan. Right, that's the plan. Do you want to ask me anything?
+[SEG0047] person_1 (PATIENT): Oh, okay, that makes sense. Thanks for explaining.
+
+JSON:

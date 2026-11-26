@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20393)
+[SEG0001] person_1 (PATIENT): sorry doctor shall I sit here?
+[SEG0002] person_2 (DOCTOR): No problem at all, come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): Well I've been having a tight feeling in my chest when I walk uphill.
+[SEG0004] person_2 (DOCTOR): Can you tell me when it it first started?
+[SEG0005] person_1 (PATIENT): Probably about a month. Yeah.
+[SEG0006] person_2 (DOCTOR): tell me a a bit more about it: how bad it gets how often and whether anything makes it better or worse
+[SEG0007] person_1 (PATIENT): It happens every other day. About a five out of ten.
+[SEG0008] person_2 (DOCTOR): Right, have you been sweating with the tightness?
+[SEG0009] person_1 (PATIENT): yes, I have
+[SEG0010] person_2 (DOCTOR): is it there all the time or does it it come and go?
+[SEG0011] person_1 (PATIENT): it's every other day
+[SEG0012] person_2 (DOCTOR): let me quickly check your readings
+[SEG0013] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0014] person_2 (DOCTOR): okay: heart rate 85, respiratory rate 18, pressure 125 over 80, oxygen saturation is 99 percent, temperature is 36.4 degrees
+[SEG0015] person_1 (PATIENT): erm, is that alright, doctor?
+[SEG0016] person_2 (DOCTOR): alright we'll look at it together shortly. Any pain between the shoulder blades ankle swelling or palpitations at all?
+[SEG0017] person_1 (PATIENT): No, no pain between the shoulder blades, ankle swelling or palpitations.
+[SEG0018] person_2 (DOCTOR): I see, go ahead. Is your urine normal, no changes?
+[SEG0019] person_1 (PATIENT): Nothing there, no.
+[SEG0020] person_2 (DOCTOR): any pins and needles or loss of strength anywhere?
+[SEG0021] person_1 (PATIENT): nothing odd there
+[SEG0022] person_2 (DOCTOR): Do you take any regular medication?
+[SEG0023] person_1 (PATIENT): No, nothing at the moment.
+[SEG0024] person_2 (DOCTOR): do you have any medical conditions I should know about?
+[SEG0025] person_1 (PATIENT): no I've always been fairly healthy
+[SEG0026] person_2 (DOCTOR): How are your meals?
+[SEG0027] person_1 (PATIENT): I grab fast food at lunch most days
+[SEG0028] person_2 (DOCTOR): are you on your own at home?
+[SEG0029] person_1 (PATIENT): I live with my elderly mother
+[SEG0030] person_2 (DOCTOR): what's your work?
+[SEG0031] person_1 (PATIENT): I'm a plumber, lots of bending and kneeling
+[SEG0032] person_2 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0033] person_1 (PATIENT): my aunt has rheumatoid arthritis
+[SEG0034] person_2 (DOCTOR): are you allergic to anything? Any allergies to medicines or foods?
+[SEG0035] person_1 (PATIENT): no, not that that I know of
+[SEG0036] person_2 (DOCTOR): right, here's what I'm thinking i'd lean towards exertional angina until proven otherwise
+[SEG0037] person_2 (DOCTOR): I'm sending you for an exercise stress test because of exertional chest tightness. For this GTN spray 400 micrograms when needed for chest pain long term. It's for chest pain. If the tightness comes stop sit down and use the spray under your tongue. Come back or go to to emergency straight away if the chest pain lasts more than ten minutes or comes at rest. Come back after the test results are back.
+[SEG0038] person_2 (DOCTOR): Does all of that make sense?
+[SEG0039] person_1 (PATIENT): alright thanks take care
+[SEG0040] person_2 (DOCTOR): Have a good day.
+
+JSON:

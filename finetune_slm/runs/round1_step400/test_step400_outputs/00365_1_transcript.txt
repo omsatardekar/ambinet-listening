@@ -1,0 +1,64 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00365)
+[SEG0001] person_1 (PATIENT): Hello? Doctor? They told me to come straight in.
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): Okay, so I wanted to get a rattling chest looked at.
+[SEG0004] person_2 (DOCTOR): How far back does it go? Just so I get the full picture.
+[SEG0005] person_1 (PATIENT): I mean, it's been three days, I'm fairly sure. And there's more breathlessness than usual as well, about a week now.
+[SEG0006] person_2 (DOCTOR): First the numbers, if you don't mind.
+[SEG0007] person_2 (DOCTOR): Rest your hand here...
+[SEG0008] person_2 (DOCTOR): Okay: respiratory rate 23, blood pressure 136 over 72, pulse is 89 beats a minute, saturation 91 percent, temp 36.9 degrees.
+[SEG0009] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0010] person_1 (PATIENT): Yes, doctor.
+[SEG0011] person_2 (DOCTOR): Let me look at this properly.
+[SEG0012] person_2 (DOCTOR): Air entry is reduced on both sides with a prolonged breathing out phase.
+[SEG0013] person_2 (DOCTOR): Thanks, please take a seat again.
+[SEG0014] person_2 (DOCTOR): Have you had any fever, chest pain or swollen ankles?
+[SEG0015] person_1 (PATIENT): No, nothing there.
+[SEG0016] person_2 (DOCTOR): Alright, how are your joints, any aches elsewhere?
+[SEG0017] person_1 (PATIENT): I move fine otherwise.
+[SEG0018] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0019] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0020] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0021] person_1 (PATIENT): No, nothing like that.
+[SEG0022] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0023] person_1 (PATIENT): I, I take Tiotropium inhaler, once a day for my chest.
+[SEG0024] person_2 (DOCTOR): Moving on to your background, any past medical history? Bear with me, I'm just building up the picture.
+[SEG0025] person_1 (PATIENT): I mean, I've had COPD for nearly five years now. I'm not great at remembering details, so bear with me.
+[SEG0026] person_2 (DOCTOR): Is there a family history of anything significant?
+[SEG0027] person_1 (PATIENT): My mother has migraines.
+[SEG0028] person_2 (DOCTOR): Right, any drug or food allergies?
+[SEG0029] person_1 (PATIENT): Yes, I'm allergic to dust.
+[SEG0030] person_2 (DOCTOR): Any smoking?
+[SEG0031] person_1 (PATIENT): I stopped smoking about two years back.
+[SEG0032] person_2 (DOCTOR): And alcohol, how much?
+[SEG0033] person_1 (PATIENT): A beer or two most evenings, to be honest.
+[SEG0034] person_2 (DOCTOR): Are you working at the moment?
+[SEG0035] person_1 (PATIENT): Yes, I'm a nurse on a busy ward.
+[SEG0036] person_2 (DOCTOR): And what do you usually eat?
+[SEG0037] person_1 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0038] person_2 (DOCTOR): Okay, thinking it through, it fits best with a flare-up of COPD.
+[SEG0039] person_1 (PATIENT): Is it something serious, doctor?
+[SEG0040] person_2 (DOCTOR): I can't promise yet, but most people with a flare-up of COPD do well once it's treated properly. I think a sputum culture makes sense here, for productive cough.
+[SEG0041] person_1 (PATIENT): Fine by me.
+[SEG0042] person_2 (DOCTOR): I'd like to arrange a chest X-ray for breathlessness.
+[SEG0043] person_1 (PATIENT): Fine by me.
+[SEG0044] person_2 (DOCTOR): I'm going to put you on doxycycline, 100 milligrams, twice a day, for five days. That's for chest infection. This is a good time to talk about stopping smoking if that's still an issue. If you smoke, this is a good moment to think about stopping, and we can help you with that. Let's hold off on blood tests for now, and if there's no change in a month we can revisit it.
+[SEG0045] person_2 (DOCTOR): One warning sign to remember: you become more breathless or your lips turn blue. In that case don't wait. Book a review in two weeks.
+[SEG0046] person_1 (PATIENT): Uh, good, I'll come back then.
+[SEG0047] person_2 (DOCTOR): Is there anything you wanted to ask?
+[SEG0048] person_1 (PATIENT): Um, nothing more from me, thanks.
+[SEG0049] person_2 (DOCTOR): Safe journey home.
+
+JSON:

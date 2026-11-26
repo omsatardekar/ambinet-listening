@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00423)
+[SEG0001] person_1 (PATIENT): Hi, doctor, I brought my bag, is it fine to leave it here?
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): Okay, so I'm here because of trouble concentrating at work.
+[SEG0004] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0005] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0006] person_2 (DOCTOR): Okay: saturation 99 percent, pulse is 84 beats a minute, temperature 36.9. And BP is 115 over 77.
+[SEG0007] person_1 (PATIENT): Is that alright, doctor?
+[SEG0008] person_2 (DOCTOR): That's fine, we'll come to it.
+[SEG0009] person_2 (DOCTOR): Since when have you had this?
+[SEG0010] person_1 (PATIENT): It's been going on for about three months.
+[SEG0011] person_2 (DOCTOR): Does anything bring it on or make it worse?
+[SEG0012] person_1 (PATIENT): It's worse with noisy offices.
+[SEG0013] person_2 (DOCTOR): Have you noticed substance use, heavy caffeine or anxiety attacks?
+[SEG0014] person_1 (PATIENT): No substance use, heavy caffeine or anxiety attacks, none of it.
+[SEG0015] person_2 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0016] person_1 (PATIENT): No, that side's been fine.
+[SEG0017] person_2 (DOCTOR): Have you had any surgery before?
+[SEG0018] person_1 (PATIENT): Yes, I had my gallbladder removed, in 2016.
+[SEG0019] person_2 (DOCTOR): Okay, do you smoke?
+[SEG0020] person_1 (PATIENT): No, I don't smoke and never have.
+[SEG0021] person_2 (DOCTOR): Do you work?
+[SEG0022] person_1 (PATIENT): I run a small shop, so I'm on my feet a lot.
+[SEG0023] person_2 (DOCTOR): What's your diet like?
+[SEG0024] person_1 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0025] person_2 (DOCTOR): How about exercise?
+[SEG0026] person_1 (PATIENT): Not really, I don't get much exercise.
+[SEG0027] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0028] person_1 (PATIENT): I've got anxiety.
+[SEG0029] person_2 (DOCTOR): Okay, I can see anxiety in your file as well.
+[SEG0030] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0031] person_1 (PATIENT): I've never been told I have allergies.
+[SEG0032] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0033] person_1 (PATIENT): It's escitalopram, 10 milligrams, once a day for the anxiety.
+[SEG0034] person_2 (DOCTOR): Putting together what you've described, I'm honestly not certain yet. It could be difficulty with attention and organisation that needs a fuller assessment, or it might be poor sleep. I'm going to order a thyroid test, for poor concentration. Keep a regular sleep schedule and write down your tasks each morning. Let's get you seen by an adult attention clinic, I'll arrange the letter.
+[SEG0035] person_1 (PATIENT): Okay.
+[SEG0036] person_2 (DOCTOR): I'd like to see you again after the results are back.
+[SEG0037] person_1 (PATIENT): Sure, that's doable.
+[SEG0038] person_2 (DOCTOR): Let me check I've been clear. What will you do once you get home?
+[SEG0039] person_1 (PATIENT): So, I come back after the results are back. Is that right?
+[SEG0040] person_2 (DOCTOR): Yes, exactly right. Right, that's it on my side. Anything unclear?
+[SEG0041] person_1 (PATIENT): That's everything I wanted to ask. Thank you.
+[SEG0042] person_2 (DOCTOR): Alright, goodbye.
+
+JSON:

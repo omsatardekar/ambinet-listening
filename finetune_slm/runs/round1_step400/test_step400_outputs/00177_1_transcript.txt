@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00177)
+[SEG0001] person_1 (PATIENT): morning nice to finally see you, doctor
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): So, doctor, it's aching in my thighs. It's getting on my nerves now.
+[SEG0004] person_2 (DOCTOR): Okay, how far back does it go?
+[SEG0005] person_1 (PATIENT): Probably about four days. Yeah.
+[SEG0006] person_2 (DOCTOR): understood okay, give me more detail on it, whatever comes to mind
+[SEG0007] person_1 (PATIENT): it settles a little with rest. Climbing stairs definitely sets it off maybe a five out of ten on a bad day oh, there's cramps as well
+[SEG0008] person_2 (DOCTOR): Any procedures or operations?
+[SEG0009] person_1 (PATIENT): Oh, I had a knee arthroscopy three years ago.
+[SEG0010] person_2 (DOCTOR): What about your general health, any conditions you're being treated for? It helps to be thorough at this stage.
+[SEG0011] person_1 (PATIENT): I have high cholesterol. Sorry, I know I'm rambling a bit. I've never really been one for hospitals
+[SEG0012] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0013] person_1 (PATIENT): No, no allergies to anything.
+[SEG0014] person_2 (DOCTOR): what's your current medication list?
+[SEG0015] person_1 (PATIENT): I'm on atorvastatin, 20 milligrams, at night.
+[SEG0016] person_2 (DOCTOR): And alcohol, how much?
+[SEG0017] person_1 (PATIENT): I don't drink at all.
+[SEG0018] person_2 (DOCTOR): Do you have a job?
+[SEG0019] person_1 (PATIENT): I'm a self-employed electrician.
+[SEG0020] person_2 (DOCTOR): Who do you live with?
+[SEG0021] person_1 (PATIENT): I live with my family, my husband and two kids.
+[SEG0022] person_2 (DOCTOR): How's your diet?
+[SEG0023] person_1 (PATIENT): I'm mostly vegetarian
+[SEG0024] person_2 (DOCTOR): What about joint swelling?
+[SEG0025] person_1 (PATIENT): no no joint swelling
+[SEG0026] person_2 (DOCTOR): any trouble swallowing, recent heavy exercise or numbness?
+[SEG0027] person_1 (PATIENT): No. None of those.
+[SEG0028] person_2 (DOCTOR): Has your skin been okay?
+[SEG0029] person_1 (PATIENT): No, skin's been fine.
+[SEG0030] person_2 (DOCTOR): Is your urine normal, no changes?
+[SEG0031] person_1 (PATIENT): No, that's all fine.
+[SEG0032] person_2 (DOCTOR): before we go on, a a few quick readings
+[SEG0033] person_2 (DOCTOR): Rest your hand here..
+[SEG0034] person_2 (DOCTOR): Okay: temperature is 36.4 degrees, pulse is 75 beats a minute, BP is 117 over 74. And oxygen saturation is 99 percent.
+[SEG0035] person_2 (DOCTOR): I'll examine you now, bear with me.
+[SEG0036] person_2 (DOCTOR): bear with me a second
+[SEG0037] person_2 (DOCTOR): Power in the thighs is slightly reduced, four out of five.
+[SEG0038] person_2 (DOCTOR): Bear with me a second.
+[SEG0039] person_2 (DOCTOR): The muscles are mildly tender when I squeeze.
+[SEG0040] person_1 (PATIENT): Mm, okay.
+[SEG0041] person_2 (DOCTOR): all done, you can get dressed from what you've told me and and what I found, it points towards muscle symptoms that may be related to the cholesterol tablet
+[SEG0042] person_1 (PATIENT): should I be worried about this?
+[SEG0043] person_2 (DOCTOR): I can't promise yet, but most people with muscle symptoms that may be related to the cholesterol tablet do well once it's treated properly.
+[SEG0044] person_2 (DOCTOR): A creatine kinase level is what I'd like next, for muscle pain.
+[SEG0045] person_1 (PATIENT): Does it it need any preparation?
+[SEG0046] person_2 (DOCTOR): alright, thanks for coming in
+[SEG0047] person_1 (PATIENT): That's everything I wanted to ask. Thank you.
+[SEG0048] person_2 (DOCTOR): take care
+
+JSON:

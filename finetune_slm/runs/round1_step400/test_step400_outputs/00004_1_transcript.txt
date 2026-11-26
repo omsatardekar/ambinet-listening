@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00004)
+[SEG0001] person_1 (PATIENT): Morning, doctor, I hope I'm not interrupting.
+[SEG0002] person_2 (DOCTOR): Yes, do sit. Tell me what's been happening.
+[SEG0003] person_1 (PATIENT): Uh, I'm here because of constipation.
+[SEG0004] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0005] person_1 (PATIENT): I take metformin, 500 milligrams, twice a day.
+[SEG0006] person_2 (DOCTOR): Is this recent, or has it been a while?
+[SEG0007] person_1 (PATIENT): Probably four weeks. Yeah.
+[SEG0008] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0009] person_1 (PATIENT): When it starts I tend to get a heavy feeling in the lower tummy as well. And straining to pass stool, too. The heavy feeling in the lower tummy? That's been for two years. Hmm, I had a little bright blood on the paper before. That's settled now, though.
+[SEG0010] person_2 (DOCTOR): Have you had constipation before, or is this the first time?
+[SEG0011] person_1 (PATIENT): A bit, last year. It settled by itself back then.
+[SEG0012] person_2 (DOCTOR): And abdominal swelling, any of that?
+[SEG0013] person_1 (PATIENT): No. No abdominal swelling.
+[SEG0014] person_2 (DOCTOR): A few quick ones: pain on passing stool or vomiting?
+[SEG0015] person_1 (PATIENT): I haven't had pain on passing stool or vomiting, no.
+[SEG0016] person_2 (DOCTOR): A few quick ones: black stools, weight loss or fever?
+[SEG0017] person_1 (PATIENT): No, no black stools, weight loss or fever.
+[SEG0018] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0019] person_1 (PATIENT): Um, no, nothing with my heart.
+[SEG0020] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0021] person_1 (PATIENT): No changes there.
+[SEG0022] person_2 (DOCTOR): Is there a family history of anything significant?
+[SEG0023] person_1 (PATIENT): Yeah, um, my sister has epilepsy. My mother has diabetes.
+[SEG0024] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0025] person_1 (PATIENT): I stopped smoking about two years back. Yes, I'm a nurse on a busy ward. It's just me and my wife at home now.
+[SEG0026] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0027] person_1 (PATIENT): I have diabetes, for nearly five years. An underactive thyroid, for nearly five years.
+[SEG0028] person_2 (DOCTOR): Alright, diabetes, that matches what I have here.
+[SEG0029] person_2 (DOCTOR): Okay, what about operations, anything like that?
+[SEG0030] person_1 (PATIENT): I had my thyroid operated on a long time ago.
+[SEG0031] person_2 (DOCTOR): Before we go on, a few quick readings.
+[SEG0032] person_2 (DOCTOR): Almost there...
+[SEG0033] person_2 (DOCTOR): Okay: heart rate 71, temperature is 36.7 degrees, respiratory rate 17, pressure 118 over 77.
+[SEG0034] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0035] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0036] person_2 (DOCTOR): There's no mass in the tummy.
+[SEG0037] person_2 (DOCTOR): Let me just check something.
+[SEG0038] person_2 (DOCTOR): I can feel firm stool in the left lower abdomen.
+[SEG0039] person_2 (DOCTOR): Okay, you can sit up.
+[SEG0040] person_2 (DOCTOR): Today I'm not changing anything. Ask me anything before you go.
+[SEG0041] person_1 (PATIENT): No questions. Thank you.
+[SEG0042] person_2 (DOCTOR): Mind how you go.
+
+JSON:

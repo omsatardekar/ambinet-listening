@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00359)
+[SEG0001] person_1 (PATIENT): Hi, doctor. Is this the right room?
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): Oh, it's numbness on the left side of my face. I thought I'd wait, but it hasn't gone. I've never really been one for hospitals.
+[SEG0004] person_2 (DOCTOR): How long has this been going on?
+[SEG0005] person_1 (PATIENT): Yeah, it's been going on for about two weeks. I'd rather not end up on lots of tablets if I can avoid it.
+[SEG0006] person_2 (DOCTOR): right, anything that tends to go along with it?
+[SEG0007] person_1 (PATIENT): It usually comes with tiredness. The tiredness? That's been for about two weeks.
+[SEG0008] person_2 (DOCTOR): any trouble swallowing, confusion, loss of vision or chest pain at all?
+[SEG0009] person_1 (PATIENT): No, none of that at all.
+[SEG0010] person_2 (DOCTOR): any rashes or skin problems otherwise?
+[SEG0011] person_1 (PATIENT): No, skin's been fine.
+[SEG0012] person_2 (DOCTOR): on the cardiac side, anything I should know?
+[SEG0013] person_1 (PATIENT): nothing like that
+[SEG0014] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0015] person_1 (PATIENT): No operations, no.
+[SEG0016] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0017] person_1 (PATIENT): None, you know, as far as I'm aware.
+[SEG0018] person_2 (DOCTOR): Any diagnoses you've been given before? Take your time, there's no rush.
+[SEG0019] person_1 (PATIENT): Yes, high blood pressure.
+[SEG0020] person_2 (DOCTOR): I follow. Yes, high blood pressure is known to to us, good to have that clear. Which tablets or creams or inhalers do you use?
+[SEG0021] person_1 (PATIENT): Oh, you know, I take losartan, 50 milligrams, once a day for my blood pressure.
+[SEG0022] person_2 (DOCTOR): Do you drink alcohol?
+[SEG0023] person_1 (PATIENT): I have a couple of drinks on the weekend.
+[SEG0024] person_2 (DOCTOR): what do you do to keep active?
+[SEG0025] person_1 (PATIENT): I cycle to work most mornings
+[SEG0026] person_2 (DOCTOR): are you working or retired?
+[SEG0027] person_1 (PATIENT): Retired. I stopped a few years back.
+[SEG0028] person_2 (DOCTOR): How do you eat, generally?
+[SEG0029] person_1 (PATIENT): I skip breakfast most days.
+[SEG0030] person_2 (DOCTOR): Is there a family history of anything significant?
+[SEG0031] person_1 (PATIENT): My brother has asthma.
+[SEG0032] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0033] person_2 (DOCTOR): One second...
+[SEG0034] person_2 (DOCTOR): Okay: pulse is 86 beats a minute, SpO2 97 percent on room air, BP is 164 over 93.
+[SEG0035] person_1 (PATIENT): Is that normal?
+[SEG0036] person_2 (DOCTOR): let's look at it together in a minute
+[SEG0037] person_2 (DOCTOR): Shall we do the examination?
+[SEG0038] person_1 (PATIENT): Okay, ready.
+[SEG0039] person_2 (DOCTOR): Almost done with this part.
+[SEG0040] person_2 (DOCTOR): there's mild drooping at the left corner of your mouth
+[SEG0041] person_1 (PATIENT): go ahead
+[SEG0042] person_2 (DOCTOR): All done, you can get dressed. So, based on the history and the examination, this looks most like a possible mini-stroke, which we need to investigate urgently.
+[SEG0043] person_2 (DOCTOR): Let's book an ECG to look into possible stroke. Let's use clopidogrel, 75 milligrams, once a day, until we review. You take it by mouth. That's for stroke prevention.
+[SEG0044] person_1 (PATIENT): That's easy enough to remember.
+[SEG0045] person_2 (DOCTOR): don't drive for now, and bring someone with you to the next visit. If the numbness, weakness or speech problem returns, or you feel really unwell, please come to the emergency department. I'd like you back in one week. Thanks for coming in
+[SEG0046] person_1 (PATIENT): no, um, you've explained it well. Thanks
+[SEG0047] person_2 (DOCTOR): So, mind how you go.
+
+JSON:

@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00033)
+[SEG0001] person_1 (NURSE): Doctor, I've checked them in and done the preliminary measurements, I'll hand them over when you ask.
+[SEG0002] person_2 (DOCTOR): Thanks, that's helpful. Hello, please sit. What's been happening?
+[SEG0003] person_3 (CAREGIVER): Hello, doctor, I came in with them, if that's okay.
+[SEG0004] person_4 (PATIENT): Honestly, it's blood on the toilet paper, and my family pushed me to come.
+[SEG0005] person_2 (DOCTOR): Alright, how long have you had it?
+[SEG0006] person_4 (PATIENT): Honestly I can't say exactly when it started. It might have been last month or the month before, I really can't pin it down.
+[SEG0007] person_2 (DOCTOR): How intense does it get?
+[SEG0008] person_4 (PATIENT): Mostly moderate. I've also had pain when I pass stool. I've also had an itchy bottom, since yesterday.
+[SEG0009] person_1 (NURSE): Okay, so the vitals from earlier. Pressure 114 over 71, SpO2 98 percent on room air, pulse 75.
+[SEG0010] person_2 (DOCTOR): Okay, noted.
+[SEG0011] person_2 (DOCTOR): So, can I examine you now?
+[SEG0012] person_2 (DOCTOR): I'll go gently.
+[SEG0013] person_2 (DOCTOR): There's a small external pile at the edge, and I don't see any fissure.
+[SEG0014] person_2 (DOCTOR): Almost done with this part.
+[SEG0015] person_2 (DOCTOR): Tummy is soft and non-tender.
+[SEG0016] person_2 (DOCTOR): Good, that's the examination. Have you had any fever?
+[SEG0017] person_4 (PATIENT): No. No fever.
+[SEG0018] person_3 (CAREGIVER): Um, actually, doctor, I did notice fever. He doesn't always say.
+[SEG0019] person_4 (PATIENT): No, I don't think I did. Maybe a little, I'm not sure.
+[SEG0020] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. Okay, did you get change in bowel habit, family history of bowel cancer or black stools?
+[SEG0021] person_4 (PATIENT): No. None of those.
+[SEG0022] person_2 (DOCTOR): Any weight loss or abdominal pain at all?
+[SEG0023] person_4 (PATIENT): No, no weight loss or abdominal pain.
+[SEG0024] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0025] person_4 (PATIENT): No rashes.
+[SEG0026] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0027] person_4 (PATIENT): I was told I'm allergic to latex, but I don't remember what reaction I had.
+[SEG0028] person_2 (DOCTOR): Right, what medicines do you take regularly?
+[SEG0029] person_3 (CAREGIVER): He is on iron tablets, once a day, I give it to him. He is on sertraline, 50 milligrams, once a day for my mood, I give it to him.
+[SEG0030] person_2 (DOCTOR): And for how long?
+[SEG0031] person_3 (CAREGIVER): Nearly five years now.
+[SEG0032] person_2 (DOCTOR): Do you live alone?
+[SEG0033] person_4 (PATIENT): Yes, I live on my own.
+[SEG0034] person_2 (DOCTOR): Do you have a job?
+[SEG0035] person_4 (PATIENT): I'm a self-employed electrician.
+[SEG0036] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0037] person_4 (PATIENT): I have low haemoglobin. I have migraines, for two years.
+[SEG0038] person_2 (DOCTOR): Understood.
+[SEG0039] person_4 (PATIENT): I've got depression.
+[SEG0040] person_2 (DOCTOR): Right, so depression is already on your record. We'll keep that in mind today. Have you had any previous surgeries?
+[SEG0041] person_4 (PATIENT): No operations, no.
+[SEG0042] person_2 (DOCTOR): So, is there a family history of anything significant?
+[SEG0043] person_4 (PATIENT): My mother has diabetes. My mother had high blood pressure.
+[SEG0044] person_2 (DOCTOR): Okay, so my impression is this: This looks most like haemorrhoids. I want to be honest that this is an impression, not a final answer. I'd also keep something higher up in the bowel that we shouldn't miss in mind.
+[SEG0045] person_4 (PATIENT): Well, uh, should I be worried about this?
+[SEG0046] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's haemorrhoids, and we'll know more once the a colonoscopy is back.
+[SEG0047] person_2 (DOCTOR): I think a colonoscopy makes sense here, for rectal bleeding. That will help us see what's going on underneath and decide the next step.
+[SEG0048] person_4 (PATIENT): Okay, that's fine.
+[SEG0049] person_2 (DOCTOR): I'm sending you for blood tests because of rectal bleeding. We'll begin with lactulose, 15 ml, at night, for two weeks. You take it by mouth. It's for constipation. Soak in a warm bath for ten minutes after you pass stool, and don't strain. Don't skip meals, and try to eat smaller portions more often through the day. We'll refer you to a colorectal surgeon.
+[SEG0050] person_2 (DOCTOR): One warning sign to remember: you pass a lot of blood or feel faint. In that case don't wait. We'll catch up in three weeks. Look after yourself.
+[SEG0051] person_4 (PATIENT): Thanks, that was helpful.
+[SEG0052] person_2 (DOCTOR): See you then.
+
+JSON:

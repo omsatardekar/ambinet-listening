@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00068)
+[SEG0001] person_1 (DOCTOR): Come in, come in. Pull the door closed behind you, please.
+[SEG0002] person_2 (PATIENT): Thanks. Sorry, I'm a little early.
+[SEG0003] person_1 (DOCTOR): Alright, go ahead, tell me what's happening.
+[SEG0004] person_2 (PATIENT): I've been looking pale.
+[SEG0005] person_1 (DOCTOR): How long has this been going on?
+[SEG0006] person_2 (PATIENT): I'm not sure when it began, to be honest. Some weeks ago, but I can't say how many. I've had breathlessness on the stairs too, for two weeks. As for breathlessness on the stairs, I'd give it a eight, out of ten. I get some relief from resting.
+[SEG0007] person_1 (DOCTOR): Have you been looking pale at any time before this?
+[SEG0008] person_2 (PATIENT): So, I had a similar thing about six months ago. It went away.
+[SEG0009] person_1 (DOCTOR): I'll take a few measurements first.
+[SEG0010] person_1 (DOCTOR): Rest your hand here...
+[SEG0011] person_1 (DOCTOR): Okay: temperature is 36.5 degrees, heart rate 112, blood pressure 123 over 70.
+[SEG0012] person_2 (PATIENT): Is that okay?
+[SEG0013] person_1 (DOCTOR): I'll come back to those numbers.
+[SEG0014] person_1 (DOCTOR): I'll examine you now, bear with me.
+[SEG0015] person_2 (PATIENT): Sure.
+[SEG0016] person_1 (DOCTOR): Take your time, no rush.
+[SEG0017] person_1 (DOCTOR): Heart sounds are normal, I don't hear any murmur.
+[SEG0018] person_1 (DOCTOR): All done, you can get dressed.
+[SEG0019] person_1 (DOCTOR): Right, a few quick ones: weight loss or blood in the stool?
+[SEG0020] person_2 (PATIENT): No, nothing there.
+[SEG0021] person_1 (DOCTOR): So, a few quick ones: chest pain, heavy periods or black stools?
+[SEG0022] person_2 (PATIENT): No, not any of them.
+[SEG0023] person_1 (DOCTOR): Neurologically, anything strange?
+[SEG0024] person_2 (PATIENT): No, that's all normal.
+[SEG0025] person_1 (DOCTOR): Has your heart given you any trouble?
+[SEG0026] person_2 (PATIENT): Nothing like that.
+[SEG0027] person_1 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0028] person_2 (PATIENT): I've had acid reflux for about ten years now.
+[SEG0029] person_1 (DOCTOR): Right. Who do you live with?
+[SEG0030] person_2 (PATIENT): I live with my family, my husband and two kids.
+[SEG0031] person_1 (DOCTOR): Do you get any exercise?
+[SEG0032] person_2 (PATIENT): I walk for about half an hour most days.
+[SEG0033] person_1 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0034] person_2 (PATIENT): I've never been told I have allergies.
+[SEG0035] person_1 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0036] person_2 (PATIENT): It's pantoprazole, 40 milligrams, before breakfast for my acidity.
+[SEG0037] person_1 (DOCTOR): Having listened and examined, the most likely explanation is anaemia of some kind.
+[SEG0038] person_1 (DOCTOR): I'll request a vitamin B12 level, it'll help with possible deficiency. Let's book a ferritin level to look into possible iron deficiency. The result will help us decide whether anything more is needed. You'll be taking ferrous sulfate, 200 milligrams, once a day, for three months. You take it by mouth. It's for possible iron deficiency. Iron can darken the stools and bother the stomach, so take it after food.
+[SEG0039] person_1 (DOCTOR): Try to keep a simple diary of when it happens and what you were doing, and bring it to the next visit. A full blood count is something we might do if this doesn't improve in two weeks. Book a review after the results are back.
+[SEG0040] person_2 (PATIENT): Alright, I'll put it in my diary.
+[SEG0041] person_1 (DOCTOR): Right, that's all. Go gently.
+[SEG0042] person_2 (PATIENT): No, you've explained it well. Thanks.
+
+JSON:

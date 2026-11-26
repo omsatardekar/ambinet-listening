@@ -1,0 +1,87 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00449)
+[SEG0001] person_1 (PATIENT): Sorry I'm a few minutes behind, doctor.
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_3 (CAREGIVER): Morning, doctor. I'll stay and fill in anything that's missed.
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to have you here.
+[SEG0005] person_4 (FAMILY_MEMBER): Doctor, it's a high reading at home. That's what we're worried about.
+[SEG0006] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0007] person_1 (PATIENT): I'm on ramipril, 5 milligrams, every morning for my blood pressure.
+[SEG0008] person_1 (PATIENT): It's a... um, uh, I can't remember what it's called. It's a small white one.
+[SEG0009] person_2 (DOCTOR): Okay, do you remember what it's for?
+[SEG0010] person_1 (PATIENT): For my cholesterol, I believe. My son sets them out for me, I just take what I'm given.
+[SEG0011] person_2 (DOCTOR): How far back does it go?
+[SEG0012] person_1 (PATIENT): About three weeks, give or take.
+[SEG0013] person_4 (FAMILY_MEMBER): It was closer to a month, doctor.
+[SEG0014] person_2 (DOCTOR): Okay, so roughly three to four weeks. Is that right?
+[SEG0015] person_1 (PATIENT): Yes, somewhere around that.
+[SEG0016] person_2 (DOCTOR): And how severe is it?
+[SEG0017] person_1 (PATIENT): Uh, about a five out of ten.
+[SEG0018] person_1 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0019] person_4 (FAMILY_MEMBER): Tell the doctor about the other thing, that's what worries me.
+[SEG0020] person_1 (PATIENT): I was getting to that! I've also had a little puffiness in the ankles.
+[SEG0021] person_2 (DOCTOR): What's the pattern, is it there all day?
+[SEG0022] person_1 (PATIENT): Honestly, all the time.
+[SEG0023] person_2 (DOCTOR): On a normal day, how strong is it?
+[SEG0024] person_1 (PATIENT): Well, it's... hard to say, it's kind of... I don't know—
+[SEG0025] person_2 (DOCTOR): Take your time. Mild, moderate, or severe, if you had to pick?
+[SEG0026] person_1 (PATIENT): Mild, really.
+[SEG0027] person_2 (DOCTOR): Right, have you had headaches in the mornings?
+[SEG0028] person_1 (PATIENT): Mm, yes.
+[SEG0029] person_2 (DOCTOR): Does it happen all the time or in spells?
+[SEG0030] person_1 (PATIENT): It just comes and goes.
+[SEG0031] person_2 (DOCTOR): Have you had a ringing in the ears?
+[SEG0032] person_1 (PATIENT): Yeah. About a month, I'd say.
+[SEG0033] person_2 (DOCTOR): Alright, have you had a high reading at home before, or is this the first time?
+[SEG0034] person_1 (PATIENT): A bit, a couple of years ago. It settled by itself back then.
+[SEG0035] person_2 (DOCTOR): Alright, how about breathlessness?
+[SEG0036] person_1 (PATIENT): Definitely no breathlessness.
+[SEG0037] person_2 (DOCTOR): Any sign of palpitations?
+[SEG0038] person_1 (PATIENT): No, none, no palpitations.
+[SEG0039] person_3 (CAREGIVER): Actually, doctor, I did notice palpitations. He doesn't always say.
+[SEG0040] person_1 (PATIENT): No, I don't think I did. Maybe a little, I'm not sure.
+[SEG0041] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. A few quick ones: vision changes, nosebleeds or weakness?
+[SEG0042] person_1 (PATIENT): Um, no vision changes, nosebleeds or weakness, none of it.
+[SEG0043] person_2 (DOCTOR): How are your bowels, any trouble?
+[SEG0044] person_1 (PATIENT): No, all normal there.
+[SEG0045] person_2 (DOCTOR): Have you had to have anything operated on?
+[SEG0046] person_1 (PATIENT): I had my thyroid operated on a long time ago.
+[SEG0047] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0048] person_1 (PATIENT): No, no allergies to anything.
+[SEG0049] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0050] person_1 (PATIENT): I used to smoke but I quit five years ago. I have a couple of drinks on the weekend. Mostly home-cooked food, rice and vegetables. I walk for about half an hour most days.
+[SEG0051] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0052] person_1 (PATIENT): I have high blood pressure, for two years. My sister suggested writing things down, but I forgot. I didn't want to make a fuss, you know.
+[SEG0053] person_2 (DOCTOR): Go on.
+[SEG0054] person_1 (PATIENT): I've had high cholesterol for about ten years now. I have diabetes.
+[SEG0055] person_2 (DOCTOR): Right, can I take your vitals now?
+[SEG0056] person_2 (DOCTOR): One second...
+[SEG0057] person_2 (DOCTOR): Okay: saturation 99 percent, blood pressure 168 over 103, pulse is 86 beats a minute.
+[SEG0058] person_1 (PATIENT): Uh, uh, is that alright, doctor?
+[SEG0059] person_2 (DOCTOR): I'll explain what that means shortly.
+[SEG0060] person_2 (DOCTOR): I'd like to examine you now.
+[SEG0061] person_1 (PATIENT): Mm, okay.
+[SEG0062] person_2 (DOCTOR): I'll go gently.
+[SEG0063] person_2 (DOCTOR): Heart sounds are normal.
+[SEG0064] person_1 (PATIENT): Mm, okay.
+[SEG0065] person_2 (DOCTOR): Hold that position for me.
+[SEG0066] person_2 (DOCTOR): There's mild pitting swelling at both ankles.
+[SEG0067] person_2 (DOCTOR): Alright, good, that's the examination. Putting it all together, I'm honestly not certain yet. It could be hypertension that isn't well controlled, or it might be a side effect from the current tablet.
+[SEG0068] person_1 (PATIENT): Doctor, is this dangerous?
+[SEG0069] person_2 (DOCTOR): I can't promise yet, but most people with hypertension that isn't well controlled do well once it's treated properly. Have you had any tests for this so far?
+[SEG0070] person_1 (PATIENT): I did have a urine test for protein done last month, um, but the paper's at home.
+[SEG0071] person_2 (DOCTOR): I'll request kidney function tests, it'll help with hypertension. Any last questions?
+[SEG0072] person_1 (PATIENT): Okay, thank you. Bye.
+
+JSON:

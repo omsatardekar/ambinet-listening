@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01687)
+[SEG0001] person_1 (DOCTOR): Hi, sit anywhere you like.
+[SEG0002] person_2 (PATIENT): Erm, good morning, doctor, thank you.
+[SEG0003] person_1 (DOCTOR): What do you need help with?
+[SEG0004] person_2 (PATIENT): Well, um, I've been having chest pressure. A neighbour of mine said I should see someone about it.
+[SEG0005] person_1 (DOCTOR): So, how long has it been like this?
+[SEG0006] person_2 (PATIENT): Probably five days. Yeah. I've had a very fast heartbeat too, for four weeks.
+[SEG0007] person_1 (DOCTOR): How strong would you say it is?
+[SEG0008] person_2 (PATIENT): I mean, you know, I'd give it a three, out of ten. Mm, I've also been feeling faint.
+[SEG0009] person_1 (DOCTOR): What about fever?
+[SEG0010] person_2 (PATIENT): No fever, thankfully.
+[SEG0011] person_1 (DOCTOR): Did you get cough or leg swelling?
+[SEG0012] person_2 (PATIENT): Okay, so I haven't had cough or leg swelling, no.
+[SEG0013] person_1 (DOCTOR): How's your breathing otherwise?
+[SEG0014] person_2 (PATIENT): Breathing's normal.
+[SEG0015] person_1 (DOCTOR): Which medicines do you take at the moment?
+[SEG0016] person_2 (PATIENT): I take clopidogrel, 75 milligrams, once a day for the stent.
+[SEG0017] person_1 (DOCTOR): And alcohol, how much?
+[SEG0018] person_2 (PATIENT): Nothing, I'm teetotal.
+[SEG0019] person_1 (DOCTOR): Do you follow any particular diet?
+[SEG0020] person_2 (PATIENT): I'm vegetarian and have been for years.
+[SEG0021] person_1 (DOCTOR): Do you do any exercise?
+[SEG0022] person_2 (PATIENT): I swim twice a week.
+[SEG0023] person_1 (DOCTOR): Are you on your own at home?
+[SEG0024] person_2 (PATIENT): I live with my elderly mother.
+[SEG0025] person_1 (DOCTOR): Do you have any chronic illnesses?
+[SEG0026] person_2 (PATIENT): Heart disease, for five years.
+[SEG0027] person_1 (DOCTOR): Okay, I can see heart disease in your file as well. Any allergies to tablets, food or anything in the environment?
+[SEG0028] person_2 (PATIENT): Actually, no allergies at all.
+[SEG0029] person_1 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0030] person_2 (PATIENT): Well, my uncle has high cholesterol.
+[SEG0031] person_1 (DOCTOR): I'll do your observations first.
+[SEG0032] person_1 (DOCTOR): Alright, keep your arm relaxed for me...
+[SEG0033] person_1 (DOCTOR): Okay: height 186 centimetres, weight 83 kilos, blood pressure 103 over 64, pulse 92, temp 36.4 degrees, oxygen saturation is 96 percent.
+[SEG0034] person_2 (PATIENT): Is that okay?
+[SEG0035] person_1 (DOCTOR): Don't worry, we'll discuss it in a second.
+[SEG0036] person_1 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0037] person_1 (DOCTOR): So, take a deep breath for me.
+[SEG0038] person_1 (DOCTOR): Your pulse is over one hundred and eighty and your blood pressure is low.
+[SEG0039] person_1 (DOCTOR): Thank you, you can get dressed.
+[SEG0040] person_1 (DOCTOR): Let me tell you where I've got to. It fits best with a dangerous fast heart rhythm. We shouldn't forget supraventricular tachycardia.
+[SEG0041] person_2 (PATIENT): Do you think it's something serious?
+[SEG0042] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a dangerous fast heart rhythm, but I'd like to confirm.
+[SEG0043] person_1 (DOCTOR): I think an urgent ECG makes sense here, for fast heart rhythm. We should do blood tests for arrhythmia.
+[SEG0044] person_2 (PATIENT): That's fine with me.
+[SEG0045] person_1 (DOCTOR): Lie flat, I am calling the emergency team and preparing to shock the heart. Do get help quickly if the symptoms get worse. Right, that's the plan. Do you want to ask me anything?
+[SEG0046] person_2 (PATIENT): So, I think I understand everything. Thanks.
+[SEG0047] person_1 (DOCTOR): Have a good day.
+
+JSON:

@@ -1,0 +1,64 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01628)
+[SEG0001] person_1 (PATIENT): Good evening, doctor, thanks for seeing me.
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_3 (CAREGIVER): doctor, I'm just here to help with the details it's neck pain after a car crash, doctor she didn't want to come, but I insisted
+[SEG0004] person_2 (DOCTOR): How many days or weeks has it been?
+[SEG0005] person_1 (PATIENT): I've had it since Friday work has been very busy so I kept ignoring it i did try to ignore it for a while
+[SEG0006] person_2 (DOCTOR): Is it constant or in episodes?
+[SEG0007] person_1 (PATIENT): Honestly, every other day.
+[SEG0008] person_2 (DOCTOR): How strong would you say it is?
+[SEG0009] person_1 (PATIENT): it's severe, honestly
+[SEG0010] person_2 (DOCTOR): What do you do to make it better?
+[SEG0011] person_1 (PATIENT): I get some relief from heat. I did have a headache at one point, but that's gone now.
+[SEG0012] person_2 (DOCTOR): is there anything relevant on the family side?
+[SEG0013] person_1 (PATIENT): My cousin has psoriasis.
+[SEG0014] person_2 (DOCTOR): Okay, what's on your current medicine list?
+[SEG0015] person_3 (CAREGIVER): she is on bisoprolol, 2.5 milligrams, once a day for the heart rhythm, I give it to her. It's ibuprofen, with food, doctor
+[SEG0016] person_2 (DOCTOR): Okay, and what strength is that?
+[SEG0017] person_3 (CAREGIVER): 400 milligrams, I think that's what's on the box.
+[SEG0018] person_2 (DOCTOR): how long have you taken that?
+[SEG0019] person_3 (CAREGIVER): Six months now.
+[SEG0020] person_2 (DOCTOR): now some background about your lifestyle
+[SEG0021] person_1 (PATIENT): I only drink at family occasions. No, I've never smoked in my life. I live with my elderly mother. I do a yoga class on Thursdays. I grab fast food at lunch most days.
+[SEG0022] person_2 (DOCTOR): Have you had any surgical procedures?
+[SEG0023] person_1 (PATIENT): I had part of my thyroid removed years back
+[SEG0024] person_2 (DOCTOR): Any allergies to to tablets, food or anything in the environment?
+[SEG0025] person_1 (PATIENT): no, I'm not allergic to anything
+[SEG0026] person_2 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0027] person_1 (PATIENT): oh, I have an irregular heartbeat, for about ten years. I've been reading about it online and it worried me
+[SEG0028] person_2 (DOCTOR): I follow. Yes, an irregular heartbeat is known to us, good to have that clear. Did you get chest pain, loss of consciousness or numbness in the arms?
+[SEG0029] person_1 (PATIENT): I haven't had chest pain, loss of consciousness or numbness in the arms, no
+[SEG0030] person_2 (DOCTOR): Any weakness?
+[SEG0031] person_1 (PATIENT): Definitely no weakness.
+[SEG0032] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0033] person_1 (PATIENT): No, that's been fine.
+[SEG0034] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0035] person_1 (PATIENT): No changes there.
+[SEG0036] person_2 (DOCTOR): Right, I'll note down your vital signs first.
+[SEG0037] person_2 (DOCTOR): Sit still for a moment...
+[SEG0038] person_2 (DOCTOR): Okay: saturation 98 percent, heart rate 76, temperature is 36.7 degrees. And And BP is 128 over 82.
+[SEG0039] person_2 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0040] person_2 (DOCTOR): I'm just checking this side.
+[SEG0041] person_2 (DOCTOR): There is muscle tenderness either side of the neck and no tenderness over the bones.
+[SEG0042] person_2 (DOCTOR): that's all I needed to check
+[SEG0043] person_2 (DOCTOR): putting it all together, I don't have a clear answer today: whiplash-type neck strain is possible, and so is a cervical spine injury let me just check I've got this right you've had neck pain after a car crash, since Friday, severe, and no chest pain or numbness in the arms
+[SEG0044] person_1 (PATIENT): That's what happened, yes.
+[SEG0045] person_2 (DOCTOR): Keep your neck moving gently and avoid a collar. Please come and see me if not better in two weeks.
+[SEG0046] person_1 (PATIENT): Erm, you know, I'll note it in my calendar.
+[SEG0047] person_2 (DOCTOR): have I covered everything you wanted?
+[SEG0048] person_1 (PATIENT): Uh, good, thanks, I'll see you then.
+[SEG0049] person_2 (DOCTOR): Look after yourself.
+
+JSON:

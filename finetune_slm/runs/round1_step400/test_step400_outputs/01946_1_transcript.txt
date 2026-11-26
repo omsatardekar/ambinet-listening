@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01946)
+[SEG0001] person_1 (PATIENT): Sorry I'm a little late, doctor.
+[SEG0002] person_2 (DOCTOR): So, of course, leave it there. How can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): Mm, doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_1 (PATIENT): I'm here because of vomiting.
+[SEG0005] person_2 (DOCTOR): Would you say mild, moderate or severe?
+[SEG0006] person_1 (PATIENT): I'd say severe.
+[SEG0007] person_2 (DOCTOR): Has there been the worst headache of your life too?
+[SEG0008] person_1 (PATIENT): Yes, for six months. With worst headache of my life, maybe a six out of ten on a bad day. Honestly, on and off. I've had a stiff neck too, for about two weeks. With stiff neck, I'd say mild.
+[SEG0009] person_2 (DOCTOR): Right, can you list what you take, tablets, creams or inhalers?
+[SEG0010] person_1 (PATIENT): Warfarin, 3 milligrams, in the evening for the blood thinning. I take lamotrigine, 100 milligrams, twice a day.
+[SEG0011] person_2 (DOCTOR): Before we go further, any allergies?
+[SEG0012] person_1 (PATIENT): Oh, yes, nickel. I get a rash on my skin.
+[SEG0013] person_2 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0014] person_1 (PATIENT): I've had an irregular heartbeat for two years now. I've had epilepsy, yes.
+[SEG0015] person_2 (DOCTOR): Alright, an irregular heartbeat, that matches what I have here. How active are you?
+[SEG0016] person_1 (PATIENT): I hardly move around during the day.
+[SEG0017] person_2 (DOCTOR): And your job?
+[SEG0018] person_1 (PATIENT): I work in accounts at a hospital.
+[SEG0019] person_2 (DOCTOR): So, have you noticed weakness, fever or head injury?
+[SEG0020] person_1 (PATIENT): No, I haven't had any of them.
+[SEG0021] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0022] person_1 (PATIENT): Skin's normal.
+[SEG0023] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0024] person_1 (PATIENT): No, nothing with my heart.
+[SEG0025] person_2 (DOCTOR): Let me get the readings out of the way.
+[SEG0026] person_2 (DOCTOR): That's it, just a little longer...
+[SEG0027] person_2 (DOCTOR): Okay: pulse 89, SpO2 99 percent on room air. And temperature 36.4, blood pressure 156 over 99.
+[SEG0028] person_1 (PATIENT): Is that okay?
+[SEG0029] person_2 (DOCTOR): We'll go over that shortly.
+[SEG0030] person_2 (DOCTOR): Right, let's have a proper look at you.
+[SEG0031] person_2 (DOCTOR): Stay as you are for a moment.
+[SEG0032] person_2 (DOCTOR): Your neck is stiff and you are very sensitive to light.
+[SEG0033] person_2 (DOCTOR): Please sit back down. Putting it all together, the most likely explanation is a possible bleed around the brain. The reason I say that is that your story and my examination fit together. Another possibility is a migraine.
+[SEG0034] person_1 (PATIENT): Hmm, is this serious, doctor?
+[SEG0035] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a possible bleed around the brain, and we'll know more once the a lumbar puncture is back. I'm going to order a lumbar puncture, for thunderclap headache. This needs an emergency scan, an ambulance is on its way. Please don't wait if the symptoms get worse. That's when to be seen urgently.
+[SEG0036] person_1 (PATIENT): Yes, I'll bear that in mind.
+[SEG0037] person_2 (DOCTOR): I'd like to see you again straight away.
+[SEG0038] person_1 (PATIENT): Okay, I'll arrange it.
+[SEG0039] person_2 (DOCTOR): That's all from me. Any questions?
+[SEG0040] person_1 (PATIENT): That's clear, thanks.
+
+JSON:

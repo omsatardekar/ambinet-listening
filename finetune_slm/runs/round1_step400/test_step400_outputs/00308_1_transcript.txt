@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00308)
+[SEG0001] person_1 (PATIENT): Good afternoon, doctor, the receptionist said you'd see me now.
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): Well, I've been having nausea in the mornings.
+[SEG0004] person_2 (DOCTOR): Is this recent, or has it been a while?
+[SEG0005] person_1 (PATIENT): It's been about three months now.
+[SEG0006] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0007] person_1 (PATIENT): Tender breasts goes along with it, most of the time. The tender breasts? That's been for about two weeks.
+[SEG0008] person_2 (DOCTOR): Have you had nausea in the mornings before, or is this the first time?
+[SEG0009] person_1 (PATIENT): A bit, a couple of years ago. It settled by itself back then.
+[SEG0010] person_2 (DOCTOR): Any vomiting everything, burning when passing urine, bleeding or fever?
+[SEG0011] person_1 (PATIENT): No, none of that at all.
+[SEG0012] person_2 (DOCTOR): Nothing like severe abdominal pain?
+[SEG0013] person_1 (PATIENT): No, no severe abdominal pain.
+[SEG0014] person_2 (DOCTOR): Understood. Your breathing, any trouble there?
+[SEG0015] person_1 (PATIENT): No problems with breathing.
+[SEG0016] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0017] person_1 (PATIENT): No rashes.
+[SEG0018] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0019] person_1 (PATIENT): No, I don't smoke and never have. I'm mostly vegetarian. It's just me and my wife at home now. I play badminton on Sundays.
+[SEG0020] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0021] person_1 (PATIENT): It's Thyronorm, 50 micrograms, every morning. Iron tablets, once a day.
+[SEG0022] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0023] person_1 (PATIENT): I'm allergic to penicillin, I get a rash.
+[SEG0024] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0025] person_1 (PATIENT): Yes, an underactive thyroid.
+[SEG0026] person_2 (DOCTOR): Understood.
+[SEG0027] person_1 (PATIENT): I have low haemoglobin, for two years.
+[SEG0028] person_2 (DOCTOR): Any previous surgeries?
+[SEG0029] person_1 (PATIENT): Just my tonsils out, when I was a child.
+[SEG0030] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0031] person_2 (DOCTOR): Rest your hand here...
+[SEG0032] person_2 (DOCTOR): Okay: pressure 122 over 69, SpO2 99 percent on room air, respiratory rate 17, temp 36.6 degrees, pulse 67.
+[SEG0033] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0034] person_2 (DOCTOR): Let me look at this properly.
+[SEG0035] person_2 (DOCTOR): Tummy is soft, non-tender, and the uterus isn't palpable above the pelvic bone yet.
+[SEG0036] person_2 (DOCTOR): Thanks for that. Putting it all together, I'd lean towards an early pregnancy.
+[SEG0037] person_1 (PATIENT): Doctor, is this dangerous?
+[SEG0038] person_2 (DOCTOR): I can't promise yet, but most people with an early pregnancy do well once it's treated properly. I'd like to arrange an early scan for early pregnancy.
+[SEG0039] person_3 (CLINICAL_STAFF): We have a slot Thursday at 2 pm, if that works.
+[SEG0040] person_1 (PATIENT): Okay, I'll be there.
+[SEG0041] person_2 (DOCTOR): I'm going to put you on folic acid, 5 milligrams, once a day, until twelve weeks. It's for pregnancy. Small, frequent meals and dry crackers before getting out of bed can calm the morning nausea. Let's hold off on blood tests for now, and if there's no change next month we can revisit it. I'd like to see you again in four weeks. Okay, I think we're finished. Is everything clear?
+[SEG0042] person_1 (PATIENT): Thank you for your time.
+
+JSON:

@@ -1,0 +1,50 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20033)
+[SEG0001] person_1 (PATIENT): Mm, hi, doctor, I hope I'm not disturbing you.
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): It's a bump on my head. I thought I'd wait, um, but it hasn't gone. I wasn't sure whether to come in at all, to be honest. I looked a few things up online, and that probably didn't help.
+[SEG0004] person_2 (DOCTOR): Okay, when did this begin?
+[SEG0005] person_1 (PATIENT): It's been going on for two weeks.
+[SEG0006] person_2 (DOCTOR): Have you noticed anything else alongside it?
+[SEG0007] person_1 (PATIENT): When it starts I tend to get a sore neck as well. With sore neck, a five out of ten, I suppose.
+[SEG0008] person_2 (DOCTOR): Have you been feeling dizzy?
+[SEG0009] person_1 (PATIENT): Yes, about the same, one week.
+[SEG0010] person_2 (DOCTOR): Any past operations I should know about?
+[SEG0011] person_1 (PATIENT): Okay, so yes, I had a varicose vein procedure, last year. I've been reading about it online and it worried me. I just want to get back to normal, really.
+[SEG0012] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0013] person_1 (PATIENT): I hardly move around during the day. I'm a hairdresser, on my feet all day. I live with my elderly mother.
+[SEG0014] person_2 (DOCTOR): Are you on any regular medication?
+[SEG0015] person_1 (PATIENT): Nothing regular, no.
+[SEG0016] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0017] person_1 (PATIENT): No, nothing at all.
+[SEG0018] person_2 (DOCTOR): Have you had loss of consciousness, by any chance?
+[SEG0019] person_1 (PATIENT): Nope, no loss of consciousness.
+[SEG0020] person_2 (DOCTOR): A few quick ones: double vision, weakness or vomiting?
+[SEG0021] person_1 (PATIENT): I haven't had double vision, weakness or vomiting, no.
+[SEG0022] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0023] person_1 (PATIENT): That's normal as far as I know.
+[SEG0024] person_3 (NURSE): Doctor, I've got the readings for you. Pressure 128 over 74, temp 36.7 degrees, saturation 98 percent. Respiratory rate 14, pulse is 81 beats a minute.
+[SEG0025] person_2 (DOCTOR): Okay, noted.
+[SEG0026] person_2 (DOCTOR): Could you come over to the couch, please?
+[SEG0027] person_1 (PATIENT): Right.
+[SEG0028] person_2 (DOCTOR): Raise your arm for me.
+[SEG0029] person_2 (DOCTOR): There is a small bruise on the forehead, the pupils are equal and reactive, and you are walking steadily.
+[SEG0030] person_2 (DOCTOR): That's all I needed to check.
+[SEG0031] person_2 (DOCTOR): Right, here's what I'm thinking. This is probably a minor head injury without worrying signs. We shouldn't forget a neck strain.
+[SEG0032] person_1 (PATIENT): Is this permanent?
+[SEG0033] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a minor head injury without worrying signs, and we'll watch how it goes. I'm going to put you on paracetamol, 1 gram, every six hours if needed, for three days. It's for headache. Someone should stay with you tonight, and no alcohol or contact sport for now. Let's review you if the headache gets worse. I think we're done unless you have questions.
+[SEG0034] person_1 (PATIENT): Thank you, that's helpful.
+[SEG0035] person_2 (DOCTOR): Have a good day.
+
+JSON:

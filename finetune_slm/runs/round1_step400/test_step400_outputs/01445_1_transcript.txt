@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01445)
+[SEG0001] person_1 (PATIENT): Morning, uh, doctor. Is this the right room?
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What seems to be wrong?
+[SEG0003] person_1 (PATIENT): Let me think, I've been feeling a bit muddled, and I wanted to get it checked.
+[SEG0004] person_2 (DOCTOR): When was the first time you noticed it?
+[SEG0005] person_1 (PATIENT): well, for about two weeks, I'd say i've been putting this off for weeks i'm hoping you can tell me something definite
+[SEG0006] person_2 (DOCTOR): Is it a lot or only a a little?
+[SEG0007] person_1 (PATIENT): It's severe, honestly.
+[SEG0008] person_2 (DOCTOR): is it accompanied by anything?
+[SEG0009] person_1 (PATIENT): Constipation goes along with it, most of the time. Actually, the Constipation? That's been for two months.
+[SEG0010] person_2 (DOCTOR): sure do you have any medical conditions I should know about?
+[SEG0011] person_1 (PATIENT): No, I've always been fairly healthy.
+[SEG0012] person_2 (DOCTOR): Are you on any regular medication?
+[SEG0013] person_1 (PATIENT): No, none.
+[SEG0014] person_2 (DOCTOR): Before we go further, any allergies?
+[SEG0015] person_1 (PATIENT): Oh, no, nothing as far as I know.
+[SEG0016] person_2 (DOCTOR): how active are you?
+[SEG0017] person_1 (PATIENT): I hardly move around during the day.
+[SEG0018] person_2 (DOCTOR): Tell me about your eating.
+[SEG0019] person_1 (PATIENT): I drink a lot of tea and snack through the day.
+[SEG0020] person_2 (DOCTOR): A few quick ones: falls, chest pain or fever?
+[SEG0021] person_1 (PATIENT): No, not a single one.
+[SEG0022] person_2 (DOCTOR): your breathing, any trouble there?
+[SEG0023] person_1 (PATIENT): No, my breathing's been fine.
+[SEG0024] person_2 (DOCTOR): anything with your heart, like skipped beats or fainting?
+[SEG0025] person_1 (PATIENT): um, no, that's been fine
+[SEG0026] person_2 (DOCTOR): Can I check a few measurements before we carry on?
+[SEG0027] person_2 (DOCTOR): bear with me while this finishes..
+[SEG0028] person_2 (DOCTOR): Okay: temperature 36.8, respiratory rate 19, SpO2 98 percent on room air. And blood pressure 94 over 59, pulse 107.
+[SEG0029] person_2 (DOCTOR): Could you come over to the couch, please?
+[SEG0030] person_2 (DOCTOR): look straight ahead
+[SEG0031] person_2 (DOCTOR): Your blood pressure drops a little on standing.
+[SEG0032] person_2 (DOCTOR): Okay, that's enough for me.
+[SEG0033] person_2 (DOCTOR): Putting it all together, the most likely explanation is side effects from several medicines taken together.
+[SEG0034] person_1 (PATIENT): is it dangerous, uh, doctor?
+[SEG0035] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like side effects from several medicines taken together, but I'd like to confirm.
+[SEG0036] person_2 (DOCTOR): I want blood tests done, that's for dizziness
+[SEG0037] person_3 (CLINICAL_STAFF): The earliest is Thursday, 11:30 am.
+[SEG0038] person_2 (DOCTOR): we will stop the sleeping tablet slowly over two weeks i'd like to see you again in two weeks
+[SEG0039] person_1 (PATIENT): That's fine with me.
+[SEG0040] person_2 (DOCTOR): Have I covered everything you wanted?
+[SEG0041] person_1 (PATIENT): thank you, doctor, goodbye
+[SEG0042] person_2 (DOCTOR): Okay, take care now.
+
+JSON:

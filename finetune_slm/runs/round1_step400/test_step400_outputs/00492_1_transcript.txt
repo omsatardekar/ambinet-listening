@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00492)
+[SEG0001] person_1 (PATIENT): hello doctor. It's my turn I think
+[SEG0002] person_2 (DOCTOR): No trouble at all, come in. What's been bothering you?
+[SEG0003] person_1 (PATIENT): I wanted to get exhaustion since I had the flu looked at
+[SEG0004] person_2 (DOCTOR): is there anything that takes the edge off?
+[SEG0005] person_1 (PATIENT): um sleeping in helps a bit i had aching legs before that's settled now um though
+[SEG0006] person_2 (DOCTOR): alright can I take your vitals now?
+[SEG0007] person_2 (DOCTOR): Alright, almost there...
+[SEG0008] person_2 (DOCTOR): Okay: temp 36.8 degrees, pulse 64, respiratory rate 14. And blood pressure 126 over 78.
+[SEG0009] person_2 (DOCTOR): Right, let me check a few things physically.
+[SEG0010] person_2 (DOCTOR): stay still while I have a look
+[SEG0011] person_2 (DOCTOR): chest sounds clear all over
+[SEG0012] person_2 (DOCTOR): Right, you can sit back down. Any fever or swollen legs at all?
+[SEG0013] person_1 (PATIENT): Okay so I haven't had fever or swollen legs no.
+[SEG0014] person_2 (DOCTOR): Have you had weight loss by any chance?
+[SEG0015] person_1 (PATIENT): not that I've noticed, no weight loss
+[SEG0016] person_2 (DOCTOR): any rash or shortness of breath at all?
+[SEG0017] person_1 (PATIENT): No, no rash or shortness of breath.
+[SEG0018] person_2 (DOCTOR): Alright any breathing difficulties apart from this?
+[SEG0019] person_1 (PATIENT): yeah, no, my breathing's been fine
+[SEG0020] person_2 (DOCTOR): any previous surgeries?
+[SEG0021] person_1 (PATIENT): no operations, no
+[SEG0022] person_2 (DOCTOR): Does anything run in the the family?
+[SEG0023] person_1 (PATIENT): I mean, my father had a stroke
+[SEG0024] person_2 (DOCTOR): okay what do you do for work?
+[SEG0025] person_1 (PATIENT): I work in an office, mostly sitting at a desk.
+[SEG0026] person_2 (DOCTOR): Any sport or activity?
+[SEG0027] person_1 (PATIENT): I play badminton on Sundays
+[SEG0028] person_2 (DOCTOR): is anyone at home with you?
+[SEG0029] person_1 (PATIENT): I share a flat with two friends
+[SEG0030] person_2 (DOCTOR): any allergies I should know about?
+[SEG0031] person_1 (PATIENT): not currently uh but as a youngster codeine gave me vomiting
+[SEG0032] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0033] person_1 (PATIENT): I was on Asthalin inhaler before. I stopped taking it
+[SEG0034] person_2 (DOCTOR): moving on to your background, any past medical history?
+[SEG0035] person_1 (PATIENT): I've, I've got asthma.
+[SEG0036] person_2 (DOCTOR): mm. Let me tell you where I've got to. It points towards post-viral fatigue. I want to be honest that this is an impression, not a final answer
+[SEG0037] person_2 (DOCTOR): we should do a thyroid test for fatigue. I want blood tests done, that's for fatigue. That will help us see what's going on underneath and decide the next step. Pace yourself, a little more activity each day but stop before you're wiped out. One warning sign to remember: the symptoms get worse. In that case don't wait
+[SEG0038] person_1 (PATIENT): that's clear
+[SEG0039] person_2 (DOCTOR): I'll want another look in a month. Before we finish, can you repeat the plan back to to me?
+[SEG0040] person_1 (PATIENT): So, I come back in a month. Is that right?
+[SEG0041] person_2 (DOCTOR): Yes, exactly right. Alright, I'll see you out.
+[SEG0042] person_1 (PATIENT): I appreciate it, doctor
+[SEG0043] person_2 (DOCTOR): All the best.
+
+JSON:

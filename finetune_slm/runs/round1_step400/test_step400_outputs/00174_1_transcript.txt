@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00174)
+[SEG0001] person_1 (DOCTOR): Evening. Long day, I imagine. Sit down.
+[SEG0002] person_2 (PATIENT): Hello, doctor, thank you.
+[SEG0003] person_1 (DOCTOR): Is this your first time with this clinic?
+[SEG0004] person_2 (PATIENT): Mm, first time with this one, yes. A friend recommended it.
+[SEG0005] person_1 (DOCTOR): What made you decide to come in?
+[SEG0006] person_2 (PATIENT): I've been wanting to stop smoking. I just want to get back to normal, really. It's a relief to finally sit down and talk about it. Oh, and irritability when I try to cut down. That's been about the same, ten days.
+[SEG0007] person_1 (DOCTOR): And what about alcohol problems or coughing up blood?
+[SEG0008] person_2 (PATIENT): None, as far as I know.
+[SEG0009] person_1 (DOCTOR): Has your heart given you any trouble?
+[SEG0010] person_2 (PATIENT): No, nothing with my heart.
+[SEG0011] person_1 (DOCTOR): Neurologically, anything strange?
+[SEG0012] person_2 (PATIENT): No, nothing like that.
+[SEG0013] person_1 (DOCTOR): Have you had to have anything operated on?
+[SEG0014] person_2 (PATIENT): I had a knee arthroscopy three years ago.
+[SEG0015] person_1 (DOCTOR): Do you drink alcohol?
+[SEG0016] person_2 (PATIENT): I have a couple of drinks on the weekend.
+[SEG0017] person_1 (DOCTOR): Any smoking?
+[SEG0018] person_2 (PATIENT): I used to smoke but I quit five years ago.
+[SEG0019] person_1 (DOCTOR): Alright, are you working at the moment?
+[SEG0020] person_2 (PATIENT): Yes, I'm a nurse on a busy ward.
+[SEG0021] person_1 (DOCTOR): Any sport or activity?
+[SEG0022] person_2 (PATIENT): I play badminton on Sundays.
+[SEG0023] person_1 (DOCTOR): Is there a family history of anything significant?
+[SEG0024] person_2 (PATIENT): My uncle had colon cancer.
+[SEG0025] person_1 (DOCTOR): Any regular medication?
+[SEG0026] person_2 (PATIENT): No, nothing regular.
+[SEG0027] person_1 (DOCTOR): Any allergies I should know about? These questions might sound routine, but they matter.
+[SEG0028] person_2 (PATIENT): No, uh, no allergies to anything.
+[SEG0029] person_1 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0030] person_2 (PATIENT): No, nothing, I've generally been healthy.
+[SEG0031] person_1 (DOCTOR): A few measurements, then we'll continue.
+[SEG0032] person_1 (DOCTOR): Just relax your arm...
+[SEG0033] person_1 (DOCTOR): Okay: respiratory rate 16, BP is 124 over 78, saturation 97 percent, pulse 66.
+[SEG0034] person_1 (DOCTOR): Right, let me check a few things physically.
+[SEG0035] person_1 (DOCTOR): Just relax, I'll be quick.
+[SEG0036] person_1 (DOCTOR): Chest sounds clear, a bit of wheeze when you breathe out hard.
+[SEG0037] person_1 (DOCTOR): All done, you can get dressed.
+[SEG0038] person_1 (DOCTOR): Right, here's what I'm thinking. My working impression is nicotine dependence. What I'm giving you is nicotine patches, 14 milligrams, once a day, for six weeks. That's for smoking cessation.
+[SEG0039] person_2 (PATIENT): That's easy enough to remember.
+[SEG0040] person_1 (DOCTOR): Alright, I'll see you out.
+[SEG0041] person_2 (PATIENT): Thanks so much, um, doctor.
+[SEG0042] person_1 (DOCTOR): Mind how you go.
+
+JSON:

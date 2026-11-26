@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00420)
+[SEG0001] person_1 (PATIENT): Hi, doctor, I brought my bag, is it fine to leave it here?
+[SEG0002] person_2 (DOCTOR): Alright, no trouble at all, come in. What's been bothering you?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_1 (PATIENT): I'm here because of a mole on my back that looks different.
+[SEG0005] person_2 (DOCTOR): How far back does it go?
+[SEG0006] person_1 (PATIENT): About... well, about three months.
+[SEG0007] person_2 (DOCTOR): What about another new spot on your arm, have you noticed that?
+[SEG0008] person_1 (PATIENT): Yes, I have. I've also had a bit of itching on it, for four weeks. Um, as for bit of itching on it, it's a few times a day. It bled once was there, but it's gone away on its own.
+[SEG0009] person_2 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0010] person_1 (PATIENT): Heart disease, for five years. I've had heart failure for about a year now. I'm hoping you can tell me something definite.
+[SEG0011] person_2 (DOCTOR): I see.
+[SEG0012] person_1 (PATIENT): I have diabetes, for about ten years.
+[SEG0013] person_2 (DOCTOR): Right, so heart failure is already on your record. We'll keep that in mind today.
+[SEG0014] person_2 (DOCTOR): Any sport or activity?
+[SEG0015] person_1 (PATIENT): I play badminton on Sundays.
+[SEG0016] person_2 (DOCTOR): What's your job?
+[SEG0017] person_1 (PATIENT): I teach at a primary school.
+[SEG0018] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0019] person_1 (PATIENT): I take aspirin, 75 milligrams, once a day.
+[SEG0020] person_3 (FAMILY_MEMBER): It's meant to be once a day, though I don't see he take it every time.
+[SEG0021] person_1 (PATIENT): I take furosemide, 40 milligrams, every morning for the fluid.
+[SEG0022] person_2 (DOCTOR): Is that long-standing?
+[SEG0023] person_1 (PATIENT): About two months. It's Glycomet, 500 milligrams, twice a day.
+[SEG0024] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0025] person_1 (PATIENT): Ibuprofen, I'd say.
+[SEG0026] person_2 (DOCTOR): Did you get pain, weight loss, fever or history of skin cancer?
+[SEG0027] person_1 (PATIENT): No, no pain, weight loss, fever or history of skin cancer.
+[SEG0028] person_2 (DOCTOR): Nothing like lumps in the armpit?
+[SEG0029] person_1 (PATIENT): No. No lumps in the armpit.
+[SEG0030] person_2 (DOCTOR): How are your bowels, any trouble?
+[SEG0031] person_1 (PATIENT): No, that side's been fine.
+[SEG0032] person_2 (DOCTOR): First the numbers, if you don't mind.
+[SEG0033] person_2 (DOCTOR): One second...
+[SEG0034] person_2 (DOCTOR): Okay: saturation 99 percent, temperature is 36.5 degrees, heart rate 74, respiratory rate 18, pressure 109 over 74.
+[SEG0035] person_1 (PATIENT): Is that alright, doctor?
+[SEG0036] person_2 (DOCTOR): Let's look at it together in a minute.
+[SEG0037] person_2 (DOCTOR): Shall we do the examination?
+[SEG0038] person_1 (PATIENT): Mm, okay.
+[SEG0039] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0040] person_2 (DOCTOR): I can't feel any glands in the armpit.
+[SEG0041] person_1 (PATIENT): Fine.
+[SEG0042] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0043] person_2 (DOCTOR): It's about eight millimetres, with an uneven border and two shades of brown.
+[SEG0044] person_2 (DOCTOR): All done, you can get dressed.
+[SEG0045] person_2 (DOCTOR): So, based on the history and the examination, I can't pin this down yet. We're looking at a pigmented lesion that needs to be looked at more closely or a seborrhoeic keratosis.
+[SEG0046] person_1 (PATIENT): I've been thinking the worst, to be honest. Is it bad?
+[SEG0047] person_2 (DOCTOR): It's reasonable to be concerned, but right now a pigmented lesion that needs to be looked at more closely is my leading thought, not anything worse. Let's book a dermoscopy to look into changing mole. I'm going to order a skin biopsy, for changing mole. Please use sunscreen and cover up in the midday sun, and check your skin once a month. Do get help quickly if the symptoms get worse.
+[SEG0048] person_2 (DOCTOR): I'll want another look after the biopsy results.
+[SEG0049] person_1 (PATIENT): Okay.
+[SEG0050] person_2 (DOCTOR): Is there anything you wanted to ask?
+[SEG0051] person_1 (PATIENT): Nothing more from me, thanks.
+
+JSON:

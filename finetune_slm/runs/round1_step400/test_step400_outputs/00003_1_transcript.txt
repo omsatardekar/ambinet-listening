@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00003)
+[SEG0001] person_1 (PATIENT): Good evening, um, doctor, thank you for staying late.
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): I've been dealing with more breathlessness than usual
+[SEG0004] person_2 (DOCTOR): How long have you had it?
+[SEG0005] person_1 (PATIENT): Ten days, I think... sorry, about four days, I got that wrong.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): Yes, stairs. That makes it it worse. It's every other day. I get some relief from resting.
+[SEG0008] person_2 (DOCTOR): Okay, any poor sleep because of the cough as well?
+[SEG0009] person_1 (PATIENT): Yes, I have. About poor sleep because of the cough, honestly, a couple of times a week. Oh, and a rattling chest. Hmm, as for rattling chest, it feels mild to me.
+[SEG0010] person_2 (DOCTOR): And swollen ankles, any of that?
+[SEG0011] person_1 (PATIENT): No. No swollen ankles.
+[SEG0012] person_2 (DOCTOR): And what about weight loss, chest pain or coughing up blood?
+[SEG0013] person_1 (PATIENT): I haven't had weight loss, chest pain or coughing up blood, no
+[SEG0014] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0015] person_1 (PATIENT): No, nothing with my heart.
+[SEG0016] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0017] person_1 (PATIENT): Yes, eggs. I've no idea what the reaction was, only that I'm not supposed to have it.
+[SEG0018] person_2 (DOCTOR): Do your parents or siblings have any long-term illnesses?
+[SEG0019] person_1 (PATIENT): My father had kidney stones.
+[SEG0020] person_2 (DOCTOR): Right, what about your general health, any conditions you're being treated for?
+[SEG0021] person_1 (PATIENT): I've had COPD for two years now.
+[SEG0022] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0023] person_1 (PATIENT): Tiotropium inhaler, once a day for my chest.
+[SEG0024] person_2 (DOCTOR): tell me about your routine, work, habits, that sort of thing
+[SEG0025] person_1 (PATIENT): Barely, I'm mostly sedentary these days. I run a small shop, so I'm on my feet a lot. I live with my family, my husband and two kids.
+[SEG0026] person_2 (DOCTOR): I'll check your pressure and pulse.
+[SEG0027] person_2 (DOCTOR): hold still for me..
+[SEG0028] person_2 (DOCTOR): Okay: saturation 90 percent, temperature is 37.0 degrees. And blood pressure 142 over 72, weight 80 kilos, respiratory rate 22, height 162 centimetres, pulse 93.
+[SEG0029] person_2 (DOCTOR): Come over here and I'll have a look.
+[SEG0030] person_2 (DOCTOR): Let me press here.
+[SEG0031] person_2 (DOCTOR): Air entry is reduced on both sides with a prolonged breathing out phase.
+[SEG0032] person_2 (DOCTOR): thanks, please take a seat again. Having listened and examined, this looks most like a flare-up of COPD. I'd like to arrange blood tests for infective exacerbation. For this, prednisolone, 30 milligrams, once a day, for five days. You take it by mouth. That's for COPD flare-up. I'm prescribing doxycycline, 100 milligrams, twice a day, for five days. That's for chest infection. Please take the tablets with food so they don't upset your stomach
+[SEG0033] person_2 (DOCTOR): Do get help quickly if you become more breathless or your lips turn blue.
+[SEG0034] person_1 (PATIENT): Okay, I understand.
+[SEG0035] person_2 (DOCTOR): I'll want another look in one week okay, we're done for today take care
+[SEG0036] person_1 (PATIENT): No questions. Thank you.
+
+JSON:

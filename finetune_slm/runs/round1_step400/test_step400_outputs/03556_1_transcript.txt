@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03556)
+[SEG0001] person_1 (DOCTOR): Morning, come on through. How are things, what's been happening?
+[SEG0002] person_2 (PATIENT): Ah, you know, so the thing is, I've got breathlessness during sport.
+[SEG0003] person_1 (DOCTOR): How long has this been bothering you?
+[SEG0004] person_2 (PATIENT): Since Monday, that's when it began.
+[SEG0005] person_1 (DOCTOR): What brings it on?
+[SEG0006] person_2 (PATIENT): Hmm, yes, sport. That makes it worse.
+[SEG0007] person_1 (DOCTOR): How troublesome is it day to day?
+[SEG0008] person_2 (PATIENT): Mild, really.
+[SEG0009] person_1 (DOCTOR): Have you noticed anything else alongside it?
+[SEG0010] person_2 (PATIENT): When it starts I tend to get a cousin who died suddenly as well.
+[SEG0011] person_1 (DOCTOR): Have you been to theatre before?
+[SEG0012] person_2 (PATIENT): Just part of my thyroid removed, years back.
+[SEG0013] person_1 (DOCTOR): Do you have any long-term conditions?
+[SEG0014] person_2 (PATIENT): Low haemoglobin, for about a year.
+[SEG0015] person_1 (DOCTOR): Anything else?
+[SEG0016] person_2 (PATIENT): I have depression.
+[SEG0017] person_1 (DOCTOR): Mm, okay. Alright, low haemoglobin and depression, that matches what I have here.
+[SEG0018] person_1 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0019] person_2 (PATIENT): Iron tablets, once a day.
+[SEG0020] person_1 (DOCTOR): Sure.
+[SEG0021] person_2 (PATIENT): Mirtazapine. I take it at night for my mood.
+[SEG0022] person_1 (DOCTOR): And what strength is that?
+[SEG0023] person_2 (PATIENT): It's 15 milligrams.
+[SEG0024] person_1 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0025] person_2 (PATIENT): I do a yoga class on Thursdays. I work in accounts at a hospital. I drink a lot of tea and snack through the day.
+[SEG0026] person_1 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0027] person_2 (PATIENT): No, not that I know of.
+[SEG0028] person_1 (DOCTOR): Did you get leg swelling, fever or fainting?
+[SEG0029] person_2 (PATIENT): No, I'd have said so.
+[SEG0030] person_1 (DOCTOR): Have you had cough, by any chance?
+[SEG0031] person_2 (PATIENT): Not that I've noticed, no cough.
+[SEG0032] person_1 (DOCTOR): Has your skin been okay?
+[SEG0033] person_2 (PATIENT): No, skin's been fine.
+[SEG0034] person_1 (DOCTOR): Anything unusual with passing urine?
+[SEG0035] person_2 (PATIENT): Nothing there, no.
+[SEG0036] person_1 (DOCTOR): Alright, time for your numbers, if that's okay.
+[SEG0037] person_1 (DOCTOR): Okay, this won't take long...
+[SEG0038] person_1 (DOCTOR): Okay: pulse 73, pressure 108 over 71, temperature 36.6, respiratory rate 17, saturation 97 percent. Okay, so my impression from what you've said is this: This is probably possible hypertrophic cardiomyopathy. We shouldn't forget athlete's heart.
+[SEG0039] person_2 (PATIENT): Is this serious, doctor?
+[SEG0040] person_1 (DOCTOR): I understand the worry. At the moment I'd say it's possible hypertrophic cardiomyopathy, and we'll know more once the a heart monitor is back.
+[SEG0041] person_1 (DOCTOR): Let's book a heart monitor to look into palpitations. Have I covered everything you wanted?
+[SEG0042] person_2 (PATIENT): Thank you, doctor, goodbye.
+[SEG0043] person_1 (DOCTOR): Take care now.
+
+JSON:

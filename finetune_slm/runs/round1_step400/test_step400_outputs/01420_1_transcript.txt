@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01420)
+[SEG0001] person_1 (DOCTOR): Good afternoon, how are you today?
+[SEG0002] person_2 (PATIENT): Hi, thanks.
+[SEG0003] person_1 (DOCTOR): Did you take the bus in?
+[SEG0004] person_2 (PATIENT): I drove. The roads were quiet today.
+[SEG0005] person_1 (DOCTOR): Where shall we begin?
+[SEG0006] person_2 (PATIENT): I've been feeling a bit muddled, and I wanted to get it checked.
+[SEG0007] person_3 (NURSE): Here are the numbers, doctor. Heart rate 102, saturation 99 percent, blood pressure 97 over 56, temperature is 36.9 degrees, height 176 centimetres, weight 55 kilos.
+[SEG0008] person_1 (DOCTOR): Good, thank you.
+[SEG0009] person_1 (DOCTOR): Did it come on recently?
+[SEG0010] person_2 (PATIENT): Since Monday, that's when it began.
+[SEG0011] person_1 (DOCTOR): How much does it limit you?
+[SEG0012] person_2 (PATIENT): Maybe a eight out of ten on a bad day.
+[SEG0013] person_1 (DOCTOR): Mm-hmm.
+[SEG0014] person_2 (PATIENT): Oh, and dizziness on standing. Right, as for dizziness on standing, it just comes and goes. I get some relief from sitting.
+[SEG0015] person_1 (DOCTOR): Let me check a few things. Any falls, fever or chest pain?
+[SEG0016] person_2 (PATIENT): No, nothing to report there.
+[SEG0017] person_1 (DOCTOR): How are your bowels, any trouble?
+[SEG0018] person_2 (PATIENT): No, all normal there.
+[SEG0019] person_1 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0020] person_2 (PATIENT): Not really, no.
+[SEG0021] person_1 (DOCTOR): Is there any regular medication you use?
+[SEG0022] person_2 (PATIENT): No, I don't take any tablets.
+[SEG0023] person_1 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0024] person_2 (PATIENT): Not to my knowledge, no.
+[SEG0025] person_1 (DOCTOR): A few questions about your lifestyle now.
+[SEG0026] person_2 (PATIENT): I hardly move around during the day. I'm a bus driver, so I sit for long hours. I'm vegetarian and have been for years.
+[SEG0027] person_1 (DOCTOR): Alright, over here please and I'll take a look.
+[SEG0028] person_1 (DOCTOR): I'll listen to your chest now.
+[SEG0029] person_1 (DOCTOR): Your blood pressure drops a little on standing.
+[SEG0030] person_1 (DOCTOR): Okay, that's enough for me.
+[SEG0031] person_1 (DOCTOR): Okay, thinking it through, I'm honestly not certain yet. It could be side effects from several medicines taken together, or it might be dehydration.
+[SEG0032] person_2 (PATIENT): Is this permanent?
+[SEG0033] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like side effects from several medicines taken together, but I'd like to confirm.
+[SEG0034] person_1 (DOCTOR): I think a medication review makes sense here, for polypharmacy. I'd rather check than guess, and this is the quickest way to know more.
+[SEG0035] person_2 (PATIENT): Is that done today?
+[SEG0036] person_1 (DOCTOR): I'm sending you for blood tests because of dizziness. We will stop the sleeping tablet slowly over two weeks. A short walk every day, even twenty minutes, will help more than you'd think. Let's get you seen by the pharmacist, I'll arrange the letter.
+[SEG0037] person_2 (PATIENT): Okay.
+[SEG0038] person_1 (DOCTOR): Please don't wait if the symptoms get worse. That's when to be seen urgently.
+[SEG0039] person_2 (PATIENT): I'll remember that.
+[SEG0040] person_1 (DOCTOR): Let's plan a check in two weeks. Anything else on your mind before you go?
+[SEG0041] person_2 (PATIENT): I think I understand everything. Thanks.
+
+JSON:

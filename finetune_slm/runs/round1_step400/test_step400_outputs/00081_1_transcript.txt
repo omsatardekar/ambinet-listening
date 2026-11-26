@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00081)
+[SEG0001] person_1 (NURSE): Okay, doctor, we're all set in here. I'll give you the numbers when you want them.
+[SEG0002] person_2 (DOCTOR): Okay, great. Hello, come in and sit down. How can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): Hello, doctor, I came in with them, if that's okay.
+[SEG0004] person_2 (DOCTOR): So, absolutely, come and sit beside them.
+[SEG0005] person_4 (PATIENT): I'm here because of morning shakiness. My family kept telling me to get it checked.
+[SEG0006] person_2 (DOCTOR): When did it begin?
+[SEG0007] person_4 (PATIENT): I've had it for five days.
+[SEG0008] person_2 (DOCTOR): Okay, what's the pattern, is it there all day?
+[SEG0009] person_4 (PATIENT): Honestly, every other day.
+[SEG0010] person_4 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0011] person_3 (FAMILY_MEMBER): Tell the doctor about the other thing, that's what worries me.
+[SEG0012] person_4 (PATIENT): I was getting to that!
+[SEG0013] person_2 (DOCTOR): That's fine, one at a time. I'll ask about everything. Have you had an upset stomach in the mornings?
+[SEG0014] person_4 (PATIENT): Yes, you know, about the same, three weeks.
+[SEG0015] person_2 (DOCTOR): Have you had morning shakiness before, or is this the first time?
+[SEG0016] person_4 (PATIENT): Yes, something like this happened last year, and it went away on its own.
+[SEG0017] person_2 (DOCTOR): And what about seizures or vomiting blood?
+[SEG0018] person_4 (PATIENT): No, no seizures, no vomiting blood. I was wanting to cut down on drinking at one point, but that went away on its own.
+[SEG0019] person_2 (DOCTOR): Right, and what about blackouts, thoughts of harming myself or yellow eyes?
+[SEG0020] person_4 (PATIENT): No blackouts, thoughts of harming myself or yellow eyes, none of it.
+[SEG0021] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0022] person_4 (PATIENT): Nothing there, no.
+[SEG0023] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0024] person_4 (PATIENT): No rashes.
+[SEG0025] person_2 (DOCTOR): Have you had to have anything operated on?
+[SEG0026] person_4 (PATIENT): Um, just a lump removed from my back, years ago.
+[SEG0027] person_2 (DOCTOR): So, are you on any tablets or medication?
+[SEG0028] person_4 (PATIENT): It's a... um, I can't remember what it's called. It's a round yellow one.
+[SEG0029] person_2 (DOCTOR): Do you remember what it's for?
+[SEG0030] person_4 (PATIENT): Oh, for the reflux, I believe. My husband sets them out for me, I just take what I'm given.
+[SEG0031] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0032] person_4 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0033] person_2 (DOCTOR): Any smoking?
+[SEG0034] person_4 (PATIENT): I smoke, yes, around five a day.
+[SEG0035] person_2 (DOCTOR): Is anyone at home with you?
+[SEG0036] person_4 (PATIENT): I share a flat with two friends.
+[SEG0037] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0038] person_4 (PATIENT): I've, I've got acid reflux. I told myself I'd wait and see, and here I am.
+[SEG0039] person_2 (DOCTOR): Anything more?
+[SEG0040] person_4 (PATIENT): I've had high blood pressure, yes.
+[SEG0041] person_2 (DOCTOR): Okay, I can see acid reflux in your file as well.
+[SEG0042] person_1 (NURSE): Here are the numbers, doctor. Oxygen saturation is 98 percent, BMI works out to 23.0, pulse is 82 beats a minute, height 172 centimetres, weight 68 kilos, respiratory rate 16, blood pressure 122 over 81, temperature is 36.7 degrees.
+[SEG0043] person_2 (DOCTOR): Good, thank you. Right, here's what I'm thinking. This looks most like alcohol use that you'd like to reduce. We shouldn't forget anxiety driving the drinking. It could also be alcohol-related liver strain, so we'll keep that open. Blood tests is what I'd like next, for alcohol use. I'll request liver function tests, it'll help with alcohol use. Plan a few alcohol-free days each week and track how much you drink.
+[SEG0044] person_2 (DOCTOR): Let's get you seen by the alcohol support service, I'll arrange the letter. The thing that would worry me is if you have severe shaking, confusion or seizures when you cut down. If that happens, go to emergency.
+[SEG0045] person_4 (PATIENT): Alright, I know what to look for.
+[SEG0046] person_2 (DOCTOR): See me again in four weeks. Any last questions?
+[SEG0047] person_4 (PATIENT): Um, you know, that's everything I wanted to ask. Thank you.
+[SEG0048] person_2 (DOCTOR): All the best.
+
+JSON:

@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01484)
+[SEG0001] person_1 (DOCTOR): good morning. I've just opened your notes
+[SEG0002] person_2 (PATIENT): afternoon, you know, is this seat fine?
+[SEG0003] person_3 (FAMILY_MEMBER): hello, doctor i hope it's alright if I stay in for this
+[SEG0004] person_1 (DOCTOR): that's fine, sit down. We'll go through it together. Is it your first time here?
+[SEG0005] person_2 (PATIENT): no, uh, I came last year for something else
+[SEG0006] person_1 (DOCTOR): What do you need help with?
+[SEG0007] person_2 (PATIENT): doctor it's a red warm patch on my shin. It's getting on my nerves now. I'm hoping you can tell me something definite. I looked a few things up online and that probably didn't help
+[SEG0008] person_1 (DOCTOR): Can you tell me when it first started?
+[SEG0009] person_2 (PATIENT): it's been about two weeks now
+[SEG0010] person_1 (DOCTOR): is it bearing on you a lot?
+[SEG0011] person_2 (PATIENT): mostly mild
+[SEG0012] person_1 (DOCTOR): yes carry on. Have you tried anything for it?
+[SEG0013] person_2 (PATIENT): it settles a little with elevation. And I've been feeling shivery as well, for about four days. Oh, and and a sore leg. Okay, uh, so about sore leg, mostly severe
+[SEG0014] person_1 (DOCTOR): have you had a a red warm patch on your shin before, or is this the first time?
+[SEG0015] person_2 (PATIENT): well, a bit, last year it settled by itself back then
+[SEG0016] person_1 (DOCTOR): okay, time for me to examine you
+[SEG0017] person_2 (PATIENT): okay, doctor
+[SEG0018] person_1 (DOCTOR): Stay as you are for a moment.
+[SEG0019] person_1 (DOCTOR): the shin is red, warm and tender with a clear edge, and I've marked it it with a pen
+[SEG0020] person_1 (DOCTOR): So, good, you can sit up again. Have you noticed cut, rash elsewhere or shortness of breath?
+[SEG0021] person_2 (PATIENT): sorry what was I saying I haven't had cut rash elsewhere or shortness of breath no
+[SEG0022] person_1 (DOCTOR): anything different when you pass water?
+[SEG0023] person_2 (PATIENT): That's normal as far as I know.
+[SEG0024] person_1 (DOCTOR): is there any regular medication you use?
+[SEG0025] person_2 (PATIENT): no none
+[SEG0026] person_1 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0027] person_2 (PATIENT): no, not that I know of
+[SEG0028] person_1 (DOCTOR): any health conditions I should have on record?
+[SEG0029] person_2 (PATIENT): I've had gout for five years now.
+[SEG0030] person_1 (DOCTOR): I follow.
+[SEG0031] person_1 (DOCTOR): And your job?
+[SEG0032] person_2 (PATIENT): I work in accounts at a hospital.
+[SEG0033] person_1 (DOCTOR): Are you active?
+[SEG0034] person_2 (PATIENT): I walk the dog every morning
+[SEG0035] person_1 (DOCTOR): Have you been to to theatre before?
+[SEG0036] person_2 (PATIENT): Uh yes I had part of my thyroid removed years back. I'd rather know what's going on than keep guessing. Sorry I know I'm rambling a bit.
+[SEG0037] person_1 (DOCTOR): taking everything into account it's hard to say. Cellulitis of the leg is one possibility and a blood clot in the leg another and I'd rather not commit yet
+[SEG0038] person_2 (PATIENT): do you think it's something serious?
+[SEG0039] person_1 (DOCTOR): I can't promise yet but most people with cellulitis of the leg do well once it's treated properly. Just to be sure I understood. You've had a red warm patch on your shin for about two weeks mild and no cut or rash elsewhere.
+[SEG0040] person_2 (PATIENT): Yeah, yes, you've got it.
+[SEG0041] person_1 (DOCTOR): I'm sending you for blood tests because of cellulitis. The treatment will be flucloxacillin, 500 milligrams, four times a day, seven days. That's for cellulitis. The pharmacy will go through the details again when you pick it up
+[SEG0042] person_2 (PATIENT): okay I understand
+[SEG0043] person_1 (DOCTOR): keep the leg raised and come back if the redness goes past the pen line. Please take the tablets with food so they don't upset your stomach. We'll catch up in two days
+[SEG0044] person_2 (PATIENT): okay, I'll arrange it it
+[SEG0045] person_1 (DOCTOR): alright anything else on your mind before you go?
+[SEG0046] person_2 (PATIENT): good, thanks, I'll see you then
+[SEG0047] person_1 (DOCTOR): Take care now.
+
+JSON:

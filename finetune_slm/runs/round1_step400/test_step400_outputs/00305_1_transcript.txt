@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00305)
+[SEG0001] person_1 (PATIENT): Hello, doctor. Where would you like me?
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, I'm just here to help with the details.
+[SEG0004] person_1 (PATIENT): I, I wanted to get lightheadedness looked at.
+[SEG0005] person_2 (DOCTOR): Okay, roughly when did it start?
+[SEG0006] person_1 (PATIENT): About a week, I think... sorry, three weeks, I got that wrong. I took the morning off to come in today.
+[SEG0007] person_2 (DOCTOR): Okay, so. How much is it bothering you?
+[SEG0008] person_1 (PATIENT): Pretty severe, if I'm being honest. Oh, and shortness of breath with it. Had that since last Tuesday.
+[SEG0009] person_2 (DOCTOR): How intense does it get?
+[SEG0010] person_1 (PATIENT): Maybe a five out of ten on a bad day.
+[SEG0011] person_2 (DOCTOR): Have you been sweating?
+[SEG0012] person_1 (PATIENT): Yes, uh, about the same, ten days. I've had a fluttering in the chest too, for three weeks. As for fluttering in the chest, I'd give it a five, out of ten.
+[SEG0013] person_2 (DOCTOR): Let me measure a few things.
+[SEG0014] person_2 (DOCTOR): Right, one second...
+[SEG0015] person_2 (DOCTOR): Okay: temp 36.9 degrees, pulse is 106 beats a minute, blood pressure 118 over 75. And oxygen saturation is 99 percent.
+[SEG0016] person_2 (DOCTOR): Can I examine you now?
+[SEG0017] person_2 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0018] person_2 (DOCTOR): No murmurs and the neck veins aren't distended.
+[SEG0019] person_2 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0020] person_2 (DOCTOR): Pulse is irregular right now.
+[SEG0021] person_2 (DOCTOR): That's all I need, thank you. Alright, what about fainting?
+[SEG0022] person_1 (PATIENT): No, you know, no fainting.
+[SEG0023] person_2 (DOCTOR): And what about chest pain, tremor or fever?
+[SEG0024] person_1 (PATIENT): Nothing like that, um, no.
+[SEG0025] person_2 (DOCTOR): Right, is your mobility otherwise okay?
+[SEG0026] person_1 (PATIENT): I move fine otherwise.
+[SEG0027] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0028] person_1 (PATIENT): No rashes.
+[SEG0029] person_2 (DOCTOR): Any surgery in your history?
+[SEG0030] person_1 (PATIENT): Just my tonsils out, when I was a child.
+[SEG0031] person_2 (DOCTOR): Is there a family history of anything significant?
+[SEG0032] person_1 (PATIENT): My father was diabetic.
+[SEG0033] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0034] person_1 (PATIENT): Right, I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0035] person_2 (DOCTOR): Do you live alone?
+[SEG0036] person_1 (PATIENT): Yes, I live on my own.
+[SEG0037] person_2 (DOCTOR): What do you do for work?
+[SEG0038] person_1 (PATIENT): I work in an office, mostly sitting at a desk.
+[SEG0039] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0040] person_1 (PATIENT): Yes, high blood pressure. My family kept telling me to get it checked. I have an underactive thyroid.
+[SEG0041] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0042] person_3 (FAMILY_MEMBER): He takes telmisartan, 40 milligrams, once a day.
+[SEG0043] person_2 (DOCTOR): Having listened and examined, my working impression is palpitations with an unclear cause. I can't rule out too much caffeine yet.
+[SEG0044] person_1 (PATIENT): What are the chances it's something bad?
+[SEG0045] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's palpitations with an unclear cause, and we'll know more once the a thyroid test is back.
+[SEG0046] person_2 (DOCTOR): I'd like to arrange a thyroid test for palpitations. I'll request an ECG, it'll help with palpitations. I'm sending you for an echocardiogram because of palpitations. That will help us see what's going on underneath and decide the next step.
+[SEG0047] person_1 (PATIENT): Where do I go for that?
+[SEG0048] person_2 (DOCTOR): You'll be taking metoprolol, 25 milligrams, twice a day, until we review. You take it by mouth. It's for palpitations. The pharmacy will go through the details again when you pick it up. Cut back on tea, coffee and energy drinks, and note the time whenever it happens. Keep an eye out, and if you faint or have chest pain with the racing, call us the same day or go to emergency.
+[SEG0049] person_2 (DOCTOR): I'll want another look in two weeks.
+[SEG0050] person_1 (PATIENT): I'll make the appointment on my way out.
+[SEG0051] person_2 (DOCTOR): Is there anything you wanted to ask?
+[SEG0052] person_1 (PATIENT): No questions. Thank you.
+[SEG0053] person_2 (DOCTOR): Take care.
+
+JSON:

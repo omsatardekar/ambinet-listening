@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00467)
+[SEG0001] person_1 (PATIENT): Um, good evening, doctor, thank you for staying late.
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_1 (PATIENT): Yeah, mainly pain under the right ribs after fatty meals. There's a couple of other things, but that's the main one. My sister suggested writing things down, but I forgot. I looked a few things up online, and that probably didn't help.
+[SEG0004] person_2 (DOCTOR): Right, any medication at the moment, including things from the pharmacy?
+[SEG0005] person_1 (PATIENT): Hmm, I take atorvastatin, 20 milligrams, at night.
+[SEG0006] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): It's worse with fatty food. I get some relief from lying still. I thought it would sort itself out, but it hasn't. I took the morning off to come in today.
+[SEG0008] person_2 (DOCTOR): So, what about bloating, have you noticed that?
+[SEG0009] person_1 (PATIENT): Yes, for two weeks. With bloating, pretty moderate, if I'm being honest.
+[SEG0010] person_2 (DOCTOR): Did you get vomiting, weight loss, dark urine or fever?
+[SEG0011] person_1 (PATIENT): Okay, so no, none of that at all.
+[SEG0012] person_2 (DOCTOR): Has your skin been okay?
+[SEG0013] person_1 (PATIENT): No, skin's been fine.
+[SEG0014] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0015] person_1 (PATIENT): No allergies that I know of, no.
+[SEG0016] person_2 (DOCTOR): What do you do for work?
+[SEG0017] person_1 (PATIENT): I work in an office, mostly sitting at a desk.
+[SEG0018] person_2 (DOCTOR): Any sport or activity?
+[SEG0019] person_1 (PATIENT): I play badminton on Sundays.
+[SEG0020] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0021] person_1 (PATIENT): No, nothing like that.
+[SEG0022] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0023] person_1 (PATIENT): I have high cholesterol, for about ten years. It's a relief to finally sit down and talk about it.
+[SEG0024] person_2 (DOCTOR): Okay, so. Right, so high cholesterol is already on your record. We'll keep that in mind today. So, a few measurements, then we'll continue.
+[SEG0025] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0026] person_2 (DOCTOR): Okay: pulse 67, temp 36.7 degrees, BP is 108 over 69.
+[SEG0027] person_2 (DOCTOR): Can I examine you now?
+[SEG0028] person_2 (DOCTOR): Let me look at this properly.
+[SEG0029] person_2 (DOCTOR): Mild tenderness under the right ribs, and no pain when you breathe in while I press.
+[SEG0030] person_2 (DOCTOR): Thanks for that.
+[SEG0031] person_2 (DOCTOR): Right, here's what I'm thinking. I think we're dealing with gallstone pain at this stage.
+[SEG0032] person_1 (PATIENT): What are the chances it's something bad?
+[SEG0033] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's gallstone pain, and we'll know more once the liver function tests is back. Let's get liver function tests, for right upper quadrant pain. Smaller, lower-fat meals will probably keep the pain down until we've seen the scan. Come back in two weeks.
+[SEG0034] person_1 (PATIENT): Fine.
+[SEG0035] person_2 (DOCTOR): Look after yourself.
+[SEG0036] person_1 (PATIENT): That's everything I wanted to ask. Thank you.
+
+JSON:

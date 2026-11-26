@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20188)
+[SEG0001] person_1 (DOCTOR): Hello take a seat I'll be with you in a second.
+[SEG0002] person_2 (PATIENT): hello, thanks for fitting me in
+[SEG0003] person_1 (DOCTOR): What's the main thing today?
+[SEG0004] person_2 (PATIENT): I wanted to to get loud snoring looked at
+[SEG0005] person_1 (DOCTOR): how long has this been bothering you?
+[SEG0006] person_2 (PATIENT): I've had it it for two months
+[SEG0007] person_1 (DOCTOR): Okay, does anything set it it off?
+[SEG0008] person_2 (PATIENT): it's It's worse with lying on my back
+[SEG0009] person_1 (DOCTOR): Right, right.
+[SEG0010] person_3 (NURSE): here are the numbers, doctor. Temp 36.5 degrees, pulse 86. Respiratory rate 17, SpO2 98 percent on room air, BP is 154 over 99.
+[SEG0011] person_1 (DOCTOR): good, thank you
+[SEG0012] person_1 (DOCTOR): Could you come over to the couch, please?
+[SEG0013] person_1 (DOCTOR): let me feel here
+[SEG0014] person_1 (DOCTOR): your neck is thick and the back of the throat looks crowded
+[SEG0015] person_2 (PATIENT): yeah no problem
+[SEG0016] person_1 (DOCTOR): Please sit back down. Any palpitations or chest pain?
+[SEG0017] person_2 (PATIENT): no, not a single one
+[SEG0018] person_1 (DOCTOR): right did you get choking at night or low mood?
+[SEG0019] person_2 (PATIENT): no, not a a single one
+[SEG0020] person_1 (DOCTOR): so any change in your bowel habit or your stomach generally?
+[SEG0021] person_2 (PATIENT): no all normal there
+[SEG0022] person_1 (DOCTOR): do you get out much?
+[SEG0023] person_2 (PATIENT): Not much, I mostly stay in these days
+[SEG0024] person_1 (DOCTOR): Do you follow any particular diet?
+[SEG0025] person_2 (PATIENT): I'm vegetarian and have been for years.
+[SEG0026] person_1 (DOCTOR): Any previous surgeries?
+[SEG0027] person_2 (PATIENT): nothing, I haven't had any operations
+[SEG0028] person_1 (DOCTOR): are you on any regular medication?
+[SEG0029] person_2 (PATIENT): nothing regular no
+[SEG0030] person_1 (DOCTOR): any allergies to tablets food or anything in the environment?
+[SEG0031] person_2 (PATIENT): no known allergies
+[SEG0032] person_1 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0033] person_2 (PATIENT): no, I've always been fairly healthy
+[SEG0034] person_1 (DOCTOR): Let me tell you where I've got to. I don't have a clear answer today: symptoms that suggest obstructive sleep apnoea is possible, and so is an under-active thyroid. Let's book a thyroid test to look into tiredness. An overnight sleep study is what I'd like next, for suspected sleep apnoea. Try to sleep on your side and avoid alcohol close to bedtime.
+[SEG0035] person_1 (DOCTOR): try to keep a simple diary of when it happens and what you were doing, and bring it to the next visit. I'd like you to see the sleep clinic as well, and I'll write the referral. The thing that would worry me is if you feel sleepy while driving. If that happens, go to emergency. I'll want another look in six weeks. Tell me what you've taken from all that, so I can fill in any gaps
+[SEG0036] person_2 (PATIENT): so, I come back in six weeks. Is that right?
+[SEG0037] person_1 (DOCTOR): yes, exactly right. Is there anything you'd like me to to go over again?
+[SEG0038] person_2 (PATIENT): That's clear, thanks.
+[SEG0039] person_1 (DOCTOR): Look after yourself.
+
+JSON:

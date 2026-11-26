@@ -1,0 +1,76 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00405)
+[SEG0001] person_1 (PATIENT): Hmm, sorry I'm a few minutes behind, doctor.
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_3 (FAMILY_MEMBER): Thank you for fitting us in, doctor.
+[SEG0004] person_2 (DOCTOR): Yes, that's no problem at all. Please sit.
+[SEG0005] person_1 (PATIENT): I'm here because of a tight chest.
+[SEG0006] person_2 (DOCTOR): Right, since when have you had this?
+[SEG0007] person_1 (PATIENT): Yesterday, it came on out of nowhere.
+[SEG0008] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0009] person_1 (PATIENT): It settles a little with the inhaler. Severe, really. It happens once or twice a day.
+[SEG0010] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0011] person_1 (PATIENT): It usually comes with shortness of breath on walking.
+[SEG0012] person_1 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0013] person_3 (FAMILY_MEMBER): Okay, so tell the doctor about the other thing, that's what worries me.
+[SEG0014] person_1 (PATIENT): I was getting to that! About shortness of breath on walking, it happens on and off. Yes, walking fast. That makes it worse.
+[SEG0015] person_4 (UNKNOWN): Yes, exactly like that.
+[SEG0016] person_2 (DOCTOR): A few measurements, then we'll continue.
+[SEG0017] person_2 (DOCTOR): One second...
+[SEG0018] person_2 (DOCTOR): Okay: weight 58 kilos, respiratory rate 26. And oxygen saturation is 92 percent, height 174 centimetres, heart rate 84, pressure 125 over 88, temperature is 37.0 degrees.
+[SEG0019] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0020] person_1 (PATIENT): No problem.
+[SEG0021] person_2 (DOCTOR): Let me just check something.
+[SEG0022] person_2 (DOCTOR): I can hear a widespread wheeze on both sides when you breathe out.
+[SEG0023] person_2 (DOCTOR): I'll go gently.
+[SEG0024] person_2 (DOCTOR): You're speaking in full sentences, which is reassuring.
+[SEG0025] person_2 (DOCTOR): Okay, you can sit up. What about fever?
+[SEG0026] person_1 (PATIENT): No. No fever.
+[SEG0027] person_2 (DOCTOR): A few quick ones: weight loss, coughing up phlegm, leg swelling or runny nose?
+[SEG0028] person_1 (PATIENT): No, uh, no weight loss, no coughing up phlegm, no leg swelling. I was using my blue inhaler more at one point, but that went away on its own.
+[SEG0029] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0030] person_1 (PATIENT): That's normal as far as I know.
+[SEG0031] person_2 (DOCTOR): Is your digestion otherwise okay?
+[SEG0032] person_1 (PATIENT): So, bowels are regular, nothing odd.
+[SEG0033] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0034] person_1 (PATIENT): I'm on Seretide inhaler, twice a day. Paracetamol. I take it 650 milligrams, when needed for the knee pain.
+[SEG0035] person_2 (DOCTOR): Do you drink alcohol?
+[SEG0036] person_1 (PATIENT): I don't drink at all.
+[SEG0037] person_2 (DOCTOR): Anything special about your diet?
+[SEG0038] person_1 (PATIENT): I try to avoid too much sugar.
+[SEG0039] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0040] person_1 (PATIENT): Oh, I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0041] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0042] person_1 (PATIENT): My mother has diabetes.
+[SEG0043] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0044] person_1 (PATIENT): I have asthma, for about a year.
+[SEG0045] person_2 (DOCTOR): Okay.
+[SEG0046] person_1 (PATIENT): Arthritis in my knees, for about a year.
+[SEG0047] person_2 (DOCTOR): Yes, arthritis in your knees is known to us, good to have that clear. Having listened and examined, this looks most like an asthma flare-up. A chest infection is still possible.
+[SEG0048] person_2 (DOCTOR): I'm going to order a peak flow reading, for asthma control.
+[SEG0049] person_5 (CLINICAL_STAFF): The earliest is Friday, 2 pm.
+[SEG0050] person_1 (PATIENT): Okay, I'll be there.
+[SEG0051] person_2 (DOCTOR): I'm sending you for a chest X-ray because of wheeze. I'd rather check than guess, and this is the quickest way to know more.
+[SEG0052] person_1 (PATIENT): Is that done here?
+[SEG0053] person_2 (DOCTOR): I'm prescribing prednisolone, 30 milligrams, once a day, for five days. It's for asthma flare-up.
+[SEG0054] person_1 (PATIENT): Fine, I'll start it.
+[SEG0055] person_2 (DOCTOR): Rinse your mouth after the steroid inhaler.
+[SEG0056] person_1 (PATIENT): Oh, do I need breathing tests? I read it might help.
+[SEG0057] person_2 (DOCTOR): I wouldn't order it today. If anything changes, we'll reconsider. If the inhaler isn't helping or you can't speak in full sentences, or you feel really unwell, please come to the emergency department.
+[SEG0058] person_1 (PATIENT): Understood.
+[SEG0059] person_2 (DOCTOR): Come back in two weeks. Do you have any questions?
+[SEG0060] person_1 (PATIENT): Thank you for your time.
+[SEG0061] person_2 (DOCTOR): So, all the best.
+
+JSON:

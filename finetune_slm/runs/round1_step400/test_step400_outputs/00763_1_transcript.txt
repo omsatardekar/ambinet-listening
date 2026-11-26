@@ -1,0 +1,48 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00763)
+[SEG0001] person_1 (PATIENT): G'day. Um, I'm bloated. Like permanently. And windy. It's been weeks. I think.
+[SEG0002] person_2 (DOCTOR): How many weeks, would you say?
+[SEG0003] person_1 (PATIENT): Oh, I don't know. Maybe, hang on, I wrote it down. Anyway, a few weeks. Or longer. I can't pin the start.
+[SEG0004] person_2 (DOCTOR): That's fine. Is it there all day, or after certain foods?
+[SEG0005] person_1 (PATIENT): By the afternoon, it's like I've swallowed a football. Better in the morning.
+[SEG0006] person_2 (DOCTOR): Any weight loss, or change in your appetite?
+[SEG0007] person_1 (PATIENT): No. Weight's the same. Appetite's fine.
+[SEG0008] person_2 (DOCTOR): Any blood in your stools, or black stools?
+[SEG0009] person_1 (PATIENT): No. No blood.
+[SEG0010] person_2 (DOCTOR): Any change in your bowels, constipation, looseness? ~
+[SEG0011] person_1 (PATIENT): Bit of both, depending on the day. Nothing out of the ordinary for me. ~
+[SEG0012] person_2 (DOCTOR): Any pain, or vomiting? ~
+[SEG0013] person_1 (PATIENT): Some mild cramps now and then. No vomiting. ~
+[SEG0014] person_2 (DOCTOR): And any trouble with your waterworks, or anything gynaecological, pelvic pain or a change in your periods? ~
+[SEG0015] person_1 (PATIENT): No. All normal. ~
+[SEG0016] person_2 (DOCTOR): Let me press your tummy. Lie back on the couch for me. ~
+[SEG0017] person_1 (PATIENT): Sure. Is this going to hurt? ~
+[SEG0018] person_2 (DOCTOR): Not if I can help it.
+[SEG0019] person_2 (DOCTOR): Your tummy is soft, and I can feel it's bloated and a little tight, but it's not tender, and I can't feel any lumps.
+[SEG0020] person_1 (PATIENT): Is that good? ~
+[SEG0021] person_2 (DOCTOR): It's what I'd hoped. Any breathlessness, chest pain, or cough?
+[SEG0022] person_1 (PATIENT): No, nothing like that.
+[SEG0023] person_2 (DOCTOR): Right. Bloating that comes on through the day, with a bit of both loose and hard stools, fits with irritable bowel, but I can't rule out something like coeliac disease or lactose intolerance.
+[SEG0024] person_1 (PATIENT): How do you find out? ~
+[SEG0025] person_2 (DOCTOR): Often by keeping a food diary, and trying changes one by one. ~
+[SEG0026] person_1 (PATIENT): A food diary, I could try. ~
+[SEG0027] person_2 (DOCTOR): Write down what you eat, when the bloating comes, and your bowel habits, for two weeks.
+[SEG0028] person_1 (PATIENT): Right. And what should I eat? ~
+[SEG0029] person_2 (DOCTOR): Regular meals, eat slowly, avoid fizzy drinks and chewing gum, and cut down on beans, onions, and sweeteners.
+[SEG0030] person_1 (PATIENT): Ah, I do love my sugar-free gum. ~
+[SEG0031] person_2 (DOCTOR): That could be a culprit, actually. ~
+[SEG0032] person_1 (PATIENT): Well, I'll stop that and see. Thanks, doc. ~
+[SEG0033] person_2 (DOCTOR): Hope it settles. ~
+
+JSON:

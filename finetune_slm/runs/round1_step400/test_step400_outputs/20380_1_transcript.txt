@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20380)
+[SEG0001] person_1 (PATIENT): Morning, doctor. Lovely to meet you.
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_1 (PATIENT): I wanted to get loud snoring looked at.
+[SEG0004] person_2 (DOCTOR): Did it come on recently?
+[SEG0005] person_1 (PATIENT): I've had it for two months.
+[SEG0006] person_2 (DOCTOR): Does anything set it off?
+[SEG0007] person_1 (PATIENT): I notice it more with lying on my back.
+[SEG0008] person_2 (DOCTOR): Have you noticed anything else alongside it?
+[SEG0009] person_1 (PATIENT): It usually comes with a dry mouth in the morning.
+[SEG0010] person_2 (DOCTOR): Let me get the readings out of the way.
+[SEG0011] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0012] person_2 (DOCTOR): Okay: respiratory rate 18, SpO2 98 percent on room air. And heart rate 76, temperature 36.8, blood pressure 172 over 88.
+[SEG0013] person_2 (DOCTOR): Alright, I'll need to examine you for this, it won't take long.
+[SEG0014] person_2 (DOCTOR): I'm just checking this side.
+[SEG0015] person_2 (DOCTOR): Your neck is thick and the back of the throat looks crowded.
+[SEG0016] person_2 (DOCTOR): Okay, all finished, thank you.
+[SEG0017] person_2 (DOCTOR): Let me check a few things. Any chest pain, low mood or leg swelling?
+[SEG0018] person_1 (PATIENT): No, um, none of those at all.
+[SEG0019] person_2 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0020] person_1 (PATIENT): No, joints are fine.
+[SEG0021] person_2 (DOCTOR): Alright, anything with your heart, like skipped beats or fainting?
+[SEG0022] person_1 (PATIENT): Nothing like that.
+[SEG0023] person_2 (DOCTOR): Do you have any chronic illnesses?
+[SEG0024] person_1 (PATIENT): I've had high blood pressure for five years now.
+[SEG0025] person_2 (DOCTOR): Alright, high blood pressure, that matches what I have here. Has anything ever caused you a reaction? I mean any allergies.
+[SEG0026] person_1 (PATIENT): No, not that I know of.
+[SEG0027] person_2 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0028] person_1 (PATIENT): Ramipril. I take it 5 milligrams, every morning.
+[SEG0029] person_2 (DOCTOR): Do you work outside the home?
+[SEG0030] person_1 (PATIENT): I'm a hairdresser, on my feet all day.
+[SEG0031] person_2 (DOCTOR): Do you get out much?
+[SEG0032] person_1 (PATIENT): Not much, I mostly stay in these days.
+[SEG0033] person_2 (DOCTOR): What does a normal day of food look like?
+[SEG0034] person_1 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0035] person_2 (DOCTOR): Any previous surgeries?
+[SEG0036] person_1 (PATIENT): No, I've never been operated on.
+[SEG0037] person_2 (DOCTOR): So where does that leave us? This looks most like symptoms that suggest obstructive sleep apnoea.
+[SEG0038] person_1 (PATIENT): Is this permanent?
+[SEG0039] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's symptoms that suggest obstructive sleep apnoea, and we'll know more once the an overnight sleep study is back.
+[SEG0040] person_2 (DOCTOR): I want an overnight sleep study done, that's for suspected sleep apnoea.
+[SEG0041] person_1 (PATIENT): Okay, um, I'll do it.
+[SEG0042] person_2 (DOCTOR): Try to sleep on your side and avoid alcohol close to bedtime. I'll also refer you to the sleep clinic. I'm not ordering a thyroid test today. If things carry on next month, we'll consider it. One warning sign to remember: you feel sleepy while driving. In that case don't wait. I'd like to see you again in six weeks. Anything else on your mind before you go?
+[SEG0043] person_1 (PATIENT): Thank you, doctor, goodbye.
+[SEG0044] person_2 (DOCTOR): Have a good day.
+
+JSON:

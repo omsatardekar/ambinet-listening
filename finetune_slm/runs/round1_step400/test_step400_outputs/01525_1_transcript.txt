@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01525)
+[SEG0001] person_1 (PATIENT): Ah, hi, doctor, I came as soon as they called me.
+[SEG0002] person_2 (DOCTOR): You're alright, take a seat. What can I do for you?
+[SEG0003] person_1 (PATIENT): So, I've been feeling faint, doctor.
+[SEG0004] person_2 (DOCTOR): How long has it been like this?
+[SEG0005] person_1 (PATIENT): Honestly I can't say exactly when it started. It might have been last month or the month before, I really can't pin it down.
+[SEG0006] person_2 (DOCTOR): Anything that improves it?
+[SEG0007] person_1 (PATIENT): I get some relief from lying down.
+[SEG0008] person_2 (DOCTOR): Does anything else come with it?
+[SEG0009] person_1 (PATIENT): It usually comes with chest pressure. The chest pressure? That's been for two months. About chest pressure, it's mild, honestly.
+[SEG0010] person_2 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0011] person_1 (PATIENT): I take metoprolol, 50 milligrams, twice a day.
+[SEG0012] person_2 (DOCTOR): Mm, okay. What about alcohol?
+[SEG0013] person_1 (PATIENT): I only drink at family occasions.
+[SEG0014] person_2 (DOCTOR): Do you get out much?
+[SEG0015] person_1 (PATIENT): Not much, I mostly stay in these days.
+[SEG0016] person_2 (DOCTOR): Do you live by yourself?
+[SEG0017] person_1 (PATIENT): No, I share a house with my brother.
+[SEG0018] person_2 (DOCTOR): Do you work outside the home?
+[SEG0019] person_1 (PATIENT): I'm a hairdresser, on my feet all day.
+[SEG0020] person_2 (DOCTOR): Okay, do you have any chronic illnesses?
+[SEG0021] person_1 (PATIENT): I've had heart disease, yes.
+[SEG0022] person_2 (DOCTOR): Have you been to theatre before?
+[SEG0023] person_1 (PATIENT): Just keyhole surgery on my gallbladder, two years back.
+[SEG0024] person_2 (DOCTOR): Any allergies to tablets, food or anything in the environment?
+[SEG0025] person_1 (PATIENT): No allergies at all.
+[SEG0026] person_2 (DOCTOR): Any leg swelling, cough or fever at all?
+[SEG0027] person_1 (PATIENT): No, you know, I'd have said so.
+[SEG0028] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0029] person_1 (PATIENT): That's normal as far as I know.
+[SEG0030] person_2 (DOCTOR): Let me take your readings now.
+[SEG0031] person_2 (DOCTOR): Sit still for a moment...
+[SEG0032] person_2 (DOCTOR): Okay: BP is 104 over 56, temperature 36.9, SpO2 99 percent on room air, heart rate 102.
+[SEG0033] person_2 (DOCTOR): Right, I'd like to check you over now, if that's alright.
+[SEG0034] person_2 (DOCTOR): I'm just checking this side.
+[SEG0035] person_2 (DOCTOR): Your pulse is over one hundred and eighty and your blood pressure is low.
+[SEG0036] person_1 (PATIENT): Right.
+[SEG0037] person_2 (DOCTOR): You can relax now. Taking everything into account, this looks most like a dangerous fast heart rhythm. Supraventricular tachycardia is also on my list.
+[SEG0038] person_1 (PATIENT): Right, is this serious, doctor?
+[SEG0039] person_2 (DOCTOR): I can't promise yet, but most people with a dangerous fast heart rhythm do well once it's treated properly.
+[SEG0040] person_2 (DOCTOR): Let's get an urgent ECG, for fast heart rhythm. Lie flat, I am calling the emergency team and preparing to shock the heart. Book a review straight away. Does all of that make sense?
+[SEG0041] person_1 (PATIENT): No, that's all. Thanks a lot.
+
+JSON:

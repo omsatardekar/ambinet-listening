@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00139)
+[SEG0001] person_1 (NURSE): Morning, doctor. I've settled them in, ready when you are.
+[SEG0002] person_2 (DOCTOR): Okay, thanks. Hi, how can I help today?
+[SEG0003] person_3 (PATIENT): Um, so... constipation. That's why I came.
+[SEG0004] person_2 (DOCTOR): How long have you had it? Bear with me, I'm just building up the picture.
+[SEG0005] person_3 (PATIENT): It's, It's been going on for about three months. I'm hoping you can tell me something definite.
+[SEG0006] person_2 (DOCTOR): Does anything settle it?
+[SEG0007] person_3 (PATIENT): I get some relief from drinking more water. And a heavy feeling in the lower tummy, too. Oh, and straining to pass stool. That's been about the same, six months.
+[SEG0008] person_2 (DOCTOR): On a normal day, how strong is it?
+[SEG0009] person_3 (PATIENT): I'd call it moderate.
+[SEG0010] person_2 (DOCTOR): Okay, have you had constipation before, or is this the first time?
+[SEG0011] person_3 (PATIENT): A bit, last winter. It settled by itself back then.
+[SEG0012] person_2 (DOCTOR): Did you notice any vomiting?
+[SEG0013] person_3 (PATIENT): No. No vomiting.
+[SEG0014] person_2 (DOCTOR): Understood. Did you get fever, weight loss, black stools or abdominal swelling?
+[SEG0015] person_3 (PATIENT): No. None of those.
+[SEG0016] person_2 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0017] person_3 (PATIENT): Yeah, no, nothing like that.
+[SEG0018] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0019] person_3 (PATIENT): Yes, an underactive thyroid.
+[SEG0020] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0021] person_3 (PATIENT): I don't drink at all. I used to smoke but I quit five years ago. Barely, I'm mostly sedentary these days. Mostly home-cooked food, rice and vegetables. I work in an office, mostly sitting at a desk.
+[SEG0022] person_2 (DOCTOR): Any regular medication?
+[SEG0023] person_3 (PATIENT): No, nothing regular.
+[SEG0024] person_2 (DOCTOR): Have you had to have anything operated on?
+[SEG0025] person_3 (PATIENT): Just cataract surgery on my right eye, last year.
+[SEG0026] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0027] person_3 (PATIENT): Yes, latex. I get a rash on my hands.
+[SEG0028] person_1 (NURSE): Doctor, I've got the readings for you. Saturation 97 percent, weight 57 kilos. BMI works out to 16.7, pulse 85, BP is 117 over 75, height 185 centimetres, temperature 36.7.
+[SEG0029] person_2 (DOCTOR): Good, thank you.
+[SEG0030] person_2 (DOCTOR): Let me have a look at you.
+[SEG0031] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0032] person_2 (DOCTOR): There's no mass in the tummy.
+[SEG0033] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0034] person_2 (DOCTOR): I can feel firm stool in the left lower abdomen.
+[SEG0035] person_2 (DOCTOR): Good, that's the examination.
+[SEG0036] person_2 (DOCTOR): Taking everything into account, this looks most like chronic constipation.
+[SEG0037] person_2 (DOCTOR): I'll request blood tests, it'll help with constipation.
+[SEG0038] person_3 (PATIENT): Alright, when would that be?
+[SEG0039] person_2 (DOCTOR): Let's get a colonoscopy, for constipation and rectal bleeding. For this, lactulose, 15 ml, at night, for two weeks. That's for constipation. It's a commonly used medicine and most people tolerate it well.
+[SEG0040] person_3 (PATIENT): So, how long until it works?
+[SEG0041] person_2 (DOCTOR): More fibre, more water, and give yourself ten unhurried minutes after breakfast. Come back or go to emergency straight away if the symptoms get worse. Please come and see me in a month.
+[SEG0042] person_3 (PATIENT): Good, I'll come back then.
+[SEG0043] person_2 (DOCTOR): Right, take care, and call us if anything changes.
+[SEG0044] person_3 (PATIENT): I think that's clear. Thank you for being so thorough.
+[SEG0045] person_2 (DOCTOR): All the best.
+
+JSON:

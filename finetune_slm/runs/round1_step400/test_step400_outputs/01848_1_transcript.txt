@@ -1,0 +1,49 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01848)
+[SEG0001] person_1 (PATIENT): Hello doctor, sorry, I took a wrong turn on the way here.
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): Doctor, it's loose stools with blood. It's getting on my nerves now.
+[SEG0004] person_2 (DOCTOR): How strong would you say it is?
+[SEG0005] person_1 (PATIENT): I'd say severe. And cramping tummy pain, too. About cramping tummy pain, it's a few times a day. Oh, and tiredness. That's been about the same, two months.
+[SEG0006] person_2 (DOCTOR): Let's run through your medicines.
+[SEG0007] person_1 (PATIENT): Well, I take Foracort inhaler, twice a day. I do miss it now and then, to be fair. Oh, I had Asthalin inhaler at one point, but I'm off it now.
+[SEG0008] person_2 (DOCTOR): Do you have any long-term conditions?
+[SEG0009] person_1 (PATIENT): I've had asthma for two years now.
+[SEG0010] person_2 (DOCTOR): Yes, asthma is known to us, good to have that clear. Are you allergic to anything? Any allergies to medicines or foods?
+[SEG0011] person_1 (PATIENT): Okay, so no, not that I know of.
+[SEG0012] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0013] person_1 (PATIENT): I'm a hairdresser, on my feet all day. I grab fast food at lunch most days. Not much, I mostly stay in these days.
+[SEG0014] person_2 (DOCTOR): Okay, have you had any surgical procedures?
+[SEG0015] person_1 (PATIENT): Just my septum straightened, in my thirties.
+[SEG0016] person_2 (DOCTOR): So, how about fever?
+[SEG0017] person_1 (PATIENT): Not that I've noticed, no fever.
+[SEG0018] person_2 (DOCTOR): I follow. Any vomiting, joint pain or weight loss?
+[SEG0019] person_1 (PATIENT): Nope, nothing like that.
+[SEG0020] person_2 (DOCTOR): Okay, go on. Has your heart given you any trouble?
+[SEG0021] person_1 (PATIENT): Yeah, no, nothing with my heart.
+[SEG0022] person_3 (NURSE): Doctor, I've got the readings for you. SpO2 98 percent on room air, pressure 128 over 78, temp 36.5 degrees, pulse 79, respiratory rate 15.
+[SEG0023] person_2 (DOCTOR): Okay, noted.
+[SEG0024] person_2 (DOCTOR): Could you come over to the couch, please?
+[SEG0025] person_2 (DOCTOR): Nearly finished here.
+[SEG0026] person_2 (DOCTOR): There is tenderness in the lower right tummy and no guarding.
+[SEG0027] person_2 (DOCTOR): Right, good, you can sit up again. So where does that leave us? I think we're dealing with a flare of inflammatory bowel disease at this stage.
+[SEG0028] person_1 (PATIENT): I'm scared it's something bad. Is it?
+[SEG0029] person_2 (DOCTOR): I can't promise yet, but most people with a flare of inflammatory bowel disease do well once it's treated properly.
+[SEG0030] person_2 (DOCTOR): I want blood tests done, that's for flare. I want a stool test done, that's for bloody diarrhoea. I'm going to put you on prednisolone, 40 milligrams, once a day, one week then reduce. You take it by mouth. It's for inflammatory bowel flare.
+[SEG0031] person_1 (PATIENT): Is that safe with my other medicines?
+[SEG0032] person_2 (DOCTOR): Keep up your fluids and call the IBD nurse if you get a fever. Come back or go to emergency straight away if the symptoms get worse. Book a review in two weeks. I think we're done unless you have questions.
+[SEG0033] person_1 (PATIENT): No, that's all. Thanks a lot.
+[SEG0034] person_2 (DOCTOR): Look after yourself.
+
+JSON:

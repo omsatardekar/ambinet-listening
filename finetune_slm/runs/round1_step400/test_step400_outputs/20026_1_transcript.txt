@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20026)
+[SEG0001] person_1 (DOCTOR): Hello, sorry about the delay, do sit.
+[SEG0002] person_2 (PATIENT): Good morning, doctor, thank you.
+[SEG0003] person_1 (DOCTOR): tell me what's brought you in
+[SEG0004] person_2 (PATIENT): honestly, it's a sore on the bottom of my foot, and my family pushed me to come
+[SEG0005] person_1 (DOCTOR): Can you tell me when it first started?
+[SEG0006] person_2 (PATIENT): actually, it's been like this since last Tuesday
+[SEG0007] person_1 (DOCTOR): tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse
+[SEG0008] person_2 (PATIENT): I'd say moderate. Walking definitely sets it off
+[SEG0009] person_1 (DOCTOR): Is there anything else with it?
+[SEG0010] person_2 (PATIENT): Numbness in my feet goes along with it, most of the time ah, as for Numbness in my feet, I honestly can't say when that began it might have been last month or the month before
+[SEG0011] person_1 (DOCTOR): And what about confusion, calf pain, chest pain or vomiting?
+[SEG0012] person_2 (PATIENT): No confusion, calf pain, chest pain or vomiting, none of it.
+[SEG0013] person_1 (DOCTOR): What about black toes?
+[SEG0014] person_2 (PATIENT): no, no black toes
+[SEG0015] person_1 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0016] person_2 (PATIENT): Mm, no, that side's been fine.
+[SEG0017] person_1 (DOCTOR): Alright, which medicines do you take at the moment?
+[SEG0018] person_2 (PATIENT): It's glibenclamide, 5 milligrams, before breakfast.
+[SEG0019] person_1 (DOCTOR): Are you in work at the moment?
+[SEG0020] person_2 (PATIENT): Yes, I work in a bakery, early starts.
+[SEG0021] person_1 (DOCTOR): How active are you?
+[SEG0022] person_2 (PATIENT): I hardly move around during the day
+[SEG0023] person_1 (DOCTOR): Did you ever have any procedures done?
+[SEG0024] person_2 (PATIENT): I had an operation for a hernia last spring.
+[SEG0025] person_1 (DOCTOR): do you have any chronic illnesses?
+[SEG0026] person_2 (PATIENT): Diabetes, for about ten years.
+[SEG0027] person_1 (DOCTOR): Mm, okay.
+[SEG0028] person_3 (NURSE): okay, so the vitals from earlier. BMI works out to 23.1, heart rate 103, saturation 95 percent. Height 174 centimetres, BP is 109 over 69, weight 70 kilos, temperature is 38.2 degrees
+[SEG0029] person_1 (DOCTOR): Okay, noted.
+[SEG0030] person_1 (DOCTOR): I think blood tests makes sense here, for infection.
+[SEG0031] person_2 (PATIENT): that makes sense
+[SEG0032] person_1 (DOCTOR): I think a foot X-ray makes sense here, for ulcer i'd like to arrange a swab from the ulcer for infected ulcer let's use amoxicillin/clavulanic acid, 625 milligrams, three times a day, for seven days you take it by mouth it's for foot infection
+[SEG0033] person_2 (PATIENT): Alright, I'll pick it up today.
+[SEG0034] person_1 (DOCTOR): keep the weight off that foot and keep the dressing dry try to keep a simple diary of when it happens and what you were doing, and bring it to the next visit let's get you seen by the foot clinic, I'll arrange the letter come back or go to emergency straight away if the redness spreads or you feel unwell with a fever
+[SEG0035] person_2 (PATIENT): Okay, um, makes sense.
+[SEG0036] person_1 (DOCTOR): Please come and see me after the swab result. That's everything on my side. Anything you're unsure about?
+[SEG0037] person_2 (PATIENT): okay, so thank you, doctor, goodbye
+[SEG0038] person_1 (DOCTOR): Look after yourself.
+
+JSON:

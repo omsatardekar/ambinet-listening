@@ -1,0 +1,81 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03653)
+[SEG0001] person_1 (PATIENT): Okay, so hello? Doctor? I was told to come in.
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_3 (CAREGIVER): Ah, morning, doctor. I'll stay and fill in anything that's missed.
+[SEG0004] person_2 (DOCTOR): Good, that'll be useful. Pull up a chair.
+[SEG0005] person_1 (PATIENT): So the thing is, I've got breathlessness during sport.
+[SEG0006] person_2 (DOCTOR): So, how long has this been bothering you?
+[SEG0007] person_1 (PATIENT): I'd say a week, maybe.
+[SEG0008] person_3 (CAREGIVER): I think it's been nearer two weeks, actually.
+[SEG0009] person_2 (DOCTOR): Okay, so roughly one to two weeks. Is that right?
+[SEG0010] person_1 (PATIENT): Sorry, what was I saying, I suppose so, yes.
+[SEG0011] person_2 (DOCTOR): How much does it limit you?
+[SEG0012] person_1 (PATIENT): Well, it's... hard to say, it's kind of... I don't know—
+[SEG0013] person_2 (DOCTOR): Take your time. Mild, moderate, or severe, if you had to pick?
+[SEG0014] person_1 (PATIENT): I'd call it severe.
+[SEG0015] person_2 (DOCTOR): Is anything making it worse?
+[SEG0016] person_1 (PATIENT): It's worse with sport.
+[SEG0017] person_1 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0018] person_3 (CAREGIVER): Uh, uh, tell the doctor about the other thing, that's what worries me.
+[SEG0019] person_1 (PATIENT): I was getting to that!
+[SEG0020] person_2 (DOCTOR): That's fine, one at a time. I'll ask about everything.
+[SEG0021] person_1 (PATIENT): Oh, you know, and chest tightness when pushing hard. That's been about the same, ten days.
+[SEG0022] person_2 (DOCTOR): Is it there all the time or does it come and go?
+[SEG0023] person_1 (PATIENT): I'd say every other day.
+[SEG0024] person_2 (DOCTOR): Let me check a few things. Any cough, fainting or leg swelling?
+[SEG0025] person_1 (PATIENT): No, no cough, no fainting, no leg swelling. I did have a flutter now and then at one point, but that went away on its own.
+[SEG0026] person_2 (DOCTOR): Have you had fever, by any chance?
+[SEG0027] person_1 (PATIENT): Nope, no fever.
+[SEG0028] person_3 (CAREGIVER): Actually, doctor, I did notice fever. She doesn't always say.
+[SEG0029] person_1 (PATIENT): No, I don't think I did. Maybe a little, I'm not sure.
+[SEG0030] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. Right, anything different when you pass water?
+[SEG0031] person_1 (PATIENT): That's normal as far as I know.
+[SEG0032] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0033] person_1 (PATIENT): No, skin's been fine.
+[SEG0034] person_2 (DOCTOR): Is there anything relevant on the family side?
+[SEG0035] person_1 (PATIENT): My son has asthma.
+[SEG0036] person_2 (DOCTOR): How are your meals?
+[SEG0037] person_1 (PATIENT): I grab fast food at lunch most days.
+[SEG0038] person_2 (DOCTOR): Do you get out much?
+[SEG0039] person_1 (PATIENT): Not much, I mostly stay in these days.
+[SEG0040] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0041] person_1 (PATIENT): I've got high blood pressure.
+[SEG0042] person_2 (DOCTOR): Sure.
+[SEG0043] person_1 (PATIENT): I have an irregular heartbeat, for two years. I've had heart failure, yes.
+[SEG0044] person_2 (DOCTOR): Hm, okay.
+[SEG0045] person_1 (PATIENT): I've had high cholesterol, yes. I told my wife I'd come today.
+[SEG0046] person_2 (DOCTOR): Alright, heart failure and high cholesterol, that matches what I have here. Any allergies to tablets, food or anything in the environment?
+[SEG0047] person_1 (PATIENT): Sorry, what was I saying, yes, I'm allergic to grass pollen. Trimethoprim. I come out in... well, itching.
+[SEG0048] person_2 (DOCTOR): Do you take any prescribed or over-the-counter medicines?
+[SEG0049] person_1 (PATIENT): Lisinopril. I take it 10 milligrams, once a day for my pressure. I'm on metoprolol, 50 milligrams, twice a day for the heart rhythm.
+[SEG0050] person_1 (PATIENT): Ah, um, it's a... um, I can't remember what it's called. It's a little pink tablet.
+[SEG0051] person_2 (DOCTOR): Do you remember what it's for?
+[SEG0052] person_1 (PATIENT): For my cholesterol, I believe. My wife sets them out for me, I just take what I'm given.
+[SEG0053] person_4 (NURSE): Okay, so the vitals from earlier. Temperature is 36.6 degrees, heart rate 68, saturation 97 percent. Pressure 119 over 76.
+[SEG0054] person_2 (DOCTOR): Thanks.
+[SEG0055] person_2 (DOCTOR): May I examine you now?
+[SEG0056] person_2 (DOCTOR): Take a deep breath for me.
+[SEG0057] person_2 (DOCTOR): There is a harsh murmur that gets louder when you stand up.
+[SEG0058] person_2 (DOCTOR): You can relax now. Okay, thinking it through, this is probably possible hypertrophic cardiomyopathy. I want to be honest that this is an impression, not a final answer. It could also be athlete's heart, so we'll keep that open. An innocent flow murmur is also on my list. I'd like to arrange an echocardiogram for murmur.
+[SEG0059] person_4 (NURSE): We've already done an ECG this morning, doctor.
+[SEG0060] person_2 (DOCTOR): Okay, I'll take a look at that. I'd like to arrange a heart monitor for palpitations. No competitive sport until the heart scan, and we will check your close family. We'll refer you to the inherited cardiac conditions clinic.
+[SEG0061] person_1 (PATIENT): Okay.
+[SEG0062] person_2 (DOCTOR): If the symptoms get worse, that's the point to come in urgently. Please come and see me after the scan.
+[SEG0063] person_1 (PATIENT): Good, I'll return then.
+[SEG0064] person_2 (DOCTOR): Right, that's the plan. Do you want to ask me anything?
+[SEG0065] person_1 (PATIENT): Great, thank you for your help.
+[SEG0066] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

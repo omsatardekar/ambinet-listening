@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00114)
+[SEG0001] person_1 (PATIENT): Hi, doctor. Is this the right room?
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_1 (PATIENT): It's heartburn, mostly.
+[SEG0004] person_2 (DOCTOR): And when did that start?
+[SEG0005] person_1 (PATIENT): About... well, about a month. I kept putting it off, which I know isn't sensible. I took the morning off to come in today.
+[SEG0006] person_2 (DOCTOR): How often does it happen?
+[SEG0007] person_1 (PATIENT): It sort of comes and goes.
+[SEG0008] person_2 (DOCTOR): Any food coming back up as well?
+[SEG0009] person_1 (PATIENT): Yes, about the same, about a week. About food coming back up, I'd call it severe.
+[SEG0010] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0011] person_1 (PATIENT): Not currently, but as a youngster sulfa drugs gave me a rash.
+[SEG0012] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0013] person_1 (PATIENT): Mostly home-cooked food, rice and vegetables. I work on a farm, it's quite physical. I walk for about half an hour most days.
+[SEG0014] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0015] person_1 (PATIENT): Losartan. I take it 50 milligrams, maybe, once a day.
+[SEG0016] person_2 (DOCTOR): Is the packet here, or the prescription?
+[SEG0017] person_1 (PATIENT): No, it's at home. It's, It's Eno, when I get it.
+[SEG0018] person_2 (DOCTOR): Any previous surgeries?
+[SEG0019] person_1 (PATIENT): No, uh, never had any surgery.
+[SEG0020] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0021] person_1 (PATIENT): Oh, I have high blood pressure, for about ten years.
+[SEG0022] person_2 (DOCTOR): Uh-huh. Alright, high blood pressure, that matches what I have here.
+[SEG0023] person_2 (DOCTOR): A few quick ones: pain on exertion or weight loss?
+[SEG0024] person_1 (PATIENT): So, none, as far as I know.
+[SEG0025] person_2 (DOCTOR): Uh-huh. Have you noticed trouble swallowing or black stools?
+[SEG0026] person_1 (PATIENT): I haven't had trouble swallowing or black stools, no.
+[SEG0027] person_2 (DOCTOR): Right, right. Right, has your heart given you any trouble?
+[SEG0028] person_1 (PATIENT): Nothing like that.
+[SEG0029] person_2 (DOCTOR): A few measurements, then we'll continue.
+[SEG0030] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0031] person_2 (DOCTOR): Okay: pressure 113 over 74, SpO2 99 percent on room air, temp 36.9 degrees, pulse 71.
+[SEG0032] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0033] person_2 (DOCTOR): Let me look at this properly.
+[SEG0034] person_2 (DOCTOR): Tummy is soft and non-tender.
+[SEG0035] person_2 (DOCTOR): Good, that's the examination.
+[SEG0036] person_2 (DOCTOR): Let me tell you where I've got to. I think we're dealing with gastro-oesophageal reflux at this stage. It could also be gastritis, so we'll keep that open. We should do an ECG for chest discomfort. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Okay, we're done for today. Take care.
+[SEG0037] person_1 (PATIENT): Thanks so much, um, doctor.
+[SEG0038] person_2 (DOCTOR): Right, take care.
+
+JSON:

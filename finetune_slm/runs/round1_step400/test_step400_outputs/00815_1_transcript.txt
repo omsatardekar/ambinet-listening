@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00815)
+[SEG0001] person_1 (PATIENT): Hello, doctor. Um, I've got this shake in my right hand, when I'm holding a cup of tea, and my daughter said I should see someone.
+[SEG0002] person_2 (DOCTOR): Tell me about the shake. When does it happen?
+[SEG0003] person_1 (PATIENT): When I pick up the cup, and lift it, it trembles. And when I write, my handwriting gets scrawly. It's not there when the hand is resting.
+[SEG0004] person_2 (DOCTOR): When did you first notice it?
+[SEG0005] person_1 (PATIENT): Oh, I'm not sure. A year ago? It could be longer. I forget these things.
+[SEG0006] person_2 (DOCTOR): Does it affect the other hand? ~
+[SEG0007] person_1 (PATIENT): A little, I think, in the left, but not as much. ~
+[SEG0008] person_2 (DOCTOR): Does alcohol make it better or worse? ~
+[SEG0009] person_1 (PATIENT): A glass of wine takes the edge off, actually. ~
+[SEG0010] person_2 (DOCTOR): Any slowness, stiffness, or trouble walking?
+[SEG0011] person_1 (PATIENT): No, nothing like that. Walking's fine.
+[SEG0012] person_2 (DOCTOR): And caffeine, how much do you drink?
+[SEG0013] person_1 (PATIENT): Four cups of tea a day.
+[SEG0014] person_2 (DOCTOR): Any allergies to medicines?
+[SEG0015] person_1 (PATIENT): Years ago, I came out in a rash on penicillin, so I've stayed away.
+[SEG0016] person_2 (DOCTOR): Any other conditions?
+[SEG0017] person_1 (PATIENT): High blood pressure, and an underactive thyroid.
+[SEG0018] person_2 (DOCTOR): Does tremor run in the family? ~
+[SEG0019] person_1 (PATIENT): My father had it. We called it the family shake. ~
+[SEG0020] person_2 (DOCTOR): That's useful. Let me examine you. Hold your arms out. ~
+[SEG0021] person_1 (PATIENT): Like this?
+[SEG0022] person_2 (DOCTOR): There's a fine tremor in both hands when you hold your arms out, worse on the right, and it increases when you reach for my finger. At rest it disappears.
+[SEG0023] person_1 (PATIENT): Is it Parkinson's? ~
+[SEG0024] person_2 (DOCTOR): A rest tremor and slowness would be Parkinson's, and you don't have those. Let me check that. Walk across the room for me, and tap your fingers together. ~
+[SEG0025] person_1 (PATIENT): Okay.
+[SEG0026] person_2 (DOCTOR): Your walking is normal, with good arm swing, and your finger-tapping is quick and even, with normal tone.
+[SEG0027] person_1 (PATIENT): So it's not? ~
+[SEG0028] person_2 (DOCTOR): No, I'm not worried about Parkinson's. What you've got fits with a benign essential tremor, but I don't want to put a label on it yet. ~
+[SEG0029] person_1 (PATIENT): What would you like me to do? ~
+[SEG0030] person_2 (DOCTOR): Try cutting down the tea to two cups. Caffeine makes tremors worse.
+[SEG0031] person_1 (PATIENT): Two cups. I'll try. ~
+[SEG0032] person_2 (DOCTOR): And stress and tiredness too. It may settle. ~
+[SEG0033] person_1 (PATIENT): Does it need tablets? ~
+[SEG0034] person_2 (DOCTOR): Not unless it's affecting your life. If it is, there are tablets that help. ~
+[SEG0035] person_1 (PATIENT): It's the tea that bothers me. ~
+[SEG0036] person_2 (DOCTOR): Use a heavy cup, or a cup with two handles, and a straw if needed.
+[SEG0037] person_1 (PATIENT): That's a good idea. ~
+[SEG0038] person_2 (DOCTOR): If the tremor becomes much worse, you develop stiffness or slowness, or it starts at rest, come back and I'll refer you to a neurologist.
+[SEG0039] person_1 (PATIENT): I will. Thank you. ~
+
+JSON:

@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01870)
+[SEG0001] person_1 (DOCTOR): Afternoon, thanks for coming in.
+[SEG0002] person_2 (PATIENT): Morning, doctor, sorry about the rush.
+[SEG0003] person_3 (CAREGIVER): Good afternoon, um, doctor. I look after them so I thought I'd come.
+[SEG0004] person_1 (DOCTOR): What's the main thing today?
+[SEG0005] person_2 (PATIENT): Um, so... tiredness. That's why I came.
+[SEG0006] person_1 (DOCTOR): Has this been going on for long?
+[SEG0007] person_2 (PATIENT): Around three days, I think.
+[SEG0008] person_3 (CAREGIVER): I think it's been nearer five days, actually.
+[SEG0009] person_1 (DOCTOR): Okay, so roughly three to five days. Is that right?
+[SEG0010] person_2 (PATIENT): Yeah, roughly.
+[SEG0011] person_1 (DOCTOR): Any other symptoms with it?
+[SEG0012] person_2 (PATIENT): It usually comes with loose stools with blood. The loose stools with blood? That's been for five days. About loose stools with blood, mostly moderate.
+[SEG0013] person_1 (DOCTOR): What about mouth ulcers, have you noticed that?
+[SEG0014] person_2 (PATIENT): Yes, for two months.
+[SEG0015] person_1 (DOCTOR): Have you had tiredness before, or is this the first time?
+[SEG0016] person_2 (PATIENT): I had a similar thing about six months ago. It went away.
+[SEG0017] person_1 (DOCTOR): Shall I check your blood pressure and pulse?
+[SEG0018] person_1 (DOCTOR): Keep your arm relaxed for me...
+[SEG0019] person_1 (DOCTOR): Okay: pulse 72, temperature 36.8, SpO2 97 percent on room air, blood pressure 111 over 70.
+[SEG0020] person_1 (DOCTOR): May I examine you now?
+[SEG0021] person_1 (DOCTOR): Take a deep breath for me.
+[SEG0022] person_1 (DOCTOR): There is tenderness in the lower right tummy and no guarding.
+[SEG0023] person_1 (DOCTOR): Okay, that's enough for me.
+[SEG0024] person_1 (DOCTOR): Have you had any fever or weight loss?
+[SEG0025] person_2 (PATIENT): None of those, no.
+[SEG0026] person_1 (DOCTOR): Have you had any joint pain or vomiting?
+[SEG0027] person_2 (PATIENT): No, no joint pain or vomiting.
+[SEG0028] person_1 (DOCTOR): Any pins and needles or loss of strength anywhere?
+[SEG0029] person_2 (PATIENT): No, uh, that's all normal.
+[SEG0030] person_1 (DOCTOR): How are your meals?
+[SEG0031] person_2 (PATIENT): I grab fast food at lunch most days.
+[SEG0032] person_1 (DOCTOR): What's your work?
+[SEG0033] person_2 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0034] person_1 (DOCTOR): Are there any illnesses in your family?
+[SEG0035] person_2 (PATIENT): Okay, so my father had bowel cancer. So, my daughter has type 1 diabetes.
+[SEG0036] person_1 (DOCTOR): Has anything ever caused you a reaction? I mean any allergies.
+[SEG0037] person_2 (PATIENT): Actually, no, nothing as far as I know.
+[SEG0038] person_1 (DOCTOR): Which medicines do you take at the moment?
+[SEG0039] person_2 (PATIENT): Um, I take Seretide inhaler, twice a day. I'd been on Foracort inhaler, not any more though, I stopped.
+[SEG0040] person_1 (DOCTOR): Have you had any surgical procedures?
+[SEG0041] person_2 (PATIENT): Yes, uh, I had a caesarean for my second baby, nine years ago.
+[SEG0042] person_1 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0043] person_2 (PATIENT): I mean, I've had asthma for two years now.
+[SEG0044] person_1 (DOCTOR): Taking everything into account, this is probably a flare of inflammatory bowel disease. I can't rule out an infection yet. I want blood tests done, that's for flare. I'm going to order a stool test, for bloody diarrhoea.
+[SEG0045] person_2 (PATIENT): How long will it take?
+[SEG0046] person_1 (DOCTOR): The treatment will be prednisolone, 40 milligrams, once a day, one week then reduce. That's for inflammatory bowel flare. I'll put all of this in writing so you don't have to remember it. Keep up your fluids and call the IBD nurse if you get a fever. The thing that would worry me is if the symptoms get worse. If that happens, go to emergency.
+[SEG0047] person_2 (PATIENT): Okay, um, I'll look out for that.
+[SEG0048] person_1 (DOCTOR): Right, that's the plan. Do you want to ask me anything?
+[SEG0049] person_2 (PATIENT): That's clear, thanks.
+[SEG0050] person_1 (DOCTOR): See you soon.
+
+JSON:

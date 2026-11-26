@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20044)
+[SEG0001] person_1 (DOCTOR): Evening. Let's get started.
+[SEG0002] person_2 (CAREGIVER): Morning, doctor. I'll stay and fill in anything that's missed.
+[SEG0003] person_1 (DOCTOR): Weather's turned, hasn't it?
+[SEG0004] person_3 (PATIENT): It has. I got caught in the rain walking over.
+[SEG0005] person_1 (DOCTOR): What do you need help with?
+[SEG0006] person_3 (PATIENT): I've been dealing with loud snoring.
+[SEG0007] person_1 (DOCTOR): Can you tell me when it first started?
+[SEG0008] person_3 (PATIENT): It's been about a month, I'm fairly sure. I've been reading about it online and it worried me.
+[SEG0009] person_1 (DOCTOR): Have you been waking up with a headache?
+[SEG0010] person_3 (PATIENT): Yes, about the same, two months.
+[SEG0011] person_1 (DOCTOR): Have you had loud snoring before, or is this the first time?
+[SEG0012] person_3 (PATIENT): Yes, something like this happened last year, and it went away on its own.
+[SEG0013] person_1 (DOCTOR): What does a normal day of food look like?
+[SEG0014] person_3 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0015] person_1 (DOCTOR): Who lives with you?
+[SEG0016] person_3 (PATIENT): My partner and our baby.
+[SEG0017] person_1 (DOCTOR): Have you ever had an operation?
+[SEG0018] person_3 (PATIENT): Just my appendix taken out, when I was in my twenties. A neighbour of mine said I should see someone about it. I didn't want to bother you but it keeps coming back.
+[SEG0019] person_1 (DOCTOR): Any allergies to tablets, food or anything in the environment?
+[SEG0020] person_3 (PATIENT): I've never had an allergy.
+[SEG0021] person_1 (DOCTOR): What's on your current medicine list?
+[SEG0022] person_2 (CAREGIVER): It's sitagliptin, 100 milligrams, once a day, doctor.
+[SEG0023] person_1 (DOCTOR): Has anyone ever diagnosed you with something? I ask because it helps me narrow things down.
+[SEG0024] person_3 (PATIENT): Yes, diabetes. I just want to get back to normal, really.
+[SEG0025] person_1 (DOCTOR): I follow. Okay, I can see diabetes in your file as well.
+[SEG0026] person_1 (DOCTOR): Have you noticed chest pain or leg swelling?
+[SEG0027] person_3 (PATIENT): I haven't had chest pain or leg swelling, no.
+[SEG0028] person_1 (DOCTOR): Have you noticed palpitations, choking at night or falling asleep while driving?
+[SEG0029] person_3 (PATIENT): None of those, no.
+[SEG0030] person_1 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0031] person_3 (PATIENT): No, joints are fine.
+[SEG0032] person_1 (DOCTOR): Right, anything unusual with passing urine?
+[SEG0033] person_3 (PATIENT): Um, no, that's all fine.
+[SEG0034] person_1 (DOCTOR): I'll do your observations first.
+[SEG0035] person_1 (DOCTOR): Alright, sit still for a moment...
+[SEG0036] person_1 (DOCTOR): Okay: saturation 97 percent, blood pressure 157 over 101, pulse is 73 beats a minute, respiratory rate 17.
+[SEG0037] person_1 (DOCTOR): So, may I examine you now?
+[SEG0038] person_1 (DOCTOR): Let me feel here.
+[SEG0039] person_1 (DOCTOR): Your neck is thick and the back of the throat looks crowded.
+[SEG0040] person_3 (PATIENT): That's alright.
+[SEG0041] person_1 (DOCTOR): All finished, thank you. So, based on the history and the examination, this looks most like symptoms that suggest obstructive sleep apnoea. Poor sleep habits is also on my list. Let's book an overnight sleep study to look into suspected sleep apnoea.
+[SEG0042] person_3 (PATIENT): When would that take place?
+[SEG0043] person_1 (DOCTOR): Let's get a thyroid test, for tiredness. The result will help us decide whether anything more is needed. Try to sleep on your side and avoid alcohol close to bedtime. One warning sign to remember: you feel sleepy while driving. In that case don't wait. I'd like you back after the sleep study.
+[SEG0044] person_3 (PATIENT): I can manage that.
+[SEG0045] person_1 (DOCTOR): That's all from me. Any questions?
+[SEG0046] person_3 (PATIENT): Great, thank you for your help.
+
+JSON:

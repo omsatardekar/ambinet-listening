@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01678)
+[SEG0001] person_1 (PATIENT): right, you know, hi, is it okay to come in now?
+[SEG0002] person_2 (DOCTOR): of course, leave it there how can I help?
+[SEG0003] person_3 (CAREGIVER): Hello, doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_2 (DOCTOR): that's fine, sit down. We'll go through it together
+[SEG0005] person_1 (PATIENT): it's painful periods mostly
+[SEG0006] person_2 (DOCTOR): alright, what do you take on a normal day?
+[SEG0007] person_3 (CAREGIVER): it's Tiotropium inhaler, once a day, doctor it's diclofenac, when needed, doctor
+[SEG0008] person_2 (DOCTOR): So So do you know the dose?
+[SEG0009] person_3 (CAREGIVER): It's 50 milligrams. She takes thyroxine 75 micrograms every morning. She takes ibuprofen 400 milligrams with food when needed.
+[SEG0010] person_2 (DOCTOR): when did this begin?
+[SEG0011] person_1 (PATIENT): for three days, I'd say
+[SEG0012] person_2 (DOCTOR): can you describe it a bit more for me? How strong it is what the pattern is what helps
+[SEG0013] person_1 (PATIENT): it's worse with first two days a a four out of ten, I suppose only a hot water bottle, and it's not much i've also been feeling sick on the first day as for feeling sick on the first day, a seven out of ten, I suppose. A dull ache in my back was there, but it's gone away on its own
+[SEG0014] person_2 (DOCTOR): Have you had any pain with sex fever or heavy bleeding?
+[SEG0015] person_1 (PATIENT): No, not a single one.
+[SEG0016] person_2 (DOCTOR): So did you notice any bleeding between periods?
+[SEG0017] person_1 (PATIENT): no no bleeding between periods
+[SEG0018] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0019] person_1 (PATIENT): no nothing with my heart
+[SEG0020] person_2 (DOCTOR): any smoking?
+[SEG0021] person_1 (PATIENT): I've never touched a cigarette
+[SEG0022] person_2 (DOCTOR): what's your work?
+[SEG0023] person_1 (PATIENT): I'm a plumber, lots of bending and kneeling
+[SEG0024] person_2 (DOCTOR): Okay, do you live by yourself?
+[SEG0025] person_1 (PATIENT): No, I share a house with my brother
+[SEG0026] person_2 (DOCTOR): Are there any illnesses in your family?
+[SEG0027] person_1 (PATIENT): My sister had breast cancer.
+[SEG0028] person_2 (DOCTOR): do you react to any medicines or foods? Any allergies?
+[SEG0029] person_1 (PATIENT): No, I'm not allergic to anything.
+[SEG0030] person_3 (CAREGIVER): actually, I remember she had some kind of reaction to amoxicillin before i couldn't swear to it
+[SEG0031] person_1 (PATIENT): I don't remember that
+[SEG0032] person_2 (DOCTOR): Alright so that's unclear. I'll record what each of you said.
+[SEG0033] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0034] person_1 (PATIENT): I've had COPD for two years now
+[SEG0035] person_2 (DOCTOR): yes carry on
+[SEG0036] person_1 (PATIENT): I have arthritis in my knees
+[SEG0037] person_2 (DOCTOR): yes carry on
+[SEG0038] person_1 (PATIENT): An underactive thyroid for about ten years.
+[SEG0039] person_2 (DOCTOR): I see, go ahead. Right, so arthritis in your knees is already on your record. We'll keep that in mind today
+[SEG0040] person_2 (DOCTOR): Let me take your readings now.
+[SEG0041] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0042] person_2 (DOCTOR): okay: blood pressure 118 over 79, respiratory rate 14, pulse is 69 beats a minute, temperature 36.5.
+[SEG0043] person_1 (PATIENT): Is that normal?
+[SEG0044] person_2 (DOCTOR): We'll look at it together shortly.
+[SEG0045] person_2 (DOCTOR): may I examine you now?
+[SEG0046] person_1 (PATIENT): Right.
+[SEG0047] person_2 (DOCTOR): I'll listen to your chest now.
+[SEG0048] person_2 (DOCTOR): your tummy is soft and not tender between periods
+[SEG0049] person_2 (DOCTOR): that's all I needed to check. From what you've told me and what I found, my working impression is primary dysmenorrhoea. Heat, gentle exercise, and start the tablet at the first sign of pain. Does all of that make sense?
+[SEG0050] person_1 (PATIENT): Good thanks I'll see you then.
+
+JSON:

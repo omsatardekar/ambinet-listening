@@ -1,0 +1,72 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20251)
+[SEG0001] person_1 (DOCTOR): Afternoon, thanks for coming in.
+[SEG0002] person_2 (CAREGIVER): Right, good afternoon, doctor. I look after them so I thought I'd come.
+[SEG0003] person_1 (DOCTOR): What would you like to start with today?
+[SEG0004] person_2 (CAREGIVER): It's breathlessness on exertion, doctor. He didn't want to come, but I insisted.
+[SEG0005] person_1 (DOCTOR): Has this been going on for long?
+[SEG0006] person_3 (PATIENT): For two months, I'd say.
+[SEG0007] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0008] person_3 (PATIENT): Mild, really. It settles a little with resting. Yes, stairs. That makes it worse.
+[SEG0009] person_1 (DOCTOR): Any a tight feeling in your chest when you walk uphill as well?
+[SEG0010] person_3 (PATIENT): Yes, I have. As for tight feeling in my chest when I walk uphill, it's severe, honestly.
+[SEG0011] person_1 (DOCTOR): Have you been sweating with the tightness?
+[SEG0012] person_3 (PATIENT): Yeah. Six months, I'd say. As for sweating with the tightness, mostly mild.
+[SEG0013] person_1 (DOCTOR): Yes, carry on.
+[SEG0014] person_3 (PATIENT): I've had a heaviness in my left arm too, for nearly five years.
+[SEG0015] person_1 (DOCTOR): How strong would you say it is?
+[SEG0016] person_3 (PATIENT): Mild, really.
+[SEG0017] person_1 (DOCTOR): Have you had breathlessness on exertion before, or is this the first time?
+[SEG0018] person_3 (PATIENT): I had a similar thing last winter. It went away.
+[SEG0019] person_1 (DOCTOR): A few quick ones: fainting, pain at rest or cough?
+[SEG0020] person_3 (PATIENT): No, not a single one.
+[SEG0021] person_1 (DOCTOR): A few quick ones: pain between the shoulder blades, ankle swelling or palpitations?
+[SEG0022] person_3 (PATIENT): No, not a single one.
+[SEG0023] person_1 (DOCTOR): Any trouble with the waterworks?
+[SEG0024] person_3 (PATIENT): Nothing there, no.
+[SEG0025] person_1 (DOCTOR): Any pins and needles or loss of strength anywhere?
+[SEG0026] person_3 (PATIENT): No, that's all normal.
+[SEG0027] person_1 (DOCTOR): Any allergies to tablets, food or anything in the environment?
+[SEG0028] person_3 (PATIENT): I've never had an allergy.
+[SEG0029] person_1 (DOCTOR): Anything surgical in your history?
+[SEG0030] person_3 (PATIENT): Just keyhole surgery on my gallbladder, two years back.
+[SEG0031] person_1 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0032] person_3 (PATIENT): I have about eight cigarettes in a day. Lots of rice, lentils and some fruit. I'm a plumber, lots of bending and kneeling. My partner and our baby.
+[SEG0033] person_1 (DOCTOR): Right, has anyone in your family had anything serious?
+[SEG0034] person_3 (PATIENT): My father has Parkinson's disease. My grandmother had dementia.
+[SEG0035] person_1 (DOCTOR): What's on your current medicine list?
+[SEG0036] person_3 (PATIENT): I take glibenclamide, 5 milligrams, before breakfast for my sugar. Metoprolol. I take it 50 milligrams, twice a day.
+[SEG0037] person_1 (DOCTOR): Yes, carry on.
+[SEG0038] person_3 (PATIENT): Rosuvastatin, 10 milligrams, at night. Let me think, I'd been on metformin, not any more though, I stopped.
+[SEG0039] person_1 (DOCTOR): What about your medical history?
+[SEG0040] person_3 (PATIENT): I've got diabetes.
+[SEG0041] person_1 (DOCTOR): Ah.
+[SEG0042] person_3 (PATIENT): I have high blood pressure. Yes, high cholesterol.
+[SEG0043] person_1 (DOCTOR): Okay, I can see diabetes and high blood pressure in your file as well.
+[SEG0044] person_1 (DOCTOR): Shall I check your blood pressure and pulse?
+[SEG0045] person_1 (DOCTOR): Keep your arm relaxed for me...
+[SEG0046] person_1 (DOCTOR): Okay: weight 81 kilos, respiratory rate 18, BP is 118 over 74, height 181 centimetres, pulse 66, temperature 36.8.
+[SEG0047] person_3 (PATIENT): Is that normal?
+[SEG0048] person_1 (DOCTOR): I'll come back to the numbers.
+[SEG0049] person_1 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0050] person_1 (DOCTOR): I'm just checking this side.
+[SEG0051] person_1 (DOCTOR): There is no swelling in your ankles.
+[SEG0052] person_1 (DOCTOR): Take a deep breath for me.
+[SEG0053] person_1 (DOCTOR): Heart sounds are normal, no murmur, and the chest is clear.
+[SEG0054] person_1 (DOCTOR): Thank you, you can get dressed. So where does that leave us? It points towards exertional angina until proven otherwise. A muscle strain is still possible. Let me repeat that back to make sure. You've had breathlessness on exertion for two months, mild, and no ankle swelling or palpitations.
+[SEG0055] person_3 (PATIENT): Mm, that's right.
+[SEG0056] person_1 (DOCTOR): I'm going to send a referral to the cardiology clinic. Does all of that make sense?
+[SEG0057] person_3 (PATIENT): Sorry, what was I saying, I think I understand everything. Thanks.
+
+JSON:

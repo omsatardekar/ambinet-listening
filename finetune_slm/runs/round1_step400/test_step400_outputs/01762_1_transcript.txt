@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01762)
+[SEG0001] person_1 (DOCTOR): Good afternoon, how are you today?
+[SEG0002] person_1 (DOCTOR): Tell me what's brought you in.
+[SEG0003] person_2 (PATIENT): So So the thing is, I've got a barking cough.
+[SEG0004] person_1 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0005] person_2 (PATIENT): I was on clopidogrel before. I stopped taking it
+[SEG0006] person_1 (DOCTOR): What's the timeline, when did it begin?
+[SEG0007] person_2 (PATIENT): I'd say about a week actually, no, closer to three weeks
+[SEG0008] person_1 (DOCTOR): does anything set it off?
+[SEG0009] person_2 (PATIENT): Night definitely sets it off
+[SEG0010] person_1 (DOCTOR): does anything else come with it?
+[SEG0011] person_2 (PATIENT): A runny nose goes along with it, most of the time. I've also had a hoarse voice, since yesterday.
+[SEG0012] person_1 (DOCTOR): Have you had a barking cough before, or is this the first time?
+[SEG0013] person_2 (PATIENT): I had a similar thing about six months ago. It went away
+[SEG0014] person_1 (DOCTOR): And what about drooling or difficulty swallowing?
+[SEG0015] person_2 (PATIENT): No, none that I've noticed.
+[SEG0016] person_1 (DOCTOR): And what about noisy breathing when resting or blue lips?
+[SEG0017] person_2 (PATIENT): No, none that I've noticed.
+[SEG0018] person_1 (DOCTOR): And your skin, any changes there?
+[SEG0019] person_2 (PATIENT): No rashes.
+[SEG0020] person_1 (DOCTOR): Are you on your own at home?
+[SEG0021] person_2 (PATIENT): I live with my elderly mother.
+[SEG0022] person_1 (DOCTOR): Anything you do to stay fit?
+[SEG0023] person_2 (PATIENT): I do a yoga class on Thursdays.
+[SEG0024] person_1 (DOCTOR): Any past operations I should know about?
+[SEG0025] person_2 (PATIENT): I had my appendix taken out when I was in my twenties
+[SEG0026] person_1 (DOCTOR): Does your family have any medical conditions?
+[SEG0027] person_2 (PATIENT): My sister had breast cancer.
+[SEG0028] person_1 (DOCTOR): Has anything ever caused you a reaction? I mean any allergies.
+[SEG0029] person_2 (PATIENT): No, not that I know of.
+[SEG0030] person_1 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0031] person_2 (PATIENT): Heart disease, for nearly five years.
+[SEG0032] person_1 (DOCTOR): Shall I check your blood pressure and pulse?
+[SEG0033] person_1 (DOCTOR): Sit still for a a moment...
+[SEG0034] person_1 (DOCTOR): Okay: temperature is 36.7 degrees, pulse 78, pressure 116 over 80, respiratory rate 14, saturation 97 percent.
+[SEG0035] person_1 (DOCTOR): okay, time for me to examine you
+[SEG0036] person_1 (DOCTOR): raise your arm for me
+[SEG0037] person_1 (DOCTOR): he is playful, breathing comfortably at rest, and and I can't hear any noisy breathing now
+[SEG0038] person_1 (DOCTOR): okay, that's all I needed to check
+[SEG0039] person_1 (DOCTOR): Having listened and examined, the most likely explanation is mild croup. I'll start you on dexamethasone, 0.15 mg per kg, once, single dose. That's for croup. The pharmacy will go through the details again when you pick it up. Keep him calm, sit him upright, and give fluids. If he makes a noisy sound when resting or struggles to breathe, that's the point to come in urgently. Please come and see me if no better in two days.
+[SEG0040] person_1 (DOCTOR): so, does all of that make sense?
+[SEG0041] person_2 (PATIENT): Thank you, doctor, goodbye.
+
+JSON:

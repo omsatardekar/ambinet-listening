@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00146)
+[SEG0001] person_1 (NURSE): Doctor, I've brought them through. The observations are done, whenever you need them.
+[SEG0002] person_2 (DOCTOR): Thank you. Good morning, tell me what's been going on.
+[SEG0003] person_3 (CAREGIVER): Morning um doctor. I'll stay and and fill in anything that's missed.
+[SEG0004] person_2 (DOCTOR): yes, that's no problem at all please sit
+[SEG0005] person_4 (PATIENT): mainly I've been feeling anxious most of the day. That's why I came. I told myself I'd wait and see, um, and here I am. I just want to get back to normal, really
+[SEG0006] person_2 (DOCTOR): since when have you had this?
+[SEG0007] person_4 (PATIENT): About about a month give or take.
+[SEG0008] person_3 (CAREGIVER): Right, uh, I think it's been nearer about two months, actually.
+[SEG0009] person_2 (DOCTOR): Okay, so so roughly one to two months. Is that right?
+[SEG0010] person_4 (PATIENT): Well, you know, yes, somewhere around that.
+[SEG0011] person_2 (DOCTOR): On a normal day how strong is it?
+[SEG0012] person_4 (PATIENT): Severe I'd say there's trouble falling asleep as well as for trouble falling asleep I'd call it mild
+[SEG0013] person_5 (UNKNOWN): Yes, exactly like that.
+[SEG0014] person_2 (DOCTOR): Let me check a a few things. Any thoughts of harming myself, low mood, alcohol use or fainting?
+[SEG0015] person_4 (PATIENT): well, no, no thoughts of harming myself, no low mood, no alcohol use. I did have a tight feeling in the chest at one point, but that went away on its own
+[SEG0016] person_2 (DOCTOR): have you noticed chest pain on exertion or weight loss?
+[SEG0017] person_4 (PATIENT): No, I'd have mentioned it.
+[SEG0018] person_2 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0019] person_4 (PATIENT): nothing else aches
+[SEG0020] person_2 (DOCTOR): any trouble with the waterworks?
+[SEG0021] person_4 (PATIENT): Nothing there, no.
+[SEG0022] person_2 (DOCTOR): do you have any known allergies at all?
+[SEG0023] person_4 (PATIENT): hmm there was some antibiotic I was told I was allergic but I couldn't tell you what it was called or what it did
+[SEG0024] person_2 (DOCTOR): any operations in the past?
+[SEG0025] person_4 (PATIENT): I had my thyroid operated on a long time ago
+[SEG0026] person_2 (DOCTOR): so, any diagnoses you've been given before?
+[SEG0027] person_4 (PATIENT): Anxiety, for about ten years. I've had eczema, yes. I have depression. I've got heart disease
+[SEG0028] person_2 (DOCTOR): Yes anxiety is known to us good to have that clear. Right and alcohol how much?
+[SEG0029] person_4 (PATIENT): A beer or two most evenings, to be honest
+[SEG0030] person_2 (DOCTOR): What kind of work do you do?
+[SEG0031] person_4 (PATIENT): I work on a farm, it's quite physical.
+[SEG0032] person_2 (DOCTOR): do you get any exercise?
+[SEG0033] person_4 (PATIENT): I walk for about half an hour most days.
+[SEG0034] person_2 (DOCTOR): What's your current medication list?
+[SEG0035] person_4 (PATIENT): I take hydrocortisone cream when needed. I take escitalopram 10 milligrams once a day for my mood. I'm on aspirin 75 milligrams maybe once a day
+[SEG0036] person_2 (DOCTOR): Is the packet here, or the prescription?
+[SEG0037] person_4 (PATIENT): no it's at home
+[SEG0038] person_1 (NURSE): okay, so the vitals from earlier. Temp 37.0 degrees, BMI works out to 23.3, height 163 centimetres. Heart rate 86, blood pressure 111 over 75, weight 62 kilos, respiratory rate 18.
+[SEG0039] person_2 (DOCTOR): okay, noted
+[SEG0040] person_2 (DOCTOR): okay I need to to examine you for this
+[SEG0041] person_4 (PATIENT): yes, doctor
+[SEG0042] person_2 (DOCTOR): Let me just check something.
+[SEG0043] person_2 (DOCTOR): Pulse is regular and you're breathing comfortably right now.
+[SEG0044] person_2 (DOCTOR): Okay, that's fine, sit up. From what you've told me and what I found, I think we're dealing with an anxiety disorder at this stage. A thyroid problem is also on my list. A heart rhythm cause is still possible. I'm sending you for an ECG because of palpitations. I think a thyroid test makes sense here, for anxiety. Regular exercise and less caffeine make a real difference.
+[SEG0045] person_2 (DOCTOR): Slow breathing in for four and out for six for a few minutes whenever it builds up. Let's get you seen by a counsellor I'll arrange the letter.
+[SEG0046] person_4 (PATIENT): Sure, you know, where do I go?
+[SEG0047] person_2 (DOCTOR): and please bring the latest prescription or the medicine boxes to the next visit so we can settle the dose. One warning sign to remember: you have thoughts of harming yourself. In that case don't wait. Let's review you in four weeks. Call the clinic if you need us
+[SEG0048] person_4 (PATIENT): no, you've explained it well thanks
+
+JSON:

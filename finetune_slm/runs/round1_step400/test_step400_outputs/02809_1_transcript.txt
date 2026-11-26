@@ -1,0 +1,70 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02809)
+[SEG0001] person_1 (DOCTOR): Good afternoon, how are you today?
+[SEG0002] person_2 (FAMILY_MEMBER): Hello, doctor. I'm here with them in case I can help.
+[SEG0003] person_1 (DOCTOR): Sorry about the wait, we're running a bit behind.
+[SEG0004] person_3 (PATIENT): Oh, that's fine. I was just reading something on my phone.
+[SEG0005] person_1 (DOCTOR): Alright, what would you like to start with today?
+[SEG0006] person_3 (PATIENT): I'm here because of a severe headache.
+[SEG0007] person_1 (DOCTOR): Since when exactly?
+[SEG0008] person_3 (PATIENT): Around a week, um, I think.
+[SEG0009] person_2 (FAMILY_MEMBER): I think it's been nearer two weeks, actually.
+[SEG0010] person_1 (DOCTOR): Okay, so roughly one to two weeks. Is that right?
+[SEG0011] person_3 (PATIENT): Well, yes, somewhere around that.
+[SEG0012] person_1 (DOCTOR): Is it constant or in episodes?
+[SEG0013] person_3 (PATIENT): Honestly, once or twice a day.
+[SEG0014] person_1 (DOCTOR): Is it a lot or only a little?
+[SEG0015] person_3 (PATIENT): Mostly mild.
+[SEG0016] person_3 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0017] person_2 (FAMILY_MEMBER): Tell the doctor about the other thing, that's what worries me.
+[SEG0018] person_3 (PATIENT): I was getting to that! I've also had swollen face and hands, for about a week.
+[SEG0019] person_1 (DOCTOR): Have you had a severe headache before, or is this the first time?
+[SEG0020] person_3 (PATIENT): I had a similar thing about six months ago. It went away.
+[SEG0021] person_1 (DOCTOR): Anything surgical in your history?
+[SEG0022] person_3 (PATIENT): Uh, yes, I had my septum straightened, in my thirties.
+[SEG0023] person_1 (DOCTOR): Right, what's on your current medicine list?
+[SEG0024] person_2 (FAMILY_MEMBER): She is on lamotrigine, 100 milligrams, twice a day, I give it to her. It's alendronate, once a week for my bones, doctor.
+[SEG0025] person_1 (DOCTOR): How much do you take?
+[SEG0026] person_2 (FAMILY_MEMBER): 70 milligrams, I think that's what's on the box. Um, she takes Eltroxin, 100 micrograms, every morning.
+[SEG0027] person_3 (PATIENT): I'd been on carbamazepine, not any more though, I stopped.
+[SEG0028] person_1 (DOCTOR): Any health conditions I should have on record?
+[SEG0029] person_3 (PATIENT): I've got epilepsy. I've had thin bones for two years now. I kept putting it off, which I know isn't sensible. I've been putting this off for weeks.
+[SEG0030] person_1 (DOCTOR): Yes, carry on.
+[SEG0031] person_3 (PATIENT): I've got an underactive thyroid.
+[SEG0032] person_1 (DOCTOR): Right, so an underactive thyroid is already on your record. We'll keep that in mind today. Any smoking?
+[SEG0033] person_3 (PATIENT): I gave up cigarettes last spring.
+[SEG0034] person_1 (DOCTOR): Are you in work at the moment?
+[SEG0035] person_3 (PATIENT): Yes, I work in a bakery, early starts.
+[SEG0036] person_1 (DOCTOR): Tell me about your eating.
+[SEG0037] person_3 (PATIENT): I drink a lot of tea and snack through the day.
+[SEG0038] person_1 (DOCTOR): Right, do you react to any medicines or foods? Any allergies?
+[SEG0039] person_3 (PATIENT): Yes, tramadol, it gives me vomiting. Walnuts. I come out in... well, hives.
+[SEG0040] person_1 (DOCTOR): Any vaginal bleeding, leaking fluid or reduced baby movements at all?
+[SEG0041] person_3 (PATIENT): No, no vaginal bleeding, no leaking fluid, no reduced baby movements. I did have pain under the right ribs at one point, but that went away on its own.
+[SEG0042] person_1 (DOCTOR): Alright, has your skin been okay?
+[SEG0043] person_3 (PATIENT): Skin's normal.
+[SEG0044] person_4 (NURSE): Doctor, I've got the readings for you. Blood pressure 163 over 95, respiratory rate 16, saturation 96 percent. Pulse 79.
+[SEG0045] person_1 (DOCTOR): Thanks. So, based on your history, it's hard to say. Severe pre-eclampsia is one possibility and a migraine another, and I'd rather not commit yet.
+[SEG0046] person_3 (PATIENT): What are the odds it's serious?
+[SEG0047] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like severe pre-eclampsia, but I'd like to confirm. So, to recap quickly. You've had a severe headache, mild, and no reduced baby movements or vaginal bleeding.
+[SEG0048] person_3 (PATIENT): Hmm, um, that's what happened, yes.
+[SEG0049] person_1 (DOCTOR): I'm going to order a urine protein test, for pre-eclampsia.
+[SEG0050] person_3 (PATIENT): When would that take place?
+[SEG0051] person_1 (DOCTOR): I'll request urgent blood tests, it'll help with pre-eclampsia. I'll start you on labetalol, 200 milligrams, once now, single dose. You take it by mouth. That should help with severe hypertension. You need to go to the maternity unit straight away. Try to keep a simple diary of when it happens and what you were doing, and bring it to the next visit. One warning sign to remember: the symptoms get worse. In that case don't wait.
+[SEG0052] person_1 (DOCTOR): Book a review straight away.
+[SEG0053] person_3 (PATIENT): Right, good, I'll return then.
+[SEG0054] person_1 (DOCTOR): Anything else on your mind before you go?
+[SEG0055] person_3 (PATIENT): That's clear, thanks.
+
+JSON:

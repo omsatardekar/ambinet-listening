@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00028)
+[SEG0001] person_1 (NURSE): Doctor, we're ready in room two, I've already taken the observations.
+[SEG0002] person_2 (DOCTOR): Thanks, that's helpful. Hello, please sit. What's been happening?
+[SEG0003] person_3 (PATIENT): I've been feeling lightheaded, and I wanted to get it checked.
+[SEG0004] person_2 (DOCTOR): Is this recent, or has it been a while?
+[SEG0005] person_3 (PATIENT): It's been two months, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): Is it constant, or does it come and go?
+[SEG0007] person_3 (PATIENT): Honestly, a couple of times a week.
+[SEG0008] person_2 (DOCTOR): How bad is it, would you say?
+[SEG0009] person_3 (PATIENT): About a four out of ten.
+[SEG0010] person_2 (DOCTOR): Is it worse with anything in particular?
+[SEG0011] person_3 (PATIENT): It's worse with standing up and hot weather. I've been sweating too, for three weeks.
+[SEG0012] person_2 (DOCTOR): Any vomiting, slurred speech or palpitations?
+[SEG0013] person_3 (PATIENT): No, none of those.
+[SEG0014] person_2 (DOCTOR): And what about fainting completely or chest pain?
+[SEG0015] person_3 (PATIENT): I haven't had fainting completely or chest pain, no.
+[SEG0016] person_2 (DOCTOR): Is your urine normal, no changes?
+[SEG0017] person_3 (PATIENT): Nothing there, uh, no.
+[SEG0018] person_2 (DOCTOR): Any previous surgeries?
+[SEG0019] person_3 (PATIENT): No, never had any surgery.
+[SEG0020] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0021] person_3 (PATIENT): I have diabetes.
+[SEG0022] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0023] person_3 (PATIENT): Not that I know, no.
+[SEG0024] person_2 (DOCTOR): And what do you usually eat?
+[SEG0025] person_3 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0026] person_2 (DOCTOR): What do you do to keep active?
+[SEG0027] person_3 (PATIENT): I cycle to work most mornings.
+[SEG0028] person_2 (DOCTOR): Are you working or retired?
+[SEG0029] person_3 (PATIENT): Retired. I stopped a few years back.
+[SEG0030] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0031] person_3 (PATIENT): I take glimepiride, 2 milligrams, before breakfast for my sugar.
+[SEG0032] person_1 (NURSE): Okay, so the vitals from earlier. Weight 90 kilos, SpO2 96 percent on room air, BMI works out to 26.0, temperature 37.1, pulse is 102 beats a minute, pressure 101 over 59, height 186 centimetres.
+[SEG0033] person_2 (DOCTOR): Okay, noted.
+[SEG0034] person_2 (DOCTOR): Let me have a look at you.
+[SEG0035] person_2 (DOCTOR): Let me press here.
+[SEG0036] person_2 (DOCTOR): Heart rhythm is regular.
+[SEG0037] person_2 (DOCTOR): Let me press here.
+[SEG0038] person_2 (DOCTOR): Your blood pressure drops when you stand, I'll note that.
+[SEG0039] person_3 (PATIENT): Go ahead.
+[SEG0040] person_2 (DOCTOR): Thanks for that. Having listened and examined, I'd lean towards postural low blood pressure. I can't rule out a heart rhythm problem yet.
+[SEG0041] person_2 (DOCTOR): I want an ECG done, that's for dizziness. The result will help us decide whether anything more is needed. I want a blood sugar test done, that's for dizziness.
+[SEG0042] person_3 (PATIENT): How long does that take?
+[SEG0043] person_2 (DOCTOR): Get up in stages, sit on the edge of the bed for a minute first, and keep drinking water. Try to get to bed and wake up at the same time each day, and keep your phone away from the bed. Let's hold off on blood tests for now, and if there's no change in two weeks we can revisit it. Let's plan a check in two weeks.
+[SEG0044] person_3 (PATIENT): Okay, see you then.
+[SEG0045] person_2 (DOCTOR): That's everything from me. Any other questions?
+[SEG0046] person_3 (PATIENT): Okay, thank you. Bye.
+[SEG0047] person_2 (DOCTOR): Okay, bye for now.
+
+JSON:

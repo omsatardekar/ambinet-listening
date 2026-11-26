@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00126)
+[SEG0001] person_1 (PATIENT): Hi, you know, doctor. Long queue outside, but here I am.
+[SEG0002] person_2 (DOCTOR): Right, yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_3 (CAREGIVER): Well, you know, hello, doctor. I hope it's alright if I stay in for this. Doctor, it's periods lasting longer. That's what we're worried about.
+[SEG0004] person_2 (DOCTOR): When did it begin?
+[SEG0005] person_1 (PATIENT): It's been like this since this morning. I didn't want to make a fuss, you know.
+[SEG0006] person_2 (DOCTOR): How would you describe it, mild, moderate, severe?
+[SEG0007] person_1 (PATIENT): I'd call it severe. I did have very heavy periods at one point, but that's gone now.
+[SEG0008] person_2 (DOCTOR): Have you had any vaginal discharge or fever?
+[SEG0009] person_1 (PATIENT): No, nothing there.
+[SEG0010] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0011] person_1 (PATIENT): No, nothing there.
+[SEG0012] person_2 (DOCTOR): Have you ever been under the knife?
+[SEG0013] person_1 (PATIENT): Just cataract surgery on my right eye, last year.
+[SEG0014] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0015] person_1 (PATIENT): Sulfa drugs, I'd say.
+[SEG0016] person_2 (DOCTOR): Do your parents or siblings have any long-term illnesses?
+[SEG0017] person_1 (PATIENT): My mother has migraines.
+[SEG0018] person_2 (DOCTOR): Do you have a job?
+[SEG0019] person_1 (PATIENT): I'm a self-employed electrician.
+[SEG0020] person_2 (DOCTOR): Who do you live with?
+[SEG0021] person_1 (PATIENT): I live with my family, my husband and two kids.
+[SEG0022] person_2 (DOCTOR): Do you exercise at all?
+[SEG0023] person_1 (PATIENT): I go to the gym a couple of times a week.
+[SEG0024] person_2 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0025] person_1 (PATIENT): Yes, an underactive thyroid.
+[SEG0026] person_2 (DOCTOR): Mhm. Okay, I can see an underactive thyroid in your file as well. Any medication at the moment, including things from the pharmacy?
+[SEG0027] person_3 (CAREGIVER): Right, it's Thyronorm, 50 micrograms, every morning, doctor.
+[SEG0028] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0029] person_2 (DOCTOR): Just relax your arm...
+[SEG0030] person_2 (DOCTOR): Okay: temperature is 36.6 degrees, saturation 97 percent, height 172 centimetres, BMI works out to 30.1, weight 89 kilos, pressure 111 over 75, pulse is 75 beats a minute.
+[SEG0031] person_2 (DOCTOR): Come over here and I'll have a look.
+[SEG0032] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0033] person_2 (DOCTOR): The tummy is soft, a little tender in the lower part, and there's no mass.
+[SEG0034] person_2 (DOCTOR): Take your time, no rush.
+[SEG0035] person_2 (DOCTOR): You look a little pale.
+[SEG0036] person_2 (DOCTOR): Right, you can sit back down. From what you've told me and what I found, I think we're dealing with heavy periods with a cause still to find at this stage. Let's book blood tests to look into heavy periods. I want a pregnancy test done, that's for abnormal bleeding. I'm prescribing ferrous sulfate, 200 milligrams, once a day, for three months. That's for possible iron deficiency.
+[SEG0037] person_2 (DOCTOR): Keep a note of how many pads you use each day and the dates, it helps us a lot. The thing that would worry me is if you soak through a pad every hour or feel faint. If that happens, go to emergency.
+[SEG0038] person_1 (PATIENT): Okay, uh, fair enough.
+[SEG0039] person_2 (DOCTOR): Book a review after the results are back. That's it on my side. Anything unclear?
+[SEG0040] person_1 (PATIENT): Thanks, that was helpful.
+
+JSON:

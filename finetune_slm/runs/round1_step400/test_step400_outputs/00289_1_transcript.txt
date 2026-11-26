@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00289)
+[SEG0001] person_1 (PATIENT): Afternoon doctor.
+[SEG0002] person_2 (DOCTOR): that's alright, take a seat tell me why you've come
+[SEG0003] person_1 (PATIENT): um, uh, so... fever and joint pains that's why I came
+[SEG0004] person_2 (DOCTOR): When did it begin?
+[SEG0005] person_1 (PATIENT): About two weeks I think... sorry three weeks I got that wrong.
+[SEG0006] person_2 (DOCTOR): Uh-huh. How intense does it get?
+[SEG0007] person_1 (PATIENT): I mean, a six out of ten, I suppose there was a blotchy rash on the trunk, yes, but that went away
+[SEG0008] person_2 (DOCTOR): so, have you had fever and joint pains before, or is this the first time?
+[SEG0009] person_1 (PATIENT): I had a similar thing last winter. It went away.
+[SEG0010] person_2 (DOCTOR): Have you had any red eyes or vomiting?
+[SEG0011] person_1 (PATIENT): so no red eyes or vomiting none of it
+[SEG0012] person_2 (DOCTOR): Let me check a few things. Any cough or bleeding?
+[SEG0013] person_1 (PATIENT): right, no, no cough or bleeding
+[SEG0014] person_2 (DOCTOR): how's your breathing otherwise?
+[SEG0015] person_1 (PATIENT): no, my breathing's been fine
+[SEG0016] person_2 (DOCTOR): tell me about your routine, work, habits, that sort of thing
+[SEG0017] person_1 (PATIENT): I'm a software engineer, so I'm at a screen all day. Barely, I'm mostly sedentary these days. Yes, I live on my own.
+[SEG0018] person_2 (DOCTOR): Do your parents or siblings have any long-term illnesses?
+[SEG0019] person_1 (PATIENT): my father had a a heart attack
+[SEG0020] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0021] person_1 (PATIENT): High blood pressure, for nearly five years
+[SEG0022] person_2 (DOCTOR): Any previous surgeries?
+[SEG0023] person_1 (PATIENT): right, I had my thyroid operated on a long time ago
+[SEG0024] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0025] person_1 (PATIENT): years back I got hives from penicillin, so I stay away from it now
+[SEG0026] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0027] person_1 (PATIENT): I take ramipril, 5 milligrams, every morning for my blood pressure
+[SEG0028] person_2 (DOCTOR): Before we go on a few quick readings.
+[SEG0029] person_2 (DOCTOR): Hold still for me...
+[SEG0030] person_2 (DOCTOR): Okay: pressure 115 over 74, SpO2 95 percent on room air, temperature 38.4, pulse 101.
+[SEG0031] person_2 (DOCTOR): Alright, shall we do the examination?
+[SEG0032] person_2 (DOCTOR): take your time, no rush
+[SEG0033] person_2 (DOCTOR): A fine rash over the chest and back not itchy to touch.
+[SEG0034] person_2 (DOCTOR): Thanks for that. Okay so my impression is this: The most likely explanation is a viral fever with joint involvement, possibly chikungunya. The reason I say that is that your story and my examination fit together. I can't rule out an early inflammatory arthritis yet.
+[SEG0035] person_1 (PATIENT): what are the chances it's something bad?
+[SEG0036] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a viral fever with joint involvement, possibly chikungunya, and we'll know more once the a dengue test is back
+[SEG0037] person_2 (DOCTOR): I want a dengue test done, that's for fever. I'll start you on paracetamol, 650 milligrams, three times a day, for five days. It's for fever and joint pain. Avoid anti-inflammatory painkillers until we know it it isn't dengue. Alright, I'll see you out.
+[SEG0038] person_1 (PATIENT): hmm, that's everything I wanted to ask thank you
+
+JSON:

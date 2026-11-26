@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00001)
+[SEG0001] person_1 (PATIENT): Hi, doctor. Long queue outside, but here I am.
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): Um, so... stiffness in the morning. That's why I came.
+[SEG0004] person_2 (DOCTOR): When did it begin?
+[SEG0005] person_1 (PATIENT): For three weeks, I'd say.
+[SEG0006] person_2 (DOCTOR): Right, tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): It happens once or twice a day. Moderate, really. A neighbour of mine said I should see someone about it.
+[SEG0008] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0009] person_2 (DOCTOR): almost there..
+[SEG0010] person_2 (DOCTOR): Okay: blood pressure 120 over 76, SpO2 99 percent on room air. And temp 36.6 degrees, pulse 72.
+[SEG0011] person_1 (PATIENT): Is that that okay?
+[SEG0012] person_2 (DOCTOR): okay, we'll put it in context in a moment
+[SEG0013] person_2 (DOCTOR): shall we do the examination?
+[SEG0014] person_1 (PATIENT): fine
+[SEG0015] person_2 (DOCTOR): Let me press here.
+[SEG0016] person_2 (DOCTOR): There's mild swelling on the right knee, and a grating feel when I bend it.
+[SEG0017] person_2 (DOCTOR): okay, good, that's the examination any fever, redness over the knee or back pain at all?
+[SEG0018] person_1 (PATIENT): No, none of those.
+[SEG0019] person_2 (DOCTOR): any pins and needles or loss of strength anywhere?
+[SEG0020] person_1 (PATIENT): no, nothing like that
+[SEG0021] person_2 (DOCTOR): Okay, what do you do for work?
+[SEG0022] person_1 (PATIENT): I work in an office, mostly sitting at a desk
+[SEG0023] person_2 (DOCTOR): Do you get any exercise?
+[SEG0024] person_1 (PATIENT): I walk for about half an hour most days
+[SEG0025] person_2 (DOCTOR): Are you living with family?
+[SEG0026] person_1 (PATIENT): I stay with my daughter and her family.
+[SEG0027] person_2 (DOCTOR): are you on any regular medication?
+[SEG0028] person_1 (PATIENT): Nothing, no.
+[SEG0029] person_2 (DOCTOR): right, any surgery in your history?
+[SEG0030] person_1 (PATIENT): Just a hernia repair, about five years back.
+[SEG0031] person_2 (DOCTOR): do you have any medical conditions I should know about?
+[SEG0032] person_1 (PATIENT): No, I've never had anything serious.
+[SEG0033] person_2 (DOCTOR): so where does that leave us? I think we're dealing with osteoarthritis of the knees at this stage
+[SEG0034] person_2 (DOCTOR): Let's get blood tests, for joint pain.
+[SEG0035] person_1 (PATIENT): okay, noted
+[SEG0036] person_2 (DOCTOR): Let's use etoricoxib, 60 milligrams, once a day, for five days. It's for knee pain. Losing even a few kilos takes a lot of load off the knees, and I'd like you to do the strengthening exercises. I'll also refer you to physiotherapy.
+[SEG0037] person_1 (PATIENT): okay
+[SEG0038] person_2 (DOCTOR): Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency.
+[SEG0039] person_1 (PATIENT): okay, I'll remember
+[SEG0040] person_2 (DOCTOR): That's it on my side. Anything unclear?
+[SEG0041] person_1 (PATIENT): thanks, that was helpful
+
+JSON:

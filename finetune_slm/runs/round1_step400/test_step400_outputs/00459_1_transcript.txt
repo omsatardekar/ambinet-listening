@@ -1,0 +1,48 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00459)
+[SEG0001] person_1 (PATIENT): Uh, hi, doctor. Is this the right room?
+[SEG0002] person_2 (DOCTOR): That's alright, take a seat. Tell me why you've come.
+[SEG0003] person_1 (PATIENT): So, I've been dealing with a very painful, swollen big toe.
+[SEG0004] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0005] person_1 (PATIENT): I take amlodipine, 5 milligrams, once a day. Well, um, I'm on allopurinol, 100 milligrams, once a day. So, uh, I'm on ibuprofen, 400 milligrams, twice a day.
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): I'd say all the time. Mostly moderate.
+[SEG0008] person_2 (DOCTOR): So, does it come along with anything else?
+[SEG0009] person_1 (PATIENT): Right, when it starts I tend to get trouble walking as well. The trouble walking? That's been for ten days.
+[SEG0010] person_2 (DOCTOR): Have you noticed trauma to the toe, kidney problems or rash?
+[SEG0011] person_1 (PATIENT): I, I haven't had trauma to the toe, kidney problems or rash, no.
+[SEG0012] person_2 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0013] person_1 (PATIENT): Uh, no, that's all normal.
+[SEG0014] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0015] person_1 (PATIENT): High blood pressure, for about ten years. Sorry, I know I'm rambling a bit. I have gout, for about ten years.
+[SEG0016] person_2 (DOCTOR): Have you ever been under the knife?
+[SEG0017] person_1 (PATIENT): Just a hernia repair, about five years back.
+[SEG0018] person_2 (DOCTOR): Okay, a few questions about your lifestyle now.
+[SEG0019] person_1 (PATIENT): I share a flat with two friends. I'm a software engineer, so I'm at a screen all day. I eat out quite a lot, to be honest.
+[SEG0020] person_2 (DOCTOR): Right, before I prescribe anything, any allergies?
+[SEG0021] person_1 (PATIENT): No allergies that I know of, no.
+[SEG0022] person_2 (DOCTOR): Let me measure a few things.
+[SEG0023] person_2 (DOCTOR): Rest your hand here...
+[SEG0024] person_2 (DOCTOR): Okay: pulse is 74 beats a minute, BMI works out to 20.8. And respiratory rate 14, blood pressure 111 over 74, temperature is 36.5 degrees, SpO2 97 percent on room air, weight 69 kilos, height 182 centimetres.
+[SEG0025] person_1 (PATIENT): Is that okay?
+[SEG0026] person_2 (DOCTOR): Okay, I'll interpret it once I've examined you.
+[SEG0027] person_2 (DOCTOR): I'll examine you now, bear with me.
+[SEG0028] person_1 (PATIENT): Alright.
+[SEG0029] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0030] person_2 (DOCTOR): The big toe joint is red, hot, swollen and extremely tender to touch.
+[SEG0031] person_2 (DOCTOR): Thanks, please take a seat again. Okay, thinking it through, this looks most like an acute gout flare. I'd also keep pseudogout in mind. I'd like to arrange kidney function tests for gout. I'd like to arrange a uric acid level for suspected gout. Cut right back on red meat, organ meats, beer and sugary drinks, and drink plenty of water. Right, that's all. Go gently.
+[SEG0032] person_1 (PATIENT): No, you've explained it well. Thanks.
+[SEG0033] person_2 (DOCTOR): See you then.
+
+JSON:

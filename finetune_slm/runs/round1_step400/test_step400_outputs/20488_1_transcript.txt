@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20488)
+[SEG0001] person_1 (DOCTOR): good afternoon how are you today?
+[SEG0002] person_1 (DOCTOR): what's been worrying you?
+[SEG0003] person_2 (PATIENT): so, I've been feeling weak, doctor
+[SEG0004] person_1 (DOCTOR): Since when exactly?
+[SEG0005] person_2 (PATIENT): it's been like this since yesterday my family kept telling me to get it checked i just want to get back to normal, really i did have nearly blacking out at one point, but that's gone now
+[SEG0006] person_1 (DOCTOR): let me check a few things. Any black stools, chest pain or vomiting?
+[SEG0007] person_2 (PATIENT): no, not a single one
+[SEG0008] person_1 (DOCTOR): understood. Any sign of fainting?
+[SEG0009] person_2 (PATIENT): No. No fainting.
+[SEG0010] person_1 (DOCTOR): how's your breathing otherwise?
+[SEG0011] person_2 (PATIENT): Well no my breathing's been fine.
+[SEG0012] person_1 (DOCTOR): how are your bowels any trouble?
+[SEG0013] person_2 (PATIENT): bowels are regular, nothing odd
+[SEG0014] person_1 (DOCTOR): is there any regular medication you use?
+[SEG0015] person_2 (PATIENT): Let me think, no, I'm not on anything.
+[SEG0016] person_1 (DOCTOR): before we go further, any allergies?
+[SEG0017] person_2 (PATIENT): I'm allergic to amoxicillin, I get hives
+[SEG0018] person_1 (DOCTOR): What about your medical history?
+[SEG0019] person_2 (PATIENT): High blood pressure, for five years
+[SEG0020] person_1 (DOCTOR): has anyone in your family had anything serious?
+[SEG0021] person_2 (PATIENT): my grandmother had dementia
+[SEG0022] person_1 (DOCTOR): are you in work at the moment?
+[SEG0023] person_2 (PATIENT): Yes, I work in a bakery, early starts.
+[SEG0024] person_1 (DOCTOR): So are you on your own at home?
+[SEG0025] person_2 (PATIENT): I live with my elderly mother
+[SEG0026] person_1 (DOCTOR): Have you had any surgical procedures?
+[SEG0027] person_2 (PATIENT): let me think, you know, I had a cataract operation in my left eye about a year ago i didn't wanna make a fuss, you know i've never really been one for hospitals
+[SEG0028] person_1 (DOCTOR): Let's start with the basic checks.
+[SEG0029] person_1 (DOCTOR): Sit still for a moment...
+[SEG0030] person_1 (DOCTOR): okay: BMI works out to 22.3, blood pressure 98 over 65. And weight 53 kilos, temperature is 37.0 degrees, oxygen saturation is 99 percent, heart rate 95, height 154 centimetres
+[SEG0031] person_2 (PATIENT): is that normal?
+[SEG0032] person_1 (DOCTOR): I'll explain what these mean in a moment
+[SEG0033] person_1 (DOCTOR): let me look at the the area, I'll be gentle
+[SEG0034] person_2 (PATIENT): okay, doctor
+[SEG0035] person_1 (DOCTOR): does that that hurt?
+[SEG0036] person_1 (DOCTOR): Your blood pressure drops when you stand, from the lying reading to standing.
+[SEG0037] person_1 (DOCTOR): that's the examination finished from what you've told me and what I found, I'm honestly not certain yet it could be postural low blood pressure, possibly related to medicines or dehydration, or it might be dehydration i want an ECG done, that's for dizziness
+[SEG0038] person_2 (PATIENT): Does it hurt?
+[SEG0039] person_1 (DOCTOR): get up slowly from lying and sitting and keep drinking fluids through the day
+[SEG0040] person_2 (PATIENT): Should I have a lying and standing blood pressure check as well?
+[SEG0041] person_1 (DOCTOR): I don't think that's needed at this stage the history doesn't call for it let's review you after the results are back okay does all of that that make sense?
+[SEG0042] person_2 (PATIENT): So, alright, thanks, take care.
+[SEG0043] person_1 (DOCTOR): alright, have a good day
+
+JSON:

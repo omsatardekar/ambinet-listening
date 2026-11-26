@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02236)
+[SEG0001] person_1 (PATIENT): good afternoon doctor
+[SEG0002] person_2 (DOCTOR): yes come in and and sit down what brings you here today?
+[SEG0003] person_3 (FAMILY_MEMBER): doctor, I'm just here to to help with the details
+[SEG0004] person_2 (DOCTOR): that's fine, sit down. We'll go through it it together
+[SEG0005] person_1 (PATIENT): So I've been coughing up pink frothy sputum doctor.
+[SEG0006] person_2 (DOCTOR): Are you taking anything regularly including from the pharmacy?
+[SEG0007] person_3 (FAMILY_MEMBER): right, uh, she is on metoprolol, 50 milligrams, twice a day, I give it to her
+[SEG0008] person_2 (DOCTOR): alright, how long has it it been like this?
+[SEG0009] person_1 (PATIENT): around about a month, I think
+[SEG0010] person_3 (FAMILY_MEMBER): ah it was closer to about two months doctor
+[SEG0011] person_2 (DOCTOR): okay, so roughly one to two months. Is that right?
+[SEG0012] person_1 (PATIENT): Yes somewhere around that.
+[SEG0013] person_2 (DOCTOR): I follow. Rate it for me, mild, moderate or severe?
+[SEG0014] person_1 (PATIENT): about a six out of ten i've, I've also been sweating actually, uh, I've also had a pounding heart, for two days and, And there's being very breathless as well, about a month now
+[SEG0015] person_2 (DOCTOR): have you noticed fever calf pain or wheeze?
+[SEG0016] person_1 (PATIENT): Ah no no fever calf pain or wheeze.
+[SEG0017] person_2 (DOCTOR): has your skin been okay?
+[SEG0018] person_1 (PATIENT): Skin's normal.
+[SEG0019] person_2 (DOCTOR): any pins and needles or loss of strength anywhere?
+[SEG0020] person_1 (PATIENT): mm no nothing like that
+[SEG0021] person_2 (DOCTOR): Who lives with you?
+[SEG0022] person_1 (PATIENT): My partner and our baby
+[SEG0023] person_2 (DOCTOR): what's your work?
+[SEG0024] person_1 (PATIENT): I'm a plumber, lots of bending and kneeling
+[SEG0025] person_2 (DOCTOR): Before we go further, any allergies?
+[SEG0026] person_1 (PATIENT): no known allergies
+[SEG0027] person_3 (FAMILY_MEMBER): Yeah you know hold on doctor I think she reacted to diclofenac once. I'm not certain though.
+[SEG0028] person_1 (PATIENT): Really? I don't think so.
+[SEG0029] person_2 (DOCTOR): Okay I'll note both of those.
+[SEG0030] person_2 (DOCTOR): Right, any health conditions I should have on record?
+[SEG0031] person_1 (PATIENT): I've had heart failure, yes. I didn't wanna bother you but it keeps coming back. I wasn't sure whether to come in at all, to be honest.
+[SEG0032] person_2 (DOCTOR): Mm, okay. Any inherited conditions that you know of in the family?
+[SEG0033] person_1 (PATIENT): My mother had a stroke. Let me think, uh, my brother has epilepsy.
+[SEG0034] person_2 (DOCTOR): Let's start with the basic checks.
+[SEG0035] person_2 (DOCTOR): bear with me while this finishes..
+[SEG0036] person_2 (DOCTOR): okay: oxygen saturation is 93 percent, pulse 96, BP is 137 over 74, temp 36.7 degrees
+[SEG0037] person_2 (DOCTOR): let me look at the the area I'll be gentle
+[SEG0038] person_2 (DOCTOR): I'll listen to your chest now.
+[SEG0039] person_2 (DOCTOR): there are crackles all the way up both lungs and you are breathing very fast
+[SEG0040] person_2 (DOCTOR): So thank you you can get dressed. Taking everything into account I'd lean towards acute pulmonary oedema. We shouldn't forget a severe chest infection. I'd like to arrange an ECG for pulmonary oedema. I'm gonna to order a chest X-ray for pulmonary oedema.
+[SEG0041] person_1 (PATIENT): where would I go for that?
+[SEG0042] person_2 (DOCTOR): I'd like to arrange blood tests for pulmonary oedema. It's a routine test and it'll give us a much clearer picture
+[SEG0043] person_1 (PATIENT): Mm, alright.
+[SEG0044] person_2 (DOCTOR): I'm prescribing furosemide, 40 milligrams, once now, single dose. It's for fluid on the lungs. Sit upright, I am giving oxygen and a water tablet injection now. One warning sign to remember: the symptoms get worse. In that case don't wait. Let's review you straight away. That's everything on my side. Anything you're unsure about?
+[SEG0045] person_1 (PATIENT): Thank you that's helpful.
+[SEG0046] person_2 (DOCTOR): all the the best
+
+JSON:

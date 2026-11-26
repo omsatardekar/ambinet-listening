@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00285)
+[SEG0001] person_1 (PATIENT): Sorry, doctor, I couldn't find the door at first.
+[SEG0002] person_2 (DOCTOR): of course, put it down anywhere so, how can I help?
+[SEG0003] person_1 (PATIENT): honestly, it's constipation, and my family pushed me to come
+[SEG0004] person_2 (DOCTOR): I'll take a few measurements first.
+[SEG0005] person_2 (DOCTOR): right, rest your hand here..
+[SEG0006] person_2 (DOCTOR): Okay: saturation 99 percent, heart rate 83, respiratory rate 16. And And blood pressure 118 over 73.
+[SEG0007] person_1 (PATIENT): is that okay?
+[SEG0008] person_2 (DOCTOR): that's fine, we'll come to it. How far back does it it go?
+[SEG0009] person_1 (PATIENT): I'd say two years. Actually no closer to nearly five years.
+[SEG0010] person_2 (DOCTOR): how bad is it would you say?
+[SEG0011] person_1 (PATIENT): I'd give it a eight, out of ten.
+[SEG0012] person_2 (DOCTOR): So, anything that tends to go along with it?
+[SEG0013] person_1 (PATIENT): Straining to pass stool goes along with it, most of the time. The Straining to pass stool? That's been for about a month. I've, I've also had hard pellet-like stools, for about three months. With hard pellet-like stools, it feels severe to me. A little bright blood on the paper was there, but it's gone away on its own.
+[SEG0014] person_2 (DOCTOR): Any abdominal swelling, vomiting, fever or black stools at all?
+[SEG0015] person_1 (PATIENT): No, no abdominal swelling, vomiting, fever or black stools.
+[SEG0016] person_2 (DOCTOR): how about weight loss?
+[SEG0017] person_1 (PATIENT): right no I haven't had any weight loss
+[SEG0018] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0019] person_1 (PATIENT): no, that's all fine
+[SEG0020] person_2 (DOCTOR): what about allergies, to medicines or foods or anything else? Take your time, there's no rush
+[SEG0021] person_1 (PATIENT): Hmm, no, none that I know of.
+[SEG0022] person_2 (DOCTOR): what about operations, anything like that?
+[SEG0023] person_1 (PATIENT): Just a stent put in my heart two years ago.
+[SEG0024] person_2 (DOCTOR): anyone in the family with similar problems or other conditions?
+[SEG0025] person_1 (PATIENT): my sister has epilepsy
+[SEG0026] person_2 (DOCTOR): What kinda work do you do?
+[SEG0027] person_1 (PATIENT): I work on a farm, it's quite physical.
+[SEG0028] person_2 (DOCTOR): Is anyone at home with you?
+[SEG0029] person_1 (PATIENT): I share a flat with two friends
+[SEG0030] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0031] person_1 (PATIENT): I, I take metformin, 500 milligrams, twice a day for my sugar. Thyroxine, 75 micrograms, every morning for my thyroid. I take something called aspi... aspirin, 75 milligrams, maybe, once a day for my heart.
+[SEG0032] person_2 (DOCTOR): do you have the packet or the prescription with you?
+[SEG0033] person_1 (PATIENT): well, not with me i'll bring it next time i used to take glimepiride, but I stopped it
+[SEG0034] person_2 (DOCTOR): tell me about your health in general, any ongoing conditions?
+[SEG0035] person_1 (PATIENT): yes diabetes yes an underactive thyroid yes heart disease
+[SEG0036] person_2 (DOCTOR): alright, diabetes, that matches what I have here
+[SEG0037] person_2 (DOCTOR): I'll examine you now, bear with me.
+[SEG0038] person_1 (PATIENT): okay
+[SEG0039] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0040] person_2 (DOCTOR): There's no mass in the tummy.
+[SEG0041] person_2 (DOCTOR): Almost done with this part.
+[SEG0042] person_2 (DOCTOR): I can feel firm stool in the left lower abdomen.
+[SEG0043] person_2 (DOCTOR): okay, finished. Taking everything into account, I think we're dealing with chronic constipation at this stage. It could also be an underactive thyroid, so we'll keep that open
+[SEG0044] person_1 (PATIENT): right, uh, should I be worried about this?
+[SEG0045] person_2 (DOCTOR): It's reasonable to be concerned, but right now chronic constipation is my leading thought, not anything worse. Let me repeat that back to make sure. You've had constipation for nearly five years, and no black stools or weight loss.
+[SEG0046] person_1 (PATIENT): yes, that's right
+[SEG0047] person_2 (DOCTOR): let's book blood tests to look into constipation
+[SEG0048] person_1 (PATIENT): How long does that that take?
+[SEG0049] person_2 (DOCTOR): let's get a colonoscopy, for constipation and rectal bleeding i'm going to put you on lactulose, 15 ml, at night, for two weeks it's for constipation more fibre, more water, and give yourself ten unhurried minutes after breakfast and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+[SEG0050] person_1 (PATIENT): okay, I'll remember
+[SEG0051] person_2 (DOCTOR): keep an eye out, and if the the symptoms get worse, call us the same day or go to emergency i'll want another look in a month do you have any questions?
+[SEG0052] person_1 (PATIENT): No, you've explained it well. Thanks.
+[SEG0053] person_2 (DOCTOR): bye for now
+
+JSON:

@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00245)
+[SEG0001] person_1 (PATIENT): Sorry I'm a few minutes behind doctor.
+[SEG0002] person_2 (DOCTOR): Okay yes do sit. Tell me what's been happening.
+[SEG0003] person_1 (PATIENT): I've, I've been losing weight even though I'm eating well, and I wanted to get it checked.
+[SEG0004] person_2 (DOCTOR): when did it begin?
+[SEG0005] person_1 (PATIENT): it's been like this since Friday
+[SEG0006] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0007] person_1 (PATIENT): Shaky hands goes along with it, most of the time. I've had my heart racing too, for about four days. As for my heart racing, I'd say once or twice a day.
+[SEG0008] person_2 (DOCTOR): Have you noticed lump in the neck eye bulging or trouble sleeping?
+[SEG0009] person_1 (PATIENT): I haven't had lump in the neck eye bulging or trouble sleeping no
+[SEG0010] person_2 (DOCTOR): Any sign of chest pain?
+[SEG0011] person_1 (PATIENT): No chest pain thankfully.
+[SEG0012] person_2 (DOCTOR): Anything unusual with passing urine?
+[SEG0013] person_1 (PATIENT): that's normal as far as I know
+[SEG0014] person_2 (DOCTOR): a few questions about your lifestyle now
+[SEG0015] person_1 (PATIENT): It's just me and my wife at home now. I'm mostly vegetarian. I drive a delivery van all day.
+[SEG0016] person_2 (DOCTOR): let's go through your medication. What are you taking?
+[SEG0017] person_1 (PATIENT): I'm on something called apix... apixaban, 5 milligrams, maybe, twice a day for the heart rhythm.
+[SEG0018] person_2 (DOCTOR): is the packet here, or the prescription?
+[SEG0019] person_1 (PATIENT): Not with me. I'll bring it next time. It's spironolactone 25 milligrams once a day for my heart. Sodium valproate 500 milligrams twice a day for the fits.
+[SEG0020] person_2 (DOCTOR): do you have any allergies to medicines, food, anything at all?
+[SEG0021] person_1 (PATIENT): I don't have any known medication allergies
+[SEG0022] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0023] person_1 (PATIENT): An irregular heartbeat, for nearly five years. I have heart failure, for five years. Hmm, I have epilepsy, for about a year
+[SEG0024] person_2 (DOCTOR): And apart from that?
+[SEG0025] person_2 (DOCTOR): First the numbers if you don't mind.
+[SEG0026] person_2 (DOCTOR): hold still for me..
+[SEG0027] person_2 (DOCTOR): okay: BP is 116 over 88, temperature 36.8, pulse 109.
+[SEG0028] person_1 (PATIENT): is that alright doctor?
+[SEG0029] person_2 (DOCTOR): Alright, don't worry, I'll go through it in a moment.
+[SEG0030] person_2 (DOCTOR): I'd like to to examine you now.
+[SEG0031] person_2 (DOCTOR): let me just check something
+[SEG0032] person_2 (DOCTOR): there's a fine tremor in the outstretched hands, and your palms are warm and moist
+[SEG0033] person_1 (PATIENT): Fine.
+[SEG0034] person_2 (DOCTOR): Let me just check something.
+[SEG0035] person_2 (DOCTOR): your thyroid feels a little enlarged and smooth
+[SEG0036] person_2 (DOCTOR): Thanks, please take a seat again. From what you've told me and what I found, I think we're dealing with an overactive thyroid at this stage. We shouldn't forget a heart rhythm problem. I'm sending you for an ECG because of palpitations.
+[SEG0037] person_1 (PATIENT): how long does that take?
+[SEG0038] person_2 (DOCTOR): we'll begin with propranolol, 20 milligrams, twice a day, until we review it's for palpitations and tremor limit tea, coffee and anything that speeds up the heart for now try to keep a simple diary of when it happens and what you were doing, and bring it to the next visit i'm going to send a referral to an endocrinologist
+[SEG0039] person_2 (DOCTOR): And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Please don't wait if the symptoms get worse. That's when to be seen urgently. Let's review you after the results are back. That's it on my side. Anything unclear?
+[SEG0040] person_1 (PATIENT): That's everything I wanted to ask. Thank you.
+[SEG0041] person_2 (DOCTOR): Take care.
+
+JSON:

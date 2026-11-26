@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00117)
+[SEG0001] person_1 (PATIENT): sorry I'm a few minutes behind, doctor
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_3 (FAMILY_MEMBER): Good morning, doctor. I came along to help out.
+[SEG0004] person_1 (PATIENT): Honestly, it's gritty tired eyes, and my family pushed me to come.
+[SEG0005] person_2 (DOCTOR): And when did that start?
+[SEG0006] person_1 (PATIENT): I, I'd say about a month, maybe.
+[SEG0007] person_3 (FAMILY_MEMBER): Hm, I'd say more like about two months.
+[SEG0008] person_2 (DOCTOR): Okay, so roughly one to two months. Is that right?
+[SEG0009] person_1 (PATIENT): yes, somewhere around that
+[SEG0010] person_2 (DOCTOR): How bad is it, would you say?
+[SEG0011] person_1 (PATIENT): Pretty severe, if I'm being honest. I've had blurry vision that clears when I blink too, for about four days.
+[SEG0012] person_2 (DOCTOR): has there been redness by the evening too?
+[SEG0013] person_1 (PATIENT): mm, yes. I had burning at the end of the day before. That's settled now, though
+[SEG0014] person_2 (DOCTOR): let's go through your medication what are you taking?
+[SEG0015] person_1 (PATIENT): Furosemide. I take it 40 milligrams, every morning. I take artificial tears, when needed. I looked a few things up online, and that probably didn't help. I used to take spironolactone, but I stopped it.
+[SEG0016] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0017] person_1 (PATIENT): I stopped smoking about two years back. I have a couple of drinks on the weekend. I'm mostly vegetarian. I play badminton on Sundays. I teach at a primary school.
+[SEG0018] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0019] person_1 (PATIENT): I've got an enlarged prostate. Yes, heart failure.
+[SEG0020] person_2 (DOCTOR): Right, so an enlarged prostate is already on your record. We'll keep that in mind today.
+[SEG0021] person_2 (DOCTOR): any relatives with health problems I should be aware of?
+[SEG0022] person_1 (PATIENT): My father had a heart attack. Oh, my mother has migraines.
+[SEG0023] person_2 (DOCTOR): What about operations, anything like that?
+[SEG0024] person_1 (PATIENT): Just my appendix out, about eight years ago.
+[SEG0025] person_2 (DOCTOR): Have you noticed dry mouth, sensitivity to light, discharge or loss of vision?
+[SEG0026] person_1 (PATIENT): Nothing like that, no.
+[SEG0027] person_2 (DOCTOR): Did you notice any double vision?
+[SEG0028] person_1 (PATIENT): Nope, no double vision.
+[SEG0029] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0030] person_1 (PATIENT): nothing like that
+[SEG0031] person_2 (DOCTOR): Okay, a quick examination now.
+[SEG0032] person_1 (PATIENT): No problem.
+[SEG0033] person_2 (DOCTOR): just relax, I'll be quick
+[SEG0034] person_2 (DOCTOR): the eyes look a little pink but the corneas are clear
+[SEG0035] person_1 (PATIENT): No problem.
+[SEG0036] person_2 (DOCTOR): that's all I need, thank you. So, based on the history and the examination, it points towards dry eye. Digital eye strain is still possible
+[SEG0037] person_1 (PATIENT): Is it it something serious, doctor?
+[SEG0038] person_2 (DOCTOR): nothing I've seen today points to an emergency it looks like dry eye, but I'd like to confirm let me just check I've got this right you've had gritty tired eyes, severe, and no discharge or sensitivity to light
+[SEG0039] person_1 (PATIENT): Exactly.
+[SEG0040] person_2 (DOCTOR): I think an eye check makes sense here, for gritty eyes
+[SEG0041] person_1 (PATIENT): Where do I go for that?
+[SEG0042] person_2 (DOCTOR): Look away from the screen every twenty minutes and blink fully. Come back in four weeks.
+[SEG0043] person_1 (PATIENT): Okay, I'll book that.
+[SEG0044] person_2 (DOCTOR): do you have any questions?
+[SEG0045] person_1 (PATIENT): No, you've explained it well. Thanks.
+[SEG0046] person_2 (DOCTOR): Goodbye.
+
+JSON:

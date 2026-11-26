@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00429)
+[SEG0001] person_1 (DOCTOR): Good afternoon. Have a seat and we'll begin.
+[SEG0002] person_2 (PATIENT): Morning.
+[SEG0003] person_1 (DOCTOR): In your own words, what's happened?
+[SEG0004] person_2 (PATIENT): Oh, I've been dealing with skipped beats.
+[SEG0005] person_1 (DOCTOR): When did you first notice it?
+[SEG0006] person_2 (PATIENT): I've, I've had it since last Tuesday.
+[SEG0007] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0008] person_2 (PATIENT): Um, it sort of comes and goes. Mostly mild. Right, I've also been feeling anxious about it, for about three months.
+[SEG0009] person_1 (DOCTOR): So, any fainting, leg swelling or family history of sudden death?
+[SEG0010] person_2 (PATIENT): Um, I haven't had fainting, leg swelling or family history of sudden death, no.
+[SEG0011] person_1 (DOCTOR): Right, what about breathlessness?
+[SEG0012] person_2 (PATIENT): Not that I've noticed, no breathlessness.
+[SEG0013] person_1 (DOCTOR): Neurologically, anything strange?
+[SEG0014] person_2 (PATIENT): Oh, no, that's all normal.
+[SEG0015] person_1 (DOCTOR): Has your skin been okay?
+[SEG0016] person_2 (PATIENT): No rashes.
+[SEG0017] person_1 (DOCTOR): What medicines are you taking at the moment? It helps to be thorough at this stage.
+[SEG0018] person_2 (PATIENT): I'm on thyroxine, 75 micrograms, every morning for my thyroid.
+[SEG0019] person_1 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0020] person_2 (PATIENT): Um, my mother has diabetes.
+[SEG0021] person_1 (DOCTOR): So, a few questions about your lifestyle now.
+[SEG0022] person_2 (PATIENT): I've never smoked. Yes, I'm a nurse on a busy ward. I share a flat with two friends. I go to the gym a couple of times a week.
+[SEG0023] person_1 (DOCTOR): Any allergies I should know about?
+[SEG0024] person_2 (PATIENT): No, none that I know of.
+[SEG0025] person_1 (DOCTOR): Do you have any medical conditions, anything you've been treated for? I ask because it helps me narrow things down.
+[SEG0026] person_2 (PATIENT): Yeah, yes, an underactive thyroid. I didn't want to make a fuss, you know.
+[SEG0027] person_1 (DOCTOR): Okay, so. Right, so an underactive thyroid is already on your record. We'll keep that in mind today. Have you had to have anything operated on?
+[SEG0028] person_2 (PATIENT): Oh, uh, I had a lump removed from my back years ago.
+[SEG0029] person_1 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0030] person_1 (DOCTOR): One second...
+[SEG0031] person_1 (DOCTOR): Okay: pressure 122 over 74, temp 36.9 degrees, pulse is 83 beats a minute. And SpO2 98 percent on room air.
+[SEG0032] person_2 (PATIENT): Is that okay?
+[SEG0033] person_1 (DOCTOR): So, I'll come back to those numbers.
+[SEG0034] person_1 (DOCTOR): Let me have a look at you.
+[SEG0035] person_1 (DOCTOR): So, a little pressure here, tell me if it's tender.
+[SEG0036] person_1 (DOCTOR): Pulse is regular at the moment, with a couple of early beats while I listened.
+[SEG0037] person_1 (DOCTOR): Alright, all done, you can get dressed.
+[SEG0038] person_1 (DOCTOR): Okay, thinking it through, I'm honestly not certain yet. It could be benign extra heartbeats, though we should confirm, or it might be a thyroid cause. Let's book a thyroid test to look into palpitations. I want an ECG done, that's for palpitations.
+[SEG0039] person_2 (PATIENT): Mm, uh, okay.
+[SEG0040] person_1 (DOCTOR): Try cutting out caffeine for two weeks and see if the beats settle. See me again in four weeks. That's everything from me. Any other questions?
+[SEG0041] person_2 (PATIENT): So, nothing more from me, thanks.
+[SEG0042] person_1 (DOCTOR): See you then.
+
+JSON:

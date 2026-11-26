@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03518)
+[SEG0001] person_1 (DOCTOR): Hello, sorry about the delay, do sit.
+[SEG0002] person_2 (CAREGIVER): Hello, uh, doctor. I hope it's alright if I stay in for this.
+[SEG0003] person_1 (DOCTOR): What's the main thing today?
+[SEG0004] person_3 (PATIENT): it's daily headaches worse lying down, mostly
+[SEG0005] person_1 (DOCTOR): Since when exactly?
+[SEG0006] person_3 (PATIENT): It's been going on for about a week.
+[SEG0007] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0008] person_3 (PATIENT): It settles a little with sitting up. Pretty moderate, if I'm being honest. And a whooshing noise in my ears, too. Oh, and brief blackouts of vision on standing. That's been about the same, about two weeks.
+[SEG0009] person_1 (DOCTOR): have you been to theatre before?
+[SEG0010] person_3 (PATIENT): Just keyhole surgery on my gallbladder, two years back.
+[SEG0011] person_1 (DOCTOR): before we go further, any allergies?
+[SEG0012] person_3 (PATIENT): I've never had an allergy.
+[SEG0013] person_1 (DOCTOR): let's talk a little about your daily life and and habits
+[SEG0014] person_3 (PATIENT): I walk the dog every morning. Lots of rice, lentils and some fruit. I retired from the post office two years ago.
+[SEG0015] person_1 (DOCTOR): Do you have any long-term conditions?
+[SEG0016] person_3 (PATIENT): I've had diabetes for nearly five years now.
+[SEG0017] person_1 (DOCTOR): Okay, go on. Which medicines do you take at the moment?
+[SEG0018] person_3 (PATIENT): Sitagliptin. I take it 100 milligrams, once a day.
+[SEG0019] person_1 (DOCTOR): Have you noticed stiff neck, head injury, fever or weakness?
+[SEG0020] person_3 (PATIENT): No, no stiff neck, head injury, fever or weakness.
+[SEG0021] person_1 (DOCTOR): Yes, carry on. Has your skin been okay?
+[SEG0022] person_3 (PATIENT): No rashes.
+[SEG0023] person_1 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0024] person_3 (PATIENT): no, nothing there
+[SEG0025] person_1 (DOCTOR): Let's start with the basic checks.
+[SEG0026] person_1 (DOCTOR): sit still for a moment..
+[SEG0027] person_1 (DOCTOR): okay: heart rate 83, BP is 114 over 74, temp 36.9 degrees
+[SEG0028] person_3 (PATIENT): Is that alright, doctor?
+[SEG0029] person_1 (DOCTOR): That's fine, I'll explain it soon.
+[SEG0030] person_1 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0031] person_1 (DOCTOR): I'm just checking this side
+[SEG0032] person_1 (DOCTOR): The back of both eyes shows swollen optic discs and the visual fields are slightly constricted.
+[SEG0033] person_1 (DOCTOR): Alright, you can sit up now.
+[SEG0034] person_1 (DOCTOR): Let me tell you where I've got to. I think we're dealing with raised pressure inside the head, possibly idiopathic intracranial hypertension at this stage. I'd like you to take acetazolamide, 250 milligrams, twice a day, until review. That's for raised pressure. The pharmacy will go through the details again when you pick it up.
+[SEG0035] person_3 (PATIENT): Alright, I'll pick it up today.
+[SEG0036] person_1 (DOCTOR): Can you run through the plan with me quickly, just to be certain?
+[SEG0037] person_3 (PATIENT): So, you know, I take the acetazolamide, 250 milligrams, twice a day. Is that right?
+[SEG0038] person_1 (DOCTOR): Yes, exactly right. Have I covered everything you wanted?
+[SEG0039] person_3 (PATIENT): No, that's all. Thanks a lot.
+
+JSON:

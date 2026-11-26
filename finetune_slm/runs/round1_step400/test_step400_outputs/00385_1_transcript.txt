@@ -1,0 +1,71 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00385)
+[SEG0001] person_1 (PATIENT): good evening, doctor, thank you for staying late
+[SEG0002] person_2 (DOCTOR): No trouble at all, come in. What's been bothering you?
+[SEG0003] person_1 (PATIENT): um mainly I've been feeling faint that's why I came
+[SEG0004] person_2 (DOCTOR): how long have you had it?
+[SEG0005] person_1 (PATIENT): It started yesterday.
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): Sitting in the shade helps a bit. It just comes and goes. I'd call it moderate. I'm not great at remembering details uh so bear with me.
+[SEG0008] person_2 (DOCTOR): has there been a pounding headache too?
+[SEG0009] person_1 (PATIENT): Yeah, you know, yes, about the same, about four days. About pounding headache, severe, really.
+[SEG0010] person_2 (DOCTOR): okay, I'll check your pressure and pulse
+[SEG0011] person_2 (DOCTOR): Almost there...
+[SEG0012] person_2 (DOCTOR): Okay: temperature 36.9, pulse is 104 beats a minute, blood pressure 99 over 58.
+[SEG0013] person_1 (PATIENT): Is that okay?
+[SEG0014] person_2 (DOCTOR): I'll come back to those numbers
+[SEG0015] person_2 (DOCTOR): Okay, a quick examination now.
+[SEG0016] person_1 (PATIENT): Okay.
+[SEG0017] person_2 (DOCTOR): Bear with me a second.
+[SEG0018] person_2 (DOCTOR): your skin is warm and a bit clammy
+[SEG0019] person_1 (PATIENT): Alright.
+[SEG0020] person_2 (DOCTOR): let me just check something
+[SEG0021] person_2 (DOCTOR): Capillary refill is normal
+[SEG0022] person_1 (PATIENT): alright
+[SEG0023] person_2 (DOCTOR): so, all done, you can get dressed
+[SEG0024] person_2 (DOCTOR): let me check a a few things any vomiting or fever?
+[SEG0025] person_1 (PATIENT): hmm, no, no vomiting or fever
+[SEG0026] person_2 (DOCTOR): let me check a few things any passing no urine or fainting?
+[SEG0027] person_1 (PATIENT): None, as far as I know.
+[SEG0028] person_2 (DOCTOR): has your skin been okay?
+[SEG0029] person_1 (PATIENT): No rashes.
+[SEG0030] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0031] person_1 (PATIENT): High blood pressure for five years
+[SEG0032] person_2 (DOCTOR): yes?
+[SEG0033] person_1 (PATIENT): I've had heart failure yes. I've got heart disease.
+[SEG0034] person_2 (DOCTOR): Right, any more?
+[SEG0035] person_2 (DOCTOR): have you had any surgery before?
+[SEG0036] person_1 (PATIENT): just a stent put in my heart two years ago
+[SEG0037] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0038] person_1 (PATIENT): Not that I know no.
+[SEG0039] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0040] person_1 (PATIENT): it's, It's telmisartan, 40 milligrams, once a day for my pressure i, I take spironolactone, 25 milligrams, once a day i take aspirin, 75 milligrams, once a day
+[SEG0041] person_2 (DOCTOR): And your work?
+[SEG0042] person_1 (PATIENT): I drive a delivery van all day.
+[SEG0043] person_2 (DOCTOR): What do you do to to keep active?
+[SEG0044] person_1 (PATIENT): I cycle to work most mornings.
+[SEG0045] person_2 (DOCTOR): are you living with family?
+[SEG0046] person_1 (PATIENT): I stay with my daughter and her family.
+[SEG0047] person_2 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0048] person_1 (PATIENT): my father had a stroke
+[SEG0049] person_2 (DOCTOR): So, based on the history and the examination, my working impression is heat exhaustion with some dehydration. That's my thinking for now, and it may change as we learn more. Stop me if I've got anything wrong. You've been feeling faint, yesterday, moderate, and no fever or vomiting.
+[SEG0050] person_1 (PATIENT): Yes, that's right.
+[SEG0051] person_2 (DOCTOR): I'm gonna order blood salts, for dehydration. You'll be taking ORS, 1 sachet, three times a day, for two days. You take it by mouth. That should help with dehydration.
+[SEG0052] person_1 (PATIENT): Can I get that from the usual pharmacy?
+[SEG0053] person_2 (DOCTOR): avoid the midday sun for a few days and keep a water bottle with you please don't wait if you become confused or stop sweating that's when to be seen urgently let's plan a check in three days
+[SEG0054] person_1 (PATIENT): Sure that's doable.
+[SEG0055] person_2 (DOCTOR): take care, and call us if anything changes
+[SEG0056] person_1 (PATIENT): nothing more from me, thanks
+
+JSON:

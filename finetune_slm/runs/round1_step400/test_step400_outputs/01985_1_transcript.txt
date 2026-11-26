@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01985)
+[SEG0001] person_1 (NURSE): Doctor, your next patient is here. I've done the basics, I'll read them out in a moment.
+[SEG0002] person_2 (DOCTOR): Thank you. Good morning, tell me what's been going on.
+[SEG0003] person_3 (CAREGIVER): Thank you for fitting us in, doctor.
+[SEG0004] person_2 (DOCTOR): Absolutely, come and sit beside them.
+[SEG0005] person_4 (PATIENT): I wanted to get tiredness looked at.
+[SEG0006] person_2 (DOCTOR): Has this been going on for long?
+[SEG0007] person_4 (PATIENT): About a week, give or take.
+[SEG0008] person_3 (CAREGIVER): Hm, I'd say more like two weeks.
+[SEG0009] person_2 (DOCTOR): Okay, so roughly one to two weeks. Is that right?
+[SEG0010] person_4 (PATIENT): Yeah, roughly. I've, I've had loose stools with blood too, for ten days. Oh, and mouth ulcers. Had that since this morning. I, I did have cramping tummy pain at one point, but that's gone now.
+[SEG0011] person_2 (DOCTOR): Have you had tiredness before, or is this the first time?
+[SEG0012] person_4 (PATIENT): Yes, something like this happened a couple of years ago, and it went away on its own.
+[SEG0013] person_2 (DOCTOR): What operations have you had, if any?
+[SEG0014] person_4 (PATIENT): Yes, I had a caesarean for my second baby, nine years ago.
+[SEG0015] person_2 (DOCTOR): Before we go further, any allergies?
+[SEG0016] person_4 (PATIENT): No, I've never reacted to anything.
+[SEG0017] person_2 (DOCTOR): Who lives with you?
+[SEG0018] person_4 (PATIENT): My partner and our baby.
+[SEG0019] person_2 (DOCTOR): What's your work?
+[SEG0020] person_4 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0021] person_2 (DOCTOR): Do you take any prescribed or over-the-counter medicines?
+[SEG0022] person_3 (CAREGIVER): She is on omeprazole, 20 milligrams, once a day, I give it to her. She takes sertraline, 50 milligrams, once a day. It's propranolol, 40 milligrams, twice a day, doctor.
+[SEG0023] person_2 (DOCTOR): What about your medical history?
+[SEG0024] person_4 (PATIENT): Acid reflux, for about ten years.
+[SEG0025] person_2 (DOCTOR): Ah.
+[SEG0026] person_4 (PATIENT): I have depression. I have migraines, for about a year.
+[SEG0027] person_2 (DOCTOR): Okay, I can see depression and migraines in your file as well. And what about joint pain or vomiting?
+[SEG0028] person_4 (PATIENT): I haven't had joint pain or vomiting, no.
+[SEG0029] person_2 (DOCTOR): Did you get weight loss or fever?
+[SEG0030] person_4 (PATIENT): No, I haven't had any of them.
+[SEG0031] person_2 (DOCTOR): Any problems with your joints or muscles?
+[SEG0032] person_4 (PATIENT): I move fine otherwise.
+[SEG0033] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0034] person_4 (PATIENT): No, nothing there.
+[SEG0035] person_1 (NURSE): Here are the numbers, doctor. Respiratory rate 18, SpO2 97 percent on room air. Temp 36.5 degrees, pulse 75, blood pressure 128 over 79.
+[SEG0036] person_2 (DOCTOR): Okay, noted. Right, here's what I'm thinking. This is probably a flare of inflammatory bowel disease. I can't rule out an infection yet. Let me just check I've got this right. You've had tiredness, and no vomiting or fever.
+[SEG0037] person_4 (PATIENT): Yes, you've got it.
+[SEG0038] person_2 (DOCTOR): I'd like to arrange a stool test for bloody diarrhoea. I'd like to arrange blood tests for flare. That will help us see what's going on underneath and decide the next step. I'm going to put you on prednisolone, 40 milligrams, once a day, one week then reduce. You take it by mouth. It's for inflammatory bowel flare. Keep up your fluids and call the IBD nurse if you get a fever. Let's review you in two weeks.
+[SEG0039] person_2 (DOCTOR): Right, that's the plan. Do you want to ask me anything?
+[SEG0040] person_4 (PATIENT): Good, thanks, I'll see you then.
+[SEG0041] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

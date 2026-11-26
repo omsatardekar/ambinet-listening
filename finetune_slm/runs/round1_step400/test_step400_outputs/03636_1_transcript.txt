@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03636)
+[SEG0001] person_1 (PATIENT): Hi doctor, am I too early?
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): Um, so... headaches. That's why I came.
+[SEG0004] person_2 (DOCTOR): When did this begin?
+[SEG0005] person_1 (PATIENT): Um, it's been about a month, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): Uh, I'd say a few times a day. Mostly moderate.
+[SEG0008] person_2 (DOCTOR): What about being told it was just stress, have you noticed that?
+[SEG0009] person_1 (PATIENT): Yeah, that too. As for being told it was just stress, about a three out of ten.
+[SEG0010] person_2 (DOCTOR): Any hot flushes, visual changes, weight change or positive pregnancy test at all?
+[SEG0011] person_1 (PATIENT): No, no hot flushes, visual changes, weight change or positive pregnancy test.
+[SEG0012] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0013] person_1 (PATIENT): No rashes.
+[SEG0014] person_2 (DOCTOR): Do you have any chronic illnesses?
+[SEG0015] person_1 (PATIENT): I have high blood pressure.
+[SEG0016] person_2 (DOCTOR): Okay, go on.
+[SEG0017] person_2 (DOCTOR): Has anything ever caused you a reaction? I mean any allergies.
+[SEG0018] person_1 (PATIENT): I'm allergic to tramadol, I get feeling very drowsy.
+[SEG0019] person_2 (DOCTOR): Is there anything relevant on the family side?
+[SEG0020] person_1 (PATIENT): My grandmother had dementia.
+[SEG0021] person_2 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0022] person_1 (PATIENT): Amlodipine, 5 milligrams, once a day for my pressure.
+[SEG0023] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0024] person_1 (PATIENT): I'm a hairdresser, on my feet all day. My partner and our baby. I do a yoga class on Thursdays.
+[SEG0025] person_2 (DOCTOR): Let me quickly check your readings.
+[SEG0026] person_2 (DOCTOR): Sit still for a moment...
+[SEG0027] person_2 (DOCTOR): Okay: saturation 97 percent, respiratory rate 18, temp 36.6 degrees, pressure 126 over 76, pulse is 73 beats a minute.
+[SEG0028] person_1 (PATIENT): Is that okay?
+[SEG0029] person_2 (DOCTOR): I'll interpret them after the examination.
+[SEG0030] person_2 (DOCTOR): Alright, over here please and I'll take a look.
+[SEG0031] person_2 (DOCTOR): Right, does that hurt?
+[SEG0032] person_2 (DOCTOR): You are not pregnant by the urine test, the breasts express a little milk, and there is no visual field loss.
+[SEG0033] person_2 (DOCTOR): Thank you, you can get dressed.
+[SEG0034] person_2 (DOCTOR): Let me tell you where I've got to. It points towards raised prolactin or a thyroid problem rather than stress. The reason I say that is that your story and my examination fit together. A prolactin and thyroid blood test is what I'd like next, for galactorrhoea. Don't stress about stress as the cause, the tests will tell us.
+[SEG0035] person_2 (DOCTOR): I follow. If the symptoms get worse, or you feel really unwell, please come to the emergency department. I'd like to see you again after the results. Does all of that make sense?
+[SEG0036] person_1 (PATIENT): Mm, okay, that makes sense. Thanks for explaining.
+
+JSON:

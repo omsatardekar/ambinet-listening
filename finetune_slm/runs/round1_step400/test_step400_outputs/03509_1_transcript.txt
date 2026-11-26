@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03509)
+[SEG0001] person_1 (NURSE): Ready for you, doctor. I'll stay in case you need anything.
+[SEG0002] person_2 (DOCTOR): Good, thank you. Welcome, tell me what's brought you in.
+[SEG0003] person_3 (CAREGIVER): Hello, doctor. I'm here with them in case I can help.
+[SEG0004] person_4 (PATIENT): So the thing is, I've got fainting once.
+[SEG0005] person_1 (NURSE): Here are the numbers, doctor. Temp 36.8 degrees, respiratory rate 17, oxygen saturation is 99 percent. Pulse 104, blood pressure 135 over 83.
+[SEG0006] person_2 (DOCTOR): Good, thank you. Since when exactly?
+[SEG0007] person_4 (PATIENT): Probably ten days. Yeah.
+[SEG0008] person_2 (DOCTOR): How strong would you say it is?
+[SEG0009] person_4 (PATIENT): It's mild, honestly.
+[SEG0010] person_2 (DOCTOR): Does anything else come with it?
+[SEG0011] person_4 (PATIENT): A faster heartbeat goes along with it, most of the time. The faster heartbeat? That's been for about three months. And a swollen calf after a long drive, too.
+[SEG0012] person_2 (DOCTOR): How frequently does it come?
+[SEG0013] person_4 (PATIENT): I'd say a couple of times a week.
+[SEG0014] person_2 (DOCTOR): Have you had any cough, coughing up blood, chest pain or fever?
+[SEG0015] person_4 (PATIENT): No cough, coughing up blood, chest pain or fever, none of it.
+[SEG0016] person_2 (DOCTOR): Has your skin been okay?
+[SEG0017] person_4 (PATIENT): Skin's normal.
+[SEG0018] person_2 (DOCTOR): Do you drink alcohol?
+[SEG0019] person_4 (PATIENT): Nothing, I'm teetotal.
+[SEG0020] person_2 (DOCTOR): How about smoking?
+[SEG0021] person_4 (PATIENT): I quit smoking around ten years ago.
+[SEG0022] person_2 (DOCTOR): What do you do during the day?
+[SEG0023] person_4 (PATIENT): I look after my grandchildren most days.
+[SEG0024] person_2 (DOCTOR): Who lives with you?
+[SEG0025] person_4 (PATIENT): My partner and our baby.
+[SEG0026] person_2 (DOCTOR): Anything you do to stay fit?
+[SEG0027] person_4 (PATIENT): I do a yoga class on Thursdays.
+[SEG0028] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0029] person_4 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0030] person_2 (DOCTOR): Alright, tell me your medicines, please.
+[SEG0031] person_4 (PATIENT): Escitalopram. I take it 10 milligrams, once a day for the anxiety. Mirtazapine, 15 milligrams, at night for my mood.
+[SEG0032] person_3 (CAREGIVER): Doctor, I think the last prescription for the mirtazapine was 7.5 milligrams. We changed it at the last visit.
+[SEG0033] person_2 (DOCTOR): I see. Is the most recent prescription on you?
+[SEG0034] person_4 (PATIENT): I don't think I have it with me. I had spironolactone at one point, but I'm off it now.
+[SEG0035] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0036] person_4 (PATIENT): No, not at all.
+[SEG0037] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0038] person_4 (PATIENT): I've got anxiety. I've got depression. I have heart failure.
+[SEG0039] person_2 (DOCTOR): Is there anything more?
+[SEG0040] person_2 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0041] person_4 (PATIENT): My son has asthma. My cousin has psoriasis.
+[SEG0042] person_2 (DOCTOR): Okay, time for me to examine you.
+[SEG0043] person_2 (DOCTOR): Hold that for a second.
+[SEG0044] person_2 (DOCTOR): Your oxygen is lower than expected for someone so young and the left calf is a little swollen.
+[SEG0045] person_2 (DOCTOR): That's all I needed to check. Okay, thinking it through, the most likely explanation is possible pulmonary embolism without chest pain. A simple faint is still possible.
+[SEG0046] person_4 (PATIENT): I mean, do you think it's something serious?
+[SEG0047] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's possible pulmonary embolism without chest pain, and we'll know more once the a CT pulmonary angiogram is back.
+[SEG0048] person_2 (DOCTOR): Let's get a CT pulmonary angiogram, for possible embolus. Let's book a D-dimer to look into syncope and calf swelling. Even without chest pain this needs a scan today, so please go to hospital. If you smoke, this is a good moment to think about stopping, and we can help you with that. We'll refer you to the emergency team.
+[SEG0049] person_2 (DOCTOR): And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Please don't wait if the symptoms get worse. That's when to be seen urgently. I'd like to see you again straight away.
+[SEG0050] person_4 (PATIENT): Sure.
+[SEG0051] person_2 (DOCTOR): Anything else on your mind before you go?
+[SEG0052] person_4 (PATIENT): Thank you, that's helpful.
+[SEG0053] person_2 (DOCTOR): Look after yourself.
+
+JSON:

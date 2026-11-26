@@ -1,0 +1,50 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00444)
+[SEG0001] person_1 (NURSE): doctor, I've checked them in and done the preliminary measurements, I'll hand them over when you ask
+[SEG0002] person_2 (DOCTOR): Perfect, thanks. Hello there, so what's the trouble?
+[SEG0003] person_3 (CAREGIVER): Doctor, I'm just here to help with the details. It's been feeling overwhelmed at work, doctor. He didn't want to come, but I insisted.
+[SEG0004] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0005] person_3 (CAREGIVER): He is on omeprazole, 20 milligrams, once a day, I give it to him. He is on escitalopram, once a day for the anxiety, I give it to him.
+[SEG0006] person_2 (DOCTOR): how much do you take?
+[SEG0007] person_3 (CAREGIVER): it's 10 milligrams. He is on paracetamol, 500 milligrams, when needed, I give it to him
+[SEG0008] person_2 (DOCTOR): roughly when did it start?
+[SEG0009] person_4 (PATIENT): About... well, six months.
+[SEG0010] person_2 (DOCTOR): Alright, can you describe it a bit more for me? How strong it is, what the pattern is, what helps. Take your time, there's no rush.
+[SEG0011] person_4 (PATIENT): Deadlines definitely sets it off it settles a little with weekends off. Moderate, really oh, and a knot in my stomach as for trouble switching off at night, I honestly can't say when that began it might have been last month or the month before as for trouble switching off at night, it's every other day i did have headaches in the evening at one point, but that's gone now
+[SEG0012] person_2 (DOCTOR): Any weight loss or fainting at all?
+[SEG0013] person_4 (PATIENT): No, no weight loss or fainting.
+[SEG0014] person_2 (DOCTOR): any chest pain, alcohol use or thoughts of harming myself at all?
+[SEG0015] person_4 (PATIENT): I haven't had chest pain, alcohol use or thoughts of harming myself, no.
+[SEG0016] person_2 (DOCTOR): And And your skin, any changes there?
+[SEG0017] person_4 (PATIENT): skin's normal
+[SEG0018] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0019] person_4 (PATIENT): nothing else aches
+[SEG0020] person_2 (DOCTOR): moving on to your background, any past medical history?
+[SEG0021] person_4 (PATIENT): I mean, I've had acid reflux for about a year now. I've got anxiety.
+[SEG0022] person_2 (DOCTOR): alright, acid reflux, that matches what I have here do you have any known allergies at all?
+[SEG0023] person_4 (PATIENT): yes, peanuts, it gives me my lips swelling yes, penicillin i've no idea what the reaction was, only that I'm not supposed to have it
+[SEG0024] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0025] person_4 (PATIENT): No, I don't smoke and never have. I play badminton on Sundays. I work on a farm, it's quite physical.
+[SEG0026] person_2 (DOCTOR): What about operations, anything like that?
+[SEG0027] person_4 (PATIENT): I had a hernia repair about five years back.
+[SEG0028] person_1 (NURSE): Here are the numbers, doctor. Pressure 113 over 68, saturation 99 percent, pulse 78, temp 37.0 degrees.
+[SEG0029] person_2 (DOCTOR): Okay, noted.
+[SEG0030] person_2 (DOCTOR): from what you've told me, it points towards stress-related symptoms. I can't rule out an anxiety disorder yet
+[SEG0031] person_4 (PATIENT): Do you think it's serious?
+[SEG0032] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's stress-related symptoms, and we'll watch how it goes.
+[SEG0033] person_2 (DOCTOR): alright, today I'm not changing anything look after yourself
+[SEG0034] person_4 (PATIENT): no, you've explained it well thanks
+[SEG0035] person_2 (DOCTOR): Goodbye.
+
+JSON:

@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00323)
+[SEG0001] person_1 (DOCTOR): Afternoon. Take the chair by the desk.
+[SEG0002] person_2 (PATIENT): Hello.
+[SEG0003] person_3 (FAMILY_MEMBER): Uh, um, doctor, I'm just here to help with the details.
+[SEG0004] person_1 (DOCTOR): Tell me from the beginning, what's been happening?
+[SEG0005] person_3 (FAMILY_MEMBER): Uh, we came because of swelling.
+[SEG0006] person_1 (DOCTOR): How far back does it go?
+[SEG0007] person_2 (PATIENT): Right, I've had it for five days. I'd rather not end up on lots of tablets if I can avoid it. I had tingling in the fingers before. That's settled now, though.
+[SEG0008] person_1 (DOCTOR): Any loss of consciousness?
+[SEG0009] person_2 (PATIENT): No. No loss of consciousness.
+[SEG0010] person_1 (DOCTOR): Any pain in the shoulder, numbness or pain in the elbow?
+[SEG0011] person_2 (PATIENT): No, no pain in the shoulder, numbness or pain in the elbow.
+[SEG0012] person_1 (DOCTOR): And your skin, any changes there?
+[SEG0013] person_2 (PATIENT): No rashes.
+[SEG0014] person_1 (DOCTOR): Okay, any change in your bowel habit or your stomach generally?
+[SEG0015] person_2 (PATIENT): Nothing unusual, no.
+[SEG0016] person_1 (DOCTOR): Alright, are you on any tablets or medication?
+[SEG0017] person_2 (PATIENT): Alendronate. I take it once a week.
+[SEG0018] person_1 (DOCTOR): How much do you take?
+[SEG0019] person_2 (PATIENT): It's 70 milligrams.
+[SEG0020] person_1 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0021] person_2 (PATIENT): I've got thin bones. Um, I've had high cholesterol for about a year now. My family kept telling me to get it checked.
+[SEG0022] person_1 (DOCTOR): Mm. Yes, thin bones is known to us, good to have that clear.
+[SEG0023] person_1 (DOCTOR): What's your diet like?
+[SEG0024] person_2 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0025] person_1 (DOCTOR): Do you get any exercise?
+[SEG0026] person_2 (PATIENT): I walk for about half an hour most days.
+[SEG0027] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0028] person_2 (PATIENT): Well, no, nothing like that.
+[SEG0029] person_1 (DOCTOR): Let's do your observations.
+[SEG0030] person_1 (DOCTOR): Okay, give me a moment...
+[SEG0031] person_1 (DOCTOR): Okay: oxygen saturation is 97 percent, pulse is 69 beats a minute. And weight 78 kilos, respiratory rate 15, temperature is 36.9 degrees, BMI works out to 23.5, pressure 121 over 68, height 182 centimetres.
+[SEG0032] person_1 (DOCTOR): Let me examine, it won't take long.
+[SEG0033] person_1 (DOCTOR): Let me just check something.
+[SEG0034] person_1 (DOCTOR): Fingers have good colour and the pulses are fine.
+[SEG0035] person_1 (DOCTOR): Let me just check something.
+[SEG0036] person_1 (DOCTOR): There's swelling and tenderness at the base of the thumb side of the wrist.
+[SEG0037] person_1 (DOCTOR): Thanks, please take a seat again.
+[SEG0038] person_1 (DOCTOR): Right, here's what I'm thinking. It fits best with a wrist sprain, but a small fracture is possible. The reason I say that is that your story and my examination fit together. A scaphoid fracture is still possible.
+[SEG0039] person_2 (PATIENT): Do you think it's serious?
+[SEG0040] person_1 (DOCTOR): I can't promise yet, but most people with a wrist sprain, but a small fracture is possible do well once it's treated properly.
+[SEG0041] person_1 (DOCTOR): I'm going to order an X-ray of the wrist, for wrist injury.
+[SEG0042] person_2 (PATIENT): Alright, when would that be?
+[SEG0043] person_1 (DOCTOR): I'd like you to take paracetamol, 650 milligrams, three times a day, for five days. That's for wrist pain.
+[SEG0044] person_2 (PATIENT): Okay, um, and I take that after food?
+[SEG0045] person_1 (DOCTOR): I'd like you to wear a splint until the X-ray result is confirmed and keep the hand raised. Let's get you seen by the orthopaedic clinic, I'll arrange the letter. Come back or go to emergency straight away if the symptoms get worse. Okay, we're done for today. Take care.
+[SEG0046] person_2 (PATIENT): No questions. Thank you.
+[SEG0047] person_1 (DOCTOR): Bye for now.
+
+JSON:

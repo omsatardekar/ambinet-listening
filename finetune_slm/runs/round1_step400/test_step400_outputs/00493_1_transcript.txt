@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00493)
+[SEG0001] person_1 (PATIENT): oh, good evening, doctor, thank you for staying late
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): I've been dealing with a pounding headache.
+[SEG0004] person_2 (DOCTOR): how long have you had it?
+[SEG0005] person_1 (PATIENT): I've had it for three days
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): It happens a couple of times a week. About a five out of ten. I'm hoping you can tell me something definite. I've never really been one for hospitals.
+[SEG0008] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0009] person_2 (DOCTOR): Hold still for me...
+[SEG0010] person_2 (DOCTOR): Okay: pulse is 64 beats a minute, blood pressure 117 over 81, temp 36.8 degrees.
+[SEG0011] person_2 (DOCTOR): Shall we do the examination?
+[SEG0012] person_2 (DOCTOR): almost done with this part
+[SEG0013] person_2 (DOCTOR): Neck is supple, no stiffness at all.
+[SEG0014] person_1 (PATIENT): Alright.
+[SEG0015] person_2 (DOCTOR): Almost done with this part.
+[SEG0016] person_2 (DOCTOR): Cranial nerves look normal, eye movements are full.
+[SEG0017] person_2 (DOCTOR): Thanks for that. What about slurred speech?
+[SEG0018] person_1 (PATIENT): no slurred speech, thankfully
+[SEG0019] person_2 (DOCTOR): and what about weakness in the arms or legs, double vision or loss of consciousness?
+[SEG0020] person_1 (PATIENT): None, as far as I know.
+[SEG0021] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0022] person_1 (PATIENT): No, nothing there.
+[SEG0023] person_2 (DOCTOR): Any previous surgeries?
+[SEG0024] person_1 (PATIENT): No operations, no.
+[SEG0025] person_2 (DOCTOR): Are you on any regular medication?
+[SEG0026] person_1 (PATIENT): no, I don't take anything regularly
+[SEG0027] person_2 (DOCTOR): And your work?
+[SEG0028] person_1 (PATIENT): I drive a delivery van all day
+[SEG0029] person_2 (DOCTOR): Any sport or activity?
+[SEG0030] person_1 (PATIENT): I play badminton on Sundays.
+[SEG0031] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0032] person_1 (PATIENT): No, none that I know of.
+[SEG0033] person_2 (DOCTOR): From what you've told me and and what I found, this looks most like migraine with aura.
+[SEG0034] person_1 (PATIENT): Is it something serious, doctor?
+[SEG0035] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's migraine with aura, and we'll know more once the an MRI of the brain is back. I think an MRI of the brain makes sense here, for recurrent headaches. It's a routine test and it'll give us a much clearer picture. We'll begin with propranolol, 20 milligrams, twice a day, for three months. That's for migraine prevention.
+[SEG0036] person_1 (PATIENT): Should I keep taking it if I feel better?
+[SEG0037] person_2 (DOCTOR): Keep a headache diary, things like skipped meals, poor sleep, certain foods and the weather. We'll catch up in a month. Alright, I'll see you out.
+[SEG0038] person_1 (PATIENT): Right. Thanks again.
+[SEG0039] person_2 (DOCTOR): goodbye
+
+JSON:

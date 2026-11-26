@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02377)
+[SEG0001] person_1 (PATIENT): Hi, is it okay to come in now?
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_3 (CAREGIVER): Hello, doctor. I'm here with them in case I can help.
+[SEG0004] person_1 (PATIENT): Honestly, it's spots on my forehead and chin, and my family pushed me to come. It's the not knowing that gets to me. I've been putting this off for weeks.
+[SEG0005] person_2 (DOCTOR): How long has it been like this?
+[SEG0006] person_1 (PATIENT): It's been one week now.
+[SEG0007] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0008] person_1 (PATIENT): I'd say severe. It's worse with before periods. Oh, and oily skin. I've also had a few blackheads, for about a month.
+[SEG0009] person_2 (DOCTOR): Have you had spots on your forehead and chin before, or is this the first time?
+[SEG0010] person_1 (PATIENT): Yeah, I had a similar thing a couple of years ago. It went away.
+[SEG0011] person_2 (DOCTOR): I'll note down your vital signs first.
+[SEG0012] person_2 (DOCTOR): Keep your arm relaxed for me...
+[SEG0013] person_2 (DOCTOR): Okay: temp 36.6 degrees, height 171 centimetres. And weight 94 kilos, pressure 120 over 75, heart rate 64, oxygen saturation is 98 percent, BMI works out to 32.1.
+[SEG0014] person_1 (PATIENT): Is that okay?
+[SEG0015] person_2 (DOCTOR): Okay, I'll explain what these mean in a moment.
+[SEG0016] person_2 (DOCTOR): May I examine you now?
+[SEG0017] person_1 (PATIENT): Yeah, no problem.
+[SEG0018] person_2 (DOCTOR): Right, raise your arm for me.
+[SEG0019] person_2 (DOCTOR): There are small blackheads and a few red spots with no deep cysts.
+[SEG0020] person_2 (DOCTOR): Okay, that's enough for me. Have you had irregular periods, by any chance?
+[SEG0021] person_1 (PATIENT): No, no irregular periods.
+[SEG0022] person_2 (DOCTOR): Did you get low mood, painful cysts or scarring?
+[SEG0023] person_1 (PATIENT): No, none that I've noticed.
+[SEG0024] person_2 (DOCTOR): Any problems with your joints or muscles?
+[SEG0025] person_1 (PATIENT): No, nothing there.
+[SEG0026] person_2 (DOCTOR): Right, on the cardiac side, anything I should know?
+[SEG0027] person_1 (PATIENT): No, uh, nothing with my heart.
+[SEG0028] person_2 (DOCTOR): Have you ever had an operation?
+[SEG0029] person_1 (PATIENT): Yes, I had a caesarean for my second baby, nine years ago.
+[SEG0030] person_2 (DOCTOR): Do you get out much?
+[SEG0031] person_1 (PATIENT): Not much, I mostly stay in these days.
+[SEG0032] person_2 (DOCTOR): Is there someone at home?
+[SEG0033] person_1 (PATIENT): My husband and I live above the shop.
+[SEG0034] person_2 (DOCTOR): Before we go further, any allergies?
+[SEG0035] person_1 (PATIENT): Yes, naproxen, it gives me stomach pain.
+[SEG0036] person_2 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0037] person_1 (PATIENT): I've got high blood pressure. I have COPD, for nearly five years. I told myself I'd wait and see, and here I am. I've had eczema for about a year now.
+[SEG0038] person_2 (DOCTOR): Mm-hmm. Yes, COPD is known to us, good to have that clear. Which medicines do you take at the moment?
+[SEG0039] person_1 (PATIENT): I take ramipril, 5 milligrams, every morning for my blood pressure.
+[SEG0040] person_2 (DOCTOR): Okay, go on.
+[SEG0041] person_1 (PATIENT): Tiotropium inhaler. I take it once a day.
+[SEG0042] person_3 (CAREGIVER): That's what's prescribed, but I'm not sure she takes it every day.
+[SEG0043] person_1 (PATIENT): I'm on hydrocortisone cream, when needed for the eczema. I'm on a face wash, twice a day.
+[SEG0044] person_2 (DOCTOR): Is that long-standing?
+[SEG0045] person_1 (PATIENT): Two years now.
+[SEG0046] person_2 (DOCTOR): Having listened and examined, it fits best with mild acne. The reason I say that is that your story and my examination fit together.
+[SEG0047] person_1 (PATIENT): Will it clear up?
+[SEG0048] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like mild acne.
+[SEG0049] person_2 (DOCTOR): I'd like you to take benzoyl peroxide gel, 5%, once a day, eight weeks. That should help with acne. Wash gently twice a day and don't squeeze the spots. Come back or go to emergency straight away if the symptoms get worse.
+[SEG0050] person_1 (PATIENT): I'll remember that.
+[SEG0051] person_2 (DOCTOR): We'll catch up in eight weeks. I think we're done unless you have questions.
+[SEG0052] person_1 (PATIENT): Great, thank you for your help.
+
+JSON:

@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00350)
+[SEG0001] person_1 (PATIENT): Hello doctor, sorry, am I early?
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): okay, so so the thing is, I've got aching in my thighs
+[SEG0004] person_2 (DOCTOR): how intense does it get?
+[SEG0005] person_1 (PATIENT): Pretty severe, if I'm being honest.
+[SEG0006] person_2 (DOCTOR): is there anything that triggers it?
+[SEG0007] person_1 (PATIENT): Right, climbing stairs definitely sets it off. And cramps, too.
+[SEG0008] person_2 (DOCTOR): A few quick ones: fever, numbness or trouble swallowing?
+[SEG0009] person_1 (PATIENT): nothing like that, no
+[SEG0010] person_2 (DOCTOR): Any recent heavy exercise or rash at all?
+[SEG0011] person_1 (PATIENT): nothing like that, no
+[SEG0012] person_2 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0013] person_1 (PATIENT): no, nothing like that that
+[SEG0014] person_2 (DOCTOR): How are your bowels, any trouble?
+[SEG0015] person_1 (PATIENT): no, all normal there
+[SEG0016] person_2 (DOCTOR): right, which tablets or creams or inhalers do you use?
+[SEG0017] person_1 (PATIENT): I take Thyronorm, every morning for my thyroid
+[SEG0018] person_2 (DOCTOR): And what strength is that?
+[SEG0019] person_1 (PATIENT): it's, It's 50 micrograms
+[SEG0020] person_2 (DOCTOR): anyone in the family with similar problems or other conditions?
+[SEG0021] person_1 (PATIENT): My sister has thyroid problems.
+[SEG0022] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0023] person_1 (PATIENT): An underactive thyroid, for about a year. I've, I've got high blood pressure.
+[SEG0024] person_2 (DOCTOR): Okay. Yes, an underactive thyroid and high blood pressure are known to us, good to have that clear.
+[SEG0025] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0026] person_1 (PATIENT): I share a flat with two friends. I work in an office, mostly sitting at a desk. I'm mostly vegetarian.
+[SEG0027] person_2 (DOCTOR): I'll take a few measurements first.
+[SEG0028] person_2 (DOCTOR): Almost there...
+[SEG0029] person_2 (DOCTOR): Okay: respiratory rate 15, temperature 36.8, heart rate 80. And blood pressure 124 over 75, oxygen saturation is 98 percent.
+[SEG0030] person_1 (PATIENT): Is that okay?
+[SEG0031] person_2 (DOCTOR): Alright, I'll interpret it once I've examined you.
+[SEG0032] person_2 (DOCTOR): alright, can I examine you now?
+[SEG0033] person_2 (DOCTOR): Let me just check something.
+[SEG0034] person_2 (DOCTOR): The muscles are mildly tender when I squeeze.
+[SEG0035] person_2 (DOCTOR): Take your time, no rush.
+[SEG0036] person_2 (DOCTOR): Power in the thighs is slightly reduced, four out of five
+[SEG0037] person_2 (DOCTOR): Good, that's the examination. Okay, thinking it through, this looks most like muscle symptoms that may be related to the cholesterol tablet. It could also be an underactive thyroid, so we'll keep that open.
+[SEG0038] person_1 (PATIENT): Is it something serious, doctor?
+[SEG0039] person_2 (DOCTOR): I can't promise yet, but most people with muscle symptoms that may be related to the cholesterol tablet do well once it's treated properly. I want a creatine kinase level done, that's for muscle pain. I want a thyroid test done, that's for muscle weakness. Don't stop any of your tablets on your own, we'll decide after the blood test. I'm not ordering a vitamin D level today. If things carry on in a month, we'll consider it
+[SEG0040] person_2 (DOCTOR): I'll want another look after the results are back.
+[SEG0041] person_1 (PATIENT): alright, I'll put it in my diary
+[SEG0042] person_2 (DOCTOR): Alright, before we finish, can you repeat the plan back to me?
+[SEG0043] person_1 (PATIENT): So, I come back after the results are back. Is that right?
+[SEG0044] person_2 (DOCTOR): Yes, exactly right. Alright, I'll see you out.
+[SEG0045] person_1 (PATIENT): Right, I think that's clear. Thank you for being so thorough.
+
+JSON:

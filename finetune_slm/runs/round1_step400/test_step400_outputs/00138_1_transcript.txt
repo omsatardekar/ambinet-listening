@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00138)
+[SEG0001] person_1 (NURSE): Doctor the patient's with us now. I did the usual checks at the front so just say when you want them.
+[SEG0002] person_2 (DOCTOR): Thanks, that's helpful. Hello, please sit. What's been happening?
+[SEG0003] person_3 (PATIENT): so the thing is, I've got a bad cough
+[SEG0004] person_2 (DOCTOR): how far back does it go?
+[SEG0005] person_3 (PATIENT): um, for two weeks, I'd say
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_3 (PATIENT): Mild really. It happens every other day. Only honey and warm water and it's not much. I've also had a sore throat. With sore throat it's severe honestly. I did have a low fever at one point but that's gone now.
+[SEG0008] person_2 (DOCTOR): Any coughing up blood, night sweats or weight loss at all?
+[SEG0009] person_3 (PATIENT): No, none of those.
+[SEG0010] person_2 (DOCTOR): how about chest pain?
+[SEG0011] person_3 (PATIENT): No, none, no chest pain.
+[SEG0012] person_2 (DOCTOR): on the cardiac side anything I should know?
+[SEG0013] person_3 (PATIENT): nothing like that
+[SEG0014] person_2 (DOCTOR): What about family history, any illnesses that run in the the family?
+[SEG0015] person_3 (PATIENT): my father had a stroke
+[SEG0016] person_2 (DOCTOR): do you have any medical conditions, anything you've been treated for?
+[SEG0017] person_3 (PATIENT): yes, high blood pressure
+[SEG0018] person_2 (DOCTOR): okay, keep going
+[SEG0019] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0020] person_3 (PATIENT): I've never smoked. I gave up drinking about three years ago. Yes, I'm a nurse on a busy ward. Yes, I live on my own. I go to the gym a couple of times a week
+[SEG0021] person_2 (DOCTOR): are there any allergies on your record that I should check?
+[SEG0022] person_3 (PATIENT): I don't have any known medication allergies
+[SEG0023] person_2 (DOCTOR): any previous surgeries?
+[SEG0024] person_3 (PATIENT): no, never had any surgery
+[SEG0025] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0026] person_3 (PATIENT): I'm on losartan, 50 milligrams, once a day. I take paracetamol, 500 milligrams, when needed
+[SEG0027] person_1 (NURSE): here are the numbers doctor temperature is 38.0 degrees height 159 centimetres pressure 112 over 68 SpO2 95 percent on room air heart rate 102 weight 83 kilos respiratory rate 17.
+[SEG0028] person_2 (DOCTOR): thanks
+[SEG0029] person_2 (DOCTOR): can I examine you now?
+[SEG0030] person_3 (PATIENT): okay
+[SEG0031] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0032] person_2 (DOCTOR): there are a a few scattered wheezes on both sides
+[SEG0033] person_2 (DOCTOR): Thanks, please take a seat again. Okay, thinking it through, it points towards a chest infection, probably viral. Just to be sure I understood. You've had a bad cough for two weeks, mild, and no weight loss or coughing up blood.
+[SEG0034] person_3 (PATIENT): that's what happened, yes
+[SEG0035] person_2 (DOCTOR): let's book blood tests to look into cough that will help us see what's going on underneath and decide the next step
+[SEG0036] person_1 (NURSE): I've already done a chest X-ray, it's ready for you.
+[SEG0037] person_2 (DOCTOR): thanks, I'll check it i'd like you to take salbutamol inhaler, 100 micrograms, two puffs when needed, for one week it's for wheeze i'm going to put you on azithromycin, 500 milligrams, once a day, for three days it's for chest infection steam and warm fluids can ease the cough, and try to sleep with your head propped up see me again in ten days
+[SEG0038] person_3 (PATIENT): That works for me.
+[SEG0039] person_2 (DOCTOR): Any last questions?
+[SEG0040] person_3 (PATIENT): well, all good here. Thank you
+[SEG0041] person_2 (DOCTOR): bye for now
+
+JSON:

@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03583)
+[SEG0001] person_1 (PATIENT): morning, doctor lovely to meet you
+[SEG0002] person_2 (DOCTOR): Of course leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): yeah, uh, it's a flutter now and then i don't know what's causing it i've never really been one for hospitals
+[SEG0004] person_2 (DOCTOR): since when exactly?
+[SEG0005] person_1 (PATIENT): Probably four weeks. Yeah.
+[SEG0006] person_2 (DOCTOR): Hm okay. How troublesome is it day to day?
+[SEG0007] person_1 (PATIENT): erm, a three out of ten, I suppose. So, I've also had a cousin who died suddenly, for five days
+[SEG0008] person_2 (DOCTOR): has there been breathlessness during sport too?
+[SEG0009] person_1 (PATIENT): Mm, um, yes.
+[SEG0010] person_2 (DOCTOR): okay, how frequently does it come?
+[SEG0011] person_1 (PATIENT): It sort of comes and goes.
+[SEG0012] person_2 (DOCTOR): Do you live by yourself?
+[SEG0013] person_1 (PATIENT): No, I share a house with my brother.
+[SEG0014] person_2 (DOCTOR): Are you active?
+[SEG0015] person_1 (PATIENT): I walk the dog every morning.
+[SEG0016] person_2 (DOCTOR): do you follow any particular diet?
+[SEG0017] person_1 (PATIENT): I'm vegetarian and have been for years
+[SEG0018] person_2 (DOCTOR): Alright, are there any allergies I should be aware of?
+[SEG0019] person_1 (PATIENT): I'm, I'm allergic to kiwi, I get an itchy mouth.
+[SEG0020] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0021] person_1 (PATIENT): I've had gout, yes. Yes, diabetes
+[SEG0022] person_2 (DOCTOR): Right, so gout is already on your record. We'll keep that in mind today. Are you taking anything regularly, including from the pharmacy?
+[SEG0023] person_1 (PATIENT): let me think, I'm on febuxostat, 80 milligrams, once a day for the gout. Gliclazide, 80 milligrams, twice a day i was on sitagliptin before i stopped taking it
+[SEG0024] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0025] person_1 (PATIENT): Nothing I haven't had any operations.
+[SEG0026] person_2 (DOCTOR): So, any fainting, cough or fever at all?
+[SEG0027] person_1 (PATIENT): No you know no fainting cough or fever.
+[SEG0028] person_2 (DOCTOR): okay, have you had leg swelling, by any chance?
+[SEG0029] person_1 (PATIENT): I, I haven't noticed any leg swelling
+[SEG0030] person_2 (DOCTOR): I follow. Anything on the skin I should know about?
+[SEG0031] person_1 (PATIENT): yeah, nothing on the skin, no
+[SEG0032] person_2 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0033] person_1 (PATIENT): No, all normal there.
+[SEG0034] person_2 (DOCTOR): I'll note down your vital signs first
+[SEG0035] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0036] person_2 (DOCTOR): Okay: respiratory rate 14, temp 36.7 degrees, heart rate 66, BP is 127 over 82.
+[SEG0037] person_1 (PATIENT): is that normal?
+[SEG0038] person_2 (DOCTOR): That's fine, I'll explain it it soon.
+[SEG0039] person_2 (DOCTOR): I'll need to examine you for this, it won't take long
+[SEG0040] person_2 (DOCTOR): breathe out slowly
+[SEG0041] person_2 (DOCTOR): there is a harsh murmur that gets louder when you stand up
+[SEG0042] person_2 (DOCTOR): so, please sit back down
+[SEG0043] person_2 (DOCTOR): Right, here's what I'm thinking. This looks most like possible hypertrophic cardiomyopathy. It could also be athlete's heart, so we'll keep that open. No competitive sport until the heart scan, and we will check your close family. Book a review after the scan. Right, that's the plan. Do you want to ask me anything?
+[SEG0044] person_1 (PATIENT): erm I think I understand everything thanks
+
+JSON:

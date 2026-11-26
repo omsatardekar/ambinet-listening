@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01956)
+[SEG0001] person_1 (DOCTOR): Evening. Let's get started. What's been worrying you?
+[SEG0002] person_2 (PATIENT): So, I've been feeling faint, doctor.
+[SEG0003] person_1 (DOCTOR): Did it come on recently?
+[SEG0004] person_2 (PATIENT): About... well, six months.
+[SEG0005] person_1 (DOCTOR): How much trouble does it give you?
+[SEG0006] person_2 (PATIENT): Severe, I'd say.
+[SEG0007] person_1 (DOCTOR): Shall I check your blood pressure and pulse?
+[SEG0008] person_1 (DOCTOR): Okay, this won't take long...
+[SEG0009] person_1 (DOCTOR): Okay: heart rate 110, blood pressure 93 over 60, temperature is 36.7 degrees. And saturation 97 percent.
+[SEG0010] person_2 (PATIENT): Is that normal?
+[SEG0011] person_1 (DOCTOR): Alright, I'll come back to the numbers.
+[SEG0012] person_1 (DOCTOR): Now I'm going to do a short physical check.
+[SEG0013] person_2 (PATIENT): Yeah, no problem.
+[SEG0014] person_1 (DOCTOR): Stay as you are for a moment.
+[SEG0015] person_1 (DOCTOR): Your pulse is over one hundred and eighty and your blood pressure is low.
+[SEG0016] person_1 (DOCTOR): Please sit back down.
+[SEG0017] person_1 (DOCTOR): Any fever, cough or leg swelling at all?
+[SEG0018] person_2 (PATIENT): No, none that I've noticed.
+[SEG0019] person_1 (DOCTOR): How about your heart, any problems like that?
+[SEG0020] person_2 (PATIENT): No, nothing with my heart.
+[SEG0021] person_1 (DOCTOR): Are you allergic to anything? Any allergies to medicines or foods?
+[SEG0022] person_2 (PATIENT): No, nothing as far as I know.
+[SEG0023] person_1 (DOCTOR): So, anything surgical in your history?
+[SEG0024] person_2 (PATIENT): Just a varicose vein procedure, last year.
+[SEG0025] person_1 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0026] person_2 (PATIENT): No, I've always been fairly healthy.
+[SEG0027] person_1 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0028] person_2 (PATIENT): I have about eight cigarettes in a day. I'll have a glass of wine with dinner. Yes, I work in a bakery, early starts. I do a yoga class on Thursdays.
+[SEG0029] person_1 (DOCTOR): Any regular medication at all?
+[SEG0030] person_2 (PATIENT): No, nothing at the moment.
+[SEG0031] person_1 (DOCTOR): From what you've told me and what I found, it points towards a dangerous fast heart rhythm. I'm going to order blood tests, for arrhythmia. Lie flat, I am calling the emergency team and preparing to shock the heart. If you smoke, this is a good moment to think about stopping, and we can help you with that. Come back or go to emergency straight away if the symptoms get worse.
+[SEG0032] person_2 (PATIENT): I understand.
+[SEG0033] person_1 (DOCTOR): Book a review straight away.
+[SEG0034] person_2 (PATIENT): I can manage that.
+[SEG0035] person_1 (DOCTOR): Does all of that make sense?
+[SEG0036] person_2 (PATIENT): That's clear, thanks.
+
+JSON:

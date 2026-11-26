@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20433)
+[SEG0001] person_1 (PATIENT): I mean, hi, is it okay to come in now?
+[SEG0002] person_2 (DOCTOR): You're alright, take a seat. What can I do for you?
+[SEG0003] person_1 (PATIENT): Mainly nausea and vomiting. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): How long has it been like this?
+[SEG0005] person_1 (PATIENT): Probably three days. Yeah.
+[SEG0006] person_2 (DOCTOR): Would you say mild, moderate or severe?
+[SEG0007] person_1 (PATIENT): Hmm, I'd call it severe.
+[SEG0008] person_2 (DOCTOR): Mm, okay. Is it there all the time or does it come and go?
+[SEG0009] person_1 (PATIENT): Honestly, every other day.
+[SEG0010] person_2 (DOCTOR): Any weakness, slurred speech or double vision?
+[SEG0011] person_1 (PATIENT): No, no weakness, slurred speech or double vision.
+[SEG0012] person_2 (DOCTOR): Alright, anything on the skin I should know about?
+[SEG0013] person_1 (PATIENT): Skin's normal.
+[SEG0014] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0015] person_1 (PATIENT): No, no conditions.
+[SEG0016] person_2 (DOCTOR): Is there anything relevant on the family side?
+[SEG0017] person_1 (PATIENT): My uncle has high cholesterol.
+[SEG0018] person_2 (DOCTOR): Do you live by yourself?
+[SEG0019] person_1 (PATIENT): No, I share a house with my brother.
+[SEG0020] person_2 (DOCTOR): What does a normal day of food look like?
+[SEG0021] person_1 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0022] person_2 (DOCTOR): Okay, are you on any regular medication?
+[SEG0023] person_1 (PATIENT): I mean, no, nothing at the moment.
+[SEG0024] person_2 (DOCTOR): Have you got any known allergies?
+[SEG0025] person_1 (PATIENT): No allergies at all.
+[SEG0026] person_2 (DOCTOR): Alright, shall I check your blood pressure and pulse?
+[SEG0027] person_2 (DOCTOR): Keep your arm relaxed for me...
+[SEG0028] person_2 (DOCTOR): Okay: blood pressure 114 over 79, SpO2 97 percent on room air, pulse 65, temperature is 36.5 degrees.
+[SEG0029] person_1 (PATIENT): Is that normal?
+[SEG0030] person_2 (DOCTOR): I'll come back to the numbers.
+[SEG0031] person_2 (DOCTOR): I'll examine you in a second, make yourself comfortable.
+[SEG0032] person_2 (DOCTOR): Does that hurt?
+[SEG0033] person_2 (DOCTOR): I can see a fine jerking of the eyes to the left and your walking is a little unsteady.
+[SEG0034] person_1 (PATIENT): That's alright.
+[SEG0035] person_2 (DOCTOR): Please sit back down.
+[SEG0036] person_2 (DOCTOR): Let me tell you where I've got to. It points towards an inner-ear balance problem such as vestibular neuritis. Blood tests is what I'd like next, for dizziness. For this, prochlorperazine, 5 milligrams, three times a day, for three days. It's for nausea and vertigo. Start moving around gently as soon as you can, since resting too long slows recovery.
+[SEG0037] person_2 (DOCTOR): Let's hold off on a positional test for now, and if there's no change in two weeks we can revisit it. We'll catch up if it isn't settling in five days. Is there anything you'd like me to go over again?
+[SEG0038] person_1 (PATIENT): That's clear, thanks.
+[SEG0039] person_2 (DOCTOR): See you soon.
+
+JSON:

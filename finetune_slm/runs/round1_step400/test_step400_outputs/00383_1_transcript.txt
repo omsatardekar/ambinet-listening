@@ -1,0 +1,75 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00383)
+[SEG0001] person_1 (DOCTOR): Hello there. Please, sit.
+[SEG0002] person_2 (CAREGIVER): Hello, doctor, I came in with them, if that's okay.
+[SEG0003] person_1 (DOCTOR): That's fine, sit down. We'll go through it together. Alright, tell me from the beginning, what's been happening?
+[SEG0004] person_3 (PATIENT): Um, so... an itchy painful right ear. That's why I came.
+[SEG0005] person_1 (DOCTOR): Before we go on, a few quick readings.
+[SEG0006] person_1 (DOCTOR): Almost there...
+[SEG0007] person_1 (DOCTOR): Okay: heart rate 65, oxygen saturation is 97 percent, blood pressure 124 over 72, temperature is 36.8 degrees. Roughly when did it start?
+[SEG0008] person_3 (PATIENT): Oh, it's been two months now.
+[SEG0009] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0010] person_3 (PATIENT): About a six out of ten. It comes and goes. Yes, lying on it and touching the ear. That makes it worse.
+[SEG0011] person_3 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0012] person_2 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0013] person_3 (PATIENT): I was getting to that!
+[SEG0014] person_1 (DOCTOR): That's fine, one at a time. I'll ask about everything.
+[SEG0015] person_3 (PATIENT): And a feeling of blockage, too.
+[SEG0016] person_1 (DOCTOR): And how severe is it?
+[SEG0017] person_3 (PATIENT): I'd give it a three, out of ten. And pain when I move my jaw, too.
+[SEG0018] person_1 (DOCTOR): Have you had an itchy painful right ear before, or is this the first time?
+[SEG0019] person_3 (PATIENT): Yes, something like this happened about six months ago, and it went away on its own.
+[SEG0020] person_4 (UNKNOWN): Yes, that's right, that's how it was.
+[SEG0021] person_1 (DOCTOR): Have you noticed recent cold or swelling behind the ear?
+[SEG0022] person_3 (PATIENT): No, no recent cold, no swelling behind the ear. I did have a bit of discharge at one point, but that went away on its own.
+[SEG0023] person_1 (DOCTOR): How about fever?
+[SEG0024] person_3 (PATIENT): No, I haven't had any fever.
+[SEG0025] person_1 (DOCTOR): Did you get facial weakness or ringing?
+[SEG0026] person_3 (PATIENT): No, none of those.
+[SEG0027] person_1 (DOCTOR): Any dizziness?
+[SEG0028] person_3 (PATIENT): Nope, no dizziness.
+[SEG0029] person_2 (CAREGIVER): Actually, doctor, I did notice dizziness. She doesn't always say.
+[SEG0030] person_3 (PATIENT): No, I don't think I did. Maybe a little, I'm not sure.
+[SEG0031] person_1 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. How's your breathing otherwise?
+[SEG0032] person_3 (PATIENT): So, no, my breathing's been fine.
+[SEG0033] person_1 (DOCTOR): Is your mobility otherwise okay?
+[SEG0034] person_3 (PATIENT): Nothing else aches.
+[SEG0035] person_1 (DOCTOR): Any previous surgeries?
+[SEG0036] person_3 (PATIENT): No operations, no.
+[SEG0037] person_1 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0038] person_3 (PATIENT): I mean, I have diabetes, for nearly five years.
+[SEG0039] person_1 (DOCTOR): Is there more?
+[SEG0040] person_3 (PATIENT): I've got eczema.
+[SEG0041] person_1 (DOCTOR): So, is there more?
+[SEG0042] person_1 (DOCTOR): Do you have a job?
+[SEG0043] person_3 (PATIENT): I'm a self-employed electrician.
+[SEG0044] person_1 (DOCTOR): What do you do to keep active?
+[SEG0045] person_3 (PATIENT): I cycle to work most mornings.
+[SEG0046] person_1 (DOCTOR): What medicines do you take regularly?
+[SEG0047] person_2 (CAREGIVER): She is on hydrocortisone cream, when needed, I give it to her.
+[SEG0048] person_1 (DOCTOR): Come over here and I'll have a look.
+[SEG0049] person_1 (DOCTOR): Let me press here.
+[SEG0050] person_1 (DOCTOR): I can't see the eardrum properly because of the swelling.
+[SEG0051] person_1 (DOCTOR): Hold that position for me.
+[SEG0052] person_1 (DOCTOR): The ear canal is red and swollen with some debris, and pulling the ear hurts.
+[SEG0053] person_3 (PATIENT): No problem.
+[SEG0054] person_1 (DOCTOR): Okay, thanks for that. From what you've told me and what I found, this looks most like an outer ear infection. The reason I say that is that your story and my examination fit together. It could also be a wax problem, so we'll keep that open.
+[SEG0055] person_1 (DOCTOR): I'll start you on ciprofloxacin ear drops, three times a day, for seven days. That should help with outer ear infection. Keep water out of the ear and don't use cotton buds. Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency. I'd like you back in a week.
+[SEG0056] person_5 (CLINICAL_STAFF): I'll book your follow-up at the front desk on your way out.
+[SEG0057] person_1 (DOCTOR): What are the next steps as you understand them?
+[SEG0058] person_3 (PATIENT): So, I take the ciprofloxacin ear drops, three times a day and come back in a week. Is that right?
+[SEG0059] person_1 (DOCTOR): Yes, exactly right. That's it on my side. Anything unclear?
+[SEG0060] person_3 (PATIENT): No, you've explained it well. Thanks.
+
+JSON:

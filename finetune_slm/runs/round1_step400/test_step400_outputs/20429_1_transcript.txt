@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20429)
+[SEG0001] person_1 (NURSE): Doctor, the patient's with us now. I did the the usual checks at the front, so just say when you want them.
+[SEG0002] person_2 (DOCTOR): thanks, that's helpful. Hello, please sit. What's been happening?
+[SEG0003] person_3 (FAMILY_MEMBER): doctor, I'll sit in if that's okay, I know what's been happening we came cos of irregular periods
+[SEG0004] person_2 (DOCTOR): When was the first time you noticed it?
+[SEG0005] person_4 (PATIENT): erm, it's been going on for two months. I've also been putting on weight, for about three months. And I've been feeling low as well. I did have spots on my face at one point, but that's gone now
+[SEG0006] person_2 (DOCTOR): right, do you take any prescribed or over-the-counter medicines?
+[SEG0007] person_4 (PATIENT): it's a... um, I can't remember what it's called. It's a round yellow one
+[SEG0008] person_2 (DOCTOR): do you remember what it's for?
+[SEG0009] person_4 (PATIENT): for the anxiety, I believe. My son sets them out for me, I just take what I'm given. I take something called sert... sertraline, 50 milligrams, maybe, once a day for my mood
+[SEG0010] person_2 (DOCTOR): Have you got the box or the the prescription on you?
+[SEG0011] person_4 (PATIENT): Not with me. I'll bring it next time. It's Tiotropium inhaler, once a day for my chest.
+[SEG0012] person_2 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0013] person_4 (PATIENT): I've had anxiety for nearly five years now. I have depression. I've had COPD, yes.
+[SEG0014] person_2 (DOCTOR): Right, so anxiety is already on your record. We'll keep that in mind today. So, a few questions about your lifestyle now.
+[SEG0015] person_4 (PATIENT): No, I've never smoked in my life. I hardly move around during the day. Lots of rice, lentils and some fruit
+[SEG0016] person_2 (DOCTOR): So, have you been to theatre before?
+[SEG0017] person_4 (PATIENT): Yes, I had an operation for a hernia, last spring.
+[SEG0018] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0019] person_4 (PATIENT): I don't think I have any, no.
+[SEG0020] person_2 (DOCTOR): Let me check a few things. Any pelvic pain, breast discharge or headaches with vision changes?
+[SEG0021] person_4 (PATIENT): No, no pelvic pain, breast discharge or headaches with vision changes.
+[SEG0022] person_2 (DOCTOR): let me check a few things. Any being pregnant or hot flushes?
+[SEG0023] person_4 (PATIENT): no, you know, no being pregnant or hot flushes
+[SEG0024] person_2 (DOCTOR): How about heavy bleeding?
+[SEG0025] person_4 (PATIENT): Nope, no heavy bleeding.
+[SEG0026] person_2 (DOCTOR): has your heart given you any trouble?
+[SEG0027] person_4 (PATIENT): Let me think, no, nothing with my heart.
+[SEG0028] person_2 (DOCTOR): Any pins and needles or loss of strength anywhere?
+[SEG0029] person_4 (PATIENT): no, nothing like that
+[SEG0030] person_1 (NURSE): Okay, so the vitals from earlier. Oxygen saturation is 98 percent, pulse is 81 beats a minute, pressure 121 over 72, temp 36.5 degrees.
+[SEG0031] person_2 (DOCTOR): alright, good, thank you
+[SEG0032] person_2 (DOCTOR): I'll need to examine you for this, it won't take long
+[SEG0033] person_2 (DOCTOR): Hold that for a second.
+[SEG0034] person_2 (DOCTOR): There is some acne on the face and extra hair on the chin, and your blood pressure is fine.
+[SEG0035] person_2 (DOCTOR): That's all I needed to check.
+[SEG0036] person_2 (DOCTOR): so where does that leave us? I don't have a clear answer today: a pattern that fits polycystic ovary syndrome is possible, and so is a thyroid problem we shouldn't forget raised prolactin so, to recap quickly you've had irregular periods for two months, and and no pelvic pain or heavy bleeding
+[SEG0037] person_4 (PATIENT): Yes, that's right.
+[SEG0038] person_2 (DOCTOR): Any scans or blood work done already?
+[SEG0039] person_4 (PATIENT): I had a pelvic ultrasound done at another clinic a few months ago i don't have the report with me
+[SEG0040] person_2 (DOCTOR): Regular exercise and a small weight loss can make cycles more regular. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0041] person_4 (PATIENT): Yes, will do.
+[SEG0042] person_2 (DOCTOR): Anything else on your mind before you go?
+[SEG0043] person_4 (PATIENT): Okay, uh, that makes sense. Thanks for explaining.
+
+JSON:

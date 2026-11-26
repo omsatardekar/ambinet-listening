@@ -1,0 +1,74 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00937)
+[SEG0001] person_2 (DOCTOR): Good morning, Mr Deshpande. Terrible weather, and I hear the car park is full again. ~
+[SEG0002] person_1 (PATIENT): Good morning, doctor. Yes, I circled three times. Thankfully the weather doesn't affect itching. ~
+[SEG0003] person_2 (DOCTOR): Itching, that's what we're here about. Tell me everything. ~
+[SEG0004] person_1 (PATIENT): I have prepared a timeline. The itching is worse at night, and it began late last month, or perhaps early this month. I cannot be exact.
+[SEG0005] person_2 (DOCTOR): That's fine. Where do you itch?
+[SEG0006] person_1 (PATIENT): Mainly between the fingers, and on my wrists. There's a rash, small red bumps in lines.
+[SEG0007] person_2 (DOCTOR): Any scratch marks?
+[SEG0008] person_1 (PATIENT): Yes, many. My wife says I look like I fought a cat.
+[SEG0009] person_2 (DOCTOR): And in the family? Is anyone else itching? ~
+[SEG0010] person_1 (PATIENT): My wife and my daughter, yes. Since last week. ~
+[SEG0011] person_2 (DOCTOR): Any fever?
+[SEG0012] person_1 (PATIENT): No fever.
+[SEG0013] person_2 (DOCTOR): Any swollen glands?
+[SEG0014] person_1 (PATIENT): No swollen glands.
+[SEG0015] person_2 (DOCTOR): Any pus, anything oozing from the spots?
+[SEG0016] person_1 (PATIENT): No pus.
+[SEG0017] person_2 (DOCTOR): Rash on the face?
+[SEG0018] person_1 (PATIENT): No, not on the face.
+[SEG0019] person_2 (DOCTOR): Have you started any new soaps or washing powder?
+[SEG0020] person_1 (PATIENT): No new soaps, I checked with my wife.
+[SEG0021] person_3 (NURSE): Doctor, shall I weigh him? ~
+[SEG0022] person_2 (DOCTOR): Not yet, nurse, I'll call you. What have you been using?
+[SEG0023] person_1 (PATIENT): Cetirizine, 10 mg, at night. Calamine lotion, twice a day. And a cream from the pharmacist, a white tube, I cannot recall the name, I'm sorry.
+[SEG0024] person_2 (DOCTOR): We'll find it. Any allergies?
+[SEG0025] person_1 (PATIENT): Possibly. In hospital I think something gave me a rash, a sticking plaster or maybe a medicine, I am not sure which.
+[SEG0026] person_2 (DOCTOR): I'll note a possible, unconfirmed allergy. Other health problems?
+[SEG0027] person_1 (PATIENT): Eczema, since childhood, and mild asthma.
+[SEG0028] person_2 (DOCTOR): Operations?
+[SEG0029] person_1 (PATIENT): Appendicectomy, in 2008.
+[SEG0030] person_2 (DOCTOR): Illnesses in the family?
+[SEG0031] person_1 (PATIENT): My mother has diabetes. My father has high blood pressure.
+[SEG0032] person_2 (DOCTOR): What do you do?
+[SEG0033] person_1 (PATIENT): Chartered accountant.
+[SEG0034] person_2 (DOCTOR): And at home?
+[SEG0035] person_1 (PATIENT): I live with my wife, two children and my mother-in-law. We all share the sofa.
+[SEG0036] person_2 (DOCTOR): Smoking?
+[SEG0037] person_1 (PATIENT): Never.
+[SEG0038] person_2 (DOCTOR): Alcohol?
+[SEG0039] person_1 (PATIENT): None.
+[SEG0040] person_2 (DOCTOR): Let me check you. Pulse 74, blood pressure 124 over 80, temperature 36.7, oxygen 99 percent, breathing 14, weight 76 kilos.
+[SEG0041] person_1 (PATIENT): Normal? ~
+[SEG0042] person_2 (DOCTOR): All normal. Let me see your hands.
+[SEG0043] person_1 (PATIENT): Here. ~
+[SEG0044] person_2 (DOCTOR): There are small red bumps and thin, wavy lines between your fingers and across your wrists, with scratch marks.
+[SEG0045] person_1 (PATIENT): Those are the burrows? ~
+[SEG0046] person_2 (DOCTOR): Possibly. And the skin on your waist has scratch marks too, but no infection.
+[SEG0047] person_1 (PATIENT): Good. ~
+[SEG0048] person_2 (DOCTOR): Any trouble with your breathing today?
+[SEG0049] person_1 (PATIENT): No, nothing, my chest is fine.
+[SEG0050] person_2 (DOCTOR): This could be scabies, given the night itching and the whole household itching, but I can't rule out a flare of your eczema.
+[SEG0051] person_1 (PATIENT): Scabies. Oh dear. ~
+[SEG0052] person_2 (DOCTOR): It's very common, nothing to do with cleanliness. I'd like to arrange a skin scraping, and I'd like to look at the lines with a dermatoscope.
+[SEG0053] person_3 (NURSE): I can get the scraping kit now. ~
+[SEG0054] person_2 (DOCTOR): Please. And I'd like to do blood tests to check for a skin infection.
+[SEG0055] person_1 (PATIENT): Will the others need checking too? ~
+[SEG0056] person_2 (DOCTOR): Yes, the whole household, once we know. ~
+[SEG0057] person_1 (PATIENT): I'll tell them. ~
+[SEG0058] person_2 (DOCTOR): If the itching continues two weeks after treatment, come back and see me.
+[SEG0059] person_1 (PATIENT): I will. Thank you, doctor. ~
+
+JSON:

@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02022)
+[SEG0001] person_1 (PATIENT): Hello, doctor. May I come in?
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_3 (FAMILY_MEMBER): Erm, doctor, thank you for seeing us.
+[SEG0004] person_2 (DOCTOR): Alright, of course, please stay. It's helpful to have you here.
+[SEG0005] person_1 (PATIENT): Well, I've been having a high temperature.
+[SEG0006] person_2 (DOCTOR): What do you take on a normal day?
+[SEG0007] person_3 (FAMILY_MEMBER): He takes Tiotropium inhaler, once a day for my chest.
+[SEG0008] person_2 (DOCTOR): Okay, go on. Okay, did it come on recently?
+[SEG0009] person_1 (PATIENT): Ever since... since Friday, really.
+[SEG0010] person_2 (DOCTOR): How troublesome is it day to day?
+[SEG0011] person_1 (PATIENT): Right, a six out of ten, I suppose.
+[SEG0012] person_2 (DOCTOR): Have you noticed anything else alongside it?
+[SEG0013] person_1 (PATIENT): Well, when it starts I tend to get vomiting and diarrhoea as well. So, uh, I've also had agitation, for four weeks. About agitation, I'd call it moderate. As for vomiting and diarrhoea, I'd call it moderate.
+[SEG0014] person_2 (DOCTOR): Did you get recent infection or chest pain?
+[SEG0015] person_1 (PATIENT): No, no recent infection or chest pain.
+[SEG0016] person_2 (DOCTOR): Okay, any muscle or joint problems besides this?
+[SEG0017] person_1 (PATIENT): I move fine otherwise.
+[SEG0018] person_2 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0019] person_1 (PATIENT): Sorry, um, what was I saying, I've had gout, yes.
+[SEG0020] person_2 (DOCTOR): Okay, go on.
+[SEG0021] person_1 (PATIENT): I've had COPD for about ten years now.
+[SEG0022] person_2 (DOCTOR): Okay, I can see gout in your file as well. Before we go further, any allergies?
+[SEG0023] person_1 (PATIENT): No known allergies.
+[SEG0024] person_2 (DOCTOR): Have you ever had an operation?
+[SEG0025] person_1 (PATIENT): Uh, I had keyhole surgery on my gallbladder two years back.
+[SEG0026] person_2 (DOCTOR): What about your parents, brothers or sisters, any conditions?
+[SEG0027] person_1 (PATIENT): My sister had breast cancer.
+[SEG0028] person_2 (DOCTOR): So, now some background about your lifestyle.
+[SEG0029] person_1 (PATIENT): Lots of rice, lentils and some fruit. My partner and our baby. I retired from the post office two years ago.
+[SEG0030] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0031] person_2 (DOCTOR): That's it, just a little longer...
+[SEG0032] person_2 (DOCTOR): Okay: blood pressure 111 over 79, pulse 102, temperature is 38.3 degrees.
+[SEG0033] person_2 (DOCTOR): I'll examine you in a second, make yourself comfortable.
+[SEG0034] person_2 (DOCTOR): I'm just checking this side.
+[SEG0035] person_2 (DOCTOR): You are hot, shaking, and your pulse is over one hundred and forty and irregular.
+[SEG0036] person_2 (DOCTOR): Okay, please sit back down. We should do urgent blood tests for thyroid storm. I'll request an ECG, it'll help with fast heart rhythm. Let's use propranolol, 1 milligrams, now, single dose. That should help with thyroid storm.
+[SEG0037] person_1 (PATIENT): That's simple enough.
+[SEG0038] person_2 (DOCTOR): This is an emergency, you will be treated in high dependency. I'm going to send a referral to the emergency team. Come back or go to emergency straight away if the symptoms get worse. We'll catch up straight away. I think we're done unless you have questions.
+[SEG0039] person_1 (PATIENT): Okay, that makes sense. Thanks for explaining.
+[SEG0040] person_2 (DOCTOR): All the best.
+
+JSON:

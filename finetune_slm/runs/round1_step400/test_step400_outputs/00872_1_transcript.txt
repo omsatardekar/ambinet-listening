@@ -1,0 +1,48 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00872)
+[SEG0001] person_1 (PATIENT): Hi, doctor! I'm Priya, and I'm here for my epilepsy review, I've got so much to tell you, because I had a seizure, one, since my last visit, and I haven't stopped worrying about it.
+[SEG0002] person_2 (DOCTOR): Thank you for telling me. When was the seizure?
+[SEG0003] person_1 (PATIENT): Six weeks ago, on a Tuesday night. I was asleep, my husband woke up and I was shaking. It lasted about two minutes, he said.
+[SEG0004] person_2 (DOCTOR): How did you feel afterwards?
+[SEG0005] person_1 (PATIENT): Awful. Confused, exhausted, a headache, and I'd bitten my tongue. I slept for twelve hours.
+[SEG0006] person_2 (DOCTOR): Did anything seem to trigger it? ~
+[SEG0007] person_1 (PATIENT): I'd missed two doses of my tablet that week, and I'd had a few late nights. And a glass of wine. ~
+[SEG0008] person_2 (DOCTOR): That's an honest answer, thank you. Any other seizures, or odd episodes like staring or jerking?
+[SEG0009] person_1 (PATIENT): No. None. Nothing else.
+[SEG0010] person_2 (DOCTOR): Any injuries, falls, or fits during the day?
+[SEG0011] person_1 (PATIENT): No.
+[SEG0012] person_2 (DOCTOR): What are you taking?
+[SEG0013] person_1 (PATIENT): Lamotrigine, 150 mg, twice a day. I've been on it for four years.
+[SEG0014] person_2 (DOCTOR): Any side effects, rashes, dizziness, double vision?
+[SEG0015] person_1 (PATIENT): No. Nothing like that.
+[SEG0016] person_2 (DOCTOR): Any other conditions?
+[SEG0017] person_1 (PATIENT): Epilepsy since I was fifteen. And I'm planning a pregnancy next year, that's partly why I came.
+[SEG0018] person_2 (DOCTOR): Good thinking. Any operations?
+[SEG0019] person_1 (PATIENT): My appendix, when I was twenty.
+[SEG0020] person_2 (DOCTOR): Let me check your reflexes and coordination, for completeness. ~
+[SEG0021] person_1 (PATIENT): Okay.
+[SEG0022] person_2 (DOCTOR): Everything looks normal. Priya, a single seizure after missed doses and poor sleep isn't a failure of treatment. The tablet works, when it's taken regularly. ~
+[SEG0023] person_1 (PATIENT): That's a relief. ~
+[SEG0024] person_2 (DOCTOR): I'm not going to change the dose, but I'd like you to set a phone alarm for both doses, and use a weekly pill box.
+[SEG0025] person_1 (PATIENT): I'll do both. ~
+[SEG0026] person_2 (DOCTOR): Keep a regular sleep routine, limit alcohol, and avoid skipping meals.
+[SEG0027] person_1 (PATIENT): Right. ~
+[SEG0028] person_2 (DOCTOR): For your pregnancy plans, lamotrigine is one of the safer options, but you'll need folic acid at a higher dose before you conceive, 5 mg once a day.
+[SEG0029] person_1 (PATIENT): Five milligrams. Okay. I'll start it. ~
+[SEG0030] person_2 (DOCTOR): Please come and see me before you try, and tell the pharmacy you're planning a pregnancy.
+[SEG0031] person_1 (PATIENT): I will. ~
+[SEG0032] person_2 (DOCTOR): Keep the driving restriction in mind, you must not drive for the period the rules set after a seizure. ~
+[SEG0033] person_1 (PATIENT): Understood. ~
+
+JSON:

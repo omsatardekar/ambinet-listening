@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03523)
+[SEG0001] person_1 (DOCTOR): Hello, take a seat, I'll be with you in a second.
+[SEG0002] person_2 (PATIENT): Hello, thanks for fitting me in.
+[SEG0003] person_1 (DOCTOR): Where shall we begin?
+[SEG0004] person_2 (PATIENT): Um, so... back pain that doesn't go away. That's why I came.
+[SEG0005] person_1 (DOCTOR): I'll just record a few vital signs.
+[SEG0006] person_1 (DOCTOR): Bear with me while this finishes...
+[SEG0007] person_1 (DOCTOR): Okay: oxygen saturation is 95 percent, temperature 39.4, heart rate 102, pressure 125 over 69. Can you tell me when it first started?
+[SEG0008] person_2 (PATIENT): It's been one week, I'm fairly sure.
+[SEG0009] person_1 (DOCTOR): Is it constant or in episodes?
+[SEG0010] person_2 (PATIENT): It happens every other day. Oh, and night sweats. Had that since last Tuesday. Mm, about night sweats, mild, I'd say.
+[SEG0011] person_1 (DOCTOR): I follow.
+[SEG0012] person_2 (PATIENT): And I've been feeling tired and run down as well, since last Tuesday.
+[SEG0013] person_1 (DOCTOR): Have you had back pain that doesn't go away before, or is this the first time?
+[SEG0014] person_2 (PATIENT): Yes, something like this happened last year, and it went away on its own.
+[SEG0015] person_1 (DOCTOR): Let me check a few things. Any leg weakness or chest pain?
+[SEG0016] person_2 (PATIENT): No, I haven't had any of them.
+[SEG0017] person_1 (DOCTOR): Let me check a few things. Any high fever or breathlessness?
+[SEG0018] person_2 (PATIENT): No, I haven't had any of them.
+[SEG0019] person_1 (DOCTOR): Okay, anything on the skin I should know about?
+[SEG0020] person_2 (PATIENT): No, skin's been fine.
+[SEG0021] person_1 (DOCTOR): Did you ever have any procedures done?
+[SEG0022] person_2 (PATIENT): Just my tonsils removed, as a teenager.
+[SEG0023] person_1 (DOCTOR): What do you take on a normal day?
+[SEG0024] person_2 (PATIENT): Gliclazide, 80 milligrams, twice a day for my sugar. I'm supposed to take it regularly, but I don't always manage.
+[SEG0025] person_1 (DOCTOR): Anything in your past medical history I should know?
+[SEG0026] person_2 (PATIENT): I've had diabetes, yes.
+[SEG0027] person_1 (DOCTOR): Hm, okay. Before we go further, any allergies?
+[SEG0028] person_2 (PATIENT): I've never had an allergy.
+[SEG0029] person_1 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0030] person_2 (PATIENT): My daughter has type 1 diabetes.
+[SEG0031] person_1 (DOCTOR): Right, do you live by yourself?
+[SEG0032] person_2 (PATIENT): No, I share a house with my brother.
+[SEG0033] person_1 (DOCTOR): Are you active?
+[SEG0034] person_2 (PATIENT): I walk the dog every morning.
+[SEG0035] person_1 (DOCTOR): Tell me about your eating.
+[SEG0036] person_2 (PATIENT): I drink a lot of tea and snack through the day.
+[SEG0037] person_1 (DOCTOR): Let's move on to the examination.
+[SEG0038] person_1 (DOCTOR): Let me feel here.
+[SEG0039] person_1 (DOCTOR): There is a soft heart murmur you've not had before and a small tender spot on the fingertip.
+[SEG0040] person_1 (DOCTOR): Thank you, you can get dressed. Okay, so my impression is this: I don't have a clear answer today: possible infection of the heart valve causing back and general symptoms is possible, and so is a muscle strain.
+[SEG0041] person_2 (PATIENT): Do you think it's something serious?
+[SEG0042] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like possible infection of the heart valve causing back and general symptoms, but I'd like to confirm. I'm going to order an MRI of the spine, for persistent back pain with systemic symptoms. The result will help us decide whether anything more is needed. I'd like to arrange an echocardiogram for new murmur. This is not an ordinary back strain, so I want tests today.
+[SEG0043] person_1 (DOCTOR): A short walk every day, even twenty minutes, will help more than you'd think. I think the medical admissions unit should see you too.
+[SEG0044] person_2 (PATIENT): Okay.
+[SEG0045] person_1 (DOCTOR): See me again straight away. That's all from me. Any questions?
+[SEG0046] person_2 (PATIENT): Alright, thanks, take care.
+
+JSON:

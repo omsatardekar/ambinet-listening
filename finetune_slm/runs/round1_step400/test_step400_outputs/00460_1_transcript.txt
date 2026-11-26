@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00460)
+[SEG0001] person_1 (PATIENT): Hello, doctor. It's my turn, I think.
+[SEG0002] person_2 (DOCTOR): Alright, that's alright, take a seat. Tell me why you've come.
+[SEG0003] person_1 (PATIENT): I've been dealing with a bad cough.
+[SEG0004] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0005] person_1 (PATIENT): Lying down and cold air definitely sets it off. I'd say every other day. It settles a little with honey and warm water. I've also been coughing up yellow phlegm.
+[SEG0006] person_2 (DOCTOR): How much is it bothering you?
+[SEG0007] person_1 (PATIENT): Pretty severe, if I'm being honest.
+[SEG0008] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0009] person_1 (PATIENT): I smoke about ten cigarettes a day. I don't drink at all. I share a flat with two friends. I walk for about half an hour most days.
+[SEG0010] person_2 (DOCTOR): Right, what medicines do you take regularly?
+[SEG0011] person_1 (PATIENT): Seretide inhaler. I take it twice a day. Cough syrup. I take it at night. I was on amlodipine before. I stopped taking it.
+[SEG0012] person_2 (DOCTOR): Any previous surgeries?
+[SEG0013] person_1 (PATIENT): No operations, no.
+[SEG0014] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0015] person_1 (PATIENT): No, none that I know of.
+[SEG0016] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0017] person_1 (PATIENT): Yes, asthma. I'd rather know what's going on than keep guessing. I've had high blood pressure, yes.
+[SEG0018] person_2 (DOCTOR): Have you noticed weight loss or shortness of breath?
+[SEG0019] person_1 (PATIENT): No, nothing there.
+[SEG0020] person_2 (DOCTOR): Have you had any leg swelling or chest pain?
+[SEG0021] person_1 (PATIENT): No leg swelling or chest pain, none of it.
+[SEG0022] person_2 (DOCTOR): Any pins and needles or loss of strength anywhere?
+[SEG0023] person_1 (PATIENT): Oh, no, nothing like that.
+[SEG0024] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0025] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0026] person_2 (DOCTOR): Okay: respiratory rate 18, SpO2 97 percent on room air, heart rate 89, temperature is 39.3 degrees, blood pressure 105 over 75.
+[SEG0027] person_1 (PATIENT): Is that alright, doctor?
+[SEG0028] person_2 (DOCTOR): We'll put it in context in a moment.
+[SEG0029] person_2 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0030] person_2 (DOCTOR): I'll go gently.
+[SEG0031] person_2 (DOCTOR): There are a few scattered wheezes on both sides.
+[SEG0032] person_2 (DOCTOR): Take your time, no rush.
+[SEG0033] person_2 (DOCTOR): No crackles at the bases.
+[SEG0034] person_2 (DOCTOR): Okay, finished.
+[SEG0035] person_2 (DOCTOR): Taking everything into account, this looks most like acute bronchitis. It could also be pneumonia, so we'll keep that open. We should do a chest X-ray for cough. I want blood tests done, that's for cough. I'd rather check than guess, and this is the quickest way to know more.
+[SEG0036] person_1 (PATIENT): Okay, noted.
+[SEG0037] person_2 (DOCTOR): Let's use salbutamol inhaler, 100 micrograms, two puffs when needed, for one week. It's for wheeze. I'll put all of this in writing so you don't have to remember it. I'm prescribing azithromycin, 500 milligrams, once a day, for three days. You take it by mouth. It's for chest infection. It's a commonly used medicine and most people tolerate it well. Steam and warm fluids can ease the cough, and try to sleep with your head propped up.
+[SEG0038] person_2 (DOCTOR): Book a review in ten days.
+[SEG0039] person_1 (PATIENT): Yes, I can do that.
+[SEG0040] person_2 (DOCTOR): Do you have any questions?
+[SEG0041] person_1 (PATIENT): I think that's clear. Thank you for being so thorough.
+
+JSON:

@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02352)
+[SEG0001] person_1 (PATIENT): sorry, uh, what was I saying, hi, is it okay to come in now?
+[SEG0002] person_2 (DOCTOR): You're alright, take a seat. What can I do for you?
+[SEG0003] person_1 (PATIENT): I, I wanted to get a high temperature looked at.
+[SEG0004] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0005] person_2 (DOCTOR): Keep your arm relaxed for me...
+[SEG0006] person_2 (DOCTOR): okay: weight 53 kilos, saturation 95 percent, height 176 centimetres. And BMI works out to 17.1, heart rate 90, temperature is 38.7 degrees, BP is 122 over 76, respiratory rate 19.
+[SEG0007] person_2 (DOCTOR): Since when exactly?
+[SEG0008] person_1 (PATIENT): It's been one week now.
+[SEG0009] person_2 (DOCTOR): Is it a lot or only a little?
+[SEG0010] person_1 (PATIENT): it's mild, honestly
+[SEG0011] person_2 (DOCTOR): Have you had agitation?
+[SEG0012] person_1 (PATIENT): Yeah. Four weeks, I'd say.
+[SEG0013] person_2 (DOCTOR): so, have you noticed recent infection or chest pain?
+[SEG0014] person_1 (PATIENT): No, no recent infection or chest pain.
+[SEG0015] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0016] person_1 (PATIENT): No, you know, nothing there.
+[SEG0017] person_2 (DOCTOR): Any regular medication at all?
+[SEG0018] person_1 (PATIENT): oh, no, I'm not on anything
+[SEG0019] person_2 (DOCTOR): What about your parents, brothers or sisters, any conditions?
+[SEG0020] person_1 (PATIENT): My mother has an underactive thyroid.
+[SEG0021] person_2 (DOCTOR): Have you got any known allergies?
+[SEG0022] person_1 (PATIENT): Yes, cat fur, it gives me wheezing.
+[SEG0023] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0024] person_1 (PATIENT): Let me think, no, nothing at all.
+[SEG0025] person_2 (DOCTOR): Right, any previous surgeries?
+[SEG0026] person_1 (PATIENT): yeah, no, not at all
+[SEG0027] person_2 (DOCTOR): Do you drink alcohol?
+[SEG0028] person_1 (PATIENT): I'll have a glass of wine with dinner.
+[SEG0029] person_2 (DOCTOR): any smoking?
+[SEG0030] person_1 (PATIENT): No, I've never smoked in my life.
+[SEG0031] person_2 (DOCTOR): Is there someone at home?
+[SEG0032] person_1 (PATIENT): My husband and I live above the shop
+[SEG0033] person_2 (DOCTOR): How active are you?
+[SEG0034] person_1 (PATIENT): I hardly move around during the day.
+[SEG0035] person_2 (DOCTOR): What line of work are you in?
+[SEG0036] person_1 (PATIENT): I'm a bus driver, so I sit for long hours
+[SEG0037] person_2 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0038] person_2 (DOCTOR): Take a a deep breath for me.
+[SEG0039] person_2 (DOCTOR): you are hot, shaking, and your pulse is over one hundred and forty and irregular
+[SEG0040] person_2 (DOCTOR): You can sit up now.
+[SEG0041] person_2 (DOCTOR): Okay, thinking it through, it's hard to say. A thyroid storm is one possibility and and sepsis another, and I'd rather not commit yet. Let's get an ECG, for fast heart rhythm.
+[SEG0042] person_1 (PATIENT): That makes sense.
+[SEG0043] person_2 (DOCTOR): I'm prescribing propranolol, 1 milligrams, now, single dose. That's for thyroid storm. This is an emergency, you will be treated in high dependency. Let's get you seen by the emergency team, I'll arrange the letter. See me again straight away. I think we're done unless you have questions.
+[SEG0044] person_1 (PATIENT): Uh, okay, that makes sense. Thanks for explaining.
+[SEG0045] person_2 (DOCTOR): Right, have a good day.
+
+JSON:

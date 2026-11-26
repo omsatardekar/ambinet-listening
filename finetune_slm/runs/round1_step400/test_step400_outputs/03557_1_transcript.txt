@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03557)
+[SEG0001] person_1 (DOCTOR): Hi there, the chair's free, sit down.
+[SEG0002] person_2 (PATIENT): Hi, thanks.
+[SEG0003] person_1 (DOCTOR): Start wherever you like, I'm listening.
+[SEG0004] person_2 (PATIENT): I've been dealing with blacking out when I stand quickly. I told my wife I'd come today. It's a relief to finally sit down and talk about it.
+[SEG0005] person_1 (DOCTOR): How long has this been bothering you?
+[SEG0006] person_2 (PATIENT): Yesterday, it came on out of nowhere. I've also had a new prostate tablet.
+[SEG0007] person_1 (DOCTOR): Shall I check your blood pressure and pulse?
+[SEG0008] person_1 (DOCTOR): Right, keep your arm relaxed for me...
+[SEG0009] person_1 (DOCTOR): Okay: height 160 centimetres, pulse 109. And saturation 96 percent, weight 53 kilos, pressure 101 over 62, temperature is 37.0 degrees, BMI works out to 20.7.
+[SEG0010] person_1 (DOCTOR): May I examine you now?
+[SEG0011] person_2 (PATIENT): That's alright.
+[SEG0012] person_1 (DOCTOR): Hold that for a second.
+[SEG0013] person_1 (DOCTOR): Your blood pressure drops a long way when you stand and your heart sounds are normal.
+[SEG0014] person_1 (DOCTOR): You can sit up now. Have you had any palpitations, head injury or chest pain?
+[SEG0015] person_2 (PATIENT): Nope, nothing like that.
+[SEG0016] person_1 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0017] person_2 (PATIENT): I mean, I move fine otherwise.
+[SEG0018] person_1 (DOCTOR): Your breathing, any trouble there?
+[SEG0019] person_2 (PATIENT): No, my breathing's been fine.
+[SEG0020] person_1 (DOCTOR): Are you active?
+[SEG0021] person_2 (PATIENT): I walk the dog every morning.
+[SEG0022] person_1 (DOCTOR): Are you on your own at home?
+[SEG0023] person_2 (PATIENT): I live with my elderly mother.
+[SEG0024] person_1 (DOCTOR): Right, what do you do during the day?
+[SEG0025] person_2 (PATIENT): I look after my grandchildren most days.
+[SEG0026] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0027] person_2 (PATIENT): No, I've never been operated on.
+[SEG0028] person_1 (DOCTOR): What do you take on a normal day?
+[SEG0029] person_2 (PATIENT): Lisinopril. I take it 10 milligrams, once a day.
+[SEG0030] person_1 (DOCTOR): What about your medical history? I'm asking so that we don't miss anything.
+[SEG0031] person_2 (PATIENT): I have high blood pressure.
+[SEG0032] person_1 (DOCTOR): Right, right. Okay, I can see high blood pressure in your file as well. Before we go further, any allergies?
+[SEG0033] person_2 (PATIENT): No, nothing as far as I know.
+[SEG0034] person_1 (DOCTOR): From what you've told me and what I found, I think we're dealing with medicine-induced postural hypotension at this stage. That's my thinking for now, and it may change as we learn more.
+[SEG0035] person_2 (PATIENT): Is this serious, doctor?
+[SEG0036] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like medicine-induced postural hypotension, but I'd like to confirm.
+[SEG0037] person_1 (DOCTOR): I'd like to arrange blood tests for syncope. We will move the prostate tablet to bedtime and you should rise slowly. I'll want another look in two weeks.
+[SEG0038] person_2 (PATIENT): Okay, I'll arrange it.
+[SEG0039] person_1 (DOCTOR): Have I covered everything you wanted?
+[SEG0040] person_2 (PATIENT): Right, I'll do that. Thank you, doctor.
+
+JSON:

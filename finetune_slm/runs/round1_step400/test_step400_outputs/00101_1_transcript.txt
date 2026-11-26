@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00101)
+[SEG0001] person_1 (NURSE): Doctor, the patient's with us now. I did the usual checks at the front, so just say when you want them.
+[SEG0002] person_2 (DOCTOR): Okay, thanks. Hi, how can I help today?
+[SEG0003] person_3 (PATIENT): Doctor, it's numbness in the toes. It's getting on my nerves now.
+[SEG0004] person_2 (DOCTOR): When did it begin?
+[SEG0005] person_3 (PATIENT): I've had it for about three months.
+[SEG0006] person_2 (DOCTOR): Would you call it mild or bad?
+[SEG0007] person_3 (PATIENT): Mostly moderate.
+[SEG0008] person_2 (DOCTOR): How often does it happen?
+[SEG0009] person_3 (PATIENT): It happens a couple of times a week.
+[SEG0010] person_1 (NURSE): Doctor, I've got the readings for you. Heart rate 86, temperature 36.5. Oxygen saturation is 98 percent, blood pressure 114 over 71, weight 92 kilos, height 159 centimetres.
+[SEG0011] person_2 (DOCTOR): Okay, noted.
+[SEG0012] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0013] person_3 (PATIENT): Yes, doctor.
+[SEG0014] person_2 (DOCTOR): I'll go gently.
+[SEG0015] person_2 (DOCTOR): Ankle reflexes are absent.
+[SEG0016] person_2 (DOCTOR): Almost done with this part.
+[SEG0017] person_2 (DOCTOR): Feeling of light touch is reduced in both feet.
+[SEG0018] person_2 (DOCTOR): All done, you can get dressed. And what about hand symptoms, bladder problems or back pain?
+[SEG0019] person_3 (PATIENT): No, none of that at all.
+[SEG0020] person_2 (DOCTOR): So, and fever, any of that?
+[SEG0021] person_3 (PATIENT): So, no, none, no fever.
+[SEG0022] person_2 (DOCTOR): Is your digestion otherwise okay?
+[SEG0023] person_3 (PATIENT): Nothing unusual, no.
+[SEG0024] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0025] person_3 (PATIENT): Hmm, no, joints are fine.
+[SEG0026] person_2 (DOCTOR): Any previous surgeries?
+[SEG0027] person_3 (PATIENT): No, nothing like that.
+[SEG0028] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for? It helps to be thorough at this stage.
+[SEG0029] person_3 (PATIENT): I've got diabetes.
+[SEG0030] person_2 (DOCTOR): And what do you do for a living?
+[SEG0031] person_3 (PATIENT): I work night shifts at a warehouse.
+[SEG0032] person_2 (DOCTOR): Who's at home with you?
+[SEG0033] person_3 (PATIENT): It's just me and my wife at home now.
+[SEG0034] person_2 (DOCTOR): Do you get any exercise?
+[SEG0035] person_3 (PATIENT): I walk for about half an hour most days.
+[SEG0036] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0037] person_3 (PATIENT): It's Glycomet, 500 milligrams, twice a day.
+[SEG0038] person_2 (DOCTOR): Okay, what about allergies, to medicines or foods or anything else?
+[SEG0039] person_3 (PATIENT): No, nothing I'm aware of.
+[SEG0040] person_2 (DOCTOR): Putting it all together, the most likely explanation is peripheral neuropathy, possibly related to sugar.
+[SEG0041] person_2 (DOCTOR): I'm going to order a vitamin B12 level, for neuropathy. I'm going to order an HbA1c, for neuropathy. The treatment will be pregabalin, 75 milligrams, at night, for four weeks. It's for nerve pain. Check your feet every evening for cuts or blisters, you may not feel them. A short walk every day, even twenty minutes, will help more than you'd think. I'm going to send a referral to podiatry.
+[SEG0042] person_2 (DOCTOR): One warning sign to remember: the symptoms get worse. In that case don't wait. Come back after the results are back. Ask me anything before you go.
+[SEG0043] person_3 (PATIENT): All good here. Thank you.
+[SEG0044] person_2 (DOCTOR): Take care.
+
+JSON:

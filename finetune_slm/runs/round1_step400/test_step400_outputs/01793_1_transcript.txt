@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01793)
+[SEG0001] person_1 (PATIENT): sorry I'm a little late, doctor
+[SEG0002] person_2 (DOCTOR): So, of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): Yeah, it's a barking cough. I don't know what's causing it.
+[SEG0004] person_2 (DOCTOR): let me get the readings out of the way
+[SEG0005] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0006] person_2 (DOCTOR): Okay: saturation 97 percent, weight 96 kilos, temperature 37.0. And blood pressure 110 over 73, heart rate 76, height 165 centimetres, respiratory rate 16, BMI works out to 35.3.
+[SEG0007] person_1 (PATIENT): is that normal?
+[SEG0008] person_2 (DOCTOR): We'll go over that shortly. How long has it been like this?
+[SEG0009] person_1 (PATIENT): Probably five days. Yeah. I looked a few things up online, um, and that probably didn't help.
+[SEG0010] person_2 (DOCTOR): Would you say mild, moderate or severe?
+[SEG0011] person_1 (PATIENT): It It feels severe to me.
+[SEG0012] person_2 (DOCTOR): Have you had any drooling, noisy breathing when resting or difficulty swallowing?
+[SEG0013] person_1 (PATIENT): I haven't had drooling, noisy breathing when resting or difficulty swallowing, no.
+[SEG0014] person_2 (DOCTOR): what about your tummy and and bowels, anything unusual there?
+[SEG0015] person_1 (PATIENT): Bowels are regular, nothing odd.
+[SEG0016] person_2 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0017] person_1 (PATIENT): I've had high cholesterol, yes. My family kept telling me to get it checked. I've got an enlarged prostate
+[SEG0018] person_2 (DOCTOR): what's on your current medicine list?
+[SEG0019] person_1 (PATIENT): Well, I'm on rosuvastatin, 10 milligrams, at night for my cholesterol.
+[SEG0020] person_2 (DOCTOR): Alright, any smoking?
+[SEG0021] person_1 (PATIENT): I gave up cigarettes last spring.
+[SEG0022] person_2 (DOCTOR): Do you drink alcohol?
+[SEG0023] person_1 (PATIENT): Nothing, I'm teetotal
+[SEG0024] person_2 (DOCTOR): Who lives with you?
+[SEG0025] person_1 (PATIENT): My partner and our baby
+[SEG0026] person_2 (DOCTOR): Do you do any exercise?
+[SEG0027] person_1 (PATIENT): I swim twice a week.
+[SEG0028] person_2 (DOCTOR): Have you retired yet?
+[SEG0029] person_1 (PATIENT): I retired from the post office two years ago.
+[SEG0030] person_2 (DOCTOR): Has anything ever caused you a reaction? I mean any allergies.
+[SEG0031] person_1 (PATIENT): Well, um, no, not that I know of.
+[SEG0032] person_2 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0033] person_1 (PATIENT): Sure thing.
+[SEG0034] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0035] person_2 (DOCTOR): He is playful, breathing comfortably at rest, and I can't hear any noisy breathing now.
+[SEG0036] person_2 (DOCTOR): Alright, all finished, thank you.
+[SEG0037] person_2 (DOCTOR): I'm going to put you on dexamethasone, 0.15 mg per kg, once, single dose. You take it by mouth. That's for croup. Keep him calm, sit him upright, and give fluids. Come back or go to emergency straight away if he makes a noisy sound when resting or struggles to breathe. See me again if no better in two days. Does all of that make sense?
+[SEG0038] person_1 (PATIENT): I think I understand everything. Thanks.
+[SEG0039] person_2 (DOCTOR): Look after yourself.
+
+JSON:

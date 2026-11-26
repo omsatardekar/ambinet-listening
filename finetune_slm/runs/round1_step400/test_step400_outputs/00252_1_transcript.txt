@@ -1,0 +1,47 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00252)
+[SEG0001] person_1 (DOCTOR): Hi, nice to see you. Sit down, please.
+[SEG0002] person_2 (PATIENT): Thanks. Sorry, I'm a little early.
+[SEG0003] person_1 (DOCTOR): Right, what's the trouble?
+[SEG0004] person_2 (PATIENT): Doctor, uh, it's pain in both knees. It's getting on my nerves now. I'm not great at remembering details, so bear with me.
+[SEG0005] person_1 (DOCTOR): How long has this been going on?
+[SEG0006] person_2 (PATIENT): Oh, um, it's been going on for two months. I told myself I'd wait and see, and here I am. I thought it would sort itself out, but it hasn't.
+[SEG0007] person_1 (DOCTOR): Uh-huh. Okay, give me more detail on it, whatever comes to mind.
+[SEG0008] person_2 (PATIENT): Okay, um, so I'd give it a five, out of ten. Squatting definitely sets it off. Oh, and a grinding sound when I move. That's been about the same, about three months. Oh, about grinding sound when I move, mild, I'd say. Oh, and difficulty getting up from a chair. That's been about the same, six months.
+[SEG0009] person_1 (DOCTOR): Right, have you had any previous surgeries?
+[SEG0010] person_2 (PATIENT): No, never had any surgery.
+[SEG0011] person_1 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0012] person_2 (PATIENT): Arthritis in my knees, for about ten years.
+[SEG0013] person_1 (DOCTOR): Right, right. Yes, arthritis in your knees is known to us, good to have that clear. What medicines are you taking at the moment?
+[SEG0014] person_2 (PATIENT): Paracetamol. I take it 650 milligrams, when needed for the knee pain.
+[SEG0015] person_1 (DOCTOR): Alright, and your work?
+[SEG0016] person_2 (PATIENT): I drive a delivery van all day.
+[SEG0017] person_1 (DOCTOR): How do you eat, generally?
+[SEG0018] person_2 (PATIENT): I skip breakfast most days.
+[SEG0019] person_1 (DOCTOR): Any pain in other joints, redness over the knee, fever or back pain at all?
+[SEG0020] person_2 (PATIENT): No, not any of them.
+[SEG0021] person_1 (DOCTOR): Alright, any rashes or skin problems otherwise?
+[SEG0022] person_2 (PATIENT): No rashes.
+[SEG0023] person_3 (NURSE): Doctor, I've got the readings for you. Respiratory rate 14, BP is 111 over 70, pulse 71, oxygen saturation is 99 percent.
+[SEG0024] person_1 (DOCTOR): Okay, noted.
+[SEG0025] person_1 (DOCTOR): Okay, I'll examine you now, bear with me.
+[SEG0026] person_2 (PATIENT): That's fine.
+[SEG0027] person_1 (DOCTOR): Tell me if anything hurts.
+[SEG0028] person_1 (DOCTOR): Bending is limited to about a right angle, and it hurts at the end.
+[SEG0029] person_1 (DOCTOR): That's all I need, thank you. Having listened and examined, I don't have a clear answer today: osteoarthritis of the knees is possible, and so is a meniscal problem.
+[SEG0030] person_1 (DOCTOR): Blood tests is what I'd like next, for joint pain. I'll request an X-ray of both knees, it'll help with knee pain. For this, etoricoxib, 60 milligrams, once a day, for five days. It's for knee pain. Losing even a few kilos takes a lot of load off the knees, and I'd like you to do the strengthening exercises. Don't skip meals, and try to eat smaller portions more often through the day.
+[SEG0031] person_1 (DOCTOR): I'm going to send a referral to physiotherapy. Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency. Come back in four weeks. Okay, we're done for today. Take care.
+[SEG0032] person_2 (PATIENT): Yeah, no, I think that's everything. Thank you, doctor.
+
+JSON:

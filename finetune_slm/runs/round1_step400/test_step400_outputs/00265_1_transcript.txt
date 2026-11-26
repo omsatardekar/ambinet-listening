@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00265)
+[SEG0001] person_1 (NURSE): doctor, your next patient is here i've done the basics, I'll read them out in a moment
+[SEG0002] person_2 (DOCTOR): Okay, thanks. Hi, how can I help today?
+[SEG0003] person_3 (PATIENT): I'm here because of it was red twice this week.
+[SEG0004] person_2 (DOCTOR): When did it begin?
+[SEG0005] person_3 (PATIENT): It's been about two weeks now. I'd rather not end up on lots of tablets if I can avoid it.
+[SEG0006] person_2 (DOCTOR): what about tiredness, have you noticed that?
+[SEG0007] person_3 (PATIENT): mm, yes oh, and a mild ache in the back as for mild ache in the back, it's once or twice a day
+[SEG0008] person_2 (DOCTOR): Do you have any allergies to medicines, food, anything at all?
+[SEG0009] person_3 (PATIENT): no allergies that I know of, no
+[SEG0010] person_2 (DOCTOR): Does anything run in the family?
+[SEG0011] person_3 (PATIENT): My father had a heart attack.
+[SEG0012] person_2 (DOCTOR): what's your current medication list?
+[SEG0013] person_3 (PATIENT): Ramipril, 5 milligrams, maybe, every morning.
+[SEG0014] person_2 (DOCTOR): okay, do you have the packet or the prescription with you?
+[SEG0015] person_3 (PATIENT): No, it's at home. Tiotropium inhaler. I take it once a day. I'm supposed to take it regularly, but I don't always manage.
+[SEG0016] person_2 (DOCTOR): How do you eat, generally?
+[SEG0017] person_3 (PATIENT): I skip breakfast most days
+[SEG0018] person_2 (DOCTOR): What kind of work do you do?
+[SEG0019] person_3 (PATIENT): I work on a farm, it's quite physical
+[SEG0020] person_2 (DOCTOR): Okay, moving on to your background, any past medical history?
+[SEG0021] person_3 (PATIENT): I've had high blood pressure for about a year now.
+[SEG0022] person_2 (DOCTOR): Anything more?
+[SEG0023] person_3 (PATIENT): I've got COPD.
+[SEG0024] person_2 (DOCTOR): Right, so high blood pressure and COPD are already on your record. We'll keep that that in mind today. A few quick ones: flank pain, recent injury or difficulty passing urine?
+[SEG0025] person_3 (PATIENT): No flank pain, recent injury or difficulty passing urine, none of it.
+[SEG0026] person_2 (DOCTOR): and what about weight loss, fever or pain on passing urine?
+[SEG0027] person_3 (PATIENT): No, nothing there.
+[SEG0028] person_2 (DOCTOR): Mm. Is your chest okay generally?
+[SEG0029] person_3 (PATIENT): No problems with breathing.
+[SEG0030] person_2 (DOCTOR): is your digestion otherwise okay?
+[SEG0031] person_3 (PATIENT): no, um, that side's been fine
+[SEG0032] person_1 (NURSE): Here are the numbers, doctor. Height 161 centimetres, oxygen saturation is 97 percent. Pressure 124 over 80, weight 54 kilos, pulse is 70 beats a minute, temp 36.8 degrees.
+[SEG0033] person_2 (DOCTOR): good, thank you
+[SEG0034] person_2 (DOCTOR): Okay, a a quick examination now.
+[SEG0035] person_2 (DOCTOR): take your time, no rush
+[SEG0036] person_2 (DOCTOR): Abdomen is soft, no masses, and no tenderness in the loins.
+[SEG0037] person_2 (DOCTOR): That's fine, sit up.
+[SEG0038] person_2 (DOCTOR): Putting it all together, I think we're dealing with blood in the urine that needs full investigation at this stage. It could also be a urine infection, so we'll keep that open. I think a cystoscopy makes sense here, for haematuria. I'd rather check than guess, and this is the quickest way to know more. I think a CT scan of the kidneys and bladder makes sense here, for haematuria.
+[SEG0039] person_3 (PATIENT): Okay, noted.
+[SEG0040] person_2 (DOCTOR): Keep drinking plenty of water, and let us know quickly if you pass clots or can't pass urine. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0041] person_3 (PATIENT): okay, I'll remember
+[SEG0042] person_2 (DOCTOR): Let's hold off on a urine test for now, and if there's no change in two weeks we can revisit it. Keep an eye out, and if you can't pass urine or pass large clots, call us the same day or go to emergency. See me again after the results are back.
+[SEG0043] person_3 (PATIENT): That works for me.
+[SEG0044] person_2 (DOCTOR): That's it on my side. Anything unclear?
+[SEG0045] person_3 (PATIENT): all good here. Thank you
+
+JSON:

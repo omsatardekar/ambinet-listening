@@ -1,0 +1,77 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00099)
+[SEG0001] person_1 (NURSE): Doctor, I've brought them through. The observations are done, whenever you need them.
+[SEG0002] person_2 (DOCTOR): Perfect, thanks. Hello there, so what's the trouble?
+[SEG0003] person_3 (PATIENT): It's pressure behind the eyes, mostly.
+[SEG0004] person_2 (DOCTOR): And when did that start?
+[SEG0005] person_3 (PATIENT): Ever since... since yesterday, really.
+[SEG0006] person_2 (DOCTOR): And how severe is it?
+[SEG0007] person_3 (PATIENT): Moderate, I'd say.
+[SEG0008] person_3 (PATIENT): I was just going to say that the main thing is—
+[SEG0009] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0010] person_2 (DOCTOR): Later, thanks. Please go on.
+[SEG0011] person_3 (PATIENT): I mean, there's headaches for a while as well.
+[SEG0012] person_2 (DOCTOR): How would you describe it, mild, moderate, severe?
+[SEG0013] person_3 (PATIENT): Severe, really.
+[SEG0014] person_2 (DOCTOR): Mm.
+[SEG0015] person_4 (UNKNOWN): Yes, exactly like that.
+[SEG0016] person_1 (NURSE): Okay, so the vitals from earlier. Pulse is 77 beats a minute, pressure 115 over 75, respiratory rate 15.
+[SEG0017] person_2 (DOCTOR): Thanks.
+[SEG0018] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0019] person_3 (PATIENT): Alright.
+[SEG0020] person_2 (DOCTOR): Almost done with this part.
+[SEG0021] person_2 (DOCTOR): Power and reflexes are equal on both sides.
+[SEG0022] person_2 (DOCTOR): I'll go gently.
+[SEG0023] person_2 (DOCTOR): Visual fields are full to confrontation and the optic discs look normal.
+[SEG0024] person_2 (DOCTOR): Okay, you can sit up. Any confusion, seizures or head injury at all?
+[SEG0025] person_3 (PATIENT): No, uh, no confusion, no seizures, no head injury. I did have neck tightness at one point, but that went away on its own.
+[SEG0026] person_2 (DOCTOR): Have you noticed weakness, jaw pain on chewing or fever?
+[SEG0027] person_3 (PATIENT): Nothing like that, no.
+[SEG0028] person_2 (DOCTOR): Is your digestion otherwise okay?
+[SEG0029] person_3 (PATIENT): Bowels are regular, nothing odd.
+[SEG0030] person_2 (DOCTOR): Do you smoke?
+[SEG0031] person_3 (PATIENT): I smoke about ten cigarettes a day.
+[SEG0032] person_2 (DOCTOR): Okay, do you get any exercise?
+[SEG0033] person_3 (PATIENT): I walk for about half an hour most days.
+[SEG0034] person_2 (DOCTOR): Have you had to have anything operated on?
+[SEG0035] person_3 (PATIENT): I had my gallbladder removed in 2016.
+[SEG0036] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0037] person_3 (PATIENT): I'm on losartan, 50 milligrams, once a day for my blood pressure.
+[SEG0038] person_2 (DOCTOR): How long have you taken that?
+[SEG0039] person_3 (PATIENT): Nearly five years now. I take allopurinol, 100 milligrams, maybe, once a day for the gout.
+[SEG0040] person_2 (DOCTOR): Have you got the box or the prescription on you?
+[SEG0041] person_3 (PATIENT): Not with me. I'll bring it next time. It's aspirin, 75 milligrams, once a day.
+[SEG0042] person_1 (NURSE): Doctor, our chart from the last visit lists it as 150 milligrams.
+[SEG0043] person_2 (DOCTOR): Alright. Did you bring the up-to-date prescription?
+[SEG0044] person_3 (PATIENT): No, I left it at home. It's atorvastatin, 20 milligrams, at night for my cholesterol.
+[SEG0045] person_2 (DOCTOR): Since when have you been taking it?
+[SEG0046] person_3 (PATIENT): About two months.
+[SEG0047] person_2 (DOCTOR): So, are there any allergies on your record that I should check?
+[SEG0048] person_3 (PATIENT): No, no allergies to anything.
+[SEG0049] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0050] person_3 (PATIENT): I've had high blood pressure for about a year now.
+[SEG0051] person_2 (DOCTOR): Hm, okay.
+[SEG0052] person_3 (PATIENT): I have gout. I have heart disease, for about a year. Yes, high cholesterol. I've had thin bones for two years now. Sorry, I know I'm rambling a bit.
+[SEG0053] person_2 (DOCTOR): Right, so high blood pressure and gout are already on your record. We'll keep that in mind today.
+[SEG0054] person_2 (DOCTOR): Okay, thinking it through, my working impression is a headache disorder of uncertain type. I'd also keep tension-type headache in mind.
+[SEG0055] person_3 (PATIENT): Is this going to go away?
+[SEG0056] person_2 (DOCTOR): It's reasonable to be concerned, but right now a headache disorder of uncertain type is my leading thought, not anything worse. I'm sending you for an eye pressure check because of headache with blurred vision. The result will help us decide whether anything more is needed.
+[SEG0057] person_5 (CLINICAL_STAFF): I can book that for Friday at 2 pm.
+[SEG0058] person_2 (DOCTOR): I think an MRI of the brain makes sense here, for headaches with visual symptoms.
+[SEG0059] person_3 (PATIENT): How long does that take?
+[SEG0060] person_2 (DOCTOR): Note down each headache with the date, time and what you were doing. Let's get you seen by a neurologist, I'll arrange the letter. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. I'll want another look in four weeks. Okay, I think we're finished. Is everything clear?
+[SEG0061] person_3 (PATIENT): No questions. Thank you.
+[SEG0062] person_2 (DOCTOR): All the best.
+
+JSON:

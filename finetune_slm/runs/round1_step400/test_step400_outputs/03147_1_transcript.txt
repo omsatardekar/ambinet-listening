@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03147)
+[SEG0001] person_1 (PATIENT): Morning, doctor. Lovely to meet you.
+[SEG0002] person_2 (DOCTOR): you're alright, take a seat. What can I do for you?
+[SEG0003] person_1 (PATIENT): Mainly hearing getting worse in both ears. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): when did this begin?
+[SEG0005] person_1 (PATIENT): Let me think it's been about a week I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): is it a lot or only a little?
+[SEG0007] person_1 (PATIENT): Mild, I'd say so, I've had hearing better in a noisy room too, for five days
+[SEG0008] person_2 (DOCTOR): how much does it limit you?
+[SEG0009] person_1 (PATIENT): I'd say mild.
+[SEG0010] person_2 (DOCTOR): has there been no dizziness too?
+[SEG0011] person_1 (PATIENT): yeah. Ten days, I'd say
+[SEG0012] person_2 (DOCTOR): has there been any ear pain?
+[SEG0013] person_1 (PATIENT): Definitely no ear pain.
+[SEG0014] person_2 (DOCTOR): Any facial weakness or discharge?
+[SEG0015] person_1 (PATIENT): no, nothing to report there
+[SEG0016] person_2 (DOCTOR): has your heart given you any trouble?
+[SEG0017] person_1 (PATIENT): no, nothing with my heart
+[SEG0018] person_2 (DOCTOR): alright, how are your joints, any aches elsewhere?
+[SEG0019] person_1 (PATIENT): no, nothing there
+[SEG0020] person_2 (DOCTOR): Do you drink alcohol?
+[SEG0021] person_1 (PATIENT): Nothing, I'm teetotal.
+[SEG0022] person_2 (DOCTOR): any smoking?
+[SEG0023] person_1 (PATIENT): I have about eight cigarettes in a day.
+[SEG0024] person_2 (DOCTOR): How are your meals?
+[SEG0025] person_1 (PATIENT): I grab fast food at lunch most days.
+[SEG0026] person_2 (DOCTOR): Anything you do to to stay fit?
+[SEG0027] person_1 (PATIENT): I do a yoga class on Thursdays
+[SEG0028] person_2 (DOCTOR): So are you on your own at home?
+[SEG0029] person_1 (PATIENT): I live with my elderly mother.
+[SEG0030] person_2 (DOCTOR): alright, are there any allergies I should be aware of?
+[SEG0031] person_1 (PATIENT): Um, no, nothing as far as I know.
+[SEG0032] person_2 (DOCTOR): can you list what you take, tablets, creams or inhalers?
+[SEG0033] person_1 (PATIENT): I take sitagliptin 100 milligrams once a day. I did try to ignore it for a while
+[SEG0034] person_2 (DOCTOR): roughly how long on that one?
+[SEG0035] person_1 (PATIENT): About three months now. Tiotropium inhaler. I take it it once a day. I told my wife I'd come today.
+[SEG0036] person_2 (DOCTOR): any previous surgeries?
+[SEG0037] person_1 (PATIENT): no, never
+[SEG0038] person_2 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0039] person_1 (PATIENT): I have diabetes
+[SEG0040] person_2 (DOCTOR): mm-hmm
+[SEG0041] person_1 (PATIENT): I have COPD. My family kept telling me to get it checked. Work has been very busy so I kept ignoring it it
+[SEG0042] person_2 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0043] person_1 (PATIENT): My grandfather had a stroke.
+[SEG0044] person_3 (NURSE): okay, so the vitals from earlier. Pulse 79, BP is 124 over 76, oxygen saturation is 99 percent
+[SEG0045] person_2 (DOCTOR): thanks
+[SEG0046] person_2 (DOCTOR): alright I'll need to to examine you for this it won't take long
+[SEG0047] person_2 (DOCTOR): I'm just checking this side.
+[SEG0048] person_2 (DOCTOR): Both ear drums look normal and the tuning fork is heard better through the bone
+[SEG0049] person_2 (DOCTOR): Okay, that's enough for me.
+[SEG0050] person_2 (DOCTOR): Having listened and examined, I'd lean towards a conductive hearing loss, possibly otosclerosis. I'd also keep wax in mind. A hearing aid or an operation are both options after the tests. Okay, is there anything you'd like me to go over again?
+[SEG0051] person_1 (PATIENT): thank you, doctor, goodbye
+
+JSON:

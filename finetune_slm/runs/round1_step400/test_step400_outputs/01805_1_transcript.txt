@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01805)
+[SEG0001] person_1 (DOCTOR): Hello, good to see you. Please sit. Weather's turned, hasn't it?
+[SEG0002] person_2 (PATIENT): It has. I got caught in the rain walking over.
+[SEG0003] person_1 (DOCTOR): What's been worrying you?
+[SEG0004] person_2 (PATIENT): Um, so... neck pain after a car crash. That's why I came.
+[SEG0005] person_1 (DOCTOR): When was the first time you noticed it?
+[SEG0006] person_2 (PATIENT): It's, It's been two weeks, I'm fairly sure. My neighbour said I should get it looked at.
+[SEG0007] person_1 (DOCTOR): Have you tried anything for it?
+[SEG0008] person_2 (PATIENT): Only heat, and it's not much.
+[SEG0009] person_1 (DOCTOR): Sure. Is anything making it worse?
+[SEG0010] person_2 (PATIENT): It's worse with turning.
+[SEG0011] person_1 (DOCTOR): Have you noticed anything else alongside it?
+[SEG0012] person_2 (PATIENT): A headache goes along with it, most of the time. The headache? That's been for about two weeks.
+[SEG0013] person_1 (DOCTOR): Any numbness in the arms, weakness, loss of consciousness or chest pain?
+[SEG0014] person_2 (PATIENT): No, I'd have said so.
+[SEG0015] person_1 (DOCTOR): Right, any breathing difficulties apart from this?
+[SEG0016] person_2 (PATIENT): No, my breathing's been fine.
+[SEG0017] person_1 (DOCTOR): Right, has your skin been okay?
+[SEG0018] person_2 (PATIENT): Nothing on the skin, no.
+[SEG0019] person_1 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0020] person_2 (PATIENT): My husband and I live above the shop. I drink a lot of tea and snack through the day. I work in accounts at a hospital.
+[SEG0021] person_1 (DOCTOR): Any previous surgeries?
+[SEG0022] person_2 (PATIENT): No, not at all.
+[SEG0023] person_1 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0024] person_2 (PATIENT): Ah, I've never had an allergy.
+[SEG0025] person_1 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0026] person_2 (PATIENT): No, no conditions.
+[SEG0027] person_1 (DOCTOR): Any regular medication at all?
+[SEG0028] person_2 (PATIENT): No, I don't take any tablets.
+[SEG0029] person_1 (DOCTOR): Can I check a few measurements before we carry on?
+[SEG0030] person_1 (DOCTOR): That's it, just a little longer...
+[SEG0031] person_1 (DOCTOR): Okay: BP is 118 over 81, weight 69 kilos, pulse 69. And temperature is 36.7 degrees, height 158 centimetres, oxygen saturation is 99 percent.
+[SEG0032] person_2 (PATIENT): Is that alright, doctor?
+[SEG0033] person_1 (DOCTOR): So, we'll go over that shortly.
+[SEG0034] person_1 (DOCTOR): I'll examine you in a second, make yourself comfortable.
+[SEG0035] person_1 (DOCTOR): Nearly finished here.
+[SEG0036] person_1 (DOCTOR): There is muscle tenderness either side of the neck and no tenderness over the bones.
+[SEG0037] person_1 (DOCTOR): That's all I needed to check.
+[SEG0038] person_1 (DOCTOR): Okay, so my impression is this: The most likely explanation is whiplash-type neck strain. Keep your neck moving gently and avoid a collar. If you get numbness or weakness in your arms, that's the point to come in urgently. Come back if not better in two weeks. Anything else on your mind before you go?
+[SEG0039] person_2 (PATIENT): Good, thanks, I'll see you then.
+
+JSON:

@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00411)
+[SEG0001] person_1 (PATIENT): Hmm, hello doctor, sorry, am I early?
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_1 (PATIENT): I'm here because of a thump in the chest at night. It's a relief to finally sit down and talk about it.
+[SEG0004] person_2 (DOCTOR): I'll take a few measurements first.
+[SEG0005] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0006] person_2 (DOCTOR): Okay: temp 36.9 degrees, respiratory rate 16. And SpO2 98 percent on room air, pulse 68, pressure 108 over 78.
+[SEG0007] person_1 (PATIENT): Is that okay?
+[SEG0008] person_2 (DOCTOR): That's fine, we'll come to it.
+[SEG0009] person_2 (DOCTOR): How far back does it go? Just so I get the full picture.
+[SEG0010] person_1 (PATIENT): For five days, I'd say.
+[SEG0011] person_2 (DOCTOR): How often does it happen?
+[SEG0012] person_1 (PATIENT): It happens on and off. I've also been feeling anxious about it, for three weeks.
+[SEG0013] person_2 (DOCTOR): Did you get energy drinks or leg swelling?
+[SEG0014] person_1 (PATIENT): No, no energy drinks or leg swelling.
+[SEG0015] person_2 (DOCTOR): Did you get fainting or family history of sudden death?
+[SEG0016] person_1 (PATIENT): I haven't had fainting or family history of sudden death, no.
+[SEG0017] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0018] person_1 (PATIENT): No, um, that's all fine.
+[SEG0019] person_2 (DOCTOR): Any operations in the past?
+[SEG0020] person_1 (PATIENT): I had a hernia repair about five years back. I've never really been one for hospitals.
+[SEG0021] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0022] person_1 (PATIENT): No, none that I know of.
+[SEG0023] person_2 (DOCTOR): Any regular medication?
+[SEG0024] person_1 (PATIENT): No, I don't take anything regularly.
+[SEG0025] person_2 (DOCTOR): Right, do you have any known allergies at all?
+[SEG0026] person_1 (PATIENT): No allergies.
+[SEG0027] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0028] person_1 (PATIENT): I cycle to work most mornings. I live with my family, my husband and two kids. I work in an office, mostly sitting at a desk.
+[SEG0029] person_2 (DOCTOR): I'd like to examine you now.
+[SEG0030] person_2 (DOCTOR): Let me look at this properly.
+[SEG0031] person_2 (DOCTOR): Heart sounds are normal with no murmur.
+[SEG0032] person_2 (DOCTOR): Right, you can sit back down.
+[SEG0033] person_2 (DOCTOR): So, based on the history and the examination, the most likely explanation is benign extra heartbeats, though we should confirm.
+[SEG0034] person_1 (PATIENT): Uh, do you think it's serious?
+[SEG0035] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's benign extra heartbeats, though we should confirm, and we'll know more once the a thyroid test is back. Let's get a thyroid test, for palpitations.
+[SEG0036] person_1 (PATIENT): Does it need any preparation?
+[SEG0037] person_2 (DOCTOR): Try cutting out caffeine for two weeks and see if the beats settle. Look after yourself.
+[SEG0038] person_1 (PATIENT): Alright, thanks. Bye for now.
+
+JSON:

@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00817)
+[SEG0001] person_1 (PATIENT): Sorry, sorry, I'm so late, the bus, then I went to the wrong floor, I thought it was... never mind. It's my heel.
+[SEG0002] person_2 (DOCTOR): No problem. Which heel? ~
+[SEG0003] person_1 (PATIENT): The right. It's the first steps in the morning, it feels like a nail going in. Heel pain, I mean, when I get out of bed.
+[SEG0004] person_2 (DOCTOR): How long has it been going on?
+[SEG0005] person_1 (PATIENT): Since... the summer? No. The summer before. Or maybe the spring. I honestly can't tell you, it just sort of arrived.
+[SEG0006] person_2 (DOCTOR): Does it ease off once you're up? ~
+[SEG0007] person_1 (PATIENT): After about ten minutes, yes, then it comes back after I've been sitting. ~
+[SEG0008] person_2 (DOCTOR): Anywhere else in the foot?
+[SEG0009] person_1 (PATIENT): Along the arch, a tight ache, yes.
+[SEG0010] person_2 (DOCTOR): Calves?
+[SEG0011] person_1 (PATIENT): Very tight, yes. I get cramp after shifts.
+[SEG0012] person_2 (DOCTOR): Any numbness or tingling in the foot?
+[SEG0013] person_1 (PATIENT): No numbness.
+[SEG0014] person_2 (DOCTOR): Did you twist it or injure it?
+[SEG0015] person_1 (PATIENT): No, I never injured it.
+[SEG0016] person_2 (DOCTOR): Any swelling?
+[SEG0017] person_1 (PATIENT): No swelling, no.
+[SEG0018] person_2 (DOCTOR): What are you taking for it?
+[SEG0019] person_1 (PATIENT): Naproxen, maybe 250 mg? Twice a day. And omeprazole, 20 mg, once a day. Every morning. Well, most mornings. I forget it on my days off.
+[SEG0020] person_2 (DOCTOR): Allergies?
+[SEG0021] person_1 (PATIENT): Tramadol. I react to it. I've been told. But don't ask me what it does to me.
+[SEG0022] person_2 (DOCTOR): Okay. Medical history?
+[SEG0023] person_1 (PATIENT): Reflux, flat feet, and carpal tunnel in both wrists.
+[SEG0024] person_2 (DOCTOR): Surgery?
+[SEG0025] person_1 (PATIENT): Bunion surgery in 2012. And a hysterectomy in 2019.
+[SEG0026] person_2 (DOCTOR): Family?
+[SEG0027] person_1 (PATIENT): My mother has arthritis in her feet.
+[SEG0028] person_2 (DOCTOR): What's your job?
+[SEG0029] person_1 (PATIENT): Nurse, twelve-hour shifts on a surgical ward.
+[SEG0030] person_2 (DOCTOR): Exercise?
+[SEG0031] person_1 (PATIENT): I run, parkrun on Saturdays. Or I did.
+[SEG0032] person_2 (DOCTOR): And on shift?
+[SEG0033] person_1 (PATIENT): Hard floors all day. About eight miles a shift, the app says.
+[SEG0034] person_2 (DOCTOR): Let me check you. Blood pressure 128 over 80, weight 82 kilos.
+[SEG0035] person_1 (PATIENT): Same as last time? ~
+[SEG0036] person_2 (DOCTOR): Same. Sit up on the couch. I'm pressing the heel.
+[SEG0037] person_1 (PATIENT): Ow! There. ~
+[SEG0038] person_2 (DOCTOR): There's tenderness at the inner side of the heel, and your calf muscles are very tight.
+[SEG0039] person_1 (PATIENT): Told you. ~
+[SEG0040] person_2 (DOCTOR): And your arches are flat when you stand.
+[SEG0041] person_1 (PATIENT): Yes, always have been. ~
+[SEG0042] person_2 (DOCTOR): Any trouble with your breathing?
+[SEG0043] person_1 (PATIENT): No, nothing, I'm fine.
+[SEG0044] person_2 (DOCTOR): This looks like plantar fasciitis, but I can't rule out a heel spur.
+[SEG0045] person_1 (PATIENT): What's the difference? ~
+[SEG0046] person_2 (DOCTOR): A spur is a bony lump you can see on X-ray. I'd like to arrange an X-ray of the foot, and an ultrasound of the heel.
+[SEG0047] person_1 (PATIENT): Is it a long wait? ~
+[SEG0048] person_2 (DOCTOR): A few weeks. I'd also like to do blood tests for inflammation, and refer you to a podiatrist for insoles.
+[SEG0049] person_1 (PATIENT): Right. And what do I do meanwhile? ~
+[SEG0050] person_2 (DOCTOR): Stretch the calves three times a day, and roll your foot over a frozen water bottle.
+[SEG0051] person_1 (PATIENT): I'll try, thank you. ~
+[SEG0052] person_2 (DOCTOR): If it's not better in six weeks, come back and we'll talk about an injection.
+[SEG0053] person_1 (PATIENT): Okay, six weeks. Sorry again about being late. ~
+
+JSON:

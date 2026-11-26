@@ -1,0 +1,46 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00891)
+[SEG0001] person_2 (DOCTOR): Hello, I'm Dr Reyes. What would you like me to call you, Mr Tran, or Henry? ~
+[SEG0002] person_1 (PATIENT): Henry's fine. My legs are a bit puffy, that's all, but Marisol made me come.
+[SEG0003] person_4 (CAREGIVER): I'm his carer, Marisol, I live in. His ankles have been swollen for three weeks, and last night he couldn't lie down, he slept in the chair.
+[SEG0004] person_1 (PATIENT): Three weeks, no. One week. It's been one week.
+[SEG0005] person_2 (DOCTOR): One week or three weeks. We'll record that as somewhere between one and three weeks. And last night, Henry?
+[SEG0006] person_1 (PATIENT): Couldn't breathe lying flat. I had to prop up on three pillows, then the chair.
+[SEG0007] person_2 (DOCTOR): Any chest pain?
+[SEG0008] person_1 (PATIENT): No chest pain.
+[SEG0009] person_2 (DOCTOR): Nurse, can we get his obs?
+[SEG0010] person_3 (NURSE): Sure. Oxygen 92 percent, blood pressure 156 over 92, pulse 96, breathing 22, temperature 36.8, and weight 88 kilos.
+[SEG0011] person_2 (DOCTOR): Thank you. Henry, what medications do you take?
+[SEG0012] person_1 (PATIENT): Metoprolol, 50 mg, twice a day. And a little white water pill, I take it every morning. I couldn't tell you the name.
+[SEG0013] person_4 (CAREGIVER): I'll bring the box tomorrow, doctor. It's small and white, but I've not got the name written down.
+[SEG0014] person_2 (DOCTOR): That's fine, we'll find it on the pharmacy record. Any heart history?
+[SEG0015] person_1 (PATIENT): High blood pressure, for thirty years.
+[SEG0016] person_2 (DOCTOR): Operations?
+[SEG0017] person_1 (PATIENT): Bypass surgery, in 2016.
+[SEG0018] person_2 (DOCTOR): Who looks after you at home?
+[SEG0019] person_4 (CAREGIVER): I do, I live in with him.
+[SEG0020] person_2 (DOCTOR): Let me look at your legs. Press here.
+[SEG0021] person_1 (PATIENT): Cold hands, doc. ~
+[SEG0022] person_2 (DOCTOR): There's pitting swelling in both legs, up to the knees.
+[SEG0023] person_4 (CAREGIVER): It wasn't that high yesterday. ~
+[SEG0024] person_2 (DOCTOR): Any palpitations, fluttering in the chest?
+[SEG0025] person_1 (PATIENT): No, nothing.
+[SEG0026] person_2 (DOCTOR): What I'm seeing looks like fluid backing up, probably from the heart, but let's confirm.
+[SEG0027] person_4 (CAREGIVER): Is it serious? ~
+[SEG0028] person_2 (DOCTOR): It needs treatment today. I'd like to arrange a chest X-ray, an ECG, and blood tests including a heart-strain marker.
+[SEG0029] person_3 (NURSE): I'll take him for the ECG now. ~
+[SEG0030] person_2 (DOCTOR): Thank you, nurse. If the swelling isn't coming down after three days of the treatment, come straight back.
+[SEG0031] person_4 (CAREGIVER): I'll watch his legs. ~
+
+JSON:

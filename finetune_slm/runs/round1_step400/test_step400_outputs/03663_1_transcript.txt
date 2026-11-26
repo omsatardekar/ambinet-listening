@@ -1,0 +1,69 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03663)
+[SEG0001] person_1 (PATIENT): Hmm hi doctor am I too early?
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What seems to be wrong?
+[SEG0003] person_1 (PATIENT): well, I've been having brief blackouts of vision on standing
+[SEG0004] person_2 (DOCTOR): Can you tell me when it first started?
+[SEG0005] person_1 (PATIENT): it's been six months now
+[SEG0006] person_2 (DOCTOR): right, right is anything making it worse?
+[SEG0007] person_1 (PATIENT): Standing definitely sets it off.
+[SEG0008] person_2 (DOCTOR): Would you say mild, moderate or severe?
+[SEG0009] person_1 (PATIENT): it feels severe to me
+[SEG0010] person_2 (DOCTOR): is it accompanied by anything?
+[SEG0011] person_1 (PATIENT): it usually comes with gaining weight
+[SEG0012] person_2 (DOCTOR): Has there been a whooshing noise in your ears too?
+[SEG0013] person_1 (PATIENT): Yes, that started yesterday. The The gaining weight? That's been since Friday.
+[SEG0014] person_2 (DOCTOR): did you get stiff neck fever or head injury?
+[SEG0015] person_1 (PATIENT): let me think, no, none that I've noticed
+[SEG0016] person_2 (DOCTOR): Any weakness?
+[SEG0017] person_1 (PATIENT): sorry, uh, what was I saying, no, I haven't had any weakness
+[SEG0018] person_2 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0019] person_1 (PATIENT): no nothing there
+[SEG0020] person_2 (DOCTOR): anything on the skin I should know about?
+[SEG0021] person_1 (PATIENT): No skin's been fine.
+[SEG0022] person_2 (DOCTOR): Do you have any long-term conditions?
+[SEG0023] person_1 (PATIENT): I've, I've had acid reflux for five years now. Erm, um, I've had anxiety for nearly five years now. I took the morning off to come in today. My family kept telling me to get it checked
+[SEG0024] person_2 (DOCTOR): yes, anxiety is known to us, good to have that clear before we go further, any allergies?
+[SEG0025] person_1 (PATIENT): mm no I've never reacted to anything
+[SEG0026] person_2 (DOCTOR): are there any illnesses in your family?
+[SEG0027] person_1 (PATIENT): my mother had a stroke
+[SEG0028] person_2 (DOCTOR): Okay and your job?
+[SEG0029] person_1 (PATIENT): I work in accounts at a hospital.
+[SEG0030] person_2 (DOCTOR): Do you follow any particular diet?
+[SEG0031] person_1 (PATIENT): I'm vegetarian and have been for years
+[SEG0032] person_2 (DOCTOR): Alright who lives with you?
+[SEG0033] person_1 (PATIENT): My partner and our baby
+[SEG0034] person_2 (DOCTOR): let's run through your medicines
+[SEG0035] person_1 (PATIENT): I'm on omeprazole, once a day.
+[SEG0036] person_2 (DOCTOR): Right and and what strength is that?
+[SEG0037] person_1 (PATIENT): It's 20 milligrams.
+[SEG0038] person_2 (DOCTOR): Is that long-standing?
+[SEG0039] person_1 (PATIENT): about about a year. I'm on escitalopram 10 milligrams once a day for the anxiety
+[SEG0040] person_2 (DOCTOR): I'd like to check you over now, if that's alright
+[SEG0041] person_2 (DOCTOR): take a a deep breath for me
+[SEG0042] person_2 (DOCTOR): The back of both eyes shows swollen optic discs and the visual fields are slightly constricted.
+[SEG0043] person_1 (PATIENT): Yes, that's fine.
+[SEG0044] person_2 (DOCTOR): okay that's enough for me
+[SEG0045] person_2 (DOCTOR): Let me tell you where I've got to. I think we're dealing with raised pressure inside the head, possibly idiopathic intracranial hypertension at this stage.
+[SEG0046] person_1 (PATIENT): actually, uh, do you think it's something serious?
+[SEG0047] person_2 (DOCTOR): nothing I've seen today points to an emergency it looks like raised pressure inside the head, possibly idiopathic intracranial hypertension but I'd like to confirm we should do an urgent MRI scan of the head and veins for papilloedema let's get a lumbar puncture for possible raised intracranial pressure
+[SEG0048] person_2 (DOCTOR): what I'm giving you is acetazolamide, 250 milligrams, twice a day, until review that's for raised pressure the pharmacy will go through the details again when you pick it up weight loss helps this condition and we will protect your eyesight
+[SEG0049] person_2 (DOCTOR): I follow. The thing that would worry me is if the symptoms get worse. If that happens, go to emergency.
+[SEG0050] person_1 (PATIENT): Yes, um, will do.
+[SEG0051] person_2 (DOCTOR): Let's review you in one week.
+[SEG0052] person_1 (PATIENT): mm, alright, I'll be back
+[SEG0053] person_2 (DOCTOR): so, that's everything on my side anything you're unsure about?
+[SEG0054] person_1 (PATIENT): oh, alright, thanks, take care
+
+JSON:

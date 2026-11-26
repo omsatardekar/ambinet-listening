@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00413)
+[SEG0001] person_1 (DOCTOR): Morning! Make yourself comfortable.
+[SEG0002] person_2 (PATIENT): good afternoon
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, thank you for seeing us.
+[SEG0004] person_1 (DOCTOR): Of course, please stay. It's helpful to have you here. What made you decide to come in?
+[SEG0005] person_3 (FAMILY_MEMBER): Doctor, it's terrible shaking and sweating. That's what we're worried about.
+[SEG0006] person_1 (DOCTOR): when did you first notice it?
+[SEG0007] person_2 (PATIENT): It's been two weeks now.
+[SEG0008] person_1 (DOCTOR): is it mild, moderate or severe?
+[SEG0009] person_2 (PATIENT): It feels severe to me.
+[SEG0010] person_1 (DOCTOR): Anything that tends to go along with it?
+[SEG0011] person_2 (PATIENT): when it starts I tend to get fever with chills as well
+[SEG0012] person_1 (DOCTOR): Have you had nausea?
+[SEG0013] person_2 (PATIENT): Yes, about the same, ten days. The fever with chills? That's been for three days. I did have a headache at one point, but that's gone now.
+[SEG0014] person_1 (DOCTOR): So, have you had terrible shaking and sweating before, or is this the first time?
+[SEG0015] person_2 (PATIENT): yes, something like this happened about six months ago, and it went away on its own
+[SEG0016] person_1 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0017] person_3 (FAMILY_MEMBER): She takes Seretide inhaler, twice a day. It's Glycomet, 500 milligrams, twice a day, doctor.
+[SEG0018] person_1 (DOCTOR): And for how long?
+[SEG0019] person_3 (FAMILY_MEMBER): For about a month. She takes paracetamol, 500 milligrams, when needed.
+[SEG0020] person_1 (DOCTOR): Roughly how long on that that one?
+[SEG0021] person_3 (FAMILY_MEMBER): For six months.
+[SEG0022] person_1 (DOCTOR): A few questions about your lifestyle now.
+[SEG0023] person_2 (PATIENT): I don't drink at all. I've never smoked. Yes, I'm a nurse on a busy ward. I skip breakfast most days. Not really, I don't get much exercise.
+[SEG0024] person_1 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0025] person_2 (PATIENT): hmm, there was some antibiotic, I was told I was allergic but I couldn't tell you what it was called or what it did
+[SEG0026] person_1 (DOCTOR): so, any long-term health problems I should know about?
+[SEG0027] person_2 (PATIENT): yes, asthma i've got diabetes
+[SEG0028] person_1 (DOCTOR): right, any more?
+[SEG0029] person_1 (DOCTOR): Alright, diabetes, that matches what I have here. Any cough, vomiting or breathlessness at all?
+[SEG0030] person_2 (PATIENT): I haven't had cough, vomiting or breathlessness, no
+[SEG0031] person_1 (DOCTOR): Any rash, diarrhoea or stiff neck at all?
+[SEG0032] person_2 (PATIENT): no, none of those
+[SEG0033] person_1 (DOCTOR): Is your urine normal, no changes?
+[SEG0034] person_2 (PATIENT): Nothing there, no.
+[SEG0035] person_1 (DOCTOR): anything with your heart, like skipped beats or fainting?
+[SEG0036] person_2 (PATIENT): Nothing like that.
+[SEG0037] person_1 (DOCTOR): Let me check your vitals now.
+[SEG0038] person_1 (DOCTOR): Okay, give me a a moment...
+[SEG0039] person_1 (DOCTOR): okay: pulse 99, temperature 38.2, BP is 104 over 76, SpO2 95 percent on room air
+[SEG0040] person_2 (PATIENT): is that alright, doctor?
+[SEG0041] person_1 (DOCTOR): They help build the picture, I'll tell you more soon.
+[SEG0042] person_1 (DOCTOR): so, based on your history, I'd lean towards malaria until proven otherwise another possibility is a viral illness let me just check I've got this right you've had terrible shaking and sweating for two weeks, severe, and no cough or diarrhoea
+[SEG0043] person_2 (PATIENT): Exactly.
+[SEG0044] person_1 (DOCTOR): let's book blood tests to look into fever. A malaria test is what I'd like next, for fever after travel
+[SEG0045] person_2 (PATIENT): Alright, when would that be?
+[SEG0046] person_1 (DOCTOR): Let the lab know you travelled recently, that's important for the tests. A dengue test is something we might do if this doesn't improve in two weeks. Let's review you in two days.
+[SEG0047] person_2 (PATIENT): Good, I'll come back then.
+[SEG0048] person_1 (DOCTOR): good. Let us know how you get on
+[SEG0049] person_2 (PATIENT): I appreciate it, doctor
+[SEG0050] person_1 (DOCTOR): Goodbye.
+
+JSON:

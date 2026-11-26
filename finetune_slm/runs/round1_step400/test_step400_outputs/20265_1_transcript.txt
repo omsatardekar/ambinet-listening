@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20265)
+[SEG0001] person_1 (PATIENT): Morning, doctor. Lovely to meet you.
+[SEG0002] person_2 (DOCTOR): So, come in. Please sit. How can I help you?
+[SEG0003] person_1 (PATIENT): Um, I'm here because of numbness in my feet.
+[SEG0004] person_2 (DOCTOR): How long has this been bothering you?
+[SEG0005] person_1 (PATIENT): Probably three days. Yeah.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): Pretty moderate, if I'm being honest. I'd say on and off. And there's a sore on the bottom of my foot as well, about four days now.
+[SEG0008] person_2 (DOCTOR): And what about calf pain, vomiting, chest pain or pain at rest in the leg?
+[SEG0009] person_1 (PATIENT): I haven't had calf pain, vomiting, chest pain or pain at rest in the leg, no
+[SEG0010] person_2 (DOCTOR): I follow any trouble with the waterworks?
+[SEG0011] person_1 (PATIENT): mm, that's normal as far as I know
+[SEG0012] person_2 (DOCTOR): So, what's on your current medicine list?
+[SEG0013] person_1 (PATIENT): I take gliclazide, 80 milligrams, twice a day for my sugar. I take metoprolol, 50 milligrams, maybe, twice a day
+[SEG0014] person_2 (DOCTOR): Is the packet here, or the prescription?
+[SEG0015] person_1 (PATIENT): No, it's at home.
+[SEG0016] person_2 (DOCTOR): What's your work?
+[SEG0017] person_1 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0018] person_2 (DOCTOR): are you on your own at home?
+[SEG0019] person_1 (PATIENT): I live with my elderly mother
+[SEG0020] person_2 (DOCTOR): what about your medical history?
+[SEG0021] person_1 (PATIENT): right, I've had diabetes for nearly five years now
+[SEG0022] person_2 (DOCTOR): Hm, okay.
+[SEG0023] person_1 (PATIENT): I have high blood pressure. It's a relief to finally sit down and talk about it
+[SEG0024] person_2 (DOCTOR): Understood.
+[SEG0025] person_2 (DOCTOR): let me ask about allergies, anything at all?
+[SEG0026] person_1 (PATIENT): years back I got itching from trimethoprim, so so I stay away from it now
+[SEG0027] person_2 (DOCTOR): I'll note down your vital signs first.
+[SEG0028] person_2 (DOCTOR): Okay, sit still for a moment...
+[SEG0029] person_2 (DOCTOR): okay: blood pressure 112 over 68, pulse 105, saturation 97 percent going by what you've described, I'd lean towards an infected diabetic foot ulcer i wanna be honest that this is an impression, not a final answer it could also be pressure damage, so we'll keep that open
+[SEG0030] person_2 (DOCTOR): I'm going to order a foot X-ray, for ulcer.
+[SEG0031] person_1 (PATIENT): is that done today?
+[SEG0032] person_2 (DOCTOR): I'll request a swab from the ulcer, it'll help with infected ulcer. I'd rather check than guess, and this is the quickest way to know more. I'm going to order blood tests, for infection. We'll begin with amoxicillin/clavulanic acid, 625 milligrams, three times a day, for seven days. That should help with foot infection. Keep the weight off that foot and keep the dressing dry.
+[SEG0033] person_2 (DOCTOR): a short walk every day, even twenty minutes, will help more than you'd think i'll also refer you to the foot clinic
+[SEG0034] person_1 (PATIENT): Okay.
+[SEG0035] person_2 (DOCTOR): And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0036] person_1 (PATIENT): Okay, uh, I'll look out for that.
+[SEG0037] person_2 (DOCTOR): Do get help quickly if the the redness spreads or you feel unwell with a fever.
+[SEG0038] person_1 (PATIENT): Oh, okay, I'll look out for that.
+[SEG0039] person_2 (DOCTOR): See me again in three days. That's all from me. Any questions?
+[SEG0040] person_1 (PATIENT): Hmm, good, thanks, I'll see you then.
+[SEG0041] person_2 (DOCTOR): Look after yourself.
+
+JSON:

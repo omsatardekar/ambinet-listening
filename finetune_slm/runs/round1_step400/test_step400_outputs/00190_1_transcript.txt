@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00190)
+[SEG0001] person_1 (DOCTOR): Good afternoon. Have a seat and we'll begin.
+[SEG0002] person_2 (PATIENT): Hi. Thanks.
+[SEG0003] person_1 (DOCTOR): So, what's been going on?
+[SEG0004] person_2 (PATIENT): so, I've been getting lost on familiar roads, doctor
+[SEG0005] person_1 (DOCTOR): How long are we talking about?
+[SEG0006] person_2 (PATIENT): Um, I'm not sure when it began, to be honest. Some weeks ago, but I can't say how many.
+[SEG0007] person_1 (DOCTOR): have you been forgetting things lately?
+[SEG0008] person_2 (PATIENT): Yeah, that too. I'd been repeating the same questions, but that went away.
+[SEG0009] person_1 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0010] person_2 (PATIENT): High cholesterol, for five years.
+[SEG0011] person_1 (DOCTOR): I see
+[SEG0012] person_2 (PATIENT): High blood pressure, for five years. I have diabetes.
+[SEG0013] person_1 (DOCTOR): Anything more?
+[SEG0014] person_1 (DOCTOR): yes, high cholesterol and high blood pressure are known to us, good to have that clear. What about operations, anything like that?
+[SEG0015] person_2 (PATIENT): Yes, I had a hernia repair, about five years back.
+[SEG0016] person_1 (DOCTOR): have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0017] person_2 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0018] person_1 (DOCTOR): How do you eat, generally?
+[SEG0019] person_2 (PATIENT): I skip breakfast most days.
+[SEG0020] person_1 (DOCTOR): any sport or activity?
+[SEG0021] person_2 (PATIENT): I play badminton on Sundays.
+[SEG0022] person_1 (DOCTOR): Is anyone at home with you?
+[SEG0023] person_2 (PATIENT): I share a flat with two friends
+[SEG0024] person_1 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0025] person_2 (PATIENT): My mother had high blood pressure. Um, my sister has epilepsy.
+[SEG0026] person_1 (DOCTOR): What's your current medication list?
+[SEG0027] person_2 (PATIENT): I'm on atorvastatin, 20 milligrams, at night. It's losartan, 50 milligrams, once a day. Glimepiride. I take it 2 milligrams, before breakfast
+[SEG0028] person_1 (DOCTOR): Have you had any trouble with bladder control or falls?
+[SEG0029] person_2 (PATIENT): nothing like that, no
+[SEG0030] person_1 (DOCTOR): Let me check a few things. Any low mood, headache, weakness on one side or hallucinations?
+[SEG0031] person_2 (PATIENT): no, no low mood, headache, weakness on one side or hallucinations
+[SEG0032] person_1 (DOCTOR): has your heart given you any trouble?
+[SEG0033] person_2 (PATIENT): My heart's been fine, as far as I know.
+[SEG0034] person_1 (DOCTOR): let me examine, it won't take long
+[SEG0035] person_2 (PATIENT): Yes, doctor.
+[SEG0036] person_1 (DOCTOR): Almost done with this part.
+[SEG0037] person_1 (DOCTOR): your gait is steady and the tone in your limbs is normal
+[SEG0038] person_1 (DOCTOR): all done, you can get dressed
+[SEG0039] person_1 (DOCTOR): Having listened and examined, this is probably memory difficulties that need to be worked up. I can't rule out a vitamin deficiency yet.
+[SEG0040] person_2 (PATIENT): Doctor, is this dangerous?
+[SEG0041] person_1 (DOCTOR): I understand the worry. At the moment I'd say it's memory difficulties that need to be worked up, and we'll know more once the a thyroid test is back. a thyroid test is what I'd like next, for memory loss. The result will help us decide whether anything more is needed. I'm going to order blood tests, for memory loss. That will help us see what's going on underneath and decide the next step.
+[SEG0042] person_1 (DOCTOR): keep a daily routine and write things down, a notebook by the door works well. Good. Let us know how you get on
+[SEG0043] person_2 (PATIENT): Alright, thanks. Bye for now.
+
+JSON:

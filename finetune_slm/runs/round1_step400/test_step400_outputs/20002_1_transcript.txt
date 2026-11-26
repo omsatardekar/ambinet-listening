@@ -1,0 +1,74 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20002)
+[SEG0001] person_1 (DOCTOR): hello, good to see you please sit what do you need help with?
+[SEG0002] person_2 (PATIENT): I've been feeling dizzy when I stand up
+[SEG0003] person_1 (DOCTOR): how long has this been bothering you?
+[SEG0004] person_2 (PATIENT): ever since... since yesterday, really
+[SEG0005] person_1 (DOCTOR): can you describe it a bit more for me? How strong it is what the pattern is what helps
+[SEG0006] person_2 (PATIENT): I mean, it's worse with getting out of bed. It's moderate, honestly. It happens a few times a day.
+[SEG0007] person_1 (DOCTOR): any other symptoms with it?
+[SEG0008] person_2 (PATIENT): when it starts I tend to get nearly blacking out as well
+[SEG0009] person_1 (DOCTOR): is it constant or in episodes?
+[SEG0010] person_2 (PATIENT): it happens once or twice a day
+[SEG0011] person_1 (DOCTOR): right right let me get the the readings out of the way
+[SEG0012] person_1 (DOCTOR): bear with me while this finishes..
+[SEG0013] person_1 (DOCTOR): okay: temperature 36.6, pressure 92 over 57, pulse 92.
+[SEG0014] person_2 (PATIENT): Is that okay?
+[SEG0015] person_1 (DOCTOR): That's fine, I'll explain it soon.
+[SEG0016] person_1 (DOCTOR): Alright, over here please and I'll take a look.
+[SEG0017] person_1 (DOCTOR): Does that hurt?
+[SEG0018] person_1 (DOCTOR): your blood pressure drops when you stand, from the lying reading to standing
+[SEG0019] person_1 (DOCTOR): I'm just checking this side
+[SEG0020] person_1 (DOCTOR): Heart sounds are normal and the chest is clear
+[SEG0021] person_1 (DOCTOR): You can sit up now.
+[SEG0022] person_1 (DOCTOR): okay, any vomiting, chest pain or palpitations at all?
+[SEG0023] person_2 (PATIENT): no, uh, I haven't had any of them
+[SEG0024] person_1 (DOCTOR): have you had any slurred speech?
+[SEG0025] person_2 (PATIENT): No, none, no slurred speech.
+[SEG0026] person_1 (DOCTOR): has your skin been okay?
+[SEG0027] person_2 (PATIENT): let me think nothing on the skin no
+[SEG0028] person_1 (DOCTOR): what conditions have you been treated for in the past?
+[SEG0029] person_2 (PATIENT): High blood pressure, for about a year
+[SEG0030] person_1 (DOCTOR): Okay, go on.
+[SEG0031] person_2 (PATIENT): let me think, um, I've had acid reflux for nearly five years now
+[SEG0032] person_1 (DOCTOR): Hm, okay. Right, so high blood pressure and acid reflux are already on your record. We'll keep that in mind today.
+[SEG0033] person_1 (DOCTOR): Any previous surgeries?
+[SEG0034] person_2 (PATIENT): nothing, I haven't had any operations
+[SEG0035] person_1 (DOCTOR): and alcohol how much?
+[SEG0036] person_2 (PATIENT): I used to drink heavily but I stopped four years ago
+[SEG0037] person_1 (DOCTOR): Are you active?
+[SEG0038] person_2 (PATIENT): I walk the dog every morning
+[SEG0039] person_1 (DOCTOR): So So tell me about your eating.
+[SEG0040] person_2 (PATIENT): I drink a lot of tea and snack through the day.
+[SEG0041] person_1 (DOCTOR): Are you on your own at home?
+[SEG0042] person_2 (PATIENT): I live with my elderly mother
+[SEG0043] person_1 (DOCTOR): tell me your medicines, please
+[SEG0044] person_2 (PATIENT): It's telmisartan, once a day.
+[SEG0045] person_1 (DOCTOR): How much do you take?
+[SEG0046] person_2 (PATIENT): 40 milligrams. Lansoprazole. I take it before breakfast.
+[SEG0047] person_1 (DOCTOR): How much do you take?
+[SEG0048] person_2 (PATIENT): 30 milligrams, I think that's what's on the box.
+[SEG0049] person_1 (DOCTOR): When did you start it?
+[SEG0050] person_2 (PATIENT): about about a month
+[SEG0051] person_1 (DOCTOR): having listened and examined, the most likely explanation is postural low blood pressure, possibly related to medicines or dehydration
+[SEG0052] person_2 (PATIENT): is this serious, doctor?
+[SEG0053] person_1 (DOCTOR): it's reasonable to be concerned, but right now postural low blood pressure, possibly related to medicines or dehydration is my leading thought, not anything worse i think a lying and standing blood pressure check makes sense here, for dizziness get up slowly from lying and sitting, and keep drinking fluids through the day we'll catch up after the results are back
+[SEG0054] person_2 (PATIENT): erm alright I'll be back
+[SEG0055] person_1 (DOCTOR): Tell me what you've taken from all that so I can fill in any gaps.
+[SEG0056] person_2 (PATIENT): so, I come back after the results are back. Is that right?
+[SEG0057] person_1 (DOCTOR): Yes, exactly right. Right, that's the plan. Do you want to ask me anything?
+[SEG0058] person_2 (PATIENT): thank you, doctor, goodbye
+[SEG0059] person_1 (DOCTOR): Take care now.
+
+JSON:

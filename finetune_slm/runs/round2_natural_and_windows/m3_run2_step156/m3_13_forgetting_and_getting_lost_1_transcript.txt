@@ -1,0 +1,147 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_13_forgetting_and_getting_lost)
+[SEG0001] person_1 (PATIENT): I put the keys in the fridge last week. That's what made me think.
+[SEG0002] person_2 (DOCTOR): In the fridge. All right. Good morning, Mr Rourke, I'm Dr Castellanos. Come in, have a seat. Is that your coat there? Give it here, I'll hang it on the door.
+[SEG0003] person_1 (PATIENT): I'll keep it.
+[SEG0004] person_2 (DOCTOR): Sure. So you put the keys in the fridge. Tell me about that.
+[SEG0005] person_1 (PATIENT): Next to the milk. I'd been holding the milk and the keys. Looked for them an hour. My wife found them.
+[SEG0006] person_2 (DOCTOR): Is that the sort of thing that's been happening more?
+[SEG0007] person_1 (PATIENT): Yeah. Keys, glasses, my phone. I used to know where things were.
+[SEG0008] person_2 (DOCTOR): And is it just the misplacing, or also forgetting things that happened, like conversations?
+[SEG0009] person_1 (PATIENT): Both. I ask the same question twice. My daughter says, you told me that. I don't remember telling her.
+[SEG0010] person_2 (DOCTOR): How long has this been going on?
+[SEG0011] person_1 (PATIENT): Well, uh, a while. Months. I'd say, since the summer started. Three months, maybe.
+[SEG0012] person_2 (DOCTOR): Has it been getting steadily worse, or does it come and go?
+[SEG0013] person_1 (PATIENT): Worse. Slowly. Not a cliff.
+[SEG0014] person_2 (DOCTOR): And apart from the keys, the phone, can you think of a time recently that really bothered you?
+[SEG0015] person_1 (PATIENT): I got lost.
+[SEG0016] person_2 (DOCTOR): Where?
+[SEG0017] person_1 (PATIENT): Driving. I was going to the garden centre. I've been to that garden centre for fifteen years. And I went round the roundabout twice and I didn't know which exit.
+[SEG0018] person_2 (DOCTOR): Mm.
+[SEG0019] person_2 (DOCTOR): What did you do?
+[SEG0020] person_1 (PATIENT): Pulled in. Sat there for a bit. Then I saw the sign for the tip and I remembered. But I wasn't right for the rest of the day.
+[SEG0021] person_2 (DOCTOR): I see.
+[SEG0022] person_2 (DOCTOR): That must have been frightening.
+[SEG0023] person_1 (PATIENT): It was a bit. Not much.
+[SEG0024] person_2 (DOCTOR): Has it happened more than once?
+[SEG0025] person_1 (PATIENT): Twice, now. The other time it was coming home from the pharmacy. About a month ago.
+[SEG0026] person_2 (DOCTOR): Okay. And you drove here today?
+[SEG0027] person_1 (PATIENT): Yes.
+[SEG0028] person_2 (DOCTOR): Alone?
+[SEG0029] person_1 (PATIENT): Well, um, my wife's at her sister's. I know the way here.
+[SEG0030] person_2 (DOCTOR): I'm glad you got here, and we'll talk about driving in a bit. Let me ask about your mood. How's your mood been?
+[SEG0031] person_1 (PATIENT): Fine.
+[SEG0032] person_2 (DOCTOR): Fine?
+[SEG0033] person_1 (PATIENT): Er, a bit flat. I don't know. Since I stopped work I haven't had the get-up. Two years now, it's been. I don't do the things I did.
+[SEG0034] person_2 (DOCTOR): Mm.
+[SEG0035] person_2 (DOCTOR): You retired two years ago. From what?
+[SEG0036] person_1 (PATIENT): Well, uh, the post office. Thirty-one years. I was a postman, then I did the counter.
+[SEG0037] person_2 (DOCTOR): And what do you do with your days now?
+[SEG0038] person_1 (PATIENT): Walk the dog in the morning. Same route. Then I sit. Do the crossword. It's harder than it was.
+[SEG0039] person_2 (DOCTOR): Do you ever feel really low, like there's no point in things?
+[SEG0040] person_1 (PATIENT): No. Not that. Just flat.
+[SEG0041] person_2 (DOCTOR): Okay. Now I'm going to ask some questions that sound like I'm ticking boxes. Have you had any falls?
+[SEG0042] person_1 (PATIENT): No.
+[SEG0043] person_2 (DOCTOR): Headaches, new ones?
+[SEG0044] person_1 (PATIENT): No headaches.
+[SEG0045] person_2 (DOCTOR): Seeing or hearing things that aren't there?
+[SEG0046] person_1 (PATIENT): No!
+[SEG0047] person_2 (DOCTOR): Weakness in an arm or leg, or on one side of the face, even briefly?
+[SEG0048] person_1 (PATIENT): No.
+[SEG0049] person_2 (DOCTOR): Trouble with your bladder, rushing to the toilet, leaking?
+[SEG0050] person_1 (PATIENT): No. Well. I get up once in the night. That's all.
+[SEG0051] person_2 (DOCTOR): That's normal. Was there any time before when your memory was bad, and then got better?
+[SEG0052] person_1 (PATIENT): Few years ago. After the flu. I was foggy for weeks, couldn't think straight. It cleared. I thought this was the same.
+[SEG0053] person_2 (DOCTOR): And you recovered completely, then?
+[SEG0054] person_1 (PATIENT): Yes. It went.
+[SEG0055] person_2 (DOCTOR): Okay. That's useful. Let me ask about your health generally. What conditions do you have?
+[SEG0056] person_1 (PATIENT): Cholesterol, nearly five years. And the sugar. Diabetes.
+[SEG0057] person_2 (DOCTOR): And what tablets?
+[SEG0058] person_1 (PATIENT): Simvastatin at night. Twenty. And the sugar one, glibenclamide, five, before breakfast.
+[SEG0059] person_2 (DOCTOR): Do you take them every day, or do you forget?
+[SEG0060] person_1 (PATIENT): Um, every day. The wife puts them out. Today she left a note.
+[SEG0061] person_2 (DOCTOR): Okay. Any allergies to medicines?
+[SEG0062] person_1 (PATIENT): Maybe. A doctor said something about antibiotics once. Wrote it on my card.
+[SEG0063] person_2 (DOCTOR): Do you know which antibiotic, or what happened?
+[SEG0064] person_1 (PATIENT): No idea. It's just on a card somewhere.
+[SEG0065] person_2 (DOCTOR): Fine, I'll write it down as a possible antibiotic allergy, and look for the card. Any operations?
+[SEG0066] person_1 (PATIENT): A bunion. Six years ago. Right foot.
+[SEG0067] person_2 (DOCTOR): And your family, any dementia, Parkinson's, strokes?
+[SEG0068] person_1 (PATIENT): Er, my son's got asthma. Not much else I can think of. My dad lived to ninety-one, and he was sharp as a tack.
+[SEG0069] person_2 (DOCTOR): Right.
+[SEG0070] person_2 (DOCTOR): Good. All right, I'd like to check a few things now. Your pulse and blood pressure, first. Give me your arm.
+[SEG0071] person_2 (DOCTOR): Pulse sixty-six, regular. Pressure one sixteen over seventy-nine. Breathing fourteen a minute, oxygen ninety-eight, temperature thirty-six point six. All normal.
+[SEG0072] person_1 (PATIENT): Good.
+[SEG0073] person_2 (DOCTOR): Now I'd like to do a short memory test. It's not an exam, you can't fail it, and it won't be used against you. I just want to see how your thinking is, today. Is that all right?
+[SEG0074] person_1 (PATIENT): Go on.
+[SEG0075] person_2 (DOCTOR): First, can you tell me what today's date is?
+[SEG0076] person_1 (PATIENT): It's the, nineteenth. Isn't it? Of November.
+[SEG0077] person_2 (DOCTOR): Yes. And what day of the week?
+[SEG0078] person_1 (PATIENT): Thursday.
+[SEG0079] person_2 (DOCTOR): Which is correct. And where are we?
+[SEG0080] person_1 (PATIENT): The surgery. The clinic. St Anne's.
+[SEG0081] person_2 (DOCTOR): Good. I'm going to say three words, and I want you to repeat them, and then remember them for later. Apple. Table. Penny.
+[SEG0082] person_1 (PATIENT): Apple, table, penny.
+[SEG0083] person_2 (DOCTOR): Good. Now count backwards from a hundred, taking away seven each time. So a hundred minus seven.
+[SEG0084] person_1 (PATIENT): Ninety-three. Eighty-six. Seventy-nine. Seventy-two. Sixty-five.
+[SEG0085] person_2 (DOCTOR): Excellent. Now spell the word world, backwards.
+[SEG0086] person_1 (PATIENT): D, L, R, O, W.
+[SEG0087] person_2 (DOCTOR): Perfect. What were the three words I asked you to remember?
+[SEG0088] person_1 (PATIENT): Apple. Table. Um.
+[SEG0089] person_2 (DOCTOR): Take your time.
+[SEG0090] person_1 (PATIENT): I can't get the third. A coin? No, it's, I can't.
+[SEG0091] person_2 (DOCTOR): That's fine. It was penny. Now I'd like you to draw a clock for me, a big circle, put all the numbers in, and set the hands to ten past eleven.
+[SEG0092] person_1 (PATIENT): There.
+[SEG0093] person_2 (DOCTOR): Thank you. The clock is nicely drawn, the numbers are in the right places, and the hands are a little off, one's pointing at the ten instead of the two. That's the kind of thing I'm looking for. Your score overall is twenty-four out of thirty, which is a little lower than I'd expect, but not dramatically low.
+[SEG0094] person_1 (PATIENT): Yeah.
+[SEG0095] person_1 (PATIENT): What does that mean?
+[SEG0096] person_2 (DOCTOR): It means your memory test is a little low today, and the rest of your neurological check, I'll do that now, is normal. Look at my finger. Follow it. Good. Squeeze my hands. Push against my hand. Good. Now tap your finger to your nose. Okay.
+[SEG0097] person_1 (PATIENT): Is it Alzheimer's?
+[SEG0098] person_2 (DOCTOR): I can't tell you that, and I don't want to say something I'm not sure of. A memory problem like yours has a lot of possible causes. Some are completely treatable, like a low vitamin B12, an under-active thyroid, low mood on its own, even some medicines, or sleep problems. Others are more gradual, and we'll need to look at a scan of your brain to say more. So what I'd like to do is check your blood, thyroid and B12 to start with, and arrange a CT scan of your head.
+[SEG0099] person_1 (PATIENT): A scan.
+[SEG0100] person_2 (DOCTOR): It's quick, it's a ring, you lie on a table, it takes ten minutes. Not noisy like an MRI.
+[SEG0101] person_1 (PATIENT): Fine.
+[SEG0102] person_2 (DOCTOR): And I'd like you to bring your wife next time, if she'd come, because she'll notice things you don't. And I'll see you in six weeks to go through everything.
+[SEG0103] person_1 (PATIENT): Six weeks. Okay.
+[SEG0104] person_2 (DOCTOR): One more thing, which I mentioned. The driving. Twice you've been lost on roads you know well. Until we know more, I'd like you not to drive on your own on unfamiliar or long routes. Short local trips in daylight, with someone next to you if you can, are different.
+[SEG0105] person_1 (PATIENT): Mm-hm.
+[SEG0106] person_1 (PATIENT): I need the car.
+[SEG0107] person_2 (DOCTOR): I know, and I'm not taking your licence away today. But I would rather you were safe.
+[SEG0108] person_1 (PATIENT): I'll think about it.
+[SEG0109] person_2 (DOCTOR): Can I ask how things are at home? Do you manage the bills, the shopping, the tablets?
+[SEG0110] person_1 (PATIENT): Uh, the wife does the tablets now. I do the bills. I got one wrong last month, paid the electric twice.
+[SEG0111] person_2 (DOCTOR): Anything else you've stopped doing because it got harder?
+[SEG0112] person_1 (PATIENT): Well, uh, the crossword, partly. And I don't go to the club on Fridays. I used to be on the committee. I forget names and I don't want to be that bloke who says, sorry, who are you.
+[SEG0113] person_2 (DOCTOR): Yes.
+[SEG0114] person_2 (DOCTOR): That sounds like it's taking some of the pleasure out of things.
+[SEG0115] person_1 (PATIENT): It does. Yeah.
+[SEG0116] person_2 (DOCTOR): Is your sleep all right?
+[SEG0117] person_1 (PATIENT): I'm up at five anyway. Dog's up at five.
+[SEG0118] person_2 (DOCTOR): And a drink of an evening?
+[SEG0119] person_1 (PATIENT): A pint with the news. Two at the weekend.
+[SEG0120] person_2 (DOCTOR): Okay, um, that's not a lot. Does the forgetting seem worse after the pint?
+[SEG0121] person_1 (PATIENT): Not that I've noticed.
+[SEG0122] person_2 (DOCTOR): And if you ever suddenly become very confused, or lose the use of an arm or leg, or can't speak properly, call an ambulance, don't wait for the appointment.
+[SEG0123] person_1 (PATIENT): Right.
+[SEG0124] person_2 (DOCTOR): Is there anything you wanted to ask me that I haven't covered?
+[SEG0125] person_1 (PATIENT): Just, will I know? If it gets worse. Will I know it's happening?
+[SEG0126] person_2 (DOCTOR): That's an honest question. Often people do know, in the early stages, as you do now, and it's frightening. It doesn't mean the worst. It means you noticed, and you came in, and that's what lets us help sooner. Meanwhile, some small things do help. Keep a list by the door for what you need to take out, keys, wallet, phone. Always put the keys in the same bowl. Write down what you've been told today. And keep up the dog walk, daily exercise really does help memory.
+[SEG0127] person_1 (PATIENT): Mm-hm.
+[SEG0128] person_1 (PATIENT): He'll be pleased. He thinks it's his idea.
+[SEG0129] person_2 (DOCTOR): He's the best doctor in the house.
+[SEG0130] person_1 (PATIENT): I'll tell the wife about the scan.
+[SEG0131] person_2 (DOCTOR): Please do. And bring her along in six weeks, if she's willing.
+[SEG0132] person_1 (PATIENT): She'll want to. She's been on at me for months.
+
+JSON:

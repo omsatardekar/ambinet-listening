@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20292)
+[SEG0001] person_1 (PATIENT): Sorry, doctor, shall I sit here?
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): Well, I've been having nausea and vomiting.
+[SEG0004] person_2 (DOCTOR): Shall I check your blood pressure and pulse?
+[SEG0005] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0006] person_2 (DOCTOR): Okay: BP is 110 over 69, pulse 77. And SpO2 98 percent on room air, respiratory rate 16. When was the first time you noticed it?
+[SEG0007] person_1 (PATIENT): Since Friday, that's when it began.
+[SEG0008] person_2 (DOCTOR): How strong would you say it is?
+[SEG0009] person_1 (PATIENT): I'd call it mild. So, you know, there's being unsteady as well. With being unsteady, maybe a four out of ten on a bad day.
+[SEG0010] person_2 (DOCTOR): What about double vision?
+[SEG0011] person_1 (PATIENT): I haven't noticed any double vision.
+[SEG0012] person_2 (DOCTOR): Okay, and what about weakness or hearing loss?
+[SEG0013] person_1 (PATIENT): Right, no, I'd have said so.
+[SEG0014] person_2 (DOCTOR): Is your urine normal, no changes?
+[SEG0015] person_1 (PATIENT): Um, that's normal as far as I know.
+[SEG0016] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0017] person_1 (PATIENT): No, never.
+[SEG0018] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0019] person_1 (PATIENT): I quit smoking around ten years ago. No, I share a house with my brother. I swim twice a week. Lots of rice, lentils and some fruit.
+[SEG0020] person_2 (DOCTOR): Tell me your medicines, please.
+[SEG0021] person_1 (PATIENT): It's metoprolol, 50 milligrams, twice a day.
+[SEG0022] person_2 (DOCTOR): What conditions have you been treated for in the past? I ask because it helps me narrow things down.
+[SEG0023] person_1 (PATIENT): I have high blood pressure, for about ten years. I'd rather know what's going on than keep guessing.
+[SEG0024] person_2 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0025] person_2 (DOCTOR): Nearly finished here.
+[SEG0026] person_2 (DOCTOR): I can see a fine jerking of the eyes to the left and your walking is a little unsteady.
+[SEG0027] person_2 (DOCTOR): You can sit up now.
+[SEG0028] person_2 (DOCTOR): Okay, thinking it through, it points towards an inner-ear balance problem such as vestibular neuritis.
+[SEG0029] person_1 (PATIENT): Is it dangerous, doctor?
+[SEG0030] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's an inner-ear balance problem such as vestibular neuritis, and we'll know more once the a positional test is back.
+[SEG0031] person_2 (DOCTOR): I want a positional test done, that's for vertigo.
+[SEG0032] person_1 (PATIENT): Ah, how long will it take?
+[SEG0033] person_2 (DOCTOR): Blood tests is what I'd like next, for dizziness. What I'm giving you is prochlorperazine, 5 milligrams, three times a day, for three days. It's for nausea and vertigo.
+[SEG0034] person_1 (PATIENT): Fine, I'll begin it.
+[SEG0035] person_2 (DOCTOR): Start moving around gently as soon as you can, since resting too long slows recovery. Please don't wait if you get double vision, weakness or trouble speaking. That's when to be seen urgently.
+[SEG0036] person_1 (PATIENT): I understand.
+[SEG0037] person_2 (DOCTOR): We'll catch up if it isn't settling in five days. Does all of that make sense?
+[SEG0038] person_1 (PATIENT): That's clear, thanks.
+[SEG0039] person_2 (DOCTOR): All the best.
+
+JSON:

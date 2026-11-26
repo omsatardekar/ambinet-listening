@@ -1,0 +1,74 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02192)
+[SEG0001] person_1 (PATIENT): Morning, doctor. Is this the right room?
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): I've been dealing with a very fast heartbeat. I told myself I'd wait and see, and here I am.
+[SEG0004] person_2 (DOCTOR): Right, what's on your current medicine list?
+[SEG0005] person_1 (PATIENT): It's escitalopram, 10 milligrams, once a day.
+[SEG0006] person_2 (DOCTOR): Alright, and for how long?
+[SEG0007] person_1 (PATIENT): Six months now. I'm on furosemide, every morning.
+[SEG0008] person_2 (DOCTOR): Do you know the dose?
+[SEG0009] person_1 (PATIENT): 40 milligrams, I think that's what's on the box.
+[SEG0010] person_2 (DOCTOR): And for how long?
+[SEG0011] person_1 (PATIENT): For two months. Sitagliptin. I take it 100 milligrams, once a day for my sugar. I do miss it now and then, to be fair. Let me think, I had Glycomet at one point, but I'm off it now.
+[SEG0012] person_2 (DOCTOR): How long has it been like this?
+[SEG0013] person_1 (PATIENT): Since last night, that's when it began. I've never really been one for hospitals.
+[SEG0014] person_2 (DOCTOR): Is it bearing on you a lot?
+[SEG0015] person_1 (PATIENT): About a eight out of ten.
+[SEG0016] person_2 (DOCTOR): Right, any other symptoms with it?
+[SEG0017] person_1 (PATIENT): It usually comes with agitation.
+[SEG0018] person_2 (DOCTOR): Any a high temperature as well?
+[SEG0019] person_1 (PATIENT): Yes, um, about the same, ten days.
+[SEG0020] person_2 (DOCTOR): How strong would you say it is?
+[SEG0021] person_1 (PATIENT): I'd say mild. And there's vomiting and diarrhoea as well, two months now.
+[SEG0022] person_2 (DOCTOR): How often do you get it?
+[SEG0023] person_1 (PATIENT): I'd say every other day. So, uh, about agitation, mild, I'd say.
+[SEG0024] person_2 (DOCTOR): Have you noticed chest pain or recent infection?
+[SEG0025] person_1 (PATIENT): No, you know, no chest pain or recent infection.
+[SEG0026] person_2 (DOCTOR): Right, any breathing difficulties apart from this?
+[SEG0027] person_1 (PATIENT): No, nothing there.
+[SEG0028] person_2 (DOCTOR): Did you ever have any procedures done?
+[SEG0029] person_1 (PATIENT): So, I had my tonsils removed as a teenager.
+[SEG0030] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0031] person_1 (PATIENT): I've had anxiety for about a year now. Heart failure, for five years.
+[SEG0032] person_2 (DOCTOR): Mm, okay.
+[SEG0033] person_1 (PATIENT): Yes, diabetes.
+[SEG0034] person_2 (DOCTOR): Okay, I can see anxiety in your file as well. How about smoking?
+[SEG0035] person_1 (PATIENT): I have about eight cigarettes in a day.
+[SEG0036] person_2 (DOCTOR): How are your meals?
+[SEG0037] person_1 (PATIENT): I grab fast food at lunch most days.
+[SEG0038] person_2 (DOCTOR): And your job?
+[SEG0039] person_1 (PATIENT): I work in accounts at a hospital.
+[SEG0040] person_2 (DOCTOR): So, are you on your own at home?
+[SEG0041] person_1 (PATIENT): I live with my elderly mother.
+[SEG0042] person_2 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0043] person_1 (PATIENT): I, I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0044] person_2 (DOCTOR): Let me take your readings now.
+[SEG0045] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0046] person_2 (DOCTOR): Okay: BMI works out to 39.4, height 156 centimetres, respiratory rate 20, weight 96 kilos, SpO2 97 percent on room air, temperature 39.1, blood pressure 125 over 67, pulse is 99 beats a minute.
+[SEG0047] person_2 (DOCTOR): Okay, time for me to examine you.
+[SEG0048] person_2 (DOCTOR): I'm just checking this side.
+[SEG0049] person_2 (DOCTOR): You are hot, shaking, and your pulse is over one hundred and forty and irregular.
+[SEG0050] person_2 (DOCTOR): Please sit back down.
+[SEG0051] person_2 (DOCTOR): Having listened and examined, I'm honestly not certain yet. It could be a thyroid storm, or it might be sepsis.
+[SEG0052] person_1 (PATIENT): Um, is it dangerous, doctor?
+[SEG0053] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a thyroid storm, but I'd like to confirm. Let's book an ECG to look into fast heart rhythm. I'll request urgent blood tests, it'll help with thyroid storm.
+[SEG0054] person_1 (PATIENT): Mm, you know, alright.
+[SEG0055] person_2 (DOCTOR): I'd like you to take propranolol, 1 milligrams, now, single dose. That's for thyroid storm. This is an emergency, you will be treated in high dependency. Cut back on tea, coffee and fizzy drinks for a couple of weeks and see how things settle. I'd like you back straight away.
+[SEG0056] person_1 (PATIENT): I, I'll note it in my calendar.
+[SEG0057] person_2 (DOCTOR): I think we're done unless you have questions.
+[SEG0058] person_1 (PATIENT): Sorry, what was I saying, okay, that makes sense. Thanks for explaining.
+[SEG0059] person_2 (DOCTOR): See you soon.
+
+JSON:

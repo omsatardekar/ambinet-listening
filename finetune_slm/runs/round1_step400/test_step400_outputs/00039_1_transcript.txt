@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00039)
+[SEG0001] person_1 (PATIENT): Oh, hi, doctor, I brought my bag, is it fine to to leave it here?
+[SEG0002] person_2 (DOCTOR): right on time. Sit, please. How can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): doctor, thank you for seeing us
+[SEG0004] person_2 (DOCTOR): yes, that's no problem at all please sit
+[SEG0005] person_3 (FAMILY_MEMBER): It's hot flushes, doctor. She didn't want to come, but I insisted.
+[SEG0006] person_2 (DOCTOR): how long has this been going on?
+[SEG0007] person_1 (PATIENT): probably three weeks yeah
+[SEG0008] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0009] person_1 (PATIENT): Okay, you know, so it's severe, honestly. It's worse with caffeine and warm rooms. Sorry, I know I'm rambling a bit. Hmm, I've had irregular periods too, for two days. Uh, you know, as for night sweats, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0010] person_2 (DOCTOR): Would you call it mild or bad?
+[SEG0011] person_1 (PATIENT): It's moderate, honestly.
+[SEG0012] person_2 (DOCTOR): let's get your blood pressure and the other basics
+[SEG0013] person_2 (DOCTOR): Rest your hand here...
+[SEG0014] person_2 (DOCTOR): Okay: SpO2 97 percent on room air, pulse 84, temp 36.7 degrees, pressure 122 over 75.
+[SEG0015] person_1 (PATIENT): is that normal?
+[SEG0016] person_2 (DOCTOR): I'll come back to those numbers
+[SEG0017] person_2 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0018] person_2 (DOCTOR): I'll go gently.
+[SEG0019] person_2 (DOCTOR): Blood pressure and pulse are fine, and there are no breast lumps on examination.
+[SEG0020] person_2 (DOCTOR): Right, you can sit back down.
+[SEG0021] person_2 (DOCTOR): Any bleeding after sex or breast lumps at all?
+[SEG0022] person_1 (PATIENT): No bleeding after sex or breast lumps, none of it.
+[SEG0023] person_2 (DOCTOR): Alright, have you had palpitations, by any chance?
+[SEG0024] person_1 (PATIENT): um, I haven't noticed any palpitations
+[SEG0025] person_3 (FAMILY_MEMBER): Actually, doctor, I did notice palpitations. She doesn't always say.
+[SEG0026] person_1 (PATIENT): Okay, um, so no, I don't think I did. Maybe a little, I'm not sure.
+[SEG0027] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. Let me check a few things. Any weight loss or chest pain?
+[SEG0028] person_1 (PATIENT): Hmm, none, as far as I know.
+[SEG0029] person_2 (DOCTOR): Is your chest okay generally?
+[SEG0030] person_1 (PATIENT): Uh, no, my breathing's been fine.
+[SEG0031] person_2 (DOCTOR): Who's at home with you?
+[SEG0032] person_1 (PATIENT): It's just me and my wife at home now.
+[SEG0033] person_2 (DOCTOR): are you working or retired?
+[SEG0034] person_1 (PATIENT): Retired. I stopped a few years back.
+[SEG0035] person_2 (DOCTOR): any diagnoses you've been given before?
+[SEG0036] person_1 (PATIENT): I've had high blood pressure for about a year now. I'd rather know what's going on than keep guessing. I have thin bones. I've had an underactive thyroid, yes.
+[SEG0037] person_2 (DOCTOR): Right, so high blood pressure and thin bones are already on your record. We'll keep that in mind today. Do you have any allergies to medicines, food, anything at all?
+[SEG0038] person_1 (PATIENT): I mean, years back I got hives from penicillin, so I stay away from it now.
+[SEG0039] person_2 (DOCTOR): what medicines are you taking at the moment?
+[SEG0040] person_1 (PATIENT): It's ramipril, 5 milligrams, maybe, every morning.
+[SEG0041] person_2 (DOCTOR): Have you got the box or the prescription on you?
+[SEG0042] person_1 (PATIENT): Okay, so not with me. I'll bring it next time. Alendronate, once a week for my bones.
+[SEG0043] person_2 (DOCTOR): And what strength is that?
+[SEG0044] person_1 (PATIENT): It's 70 milligrams. Thyronorm, 50 micrograms, every morning for my thyroid.
+[SEG0045] person_2 (DOCTOR): So where does that leave us? The most likely explanation is perimenopausal symptoms. Anaemia is still possible.
+[SEG0046] person_1 (PATIENT): What are the chances it's something bad?
+[SEG0047] person_2 (DOCTOR): I can't promise yet, but most people with perimenopausal symptoms do well once it's treated properly. Stop me if I've got anything wrong. You've had hot flushes for three weeks, severe, and no breast lumps
+[SEG0048] person_1 (PATIENT): That's it, yes.
+[SEG0049] person_2 (DOCTOR): A bone density scan is what I'd like next, for menopause. I'm gonna order blood tests, for irregular periods. Layers of clothing, a fan by the bed, and cutting down on caffeine and spicy food can help the flushes. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Come back or go to emergency straight away if the symptoms get worse.
+[SEG0050] person_2 (DOCTOR): okay, we're done for today take care
+[SEG0051] person_1 (PATIENT): I think that's clear. Thank you for being so so thorough.
+[SEG0052] person_2 (DOCTOR): Bye for now.
+
+JSON:

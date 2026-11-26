@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00095)
+[SEG0001] person_1 (PATIENT): afternoon, um, doctor
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): It's the room spinning. I thought I'd wait, but it it hasn't gone.
+[SEG0004] person_2 (DOCTOR): let's do your observations
+[SEG0005] person_2 (DOCTOR): almost there..
+[SEG0006] person_2 (DOCTOR): Okay: saturation 99 percent, blood pressure 128 over 74, pulse 67.
+[SEG0007] person_1 (PATIENT): Is that normal?
+[SEG0008] person_2 (DOCTOR): Right, I'll interpret it once I've examined you.
+[SEG0009] person_1 (PATIENT): I've also been feeling unsteady, for about four days.
+[SEG0010] person_2 (DOCTOR): Any hearing loss?
+[SEG0011] person_1 (PATIENT): No, no hearing loss.
+[SEG0012] person_2 (DOCTOR): A few quick ones: slurred speech, double vision, weakness or numbness in the face?
+[SEG0013] person_1 (PATIENT): Um, no slurred speech, double vision, weakness or numbness in the face, none of it.
+[SEG0014] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0015] person_1 (PATIENT): No, that's all fine.
+[SEG0016] person_2 (DOCTOR): have you ever been under the knife?
+[SEG0017] person_1 (PATIENT): I had my gallbladder removed in 2016.
+[SEG0018] person_2 (DOCTOR): How about exercise?
+[SEG0019] person_1 (PATIENT): Not really, I don't get much exercise.
+[SEG0020] person_2 (DOCTOR): And what do you usually eat?
+[SEG0021] person_1 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0022] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0023] person_1 (PATIENT): Right, years back I got wheezing from aspirin, so I stay away from it now.
+[SEG0024] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0025] person_1 (PATIENT): Metformin, 500 milligrams, twice a day for my sugar. It's losartan, 50 milligrams, once a day. Um, I take Vertin, 16 milligrams, when it comes. Right, before this I was on ramipril; that's been stopped.
+[SEG0026] person_2 (DOCTOR): do you have any medical conditions, anything you've been treated for?
+[SEG0027] person_1 (PATIENT): I've got diabetes. High blood pressure, for about a year. My sister suggested writing things down, but I forgot.
+[SEG0028] person_2 (DOCTOR): Okay, I can see diabetes and high blood pressure in your file as well.
+[SEG0029] person_2 (DOCTOR): Shall we do the examination?
+[SEG0030] person_2 (DOCTOR): let me just check something
+[SEG0031] person_2 (DOCTOR): When I turn your head to the right, your eyes flick sideways, that's called nystagmus.
+[SEG0032] person_2 (DOCTOR): Good, that's the examination. Having listened and examined, it's hard to say. Benign positional vertigo is one possibility and a migraine-related dizziness another, and I'd rather not commit yet.
+[SEG0033] person_1 (PATIENT): Is this something I'll have for good?
+[SEG0034] person_2 (DOCTOR): it's reasonable to be concerned, but right now benign positional vertigo is my leading thought, not anything worse. A hearing test is what I'd like next, for tinnitus and vertigo get up slowly from lying down and sit for a moment first
+[SEG0035] person_2 (DOCTOR): Mm-hm. Don't skip meals, and try to eat smaller portions more often through the day.
+[SEG0036] person_2 (DOCTOR): ah let's plan a check in three weeks is there anything you wanted to ask?
+[SEG0037] person_1 (PATIENT): Right. Thanks again.
+
+JSON:

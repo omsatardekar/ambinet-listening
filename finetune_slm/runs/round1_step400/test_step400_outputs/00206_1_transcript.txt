@@ -1,0 +1,81 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00206)
+[SEG0001] person_1 (DOCTOR): hi nice to see you sit down please
+[SEG0002] person_2 (PATIENT): yeah thanks sorry I'm a little early
+[SEG0003] person_3 (CAREGIVER): Thank you for fitting us in, doctor.
+[SEG0004] person_1 (DOCTOR): Okay. Start wherever you like.
+[SEG0005] person_3 (CAREGIVER): He's been having a low fever a few days ago doctor.
+[SEG0006] person_1 (DOCTOR): what's the pattern, is it there all day?
+[SEG0007] person_2 (PATIENT): It's, um, um... not exactly... well, hard to explain, I mean—
+[SEG0008] person_1 (DOCTOR): Let me put it another way: how many times in a typical day or week?
+[SEG0009] person_2 (PATIENT): Honestly, a couple of times a week.
+[SEG0010] person_1 (DOCTOR): how would you describe it, mild, moderate, severe?
+[SEG0011] person_2 (PATIENT): Well, it's... hard to say, it's kind of... I don't know—
+[SEG0012] person_1 (DOCTOR): Take your time. Mild moderate or severe if you had to pick?
+[SEG0013] person_2 (PATIENT): a five out of ten I suppose i've I've had a sore throat earlier too for two days
+[SEG0014] person_1 (DOCTOR): How would you describe it, mild, moderate, severe?
+[SEG0015] person_2 (PATIENT): Well, it's... hard to say, it's kinda... I don't know—
+[SEG0016] person_1 (DOCTOR): take your time. Mild, moderate, or severe, if you had to pick?
+[SEG0017] person_2 (PATIENT): Severe, I'd say.
+[SEG0018] person_1 (DOCTOR): Have you had a dry cough?
+[SEG0019] person_2 (PATIENT): yeah, that too
+[SEG0020] person_1 (DOCTOR): Does it happen all the time or in spells?
+[SEG0021] person_2 (PATIENT): Honestly, a few times a day. Oh, I did have sharp pain in the left chest when I breathe in at one point, but that's gone now.
+[SEG0022] person_1 (DOCTOR): Have you had a low fever a few days ago before, or is this the first time?
+[SEG0023] person_2 (PATIENT): I had a similar thing last winter. It went away.
+[SEG0024] person_1 (DOCTOR): So did you get leg swelling or coughing up blood?
+[SEG0025] person_2 (PATIENT): I haven't had leg swelling or coughing up blood no.
+[SEG0026] person_1 (DOCTOR): have you noticed recent long travel injury to the chest or breathlessness at rest?
+[SEG0027] person_2 (PATIENT): Okay, so no, none of that at all.
+[SEG0028] person_1 (DOCTOR): anything on the skin I should know about?
+[SEG0029] person_2 (PATIENT): Nothing on the skin no.
+[SEG0030] person_1 (DOCTOR): right, is your urine normal, no changes?
+[SEG0031] person_2 (PATIENT): no changes there
+[SEG0032] person_1 (DOCTOR): does anything run in the family?
+[SEG0033] person_2 (PATIENT): my sister has thyroid problems okay so my mother has migraines
+[SEG0034] person_1 (DOCTOR): Any diagnoses you've been given before?
+[SEG0035] person_2 (PATIENT): I've had diabetes for nearly five years now.
+[SEG0036] person_1 (DOCTOR): I see.
+[SEG0037] person_2 (PATIENT): I've had an irregular heartbeat for about a year now
+[SEG0038] person_1 (DOCTOR): okay so
+[SEG0039] person_2 (PATIENT): High blood pressure, for about ten years.
+[SEG0040] person_1 (DOCTOR): hm, okay. What's your current medication list?
+[SEG0041] person_2 (PATIENT): it's, It's a... um, I can't remember what it's called. It's a small white one
+[SEG0042] person_1 (DOCTOR): do you remember what it's for?
+[SEG0043] person_2 (PATIENT): yeah, for my sugar, I believe. My wife sets them out for me, I just take what I'm given. Okay, uh, so so it's telmisartan, 40 milligrams, once a day. I'm on ibuprofen, 400 milligrams, when it hurts
+[SEG0044] person_1 (DOCTOR): So, any operations in the past?
+[SEG0045] person_2 (PATIENT): yes I had a lump removed from my back years ago. A neighbour of mine said I should see someone about it
+[SEG0046] person_1 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0047] person_2 (PATIENT): yes, dust i get itchy eyes. Sulfa drugs i come out in... well, itching all over
+[SEG0048] person_1 (DOCTOR): A few questions about your lifestyle now.
+[SEG0049] person_2 (PATIENT): I stopped smoking about two years back. I gave up drinking about three years ago. I play badminton on Sundays. It's just me and my wife at home now.
+[SEG0050] person_4 (NURSE): Okay, so the vitals from earlier. Pulse is 69 beats a minute, temp 37.0 degrees, respiratory rate 15, BP is 119 over 81, oxygen saturation is 97 percent.
+[SEG0051] person_1 (DOCTOR): good, thank you
+[SEG0052] person_1 (DOCTOR): I'd like to to examine you now.
+[SEG0053] person_2 (PATIENT): Mm, okay.
+[SEG0054] person_1 (DOCTOR): Take your time no rush.
+[SEG0055] person_1 (DOCTOR): air entry is equal on both sides
+[SEG0056] person_2 (PATIENT): that's fine
+[SEG0057] person_1 (DOCTOR): stay still while I have a look
+[SEG0058] person_1 (DOCTOR): I can hear a faint rub on the left side
+[SEG0059] person_1 (DOCTOR): right good that's the examination. Taking everything into account this is probably viral pleurisy. That's my thinking for now and it may change as we learn more. We shouldn't forget a chest infection. A clot in the lung that we should rule out is also on my list
+[SEG0060] person_2 (PATIENT): Should I be worried about this?
+[SEG0061] person_1 (DOCTOR): I can't promise yet, but most people with viral pleurisy do well once it's treated properly let me repeat that back to make sure you've had a low fever a few days ago, and no leg swelling or injury to the chest
+[SEG0062] person_2 (PATIENT): That's it, uh, yes.
+[SEG0063] person_1 (DOCTOR): I want an ECG done, that's for chest pain. It's a routine test and it'll give us a much clearer picture. I want a chest X-ray done, that's for pleuritic pain
+[SEG0064] person_2 (PATIENT): okay, noted
+[SEG0065] person_1 (DOCTOR): Regular pain relief makes it easier to take deep breaths, which protects the lung. If you become breathless or the pain changes, or you feel really unwell, please come to the emergency department. Thanks for coming in.
+[SEG0066] person_2 (PATIENT): All good here. Thank you.
+
+JSON:

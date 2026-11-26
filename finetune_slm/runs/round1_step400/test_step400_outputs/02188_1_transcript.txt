@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02188)
+[SEG0001] person_1 (PATIENT): Hello, doctor. May I come in?
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What seems to be wrong?
+[SEG0003] person_1 (PATIENT): Oh, honestly, it's a hot red swollen big toe, and my family pushed me to come.
+[SEG0004] person_2 (DOCTOR): When was the first time you noticed it?
+[SEG0005] person_1 (PATIENT): Just since yesterday.
+[SEG0006] person_2 (DOCTOR): Mm, okay. Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): Only ice, and it's not much. Yes, touch. That makes it worse. Mostly mild.
+[SEG0008] person_2 (DOCTOR): Have you noticed anything else alongside it?
+[SEG0009] person_1 (PATIENT): It usually comes with not being able to wear a shoe. I've also had pain that woke me, for two days.
+[SEG0010] person_2 (DOCTOR): Is it there all the time or does it come and go?
+[SEG0011] person_1 (PATIENT): It, It just comes and goes. The not being able to wear a shoe? That's been for five days.
+[SEG0012] person_2 (DOCTOR): Yes, carry on.
+[SEG0013] person_2 (DOCTOR): Let's start with the basic checks.
+[SEG0014] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0015] person_2 (DOCTOR): Okay: pressure 115 over 69, saturation 97 percent, pulse 81. And temperature 36.9.
+[SEG0016] person_2 (DOCTOR): Now I'm going to do a short physical check.
+[SEG0017] person_2 (DOCTOR): Stay as you are for a moment.
+[SEG0018] person_2 (DOCTOR): The big toe joint is red, hot, swollen and exquisitely tender.
+[SEG0019] person_2 (DOCTOR): That's the examination finished.
+[SEG0020] person_2 (DOCTOR): Any injury, fever or rash?
+[SEG0021] person_1 (PATIENT): No, you know, not a single one.
+[SEG0022] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0023] person_1 (PATIENT): So, no, nothing with my heart.
+[SEG0024] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0025] person_1 (PATIENT): No changes there.
+[SEG0026] person_2 (DOCTOR): Have you got any known allergies?
+[SEG0027] person_1 (PATIENT): Tramadol. I come out in... well, vomiting.
+[SEG0028] person_2 (DOCTOR): Let's run through your medicines. Just so I get the full picture.
+[SEG0029] person_1 (PATIENT): I'm on ibuprofen, 400 milligrams, three times a day.
+[SEG0030] person_2 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0031] person_1 (PATIENT): Ah, my father has Parkinson's disease.
+[SEG0032] person_2 (DOCTOR): Any surgery in the past?
+[SEG0033] person_1 (PATIENT): Just a bunion operation, six years ago.
+[SEG0034] person_2 (DOCTOR): How active are you?
+[SEG0035] person_1 (PATIENT): I hardly move around during the day.
+[SEG0036] person_2 (DOCTOR): Okay, what do you do during the day?
+[SEG0037] person_1 (PATIENT): I look after my grandchildren most days.
+[SEG0038] person_2 (DOCTOR): Do you follow any particular diet?
+[SEG0039] person_1 (PATIENT): I'm vegetarian and have been for years.
+[SEG0040] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0041] person_1 (PATIENT): No, no conditions.
+[SEG0042] person_2 (DOCTOR): So, based on the history and the examination, this looks most like an acute gout attack. Another possibility is a septic joint. Let's get kidney function tests, for gout treatment. Let's get a uric acid blood test, for gout. Rest the foot, ice it, and drink plenty of water; limit beer and red meat. One warning sign to remember: the symptoms get worse. In that case don't wait. I'd like you back in two weeks.
+[SEG0043] person_2 (DOCTOR): Is there anything you'd like me to go over again?
+[SEG0044] person_1 (PATIENT): Right, um, I'll do that. Thank you, doctor.
+[SEG0045] person_2 (DOCTOR): Okay, see you soon.
+
+JSON:

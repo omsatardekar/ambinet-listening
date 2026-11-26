@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20379)
+[SEG0001] person_1 (PATIENT): hi, is it okay to come in now?
+[SEG0002] person_2 (DOCTOR): of course, leave it there how can I help?
+[SEG0003] person_1 (PATIENT): Honestly, it's pain in my heel, and my family pushed me to come.
+[SEG0004] person_2 (DOCTOR): what's the timeline, when did it begin?
+[SEG0005] person_1 (PATIENT): I've had it for about three months.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): I, I'd say severe. Honestly, on and off. Only resting, and it's not much. Yes, standing long and first steps in the morning. That makes it worse.
+[SEG0008] person_2 (DOCTOR): Does anything else come with it?
+[SEG0009] person_1 (PATIENT): Hmm, when it starts I tend to get pain after exercise as well. So, the pain after exercise? That's been for six months.
+[SEG0010] person_2 (DOCTOR): and what about numbness in the foot, injury or fever?
+[SEG0011] person_1 (PATIENT): no numbness in the foot, injury or fever, none of it
+[SEG0012] person_2 (DOCTOR): Right, has there been any back pain?
+[SEG0013] person_1 (PATIENT): not at all, no back pain
+[SEG0014] person_2 (DOCTOR): Understood. Anything unusual with passing urine?
+[SEG0015] person_1 (PATIENT): Nothing there, no.
+[SEG0016] person_2 (DOCTOR): have you retired yet?
+[SEG0017] person_1 (PATIENT): I retired from the post office two years ago.
+[SEG0018] person_2 (DOCTOR): Are you active?
+[SEG0019] person_1 (PATIENT): I walk the dog every morning.
+[SEG0020] person_2 (DOCTOR): Has anything ever caused you a reaction? I mean any allergies.
+[SEG0021] person_1 (PATIENT): No, um, I'm not allergic to anything.
+[SEG0022] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0023] person_1 (PATIENT): Insoles. I take it every day.
+[SEG0024] person_2 (DOCTOR): Any inherited conditions that that you know of in the family?
+[SEG0025] person_1 (PATIENT): My uncle has high cholesterol.
+[SEG0026] person_2 (DOCTOR): any medical conditions, anything you've been treated for?
+[SEG0027] person_1 (PATIENT): No, nothing I can think of.
+[SEG0028] person_2 (DOCTOR): any previous surgeries?
+[SEG0029] person_1 (PATIENT): Nothing, I haven't had any operations.
+[SEG0030] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0031] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0032] person_2 (DOCTOR): okay: oxygen saturation is 99 percent, pulse is 68 beats a minute and respiratory rate 15, temperature is 36.8 degrees, pressure 121 over 77.
+[SEG0033] person_1 (PATIENT): Is that normal?
+[SEG0034] person_2 (DOCTOR): we'll look at it together shortly
+[SEG0035] person_2 (DOCTOR): okay, shall I start the the examination?
+[SEG0036] person_2 (DOCTOR): Look straight ahead.
+[SEG0037] person_2 (DOCTOR): There is a sore spot at the inner front of the heel bone and pulling the toes back makes it worse.
+[SEG0038] person_1 (PATIENT): Yeah, no problem.
+[SEG0039] person_2 (DOCTOR): That's all I needed to check. Let me tell you where I've got to. I think we're dealing with plantar fasciitis at this stage.
+[SEG0040] person_1 (PATIENT): Is this permanent?
+[SEG0041] person_2 (DOCTOR): it's reasonable to be concerned, but right now plantar fasciitis is my leading thought, not anything worse let's book a foot X-ray to look into heel pain i'd rather check than guess, and this is the quickest way to know more i'd like you to take ibuprofen gel, three times a day, for two weeks it's for heel pain stretch the calf and the sole of the foot before getting out of bed and wear cushioned shoes
+[SEG0042] person_2 (DOCTOR): I think podiatry should see you too one warning sign to remember: the symptoms get worse in that case don't wait i'd like to see you again in six weeks does all of that make sense?
+[SEG0043] person_1 (PATIENT): great, thank you for your help
+[SEG0044] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

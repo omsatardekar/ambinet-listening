@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00428)
+[SEG0001] person_1 (DOCTOR): Hi there, come on in. So, tell me what's been troubling you.
+[SEG0002] person_2 (PATIENT): So, it's swelling of the lips. I thought I'd wait, but it hasn't gone.
+[SEG0003] person_1 (DOCTOR): Since when have you had this?
+[SEG0004] person_2 (PATIENT): It's, It's been going on for ten days. I wasn't sure whether to come in at all, to be honest. It's a relief to finally sit down and talk about it.
+[SEG0005] person_1 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps. It helps to be thorough at this stage.
+[SEG0006] person_2 (PATIENT): Well, about a six out of ten. It's once or twice a day. As for itchy raised red welts, I honestly can't say when that began. It might have been last month or the month before. I've had itching all over too, um, for three days.
+[SEG0007] person_1 (DOCTOR): Let me check a few things. Any throat tightness, new medicines or fever?
+[SEG0008] person_2 (PATIENT): Right, you know, no throat tightness, new medicines or fever, none of it.
+[SEG0009] person_1 (DOCTOR): Has there been any trouble breathing?
+[SEG0010] person_2 (PATIENT): No trouble breathing, thankfully.
+[SEG0011] person_1 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0012] person_2 (PATIENT): Bowels are regular, nothing odd.
+[SEG0013] person_1 (DOCTOR): Alright, any breathing difficulties apart from this?
+[SEG0014] person_2 (PATIENT): No, nothing there.
+[SEG0015] person_1 (DOCTOR): Any allergies I should know about?
+[SEG0016] person_2 (PATIENT): I mean, uh, I've never been told I have allergies.
+[SEG0017] person_1 (DOCTOR): Is there anything medical in your background?
+[SEG0018] person_2 (PATIENT): I've got eczema.
+[SEG0019] person_1 (DOCTOR): Okay, keep going. Yes, eczema is known to us, good to have that clear. A few questions about your lifestyle now.
+[SEG0020] person_2 (PATIENT): I cycle to work most mornings. I work on a farm, it's quite physical. I skip breakfast most days.
+[SEG0021] person_1 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0022] person_2 (PATIENT): Hydrocortisone cream, when needed.
+[SEG0023] person_1 (DOCTOR): Right.
+[SEG0024] person_1 (DOCTOR): Have you had to have anything operated on?
+[SEG0025] person_2 (PATIENT): I had my thyroid operated on a long time ago.
+[SEG0026] person_3 (NURSE): Okay, so the vitals from earlier. Blood pressure 126 over 73, heart rate 74. SpO2 97 percent on room air, temp 36.9 degrees.
+[SEG0027] person_1 (DOCTOR): Good, thank you.
+[SEG0028] person_1 (DOCTOR): I'd like to examine you now.
+[SEG0029] person_1 (DOCTOR): Bear with me a second.
+[SEG0030] person_1 (DOCTOR): Lips look a little puffy, but the tongue and throat are normal.
+[SEG0031] person_1 (DOCTOR): Okay, finished.
+[SEG0032] person_1 (DOCTOR): Taking everything into account, my working impression is acute urticaria, possibly allergic.
+[SEG0033] person_2 (PATIENT): Yeah, what are the chances it's something bad?
+[SEG0034] person_1 (DOCTOR): I can't promise yet, but most people with acute urticaria, possibly allergic do well once it's treated properly. I'm sending you for blood tests because of urticaria.
+[SEG0035] person_2 (PATIENT): Will it hurt?
+[SEG0036] person_1 (DOCTOR): I'm sending you for an allergy test because of recurrent urticaria.
+[SEG0037] person_2 (PATIENT): Will it hurt?
+[SEG0038] person_1 (DOCTOR): I'd like you to take prednisolone, 20 milligrams, once a day, for three days. You take it by mouth. That should help with hives. Write down anything new you ate, took or used before this started, even small things. If your lips or tongue swell more, or you have trouble breathing, that's the point to come in urgently. I'd like to see you again in two weeks.
+[SEG0039] person_2 (PATIENT): Oh, I'll make the appointment on my way out.
+[SEG0040] person_1 (DOCTOR): That's everything from me. Any other questions?
+[SEG0041] person_2 (PATIENT): Right. Thanks again.
+[SEG0042] person_1 (DOCTOR): See you then.
+
+JSON:

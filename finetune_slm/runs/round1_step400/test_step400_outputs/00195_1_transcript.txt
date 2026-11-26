@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00195)
+[SEG0001] person_1 (NURSE): All set here, doctor. Chart's updated, and I'll read the readings out when you're ready.
+[SEG0002] person_2 (DOCTOR): Good, thank you. Welcome, tell me what's brought you in.
+[SEG0003] person_3 (PATIENT): Yeah, uh, it's a night-time cough. I don't know what's causing it. I'd rather know what's going on than keep guessing.
+[SEG0004] person_2 (DOCTOR): When did you first notice it?
+[SEG0005] person_3 (PATIENT): Um, it's been five days, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): Is it constant, or does it come and go?
+[SEG0007] person_3 (PATIENT): It sort of comes and goes.
+[SEG0008] person_2 (DOCTOR): What about a tight chest, have you noticed that?
+[SEG0009] person_3 (PATIENT): Yes, about the same, about four days. With tight chest, it feels severe to me.
+[SEG0010] person_1 (NURSE): Here are the numbers, doctor. Blood pressure 129 over 74, saturation 94 percent, respiratory rate 24, pulse 102, temperature 37.0.
+[SEG0011] person_2 (DOCTOR): Okay, noted.
+[SEG0012] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0013] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0014] person_2 (DOCTOR): You're speaking in full sentences, which is reassuring.
+[SEG0015] person_2 (DOCTOR): That's fine, sit up.
+[SEG0016] person_2 (DOCTOR): Let me check a few things. Any fever, weight loss or leg swelling?
+[SEG0017] person_3 (PATIENT): No, none of those.
+[SEG0018] person_2 (DOCTOR): Right, anything with your heart, like skipped beats or fainting?
+[SEG0019] person_3 (PATIENT): No, that's been fine.
+[SEG0020] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0021] person_3 (PATIENT): Yes, asthma.
+[SEG0022] person_2 (DOCTOR): Okay, I can see asthma in your file as well.
+[SEG0023] person_2 (DOCTOR): Any previous surgeries?
+[SEG0024] person_3 (PATIENT): No operations, no.
+[SEG0025] person_2 (DOCTOR): Any regular medication?
+[SEG0026] person_3 (PATIENT): No, I don't take anything regularly.
+[SEG0027] person_2 (DOCTOR): Does anything run in the family?
+[SEG0028] person_3 (PATIENT): My grandmother had breast cancer.
+[SEG0029] person_2 (DOCTOR): Do you have a job?
+[SEG0030] person_3 (PATIENT): I'm a self-employed electrician.
+[SEG0031] person_2 (DOCTOR): What do you do to keep active?
+[SEG0032] person_3 (PATIENT): I cycle to work most mornings.
+[SEG0033] person_2 (DOCTOR): Okay, thinking it through, my working impression is an asthma flare-up.
+[SEG0034] person_3 (PATIENT): Doctor, is this dangerous?
+[SEG0035] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like an asthma flare-up, but I'd like to confirm. I'll request a chest X-ray, it'll help with wheeze.
+[SEG0036] person_1 (NURSE): I've already done a peak flow reading, it's ready for you.
+[SEG0037] person_2 (DOCTOR): Thanks, I'll check it. I'm prescribing prednisolone, 30 milligrams, once a day, for five days. It's for asthma flare-up. Let me watch you use the inhaler, a lot of people don't get the full dose. Rinse your mouth after the steroid inhaler. I'm not ordering breathing tests today. If things carry on in two weeks, we'll consider it. Let's review you in two weeks. Any last questions?
+[SEG0038] person_3 (PATIENT): Thanks so much, doctor.
+[SEG0039] person_2 (DOCTOR): Alright, mind how you go.
+
+JSON:

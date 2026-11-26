@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00922)
+[SEG0001] person_3 (FAMILY_MEMBER): Doctor, it's our son Rohan, he's three months old. He spits up after every single feed, and I'm worried he isn't keeping enough down.
+[SEG0002] person_1 (PATIENT): Waaah. ~
+[SEG0003] person_2 (DOCTOR): Hello, little man. Thank you both for bringing him. Let me hear it from you first, Mum. How often does he spit up?
+[SEG0004] person_3 (FAMILY_MEMBER): After every feed, doctor. Every single one.
+[SEG0005] person_4 (CAREGIVER): That's not right. It's not every feed. Maybe one or two a day, and it's only a little.
+[SEG0006] person_3 (FAMILY_MEMBER): It is every feed, I do the night ones, you're asleep.
+[SEG0007] person_2 (DOCTOR): I'll note that you remember it differently, and we'll see how he looks. Is he feeding well otherwise?
+[SEG0008] person_3 (FAMILY_MEMBER): He's hungry all the time. He takes about ninety millilitres, or maybe a hundred and twenty, I'm not sure. I don't measure carefully. ~
+[SEG0009] person_2 (DOCTOR): That's helpful. Is he bottle-fed or breast-fed? ~
+[SEG0010] person_3 (FAMILY_MEMBER): Formula only. We changed formula last month. ~
+[SEG0011] person_2 (DOCTOR): Why did you change it?
+[SEG0012] person_3 (FAMILY_MEMBER): My sister says he's allergic to cow's milk formula, but I don't know what the reaction was.
+[SEG0013] person_2 (DOCTOR): Thank you. I'll note that. Is he vomiting forcefully, or is it just milk coming up? ~
+[SEG0014] person_3 (FAMILY_MEMBER): Just milk dribbling out, mostly. ~
+[SEG0015] person_2 (DOCTOR): Is there any green or bloody vomit, or a swollen tummy?
+[SEG0016] person_3 (FAMILY_MEMBER): No. None of that.
+[SEG0017] person_2 (DOCTOR): Has he had any fever, or diarrhoea? ~
+[SEG0018] person_4 (CAREGIVER): No, nothing like that. ~
+[SEG0019] person_2 (DOCTOR): What have you been giving him, if anything?
+[SEG0020] person_3 (FAMILY_MEMBER): Colic drops, five drops with each feed, I think.
+[SEG0021] person_4 (CAREGIVER): She gives them, but I forget half the time when I do the evening feed.
+[SEG0022] person_2 (DOCTOR): Thank you for being honest. I'll weigh him and check his temperature. ~
+[SEG0023] person_3 (FAMILY_MEMBER): He's been gaining, the health visitor said so. ~
+[SEG0024] person_2 (DOCTOR): Weight 6.2 kilograms, temperature 36.7.
+[SEG0025] person_3 (FAMILY_MEMBER): Is that good? ~
+[SEG0026] person_2 (DOCTOR): That's a healthy weight for three months. Let me feel his tummy and look at him. ~
+[SEG0027] person_3 (FAMILY_MEMBER): Of course.
+[SEG0028] person_2 (DOCTOR): His tummy is soft, no lumps, and he looks well.
+[SEG0029] person_4 (CAREGIVER): So he's fine? ~
+[SEG0030] person_2 (DOCTOR): He seems well, and growing well. This sounds like reflux, which is very common at this age, and he's not showing any warning signs.
+[SEG0031] person_3 (FAMILY_MEMBER): What can we do? ~
+[SEG0032] person_2 (DOCTOR): I'd like to start a sachet of infant Gaviscon, one sachet with each feed, mixed in the milk.
+[SEG0033] person_3 (FAMILY_MEMBER): And the drops? ~
+[SEG0034] person_2 (DOCTOR): We can stop those for now. Keep him upright for twenty minutes after each feed, and try smaller, more frequent feeds.
+[SEG0035] person_4 (CAREGIVER): I'll do the evening ones properly. ~
+[SEG0036] person_2 (DOCTOR): Come back in three weeks, or sooner if he vomits forcefully, goes green, or stops feeding.
+[SEG0037] person_3 (FAMILY_MEMBER): We will. Thank you. ~
+
+JSON:

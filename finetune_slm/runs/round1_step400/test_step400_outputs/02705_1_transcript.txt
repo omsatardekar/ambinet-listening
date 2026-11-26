@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02705)
+[SEG0001] person_1 (DOCTOR): Hello, sorry about the delay, do sit.
+[SEG0002] person_2 (PATIENT): hello doctor
+[SEG0003] person_1 (DOCTOR): what's been worrying you?
+[SEG0004] person_2 (PATIENT): it's severe tummy pain out of proportion to the examination mostly
+[SEG0005] person_1 (DOCTOR): when did this begin?
+[SEG0006] person_2 (PATIENT): I'd say two weeks. Actually, no, closer to to three weeks.
+[SEG0007] person_1 (DOCTOR): how strong would you say it is?
+[SEG0008] person_2 (PATIENT): Moderate really i've also had bloody diarrhoea since yesterday there's vomiting as well
+[SEG0009] person_3 (NURSE): here are the numbers doctor. Temperature 36.5 blood pressure 114 over 75 pulse is 111 beats a minute. Oxygen saturation is 96 percent
+[SEG0010] person_1 (DOCTOR): Good, thank you.
+[SEG0011] person_1 (DOCTOR): Let's move on to to the examination.
+[SEG0012] person_2 (PATIENT): okay, doctor
+[SEG0013] person_1 (DOCTOR): I'll listen to your chest now.
+[SEG0014] person_1 (DOCTOR): Your pulse is irregular, the tummy is soft but terribly painful, and the pain is out of proportion to what I find.
+[SEG0015] person_1 (DOCTOR): Okay that's enough for me. And And what about fever hernia or chest pain?
+[SEG0016] person_2 (PATIENT): I haven't had fever hernia or chest pain no
+[SEG0017] person_1 (DOCTOR): Is your chest okay generally?
+[SEG0018] person_2 (PATIENT): No my breathing's been fine.
+[SEG0019] person_1 (DOCTOR): Any inherited conditions that that you know of in the family?
+[SEG0020] person_2 (PATIENT): my mother had a stroke
+[SEG0021] person_1 (DOCTOR): let's run through your medicines
+[SEG0022] person_2 (PATIENT): Bisoprolol 2.5 milligrams maybe once a day
+[SEG0023] person_1 (DOCTOR): Okay, do you have the packet or the the prescription with you?
+[SEG0024] person_2 (PATIENT): Not with me. I'll bring it next time. I take lisinopril 10 milligrams once a day for my pressure. Seretide inhaler. I take it twice a day.
+[SEG0025] person_1 (DOCTOR): how long has that been going on?
+[SEG0026] person_2 (PATIENT): For six months. I take a blood thinner, 5 milligrams, stopped last month.
+[SEG0027] person_3 (NURSE): doctor, our chart from the the last visit lists it as 10 milligrams
+[SEG0028] person_1 (DOCTOR): hm do you have the the latest prescription with you?
+[SEG0029] person_2 (PATIENT): not with me i'll bring it it next time before this I was on ramipril; that's been stopped
+[SEG0030] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0031] person_2 (PATIENT): No, not at all.
+[SEG0032] person_1 (DOCTOR): let's talk a little about your daily life and habits
+[SEG0033] person_2 (PATIENT): I work in accounts at a hospital. I live with my elderly mother. I grab fast food at lunch most days
+[SEG0034] person_1 (DOCTOR): have you got any known allergies?
+[SEG0035] person_2 (PATIENT): No, um, I've never reacted to anything.
+[SEG0036] person_1 (DOCTOR): anything in your past medical history I should know?
+[SEG0037] person_2 (PATIENT): I've had an irregular heartbeat, yes. High blood pressure, for two years. I've had asthma, yes.
+[SEG0038] person_1 (DOCTOR): Alright, an irregular heartbeat, that that matches what I have here.
+[SEG0039] person_1 (DOCTOR): Let me tell you where I've got to. My working impression is possible bowel ischaemia. That's my thinking for now, and it may change as we learn more. I can't rule out pancreatitis yet.
+[SEG0040] person_1 (DOCTOR): Urgent blood tests is what I'd like next, for severe abdominal pain. I'll request an urgent CT angiogram, it'll help with possible bowel ischaemia. This is an emergency, you are going to hospital now. Please take the tablets with food so they don't upset your stomach. I'd like you to see the surgical team as well, and I'll write the referral.
+[SEG0041] person_1 (DOCTOR): and please bring the latest prescription or the medicine boxes to the next visit so we can settle the dose. Have I covered everything you wanted?
+[SEG0042] person_2 (PATIENT): good thanks I'll see you then
+
+JSON:

@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00899)
+[SEG0001] person_2 (DOCTOR): Good morning. The booking says an eczema flare in Ivy. Hello, Ivy! Mum, give me the headlines, I know you're busy. ~
+[SEG0002] person_3 (FAMILY_MEMBER): Thanks. It's a flare. Behind her knees and in her elbows, red and rough, for about a week. I've got to be at the bank by eleven.
+[SEG0003] person_2 (DOCTOR): A week. And is she itchy?
+[SEG0004] person_3 (FAMILY_MEMBER): Very. She rubs her legs on the carpet.
+[SEG0005] person_5 (UNKNOWN): [from the doorway] She was scratching all night, I heard her!
+[SEG0006] person_2 (DOCTOR): Sorry, who was that? I didn't catch it. ~
+[SEG0007] person_3 (FAMILY_MEMBER): I think that's my sister, she's waiting outside. Ignore her. ~
+[SEG0008] person_2 (DOCTOR): Noted, a voice from the doorway says she scratched through the night. Ivy, show me your legs, sweetheart?
+[SEG0009] person_1 (PATIENT): Itchy! ~
+[SEG0010] person_2 (DOCTOR): I can see they're itchy. Nurse, can you do her obs while I write? ~
+[SEG0011] person_4 (NURSE): Of course. Temperature 36.8, pulse 110, breathing 24, oxygen 98 percent, weight 13.1 kilos, and height 88 centimetres.
+[SEG0012] person_2 (DOCTOR): Thank you. Mum, any weeping, crusting, fever?
+[SEG0013] person_3 (FAMILY_MEMBER): No, nothing wet, and no fever.
+[SEG0014] person_2 (DOCTOR): And what are you using on it?
+[SEG0015] person_3 (FAMILY_MEMBER): Epaderm ointment, twice a day, all over. Hydrocortisone cream, once a day on the flares. And cetirizine, maybe 2.5 mg at night, I'd have to look at the bottle.
+[SEG0016] person_2 (DOCTOR): Okay. We'll check the bottle. Any history in Ivy?
+[SEG0017] person_3 (FAMILY_MEMBER): Eczema since she was six months old. And she had bronchiolitis at one.
+[SEG0018] person_2 (DOCTOR): Does she go to nursery?
+[SEG0019] person_3 (FAMILY_MEMBER): Three days a week.
+[SEG0020] person_2 (DOCTOR): And what does she eat?
+[SEG0021] person_3 (FAMILY_MEMBER): Mostly home-cooked. I'm a bit boring that way.
+[SEG0022] person_2 (DOCTOR): Let me see. Ivy, can I look at your knees, like a doctor in a film?
+[SEG0023] person_1 (PATIENT): No. ~
+[SEG0024] person_3 (FAMILY_MEMBER): Ivy, be good for the doctor. ~
+[SEG0025] person_2 (DOCTOR): I can see dry, red, scaly patches behind both knees and in the elbow creases, with a few scratch marks.
+[SEG0026] person_3 (FAMILY_MEMBER): Is it infected? ~
+[SEG0027] person_2 (DOCTOR): Any wheeze or cough with it?
+[SEG0028] person_3 (FAMILY_MEMBER): No, nothing, her chest has been fine.
+[SEG0029] person_2 (DOCTOR): And her tummy, any vomiting or loose stools?
+[SEG0030] person_3 (FAMILY_MEMBER): No, nothing like that, everything's normal.
+[SEG0031] person_2 (DOCTOR): This looks like an eczema flare, nothing more.
+[SEG0032] person_3 (FAMILY_MEMBER): Phew. So no change in what we use? ~
+[SEG0033] person_2 (DOCTOR): Keep the emollient going, and the hydrocortisone only on the red areas, for up to a week. Pat her dry after baths, don't rub.
+[SEG0034] person_3 (FAMILY_MEMBER): Okay. ~
+[SEG0035] person_2 (DOCTOR): I'd like to see you again in four weeks to make sure it's settled.
+[SEG0036] person_3 (FAMILY_MEMBER): Four weeks. I'll book at the desk. Come on, Ivy. ~
+[SEG0037] person_1 (PATIENT): Bye-bye. ~
+
+JSON:

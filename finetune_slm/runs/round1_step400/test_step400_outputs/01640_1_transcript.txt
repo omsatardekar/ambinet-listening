@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01640)
+[SEG0001] person_1 (DOCTOR): come in, have a seat by the desk
+[SEG0002] person_2 (PATIENT): Evening, doctor.
+[SEG0003] person_1 (DOCTOR): alright, is it your first time here?
+[SEG0004] person_2 (PATIENT): No, I came last year for something else.
+[SEG0005] person_1 (DOCTOR): What do you need help with?
+[SEG0006] person_2 (PATIENT): Well, uh, I've been having shoulder tightness.
+[SEG0007] person_1 (DOCTOR): How strong would you say it is?
+[SEG0008] person_2 (PATIENT): Mild, I'd say.
+[SEG0009] person_1 (DOCTOR): Any a headache as well?
+[SEG0010] person_2 (PATIENT): Mm, you know, yes, for five days. As for headache, pretty moderate, if I'm being honest. I've been feeling shaken too, for four weeks. Erm, with feeling shaken, about a seven out of ten. Honestly, once or twice a day. Neck pain after a car crash was there, you know, but it's gone away on its own.
+[SEG0011] person_1 (DOCTOR): right, have you had shoulder tightness before, or is this the first time?
+[SEG0012] person_2 (PATIENT): yes, something like this happened a couple of years ago, and it went away on its own
+[SEG0013] person_1 (DOCTOR): have you noticed weakness, loss of consciousness or numbness in the arms?
+[SEG0014] person_2 (PATIENT): Oh, no, I'd have said so.
+[SEG0015] person_1 (DOCTOR): and chest pain, any of that?
+[SEG0016] person_2 (PATIENT): Nope, um, no chest pain.
+[SEG0017] person_1 (DOCTOR): so, anything with your heart, like skipped beats or fainting?
+[SEG0018] person_2 (PATIENT): No, uh, nothing with my heart.
+[SEG0019] person_1 (DOCTOR): is your urine normal, no changes?
+[SEG0020] person_2 (PATIENT): That's normal as far as I know.
+[SEG0021] person_1 (DOCTOR): What do you take on a normal day?
+[SEG0022] person_2 (PATIENT): Let me think, it's aspirin, 75 milligrams, once a day. Um, I'm supposed to take it regularly, but I don't always manage.
+[SEG0023] person_1 (DOCTOR): Have you had any surgical procedures?
+[SEG0024] person_2 (PATIENT): Mm, uh, just a mole taken off my arm, a few years ago. I took the morning off to come in today. I thought it would sort itself out, but it hasn't.
+[SEG0025] person_1 (DOCTOR): anything in your past medical history I should know?
+[SEG0026] person_2 (PATIENT): I have heart disease, for about a year. I've had migraines, yes.
+[SEG0027] person_1 (DOCTOR): Understood. Yes, migraines is known to us, good to have that clear.
+[SEG0028] person_1 (DOCTOR): Any smoking?
+[SEG0029] person_2 (PATIENT): I quit smoking around ten years ago.
+[SEG0030] person_1 (DOCTOR): What does a normal day of food look like?
+[SEG0031] person_2 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0032] person_1 (DOCTOR): How active are you?
+[SEG0033] person_2 (PATIENT): I hardly move around during the day.
+[SEG0034] person_1 (DOCTOR): Let's start with the basic checks.
+[SEG0035] person_1 (DOCTOR): Keep your arm relaxed for me...
+[SEG0036] person_1 (DOCTOR): Okay: pressure 119 over 82, SpO2 98 percent on room air, heart rate 69, temperature 36.4.
+[SEG0037] person_2 (PATIENT): Is that okay?
+[SEG0038] person_1 (DOCTOR): I'll interpret them after the examination.
+[SEG0039] person_1 (DOCTOR): May I examine you now?
+[SEG0040] person_1 (DOCTOR): Nearly finished here.
+[SEG0041] person_1 (DOCTOR): There is muscle tenderness either side of the neck and no tenderness over the bones.
+[SEG0042] person_2 (PATIENT): Sure thing.
+[SEG0043] person_1 (DOCTOR): Good, you can sit up again.
+[SEG0044] person_1 (DOCTOR): Taking everything into account, I'm honestly not certain yet. It could be whiplash-type neck strain, or it might be a cervical spine injury.
+[SEG0045] person_2 (PATIENT): Mm, I'm scared it's something bad. Is it?
+[SEG0046] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like whiplash-type neck strain.
+[SEG0047] person_1 (DOCTOR): I'll start you on naproxen, 500 milligrams, twice a day with food, one week. It's for neck pain.
+[SEG0048] person_2 (PATIENT): Sorry, you know, what was I saying, alright, I'll pick it up today.
+[SEG0049] person_1 (DOCTOR): Keep your neck moving gently and avoid a collar. Come back or go to emergency straight away if you get numbness or weakness in your arms. Book a review if not better in two weeks.
+[SEG0050] person_3 (CLINICAL_STAFF): Come by reception afterwards and I'll fix the appointment.
+[SEG0051] person_1 (DOCTOR): I think we're done unless you have questions
+[SEG0052] person_2 (PATIENT): Right, um, I'll do that. Thank you, doctor.
+[SEG0053] person_1 (DOCTOR): See you soon.
+
+JSON:

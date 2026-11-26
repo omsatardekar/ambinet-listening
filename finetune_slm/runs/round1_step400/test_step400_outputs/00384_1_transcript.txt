@@ -1,0 +1,74 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00384)
+[SEG0001] person_1 (PATIENT): Sorry I'm a few minutes behind, doctor.
+[SEG0002] person_2 (DOCTOR): so, yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_3 (CAREGIVER): um, uh, hello, doctor, I came in with them, if that's okay
+[SEG0004] person_2 (DOCTOR): that's fine, sit down we'll go through it it together
+[SEG0005] person_1 (PATIENT): well mainly the room spinning. There's a couple of other things but that's the main one
+[SEG0006] person_2 (DOCTOR): how long have you had it?
+[SEG0007] person_1 (PATIENT): I mean, I'd say three weeks, maybe.
+[SEG0008] person_3 (CAREGIVER): I think it's been nearer a month actually
+[SEG0009] person_2 (DOCTOR): okay so roughly three to four weeks. Is that right?
+[SEG0010] person_1 (PATIENT): That sounds about right.
+[SEG0011] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets how often and whether anything makes it better or worse.
+[SEG0012] person_1 (PATIENT): I get some relief from lying still it's mild honestly
+[SEG0013] person_2 (DOCTOR): any a ringing in your ear as well?
+[SEG0014] person_1 (PATIENT): Yes actually. With ringing in my ear I'd say on and off. I've also had a bit of vomiting. Right there was nausea yes but that went away.
+[SEG0015] person_2 (DOCTOR): let me check a few things any numbness in the face or slurred speech?
+[SEG0016] person_1 (PATIENT): no, no numbness in the face or slurred speech
+[SEG0017] person_2 (DOCTOR): did you get headache, hearing loss or weakness?
+[SEG0018] person_1 (PATIENT): I haven't had headache hearing loss or weakness no.
+[SEG0019] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0020] person_1 (PATIENT): skin's normal
+[SEG0021] person_2 (DOCTOR): tell me about your health in general any ongoing conditions?
+[SEG0022] person_1 (PATIENT): I have diabetes, for about a year i've had high blood pressure for nearly five years now it's the not knowing that gets to me i thought it would sort itself out, but it hasn't
+[SEG0023] person_2 (DOCTOR): Yes, diabetes and and high blood pressure are known to us, good to have that clear. Any relatives with health problems I should be aware of?
+[SEG0024] person_1 (PATIENT): My father was diabetic. Yeah my father had a stroke.
+[SEG0025] person_2 (DOCTOR): what about operations anything like that?
+[SEG0026] person_1 (PATIENT): yes I had a hernia repair about five years back
+[SEG0027] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0028] person_3 (CAREGIVER): he is on Glycomet 500 milligrams twice a day for my sugar I give it to him. It's ramipril 5 milligrams every morning for my blood pressure doctor
+[SEG0029] person_2 (DOCTOR): alright, are there any allergies on your record that I should check?
+[SEG0030] person_1 (PATIENT): yeah, none, as far as I'm aware
+[SEG0031] person_3 (CAREGIVER): so, actually, I remember he had some kind of reaction to codeine before i couldn't swear to it
+[SEG0032] person_1 (PATIENT): Maybe, but I don't recall it.
+[SEG0033] person_2 (DOCTOR): fair enough, I'll write down both versions what about alcohol?
+[SEG0034] person_1 (PATIENT): I don't drink at all
+[SEG0035] person_2 (DOCTOR): Are you working at the moment?
+[SEG0036] person_1 (PATIENT): Yes, I'm a nurse on a busy ward.
+[SEG0037] person_2 (DOCTOR): Are you active at all?
+[SEG0038] person_1 (PATIENT): Barely, I'm mostly sedentary these days
+[SEG0039] person_2 (DOCTOR): Can I take your vitals now?
+[SEG0040] person_2 (DOCTOR): Almost there...
+[SEG0041] person_2 (DOCTOR): Okay: BP is 123 over 78, SpO2 99 percent on room air, temp 36.4 degrees, pulse is 71 beats a minute.
+[SEG0042] person_1 (PATIENT): Is that alright, uh, doctor?
+[SEG0043] person_2 (DOCTOR): I'll interpret it it once I've examined you.
+[SEG0044] person_2 (DOCTOR): I'd like to examine you now
+[SEG0045] person_1 (PATIENT): Sure.
+[SEG0046] person_2 (DOCTOR): let me look at this properly
+[SEG0047] person_2 (DOCTOR): When I turn your head to the right, your eyes flick sideways, that's called nystagmus.
+[SEG0048] person_1 (PATIENT): go ahead
+[SEG0049] person_2 (DOCTOR): Let me look at this properly.
+[SEG0050] person_2 (DOCTOR): Your walking is steady and the finger-nose test is normal.
+[SEG0051] person_2 (DOCTOR): good, that's the examination. Okay, thinking it through, I don't have a clear answer today: benign positional vertigo is possible, and so is a migraine-related dizziness. A hearing test is what I'd like next, for tinnitus and vertigo. Let's use betahistine, 16 milligrams, three times a day, for two weeks. It's for vertigo. There's a simple head manoeuvre we can do, and I'll show you how to repeat it at home
+[SEG0052] person_2 (DOCTOR): get up slowly from lying down and sit for a a moment first
+[SEG0053] person_2 (DOCTOR): I follow cut back on tea, coffee and fizzy drinks for a couple of weeks and see how things settle if you get weakness, slurred speech or a severe headache with the dizziness, that's the point to come in urgently
+[SEG0054] person_1 (PATIENT): Oh, yes, I'll keep that in mind.
+[SEG0055] person_2 (DOCTOR): come back in two weeks
+[SEG0056] person_1 (PATIENT): Okay, I'll book that.
+[SEG0057] person_2 (DOCTOR): okay I think we're finished. Is everything clear?
+[SEG0058] person_1 (PATIENT): No um you've explained it well. Thanks.
+[SEG0059] person_2 (DOCTOR): see you then
+
+JSON:

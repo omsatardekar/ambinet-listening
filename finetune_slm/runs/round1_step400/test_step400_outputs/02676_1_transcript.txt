@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02676)
+[SEG0001] person_1 (PATIENT): Um, hello? Doctor? I was told to come in.
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_1 (PATIENT): mm, honestly, it's vomiting, and my family pushed me to come
+[SEG0004] person_2 (DOCTOR): When was the first time you noticed it?
+[SEG0005] person_1 (PATIENT): Probably three weeks. Yeah.
+[SEG0006] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): So, it sort of comes and goes. A seven out of ten, I suppose. I've also had severe tummy pain out of proportion to the examination, since this morning. About severe tummy pain out of proportion to the examination, honestly, once or twice a day.
+[SEG0008] person_2 (DOCTOR): let me check a few things any hernia or fever?
+[SEG0009] person_1 (PATIENT): I mean, no, none of those at all.
+[SEG0010] person_2 (DOCTOR): Have you had chest pain, by any chance?
+[SEG0011] person_1 (PATIENT): Not that that I've noticed, no chest pain.
+[SEG0012] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0013] person_1 (PATIENT): No rashes.
+[SEG0014] person_2 (DOCTOR): Any previous surgeries?
+[SEG0015] person_1 (PATIENT): No, um, never.
+[SEG0016] person_2 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0017] person_1 (PATIENT): I'm on a blood thinner, 5 milligrams, stopped last month.
+[SEG0018] person_2 (DOCTOR): ah tell me about your eating
+[SEG0019] person_1 (PATIENT): I drink a lot of tea and snack through the day.
+[SEG0020] person_2 (DOCTOR): Who lives with you?
+[SEG0021] person_1 (PATIENT): My partner and our baby.
+[SEG0022] person_2 (DOCTOR): Do you get out much?
+[SEG0023] person_1 (PATIENT): Not much, I mostly stay in these days
+[SEG0024] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0025] person_1 (PATIENT): No, I've always been fairly healthy.
+[SEG0026] person_2 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0027] person_1 (PATIENT): yes, erythromycin, it gives me bad stomach cramps
+[SEG0028] person_2 (DOCTOR): Let me get the readings out of the way.
+[SEG0029] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0030] person_2 (DOCTOR): Okay: pulse is 114 beats a a minute, blood pressure 130 over 84, saturation 97 percent.
+[SEG0031] person_2 (DOCTOR): Alright, shall I start the examination?
+[SEG0032] person_2 (DOCTOR): hold that for a second
+[SEG0033] person_2 (DOCTOR): Your pulse is irregular, the tummy is soft but terribly painful, and the pain is out of proportion to what I find.
+[SEG0034] person_2 (DOCTOR): Right, that's all I needed to check.
+[SEG0035] person_2 (DOCTOR): Okay, so my impression is this: I can't pin this down yet. We're looking at possible bowel ischaemia or a bowel obstruction.
+[SEG0036] person_1 (PATIENT): Is it dangerous, doctor?
+[SEG0037] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like possible bowel ischaemia, but I'd like to confirm.
+[SEG0038] person_2 (DOCTOR): An urgent CT angiogram is what I'd like next, for possible bowel ischaemia. I'm going to order urgent blood tests, for severe abdominal pain. This is an emergency, you are going to hospital now. I'd like to see you again straight away. That's everything on my side. Anything you're unsure about?
+[SEG0039] person_1 (PATIENT): Sorry, you know, what was I saying, I think I understand everything. Thanks.
+[SEG0040] person_2 (DOCTOR): So, goodbye for now.
+
+JSON:

@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01710)
+[SEG0001] person_1 (PATIENT): Hi, doctor, I hope I'm not disturbing you.
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): Honestly, it's loose stools with blood, and my family pushed me to come.
+[SEG0004] person_2 (DOCTOR): Is it bearing on you a lot?
+[SEG0005] person_1 (PATIENT): A four out of ten, I suppose.
+[SEG0006] person_2 (DOCTOR): Any mouth ulcers as well?
+[SEG0007] person_1 (PATIENT): Yes, about the same, six months.
+[SEG0008] person_2 (DOCTOR): Is there anything relevant on the family side?
+[SEG0009] person_1 (PATIENT): My mother has an underactive thyroid.
+[SEG0010] person_2 (DOCTOR): What do you take on a normal day?
+[SEG0011] person_1 (PATIENT): Gliclazide. I take it 80 milligrams, twice a day for my sugar.
+[SEG0012] person_2 (DOCTOR): How long have you been on it?
+[SEG0013] person_1 (PATIENT): Six months now.
+[SEG0014] person_2 (DOCTOR): Yes.
+[SEG0015] person_1 (PATIENT): Yeah, it's spironolactone, once a day for my heart.
+[SEG0016] person_2 (DOCTOR): And what strength is that?
+[SEG0017] person_1 (PATIENT): It's 25 milligrams.
+[SEG0018] person_2 (DOCTOR): Any allergies to tablets, food or anything in the environment?
+[SEG0019] person_1 (PATIENT): I've never had an allergy.
+[SEG0020] person_2 (DOCTOR): Have you ever had an operation?
+[SEG0021] person_1 (PATIENT): Yes, I had a caesarean for my second baby, nine years ago.
+[SEG0022] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0023] person_1 (PATIENT): Yes, diabetes.
+[SEG0024] person_2 (DOCTOR): Okay, any other things?
+[SEG0025] person_1 (PATIENT): Yes, an underactive thyroid.
+[SEG0026] person_2 (DOCTOR): Hm, okay.
+[SEG0027] person_1 (PATIENT): I have heart failure, for two years.
+[SEG0028] person_2 (DOCTOR): Right, so diabetes and an underactive thyroid are already on your record. We'll keep that in mind today. Let's talk a little about your daily life and habits.
+[SEG0029] person_1 (PATIENT): My partner and our baby. I retired from the post office two years ago. I drink a lot of tea and snack through the day.
+[SEG0030] person_2 (DOCTOR): How about fever?
+[SEG0031] person_1 (PATIENT): I haven't noticed any fever.
+[SEG0032] person_2 (DOCTOR): Any vomiting, weight loss or joint pain at all?
+[SEG0033] person_1 (PATIENT): None of those, no.
+[SEG0034] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0035] person_1 (PATIENT): Nothing there, no.
+[SEG0036] person_2 (DOCTOR): I'll note down your vital signs first.
+[SEG0037] person_2 (DOCTOR): Right, keep your arm relaxed for me...
+[SEG0038] person_2 (DOCTOR): Okay: pulse is 86 beats a minute, temperature 36.8. And blood pressure 116 over 80, respiratory rate 16.
+[SEG0039] person_1 (PATIENT): Is that normal?
+[SEG0040] person_2 (DOCTOR): They help me see the whole picture, more shortly.
+[SEG0041] person_2 (DOCTOR): May I examine you now?
+[SEG0042] person_2 (DOCTOR): Take a deep breath for me.
+[SEG0043] person_2 (DOCTOR): There is tenderness in the lower right tummy and no guarding.
+[SEG0044] person_2 (DOCTOR): You can relax now. Okay, so my impression is this: I think we're dealing with a flare of inflammatory bowel disease at this stage. It could also be an infection, so we'll keep that open.
+[SEG0045] person_1 (PATIENT): Is there something to worry about?
+[SEG0046] person_2 (DOCTOR): It's reasonable to be concerned, but right now a flare of inflammatory bowel disease is my leading thought, not anything worse. So, to recap quickly. You've had loose stools with blood, and no joint pain or fever.
+[SEG0047] person_1 (PATIENT): That's it, you know, yes.
+[SEG0048] person_2 (DOCTOR): I'm sending you for a stool test because of bloody diarrhoea.
+[SEG0049] person_3 (CLINICAL_STAFF): I can book that for Friday at 2 pm.
+[SEG0050] person_2 (DOCTOR): I'll request blood tests, it'll help with flare. I'm going to put you on prednisolone, 40 milligrams, once a day, one week then reduce. It's for inflammatory bowel flare. Keep up your fluids and call the IBD nurse if you get a fever. I'd like you to see the IBD nurse as well, and I'll write the referral. If the symptoms get worse, or you feel really unwell, please come to the emergency department.
+[SEG0051] person_2 (DOCTOR): Let's plan a check in two weeks. Right, anything else on your mind before you go?
+[SEG0052] person_1 (PATIENT): Great, thank you for your help.
+
+JSON:

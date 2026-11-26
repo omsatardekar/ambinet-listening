@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00342)
+[SEG0001] person_1 (PATIENT): So, good afternoon, doctor, the receptionist said you'd see me now.
+[SEG0002] person_2 (DOCTOR): No trouble at all, come in. What's been bothering you?
+[SEG0003] person_1 (PATIENT): Mainly I've been feeling a bit dizzy after taking all my tablets. That's why I came. I'd rather know what's going on than keep guessing.
+[SEG0004] person_2 (DOCTOR): what medicines do you take regularly?
+[SEG0005] person_1 (PATIENT): Metformin, 500 milligrams, twice a day for my sugar.
+[SEG0006] person_2 (DOCTOR): How long have you been on it?
+[SEG0007] person_1 (PATIENT): For nearly five years.
+[SEG0008] person_2 (DOCTOR): How long have you had it?
+[SEG0009] person_1 (PATIENT): it's been going on for about four days i didn't want to make a fuss, you know
+[SEG0010] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0011] person_1 (PATIENT): it usually comes with dry mouth the dry mouth? That's been since Monday
+[SEG0012] person_2 (DOCTOR): And how severe is it?
+[SEG0013] person_1 (PATIENT): It feels moderate to me. And I've been feeling drowsy in the afternoon as well.
+[SEG0014] person_2 (DOCTOR): How about falls?
+[SEG0015] person_1 (PATIENT): so, not that I've noticed, no falls
+[SEG0016] person_2 (DOCTOR): okay, any black stools, low mood or chest pain?
+[SEG0017] person_1 (PATIENT): oh, I haven't had black stools, low mood or chest pain, no
+[SEG0018] person_2 (DOCTOR): Uh-huh. Alright, is your chest okay generally?
+[SEG0019] person_1 (PATIENT): yeah, no problems with breathing
+[SEG0020] person_2 (DOCTOR): So, any previous surgeries?
+[SEG0021] person_1 (PATIENT): No, nothing like that.
+[SEG0022] person_2 (DOCTOR): what about family history, any illnesses that that run in the family?
+[SEG0023] person_1 (PATIENT): Um, my brother has asthma.
+[SEG0024] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0025] person_1 (PATIENT): I've got diabetes
+[SEG0026] person_2 (DOCTOR): Are you active at all?
+[SEG0027] person_1 (PATIENT): Barely, I'm mostly sedentary these days.
+[SEG0028] person_2 (DOCTOR): Do you have a job?
+[SEG0029] person_1 (PATIENT): I'm a self-employed electrician.
+[SEG0030] person_2 (DOCTOR): Is anyone at home with you?
+[SEG0031] person_1 (PATIENT): I share a flat with two friends.
+[SEG0032] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0033] person_1 (PATIENT): Oh, I was told I'm allergic to penicillin, but I don't remember what reaction I had.
+[SEG0034] person_2 (DOCTOR): Can I examine you now?
+[SEG0035] person_1 (PATIENT): Mm, okay.
+[SEG0036] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0037] person_2 (DOCTOR): your blood pressure falls a little when you stand
+[SEG0038] person_2 (DOCTOR): Good, that's the examination. Putting it all together, it points towards possible side effects from too many medicines. Dehydration is still possible. We should do blood tests for medication review. We should do an ECG for dizziness.
+[SEG0039] person_1 (PATIENT): Mm, okay.
+[SEG0040] person_2 (DOCTOR): Bring every box and bottle you have at home to the next visit, even the herbal ones, and we'll sort them together. Use a weekly pill organiser so the doses don't get mixed. Come back or go to emergency straight away if the symptoms get worse. I'd like to see you again in a week. Good. Let us know how you get on.
+[SEG0041] person_1 (PATIENT): One thing: no, actually that's all. Thanks.
+
+JSON:

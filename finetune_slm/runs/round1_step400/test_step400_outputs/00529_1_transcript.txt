@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00529)
+[SEG0001] person_2 (DOCTOR): Come in, come in. Awful weather again, isn't it? Did you find somewhere to park, or did you do the usual lap round the block?
+[SEG0002] person_3 (FAMILY_MEMBER): Third lap, and then I gave up and used the supermarket car park. It's a good job Mum has the wheelchair folded in the boot.
+[SEG0003] person_1 (PATIENT): I told you to drop me at the door, Pauline. I'd have managed the ramp.
+[SEG0004] person_2 (DOCTOR): Mrs Whitcombe, good to see you. Your daughter's right to be careful. Now, I understand the care home has been worried about your chest.
+[SEG0005] person_1 (PATIENT): I've made some notes, doctor. I wrote them in the book the nurse gave me, so I'd not forget anything.
+[SEG0006] person_2 (DOCTOR): Lovely, please go ahead. Take your time, we're in no hurry.
+[SEG0007] person_1 (PATIENT): The cough began on Tuesday, so that's four days now. It was dry at first, and then I started bringing up yellowy-green phlegm, mostly first thing.
+[SEG0008] person_2 (DOCTOR): Four days, with the phlegm yellowy-green. Does the cough keep you awake?
+[SEG0009] person_1 (PATIENT): A little. I wake at about three and have to sit up.
+[SEG0010] person_3 (FAMILY_MEMBER): What worries me is her breathing. She's breathless just walking to the lounge, and that's new. She used to do the whole corridor.
+[SEG0011] person_2 (DOCTOR): Thank you, Pauline. Mrs Whitcombe, would you agree you're more breathless than usual?
+[SEG0012] person_1 (PATIENT): I'd say so. But I don't want a fuss.
+[SEG0013] person_2 (DOCTOR): No fuss, just an honest picture. Have you had a temperature, any shivers?
+[SEG0014] person_1 (PATIENT): No, no fever. The nurse took it on Wednesday and it was normal.
+[SEG0015] person_2 (DOCTOR): Good. And any pain in the chest when you cough or breathe in?
+[SEG0016] person_1 (PATIENT): No chest pain. The ribs are sore from coughing, but nothing sharp.
+[SEG0017] person_2 (DOCTOR): All right, that's useful. What about your tummy and appetite, any trouble with eating, or your bowels?
+[SEG0018] person_1 (PATIENT): All fine there. I'm eating my toast.
+[SEG0019] person_3 (FAMILY_MEMBER): She is, but I'd say half portions, rather than full.
+[SEG0020] person_2 (DOCTOR): Noted. Let me check your tablets. Do you have the list from the home?
+[SEG0021] person_3 (FAMILY_MEMBER): Yes, here. Ramipril 5 mg once a day, and metformin 500 mg twice a day, and the water tablet in the morning, I don't have the name written.
+[SEG0022] person_2 (DOCTOR): Thank you, ramipril, metformin and a water tablet. Mrs Whitcombe, do you take the metformin twice a day?
+[SEG0023] person_1 (PATIENT): Twice a day, every day. Breakfast and tea. I'm very regular about it.
+[SEG0024] person_3 (FAMILY_MEMBER): Mum, the night carer told me you push the evening one away quite often. She said it half the week.
+[SEG0025] person_1 (PATIENT): That's nonsense. I might have declined it once.
+[SEG0026] person_2 (DOCTOR): I'm not going to referee. I'll note what both of you have told me, and the home can check their medicines chart.
+[SEG0027] person_2 (DOCTOR): Now, any conditions of long standing? Things you'd have had for years?
+[SEG0028] person_1 (PATIENT): Type 2 diabetes, hence the metformin. High blood pressure. And arthritis in the hands, which is why my handwriting is so poor.
+[SEG0029] person_2 (DOCTOR): Your handwriting is perfectly clear, I can see the notebook. Now a question I always ask, any allergies?
+[SEG0030] person_3 (FAMILY_MEMBER): That's one I'm not sure about. Years ago she came out in something after an antibiotic, but nobody can remember which one, or what it did. It might have been an allergy, it might not.
+[SEG0031] person_1 (PATIENT): I don't remember it at all. I've never been told I was allergic to anything.
+[SEG0032] person_2 (DOCTOR): So possibly allergic to an antibiotic, but no name and no clear reaction. I'll record it as uncertain, and we'll try to trace the old records.
+[SEG0033] person_3 (FAMILY_MEMBER): I can ask my brother, he kept all the paperwork when Dad died.
+[SEG0034] person_2 (DOCTOR): That would help. Now I'll listen to your chest, if you're comfortable. Pauline, would you help your mum with her cardigan?
+[SEG0035] person_1 (PATIENT): I'm perfectly capable of undoing a button.
+[SEG0036] person_2 (DOCTOR): Deep breaths in and out for me, through the mouth.
+[SEG0037] person_1 (PATIENT): Is it a nasty one?
+[SEG0038] person_2 (DOCTOR): I want to see a picture before I say anything definite. I'd like to send you for a chest X-ray today, at the hospital over the road.
+[SEG0039] person_3 (FAMILY_MEMBER): Today? We can do that. Does she need to be fasting?
+[SEG0040] person_2 (DOCTOR): No, nothing special. Just the usual ID, and wear something without metal on the chest.
+[SEG0041] person_1 (PATIENT): My buttons are plastic.
+[SEG0042] person_2 (DOCTOR): Perfect. In the meantime, plenty of fluids, sit up in the armchair rather than lying flat, and let the carers know if the breathing gets harder.
+[SEG0043] person_3 (FAMILY_MEMBER): I'll tell the manager. She's on the ball.
+[SEG0044] person_1 (PATIENT): Will I be able to go to the bingo on Thursday?
+[SEG0045] person_2 (DOCTOR): Let's see how you feel on Thursday. Wrap up warm either way.
+[SEG0046] person_1 (PATIENT): I always do. I knitted this scarf myself.
+[SEG0047] person_2 (DOCTOR): It's gorgeous. The X-ray department will give you the result to us, and the surgery will call the care home.
+[SEG0048] person_3 (FAMILY_MEMBER): Thank you for taking your time, doctor. She's been quite anxious.
+[SEG0049] person_2 (DOCTOR): Not at all. She's been very clear, and I'd rather see people early. Mind the ramp on the way out.
+[SEG0050] person_1 (PATIENT): I will. Good morning, doctor.
+[SEG0051] person_2 (DOCTOR): Good morning to you both.
+[SEG0052] person_3 (FAMILY_MEMBER): Come on, Mum, let's find that car before the supermarket charges us.
+
+JSON:

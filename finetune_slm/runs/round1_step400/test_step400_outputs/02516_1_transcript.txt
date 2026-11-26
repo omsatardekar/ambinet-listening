@@ -1,0 +1,69 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02516)
+[SEG0001] person_1 (DOCTOR): Right then, come on in.
+[SEG0002] person_2 (PATIENT): Hi doctor, I got here as fast as I could.
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, um, I've come along because I know the history, if it helps.
+[SEG0004] person_1 (DOCTOR): Absolutely, come and sit beside them. What's the problem?
+[SEG0005] person_2 (PATIENT): Um, so... a severe headache. That's why I came. Sorry, I know I'm rambling a bit.
+[SEG0006] person_1 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0007] person_3 (FAMILY_MEMBER): She is on glimepiride, 2 milligrams, before breakfast for my sugar, I give it to her.
+[SEG0008] person_1 (DOCTOR): So, when did this begin?
+[SEG0009] person_2 (PATIENT): Probably three days. Yeah.
+[SEG0010] person_1 (DOCTOR): Is it constant or in episodes?
+[SEG0011] person_2 (PATIENT): It happens on and off.
+[SEG0012] person_1 (DOCTOR): Right, does anything else come with it?
+[SEG0013] person_2 (PATIENT): Swollen face and hands goes along with it, most of the time. Uh, there's pain under the right ribs as well. With pain under the right ribs, it feels mild to me. Honestly, on and off. As for swollen face and hands, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0014] person_1 (DOCTOR): Have you had a severe headache before, or is this the first time?
+[SEG0015] person_2 (PATIENT): Yes, you know, something like this happened last winter, and it went away on its own.
+[SEG0016] person_1 (DOCTOR): Have you noticed vaginal bleeding, reduced baby movements or leaking fluid?
+[SEG0017] person_2 (PATIENT): No, no vaginal bleeding, reduced baby movements or leaking fluid.
+[SEG0018] person_1 (DOCTOR): Is your urine normal, no changes?
+[SEG0019] person_2 (PATIENT): That's normal as far as I know.
+[SEG0020] person_1 (DOCTOR): Your breathing, any trouble there?
+[SEG0021] person_2 (PATIENT): No problems with breathing.
+[SEG0022] person_1 (DOCTOR): What about your parents, brothers or sisters, any conditions?
+[SEG0023] person_2 (PATIENT): My son has asthma.
+[SEG0024] person_1 (DOCTOR): Any health conditions I should have on record?
+[SEG0025] person_2 (PATIENT): I have diabetes.
+[SEG0026] person_1 (DOCTOR): Right, so diabetes is already on your record. We'll keep that in mind today. Any previous surgeries?
+[SEG0027] person_2 (PATIENT): Nothing, uh, I haven't had any operations.
+[SEG0028] person_1 (DOCTOR): Any allergies to tablets, food or anything in the environment?
+[SEG0029] person_2 (PATIENT): I, I don't think I have any, no.
+[SEG0030] person_1 (DOCTOR): Anything you do to stay fit?
+[SEG0031] person_2 (PATIENT): I do a yoga class on Thursdays.
+[SEG0032] person_1 (DOCTOR): Have you retired yet?
+[SEG0033] person_2 (PATIENT): I retired from the post office two years ago.
+[SEG0034] person_1 (DOCTOR): How are your meals?
+[SEG0035] person_2 (PATIENT): I grab fast food at lunch most days.
+[SEG0036] person_1 (DOCTOR): I'll note down your vital signs first.
+[SEG0037] person_1 (DOCTOR): Keep your arm relaxed for me...
+[SEG0038] person_1 (DOCTOR): Okay: pressure 162 over 88, temperature 36.4, heart rate 84.
+[SEG0039] person_2 (PATIENT): Is that okay?
+[SEG0040] person_1 (DOCTOR): Alright, that's fine, I'll explain it soon.
+[SEG0041] person_1 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0042] person_1 (DOCTOR): Nearly finished here.
+[SEG0043] person_1 (DOCTOR): Your blood pressure is very high and your reflexes are brisk.
+[SEG0044] person_2 (PATIENT): That's alright.
+[SEG0045] person_1 (DOCTOR): Thank you, you can get dressed. Putting it all together, it points towards severe pre-eclampsia. A migraine is still possible.
+[SEG0046] person_2 (PATIENT): Is there something to worry about?
+[SEG0047] person_1 (DOCTOR): It's reasonable to be concerned, but right now severe pre-eclampsia is my leading thought, not anything worse. I'll request a urine protein test, it'll help with pre-eclampsia. Let's book urgent blood tests to look into pre-eclampsia. I'm prescribing labetalol, 200 milligrams, once now, single dose. It's for severe hypertension. You need to go to the maternity unit straight away. We'll refer you to the obstetric team.
+[SEG0048] person_2 (PATIENT): Okay.
+[SEG0049] person_1 (DOCTOR): Come back or go to emergency straight away if the symptoms get worse.
+[SEG0050] person_2 (PATIENT): Alright, I follow.
+[SEG0051] person_1 (DOCTOR): Let's plan a check straight away. How would you describe the plan, so we're on the same page?
+[SEG0052] person_2 (PATIENT): So, I take the labetalol, 200 milligrams, once now and come back straight away. Is that right?
+[SEG0053] person_1 (DOCTOR): Okay, yes, exactly right. Does all of that make sense?
+[SEG0054] person_2 (PATIENT): That's clear, thanks.
+
+JSON:

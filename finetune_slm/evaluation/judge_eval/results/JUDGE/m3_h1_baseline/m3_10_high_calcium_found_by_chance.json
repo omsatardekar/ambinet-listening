@@ -1,0 +1,596 @@
+{
+ "run_id": "m3_h1_baseline",
+ "encounter_id": "m3_10_high_calcium_found_by_chance",
+ "title": "High calcium found on a routine blood test; vague patient, son speaks first, nurse reads vitals, doctor lets silences sit",
+ "prompt_sha256": {
+  "precision": "2246a810d1cb417338e522cff551c643d54b2610c8179f628f6107e6eb270692",
+  "recall": "481fac47059ae73868a6576db46e621e1e16f779221aecf09fd52511e382c6cb"
+ },
+ "n_segments": 121,
+ "reference_facts": [
+  {
+   "fid": "D1",
+   "field": "design_fact",
+   "text": "very thirsty and passing a lot of water, tired, constipated, vague aches",
+   "attributes": {}
+  },
+  {
+   "fid": "D2",
+   "field": "design_fact",
+   "text": "no confusion, no vomiting",
+   "attributes": {}
+  },
+  {
+   "fid": "D3",
+   "field": "design_fact",
+   "text": "arthritis in the hands",
+   "attributes": {}
+  },
+  {
+   "fid": "D4",
+   "field": "design_fact",
+   "text": "one calcium and vitamin D supplement (dose disputed)",
+   "attributes": {}
+  },
+  {
+   "fid": "D5",
+   "field": "design_fact",
+   "text": "no allergies",
+   "attributes": {}
+  },
+  {
+   "fid": "D6",
+   "field": "design_fact",
+   "text": "retired school cook",
+   "attributes": {}
+  },
+  {
+   "fid": "D7",
+   "field": "design_fact",
+   "text": "temperature 36.7, BP 134/80, pulse 74",
+   "attributes": {}
+  },
+  {
+   "fid": "D8",
+   "field": "design_fact",
+   "text": "tender in the belly on deep press, otherwise normal",
+   "attributes": {}
+  },
+  {
+   "fid": "U1",
+   "field": "design_uncertainty",
+   "text": "The record should show this doubt or gap, not a confident fact: the dose of her calcium or vitamin D supplement is given differently by the patient and by her son",
+   "attributes": {}
+  },
+  {
+   "fid": "U2",
+   "field": "design_uncertainty",
+   "text": "The record should show this doubt or gap, not a confident fact: she cannot say when she last drank enough or how often she passes water",
+   "attributes": {}
+  },
+  {
+   "fid": "U3",
+   "field": "design_uncertainty",
+   "text": "The record should show this doubt or gap, not a confident fact: the doctor never names a diagnosis, orders no new test beyond what is already done, and arranges no follow-up",
+   "attributes": {}
+  }
+ ],
+ "predicted_facts": [
+  {
+   "fid": "chief_complaint[0]",
+   "field": "chief_complaint",
+   "text": "something was high (reported_by=FAMILY_MEMBER)",
+   "attributes": {
+    "reported_by": "FAMILY_MEMBER"
+   }
+  },
+  {
+   "fid": "medical_history.past_medical_history[0]",
+   "field": "medical_history.past_medical_history",
+   "text": "arthritis (status=ongoing, reported_by=PATIENT)",
+   "attributes": {
+    "status": "ongoing",
+    "reported_by": "PATIENT"
+   }
+  },
+  {
+   "fid": "medical_history.surgical_history[0]",
+   "field": "medical_history.surgical_history",
+   "text": "tonsils out (reported_by=PATIENT)",
+   "attributes": {
+    "reported_by": "PATIENT"
+   }
+  },
+  {
+   "fid": "medical_history.family_history[0]",
+   "field": "medical_history.family_history",
+   "text": "lump in breast (reported_by=PATIENT)",
+   "attributes": {
+    "reported_by": "PATIENT"
+   }
+  },
+  {
+   "fid": "medical_history.social_history[0]",
+   "field": "medical_history.social_history",
+   "text": "lifestyle (description=cooked for four hundred children every day, reported_by=PATIENT)",
+   "attributes": {
+    "description": "cooked for four hundred children every day",
+    "reported_by": "PATIENT"
+   }
+  },
+  {
+   "fid": "symptoms[0]",
+   "field": "symptoms",
+   "text": "tired (category=cardiovascular, status=current, temporality=current, body_site=tummy, reported_by=PATIENT)",
+   "attributes": {
+    "category": "cardiovascular",
+    "status": "current",
+    "temporality": "current",
+    "body_site": "tummy",
+    "reported_by": "PATIENT"
+   }
+  },
+  {
+   "fid": "symptoms[1]",
+   "field": "symptoms",
+   "text": "heavy (category=musculoskeletal, status=current, temporality=current, body_site=back, reported_by=PATIENT)",
+   "attributes": {
+    "category": "musculoskeletal",
+    "status": "current",
+    "temporality": "current",
+    "body_site": "back",
+    "reported_by": "PATIENT"
+   }
+  },
+  {
+   "fid": "symptoms[2]",
+   "field": "symptoms",
+   "text": "bunged up (category=cardiovascular, status=current, temporality=current, body_site=tummy, reported_by=PATIENT)",
+   "attributes": {
+    "category": "cardiovascular",
+    "status": "current",
+    "temporality": "current",
+    "body_site": "tummy",
+    "reported_by": "PATIENT"
+   }
+  },
+  {
+   "fid": "negative_findings[0]",
+   "field": "negative_findings",
+   "text": "high calcium (status=absent, assertion=negative, reported_by=FAMILY_MEMBER, temporality=current)",
+   "attributes": {
+    "status": "absent",
+    "assertion": "negative",
+    "reported_by": "FAMILY_MEMBER",
+    "temporality": "current"
+   }
+  },
+  {
+   "fid": "medications[0]",
+   "field": "medications",
+   "text": "calcium (dose=one a day, route=oral, frequency=daily, indication=calcium, status=currently_used, reported_by=PATIENT)",
+   "attributes": {
+    "dose": "one a day",
+    "route": "oral",
+    "frequency": "daily",
+    "indication": "calcium",
+    "status": "currently_used",
+    "reported_by": "PATIENT"
+   }
+  },
+  {
+   "fid": "allergies[0]",
+   "field": "allergies",
+   "text": "paracetamol (allergy_type=medication, reaction=none, severity=unknown, status=reported, reported_by=PATIENT)",
+   "attributes": {
+    "allergy_type": "medication",
+    "reaction": "none",
+    "severity": "unknown",
+    "status": "reported",
+    "reported_by": "PATIENT"
+   }
+  },
+  {
+   "fid": "vital_signs[0]",
+   "field": "vital_signs",
+   "text": "blood pressure (value=34.0, unit=mmHg, reported_by=NURSE)",
+   "attributes": {
+    "value": "34.0",
+    "unit": "mmHg",
+    "reported_by": "NURSE"
+   }
+  },
+  {
+   "fid": "vital_signs[1]",
+   "field": "vital_signs",
+   "text": "pulse (value=74, unit=beats per minute, reported_by=NURSE)",
+   "attributes": {
+    "value": "74",
+    "unit": "beats per minute",
+    "reported_by": "NURSE"
+   }
+  },
+  {
+   "fid": "vital_signs[2]",
+   "field": "vital_signs",
+   "text": "temperature (value=36.7, unit=°C, reported_by=DOCTOR)",
+   "attributes": {
+    "value": "36.7",
+    "unit": "°C",
+    "reported_by": "DOCTOR"
+   }
+  },
+  {
+   "fid": "physical_examination[0]",
+   "field": "physical_examination",
+   "text": "bunged up (body_site=tummy, status=present, observed_by=PATIENT)",
+   "attributes": {
+    "body_site": "tummy",
+    "status": "present",
+    "observed_by": "PATIENT"
+   }
+  },
+  {
+   "fid": "review_of_systems[0]",
+   "field": "review_of_systems",
+   "text": "cardiovascular (status=negative, details=high calcium, reported_by=PATIENT)",
+   "attributes": {
+    "status": "negative",
+    "details": "high calcium",
+    "reported_by": "PATIENT"
+   }
+  },
+  {
+   "fid": "clinical_conditions[0]",
+   "field": "clinical_conditions",
+   "text": "arthritis (status=existing, reported_by=PATIENT)",
+   "attributes": {
+    "status": "existing",
+    "reported_by": "PATIENT"
+   }
+  },
+  {
+   "fid": "clinical_assessment[0]",
+   "field": "clinical_assessment",
+   "text": "high calcium (certainty=provisional, basis=test results, stated_by=DOCTOR)",
+   "attributes": {
+    "certainty": "provisional",
+    "basis": "test results",
+    "stated_by": "DOCTOR"
+   }
+  },
+  {
+   "fid": "procedures_and_investigations[0]",
+   "field": "procedures_and_investigations",
+   "text": "calcium test (type=laboratory, status=planned, requested_by=DOCTOR, indication=calcium)",
+   "attributes": {
+    "type": "laboratory",
+    "status": "planned",
+    "requested_by": "DOCTOR",
+    "indication": "calcium"
+   }
+  },
+  {
+   "fid": "clinical_actions[0]",
+   "field": "clinical_actions",
+   "text": "take calcium tablets (action_type=medication, status=completed, responsible_person=PATIENT)",
+   "attributes": {
+    "action_type": "medication",
+    "status": "completed",
+    "responsible_person": "PATIENT"
+   }
+  },
+  {
+   "fid": "follow_up[0]",
+   "field": "follow_up",
+   "text": "consultation (status=planned)",
+   "attributes": {
+    "status": "planned"
+   }
+  },
+  {
+   "fid": "clinical_uncertainties[0]",
+   "field": "clinical_uncertainties",
+   "text": "unknown (type=date_uncertain, resolution_status=unresolved)",
+   "attributes": {
+    "type": "date_uncertain",
+    "resolution_status": "unresolved"
+   }
+  }
+ ],
+ "precision": [
+  {
+   "fid": "chief_complaint[0]",
+   "verdict": "supported",
+   "critical": false,
+   "segments": [
+    "SEG0001",
+    "SEG0009"
+   ],
+   "reason": "Family member said lab result was high; patient also says something was high."
+  },
+  {
+   "fid": "medical_history.past_medical_history[0]",
+   "verdict": "supported",
+   "critical": false,
+   "segments": [
+    "SEG0038",
+    "SEG0040",
+    "SEG0041",
+    "SEG0056"
+   ],
+   "reason": "Patient reports longstanding arthritis, still symptomatic in hands."
+  },
+  {
+   "fid": "medical_history.surgical_history[0]",
+   "verdict": "supported",
+   "critical": false,
+   "segments": [
+    "SEG0056"
+   ],
+   "reason": "Patient said she had her tonsils out as a girl."
+  },
+  {
+   "fid": "medical_history.family_history[0]",
+   "verdict": "unsupported",
+   "critical": false,
+   "segments": [],
+   "reason": "Breast lump was in patient, not family history."
+  },
+  {
+   "fid": "medical_history.social_history[0]",
+   "verdict": "partially_supported",
+   "critical": false,
+   "segments": [
+    "SEG0057",
+    "SEG0058",
+    "SEG0060"
+   ],
+   "reason": "Cooking for 400 children was reported by family member, not patient."
+  },
+  {
+   "fid": "symptoms[0]",
+   "verdict": "partially_supported",
+   "critical": false,
+   "segments": [
+    "SEG0013"
+   ],
+   "reason": "Patient reports tired, but not cardiovascular or in tummy."
+  },
+  {
+   "fid": "symptoms[1]",
+   "verdict": "unsupported",
+   "critical": false,
+   "segments": [],
+   "reason": "Heavy feeling was in tummy, not back; musculoskeletal category unsupported."
+  },
+  {
+   "fid": "symptoms[2]",
+   "verdict": "partially_supported",
+   "critical": false,
+   "segments": [
+    "SEG0026",
+    "SEG0028"
+   ],
+   "reason": "Patient reports bunged up in tummy; cardiovascular category unsupported."
+  },
+  {
+   "fid": "negative_findings[0]",
+   "verdict": "contradicted",
+   "critical": true,
+   "segments": [
+    "SEG0001",
+    "SEG0003",
+    "SEG0010"
+   ],
+   "reason": "Transcript says calcium was high, not absent."
+  },
+  {
+   "fid": "medications[0]",
+   "verdict": "supported",
+   "critical": false,
+   "segments": [
+    "SEG0043",
+    "SEG0045"
+   ],
+   "reason": "Patient states she takes calcium, one a day."
+  },
+  {
+   "fid": "allergies[0]",
+   "verdict": "unsupported",
+   "critical": true,
+   "segments": [],
+   "reason": "Patient denied any medication allergies; no paracetamol allergy mentioned."
+  },
+  {
+   "fid": "vital_signs[0]",
+   "verdict": "partially_supported",
+   "critical": false,
+   "segments": [
+    "SEG0068"
+   ],
+   "reason": "Blood pressure was 134/80, not 34 mmHg."
+  },
+  {
+   "fid": "vital_signs[1]",
+   "verdict": "supported",
+   "critical": false,
+   "segments": [
+    "SEG0068"
+   ],
+   "reason": "Nurse reported pulse 74, regular."
+  },
+  {
+   "fid": "vital_signs[2]",
+   "verdict": "partially_supported",
+   "critical": false,
+   "segments": [
+    "SEG0068"
+   ],
+   "reason": "Temperature 36.7°C was reported by nurse, not doctor."
+  },
+  {
+   "fid": "physical_examination[0]",
+   "verdict": "unsupported",
+   "critical": false,
+   "segments": [],
+   "reason": "Bunged up is a symptom reported by patient, not a physical exam finding."
+  },
+  {
+   "fid": "review_of_systems[0]",
+   "verdict": "unsupported",
+   "critical": false,
+   "segments": [],
+   "reason": "No negative cardiovascular review; high calcium was present, not denied."
+  },
+  {
+   "fid": "clinical_conditions[0]",
+   "verdict": "supported",
+   "critical": false,
+   "segments": [
+    "SEG0038",
+    "SEG0056"
+   ],
+   "reason": "Patient reports existing arthritis."
+  },
+  {
+   "fid": "clinical_assessment[0]",
+   "verdict": "supported",
+   "critical": false,
+   "segments": [
+    "SEG0010",
+    "SEG0078"
+   ],
+   "reason": "Doctor states calcium is high based on blood test results."
+  },
+  {
+   "fid": "procedures_and_investigations[0]",
+   "verdict": "contradicted",
+   "critical": false,
+   "segments": [
+    "SEG0001",
+    "SEG0010"
+   ],
+   "reason": "Calcium lab test was already done, not planned."
+  },
+  {
+   "fid": "clinical_actions[0]",
+   "verdict": "partially_supported",
+   "critical": false,
+   "segments": [
+    "SEG0043",
+    "SEG0045",
+    "SEG0050"
+   ],
+   "reason": "Patient has been taking calcium tablets, but action 'completed' status isn't stated."
+  },
+  {
+   "fid": "follow_up[0]",
+   "verdict": "supported",
+   "critical": false,
+   "segments": [
+    "SEG0001",
+    "SEG0010"
+   ],
+   "reason": "Doctor asked her to come in after high lab result; this consultation was arranged."
+  },
+  {
+   "fid": "clinical_uncertainties[0]",
+   "verdict": "supported",
+   "critical": false,
+   "segments": [
+    "SEG0019",
+    "SEG0020",
+    "SEG0023"
+   ],
+   "reason": "Duration/date uncertain: patient says about a month, hard to say."
+  }
+ ],
+ "recall": [
+  {
+   "fid": "D1",
+   "verdict": "partially_found",
+   "matched": [
+    "symptoms[0]",
+    "symptoms[2]"
+   ],
+   "reason": "Tired and constipated found; thirst, polyuria, and vague aches not captured."
+  },
+  {
+   "fid": "D2",
+   "verdict": "missing",
+   "matched": [],
+   "reason": "No predicted fact states absence of confusion or vomiting."
+  },
+  {
+   "fid": "D3",
+   "verdict": "partially_found",
+   "matched": [
+    "medical_history.past_medical_history[0]",
+    "clinical_conditions[0]"
+   ],
+   "reason": "Arthritis present, but hand location missing."
+  },
+  {
+   "fid": "D4",
+   "verdict": "partially_found",
+   "matched": [
+    "medications[0]"
+   ],
+   "reason": "Calcium supplement found, but vitamin D and disputed dose not captured."
+  },
+  {
+   "fid": "D5",
+   "verdict": "missing",
+   "matched": [],
+   "reason": "Predicted allergy entry does not convey no allergies."
+  },
+  {
+   "fid": "D6",
+   "verdict": "partially_found",
+   "matched": [
+    "medical_history.social_history[0]"
+   ],
+   "reason": "School cook implied, but retired status missing."
+  },
+  {
+   "fid": "D7",
+   "verdict": "partially_found",
+   "matched": [
+    "vital_signs[0]",
+    "vital_signs[1]",
+    "vital_signs[2]"
+   ],
+   "reason": "Temperature and pulse correct; blood pressure incorrect, missing 134/80."
+  },
+  {
+   "fid": "D8",
+   "verdict": "partially_found",
+   "matched": [
+    "physical_examination[0]"
+   ],
+   "reason": "Abdominal issue noted, but deep tenderness and otherwise normal exam missing."
+  },
+  {
+   "fid": "U1",
+   "verdict": "missing",
+   "matched": [],
+   "reason": "No uncertainty recorded about conflicting calcium/vitamin D dose reports."
+  },
+  {
+   "fid": "U2",
+   "verdict": "missing",
+   "matched": [],
+   "reason": "No uncertainty recorded about when she drank enough or urinary frequency."
+  },
+  {
+   "fid": "U3",
+   "verdict": "partially_found",
+   "matched": [
+    "procedures_and_investigations[0]",
+    "follow_up[0]"
+   ],
+   "reason": "Predictions contradict reference by adding planned test and follow-up; uncertainty not represented."
+  }
+ ]
+}

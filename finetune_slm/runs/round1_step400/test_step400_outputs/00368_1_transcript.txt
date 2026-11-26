@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00368)
+[SEG0001] person_1 (DOCTOR): Evening. Long day, I imagine. Sit down.
+[SEG0002] person_2 (PATIENT): Hello, doctor, thank you.
+[SEG0003] person_1 (DOCTOR): What brings you in today?
+[SEG0004] person_2 (PATIENT): I've been dealing with fever and chills.
+[SEG0005] person_1 (DOCTOR): Since when have you had this?
+[SEG0006] person_2 (PATIENT): About... well, about two weeks.
+[SEG0007] person_1 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0008] person_2 (PATIENT): I get some relief from paracetamol. I'd say a few times a day. I'd call it moderate.
+[SEG0009] person_1 (DOCTOR): Have you been feeling very weak?
+[SEG0010] person_2 (PATIENT): Yes, I have. About feeling very weak, a five out of ten, I suppose.
+[SEG0011] person_3 (NURSE): Okay, so the vitals from earlier. BMI works out to 28.7, oxygen saturation is 91 percent, blood pressure 122 over 78, temp 37.5 degrees, weight 94 kilos, height 181 centimetres, pulse 101, respiratory rate 20.
+[SEG0012] person_1 (DOCTOR): Okay, noted.
+[SEG0013] person_1 (DOCTOR): Right, if you're comfortable, I'll examine you now.
+[SEG0014] person_1 (DOCTOR): Take your time, no rush.
+[SEG0015] person_1 (DOCTOR): Breathing rate is a bit fast.
+[SEG0016] person_1 (DOCTOR): Thanks for that.
+[SEG0017] person_1 (DOCTOR): Any recent travel, palpitations, confusion or coughing up blood at all?
+[SEG0018] person_2 (PATIENT): No recent travel, palpitations, confusion or coughing up blood, none of it.
+[SEG0019] person_1 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0020] person_2 (PATIENT): No, my breathing's been fine.
+[SEG0021] person_1 (DOCTOR): Is your mobility otherwise okay?
+[SEG0022] person_2 (PATIENT): No, nothing there.
+[SEG0023] person_1 (DOCTOR): Alright, now some background about your lifestyle.
+[SEG0024] person_2 (PATIENT): I gave up drinking about three years ago. I'm a self-employed electrician. I stay with my daughter and her family. I try to avoid too much sugar.
+[SEG0025] person_1 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0026] person_2 (PATIENT): Tiotropium inhaler. I take it once a day for my chest. I'm on Dolo, 650 milligrams, when I get the fever.
+[SEG0027] person_1 (DOCTOR): What about operations, anything like that?
+[SEG0028] person_2 (PATIENT): I had a knee arthroscopy three years ago.
+[SEG0029] person_1 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0030] person_2 (PATIENT): Yes, aspirin, it gives me a rash.
+[SEG0031] person_1 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0032] person_2 (PATIENT): I have COPD, for about ten years. Diabetes, for nearly five years.
+[SEG0033] person_1 (DOCTOR): Any others?
+[SEG0034] person_1 (DOCTOR): From what you've told me and what I found, the most likely explanation is a possible pneumonia on the right side.
+[SEG0035] person_2 (PATIENT): What are the chances it's something bad?
+[SEG0036] person_1 (DOCTOR): It's reasonable to be concerned, but right now a possible pneumonia on the right side is my leading thought, not anything worse. I'm going to order a chest X-ray, for suspected pneumonia. The result will help us decide whether anything more is needed. I think a sputum culture makes sense here, for pneumonia.
+[SEG0037] person_2 (PATIENT): Oh, where do I go for that?
+[SEG0038] person_1 (DOCTOR): I'm going to order blood tests, for infection. I'd like you to take levofloxacin, 500 milligrams, once a day, for five days. It's for chest infection. Rest and fluids, and finish every dose of the antibiotic. Try to get to bed and wake up at the same time each day, and keep your phone away from the bed. I'd like you back after the X-ray.
+[SEG0039] person_2 (PATIENT): That works for me.
+[SEG0040] person_1 (DOCTOR): Okay, take care, and call us if anything changes.
+[SEG0041] person_2 (PATIENT): Right. Thanks again.
+[SEG0042] person_1 (DOCTOR): Take care.
+
+JSON:

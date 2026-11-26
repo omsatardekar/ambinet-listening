@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00353)
+[SEG0001] person_1 (DOCTOR): Hello. Right, let's get started.
+[SEG0002] person_2 (CAREGIVER): Good morning, doctor. I came along to help out.
+[SEG0003] person_1 (DOCTOR): Absolutely, come and sit beside them. What was the main thing you wanted to talk about?
+[SEG0004] person_3 (PATIENT): I've been dealing with fever and chills.
+[SEG0005] person_1 (DOCTOR): is this recent, or has it been a while? I'm asking so that we don't miss anything
+[SEG0006] person_3 (PATIENT): I've had it for one week. I did try to ignore it for a while.
+[SEG0007] person_1 (DOCTOR): Does it come along with anything else?
+[SEG0008] person_3 (PATIENT): Sharp pain on the right side when I breathe in goes along with it, most of the time. Um, the Sharp pain on the right side when I breathe in? That's been for about four days. Okay, so as for Sharp pain on the right side when I breathe in, mostly severe. I've had shortness of breath too, for five days
+[SEG0009] person_1 (DOCTOR): A few measurements, then we'll continue.
+[SEG0010] person_1 (DOCTOR): Almost there...
+[SEG0011] person_1 (DOCTOR): Okay: oxygen saturation is 94 percent, respiratory rate 26, blood pressure 138 over 85. And heart rate 89.
+[SEG0012] person_3 (PATIENT): is that alright, doctor?
+[SEG0013] person_1 (DOCTOR): They help build the picture, I'll tell you more soon.
+[SEG0014] person_1 (DOCTOR): Right, let me check a a few things physically.
+[SEG0015] person_3 (PATIENT): yes, doctor
+[SEG0016] person_1 (DOCTOR): Right, bear with me a second.
+[SEG0017] person_1 (DOCTOR): Breathing rate is a bit fast.
+[SEG0018] person_1 (DOCTOR): Thanks, please take a seat again.
+[SEG0019] person_1 (DOCTOR): Have you noticed recent travel or vomiting?
+[SEG0020] person_3 (PATIENT): nothing like that, no
+[SEG0021] person_1 (DOCTOR): A few quick ones: confusion or leg swelling?
+[SEG0022] person_3 (PATIENT): No confusion or leg swelling, none of it.
+[SEG0023] person_1 (DOCTOR): Neurologically, anything strange?
+[SEG0024] person_3 (PATIENT): Nothing odd there.
+[SEG0025] person_1 (DOCTOR): what medicines do you take regularly?
+[SEG0026] person_2 (CAREGIVER): He takes Tiotropium inhaler, once a day for my chest. It's metformin, 500 milligrams, twice a day, doctor. He is on Dolo, 650 milligrams, when I get the fever, I give it to him.
+[SEG0027] person_1 (DOCTOR): have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0028] person_3 (PATIENT): No, no allergies to anything.
+[SEG0029] person_1 (DOCTOR): Any previous surgeries?
+[SEG0030] person_3 (PATIENT): No, nothing like that.
+[SEG0031] person_1 (DOCTOR): What kind of work do you do?
+[SEG0032] person_3 (PATIENT): I work on a farm, it's quite physical.
+[SEG0033] person_1 (DOCTOR): how's your diet?
+[SEG0034] person_3 (PATIENT): I'm mostly vegetarian.
+[SEG0035] person_1 (DOCTOR): how about exercise?
+[SEG0036] person_3 (PATIENT): Not really, I don't get much exercise.
+[SEG0037] person_1 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0038] person_3 (PATIENT): I've had COPD for about ten years now. A neighbour of mine said I should see someone about it.
+[SEG0039] person_1 (DOCTOR): Sure.
+[SEG0040] person_3 (PATIENT): I have diabetes. It's a relief to finally sit down and talk about it. I'm not great at remembering details, so bear with me.
+[SEG0041] person_1 (DOCTOR): Go on. Yes, COPD is known to us, good to have that clear. Putting it all together, this is probably a possible pneumonia on the right side.
+[SEG0042] person_3 (PATIENT): Do you think it's serious?
+[SEG0043] person_1 (DOCTOR): It's reasonable to be concerned, but right now a possible pneumonia on the right side is my leading thought, not anything worse. I think a sputum culture makes sense here, for pneumonia. Let's book blood tests to look into infection. Let's book a chest X-ray to look into suspected pneumonia. We'll begin with levofloxacin, 500 milligrams, once a day, for five days. That's for chest infection. Rest and fluids, and finish every dose of the antibiotic.
+[SEG0044] person_1 (DOCTOR): Keep an eye out, and if the breathlessness worsens or you become drowsy, call us the same day or go to emergency.
+[SEG0045] person_3 (PATIENT): Alright, I know what to look for.
+[SEG0046] person_1 (DOCTOR): Book a review after the X-ray. Thanks for coming in.
+[SEG0047] person_3 (PATIENT): Nothing more from me, thanks.
+[SEG0048] person_1 (DOCTOR): Safe journey home.
+
+JSON:

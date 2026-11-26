@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02319)
+[SEG0001] person_1 (DOCTOR): Right then, come on in.
+[SEG0002] person_2 (CAREGIVER): Hello, doctor, I came in with them, if that's okay.
+[SEG0003] person_1 (DOCTOR): Okay, have you been waiting long?
+[SEG0004] person_3 (PATIENT): Only about ten minutes, no trouble.
+[SEG0005] person_1 (DOCTOR): So what can I do for you?
+[SEG0006] person_3 (PATIENT): Yeah, it's spots on my forehead and chin. I don't know what's causing it.
+[SEG0007] person_1 (DOCTOR): How many days or weeks has it been?
+[SEG0008] person_3 (PATIENT): Probably two weeks. Yeah. I've been putting this off for weeks.
+[SEG0009] person_1 (DOCTOR): Understood. Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0010] person_3 (PATIENT): Mostly moderate. It's worse with stress and before periods.
+[SEG0011] person_1 (DOCTOR): Any oily skin as well?
+[SEG0012] person_3 (PATIENT): Yes, um, about the same, one week. And there's a few blackheads as well, ten days now.
+[SEG0013] person_1 (DOCTOR): Let's start with the basic checks.
+[SEG0014] person_1 (DOCTOR): Right, nearly done with the readings...
+[SEG0015] person_1 (DOCTOR): Okay: pulse is 82 beats a minute, pressure 120 over 81, SpO2 97 percent on room air, respiratory rate 15.
+[SEG0016] person_3 (PATIENT): Is that normal?
+[SEG0017] person_1 (DOCTOR): Alright, they help me see the whole picture, more shortly.
+[SEG0018] person_1 (DOCTOR): Could you come over to the couch, please?
+[SEG0019] person_1 (DOCTOR): Does that hurt?
+[SEG0020] person_1 (DOCTOR): There are small blackheads and a few red spots with no deep cysts.
+[SEG0021] person_1 (DOCTOR): That's all I needed to check.
+[SEG0022] person_1 (DOCTOR): Any low mood, painful cysts or scarring at all?
+[SEG0023] person_3 (PATIENT): Oh, no, no low mood, painful cysts or scarring.
+[SEG0024] person_1 (DOCTOR): What about irregular periods?
+[SEG0025] person_3 (PATIENT): No, I haven't had any irregular periods.
+[SEG0026] person_1 (DOCTOR): Any pins and needles or loss of strength anywhere?
+[SEG0027] person_3 (PATIENT): No weakness or anything.
+[SEG0028] person_1 (DOCTOR): How are your meals?
+[SEG0029] person_3 (PATIENT): I grab fast food at lunch most days.
+[SEG0030] person_1 (DOCTOR): Right, are you on your own at home?
+[SEG0031] person_3 (PATIENT): I live with my elderly mother.
+[SEG0032] person_1 (DOCTOR): Anything you do to stay fit?
+[SEG0033] person_3 (PATIENT): I do a yoga class on Thursdays.
+[SEG0034] person_1 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0035] person_3 (PATIENT): COPD, for nearly five years.
+[SEG0036] person_1 (DOCTOR): Okay, go on.
+[SEG0037] person_1 (DOCTOR): Let's run through your medicines.
+[SEG0038] person_3 (PATIENT): Tiotropium inhaler. I take it once a day for my chest. It's a face wash, twice a day.
+[SEG0039] person_1 (DOCTOR): Mm, okay. Have you had any surgical procedures?
+[SEG0040] person_3 (PATIENT): Yes, I had a meniscus repair on my knee, four years ago.
+[SEG0041] person_1 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0042] person_3 (PATIENT): I'm allergic to kiwi, I get hives.
+[SEG0043] person_1 (DOCTOR): Having listened and examined, it points towards mild acne.
+[SEG0044] person_1 (DOCTOR): The treatment will be benzoyl peroxide gel, 5%, once a day, eight weeks. It's for acne. Wash gently twice a day and don't squeeze the spots. Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency. I'll want another look in eight weeks.
+[SEG0045] person_3 (PATIENT): Right.
+[SEG0046] person_1 (DOCTOR): I think we're done unless you have questions.
+[SEG0047] person_3 (PATIENT): Good, thanks, I'll see you then.
+
+JSON:

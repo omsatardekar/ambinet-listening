@@ -1,0 +1,82 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00088)
+[SEG0001] person_1 (PATIENT): Doctor, hello, I've got my papers here, where should I put them?
+[SEG0002] person_2 (DOCTOR): right on time sit, please how can I help?
+[SEG0003] person_3 (CAREGIVER): thank you for fitting us in, doctor
+[SEG0004] person_2 (DOCTOR): Absolutely, come and and sit beside them.
+[SEG0005] person_3 (CAREGIVER): Doctor, it's a very sore throat. That's what we're worried about.
+[SEG0006] person_2 (DOCTOR): How long are we talking about?
+[SEG0007] person_1 (PATIENT): It's been ten days, I'm fairly sure.
+[SEG0008] person_2 (DOCTOR): does anything bring it on or make it worse?
+[SEG0009] person_1 (PATIENT): I notice it more with swallowing.
+[SEG0010] person_2 (DOCTOR): how much is it bothering you?
+[SEG0011] person_1 (PATIENT): I'd call it moderate.
+[SEG0012] person_1 (PATIENT): I was just going to say that the main thing is—
+[SEG0013] person_4 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0014] person_2 (DOCTOR): later, thanks. Please go on
+[SEG0015] person_1 (PATIENT): I've, I've also had a fever, for about four days.
+[SEG0016] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0017] person_1 (PATIENT): Severe, really. It happens once or twice a day.
+[SEG0018] person_2 (DOCTOR): have you had a very sore throat before, or is this the first time?
+[SEG0019] person_1 (PATIENT): A bit, about six months ago. It settled by itself back then.
+[SEG0020] person_5 (UNKNOWN): mm, that's what happened, yes
+[SEG0021] person_2 (DOCTOR): And what about cough, ear pain or rash?
+[SEG0022] person_1 (PATIENT): so, no, no cough, no ear pain, no rash i did have swollen glands in the neck at one point, but that went away on its own
+[SEG0023] person_2 (DOCTOR): Any runny nose or drooling?
+[SEG0024] person_1 (PATIENT): I haven't had runny nose or drooling, no.
+[SEG0025] person_2 (DOCTOR): And difficulty breathing, any of that?
+[SEG0026] person_1 (PATIENT): no difficulty breathing, thankfully
+[SEG0027] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0028] person_1 (PATIENT): No, that's all fine.
+[SEG0029] person_2 (DOCTOR): How are your bowels, any trouble?
+[SEG0030] person_1 (PATIENT): no, that side's been fine
+[SEG0031] person_2 (DOCTOR): Is there a family history of anything significant?
+[SEG0032] person_1 (PATIENT): My sister has thyroid problems.
+[SEG0033] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0034] person_1 (PATIENT): I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0035] person_2 (DOCTOR): Do you work?
+[SEG0036] person_1 (PATIENT): I run a small shop, so I'm on my feet a lot
+[SEG0037] person_2 (DOCTOR): is anyone at home with you?
+[SEG0038] person_1 (PATIENT): I share a flat with two friends
+[SEG0039] person_2 (DOCTOR): so, any previous surgeries?
+[SEG0040] person_1 (PATIENT): I had my tonsils out when I was a child.
+[SEG0041] person_2 (DOCTOR): what medicines do you take regularly?
+[SEG0042] person_3 (CAREGIVER): She is on Asthalin inhaler, when needed for my asthma, I give it to her.
+[SEG0043] person_2 (DOCTOR): Okay, when did you start it?
+[SEG0044] person_3 (CAREGIVER): Nearly five years now. It's furosemide, 40 milligrams, every morning for the fluid, doctor. She takes alendronate, 70 milligrams, once a week.
+[SEG0045] person_2 (DOCTOR): When did you start it?
+[SEG0046] person_3 (CAREGIVER): About a month now
+[SEG0047] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0048] person_1 (PATIENT): I have asthma. I have heart failure, for two years.
+[SEG0049] person_2 (DOCTOR): Okay.
+[SEG0050] person_1 (PATIENT): Thin bones, for two years.
+[SEG0051] person_4 (NURSE): Doctor, I've got the readings for you. Pressure 118 over 71, SpO2 96 percent on room air, temperature 38.4, pulse 105.
+[SEG0052] person_2 (DOCTOR): Okay, noted.
+[SEG0053] person_2 (DOCTOR): let's do the physical part now
+[SEG0054] person_1 (PATIENT): okay, ready
+[SEG0055] person_2 (DOCTOR): let me just check something
+[SEG0056] person_2 (DOCTOR): both tonsils are red and swollen, and there are white patches on the the left one
+[SEG0057] person_1 (PATIENT): That's fine.
+[SEG0058] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0059] person_2 (DOCTOR): The The glands under the jaw are tender.
+[SEG0060] person_2 (DOCTOR): All done, you can get dressed. Okay, thinking it through, this is probably tonsillitis, probably bacterial. I want to be honest that this is an impression, not a final answer. I can't rule out a viral throat infection yet.
+[SEG0061] person_1 (PATIENT): should I be worried about this?
+[SEG0062] person_2 (DOCTOR): I can't promise yet, but most people with tonsillitis, probably bacterial do well once it's treated properly. Let's book a throat swab to look into sore throat.
+[SEG0063] person_6 (CLINICAL_STAFF): We have a slot Monday at 11:30 am, if that works.
+[SEG0064] person_1 (PATIENT): Monday, that works for me
+[SEG0065] person_2 (DOCTOR): the treatment will be paracetamol, 500 milligrams, every six hours if needed, for three days that's for fever and body aches you'll be taking amoxicillin, 500 milligrams, three times a day, for five days it's for throat infection finish the whole course of antibiotics even if you feel better after two days gargle with warm salt water a few times a day, it does soothe it
+[SEG0066] person_2 (DOCTOR): Cut down on salt and fried food for now, it really does make a difference. Book a review in a week. Any last questions?
+[SEG0067] person_1 (PATIENT): Nothing more from me, thanks.
+
+JSON:

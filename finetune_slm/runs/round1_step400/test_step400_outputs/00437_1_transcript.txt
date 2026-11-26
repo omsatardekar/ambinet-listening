@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00437)
+[SEG0001] person_1 (PATIENT): I mean, uh, morning, doctor, I hope I'm not interrupting
+[SEG0002] person_2 (DOCTOR): That's alright, take a a seat. Tell me why you've come.
+[SEG0003] person_1 (PATIENT): it's diarrhoea, mostly
+[SEG0004] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0005] person_1 (PATIENT): I take Glycomet, 500 milligrams, twice a day for my sugar
+[SEG0006] person_3 (NURSE): doctor our chart from the last visit lists it as 250 milligrams
+[SEG0007] person_2 (DOCTOR): Alright. Did you bring the up-to-date prescription?
+[SEG0008] person_1 (PATIENT): hmm, I don't think I have it with me. Aspirin, 75 milligrams, once a day for my heart. Thyronorm, 50 micrograms, every morning for my thyroid right, though honestly, some days I forget to take it it's loperamide, 2 milligrams, once
+[SEG0009] person_2 (DOCTOR): When did you first notice it?
+[SEG0010] person_1 (PATIENT): okay, uh, so it's been two weeks, I'm fairly sure
+[SEG0011] person_2 (DOCTOR): Can you describe it a a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0012] person_1 (PATIENT): A eight out of ten, I suppose. It's worse with drinking milk. Honestly, once or twice a day. A neighbour of mine said I should see someone about it.
+[SEG0013] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0014] person_1 (PATIENT): When it starts I tend to get a low fever as well.
+[SEG0015] person_2 (DOCTOR): have you been feeling weak?
+[SEG0016] person_1 (PATIENT): Yes, for three days. Oh, and stomach cramps. Uh, the low fever? That's been for ten days. Right, as for low fever, it's moderate, honestly.
+[SEG0017] person_2 (DOCTOR): Let me check a a few things. Any recent antibiotics or rash?
+[SEG0018] person_1 (PATIENT): no, none of that at all
+[SEG0019] person_2 (DOCTOR): and what about vomiting, black stools or weight loss?
+[SEG0020] person_1 (PATIENT): uh you know no none of those
+[SEG0021] person_2 (DOCTOR): and your skin, any changes there?
+[SEG0022] person_1 (PATIENT): right, no, skin's been fine
+[SEG0023] person_2 (DOCTOR): are there any allergies on your record that I should check?
+[SEG0024] person_1 (PATIENT): yeah, uh, no allergies that I know of, no
+[SEG0025] person_2 (DOCTOR): Right a few questions about your lifestyle now.
+[SEG0026] person_1 (PATIENT): I go to the gym a couple of times a week. Retired. I stopped a few years back. I eat out quite a lot, to be honest.
+[SEG0027] person_2 (DOCTOR): any relatives with health problems I should be aware of?
+[SEG0028] person_1 (PATIENT): So, you know, my sister has thyroid problems.
+[SEG0029] person_2 (DOCTOR): right, any long-term health problems I should know about?
+[SEG0030] person_1 (PATIENT): I have diabetes, for two years
+[SEG0031] person_2 (DOCTOR): is there more?
+[SEG0032] person_1 (PATIENT): hmm, you know, yes, heart disease i took the morning off to come in today yes, an underactive thyroid i'd rather not end up on lots of tablets if I can avoid it
+[SEG0033] person_2 (DOCTOR): right. Right so an underactive thyroid is already on your record. We'll keep that in mind today. Any procedures or operations?
+[SEG0034] person_1 (PATIENT): Yes, I had a a hernia repair, about five years back. I'm not great at remembering details, so bear with me. I told myself I'd wait and see, and here I am.
+[SEG0035] person_3 (NURSE): here are the numbers, doctor blood pressure 112 over 72, temperature is 38.0 degrees heart rate 96, oxygen saturation is 97 percent
+[SEG0036] person_2 (DOCTOR): thanks
+[SEG0037] person_2 (DOCTOR): going by what you've described it points towards acute gastroenteritis another possibility is an infective colitis
+[SEG0038] person_1 (PATIENT): Yeah, uh, I've been thinking the worst, to be honest. Is it bad?
+[SEG0039] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like acute gastroenteritis, but I'd like to confirm. Let me just check I've got this right. You've had diarrhoea for two weeks, and no weight loss or vomiting.
+[SEG0040] person_1 (PATIENT): Oh, yes, you've got it.
+[SEG0041] person_2 (DOCTOR): A stool test is what I'd like next for diarrhoea. Blood salts is what I'd like next for dehydration. It's a routine test and it'll give us a much clearer picture. We'll begin with ORS 1 sachet after each loose stool for three days. That should help with dehydration. Stick to bananas rice toast curd and avoid milk and oily food till it settles.
+[SEG0042] person_2 (DOCTOR): and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+[SEG0043] person_1 (PATIENT): right, yes, I'll watch for that
+[SEG0044] person_2 (DOCTOR): let's plan a check if it's not better in three days. Any last questions?
+[SEG0045] person_1 (PATIENT): that's everything I wanted to ask. Thank you
+[SEG0046] person_2 (DOCTOR): safe journey home
+
+JSON:

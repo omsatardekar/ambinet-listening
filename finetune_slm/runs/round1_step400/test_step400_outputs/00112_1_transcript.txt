@@ -1,0 +1,75 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00112)
+[SEG0001] person_1 (PATIENT): Right, um, good morning, doctor. Can I come in?
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): Honestly, it's very heavy periods, and my family pushed me to come.
+[SEG0004] person_2 (DOCTOR): Okay, and when did that start?
+[SEG0005] person_1 (PATIENT): Since yesterday, that's when it began.
+[SEG0006] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0007] person_1 (PATIENT): Tiredness goes along with it, most of the time.
+[SEG0008] person_2 (DOCTOR): Have you been passing clots?
+[SEG0009] person_1 (PATIENT): So, yes, since this morning. There's cramping pain in the lower tummy as well.
+[SEG0010] person_2 (DOCTOR): Alright, is it mild, moderate or severe?
+[SEG0011] person_1 (PATIENT): Moderate, I'd say. The tiredness? That's been for three days.
+[SEG0012] person_2 (DOCTOR): Have you had very heavy periods before, or is this the first time?
+[SEG0013] person_1 (PATIENT): I had a similar thing last year. It went away.
+[SEG0014] person_2 (DOCTOR): So, did you get weight loss, pain during sex, fever or vaginal discharge?
+[SEG0015] person_1 (PATIENT): No, I'd have mentioned it.
+[SEG0016] person_2 (DOCTOR): How's your breathing otherwise?
+[SEG0017] person_1 (PATIENT): No, you know, nothing there.
+[SEG0018] person_2 (DOCTOR): Any previous surgeries?
+[SEG0019] person_1 (PATIENT): So, you know, yes, I had a knee arthroscopy, three years ago.
+[SEG0020] person_2 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0021] person_1 (PATIENT): My mother has diabetes. My grandmother had breast cancer.
+[SEG0022] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0023] person_1 (PATIENT): I'm allergic to sulfa drugs, I get itching all over.
+[SEG0024] person_2 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0025] person_1 (PATIENT): Yes, an underactive thyroid. I have eczema, for five years.
+[SEG0026] person_2 (DOCTOR): Okay, I can see an underactive thyroid and eczema in your file as well. What about alcohol?
+[SEG0027] person_1 (PATIENT): A beer or two most evenings, to be honest.
+[SEG0028] person_2 (DOCTOR): Okay, do you smoke?
+[SEG0029] person_1 (PATIENT): I smoke about ten cigarettes a day.
+[SEG0030] person_2 (DOCTOR): What's your diet like?
+[SEG0031] person_1 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0032] person_2 (DOCTOR): Is anyone at home with you?
+[SEG0033] person_1 (PATIENT): I share a flat with two friends.
+[SEG0034] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0035] person_1 (PATIENT): I'm on thyroxine, 75 micrograms, maybe, every morning.
+[SEG0036] person_2 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0037] person_1 (PATIENT): No, it's at home. Hydrocortisone cream. I take it when needed for the eczema.
+[SEG0038] person_2 (DOCTOR): Let's do your observations.
+[SEG0039] person_2 (DOCTOR): Just relax your arm...
+[SEG0040] person_2 (DOCTOR): Okay: saturation 99 percent, BP is 123 over 80, temperature 36.7. And respiratory rate 14, pulse is 85 beats a minute.
+[SEG0041] person_2 (DOCTOR): Let me have a look at you.
+[SEG0042] person_2 (DOCTOR): Take your time, no rush.
+[SEG0043] person_2 (DOCTOR): The tummy is soft, a little tender in the lower part, and there's no mass.
+[SEG0044] person_2 (DOCTOR): Take your time, no rush.
+[SEG0045] person_2 (DOCTOR): You look a little pale.
+[SEG0046] person_2 (DOCTOR): Right, you can sit back down.
+[SEG0047] person_2 (DOCTOR): Taking everything into account, this looks most like heavy periods with a cause still to find. A hormonal imbalance is still possible.
+[SEG0048] person_2 (DOCTOR): Have you had any tests for this so far?
+[SEG0049] person_1 (PATIENT): I did have a pregnancy test done last month, but the paper's at home.
+[SEG0050] person_2 (DOCTOR): Let's book a pelvic ultrasound to look into heavy periods.
+[SEG0051] person_3 (CLINICAL_STAFF): I can book that for Friday at 11:30 am.
+[SEG0052] person_1 (PATIENT): Okay, I'll be there.
+[SEG0053] person_2 (DOCTOR): I'm sending you for blood tests because of heavy periods. I'm prescribing tranexamic acid, 500 milligrams, three times a day during periods, for three cycles. You take it by mouth. That should help with heavy bleeding. What I'm giving you is ferrous sulfate, 200 milligrams, once a day, for three months. That should help with possible iron deficiency. Keep a note of how many pads you use each day and the dates, it helps us a lot.
+[SEG0054] person_2 (DOCTOR): Cut down on salt and fried food for now, it really does make a difference. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0055] person_1 (PATIENT): Okay, I understand.
+[SEG0056] person_2 (DOCTOR): Come back or go to emergency straight away if you soak through a pad every hour or feel faint.
+[SEG0057] person_1 (PATIENT): Okay, uh, I understand.
+[SEG0058] person_2 (DOCTOR): Come back in four weeks. Okay, we're done for today. Take care.
+[SEG0059] person_1 (PATIENT): Okay, uh, so no questions. Thank you.
+[SEG0060] person_2 (DOCTOR): See you then.
+
+JSON:

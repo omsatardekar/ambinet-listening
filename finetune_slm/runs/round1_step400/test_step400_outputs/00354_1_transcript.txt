@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00354)
+[SEG0001] person_1 (PATIENT): Sorry I'm a few minutes behind, doctor.
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): Mainly fever and joint pains. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0005] person_1 (PATIENT): Dolo. I take it 650 milligrams, when it flares
+[SEG0006] person_2 (DOCTOR): Since when have you had this?
+[SEG0007] person_1 (PATIENT): about... well, six months
+[SEG0008] person_2 (DOCTOR): Alright, on a normal day, how strong is it?
+[SEG0009] person_1 (PATIENT): A three out of ten, I suppose.
+[SEG0010] person_2 (DOCTOR): Right, have you been feeling wiped out?
+[SEG0011] person_1 (PATIENT): Yes, actually. A headache was there, but it's gone away on its own.
+[SEG0012] person_2 (DOCTOR): Let me check a few things. Any cough, bleeding or diarrhoea?
+[SEG0013] person_1 (PATIENT): No, not any of them.
+[SEG0014] person_2 (DOCTOR): Have you noticed red eyes or neck stiffness?
+[SEG0015] person_1 (PATIENT): No, um, none of those.
+[SEG0016] person_2 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0017] person_1 (PATIENT): Bowels are regular, nothing odd.
+[SEG0018] person_2 (DOCTOR): Is your chest okay generally?
+[SEG0019] person_1 (PATIENT): no, my breathing's been fine
+[SEG0020] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0021] person_1 (PATIENT): No operations, no.
+[SEG0022] person_2 (DOCTOR): Are you active at all?
+[SEG0023] person_1 (PATIENT): Barely, I'm mostly sedentary these days.
+[SEG0024] person_2 (DOCTOR): Alright, what's your job?
+[SEG0025] person_1 (PATIENT): I teach at a primary school.
+[SEG0026] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0027] person_1 (PATIENT): I have high blood pressure.
+[SEG0028] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0029] person_2 (DOCTOR): Almost there...
+[SEG0030] person_2 (DOCTOR): Okay: BMI works out to 19.0, oxygen saturation is 98 percent, pulse is 90 beats a minute, weight 53 kilos, temp 38.1 degrees, blood pressure 116 over 67, height 167 centimetres.
+[SEG0031] person_1 (PATIENT): Is that alright, doctor?
+[SEG0032] person_2 (DOCTOR): I'll come back to those numbers
+[SEG0033] person_2 (DOCTOR): Let me have a look at you.
+[SEG0034] person_2 (DOCTOR): Let me press here.
+[SEG0035] person_2 (DOCTOR): Both wrists and several finger joints are puffy and tender.
+[SEG0036] person_2 (DOCTOR): just relax, I'll be quick
+[SEG0037] person_2 (DOCTOR): A fine rash over the chest and back, not itchy to touch.
+[SEG0038] person_2 (DOCTOR): Okay, finished. So, based on the history and the examination, I think we're dealing with a viral fever with joint involvement, possibly chikungunya at this stage. That's my thinking for now, and it may change as we learn more.
+[SEG0039] person_1 (PATIENT): is this going to go away?
+[SEG0040] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a viral fever with joint involvement, possibly chikungunya, and we'll know more once the a full blood count is back. Stop me if I've got anything wrong. You've had fever and joint pains for six months, and no bleeding or red eyes.
+[SEG0041] person_1 (PATIENT): Exactly.
+[SEG0042] person_2 (DOCTOR): I'm going to order a full blood count, for fever.
+[SEG0043] person_1 (PATIENT): Alright, when would that that be?
+[SEG0044] person_2 (DOCTOR): we should do a dengue test for fever. Avoid anti-inflammatory painkillers until we know it isn't dengue. Do get help quickly if the symptoms get worse
+[SEG0045] person_1 (PATIENT): Alright, I know what to look for.
+[SEG0046] person_2 (DOCTOR): I'd like to see you again in four days
+[SEG0047] person_1 (PATIENT): That works for me.
+[SEG0048] person_2 (DOCTOR): Okay, I think we're finished. Is everything clear?
+[SEG0049] person_1 (PATIENT): Thank you for your time.
+[SEG0050] person_2 (DOCTOR): Alright, bye for now.
+
+JSON:

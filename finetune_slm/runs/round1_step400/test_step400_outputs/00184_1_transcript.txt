@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00184)
+[SEG0001] person_1 (PATIENT): Doctor? Hi. I hope I've got the right time.
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_3 (CAREGIVER): Hello, doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_2 (DOCTOR): Please do. Extra information is always welcome.
+[SEG0005] person_3 (CAREGIVER): She's been having been wanting to stop smoking, doctor.
+[SEG0006] person_1 (PATIENT): I've also been getting out of breath quicker than before, for six months.
+[SEG0007] person_2 (DOCTOR): Is it mild, moderate or severe?
+[SEG0008] person_1 (PATIENT): Moderate, really.
+[SEG0009] person_2 (DOCTOR): Is it worse with anything in particular?
+[SEG0010] person_1 (PATIENT): Yes, uh, stairs. That makes it worse.
+[SEG0011] person_2 (DOCTOR): Any low mood or alcohol problems at all?
+[SEG0012] person_1 (PATIENT): I mean, nothing like that, no.
+[SEG0013] person_2 (DOCTOR): And coughing up blood, any of that?
+[SEG0014] person_1 (PATIENT): So, not at all, no coughing up blood.
+[SEG0015] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0016] person_1 (PATIENT): Nothing like that.
+[SEG0017] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0018] person_1 (PATIENT): No rashes.
+[SEG0019] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0020] person_1 (PATIENT): I have high blood pressure, for five years. I told myself I'd wait and see, and here I am.
+[SEG0021] person_2 (DOCTOR): Right, so high blood pressure is already on your record. We'll keep that in mind today.
+[SEG0022] person_2 (DOCTOR): Do you have a job?
+[SEG0023] person_1 (PATIENT): I'm a self-employed electrician.
+[SEG0024] person_2 (DOCTOR): Do you live alone?
+[SEG0025] person_1 (PATIENT): Yes, I live on my own.
+[SEG0026] person_2 (DOCTOR): And what do you usually eat?
+[SEG0027] person_1 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0028] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0029] person_1 (PATIENT): Amlodipine, once a day.
+[SEG0030] person_2 (DOCTOR): So, do you know the dose?
+[SEG0031] person_1 (PATIENT): It's 5 milligrams.
+[SEG0032] person_2 (DOCTOR): How long have you been on it?
+[SEG0033] person_1 (PATIENT): About two years.
+[SEG0034] person_2 (DOCTOR): Any previous surgeries?
+[SEG0035] person_1 (PATIENT): Well, no, nothing like that.
+[SEG0036] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0037] person_1 (PATIENT): Yes, shellfish, it gives me vomiting.
+[SEG0038] person_2 (DOCTOR): Let's do your observations.
+[SEG0039] person_2 (DOCTOR): Hold still for me...
+[SEG0040] person_2 (DOCTOR): Okay: heart rate 72, temperature is 36.8 degrees, pressure 111 over 69.
+[SEG0041] person_1 (PATIENT): Is that okay?
+[SEG0042] person_2 (DOCTOR): I'll interpret it once I've examined you.
+[SEG0043] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0044] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0045] person_2 (DOCTOR): Chest sounds clear, a bit of wheeze when you breathe out hard.
+[SEG0046] person_2 (DOCTOR): Thanks, please take a seat again. Taking everything into account, I can't pin this down yet. We're looking at nicotine dependence or early chronic bronchitis.
+[SEG0047] person_1 (PATIENT): Do you think it's serious?
+[SEG0048] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like nicotine dependence. The treatment will be nicotine patches, 14 milligrams, once a day, for six weeks. It's for smoking cessation. Book a review in four weeks.
+[SEG0049] person_1 (PATIENT): Alright, I'll put it in my diary.
+[SEG0050] person_2 (DOCTOR): That's it on my side. Anything unclear?
+[SEG0051] person_1 (PATIENT): Thanks so much, doctor.
+[SEG0052] person_2 (DOCTOR): Okay, mind how you go.
+
+JSON:

@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00022)
+[SEG0001] person_1 (PATIENT): doctor, hello, I've got my papers here, where should I put them?
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_1 (PATIENT): Honestly, it's swelling in my left calf, and my family pushed me to to come.
+[SEG0004] person_2 (DOCTOR): And when did that start?
+[SEG0005] person_1 (PATIENT): About... well, one week.
+[SEG0006] person_2 (DOCTOR): And then?
+[SEG0007] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0008] person_1 (PATIENT): It settles a a little with raising the leg. I'd say a few times a day.
+[SEG0009] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0010] person_2 (DOCTOR): just relax your arm..
+[SEG0011] person_2 (DOCTOR): Okay: respiratory rate 16, pulse 119, pressure 112 over 75. And temperature 36.6.
+[SEG0012] person_2 (DOCTOR): let me have a look at you
+[SEG0013] person_2 (DOCTOR): Let me press here.
+[SEG0014] person_2 (DOCTOR): The left calf is bigger than the right, tender along the vein.
+[SEG0015] person_2 (DOCTOR): Thanks, please take a a seat again.
+[SEG0016] person_2 (DOCTOR): Have you had any breathlessness or coughing up blood?
+[SEG0017] person_1 (PATIENT): No, I'd have mentioned it.
+[SEG0018] person_2 (DOCTOR): A few quick ones: swelling in the other leg or chest pain?
+[SEG0019] person_1 (PATIENT): Nothing like that, no.
+[SEG0020] person_2 (DOCTOR): is your urine normal, no changes?
+[SEG0021] person_1 (PATIENT): No changes there.
+[SEG0022] person_2 (DOCTOR): any medical conditions, anything you've been treated for? Bear with me, I'm just building up the picture
+[SEG0023] person_1 (PATIENT): no, none that I know of
+[SEG0024] person_2 (DOCTOR): Is there a family history of anything significant?
+[SEG0025] person_1 (PATIENT): My grandmother had breast cancer.
+[SEG0026] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0027] person_1 (PATIENT): No, never had any surgery.
+[SEG0028] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0029] person_1 (PATIENT): I mean, I don't have any known medication allergies.
+[SEG0030] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0031] person_1 (PATIENT): Mostly home-cooked food, rice and vegetables. I live with my family, my husband and two kids. Barely, I'm mostly sedentary these days
+[SEG0032] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0033] person_1 (PATIENT): Paracetamol, 500 milligrams, when needed
+[SEG0034] person_2 (DOCTOR): Right, here's what I'm thinking. This looks most like a possible deep vein clot.
+[SEG0035] person_1 (PATIENT): Um, is this going to go away?
+[SEG0036] person_2 (DOCTOR): nothing I've seen today points to an emergency. It looks like a possible deep vein clot, but I'd like to confirm. I'm sending you for a D-dimer blood test because of suspected DVT
+[SEG0037] person_3 (CLINICAL_STAFF): The earliest is Thursday, 11:30 am.
+[SEG0038] person_2 (DOCTOR): keep walking gently, and don't massage the calf if it hasn't settled in two weeks, we'd think about a Doppler scan of the leg, but not now if you get chest pain or sudden breathlessness, that's the point to come in urgently
+[SEG0039] person_1 (PATIENT): Alright, I know what to to look for.
+[SEG0040] person_2 (DOCTOR): I'd like you back in two days
+[SEG0041] person_1 (PATIENT): Fine.
+[SEG0042] person_2 (DOCTOR): do you have any questions?
+[SEG0043] person_1 (PATIENT): Thanks, that was helpful.
+[SEG0044] person_2 (DOCTOR): mind how you go
+
+JSON:

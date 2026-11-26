@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00296)
+[SEG0001] person_1 (DOCTOR): Hi there, come on in.
+[SEG0002] person_2 (PATIENT): Thanks, doctor. It's been a long few days.
+[SEG0003] person_1 (DOCTOR): Tell me from the beginning, what's been happening?
+[SEG0004] person_2 (PATIENT): Mainly wheezing. There's a couple of other things, but that's the main one.
+[SEG0005] person_1 (DOCTOR): Since when have you had this?
+[SEG0006] person_2 (PATIENT): Probably one week. Yeah.
+[SEG0007] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0008] person_2 (PATIENT): It happens on and off. Cold air definitely sets it off. A six out of ten, um, I suppose. There's a tight chest as well. Oh, with tight chest, I notice it more with exercise.
+[SEG0009] person_1 (DOCTOR): Is there anything medical in your background? Take your time, there's no rush.
+[SEG0010] person_2 (PATIENT): I've had asthma for about a year now.
+[SEG0011] person_1 (DOCTOR): Now some background about your lifestyle.
+[SEG0012] person_2 (PATIENT): I stopped smoking about two years back. I'm a self-employed electrician. Mostly home-cooked food, rice and vegetables. I share a flat with two friends.
+[SEG0013] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0014] person_2 (PATIENT): No operations, no.
+[SEG0015] person_1 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0016] person_2 (PATIENT): It's Asthalin inhaler, when needed for my asthma.
+[SEG0017] person_1 (DOCTOR): And what about leg swelling or runny nose?
+[SEG0018] person_2 (PATIENT): No. None of those.
+[SEG0019] person_1 (DOCTOR): Have you had any weight loss or coughing up phlegm?
+[SEG0020] person_2 (PATIENT): No, no weight loss or coughing up phlegm.
+[SEG0021] person_1 (DOCTOR): Right, anything on the skin I should know about?
+[SEG0022] person_2 (PATIENT): Nothing on the skin, no.
+[SEG0023] person_1 (DOCTOR): How are your bowels, any trouble?
+[SEG0024] person_2 (PATIENT): Bowels are regular, nothing odd.
+[SEG0025] person_1 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0026] person_1 (DOCTOR): Just relax your arm...
+[SEG0027] person_1 (DOCTOR): Okay: height 185 centimetres, weight 61 kilos, temperature is 37.0 degrees, pulse is 84 beats a minute, oxygen saturation is 91 percent, respiratory rate 21, blood pressure 129 over 90.
+[SEG0028] person_1 (DOCTOR): Right, let me check a few things physically.
+[SEG0029] person_1 (DOCTOR): Just relax, I'll be quick.
+[SEG0030] person_1 (DOCTOR): I can hear a widespread wheeze on both sides when you breathe out.
+[SEG0031] person_1 (DOCTOR): Right, you can sit back down.
+[SEG0032] person_1 (DOCTOR): Taking everything into account, this looks most like an asthma flare-up.
+[SEG0033] person_2 (PATIENT): Doctor, is this dangerous?
+[SEG0034] person_1 (DOCTOR): It's reasonable to be concerned, but right now an asthma flare-up is my leading thought, not anything worse.
+[SEG0035] person_1 (DOCTOR): I'll request a peak flow reading, it'll help with asthma control. The treatment will be prednisolone, 30 milligrams, once a day, for five days. That's for asthma flare-up.
+[SEG0036] person_2 (PATIENT): That's easy enough to remember.
+[SEG0037] person_1 (DOCTOR): Rinse your mouth after the steroid inhaler. Please come and see me in two weeks.
+[SEG0038] person_2 (PATIENT): Alright, I'll put it in my diary.
+[SEG0039] person_1 (DOCTOR): Look after yourself.
+[SEG0040] person_2 (PATIENT): All good here. Thank you.
+[SEG0041] person_1 (DOCTOR): Take care.
+
+JSON:

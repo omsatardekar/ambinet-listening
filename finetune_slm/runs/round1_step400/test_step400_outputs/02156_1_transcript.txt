@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02156)
+[SEG0001] person_1 (DOCTOR): Evening. Let's get started. Tell me what's brought you in.
+[SEG0002] person_2 (PATIENT): So the thing is, I've got spots on my forehead and chin.
+[SEG0003] person_1 (DOCTOR): How long has this been bothering you?
+[SEG0004] person_2 (PATIENT): I've had it since last Tuesday. I took the morning off to come in today. Sorry, I know I'm rambling a bit.
+[SEG0005] person_1 (DOCTOR): How strong would you say it is?
+[SEG0006] person_2 (PATIENT): I'd give it a seven, you know, out of ten. I've also had oily skin, since last weekend.
+[SEG0007] person_1 (DOCTOR): Have you noticed low mood or irregular periods?
+[SEG0008] person_2 (PATIENT): No, I haven't had any of them.
+[SEG0009] person_1 (DOCTOR): Did you get scarring or painful cysts?
+[SEG0010] person_2 (PATIENT): Hmm, no, I haven't had any of them.
+[SEG0011] person_1 (DOCTOR): Is your digestion otherwise okay?
+[SEG0012] person_2 (PATIENT): Actually, bowels are regular, nothing odd.
+[SEG0013] person_1 (DOCTOR): Have you ever had an operation?
+[SEG0014] person_2 (PATIENT): Just a cataract operation in my left eye, about a year ago.
+[SEG0015] person_1 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0016] person_2 (PATIENT): My husband and I live above the shop. I'm a plumber, lots of bending and kneeling. I swim twice a week.
+[SEG0017] person_1 (DOCTOR): Before we go further, any allergies?
+[SEG0018] person_2 (PATIENT): I'm allergic to nickel, I get a rash on my skin.
+[SEG0019] person_1 (DOCTOR): Does your family have any medical conditions?
+[SEG0020] person_2 (PATIENT): My grandfather had a stroke.
+[SEG0021] person_1 (DOCTOR): any health conditions I should have on record?
+[SEG0022] person_2 (PATIENT): yes, high blood pressure
+[SEG0023] person_1 (DOCTOR): tell me your medicines, please
+[SEG0024] person_2 (PATIENT): Ramipril, 5 milligrams, every morning.
+[SEG0025] person_1 (DOCTOR): how long have you been on it?
+[SEG0026] person_2 (PATIENT): about nearly five years
+[SEG0027] person_1 (DOCTOR): I'll note down your vital signs first.
+[SEG0028] person_1 (DOCTOR): Bear with me while this finishes...
+[SEG0029] person_1 (DOCTOR): okay: pressure 116 over 72, respiratory rate 16. And pulse is 67 beats a minute, temperature 36.8.
+[SEG0030] person_1 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0031] person_2 (PATIENT): Fine by me.
+[SEG0032] person_1 (DOCTOR): Tell me if that's sore.
+[SEG0033] person_1 (DOCTOR): there are small blackheads and a few red spots with no deep cysts
+[SEG0034] person_1 (DOCTOR): That's all I needed to check. Okay, so my impression is this: The most likely explanation is mild acne. What I'm giving you is benzoyl peroxide gel, 5%, once a day, eight weeks. That should help with acne. It's a commonly used medicine and most people tolerate it well.
+[SEG0035] person_2 (PATIENT): How soon will it work?
+[SEG0036] person_1 (DOCTOR): Wash gently twice a day and don't squeeze the spots. Come back or go to emergency straight away if the symptoms get worse. Please come and see me in eight weeks. Is there anything you'd like me to go over again?
+[SEG0037] person_2 (PATIENT): thank you, doctor, goodbye
+[SEG0038] person_1 (DOCTOR): Have a good day.
+
+JSON:

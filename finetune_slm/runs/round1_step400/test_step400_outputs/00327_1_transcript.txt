@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00327)
+[SEG0001] person_1 (DOCTOR): Morning. Just put your bag down anywhere.
+[SEG0002] person_2 (PATIENT): Hello, doctor, thank you.
+[SEG0003] person_1 (DOCTOR): Tell me what's been troubling you.
+[SEG0004] person_2 (PATIENT): It's pain after standing at work, mostly.
+[SEG0005] person_1 (DOCTOR): Okay, keep going. Okay, give me more detail on it, whatever comes to mind.
+[SEG0006] person_2 (PATIENT): Standing definitely sets it off. It sort of comes and goes. There's a tender spot on the sole as well. Oh, and limping a bit by the evening.
+[SEG0007] person_1 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0008] person_2 (PATIENT): It's alendronate, 70 milligrams, once a week.
+[SEG0009] person_1 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0010] person_2 (PATIENT): I cycle to work most mornings. I work on a farm, it's quite physical. I try to avoid too much sugar.
+[SEG0011] person_1 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0012] person_2 (PATIENT): I had a reaction to sulfa drugs when I was younger, a rash, and I've avoided it since.
+[SEG0013] person_1 (DOCTOR): Have you got any chronic problems?
+[SEG0014] person_2 (PATIENT): I've had thin bones, yes.
+[SEG0015] person_1 (DOCTOR): Let me check a few things. Any fever or numbness in the foot?
+[SEG0016] person_2 (PATIENT): Well, no, none of that at all.
+[SEG0017] person_1 (DOCTOR): Let me check a few things. Any recent injury, swelling or pain in other joints?
+[SEG0018] person_2 (PATIENT): Right, I haven't had recent injury, swelling or pain in other joints, no.
+[SEG0019] person_1 (DOCTOR): So, your breathing, any trouble there?
+[SEG0020] person_2 (PATIENT): No problems with breathing.
+[SEG0021] person_1 (DOCTOR): I'll take a few measurements first.
+[SEG0022] person_1 (DOCTOR): One second...
+[SEG0023] person_1 (DOCTOR): Okay: heart rate 71, blood pressure 120 over 72.
+[SEG0024] person_2 (PATIENT): Is that okay?
+[SEG0025] person_1 (DOCTOR): Let's look at it together in a minute.
+[SEG0026] person_1 (DOCTOR): Okay, a quick examination now.
+[SEG0027] person_2 (PATIENT): Okay.
+[SEG0028] person_1 (DOCTOR): Bear with me a second.
+[SEG0029] person_1 (DOCTOR): The ankle and foot move fully.
+[SEG0030] person_2 (PATIENT): Yes, um, doctor.
+[SEG0031] person_1 (DOCTOR): Bear with me a second.
+[SEG0032] person_1 (DOCTOR): Pressing on the inner heel brings on the pain.
+[SEG0033] person_2 (PATIENT): Okay, um, ready.
+[SEG0034] person_1 (DOCTOR): Thanks, please take a seat again. Having listened and examined, it points towards plantar fasciitis. I can't rule out a stress reaction in the bone yet.
+[SEG0035] person_2 (PATIENT): Do you think it's serious?
+[SEG0036] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like plantar fasciitis, but I'd like to confirm. I'd like to arrange an X-ray of the foot for heel pain. Roll the sole over a bottle and stretch the calf against a wall twice a day. Supportive shoes with a cushioned heel help. I'll want another look in six weeks. Call the clinic if you need us.
+[SEG0037] person_2 (PATIENT): No, I think that's everything. Thank you, doctor.
+
+JSON:

@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00427)
+[SEG0001] person_1 (NURSE): Doctor, I've brought them through. The observations are done, whenever you need them.
+[SEG0002] person_2 (DOCTOR): Okay, thanks. Hi, how can I help today?
+[SEG0003] person_3 (CAREGIVER): Doctor, I've come along because I know the history, if it helps. We came because of burning when I pass urine.
+[SEG0004] person_1 (NURSE): Here are the numbers, doctor. Temperature is 36.6 degrees, SpO2 97 percent on room air. Pulse 77, respiratory rate 14, pressure 111 over 69.
+[SEG0005] person_2 (DOCTOR): Good, thank you. How long have you had it?
+[SEG0006] person_4 (PATIENT): Since Friday, that's when it began.
+[SEG0007] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0008] person_4 (PATIENT): Pretty severe, if I'm being honest. Honestly, all the time. And cloudy, smelly urine, too. Pain low in the tummy was there, but it's gone away on its own.
+[SEG0009] person_2 (DOCTOR): Nothing like back pain?
+[SEG0010] person_4 (PATIENT): No, no back pain.
+[SEG0011] person_2 (DOCTOR): Nothing like fever?
+[SEG0012] person_4 (PATIENT): No, no fever.
+[SEG0013] person_3 (CAREGIVER): Actually, doctor, I did notice fever. She doesn't always say.
+[SEG0014] person_4 (PATIENT): No, I don't think I did. Maybe a little, I'm not sure.
+[SEG0015] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. A few quick ones: similar episode recently, blood in the urine or vaginal discharge?
+[SEG0016] person_4 (PATIENT): I haven't had similar episode recently, blood in the urine or vaginal discharge, no.
+[SEG0017] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0018] person_4 (PATIENT): No, nothing there.
+[SEG0019] person_2 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0020] person_4 (PATIENT): Nothing odd there.
+[SEG0021] person_2 (DOCTOR): So, any procedures or operations?
+[SEG0022] person_4 (PATIENT): I had my appendix out about eight years ago.
+[SEG0023] person_2 (DOCTOR): Alright, are you on any tablets or medication?
+[SEG0024] person_3 (CAREGIVER): She is on metformin, 500 milligrams, twice a day, I give it to her.
+[SEG0025] person_2 (DOCTOR): And for how long?
+[SEG0026] person_3 (CAREGIVER): Two months now. It's allopurinol, 100 milligrams, once a day, doctor. She is on cranberry juice, every day, I give it to her.
+[SEG0027] person_2 (DOCTOR): Alright, what about your general health, any conditions you're being treated for?
+[SEG0028] person_4 (PATIENT): I've got diabetes. I've had gout for two years now.
+[SEG0029] person_2 (DOCTOR): Okay, I can see diabetes and gout in your file as well.
+[SEG0030] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0031] person_4 (PATIENT): I smoke, yes, around five a day. I don't drink at all. I skip breakfast most days. Barely, I'm mostly sedentary these days.
+[SEG0032] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0033] person_2 (DOCTOR): Let me press here.
+[SEG0034] person_2 (DOCTOR): There's mild tenderness above the pubic bone, and no tenderness in the loins.
+[SEG0035] person_2 (DOCTOR): That's fine, sit up.
+[SEG0036] person_2 (DOCTOR): Taking everything into account, it fits best with a urinary tract infection. The reason I say that is that your story and my examination fit together. We shouldn't forget a sexually transmitted infection.
+[SEG0037] person_4 (PATIENT): Should I be worried about this?
+[SEG0038] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a urinary tract infection, and we'll know more once the a urine test is back. So, to recap quickly. You've had burning when you pass urine, since Friday, severe, and no back pain or vaginal discharge.
+[SEG0039] person_4 (PATIENT): Yes, that's right.
+[SEG0040] person_1 (NURSE): We've already done a urine test this morning, doctor.
+[SEG0041] person_2 (DOCTOR): Thanks, I'll check it. I'd like to arrange a urine culture for urinary symptoms.
+[SEG0042] person_4 (PATIENT): Alright, when would that be?
+[SEG0043] person_2 (DOCTOR): I'll start you on nitrofurantoin, 100 milligrams, twice a day, for five days. That should help with urine infection. Drink plenty of water and don't hold it in when you need to go. If you smoke, this is a good moment to think about stopping, and we can help you with that. Let's review you in a week. How would you describe the plan, so we're on the same page?
+[SEG0044] person_4 (PATIENT): So, I take the nitrofurantoin, 100 milligrams, twice a day and come back in a week. Is that right?
+[SEG0045] person_2 (DOCTOR): Yes, exactly right. Call the clinic if you need us.
+[SEG0046] person_4 (PATIENT): Thanks so much, doctor.
+[SEG0047] person_2 (DOCTOR): Safe journey home.
+
+JSON:

@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01032)
+[SEG0001] person_1 (PATIENT): Yeah, hello doctor, sorry, I took a wrong turn on the way here.
+[SEG0002] person_2 (DOCTOR): No problem at all, come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): Mm, I'm here because of sudden hearing loss in one ear. I've been reading about it online and it worried me.
+[SEG0004] person_2 (DOCTOR): since when exactly?
+[SEG0005] person_1 (PATIENT): It's been five days now.
+[SEG0006] person_2 (DOCTOR): Any ringing as well?
+[SEG0007] person_1 (PATIENT): Yes, since Monday. Oh, and a blocked feeling.
+[SEG0008] person_2 (DOCTOR): have you noticed ear pain, facial weakness or dizziness?
+[SEG0009] person_1 (PATIENT): No, none of those at all.
+[SEG0010] person_2 (DOCTOR): Did you notice any discharge?
+[SEG0011] person_1 (PATIENT): No, no discharge.
+[SEG0012] person_2 (DOCTOR): how are your joints, any aches elsewhere?
+[SEG0013] person_1 (PATIENT): Nothing else aches.
+[SEG0014] person_2 (DOCTOR): Is your digestion otherwise okay?
+[SEG0015] person_1 (PATIENT): No, all normal there.
+[SEG0016] person_2 (DOCTOR): are you on your own at home?
+[SEG0017] person_1 (PATIENT): I live with my elderly mother.
+[SEG0018] person_2 (DOCTOR): Are you in work at the moment?
+[SEG0019] person_1 (PATIENT): Yes, I work in a bakery, early starts.
+[SEG0020] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0021] person_1 (PATIENT): Right, no, nothing as far as I know.
+[SEG0022] person_2 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0023] person_1 (PATIENT): Actually, uh, my daughter has type 1 diabetes.
+[SEG0024] person_2 (DOCTOR): What do you take on a a normal day?
+[SEG0025] person_1 (PATIENT): I'm on Seretide inhaler, twice a day. I'm on aspirin, 75 milligrams, once a day for my heart. Hydrocortisone cream. I take it when needed. Though honestly, some days I forget to take it. Let me think, um, I had metoprolol at one point, but I'm off it now.
+[SEG0026] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0027] person_1 (PATIENT): I've had asthma for about a year now.
+[SEG0028] person_2 (DOCTOR): I follow.
+[SEG0029] person_1 (PATIENT): I, I have heart disease, for nearly five years. Okay, so I've had eczema for about a year now. I've been putting this off for weeks. I just want to get back to normal, really.
+[SEG0030] person_2 (DOCTOR): Alright, heart disease and eczema, that matches what I have here.
+[SEG0031] person_2 (DOCTOR): Any past operations I should know about?
+[SEG0032] person_1 (PATIENT): Just my septum straightened, in my thirties.
+[SEG0033] person_2 (DOCTOR): let me quickly check your readings
+[SEG0034] person_2 (DOCTOR): That's it, just a little longer...
+[SEG0035] person_2 (DOCTOR): Okay: pulse is 68 beats a minute, blood pressure 114 over 75, temperature 36.5.
+[SEG0036] person_1 (PATIENT): Is that alright, doctor?
+[SEG0037] person_2 (DOCTOR): I'll come back to the numbers
+[SEG0038] person_2 (DOCTOR): I'll examine you in a second, make yourself comfortable.
+[SEG0039] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0040] person_2 (DOCTOR): The ear drum looks normal and the tuning fork is heard louder in the other ear.
+[SEG0041] person_2 (DOCTOR): You can sit up now. Let me tell you where I've got to. This looks most like sudden hearing loss needing urgent treatment. The reason I say that is that your story and my examination fit together. It could also be a wax or fluid blockage, so we'll keep that open.
+[SEG0042] person_1 (PATIENT): Do you think it's something serious?
+[SEG0043] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's sudden hearing loss needing urgent treatment, and we'll know more once the an MRI scan is back.
+[SEG0044] person_2 (DOCTOR): I'm sending you for an MRI scan because of sudden hearing loss. I'd like to arrange an urgent hearing test for sudden hearing loss. The treatment will be prednisolone, 60 milligrams, once a day, seven days. That's for sudden hearing loss. This is time-critical, so I'm starting treatment today. I'd like you to see the ENT team as well, and I'll write the referral. Please come and see me in one week.
+[SEG0045] person_1 (PATIENT): I'll book it on my way out.
+[SEG0046] person_2 (DOCTOR): That's all from me. Any questions?
+[SEG0047] person_1 (PATIENT): I think I understand everything. Thanks.
+[SEG0048] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01205)
+[SEG0001] person_1 (PATIENT): So, hi doctor, am I too early?
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): I've been dealing with my face drooping on one side. I thought it would sort itself out, but it hasn't.
+[SEG0004] person_2 (DOCTOR): Right, how long has it been like this?
+[SEG0005] person_1 (PATIENT): Probably three weeks. Yeah.
+[SEG0006] person_2 (DOCTOR): Is it a lot or only a little?
+[SEG0007] person_1 (PATIENT): Severe, I'd say.
+[SEG0008] person_2 (DOCTOR): Yes. Does anything else come with it?
+[SEG0009] person_1 (PATIENT): A sudden headache goes along with it, most of the time. Well, the sudden headache? That's been for two months.
+[SEG0010] person_2 (DOCTOR): Have you had your face drooping on one side before, or is this the first time?
+[SEG0011] person_1 (PATIENT): Yes, something like this happened last winter, and it went away on its own.
+[SEG0012] person_2 (DOCTOR): I'll do your observations first.
+[SEG0013] person_2 (DOCTOR): Keep your arm relaxed for me...
+[SEG0014] person_2 (DOCTOR): Okay: SpO2 96 percent on room air, pulse 74, temp 36.9 degrees. And BP is 158 over 94, respiratory rate 18, weight 77 kilos, height 172 centimetres, BMI works out to 26.0.
+[SEG0015] person_2 (DOCTOR): Could you come over to the couch, please?
+[SEG0016] person_1 (PATIENT): Sure thing.
+[SEG0017] person_2 (DOCTOR): Take a deep breath for me.
+[SEG0018] person_2 (DOCTOR): Your right face droops, your right arm is weak and your speech is slurred.
+[SEG0019] person_2 (DOCTOR): That's the examination finished. A few quick ones: fever, loss of consciousness or seizure?
+[SEG0020] person_1 (PATIENT): Nope, nothing like that.
+[SEG0021] person_2 (DOCTOR): Has your skin been okay?
+[SEG0022] person_1 (PATIENT): No, skin's been fine.
+[SEG0023] person_2 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0024] person_1 (PATIENT): Yes, an irregular heartbeat.
+[SEG0025] person_2 (DOCTOR): Any surgery in the past?
+[SEG0026] person_1 (PATIENT): Yes, I had a cataract operation in my left eye, about a year ago.
+[SEG0027] person_2 (DOCTOR): Do you drink alcohol?
+[SEG0028] person_1 (PATIENT): I'll have a glass of wine with dinner.
+[SEG0029] person_2 (DOCTOR): What do you do during the day?
+[SEG0030] person_1 (PATIENT): I look after my grandchildren most days.
+[SEG0031] person_2 (DOCTOR): Who lives with you?
+[SEG0032] person_1 (PATIENT): My partner and our baby.
+[SEG0033] person_2 (DOCTOR): Before we go further, any allergies?
+[SEG0034] person_1 (PATIENT): I don't think I have any, no.
+[SEG0035] person_2 (DOCTOR): Does your family have any medical conditions?
+[SEG0036] person_1 (PATIENT): My brother has epilepsy.
+[SEG0037] person_2 (DOCTOR): Do you take any regular medication?
+[SEG0038] person_1 (PATIENT): No, I don't take any tablets.
+[SEG0039] person_2 (DOCTOR): I'll request a blood sugar test, it'll help with stroke symptoms. I'll request an urgent CT scan of the head, it'll help with possible stroke.
+[SEG0040] person_1 (PATIENT): Where would I go for that?
+[SEG0041] person_2 (DOCTOR): Call an ambulance now, you need hospital immediately. I'll also refer you to the stroke team. I'd like you back straight away. Right, that's the plan. Do you want to ask me anything?
+[SEG0042] person_1 (PATIENT): Alright, thanks, take care.
+
+JSON:

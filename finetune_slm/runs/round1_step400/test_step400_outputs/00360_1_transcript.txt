@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00360)
+[SEG0001] person_1 (PATIENT): Excuse me, doctor, should I sit here?
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): Yeah, it's the room spinning. I don't know what's causing it.
+[SEG0004] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0005] person_1 (PATIENT): Turning over in bed definitely sets it off. It happens every other day. It's moderate, honestly. I've also been feeling unsteady, for three days.
+[SEG0006] person_2 (DOCTOR): So, how intense does it it get?
+[SEG0007] person_1 (PATIENT): it's, It's mild, honestly and there's a bit of vomiting as well, five days now as for bit of vomiting, moderate, I'd say honestly, all the time
+[SEG0008] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0009] person_1 (PATIENT): Metformin. I take it 500 milligrams, twice a day for my sugar.
+[SEG0010] person_3 (NURSE): doctor, our chart from the last visit lists it as 250 milligrams
+[SEG0011] person_2 (DOCTOR): Right. Do you happen to have the current prescription here?
+[SEG0012] person_1 (PATIENT): I don't think I have it with me. Vertin i take it 16 milligrams, when it comes i had glimepiride at one point, but I'm off it now
+[SEG0013] person_2 (DOCTOR): a few questions about your lifestyle now
+[SEG0014] person_1 (PATIENT): A beer or two most evenings, to be honest. Barely, I'm mostly sedentary these days. I teach at a primary school. I live with my family, my husband and two kids.
+[SEG0015] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0016] person_1 (PATIENT): Eggs. I come out in... well, a rash. Yes, pollen, it gives me a runny nose.
+[SEG0017] person_2 (DOCTOR): Alright, any diagnoses you've been given before?
+[SEG0018] person_1 (PATIENT): I've, I've had diabetes for nearly five years now
+[SEG0019] person_2 (DOCTOR): Yes, diabetes is known to us, good to have that clear. Any hearing loss, numbness in the face or headache?
+[SEG0020] person_1 (PATIENT): Okay, so no, none of those.
+[SEG0021] person_2 (DOCTOR): And what about weakness, slurred speech or double vision?
+[SEG0022] person_1 (PATIENT): None, as far as I know.
+[SEG0023] person_2 (DOCTOR): Has your skin been okay?
+[SEG0024] person_1 (PATIENT): Nothing on the skin, no.
+[SEG0025] person_3 (NURSE): doctor, I've got the readings for you. Blood pressure 113 over 74, temperature 37.0, pulse is 85 beats a minute
+[SEG0026] person_2 (DOCTOR): Thanks.
+[SEG0027] person_2 (DOCTOR): Okay, a quick examination now.
+[SEG0028] person_2 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0029] person_2 (DOCTOR): Your walking is steady and the finger-nose test is normal.
+[SEG0030] person_2 (DOCTOR): take your time, no rush
+[SEG0031] person_2 (DOCTOR): when I turn your head to the right, your eyes flick sideways, that's called nystagmus
+[SEG0032] person_2 (DOCTOR): Thanks, please take a seat again.
+[SEG0033] person_2 (DOCTOR): Putting it all together, my working impression is benign positional vertigo. A migraine-related dizziness is still possible.
+[SEG0034] person_1 (PATIENT): Do you think it's serious?
+[SEG0035] person_2 (DOCTOR): it's reasonable to be concerned, but right now benign positional vertigo is my leading thought, not anything worse i'd like to arrange a hearing test for tinnitus and vertigo
+[SEG0036] person_1 (PATIENT): Is that done here?
+[SEG0037] person_2 (DOCTOR): There's a simple head manoeuvre we can do, and I'll show you how to repeat it at home. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. If you get weakness, slurred speech or a severe headache with the dizziness, or you feel really unwell, please come to the emergency department.
+[SEG0038] person_1 (PATIENT): Okay, fair enough.
+[SEG0039] person_2 (DOCTOR): I'd like you back in three weeks look after yourself
+[SEG0040] person_1 (PATIENT): no, uh, I think that's everything. Thank you, doctor
+
+JSON:

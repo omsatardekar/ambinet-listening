@@ -1,0 +1,72 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03599)
+[SEG0001] person_1 (PATIENT): morning, doctor lovely to meet you
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What seems to be wrong?
+[SEG0003] person_3 (CAREGIVER): Doctor, I'll sit in if that's okay, I know what's been happening. She's been having indigestion, doctor.
+[SEG0004] person_2 (DOCTOR): since when exactly?
+[SEG0005] person_1 (PATIENT): It's been going on for two weeks.
+[SEG0006] person_2 (DOCTOR): can you describe it a bit more for me? How strong it is, what the pattern is, what helps
+[SEG0007] person_1 (PATIENT): I'd say severe. Antacids helps a a bit.
+[SEG0008] person_2 (DOCTOR): Alright, is there anything else with it?
+[SEG0009] person_1 (PATIENT): An ache in my jaw goes along with it, most of the time.
+[SEG0010] person_2 (DOCTOR): have you been feeling unusually tired?
+[SEG0011] person_1 (PATIENT): Yes, about the same, two days.
+[SEG0012] person_2 (DOCTOR): how troublesome is it day to day?
+[SEG0013] person_1 (PATIENT): Severe, I'd say
+[SEG0014] person_2 (DOCTOR): Mm-hmm. Do you have any chronic illnesses?
+[SEG0015] person_1 (PATIENT): High blood pressure, for about ten years.
+[SEG0016] person_2 (DOCTOR): alright, high blood pressure, that matches what I have here
+[SEG0017] person_2 (DOCTOR): What do you take on a a normal day?
+[SEG0018] person_3 (CAREGIVER): It's hydrochlorothiazide, 12.5 milligrams, every morning for my pressure, doctor.
+[SEG0019] person_2 (DOCTOR): How long has that been going on?
+[SEG0020] person_3 (CAREGIVER): Nearly five years now. She takes antacid liquid, when needed.
+[SEG0021] person_2 (DOCTOR): Do you know the dose?
+[SEG0022] person_3 (CAREGIVER): It's 10 ml.
+[SEG0023] person_2 (DOCTOR): I see, go ahead.
+[SEG0024] person_2 (DOCTOR): what about alcohol?
+[SEG0025] person_1 (PATIENT): I only drink at family occasions
+[SEG0026] person_2 (DOCTOR): Are you active?
+[SEG0027] person_1 (PATIENT): I walk the dog every morning
+[SEG0028] person_2 (DOCTOR): is there someone at home?
+[SEG0029] person_1 (PATIENT): My husband and I live above the shop.
+[SEG0030] person_2 (DOCTOR): Right, anything surgical in your history?
+[SEG0031] person_1 (PATIENT): Yes, I had a varicose vein procedure, last year.
+[SEG0032] person_2 (DOCTOR): Does your family have any medical conditions?
+[SEG0033] person_1 (PATIENT): My daughter has type 1 diabetes.
+[SEG0034] person_2 (DOCTOR): Have you got any known allergies?
+[SEG0035] person_1 (PATIENT): No, I've never reacted to anything.
+[SEG0036] person_2 (DOCTOR): So, did you get cough, leg swelling, fever or crushing chest pain?
+[SEG0037] person_1 (PATIENT): No, no cough, leg swelling, fever or crushing chest pain.
+[SEG0038] person_2 (DOCTOR): Yes, carry on. So, is your mobility otherwise okay?
+[SEG0039] person_1 (PATIENT): No, nothing there.
+[SEG0040] person_2 (DOCTOR): Let me take your readings now.
+[SEG0041] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0042] person_2 (DOCTOR): okay: blood pressure 123 over 86, temp 36.6 degrees, oxygen saturation is 97 percent, pulse 106.
+[SEG0043] person_1 (PATIENT): Is that okay?
+[SEG0044] person_2 (DOCTOR): We'll go over that shortly.
+[SEG0045] person_2 (DOCTOR): So, could you come over to the couch, please?
+[SEG0046] person_1 (PATIENT): yes, that's fine
+[SEG0047] person_2 (DOCTOR): Nearly finished here.
+[SEG0048] person_2 (DOCTOR): Your heart sounds are normal and your tummy is soft, but your pulse is a little fast.
+[SEG0049] person_1 (PATIENT): That's alright.
+[SEG0050] person_2 (DOCTOR): thank you, you can get dressed okay, so my impression is this: I think we're dealing with possible heart attack despite no classic chest pain at this stage i'd also keep reflux in mind
+[SEG0051] person_1 (PATIENT): Will it it clear up?
+[SEG0052] person_2 (DOCTOR): nothing I've seen today points to an emergency it looks like possible heart attack despite no classic chest pain, but I'd like to confirm so, to recap quickly you've had indigestion for two weeks, severe, and no cough or crushing chest pain
+[SEG0053] person_1 (PATIENT): Correct.
+[SEG0054] person_2 (DOCTOR): An ECG is what I'd like next, for jaw pain and fatigue.
+[SEG0055] person_1 (PATIENT): That makes sense.
+[SEG0056] person_2 (DOCTOR): For this, aspirin, 300 milligrams, once now, single dose. You take it by mouth. It's for possible heart attack. Diabetes can hide the usual pain, so I am treating this as a heart problem until proven otherwise. Let's review you straight away. Have I covered everything you wanted?
+[SEG0057] person_1 (PATIENT): alright, thanks, take care
+
+JSON:

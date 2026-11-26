@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00110)
+[SEG0001] person_1 (DOCTOR): Good evening. Sorry to keep you waiting. What's been bothering you?
+[SEG0002] person_2 (PATIENT): I've been dealing with a grinding sound when I move.
+[SEG0003] person_1 (DOCTOR): Let me measure a few things.
+[SEG0004] person_1 (DOCTOR): Hold still for me...
+[SEG0005] person_1 (DOCTOR): Okay: pulse is 67 beats a minute, temperature 36.6, SpO2 98 percent on room air. And BP is 124 over 77. And when did that start?
+[SEG0006] person_2 (PATIENT): It's been going on for two months. I've never really been one for hospitals.
+[SEG0007] person_1 (DOCTOR): How would you describe it, mild, moderate, severe?
+[SEG0008] person_2 (PATIENT): About a four out of ten.
+[SEG0009] person_1 (DOCTOR): Uh-huh. Does it come along with anything else?
+[SEG0010] person_2 (PATIENT): Stiffness in the morning goes along with it, most of the time. With stiffness in the morning, it feels severe to me.
+[SEG0011] person_1 (DOCTOR): Any pain in other joints, locking of the knee or fall?
+[SEG0012] person_2 (PATIENT): No, none of that at all.
+[SEG0013] person_1 (DOCTOR): Did you notice any fever?
+[SEG0014] person_2 (PATIENT): No, I haven't had any fever.
+[SEG0015] person_1 (DOCTOR): Has your skin been okay?
+[SEG0016] person_2 (PATIENT): No, skin's been fine.
+[SEG0017] person_1 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0018] person_2 (PATIENT): No allergies.
+[SEG0019] person_1 (DOCTOR): Have you got any chronic problems?
+[SEG0020] person_2 (PATIENT): Yes, diabetes.
+[SEG0021] person_1 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0022] person_2 (PATIENT): I share a flat with two friends. I eat out quite a lot, to be honest. I cycle to work most mornings.
+[SEG0023] person_1 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0024] person_2 (PATIENT): It's Glycomet, 500 milligrams, twice a day. Volini gel, twice a day.
+[SEG0025] person_1 (DOCTOR): I'd like to examine you now.
+[SEG0026] person_2 (PATIENT): Okay.
+[SEG0027] person_1 (DOCTOR): Just relax, I'll be quick.
+[SEG0028] person_1 (DOCTOR): Bending is limited to about a right angle, and it hurts at the end.
+[SEG0029] person_1 (DOCTOR): Good, that's the examination. Having listened and examined, I'd lean towards osteoarthritis of the knees.
+[SEG0030] person_2 (PATIENT): Is this going to go away?
+[SEG0031] person_1 (DOCTOR): It's reasonable to be concerned, but right now osteoarthritis of the knees is my leading thought, not anything worse. An X-ray of both knees is what I'd like next, for knee pain. I'm going to put you on paracetamol, 650 milligrams, three times a day, for two weeks. That's for knee pain.
+[SEG0032] person_2 (PATIENT): Is that safe with my other things?
+[SEG0033] person_1 (DOCTOR): Losing even a few kilos takes a lot of load off the knees, and I'd like you to do the strengthening exercises. Let's review you in four weeks.
+[SEG0034] person_2 (PATIENT): Alright, I'll put it in my diary.
+[SEG0035] person_1 (DOCTOR): Right, that's all. Go gently.
+[SEG0036] person_2 (PATIENT): Alright, thanks. Bye for now.
+[SEG0037] person_1 (DOCTOR): See you then.
+
+JSON:

@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00006)
+[SEG0001] person_1 (PATIENT): Morning, doctor, I hope I'm not interrupting.
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): Oh, you know, mainly I've been snoring. That's why I came.
+[SEG0004] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0005] person_1 (PATIENT): Rosuvastatin. I take it 10 milligrams, at night.
+[SEG0006] person_2 (DOCTOR): How long are we talking about?
+[SEG0007] person_1 (PATIENT): About... well, two months.
+[SEG0008] person_2 (DOCTOR): Have you been putting on weight over the last year?
+[SEG0009] person_1 (PATIENT): Yes, for about a month.
+[SEG0010] person_2 (DOCTOR): Have you had chest pain, by any chance?
+[SEG0011] person_1 (PATIENT): So, uh, I haven't noticed any chest pain.
+[SEG0012] person_2 (DOCTOR): Alright, any heat intolerance, low mood or irregular periods at all?
+[SEG0013] person_1 (PATIENT): Um, no heat intolerance, low mood or irregular periods, none of it.
+[SEG0014] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0015] person_1 (PATIENT): Yeah, my heart's been fine, as far as I know.
+[SEG0016] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0017] person_1 (PATIENT): High cholesterol, for nearly five years. I took the morning off to come in today.
+[SEG0018] person_2 (DOCTOR): And then?
+[SEG0019] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0020] person_1 (PATIENT): I've never smoked. I have a couple of drinks on the weekend. I work in an office, mostly sitting at a desk. I play badminton on Sundays. I live with my family, my husband and two kids.
+[SEG0021] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0022] person_1 (PATIENT): Yes, dust, it gives me sneezing.
+[SEG0023] person_2 (DOCTOR): Any previous surgeries?
+[SEG0024] person_1 (PATIENT): No operations, no.
+[SEG0025] person_2 (DOCTOR): Alright, I'll check your pressure and pulse.
+[SEG0026] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0027] person_2 (DOCTOR): Okay: heart rate 76, respiratory rate 14, height 154 centimetres. And temperature 36.6, weight 64 kilos, BMI works out to 27.0, BP is 127 over 76.
+[SEG0028] person_1 (PATIENT): Is that normal?
+[SEG0029] person_2 (DOCTOR): Let's look at it together in a minute.
+[SEG0030] person_2 (DOCTOR): Okay, so my impression from what you've said is this: It points towards weight gain with a metabolic cause that needs checking.
+[SEG0031] person_1 (PATIENT): Hmm, doctor, is this dangerous?
+[SEG0032] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like weight gain with a metabolic cause that needs checking, but I'd like to confirm. I'm going to order a thyroid test, for weight gain.
+[SEG0033] person_1 (PATIENT): Hmm, where do I go for that?
+[SEG0034] person_2 (DOCTOR): Let's get a lipid profile, for metabolic risk. I think a sleep study makes sense here, for snoring and sleepiness. Start with small, specific changes: smaller portions, no sugary drinks, a thirty-minute walk most days. A dietitian would be the right next step, I'll refer you. If it hasn't settled next month, we'd think about an HbA1c, but not now. Okay, I think we're finished. Is everything clear?
+[SEG0035] person_1 (PATIENT): Right. Thanks again.
+[SEG0036] person_2 (DOCTOR): Safe journey home.
+
+JSON:

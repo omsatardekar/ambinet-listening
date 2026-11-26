@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00192)
+[SEG0001] person_1 (PATIENT): Good afternoon, doctor, the receptionist said you'd see me now.
+[SEG0002] person_2 (DOCTOR): Yes, do sit. Tell me what's been happening.
+[SEG0003] person_1 (PATIENT): Uh, mainly scaly, peeling skin. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): Since when have you had this?
+[SEG0005] person_1 (PATIENT): It's, It's been two days now.
+[SEG0006] person_2 (DOCTOR): How would you describe it, mild, moderate, severe?
+[SEG0007] person_1 (PATIENT): Pretty moderate, if I'm being honest. I've had itching in the groin too, for five days.
+[SEG0008] person_2 (DOCTOR): And what about pain, rash on the palms or fever?
+[SEG0009] person_1 (PATIENT): Hmm, I haven't had pain, rash on the palms or fever, no.
+[SEG0010] person_2 (DOCTOR): What about new partner?
+[SEG0011] person_1 (PATIENT): Uh, not at all, no new partner.
+[SEG0012] person_2 (DOCTOR): Sure. Anything unusual with passing urine?
+[SEG0013] person_1 (PATIENT): I mean, no, that's all fine.
+[SEG0014] person_2 (DOCTOR): Is your digestion otherwise okay?
+[SEG0015] person_1 (PATIENT): Nothing unusual, no.
+[SEG0016] person_2 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0017] person_1 (PATIENT): Uh, my brother has asthma.
+[SEG0018] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0019] person_1 (PATIENT): Glimepiride. I take it 2 milligrams, before breakfast for my sugar. Aspirin, 75 milligrams, once a day.
+[SEG0020] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0021] person_1 (PATIENT): I've never smoked. A beer or two most evenings, to be honest. I go to the gym a couple of times a week. I share a flat with two friends. I'm mostly vegetarian.
+[SEG0022] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions? Just so I get the full picture.
+[SEG0023] person_1 (PATIENT): I've had diabetes, yes. I'd rather know what's going on than keep guessing. I mean, I have heart disease, for about ten years.
+[SEG0024] person_2 (DOCTOR): Okay, I can see heart disease in your file as well. Any drug or food allergies?
+[SEG0025] person_1 (PATIENT): No allergies.
+[SEG0026] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0027] person_2 (DOCTOR): Almost there...
+[SEG0028] person_2 (DOCTOR): Okay: height 182 centimetres, BMI works out to 18.1. And saturation 97 percent, heart rate 76, weight 60 kilos, BP is 108 over 80.
+[SEG0029] person_2 (DOCTOR): Okay, a quick examination now.
+[SEG0030] person_2 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0031] person_2 (DOCTOR): Skin between the toes is white and peeling.
+[SEG0032] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0033] person_2 (DOCTOR): There's a red ring-shaped scaly patch with a clearer centre in the groin crease.
+[SEG0034] person_2 (DOCTOR): Okay, you can sit up. Having listened and examined, I'd lean towards a fungal skin infection. I want a skin scraping done, that's for suspected fungal infection.
+[SEG0035] person_3 (CLINICAL_STAFF): I can book that for Monday at 11:30 am.
+[SEG0036] person_1 (PATIENT): That's fine.
+[SEG0037] person_2 (DOCTOR): I'm going to put you on terbinafine cream, once a day, for two weeks. That should help with fungal infection. Keep the area dry, wear loose cotton, and don't share towels. Come back or go to emergency straight away if the symptoms get worse.
+[SEG0038] person_1 (PATIENT): Got it, thank you.
+[SEG0039] person_2 (DOCTOR): Call the clinic if you need us.
+[SEG0040] person_1 (PATIENT): Thanks, that was helpful.
+[SEG0041] person_2 (DOCTOR): Take care.
+
+JSON:

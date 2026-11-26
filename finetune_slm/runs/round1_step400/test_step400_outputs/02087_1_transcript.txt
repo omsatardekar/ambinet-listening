@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02087)
+[SEG0001] person_1 (PATIENT): Hello, doctor. I think it's my turn.
+[SEG0002] person_2 (DOCTOR): Right, that's fine, sit down. Tell me why you came.
+[SEG0003] person_1 (PATIENT): Um, honestly, it's a hot red swollen big toe, and my family pushed me to come. Work has been very busy so I kept ignoring it. I kept putting it off, which I know isn't sensible.
+[SEG0004] person_2 (DOCTOR): Let me get the readings out of the way.
+[SEG0005] person_2 (DOCTOR): Keep your arm relaxed for me...
+[SEG0006] person_2 (DOCTOR): Okay: heart rate 70, blood pressure 123 over 78, SpO2 97 percent on room air, temperature 36.9.
+[SEG0007] person_1 (PATIENT): Is that okay?
+[SEG0008] person_2 (DOCTOR): I'll interpret them after the examination.
+[SEG0009] person_2 (DOCTOR): What's the timeline, when did it begin?
+[SEG0010] person_1 (PATIENT): It's been about two weeks now. I'm hoping you can tell me something definite.
+[SEG0011] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0012] person_1 (PATIENT): Uh, yes, touch. That makes it worse. Mostly severe.
+[SEG0013] person_2 (DOCTOR): Let me check a few things. Any injury, rash or fever?
+[SEG0014] person_1 (PATIENT): No injury, rash or fever, none of it.
+[SEG0015] person_2 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0016] person_1 (PATIENT): No, all normal there.
+[SEG0017] person_2 (DOCTOR): How's your breathing otherwise?
+[SEG0018] person_1 (PATIENT): No, my breathing's been fine.
+[SEG0019] person_2 (DOCTOR): So, what do you do during the day?
+[SEG0020] person_1 (PATIENT): I look after my grandchildren most days.
+[SEG0021] person_2 (DOCTOR): What does a normal day of food look like?
+[SEG0022] person_1 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0023] person_2 (DOCTOR): What about your medical history?
+[SEG0024] person_1 (PATIENT): Yes, high blood pressure. I told myself I'd wait and see, and here I am.
+[SEG0025] person_2 (DOCTOR): Okay, I can see high blood pressure in your file as well.
+[SEG0026] person_2 (DOCTOR): Let's run through your medicines.
+[SEG0027] person_1 (PATIENT): It's ramipril, 5 milligrams, every morning for my blood pressure. Ibuprofen. I take it 400 milligrams, three times a day. I looked a few things up online, and that probably didn't help. A neighbour of mine said I should see someone about it.
+[SEG0028] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0029] person_1 (PATIENT): Erm, no, not at all.
+[SEG0030] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0031] person_1 (PATIENT): I'm allergic to diclofenac, I get swelling of my lips.
+[SEG0032] person_2 (DOCTOR): Let's move on to the examination.
+[SEG0033] person_2 (DOCTOR): Stay as you are for a moment.
+[SEG0034] person_2 (DOCTOR): The big toe joint is red, hot, swollen and exquisitely tender.
+[SEG0035] person_2 (DOCTOR): Okay, that's enough for me. Okay, thinking it through, I'd lean towards an acute gout attack. The reason I say that is that your story and my examination fit together.
+[SEG0036] person_1 (PATIENT): Do you think it's something serious?
+[SEG0037] person_2 (DOCTOR): I can't promise yet, but most people with an acute gout attack do well once it's treated properly. Stop me if I've got anything wrong. You've had a hot red swollen big toe for about two weeks, severe, and no rash or injury.
+[SEG0038] person_1 (PATIENT): Mm, that's right.
+[SEG0039] person_2 (DOCTOR): I'm sending you for a uric acid blood test because of gout. Rest the foot, ice it, and drink plenty of water; limit beer and red meat. A short walk every day, even twenty minutes, will help more than you'd think. We'll catch up in two weeks. Okay, does all of that make sense?
+[SEG0040] person_1 (PATIENT): Right, I'll do that. Thank you, doctor.
+[SEG0041] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

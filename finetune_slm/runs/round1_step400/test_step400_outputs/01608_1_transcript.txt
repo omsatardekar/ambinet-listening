@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01608)
+[SEG0001] person_1 (PATIENT): Hi doctor, am I too early?
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): Um, so... a headache. That's why I came.
+[SEG0004] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0005] person_1 (PATIENT): Honestly, on and off. About a three out of ten.
+[SEG0006] person_2 (DOCTOR): Have you been feeling shaken?
+[SEG0007] person_1 (PATIENT): Yes, actually. And there's shoulder tightness as well, about two weeks now.
+[SEG0008] person_2 (DOCTOR): okay, go on. What about neck pain after a car crash, have you noticed that?
+[SEG0009] person_1 (PATIENT): Yes, for three days. About neck pain after a car crash, it settles a little with heat.
+[SEG0010] person_2 (DOCTOR): Let me take your readings now.
+[SEG0011] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0012] person_2 (DOCTOR): Okay: BP is 111 over 74, temp 36.8 degrees, pulse 78, saturation 97 percent.
+[SEG0013] person_1 (PATIENT): Is that alright, doctor?
+[SEG0014] person_2 (DOCTOR): We'll go over that shortly.
+[SEG0015] person_2 (DOCTOR): Alright, over here please and I'll take a look.
+[SEG0016] person_1 (PATIENT): Yes, that's fine.
+[SEG0017] person_2 (DOCTOR): Take a a deep breath for me.
+[SEG0018] person_2 (DOCTOR): there is muscle tenderness either side of the neck and no tenderness over the bones
+[SEG0019] person_1 (PATIENT): Yes, that's fine.
+[SEG0020] person_2 (DOCTOR): Please sit back down. Any weakness, chest pain, numbness in the arms or loss of consciousness at all?
+[SEG0021] person_1 (PATIENT): no, none of those at all
+[SEG0022] person_2 (DOCTOR): How's your breathing otherwise?
+[SEG0023] person_1 (PATIENT): breathing's normal
+[SEG0024] person_2 (DOCTOR): on the cardiac side, anything I should know?
+[SEG0025] person_1 (PATIENT): No, nothing with my heart.
+[SEG0026] person_2 (DOCTOR): Are you on your own at home?
+[SEG0027] person_1 (PATIENT): I live with my elderly mother.
+[SEG0028] person_2 (DOCTOR): do you get out much?
+[SEG0029] person_1 (PATIENT): Not much, I mostly stay in these days.
+[SEG0030] person_2 (DOCTOR): What's your work?
+[SEG0031] person_1 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0032] person_2 (DOCTOR): Any previous surgeries?
+[SEG0033] person_1 (PATIENT): No surgery, no.
+[SEG0034] person_2 (DOCTOR): What about your medical history? I ask because it helps me narrow things down.
+[SEG0035] person_1 (PATIENT): I have migraines
+[SEG0036] person_2 (DOCTOR): Yes, carry on.
+[SEG0037] person_1 (PATIENT): I've had low haemoglobin for about a year now. I've had diabetes for about a year now. Yes, high blood pressure
+[SEG0038] person_2 (DOCTOR): Okay, go on. Alright, low haemoglobin, that matches what I have here. Are you taking anything regularly, including from the pharmacy?
+[SEG0039] person_1 (PATIENT): I'm on iron tablets, once a day. I take sitagliptin, 100 milligrams, once a day. It's amlodipine, 5 milligrams, maybe, once a day for my pressure.
+[SEG0040] person_2 (DOCTOR): Is the the packet here, or the prescription?
+[SEG0041] person_1 (PATIENT): No, it's at home. I'd been on hydrochlorothiazide, not any more though, I stopped.
+[SEG0042] person_2 (DOCTOR): Let me just check I've got this right. You've had a headache, and no weakness or numbness in the arms.
+[SEG0043] person_1 (PATIENT): Correct.
+[SEG0044] person_2 (DOCTOR): I'll start you on naproxen, 500 milligrams, twice a day with food, one week. You take it by mouth. That should help with neck pain. Keep your neck moving gently and avoid a collar. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0045] person_1 (PATIENT): okay, uh, I'll look out for that
+[SEG0046] person_2 (DOCTOR): Book a review if not better in two weeks. That's all from me. Any questions?
+[SEG0047] person_1 (PATIENT): thank you, doctor, goodbye
+
+JSON:

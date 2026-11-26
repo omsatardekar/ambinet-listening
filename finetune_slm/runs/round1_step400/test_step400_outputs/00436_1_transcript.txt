@@ -1,0 +1,72 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00436)
+[SEG0001] person_1 (PATIENT): Doctor, hello, I've got my papers here, where should I put them?
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_3 (CAREGIVER): Morning, doctor. I'll stay and and fill in anything that's missed.
+[SEG0004] person_2 (DOCTOR): Yes, that's no problem at all. Please sit.
+[SEG0005] person_3 (CAREGIVER): She's been having pain in both knees, doctor.
+[SEG0006] person_1 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0007] person_3 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0008] person_1 (PATIENT): I was getting to to that! Well, I've also had a grinding sound when I move, for two months. I mean, as for difficulty getting up from a chair, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0009] person_4 (NURSE): Okay, so the vitals from earlier. Temperature 36.9, heart rate 81, oxygen saturation is 99 percent, respiratory rate 16, pressure 115 over 73.
+[SEG0010] person_2 (DOCTOR): Good, thank you.
+[SEG0011] person_2 (DOCTOR): I'll examine you now, bear with me.
+[SEG0012] person_2 (DOCTOR): A A little pressure here, tell me if it's tender.
+[SEG0013] person_2 (DOCTOR): Bending is limited to about a right angle, and it hurts at the end.
+[SEG0014] person_2 (DOCTOR): Bear with me a second.
+[SEG0015] person_2 (DOCTOR): There's mild swelling on the right knee, and a grating feel when I bend it.
+[SEG0016] person_2 (DOCTOR): That's all I need, thank you. A few quick ones: redness over the knee, pain in other joints, fever or back pain?
+[SEG0017] person_1 (PATIENT): No, um, no redness over the knee, no pain in other joints, no fever. I did have stiffness in the morning at one point, but that that went away on its own.
+[SEG0018] person_2 (DOCTOR): Did you get locking of the knee or fall?
+[SEG0019] person_1 (PATIENT): No, no locking of the knee or fall.
+[SEG0020] person_2 (DOCTOR): is your urine normal, no changes?
+[SEG0021] person_1 (PATIENT): no, that's all fine
+[SEG0022] person_2 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0023] person_1 (PATIENT): Nothing odd there.
+[SEG0024] person_2 (DOCTOR): any previous surgeries?
+[SEG0025] person_1 (PATIENT): No, nothing like that.
+[SEG0026] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0027] person_1 (PATIENT): I've never been told I have allergies
+[SEG0028] person_2 (DOCTOR): are you on any tablets or medication?
+[SEG0029] person_1 (PATIENT): it's metformin, twice a day for my sugar
+[SEG0030] person_2 (DOCTOR): So, and what strength is that?
+[SEG0031] person_1 (PATIENT): 500 milligrams, I think that's what's on the box.
+[SEG0032] person_2 (DOCTOR): when did you start it?
+[SEG0033] person_1 (PATIENT): For about a month. I'm on telmisartan, 40 milligrams, once a day.
+[SEG0034] person_3 (CAREGIVER): That's what's prescribed, but I'm not sure she takes it every day.
+[SEG0035] person_1 (PATIENT): it's a... um, I can't remember what it's called it's a round yellow one
+[SEG0036] person_2 (DOCTOR): do you remember what it's for?
+[SEG0037] person_1 (PATIENT): for the joint pain, I believe my daughter sets them out for me, I just take what I'm given it's bisoprolol, 2.5 milligrams, once a day
+[SEG0038] person_2 (DOCTOR): right, anyone in the family with similar problems or other conditions?
+[SEG0039] person_1 (PATIENT): My brother has asthma. My mother has migraines.
+[SEG0040] person_2 (DOCTOR): so, do you have any medical conditions, anything you've been treated for?
+[SEG0041] person_1 (PATIENT): I've had diabetes, yes. High blood pressure, for about a year. I have arthritis in my knees.
+[SEG0042] person_2 (DOCTOR): okay, anything else?
+[SEG0043] person_1 (PATIENT): yes, high cholesterol my family kept telling me to get it checked
+[SEG0044] person_2 (DOCTOR): Go on.
+[SEG0045] person_1 (PATIENT): I've had an irregular heartbeat, yes
+[SEG0046] person_2 (DOCTOR): Do you smoke?
+[SEG0047] person_1 (PATIENT): I've never smoked
+[SEG0048] person_2 (DOCTOR): Are you living with family?
+[SEG0049] person_1 (PATIENT): I stay with my daughter and her family
+[SEG0050] person_2 (DOCTOR): just to be sure I understood you've had pain in both knees, and no fever or pain in other joints
+[SEG0051] person_1 (PATIENT): Exactly.
+[SEG0052] person_2 (DOCTOR): we should do blood tests for joint pain. Let's book an X-ray of both knees to look into knee pain. The treatment will be paracetamol, 650 milligrams, three times a day, for two weeks. You take it by mouth. That's for knee pain. Losing even a few kilos takes a lot of load off the knees, and I'd like you to do the strengthening exercises. If the symptoms get worse, that's the point to come in urgently
+[SEG0053] person_1 (PATIENT): Oh, alright, I know what to look for.
+[SEG0054] person_2 (DOCTOR): We'll catch up in four weeks. What are the next steps as you understand them?
+[SEG0055] person_1 (PATIENT): So, I take the paracetamol, 650 milligrams, three times a day and come back in four weeks. Is that right?
+[SEG0056] person_2 (DOCTOR): Yes, exactly right. Alright, I'll see you out.
+[SEG0057] person_1 (PATIENT): all good here. Thank you
+
+JSON:

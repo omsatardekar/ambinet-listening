@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00406)
+[SEG0001] person_1 (PATIENT): Afternoon, doctor.
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): Yeah, you know, it's a very painful, swollen big toe. I don't know what's causing it.
+[SEG0004] person_2 (DOCTOR): And when did that start?
+[SEG0005] person_1 (PATIENT): It's been going on for about four days.
+[SEG0006] person_2 (DOCTOR): Alright, tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): I mean, it's worse with the bedsheet touching it. Ice helps a bit. It just comes and goes. I'd rather know what's going on than keep guessing. I'm not great at remembering details, so bear with me.
+[SEG0008] person_2 (DOCTOR): Right, I'll take a few measurements first.
+[SEG0009] person_2 (DOCTOR): Hold still for me...
+[SEG0010] person_2 (DOCTOR): Okay: respiratory rate 14, pressure 125 over 76, pulse is 76 beats a minute, SpO2 97 percent on room air.
+[SEG0011] person_2 (DOCTOR): Let me have a look at you.
+[SEG0012] person_1 (PATIENT): Mm, you know, okay.
+[SEG0013] person_2 (DOCTOR): Hold that position for me.
+[SEG0014] person_2 (DOCTOR): The big toe joint is red, hot, swollen and extremely tender to touch.
+[SEG0015] person_2 (DOCTOR): That's fine, sit up. Did you get kidney problems, rash or trauma to the toe?
+[SEG0016] person_1 (PATIENT): Right, I haven't had kidney problems, rash or trauma to the toe, no.
+[SEG0017] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0018] person_1 (PATIENT): Uh, my heart's been fine, as far as I know.
+[SEG0019] person_2 (DOCTOR): Does anything run in the family?
+[SEG0020] person_1 (PATIENT): Well, you know, my father had a stroke.
+[SEG0021] person_2 (DOCTOR): Do you have any allergies to medicines, food, anything at all?
+[SEG0022] person_1 (PATIENT): No, nothing I'm aware of.
+[SEG0023] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0024] person_1 (PATIENT): No, you know, I've never had anything serious.
+[SEG0025] person_2 (DOCTOR): Any regular medication?
+[SEG0026] person_1 (PATIENT): So, you know, no, I don't take anything regularly.
+[SEG0027] person_2 (DOCTOR): So, any previous surgeries?
+[SEG0028] person_1 (PATIENT): Oh, no, nothing like that.
+[SEG0029] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0030] person_1 (PATIENT): I stopped smoking about two years back. I run a small shop, so I'm on my feet a lot. It's just me and my wife at home now.
+[SEG0031] person_2 (DOCTOR): Okay, so my impression is this: I think we're dealing with an acute gout flare at this stage. That's my thinking for now, and it may change as we learn more.
+[SEG0032] person_1 (PATIENT): Doctor, is this dangerous?
+[SEG0033] person_2 (DOCTOR): I can't promise yet, but most people with an acute gout flare do well once it's treated properly.
+[SEG0034] person_2 (DOCTOR): Let's book kidney function tests to look into gout. Let's book a uric acid level to look into suspected gout.
+[SEG0035] person_1 (PATIENT): Okay, that's fine.
+[SEG0036] person_2 (DOCTOR): We'll begin with naproxen, 500 milligrams, twice a day after food, for five days. It's for gout flare. Cut right back on red meat, organ meats, beer and sugary drinks, and drink plenty of water. One warning sign to remember: the joint gets hotter or you develop a fever. In that case don't wait. See me again in two weeks. Call the clinic if you need us.
+[SEG0037] person_1 (PATIENT): Thanks, you know, that was helpful.
+[SEG0038] person_2 (DOCTOR): Safe journey home.
+
+JSON:

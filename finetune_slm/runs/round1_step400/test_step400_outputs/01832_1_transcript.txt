@@ -1,0 +1,69 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01832)
+[SEG0001] person_1 (PATIENT): Hello? Doctor? I was told to come in.
+[SEG0002] person_2 (DOCTOR): yes, have a seat tell me what's going on
+[SEG0003] person_1 (PATIENT): Honestly, it's the worst headache of my life, and my family pushed me to come. I kept putting it off, which I know isn't sensible.
+[SEG0004] person_2 (DOCTOR): When did this begin?
+[SEG0005] person_1 (PATIENT): About... well, five days.
+[SEG0006] person_2 (DOCTOR): is it a lot or only a little?
+[SEG0007] person_1 (PATIENT): Ah, it feels severe to me.
+[SEG0008] person_2 (DOCTOR): How frequently does it come?
+[SEG0009] person_1 (PATIENT): it happens every other day
+[SEG0010] person_2 (DOCTOR): Has there been coming on in seconds too?
+[SEG0011] person_1 (PATIENT): Yes, for six months.
+[SEG0012] person_2 (DOCTOR): Have you had a stiff neck?
+[SEG0013] person_1 (PATIENT): yes, about the same, about three months with stiff neck, mild, really oh, and vomiting
+[SEG0014] person_2 (DOCTOR): And what about weakness or head injury?
+[SEG0015] person_1 (PATIENT): no, not a single one
+[SEG0016] person_2 (DOCTOR): any fever?
+[SEG0017] person_1 (PATIENT): nope, uh, no fever
+[SEG0018] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0019] person_1 (PATIENT): my heart's been fine, as far as I know
+[SEG0020] person_2 (DOCTOR): Has your skin been okay?
+[SEG0021] person_1 (PATIENT): sorry, what was I saying, nothing on the skin, no
+[SEG0022] person_2 (DOCTOR): are you taking anything regularly, including from the pharmacy?
+[SEG0023] person_1 (PATIENT): Okay, so I take hydrocortisone cream, when needed. I'm supposed to take it regularly, um, but I don't always manage. I mean, before this I was on febuxostat; that's been stopped.
+[SEG0024] person_2 (DOCTOR): What about your parents, brothers or sisters, any conditions?
+[SEG0025] person_1 (PATIENT): Right, my grandfather had a stroke. My daughter has type 1 diabetes.
+[SEG0026] person_2 (DOCTOR): What does a normal day of food look like?
+[SEG0027] person_1 (PATIENT): Lots of rice, lentils and some fruit
+[SEG0028] person_2 (DOCTOR): What line of work are you in?
+[SEG0029] person_1 (PATIENT): I'm a bus driver, so I sit for long hours.
+[SEG0030] person_2 (DOCTOR): Are you allergic to anything? Any allergies to to medicines or foods?
+[SEG0031] person_1 (PATIENT): yes, nickel i get a rash on my skin. Amoxicillin i come out in... well, a rash all over
+[SEG0032] person_2 (DOCTOR): so, tell me about any past illnesses or ongoing conditions
+[SEG0033] person_1 (PATIENT): I have eczema. I took the morning off to come in today. My neighbour said I should get it looked at.
+[SEG0034] person_2 (DOCTOR): Ah.
+[SEG0035] person_1 (PATIENT): I've had gout for about ten years now
+[SEG0036] person_2 (DOCTOR): Yes, eczema and gout are known to us, good to have that clear.
+[SEG0037] person_2 (DOCTOR): let me quickly check your readings
+[SEG0038] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0039] person_2 (DOCTOR): okay: temperature 36.8, saturation 96 percent. And pulse is 75 beats a minute, BP is 153 over 96.
+[SEG0040] person_2 (DOCTOR): Right, shall I start the examination?
+[SEG0041] person_2 (DOCTOR): I'll listen to your chest now.
+[SEG0042] person_2 (DOCTOR): Your neck is stiff and you are very sensitive to light.
+[SEG0043] person_2 (DOCTOR): All finished, thank you. Putting it all together, I'd lean towards a possible bleed around the brain. I want to be honest that this is an impression, not a final answer. A migraine is still possible.
+[SEG0044] person_1 (PATIENT): Is this serious, you know, doctor?
+[SEG0045] person_2 (DOCTOR): nothing I've seen today points to an emergency it looks like a possible bleed around the brain, but I'd like to confirm let's get a lumbar puncture, for thunderclap headache
+[SEG0046] person_3 (CLINICAL_STAFF): The earliest is Tuesday, 2 pm.
+[SEG0047] person_1 (PATIENT): Let me think, uh, okay, I'll be there.
+[SEG0048] person_2 (DOCTOR): Let's get an urgent CT scan of the head, for thunderclap headache. It's a routine test and it'll give us a much clearer picture. This needs an emergency scan, an ambulance is on its way. I'll also refer you to the emergency team. I'll want another look straight away.
+[SEG0049] person_1 (PATIENT): Yes, um, that's manageable.
+[SEG0050] person_2 (DOCTOR): tell me what you've taken from all that, so I can fill in any gaps
+[SEG0051] person_1 (PATIENT): So, uh, I come back straight away. Is that right?
+[SEG0052] person_2 (DOCTOR): Yes, exactly right. Is there anything you'd like me to go over again?
+[SEG0053] person_1 (PATIENT): I think I understand everything. Thanks.
+[SEG0054] person_2 (DOCTOR): all the best
+
+JSON:

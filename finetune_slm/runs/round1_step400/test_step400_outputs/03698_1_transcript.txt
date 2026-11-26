@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03698)
+[SEG0001] person_1 (PATIENT): Let me think, sorry I'm a little late, doctor.
+[SEG0002] person_2 (DOCTOR): So, no problem at all, come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): Let me think, mainly tingling in my feet. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): What's the timeline, when did it begin?
+[SEG0005] person_1 (PATIENT): It's been going on for six months.
+[SEG0006] person_2 (DOCTOR): Okay, go on. Okay, how strong would you say it is?
+[SEG0007] person_1 (PATIENT): Pretty moderate, if I'm being honest.
+[SEG0008] person_2 (DOCTOR): Yes. Does anything else come with it?
+[SEG0009] person_1 (PATIENT): Mild bloating goes along with it, most of the time. Right, the mild bloating? That's been for about three months. Um, um, I've had being unsteady too, for about four days.
+[SEG0010] person_2 (DOCTOR): Have you had tingling in your feet before, or is this the first time?
+[SEG0011] person_1 (PATIENT): A bit, last winter. It settled by itself back then.
+[SEG0012] person_2 (DOCTOR): What operations have you had, if any?
+[SEG0013] person_1 (PATIENT): I had my appendix taken out when I was in my twenties.
+[SEG0014] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0015] person_1 (PATIENT): Erm, not to my knowledge, no.
+[SEG0016] person_2 (DOCTOR): Do you have any chronic illnesses?
+[SEG0017] person_1 (PATIENT): Yeah, I've had high cholesterol for about ten years now.
+[SEG0018] person_2 (DOCTOR): Yes.
+[SEG0019] person_1 (PATIENT): I have an irregular heartbeat, for two years.
+[SEG0020] person_2 (DOCTOR): Alright, an irregular heartbeat, that matches what I have here.
+[SEG0021] person_2 (DOCTOR): Is there someone at home?
+[SEG0022] person_1 (PATIENT): My husband and I live above the shop.
+[SEG0023] person_2 (DOCTOR): What line of work are you in?
+[SEG0024] person_1 (PATIENT): I'm a bus driver, so I sit for long hours.
+[SEG0025] person_2 (DOCTOR): Right, what do you take on a normal day?
+[SEG0026] person_1 (PATIENT): Mm, I take rosuvastatin, 10 milligrams, at night. Right, uh, it's warfarin, 3 milligrams, maybe, in the evening.
+[SEG0027] person_2 (DOCTOR): Is the packet here, or the prescription?
+[SEG0028] person_1 (PATIENT): Sorry, what was I saying, no, it's at home. So, you know, I had atorvastatin at one point, but I'm off it now.
+[SEG0029] person_2 (DOCTOR): Did you get back pain, bladder problems, diarrhoea or weight loss?
+[SEG0030] person_1 (PATIENT): Right, um, no, I haven't had any of them.
+[SEG0031] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0032] person_1 (PATIENT): Nothing else aches.
+[SEG0033] person_2 (DOCTOR): Is your urine normal, no changes?
+[SEG0034] person_1 (PATIENT): No changes there.
+[SEG0035] person_2 (DOCTOR): Let's start with the basic checks.
+[SEG0036] person_2 (DOCTOR): That's it, just a little longer...
+[SEG0037] person_2 (DOCTOR): Okay: saturation 97 percent, heart rate 76, blood pressure 110 over 68, weight 70 kilos, height 165 centimetres, BMI works out to 25.7, respiratory rate 17.
+[SEG0038] person_1 (PATIENT): Is that alright, doctor?
+[SEG0039] person_2 (DOCTOR): They help me see the whole picture, more shortly.
+[SEG0040] person_2 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0041] person_1 (PATIENT): Right.
+[SEG0042] person_2 (DOCTOR): Take a deep breath for me.
+[SEG0043] person_2 (DOCTOR): The feeling in your feet is reduced and your balance with the eyes closed is poor.
+[SEG0044] person_2 (DOCTOR): Alright, that's the examination finished. I think an HbA1c makes sense here, for neuropathy. Please keep eating gluten normally until the coeliac test is done. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. A B12 level is something we might do if this doesn't improve in two weeks. Does all of that make sense?
+[SEG0045] person_1 (PATIENT): That's clear, thanks.
+[SEG0046] person_2 (DOCTOR): Look after yourself.
+
+JSON:

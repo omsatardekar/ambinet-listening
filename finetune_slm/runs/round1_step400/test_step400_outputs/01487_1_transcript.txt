@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01487)
+[SEG0001] person_1 (PATIENT): sorry, doctor, shall I sit here?
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): I'm here cos of a red warm patch on my shin.
+[SEG0004] person_2 (DOCTOR): What's the timeline, when did it begin?
+[SEG0005] person_1 (PATIENT): Probably four weeks. Yeah.
+[SEG0006] person_2 (DOCTOR): what eases it, if anything?
+[SEG0007] person_1 (PATIENT): Elevation helps a bit
+[SEG0008] person_2 (DOCTOR): any other symptoms with it?
+[SEG0009] person_1 (PATIENT): A sore leg goes along with it, most of the time.
+[SEG0010] person_2 (DOCTOR): And And shortness of breath, any of that?
+[SEG0011] person_1 (PATIENT): Nope, no shortness of breath.
+[SEG0012] person_2 (DOCTOR): A few quick ones: cut or rash elsewhere?
+[SEG0013] person_1 (PATIENT): I haven't had cut or rash elsewhere, no.
+[SEG0014] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0015] person_1 (PATIENT): No, that's been fine.
+[SEG0016] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0017] person_1 (PATIENT): No, I've always been fairly healthy.
+[SEG0018] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0019] person_1 (PATIENT): Nothing, I haven't had any operations.
+[SEG0020] person_2 (DOCTOR): Do you take any regular medication?
+[SEG0021] person_1 (PATIENT): no, nothing at the moment
+[SEG0022] person_2 (DOCTOR): Alright, do you do any exercise?
+[SEG0023] person_1 (PATIENT): I swim twice a week.
+[SEG0024] person_2 (DOCTOR): Is there someone at home?
+[SEG0025] person_1 (PATIENT): My husband and I live above the shop
+[SEG0026] person_2 (DOCTOR): What line of work are you in?
+[SEG0027] person_1 (PATIENT): I'm a bus driver, so I sit for long hours.
+[SEG0028] person_2 (DOCTOR): Let me get the readings out of the way.
+[SEG0029] person_2 (DOCTOR): Sit still for a moment...
+[SEG0030] person_2 (DOCTOR): Okay: pulse is 92 beats a minute, temp 39.0 degrees, blood pressure 123 over 77, saturation 97 percent.
+[SEG0031] person_1 (PATIENT): Is that okay?
+[SEG0032] person_2 (DOCTOR): don't worry, we'll discuss it in a second
+[SEG0033] person_2 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0034] person_2 (DOCTOR): I'm just checking this side.
+[SEG0035] person_2 (DOCTOR): The shin is red, warm and tender with a clear edge, and I've marked it with a pen.
+[SEG0036] person_1 (PATIENT): That's alright.
+[SEG0037] person_2 (DOCTOR): thank you, you can get dressed okay, so my impression is this: This looks most like cellulitis of the leg
+[SEG0038] person_1 (PATIENT): Will it clear up?
+[SEG0039] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like cellulitis of the leg, but I'd like to confirm. I want blood tests done, that's for cellulitis. What I'm giving you is flucloxacillin, 500 milligrams, four times a day, seven days. You take it by mouth. That's for cellulitis. Keep the leg raised and come back if the redness goes past the pen line.
+[SEG0040] person_2 (DOCTOR): If the symptoms get worse, or you feel really unwell, please come to the emergency department. Let's review you in two days.
+[SEG0041] person_1 (PATIENT): Yes, that's manageable.
+[SEG0042] person_2 (DOCTOR): That's all from me. Any questions?
+[SEG0043] person_1 (PATIENT): erm, good, thanks, I'll see you then
+[SEG0044] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00461)
+[SEG0001] person_1 (PATIENT): Hi there, is it alright if I come in now?
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): I mean, I've been dealing with a routine check-up. Oh, and a few skipped meals.
+[SEG0004] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0005] person_2 (DOCTOR): Just relax your arm...
+[SEG0006] person_2 (DOCTOR): Okay: pulse is 70 beats a minute, blood pressure 123 over 81, height 153 centimetres, saturation 97 percent, temperature 36.5, weight 68 kilos.
+[SEG0007] person_2 (DOCTOR): Right, let me check a few things physically.
+[SEG0008] person_1 (PATIENT): Sure.
+[SEG0009] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0010] person_2 (DOCTOR): Your tummy is soft with no tenderness.
+[SEG0011] person_2 (DOCTOR): Let me press here.
+[SEG0012] person_2 (DOCTOR): Heart and lung sounds are normal.
+[SEG0013] person_1 (PATIENT): Mm, okay.
+[SEG0014] person_2 (DOCTOR): Okay, you can sit up.
+[SEG0015] person_2 (DOCTOR): Have you had any shortness of breath, persistent cough or chest pain?
+[SEG0016] person_1 (PATIENT): No. None of those.
+[SEG0017] person_2 (DOCTOR): How are your bowels, any trouble?
+[SEG0018] person_1 (PATIENT): Nothing unusual, no.
+[SEG0019] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0020] person_1 (PATIENT): Oh, my father had a heart attack.
+[SEG0021] person_2 (DOCTOR): Is anyone at home with you?
+[SEG0022] person_1 (PATIENT): I share a flat with two friends.
+[SEG0023] person_2 (DOCTOR): Do you have a job?
+[SEG0024] person_1 (PATIENT): I'm a self-employed electrician.
+[SEG0025] person_2 (DOCTOR): Okay, any medical conditions, anything you've been treated for? It helps to be thorough at this stage.
+[SEG0026] person_1 (PATIENT): No, I've never had anything serious.
+[SEG0027] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0028] person_1 (PATIENT): No, you know, never had any surgery.
+[SEG0029] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0030] person_1 (PATIENT): No, none that I know of.
+[SEG0031] person_2 (DOCTOR): Any regular medication?
+[SEG0032] person_1 (PATIENT): No, I don't take anything regularly.
+[SEG0033] person_2 (DOCTOR): Having listened and examined, it's hard to say. Generally well, nothing worrying today is one possibility and a tendency towards high cholesterol another, and I'd rather not commit yet.
+[SEG0034] person_1 (PATIENT): Do you think it's serious?
+[SEG0035] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like generally well, nothing worrying today, but I'd like to confirm. Let's get an HbA1c, for health screening. I'd rather check than guess, and this is the quickest way to know more. Keep up regular exercise, around a hundred and fifty minutes a week, and go easy on processed food. I'd like to see you again in a year.
+[SEG0036] person_1 (PATIENT): Okay, I'll book that.
+[SEG0037] person_2 (DOCTOR): Right, that's all. Go gently.
+[SEG0038] person_1 (PATIENT): No, you've explained it well. Thanks.
+
+JSON:

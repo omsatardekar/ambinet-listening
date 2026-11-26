@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00497)
+[SEG0001] person_1 (PATIENT): Hi doctor, sorry, the lift was out and I had to take the stairs.
+[SEG0002] person_2 (DOCTOR): That's alright, take a seat. Tell me why you've come.
+[SEG0003] person_1 (PATIENT): It's trouble sleeping. I thought I'd wait, but it hasn't gone.
+[SEG0004] person_2 (DOCTOR): How long are we talking about?
+[SEG0005] person_1 (PATIENT): It's been going on for about three months.
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): only a warm bath, and it's not much. Moderate, really. Well, as for feeling irritable, I honestly can't say when that began. It It might have been last month or the month before
+[SEG0008] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0009] person_2 (DOCTOR): just relax your arm..
+[SEG0010] person_2 (DOCTOR): Okay: blood pressure 127 over 78, pulse 84, SpO2 97 percent on room air. And what about night sweats or restless legs?
+[SEG0011] person_1 (PATIENT): Nothing like that, no.
+[SEG0012] person_2 (DOCTOR): Right, and what about snoring, low mood or heavy caffeine?
+[SEG0013] person_1 (PATIENT): um, nothing like that, no
+[SEG0014] person_2 (DOCTOR): And then?
+[SEG0015] person_2 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0016] person_1 (PATIENT): Nothing unusual, no.
+[SEG0017] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0018] person_1 (PATIENT): No, skin's been fine.
+[SEG0019] person_2 (DOCTOR): So, have you had any previous surgeries?
+[SEG0020] person_1 (PATIENT): No operations, no.
+[SEG0021] person_2 (DOCTOR): what's your current medication list?
+[SEG0022] person_1 (PATIENT): Losartan, 50 milligrams, once a day for my blood pressure.
+[SEG0023] person_2 (DOCTOR): Since when have you been taking it?
+[SEG0024] person_1 (PATIENT): About three months now.
+[SEG0025] person_2 (DOCTOR): And then?
+[SEG0026] person_1 (PATIENT): I'm on melatonin, 3 milligrams, at night. I used to take telmisartan, but I stopped it it
+[SEG0027] person_2 (DOCTOR): Do you have any known allergies at all?
+[SEG0028] person_1 (PATIENT): Yes, eggs, it gives me stomach cramps.
+[SEG0029] person_2 (DOCTOR): anything special about your diet?
+[SEG0030] person_1 (PATIENT): I try to avoid too much sugar.
+[SEG0031] person_2 (DOCTOR): Any sport or activity?
+[SEG0032] person_1 (PATIENT): I play badminton on Sundays
+[SEG0033] person_2 (DOCTOR): are you still working?
+[SEG0034] person_1 (PATIENT): I'm retired now, I was a clerk for years.
+[SEG0035] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0036] person_1 (PATIENT): High blood pressure, for about a year. I looked a few things up online, and that probably didn't help.
+[SEG0037] person_2 (DOCTOR): So, based on your history, it points towards insomnia, probably stress-related. I'd also keep sleep apnoea in mind.
+[SEG0038] person_2 (DOCTOR): Let's get a sleep study, for insomnia. Same wake-up time every day, no screens in the hour before bed, and no coffee after lunch. If the symptoms get worse, or you feel really unwell, please come to the emergency department.
+[SEG0039] person_1 (PATIENT): Okay, fair enough.
+[SEG0040] person_2 (DOCTOR): I'd like you back in four weeks that's it on my side anything unclear?
+[SEG0041] person_1 (PATIENT): Thank you for your time.
+[SEG0042] person_2 (DOCTOR): bye for now
+
+JSON:

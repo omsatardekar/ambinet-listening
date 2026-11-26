@@ -1,0 +1,50 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00643)
+[SEG0001] person_1 (PATIENT): Right, I'm here for the hand. They said to come back, but I've got to be somewhere by two, so can we crack on?
+[SEG0002] person_2 (DOCTOR): We'll be as quick as safely possible. Remind me what happened, I've only got the triage note. ~
+[SEG0003] person_1 (PATIENT): Chopping onions. The knife slipped, cut across the palm, on the left. It bled like mad. I had it glued and strapped up yesterday at the walk-in.
+[SEG0004] person_2 (DOCTOR): Okay. Did anything else happen, did you feel your fingers go numb?
+[SEG0005] person_1 (PATIENT): No. No numbness, fingers all move.
+[SEG0006] person_2 (DOCTOR): And has it been oozing at all, or leaking through the dressing?
+[SEG0007] person_1 (PATIENT): No. Dry as a bone.
+[SEG0008] person_2 (DOCTOR): Have you had any fever, or felt feverish?
+[SEG0009] person_1 (PATIENT): No. Not at all.
+[SEG0010] person_3 (CLINICAL_STAFF): I've got the dressing trolley, doctor, shall I take the old one off? ~
+[SEG0011] person_2 (DOCTOR): Please, Kerry. Mr Barlow, this will be easier if we take the dressing off together, if that's all right. ~
+[SEG0012] person_1 (PATIENT): Go on. Quickly. ~
+[SEG0013] person_3 (CLINICAL_STAFF): Sorry, that'll sting a little.
+[SEG0014] person_2 (DOCTOR): Thanks. That's looking tidy. The edges are together, there's no redness around it and no pus.
+[SEG0015] person_1 (PATIENT): So it's healing? ~
+[SEG0016] person_2 (DOCTOR): It's healing well. While we're here, I'll update your record. Are you allergic to anything? Any allergies?
+[SEG0017] person_1 (PATIENT): None.
+[SEG0018] person_2 (DOCTOR): What medicines are you taking, if any?
+[SEG0019] person_1 (PATIENT): Just ibuprofen, 400 mg, when it throbs. Not often.
+[SEG0020] person_2 (DOCTOR): Good. And your health background?
+[SEG0021] person_1 (PATIENT): Type 2 diabetes, high blood pressure, and asthma, though I haven't needed the inhaler in years.
+[SEG0022] person_3 (CLINICAL_STAFF): Do you want the glue left on, doctor? ~
+[SEG0023] person_2 (DOCTOR): Yes, it'll come off by itself in a week or so. Kerry, use a clean dry dressing over the top. ~
+[SEG0024] person_3 (CLINICAL_STAFF): Of course. ~
+[SEG0025] person_2 (DOCTOR): Mr Barlow, any operations on this hand before?
+[SEG0026] person_1 (PATIENT): Carpal tunnel on that wrist, in 2020. This scar here.
+[SEG0027] person_2 (DOCTOR): I see it. Thank you. It's good that the glued wound is clean. With diabetes I want to be extra careful, so keep it dry for the next five days.
+[SEG0028] person_1 (PATIENT): Can I wash up? ~
+[SEG0029] person_2 (DOCTOR): Wear a rubber glove over a dry dressing, or let someone else do it. ~
+[SEG0030] person_3 (CLINICAL_STAFF): I'll give you spare dressings to take with you. ~
+[SEG0031] person_1 (PATIENT): Thanks. ~
+[SEG0032] person_3 (CLINICAL_STAFF): Change it every day, and keep it clean.
+[SEG0033] person_2 (DOCTOR): And if it gets red, swollen, starts to ooze, or you get a temperature, come straight back or go to the urgent care centre.
+[SEG0034] person_1 (PATIENT): Right. Will do. Can I go now? ~
+[SEG0035] person_2 (DOCTOR): You can. Mind that hand. ~
+
+JSON:

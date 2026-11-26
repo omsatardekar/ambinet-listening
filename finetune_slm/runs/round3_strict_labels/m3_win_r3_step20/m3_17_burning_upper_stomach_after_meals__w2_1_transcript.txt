@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_17_burning_upper_stomach_after_meals)
+[SEG0001] person_3 (NURSE): Eighty-nine and a half kilos. I'll put that in. Now, if you sit and put your arm on the table. Cuff on, don't talk.
+[SEG0002] person_3 (NURSE): One forty-two over eighty-eight, and the pulse is seventy-eight.
+[SEG0003] person_1 (DOCTOR): That's slightly up but it's after a morning's sitting. Fine. Let's feel your tummy. Lie back on the couch. Tell me when it hurts. Here?
+[SEG0004] person_2 (PATIENT): No.
+[SEG0005] person_1 (DOCTOR): Here, just below the breastbone?
+[SEG0006] person_2 (PATIENT): Ah. Yeah. That's the burn.
+[SEG0007] person_1 (DOCTOR): Tender in the upper middle of the tummy. Soft. No lump, nothing else tender. Liver and spleen not enlarged. Okay, you can sit up.
+[SEG0008] person_2 (PATIENT): What is it?
+[SEG0009] person_1 (DOCTOR): I don't want to jump to a label, Terence. What you've told me fits a few things that cause burning after meals, and I'd rather test than guess. The simplest thing is a breath test for a stomach bug that causes ulcers. It's common, easy to treat. Did they test you for it when you had the ulcer?
+[SEG0010] person_2 (PATIENT): I don't remember. It was a long time ago.
+[SEG0011] person_1 (DOCTOR): Then I'd like to do it now. You blow into a bag, after drinking a little drink. But you mustn't take any antibiotics or those stomach-acid tablets for two weeks before, so we'll need to plan that.
+[SEG0012] person_2 (PATIENT): Okay.
+[SEG0013] person_2 (PATIENT): I'm not on any of those. Only the pink stuff.
+[SEG0014] person_1 (DOCTOR): Then we can do it. Skip the pink stuff on the morning, if you can bear it. And Jan's going to take some blood to check you're not anaemic, and your liver and so on.
+[SEG0015] person_3 (NURSE): Mm.
+[SEG0016] person_3 (NURSE): Can I explain the breath test, Terence, so you know what to expect? I'll give you a small bag and ask you to blow into it, then you drink a little glass of something that tastes a bit chalky. Then you sit for half an hour and don't eat, don't drink, don't smoke, don't even chew gum. Then you blow into a second bag. We compare the two.
+[SEG0017] person_2 (PATIENT): Okay.
+[SEG0018] person_2 (PATIENT): Half an hour with no smoking.
+[SEG0019] person_3 (NURSE): I know. Bring a book. Or sit by the window and think about how well you're doing.
+[SEG0020] person_2 (PATIENT): And that tells you if I've got the bug.
+[SEG0021] person_3 (NURSE): Um, it tells us if the bug is there. It's very accurate. We'll ring you, or the doctor will, once the lab has looked.
+[SEG0022] person_2 (PATIENT): Right.
+[SEG0023] person_4 (CLINICAL_STAFF): Hello, Terence, I'm Jan. Pop your sleeve up for me. This is a little scratch, and a short squeeze. Look away if you don't like needles.
+[SEG0024] person_2 (PATIENT): I'm not a fan.
+[SEG0025] person_4 (CLINICAL_STAFF): Done. You won't even see a bruise. Bend your arm up and press on that.
+[SEG0026] person_2 (PATIENT): Doc, the pink stuff. Is it doing me harm, if I'm having a bottle every few days?
+[SEG0027] person_1 (DOCTOR): In the short term, no, it's reasonably safe. But if you need a bottle every few days for six months, then it's covering something up, and that's the thing we want to sort out. It's a signal, not a solution.
+[SEG0028] person_2 (PATIENT): Mm.
+[SEG0029] person_2 (PATIENT): My wife says it's stress.
+[SEG0030] person_1 (DOCTOR): She might be right about part of it. Stress doesn't create acid out of nowhere, but it changes how sensitive you are to it, and how well you sleep. Plenty of people with a stressful job and bad hours get exactly this.
+[SEG0031] person_2 (PATIENT): She'll be pleased you said that.
+[SEG0032] person_1 (DOCTOR): Tell her I said she should get a medal.
+[SEG0033] person_1 (DOCTOR): And I'd like you to change a few things. Smaller meals, and don't eat in the two or three hours before you lie down. Raise the head of your bed with a couple of bricks under the legs, or a wedge. Cut down on the spicy food, and the fatty stuff, and if you can, the cigarettes, because smoking worsens it. And the alcohol.
+[SEG0034] person_2 (PATIENT): I'm on nights, doc. Dinner's at two in the morning.
+[SEG0035] person_1 (DOCTOR): Then your breakfast is at two in the morning and your last meal is before you leave home, so it's three hours before you try to sleep. Whatever your clock, count it from bed.
+[SEG0036] person_2 (PATIENT): Right.
+[SEG0037] person_2 (PATIENT): That makes sense, I suppose.
+[SEG0038] person_1 (DOCTOR): If it doesn't settle in a few weeks, or if you start vomiting, or you lose weight, or you see black stools, you come back sharpish and we'll arrange a camera test, looking down the throat into the stomach.
+[SEG0039] person_2 (PATIENT): A camera down my throat.
+[SEG0040] person_1 (DOCTOR): Sedated, if you like. Nothing to worry about, but best done if it persists.
+[SEG0041] person_2 (PATIENT): I'll try the bricks first.
+[SEG0042] person_1 (DOCTOR): Bricks first. I'm serious about the smoking.
+[SEG0043] person_2 (PATIENT): I know you are.
+[SEG0044] person_3 (NURSE): Terence, before you go, I'll give you a leaflet about reflux, the food and the bed raising and what to avoid. And I'll book the breath test for a morning when you're not just off a shift, so you're not falling asleep over the bag.
+[SEG0045] person_2 (PATIENT): That's thoughtful. Mornings are the worst, I've just finished and I'm dead on my feet.
+[SEG0046] person_3 (NURSE): Then how about the afternoon, before you go in?
+[SEG0047] person_2 (PATIENT): Four o'clock. I'd be up by then.
+[SEG0048] person_3 (NURSE): Four it is.
+[SEG0049] person_1 (DOCTOR): And one last thing, Terence, tell your wife it was my idea to put the bricks under the bed, not yours, so she can't say you made it up.
+[SEG0050] person_2 (PATIENT): Okay.
+[SEG0051] person_2 (PATIENT): She'll want to see it in writing.
+[SEG0052] person_1 (DOCTOR): I'll put it on the leaflet.

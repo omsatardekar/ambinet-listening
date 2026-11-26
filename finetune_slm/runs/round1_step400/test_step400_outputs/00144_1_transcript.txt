@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00144)
+[SEG0001] person_1 (PATIENT): So, hello, doctor. It's my turn, I think.
+[SEG0002] person_2 (DOCTOR): that's alright, take a seat tell me why you've come
+[SEG0003] person_1 (PATIENT): so, I've been feeling cold all the time, doctor
+[SEG0004] person_2 (DOCTOR): so, is this recent, or has it been a while?
+[SEG0005] person_1 (PATIENT): About... well, nearly five years.
+[SEG0006] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0007] person_1 (PATIENT): Constipation goes along with it, um, most of the time
+[SEG0008] person_2 (DOCTOR): Has there been dry skin too?
+[SEG0009] person_1 (PATIENT): Yeah, that too. With dry skin, moisturiser helps a bit.
+[SEG0010] person_2 (DOCTOR): what medicines are you taking at the moment?
+[SEG0011] person_1 (PATIENT): It's iron tablets, once a day for my blood count.
+[SEG0012] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0013] person_1 (PATIENT): I've got low haemoglobin.
+[SEG0014] person_2 (DOCTOR): Okay, I can see low haemoglobin in your file as well.
+[SEG0015] person_2 (DOCTOR): tell me about your routine, work, habits, that sort of thing
+[SEG0016] person_1 (PATIENT): I play badminton on Sundays. I skip breakfast most days. I run a small shop, so I'm on my feet a lot.
+[SEG0017] person_2 (DOCTOR): any operations in the past?
+[SEG0018] person_1 (PATIENT): Well, yes, I had a a lump removed from my back, years ago.
+[SEG0019] person_2 (DOCTOR): Have you had any low mood or hair loss?
+[SEG0020] person_1 (PATIENT): no low mood or hair loss, none of it
+[SEG0021] person_2 (DOCTOR): Have you had any heavy periods or swelling in the neck?
+[SEG0022] person_1 (PATIENT): None, as far as I know.
+[SEG0023] person_2 (DOCTOR): on the cardiac side, anything I should know?
+[SEG0024] person_1 (PATIENT): no, um, nothing with my heart
+[SEG0025] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0026] person_1 (PATIENT): No changes there.
+[SEG0027] person_2 (DOCTOR): Let's do your observations.
+[SEG0028] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0029] person_2 (DOCTOR): Okay: pressure 124 over 82, temperature 36.4, SpO2 97 percent on room air, respiratory rate 14, pulse is 83 beats a minute.
+[SEG0030] person_1 (PATIENT): Is that alright, doctor?
+[SEG0031] person_2 (DOCTOR): I'll explain what that means shortly.
+[SEG0032] person_2 (DOCTOR): if you're comfortable, I'll examine you now
+[SEG0033] person_1 (PATIENT): no problem
+[SEG0034] person_2 (DOCTOR): Take your time, no rush.
+[SEG0035] person_2 (DOCTOR): reflexes are a bit slow to relax
+[SEG0036] person_2 (DOCTOR): right, you can sit back down so, based on the history and the examination, it fits best with an underactive thyroid
+[SEG0037] person_1 (PATIENT): Hmm, is this gonna go away?
+[SEG0038] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's an underactive thyroid, and we'll know more once the a thyroid test is back. a thyroid test is what I'd like next, for hypothyroid symptoms. We should do blood tests for fatigue. It's a routine test and it'll give us a much clearer picture.
+[SEG0039] person_2 (DOCTOR): We'll begin with levothyroxine, 50 micrograms, every morning on an empty stomach, until we review. You take it by mouth. That should help with hypothyroidism. It's a commonly used medicine and most people tolerate it well. Take the thyroid tablet on an empty stomach, half an hour before breakfast, and not with calcium or iron. Try to get to bed and wake up at the same time each day, and keep your phone away from the bed.
+[SEG0040] person_2 (DOCTOR): come back or go to emergency straight away if the symptoms get worse okay, call the clinic if you need us
+[SEG0041] person_1 (PATIENT): Thanks, that was helpful.
+
+JSON:

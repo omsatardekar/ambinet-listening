@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00107)
+[SEG0001] person_1 (NURSE): ready for you, doctor i'll stay in case you need anything
+[SEG0002] person_2 (DOCTOR): thank you right, hello, what's the problem?
+[SEG0003] person_3 (FAMILY_MEMBER): Hello, doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_4 (PATIENT): Well, I've been having trouble concentrating.
+[SEG0005] person_2 (DOCTOR): When did it begin? It helps to be thorough at this stage.
+[SEG0006] person_4 (PATIENT): I've had it since last weekend
+[SEG0007] person_2 (DOCTOR): Is it mild, moderate or severe?
+[SEG0008] person_4 (PATIENT): it feels severe to me. I've also been feeling cold, for about two weeks. Oh, and hair falling out. And constant tiredness, too. As for constant tiredness, a good night's sleep helps a bit
+[SEG0009] person_2 (DOCTOR): are you on any tablets or medication?
+[SEG0010] person_4 (PATIENT): Glycomet, 500 milligrams, twice a day
+[SEG0011] person_3 (FAMILY_MEMBER): She is supposed to take it twice a day, but I can't say she always does.
+[SEG0012] person_4 (PATIENT): Spironolactone. I take it 25 milligrams, maybe, once a day.
+[SEG0013] person_2 (DOCTOR): Do you have the packet or the prescription with you?
+[SEG0014] person_4 (PATIENT): Not with me. I'll bring it it next time.
+[SEG0015] person_2 (DOCTOR): any previous surgeries?
+[SEG0016] person_4 (PATIENT): No operations, no.
+[SEG0017] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0018] person_4 (PATIENT): I have diabetes, for two years. Hmm, I've had heart failure for five years now.
+[SEG0019] person_2 (DOCTOR): right, so heart failure is already on your record we'll keep that in mind today any allergies I should know about?
+[SEG0020] person_4 (PATIENT): Yes, ibuprofen. I get stomach pain.
+[SEG0021] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0022] person_4 (PATIENT): A beer or two most evenings, to be honest. I skip breakfast most days. I go to the gym a couple of times a week.
+[SEG0023] person_2 (DOCTOR): And what about blood in the stool or low mood?
+[SEG0024] person_4 (PATIENT): No, no blood in the stool or low mood.
+[SEG0025] person_2 (DOCTOR): did you notice any fever?
+[SEG0026] person_4 (PATIENT): Nope, no fever.
+[SEG0027] person_3 (FAMILY_MEMBER): Actually, doctor, I did notice fever. She doesn't always say.
+[SEG0028] person_4 (PATIENT): no, I don't think I did. Maybe a little, I'm not sure
+[SEG0029] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. And what about shortness of breath, chest pain or night sweats?
+[SEG0030] person_4 (PATIENT): No, nothing there.
+[SEG0031] person_2 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0032] person_4 (PATIENT): Nothing unusual, no.
+[SEG0033] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0034] person_4 (PATIENT): I move fine otherwise.
+[SEG0035] person_1 (NURSE): Here are the numbers, doctor. Heart rate 77, temperature 36.8, BP is 115 over 80, saturation 99 percent.
+[SEG0036] person_2 (DOCTOR): good, thank you
+[SEG0037] person_2 (DOCTOR): I'll examine you now, bear with me.
+[SEG0038] person_2 (DOCTOR): Alright, almost done with this part.
+[SEG0039] person_2 (DOCTOR): You look a little pale in the eyelids.
+[SEG0040] person_4 (PATIENT): that's fine
+[SEG0041] person_2 (DOCTOR): let me look at this properly
+[SEG0042] person_2 (DOCTOR): your thyroid isn't enlarged, I can't feel any lumps in your neck
+[SEG0043] person_2 (DOCTOR): Okay, you can sit up. Okay, so my impression is this: This looks most like persistent tiredness, possibly from low iron. Vitamin deficiency is still possible. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Today I'm not changing anything. Take care, and call us if anything changes.
+[SEG0044] person_4 (PATIENT): Oh, no questions. Thank you.
+[SEG0045] person_2 (DOCTOR): Bye for now.
+
+JSON:

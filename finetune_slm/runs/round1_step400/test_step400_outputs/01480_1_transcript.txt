@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01480)
+[SEG0001] person_1 (PATIENT): Hello, doctor. May I come in?
+[SEG0002] person_2 (DOCTOR): Yes, have a seat. Tell me what's going on.
+[SEG0003] person_1 (PATIENT): I've been feeling sick, and I wanted to get it checked.
+[SEG0004] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0005] person_1 (PATIENT): I'd say moderate. Honestly, a few times a day.
+[SEG0006] person_2 (DOCTOR): Any tummy pain as well?
+[SEG0007] person_1 (PATIENT): Yeah, uh, that too. About tummy pain, honestly, a few times a day. I've been feeling very low too, for about a month. Ah, about feeling very low, moderate, really.
+[SEG0008] person_2 (DOCTOR): What operations have you had, if any?
+[SEG0009] person_1 (PATIENT): Yes, I had my tonsils removed, as a teenager.
+[SEG0010] person_2 (DOCTOR): Are you in work at the moment?
+[SEG0011] person_1 (PATIENT): Yes, I work in a bakery, early starts.
+[SEG0012] person_2 (DOCTOR): Is there someone at home?
+[SEG0013] person_1 (PATIENT): My husband and I live above the shop.
+[SEG0014] person_2 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0015] person_1 (PATIENT): Well, uh, my grandfather had a stroke.
+[SEG0016] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0017] person_1 (PATIENT): Depression, for two years.
+[SEG0018] person_2 (DOCTOR): Mm, okay. Okay, I can see depression in your file as well.
+[SEG0019] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0020] person_1 (PATIENT): Yes, walnuts, it gives me hives.
+[SEG0021] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0022] person_1 (PATIENT): It's mirtazapine, 15 milligrams, at night.
+[SEG0023] person_2 (DOCTOR): Did you get chest pain or drowsiness?
+[SEG0024] person_1 (PATIENT): None of those, no.
+[SEG0025] person_2 (DOCTOR): Right, anything different when you pass water?
+[SEG0026] person_1 (PATIENT): That's normal as far as I know.
+[SEG0027] person_2 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0028] person_1 (PATIENT): Nothing else aches.
+[SEG0029] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0030] person_2 (DOCTOR): Sit still for a moment...
+[SEG0031] person_2 (DOCTOR): Okay: respiratory rate 17, saturation 98 percent, heart rate 64, temperature is 36.7 degrees, blood pressure 112 over 76.
+[SEG0032] person_2 (DOCTOR): Let's move on to the examination.
+[SEG0033] person_1 (PATIENT): Right.
+[SEG0034] person_2 (DOCTOR): Breathe out slowly.
+[SEG0035] person_2 (DOCTOR): You are awake and alert, with some tenderness under the right ribs.
+[SEG0036] person_1 (PATIENT): Fine by me.
+[SEG0037] person_2 (DOCTOR): You can relax now. Okay, so my impression is this: The most likely explanation is a significant paracetamol overdose needing urgent treatment. That's my thinking for now, and it may change as we learn more.
+[SEG0038] person_1 (PATIENT): Let me think, is it dangerous, doctor?
+[SEG0039] person_2 (DOCTOR): It's reasonable to be concerned, but right now a significant paracetamol overdose needing urgent treatment is my leading thought, not anything worse. I want liver function tests done, that's for overdose.
+[SEG0040] person_3 (CLINICAL_STAFF): I can book that for Thursday at 10 am.
+[SEG0041] person_2 (DOCTOR): Let's book a paracetamol level to look into overdose. You'll be taking acetylcysteine, per protocol, over 21 hours, per protocol. That should help with paracetamol overdose. You need to stay in hospital for treatment, and someone will speak to you about how you are feeling. Come back or go to emergency straight away if the symptoms get worse.
+[SEG0042] person_1 (PATIENT): Yes, will do.
+[SEG0043] person_2 (DOCTOR): Let's plan a check straight away.
+[SEG0044] person_1 (PATIENT): That's fine with me.
+[SEG0045] person_2 (DOCTOR): Alright, does all of that make sense?
+[SEG0046] person_1 (PATIENT): Okay, so okay, that makes sense. Thanks for explaining.
+
+JSON:

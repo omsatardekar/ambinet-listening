@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01574)
+[SEG0001] person_1 (PATIENT): sorry I'm a little late, um, doctor
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, I've come along cos I know the history, if it helps.
+[SEG0004] person_2 (DOCTOR): Absolutely, come and sit beside them.
+[SEG0005] person_1 (PATIENT): um, I'm here because of a barking cough. I wasn't sure whether to come in at all, to be honest. I've been putting this off for weeks
+[SEG0006] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0007] person_2 (DOCTOR): nearly done with the readings..
+[SEG0008] person_2 (DOCTOR): Okay: pressure 111 over 80, temperature 36.7, pulse 80, oxygen saturation is 98 percent, respiratory rate 14.
+[SEG0009] person_2 (DOCTOR): How long has it been like this?
+[SEG0010] person_1 (PATIENT): Actually, I've had it for ten days. I just want to get back to normal, really.
+[SEG0011] person_2 (DOCTOR): is it constant or in episodes?
+[SEG0012] person_1 (PATIENT): honestly, once or twice a day
+[SEG0013] person_2 (DOCTOR): Has there been a hoarse voice too?
+[SEG0014] person_1 (PATIENT): Yeah, that too.
+[SEG0015] person_2 (DOCTOR): okay, any a runny nose as well?
+[SEG0016] person_1 (PATIENT): Yes, about the same, about two weeks.
+[SEG0017] person_2 (DOCTOR): Any difficulty swallowing, blue lips, noisy breathing when resting or drooling at all?
+[SEG0018] person_1 (PATIENT): No, nothing to report there.
+[SEG0019] person_2 (DOCTOR): How are your bowels, any trouble?
+[SEG0020] person_1 (PATIENT): No, all normal there.
+[SEG0021] person_2 (DOCTOR): Alright, anything in your past medical history I should know?
+[SEG0022] person_1 (PATIENT): Ah, I've had asthma for five years now. My family kept telling me to get it checked.
+[SEG0023] person_2 (DOCTOR): Right, and anything else to add?
+[SEG0024] person_1 (PATIENT): Right, I've had acid reflux for nearly five years now. I'm not great at remembering details, so bear with me.
+[SEG0025] person_2 (DOCTOR): Alright, asthma and acid reflux, that that matches what I have here. Are there any illnesses in your family?
+[SEG0026] person_1 (PATIENT): My sister had breast cancer.
+[SEG0027] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0028] person_1 (PATIENT): I drink a lot of tea and snack through the day. Not much, I mostly stay in these days. I work in accounts at a hospital.
+[SEG0029] person_2 (DOCTOR): Are you allergic to anything? Any allergies to medicines or foods?
+[SEG0030] person_1 (PATIENT): Nickel i come out in... well, a rash on my skin
+[SEG0031] person_2 (DOCTOR): Have you had any surgical procedures?
+[SEG0032] person_1 (PATIENT): Right, I had a meniscus repair on my knee four years ago.
+[SEG0033] person_2 (DOCTOR): Which medicines do you take at the moment?
+[SEG0034] person_3 (FAMILY_MEMBER): He takes Asthalin inhaler, when needed. He takes omeprazole, 20 milligrams, once a day.
+[SEG0035] person_1 (PATIENT): Pantoprazole I don't take anymore
+[SEG0036] person_2 (DOCTOR): Right, here's what I'm thinking. It points towards mild croup.
+[SEG0037] person_2 (DOCTOR): let's use dexamethasone, 0.15 mg per kg, once, single dose. You take it by mouth. That should help with croup
+[SEG0038] person_1 (PATIENT): Alright, I'll pick it up today.
+[SEG0039] person_2 (DOCTOR): Keep him calm, sit him upright, and give fluids. Let's plan a check if no better in two days. That's everything on my side. Anything you're unsure about?
+[SEG0040] person_1 (PATIENT): Good, thanks, I'll see you then.
+[SEG0041] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

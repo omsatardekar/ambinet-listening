@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20355)
+[SEG0001] person_1 (PATIENT): Hi, doctor, I hope I'm not disturbing you.
+[SEG0002] person_2 (DOCTOR): No problem at all, come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): Mainly burning pain in the upper tummy. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): What do you take on a normal day? I'm asking so that we don't miss anything.
+[SEG0005] person_1 (PATIENT): I'm on naproxen, twice a day.
+[SEG0006] person_2 (DOCTOR): do you know the dose?
+[SEG0007] person_1 (PATIENT): It's 250 milligrams. Pantoprazole. I take it it 40 milligrams, before breakfast for my acidity.
+[SEG0008] person_2 (DOCTOR): Did it come on recently?
+[SEG0009] person_1 (PATIENT): I'd say about four days. Actually, no, closer to to two days.
+[SEG0010] person_2 (DOCTOR): alright, tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse these questions might sound routine, but they matter
+[SEG0011] person_1 (PATIENT): yes, spicy food and empty stomach. That makes it worse. I get some relief from milk. And I've been feeling full quickly as well, for two weeks. About feeling full quickly, it's severe, honestly
+[SEG0012] person_2 (DOCTOR): Did you notice any weight loss?
+[SEG0013] person_1 (PATIENT): No weight loss, thankfully.
+[SEG0014] person_2 (DOCTOR): any difficulty swallowing, vomiting blood or jaundice?
+[SEG0015] person_1 (PATIENT): I haven't had difficulty swallowing, vomiting blood or jaundice, no.
+[SEG0016] person_2 (DOCTOR): I follow. Have you noticed any weakness, or anything odd with your balance?
+[SEG0017] person_1 (PATIENT): Nothing odd there.
+[SEG0018] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0019] person_1 (PATIENT): Not much, I mostly stay in these days. I drink a lot of tea and snack through the day. No, I share a house with my brother
+[SEG0020] person_2 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0021] person_1 (PATIENT): I have arthritis in my knees sorry, I know I'm rambling a bit i've got acid reflux
+[SEG0022] person_2 (DOCTOR): right, right. Yes, arthritis in your knees is known to us, good to have that clear
+[SEG0023] person_2 (DOCTOR): Okay, are there any allergies I should be aware of?
+[SEG0024] person_1 (PATIENT): No allergies at all.
+[SEG0025] person_2 (DOCTOR): Okay, has anyone in your family had anything serious?
+[SEG0026] person_1 (PATIENT): My grandfather had a stroke.
+[SEG0027] person_2 (DOCTOR): Have you had any surgical procedures?
+[SEG0028] person_1 (PATIENT): yes, I had a bunion operation, six years ago
+[SEG0029] person_2 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0030] person_2 (DOCTOR): I'll listen to your chest now.
+[SEG0031] person_2 (DOCTOR): Your tummy is soft with some tenderness in the upper middle part.
+[SEG0032] person_2 (DOCTOR): okay, you can sit up now
+[SEG0033] person_2 (DOCTOR): Okay, thinking it through, my working impression is dyspepsia possibly related to anti-inflammatory tablets.
+[SEG0034] person_1 (PATIENT): Will it clear up?
+[SEG0035] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's dyspepsia possibly related to anti-inflammatory tablets, and we'll know more once the a test for the stomach germ is back.
+[SEG0036] person_2 (DOCTOR): let's get a test for the stomach germ, for dyspepsia. Please stop taking the anti-inflammatory tablets for now and use paracetamol for the pain. Let's review you in four weeks. Anything else on your mind before you go?
+[SEG0037] person_1 (PATIENT): Uh, okay, that makes sense. Thanks for explaining.
+
+JSON:

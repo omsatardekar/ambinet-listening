@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01967)
+[SEG0001] person_1 (PATIENT): Hi, doctor, I hope I'm not disturbing you.
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): Um, so... chest pressure. That's why I came.
+[SEG0004] person_2 (DOCTOR): How long has it been like this?
+[SEG0005] person_1 (PATIENT): Probably six months. Yeah. I've been putting this off for weeks. Sorry, I know I'm rambling a bit.
+[SEG0006] person_2 (DOCTOR): Okay, how strong would you say it is?
+[SEG0007] person_1 (PATIENT): I'd say severe. Right, as for sweating, I honestly can't say when that began. It might have been last month or the month before. With sweating, I'd say moderate. I've had a very fast heartbeat too, for about two weeks. Yeah, and I've been feeling faint as well, since last weekend. About feeling faint, about a six out of ten.
+[SEG0008] person_2 (DOCTOR): Have you had chest pressure before, or is this the first time?
+[SEG0009] person_1 (PATIENT): A bit, a couple of years ago. It settled by itself back then.
+[SEG0010] person_2 (DOCTOR): Any cough, fever or leg swelling at all?
+[SEG0011] person_1 (PATIENT): Actually, I haven't had cough, fever or leg swelling, no.
+[SEG0012] person_2 (DOCTOR): I see, go ahead. Okay, is your urine normal, no changes?
+[SEG0013] person_1 (PATIENT): That's normal as far as I know.
+[SEG0014] person_2 (DOCTOR): Do you have any long-term conditions?
+[SEG0015] person_1 (PATIENT): I've got heart disease. Actually, I have migraines, for two years.
+[SEG0016] person_2 (DOCTOR): Any other things?
+[SEG0017] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0018] person_1 (PATIENT): It's aspirin, 75 milligrams, once a day. Sumatriptan, 50 milligrams, when needed. I do miss it now and then, to be fair.
+[SEG0019] person_2 (DOCTOR): What about your parents, brothers or sisters, any conditions?
+[SEG0020] person_1 (PATIENT): Ah, my brother has epilepsy. My daughter has type 1 diabetes.
+[SEG0021] person_2 (DOCTOR): Right, have you had any previous surgeries?
+[SEG0022] person_1 (PATIENT): Nothing, I haven't had any operations.
+[SEG0023] person_2 (DOCTOR): How are your meals?
+[SEG0024] person_1 (PATIENT): I grab fast food at lunch most days.
+[SEG0025] person_2 (DOCTOR): Are you in work at the moment?
+[SEG0026] person_1 (PATIENT): Yes, I work in a bakery, early starts.
+[SEG0027] person_2 (DOCTOR): Right, anything you do to stay fit?
+[SEG0028] person_1 (PATIENT): I do a yoga class on Thursdays.
+[SEG0029] person_2 (DOCTOR): I'll just record a few vital signs.
+[SEG0030] person_2 (DOCTOR): Keep your arm relaxed for me...
+[SEG0031] person_2 (DOCTOR): Okay: weight 92 kilos, BP is 96 over 57, BMI works out to 37.3. And height 157 centimetres, heart rate 110, SpO2 97 percent on room air.
+[SEG0032] person_2 (DOCTOR): Okay, time for me to examine you.
+[SEG0033] person_1 (PATIENT): Yes, that's fine.
+[SEG0034] person_2 (DOCTOR): Look straight ahead.
+[SEG0035] person_2 (DOCTOR): Your pulse is over one hundred and eighty and your blood pressure is low.
+[SEG0036] person_2 (DOCTOR): Good, you can sit up again. So, based on the history and the examination, I think we're dealing with a dangerous fast heart rhythm at this stage. That's my thinking for now, and it may change as we learn more. It could also be supraventricular tachycardia, so we'll keep that open.
+[SEG0037] person_1 (PATIENT): Do you think it's something serious?
+[SEG0038] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a dangerous fast heart rhythm, and we'll know more once the an urgent ECG is back. I want an urgent ECG done, that's for fast heart rhythm. I want blood tests done, that's for arrhythmia. Lie flat, I am calling the emergency team and preparing to shock the heart. I'll also refer you to the emergency team.
+[SEG0039] person_1 (PATIENT): Sure, where do I go?
+[SEG0040] person_2 (DOCTOR): I'd like to see you again straight away. I think we're done unless you have questions.
+[SEG0041] person_1 (PATIENT): I, I think I understand everything. Thanks.
+[SEG0042] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00458)
+[SEG0001] person_1 (PATIENT): Excuse me, doctor, should I sit here?
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): Mainly I've been feeling cold all the time. That's why I came.
+[SEG0004] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0005] person_2 (DOCTOR): One second...
+[SEG0006] person_2 (DOCTOR): Okay: pulse 73, temperature 36.5, pressure 116 over 71, oxygen saturation is 98 percent. How far back does it go?
+[SEG0007] person_1 (PATIENT): Around about a week... no wait, it's more like four weeks. I've also had tiredness.
+[SEG0008] person_2 (DOCTOR): Understood.
+[SEG0009] person_1 (PATIENT): Oh, and dry skin. That's been about the same, four weeks. About dry skin, moisturiser helps a bit. And I've been putting on weight as well, for about a year.
+[SEG0010] person_2 (DOCTOR): Right, did you get heavy periods, low mood, trouble swallowing or swelling in the neck?
+[SEG0011] person_1 (PATIENT): I haven't had heavy periods, low mood, trouble swallowing or swelling in the neck, no.
+[SEG0012] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0013] person_1 (PATIENT): Nothing like that.
+[SEG0014] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0015] person_1 (PATIENT): I mean, I take iron tablets, once a day for my blood count. I'm on omeprazole, 20 milligrams, once a day. Though honestly, some days I forget to take it. Pantoprazole I don't take anymore.
+[SEG0016] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0017] person_1 (PATIENT): I've had low haemoglobin, yes. I've got depression.
+[SEG0018] person_2 (DOCTOR): Understood.
+[SEG0019] person_1 (PATIENT): I, I have acid reflux.
+[SEG0020] person_2 (DOCTOR): Alright, low haemoglobin, that matches what I have here. Now some background about your lifestyle.
+[SEG0021] person_1 (PATIENT): I walk for about half an hour most days. I teach at a primary school. It's just me and my wife at home now.
+[SEG0022] person_2 (DOCTOR): Okay, a quick examination now.
+[SEG0023] person_2 (DOCTOR): Bear with me a second.
+[SEG0024] person_2 (DOCTOR): Reflexes are a bit slow to relax.
+[SEG0025] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0026] person_2 (DOCTOR): Your pulse is slow, about fifty-six, and the thyroid isn't enlarged.
+[SEG0027] person_2 (DOCTOR): Thanks for that.
+[SEG0028] person_2 (DOCTOR): Okay, thinking it through, it points towards an underactive thyroid. Another possibility is anaemia.
+[SEG0029] person_1 (PATIENT): Um, is it something serious, doctor?
+[SEG0030] person_2 (DOCTOR): It's reasonable to be concerned, but right now an underactive thyroid is my leading thought, not anything worse.
+[SEG0031] person_2 (DOCTOR): We should do blood tests for fatigue. Let's get a thyroid test, for hypothyroid symptoms. We'll begin with levothyroxine, 50 micrograms, every morning on an empty stomach, until we review. You take it by mouth. It's for hypothyroidism.
+[SEG0032] person_1 (PATIENT): How long until it works?
+[SEG0033] person_2 (DOCTOR): Take the thyroid tablet on an empty stomach, half an hour before breakfast, and not with calcium or iron. Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency.
+[SEG0034] person_1 (PATIENT): Got it, thank you.
+[SEG0035] person_2 (DOCTOR): Let's plan a check in six weeks.
+[SEG0036] person_1 (PATIENT): Good, I'll come back then.
+[SEG0037] person_2 (DOCTOR): Ask me anything before you go.
+[SEG0038] person_1 (PATIENT): No, I think that's everything. Thank you, doctor.
+[SEG0039] person_2 (DOCTOR): Take care.
+
+JSON:

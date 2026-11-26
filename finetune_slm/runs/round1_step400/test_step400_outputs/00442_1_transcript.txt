@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00442)
+[SEG0001] person_1 (NURSE): Afternoon, doctor. They're in and comfortable, and I have the measurements ready.
+[SEG0002] person_2 (DOCTOR): Great. Hello, come in and sit down. How can I help?
+[SEG0003] person_3 (PATIENT): Mainly I've been feeling a bit dizzy after taking all my tablets. That's why I came.
+[SEG0004] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0005] person_3 (PATIENT): Yeah, um, I take atorvastatin, 20 milligrams, at night. Um, I take diclofenac, 50 milligrams, when needed for the joint pain.
+[SEG0006] person_2 (DOCTOR): Yes?
+[SEG0007] person_3 (PATIENT): Aspirin. I take it 75 milligrams, once a day for my heart.
+[SEG0008] person_2 (DOCTOR): When did you first notice it?
+[SEG0009] person_3 (PATIENT): Probably two days. Yeah.
+[SEG0010] person_2 (DOCTOR): On a normal day, how strong is it?
+[SEG0011] person_3 (PATIENT): Severe, really. There was dry mouth, yes, but that went away.
+[SEG0012] person_2 (DOCTOR): Any chest pain, black stools, fainting or falls?
+[SEG0013] person_3 (PATIENT): So, no, I'd have mentioned it.
+[SEG0014] person_2 (DOCTOR): So, your breathing, any trouble there?
+[SEG0015] person_3 (PATIENT): Breathing's normal.
+[SEG0016] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0017] person_3 (PATIENT): That's normal as far as I know.
+[SEG0018] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0019] person_3 (PATIENT): Right, uh, I'm allergic to aspirin, I get a rash.
+[SEG0020] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0021] person_3 (PATIENT): High cholesterol, for two years. I have arthritis in my knees, for nearly five years. I'm hoping you can tell me something definite. I wasn't sure whether to come in at all, to be honest.
+[SEG0022] person_2 (DOCTOR): Mhm.
+[SEG0023] person_3 (PATIENT): I have diabetes. I've had heart disease, yes.
+[SEG0024] person_2 (DOCTOR): Yes, arthritis in your knees and diabetes are known to us, good to have that clear.
+[SEG0025] person_2 (DOCTOR): Any procedures or operations?
+[SEG0026] person_3 (PATIENT): I had a stent put in my heart two years ago.
+[SEG0027] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0028] person_3 (PATIENT): I work in an office, mostly sitting at a desk. It's just me and my wife at home now. I skip breakfast most days.
+[SEG0029] person_1 (NURSE): Okay, so the vitals from earlier. Blood pressure 112 over 73, pulse 70, temp 36.4 degrees, oxygen saturation is 97 percent.
+[SEG0030] person_2 (DOCTOR): Good, thank you.
+[SEG0031] person_2 (DOCTOR): Can I examine you now?
+[SEG0032] person_3 (PATIENT): Sure.
+[SEG0033] person_2 (DOCTOR): Hold that position for me.
+[SEG0034] person_2 (DOCTOR): Your blood pressure falls a little when you stand.
+[SEG0035] person_2 (DOCTOR): Thanks for that. Having listened and examined, the most likely explanation is possible side effects from too many medicines.
+[SEG0036] person_1 (NURSE): I've already done an ECG, it's ready for you.
+[SEG0037] person_2 (DOCTOR): So, perfect. Bring every box and bottle you have at home to the next visit, even the herbal ones, and we'll sort them together. Is there anything you wanted to ask?
+[SEG0038] person_3 (PATIENT): Hmm, um, no, I think that's everything. Thank you, doctor.
+[SEG0039] person_2 (DOCTOR): Take care.
+
+JSON:

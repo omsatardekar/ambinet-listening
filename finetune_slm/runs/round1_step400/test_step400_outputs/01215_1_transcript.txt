@@ -1,0 +1,85 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01215)
+[SEG0001] person_1 (PATIENT): Hi, doctor, I came as soon as they called me.
+[SEG0002] person_2 (DOCTOR): No problem at all, come in. What's troubling you?
+[SEG0003] person_3 (CAREGIVER): Doctor, thank you for seeing us.
+[SEG0004] person_2 (DOCTOR): That's fine, sit down. We'll go through it together.
+[SEG0005] person_4 (FAMILY_MEMBER): It's, It's a dry cough in the evenings, doctor. He didn't want to come, but I insisted.
+[SEG0006] person_2 (DOCTOR): How many days or weeks has it been?
+[SEG0007] person_1 (PATIENT): Right, um, I'd say three weeks, maybe.
+[SEG0008] person_3 (CAREGIVER): It was closer to a month, doctor.
+[SEG0009] person_2 (DOCTOR): Okay, so roughly three to four weeks. Is that right?
+[SEG0010] person_1 (PATIENT): Yeah, roughly.
+[SEG0011] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0012] person_1 (PATIENT): It settles a little with antihistamine. Mostly moderate.
+[SEG0013] person_2 (DOCTOR): Does anything else come with it?
+[SEG0014] person_1 (PATIENT): When it starts I tend to get itchy eyes as well.
+[SEG0015] person_1 (PATIENT): Sorry, what was I saying, and the other thing I wanted to mention is that I can't really—
+[SEG0016] person_3 (CAREGIVER): Tell the doctor about the other thing, uh, that's what worries me.
+[SEG0017] person_1 (PATIENT): I was getting to that!
+[SEG0018] person_2 (DOCTOR): Is it constant or in episodes?
+[SEG0019] person_1 (PATIENT): I'd say a few times a day.
+[SEG0020] person_2 (DOCTOR): Is it bearing on you a lot?
+[SEG0021] person_1 (PATIENT): Well, it's... hard to say, it's kind of... I don't know—
+[SEG0022] person_2 (DOCTOR): Take your time. Mild, moderate, or severe, if you had to pick?
+[SEG0023] person_1 (PATIENT): I, I'd give it a eight, out of ten.
+[SEG0024] person_2 (DOCTOR): Have you had a dry cough in the evenings before, or is this the first time?
+[SEG0025] person_1 (PATIENT): A bit, a couple of years ago. It settled by itself back then.
+[SEG0026] person_5 (UNKNOWN): Mm, that's what happened, yes.
+[SEG0027] person_2 (DOCTOR): I'll just record a few vital signs.
+[SEG0028] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0029] person_2 (DOCTOR): Okay: pressure 126 over 69, respiratory rate 15, pulse 76, oxygen saturation is 99 percent, temperature is 36.9 degrees.
+[SEG0030] person_1 (PATIENT): Is that okay?
+[SEG0031] person_2 (DOCTOR): Don't worry, we'll discuss it in a second.
+[SEG0032] person_2 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0033] person_1 (PATIENT): Yeah, uh, no problem.
+[SEG0034] person_2 (DOCTOR): Nearly finished here.
+[SEG0035] person_2 (DOCTOR): Your chest is clear and your nose looks a little swollen inside.
+[SEG0036] person_1 (PATIENT): Yeah, um, no problem.
+[SEG0037] person_2 (DOCTOR): You can relax now. And what about wheeze, shortness of breath or fever?
+[SEG0038] person_1 (PATIENT): No, no wheeze, no shortness of breath, no fever. I did have sneezing fits at one point, but that went away on its own.
+[SEG0039] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0040] person_1 (PATIENT): No changes there.
+[SEG0041] person_2 (DOCTOR): Okay, how are your bowels, any trouble?
+[SEG0042] person_1 (PATIENT): Bowels are regular, nothing odd.
+[SEG0043] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0044] person_1 (PATIENT): An underactive thyroid, for two years. Yes, gout. I'd rather know what's going on than keep guessing. I've had an irregular heartbeat, yes. I've had heart failure for about a year now.
+[SEG0045] person_2 (DOCTOR): Understood. Yes, an underactive thyroid and gout are known to us, good to have that clear. How about smoking?
+[SEG0046] person_1 (PATIENT): No, I've never smoked in my life.
+[SEG0047] person_2 (DOCTOR): Who lives with you?
+[SEG0048] person_1 (PATIENT): My partner and our baby.
+[SEG0049] person_2 (DOCTOR): What's your work?
+[SEG0050] person_1 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0051] person_2 (DOCTOR): Tell me your medicines, please.
+[SEG0052] person_1 (PATIENT): something called eltr... Eltroxin, 100 micrograms, maybe, every morning.
+[SEG0053] person_2 (DOCTOR): Do you have the packet or the prescription with you?
+[SEG0054] person_1 (PATIENT): Not with me. I'll bring it next time. I'm, I'm on febuxostat, 80 milligrams, once a day. I'm on bisoprolol, 2.5 milligrams, once a day. Metoprolol, 50 milligrams, twice a day for my heart.
+[SEG0055] person_2 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0056] person_1 (PATIENT): My mother has an underactive thyroid.
+[SEG0057] person_2 (DOCTOR): Has anything ever caused you a reaction? I mean any allergies.
+[SEG0058] person_1 (PATIENT): No known allergies.
+[SEG0059] person_3 (CAREGIVER): Actually, I remember he had some kind of reaction to naproxen before. I couldn't swear to it.
+[SEG0060] person_1 (PATIENT): Really? I don't think so.
+[SEG0061] person_2 (DOCTOR): Alright, so that's unclear. I'll record what each of you said.
+[SEG0062] person_2 (DOCTOR): So where does that leave us? I can't pin this down yet. We're looking at seasonal hay fever causing the cough or early asthma.
+[SEG0063] person_1 (PATIENT): Uh, what are the odds it's serious?
+[SEG0064] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like seasonal hay fever causing the cough. I'd like you to take fluticasone nasal spray, 50 micrograms, once a day, for the season. That's for hay fever.
+[SEG0065] person_1 (PATIENT): So, can I collect it from my own pharmacy?
+[SEG0066] person_2 (DOCTOR): And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0067] person_1 (PATIENT): Okay, makes sense.
+[SEG0068] person_2 (DOCTOR): That's everything on my side. Anything you're unsure about?
+[SEG0069] person_1 (PATIENT): Thank you, doctor, goodbye.
+[SEG0070] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00369)
+[SEG0001] person_1 (DOCTOR): okay good morning come in have a a seat in your own words what's happened?
+[SEG0002] person_2 (PATIENT): um, it's an upset stomach in the mornings i thought I'd wait, but it hasn't gone
+[SEG0003] person_1 (DOCTOR): Tell me what you take day to day.
+[SEG0004] person_2 (PATIENT): Omeprazole, 20 milligrams, maybe, once a day.
+[SEG0005] person_1 (DOCTOR): Do you have the packet or the prescription with you?
+[SEG0006] person_2 (PATIENT): so, no, it's at home
+[SEG0007] person_1 (DOCTOR): Roughly when did it start?
+[SEG0008] person_2 (PATIENT): It's been six months, I'm fairly sure.
+[SEG0009] person_1 (DOCTOR): on a normal day, how strong is it?
+[SEG0010] person_2 (PATIENT): I'd give it a four, out of ten
+[SEG0011] person_1 (DOCTOR): How often does it happen?
+[SEG0012] person_2 (PATIENT): I'd say a couple of times a week
+[SEG0013] person_1 (DOCTOR): have you had poor sleep?
+[SEG0014] person_2 (PATIENT): yes, for six months. I've, I've had morning shakiness too, for six months
+[SEG0015] person_1 (DOCTOR): have you been feeling guilty about it?
+[SEG0016] person_2 (PATIENT): yes, for about two weeks
+[SEG0017] person_1 (DOCTOR): did you get vomiting blood, thoughts of harming myself, blackouts or seizures?
+[SEG0018] person_2 (PATIENT): no vomiting blood thoughts of harming myself blackouts or seizures none of it
+[SEG0019] person_1 (DOCTOR): Okay. Has your skin been okay?
+[SEG0020] person_2 (PATIENT): No rashes.
+[SEG0021] person_1 (DOCTOR): what about family history any illnesses that run in the family?
+[SEG0022] person_2 (PATIENT): my father had kidney stones my mother had high blood pressure
+[SEG0023] person_1 (DOCTOR): Have you had any surgery before?
+[SEG0024] person_2 (PATIENT): I had my gallbladder removed in 2016
+[SEG0025] person_1 (DOCTOR): are there any allergies on your record that I should check?
+[SEG0026] person_2 (PATIENT): hmm there was some antibiotic I was told I was allergic but I couldn't tell you what it was called or what it did
+[SEG0027] person_1 (DOCTOR): moving on to your background any past medical history?
+[SEG0028] person_2 (PATIENT): well, I've had acid reflux for about a year now i just want to get back to normal, really
+[SEG0029] person_1 (DOCTOR): Right, so acid reflux is already on your record. We'll keep that in mind today. Now some background about your lifestyle.
+[SEG0030] person_2 (PATIENT): I don't drink at all. I smoke about ten cigarettes a day. It's just me and my wife at home now. I'm a software engineer, so I'm at a screen all day.
+[SEG0031] person_3 (NURSE): okay, so the vitals from earlier spO2 99 percent on room air, heart rate 86, BP is 122 over 76, temp 36.7 degrees
+[SEG0032] person_1 (DOCTOR): Thanks.
+[SEG0033] person_1 (DOCTOR): I'd like to examine you now.
+[SEG0034] person_1 (DOCTOR): hold that that position for me
+[SEG0035] person_1 (DOCTOR): hands show a fine tremor and your abdomen is soft with no tenderness
+[SEG0036] person_1 (DOCTOR): good that's the the examination. Just to be sure I understood. You've had an upset stomach in the mornings for six months and no seizures or vomiting blood
+[SEG0037] person_2 (PATIENT): That's it, yes.
+[SEG0038] person_1 (DOCTOR): let's get liver function tests for alcohol use let's get blood tests for alcohol use plan a few alcohol-free days each week and track how much you drink
+[SEG0039] person_1 (DOCTOR): yes?
+[SEG0040] person_1 (DOCTOR): We'll refer you to the alcohol support service.
+[SEG0041] person_2 (PATIENT): alright, thank you
+[SEG0042] person_1 (DOCTOR): and please bring the latest prescription or the medicine boxes to the next visit so we can settle the dose
+[SEG0043] person_2 (PATIENT): okay, I understand
+[SEG0044] person_1 (DOCTOR): let's plan a check in a month call the clinic if you need us
+[SEG0045] person_2 (PATIENT): no, you've explained it well. Thanks
+[SEG0046] person_1 (DOCTOR): See you then.
+
+JSON:

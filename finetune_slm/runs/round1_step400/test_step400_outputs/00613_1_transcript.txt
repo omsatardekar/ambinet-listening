@@ -1,0 +1,85 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00613)
+[SEG0001] person_2 (DOCTOR): Good morning. Ms Anjali Deshmukh, is that correct?
+[SEG0002] person_1 (PATIENT): Yes, doctor. Good morning.
+[SEG0003] person_2 (DOCTOR): Please sit. I have a note from reception about your breasts. Tell me what is happening.
+[SEG0004] person_1 (PATIENT): Nothing much, actually. Just breast tenderness before my periods. I thought I should mention it.
+[SEG0005] person_2 (DOCTOR): Since when are you having this tenderness?
+[SEG0006] person_1 (PATIENT): About six months now. It is not a big problem.
+[SEG0007] person_2 (DOCTOR): Does it come at a particular time of the month?
+[SEG0008] person_1 (PATIENT): Yes, the week before my period. Then it goes away once the period starts.
+[SEG0009] person_2 (DOCTOR): That pattern is useful to know. Is anything else also happening in that week?
+[SEG0010] person_1 (PATIENT): A little bloating. My stomach feels tight. I am also irritable, my husband says.
+[SEG0011] person_2 (DOCTOR): I see. And what about headaches?
+[SEG0012] person_1 (PATIENT): Headaches, yes. But I cannot tell you when they began. Maybe a year, maybe longer. I never wrote it down.
+[SEG0013] person_2 (DOCTOR): That is fine, we will not worry about the exact timing. Any nipple discharge?
+[SEG0014] person_1 (PATIENT): No discharge.
+[SEG0015] person_2 (DOCTOR): Any lump that you have felt in either breast?
+[SEG0016] person_1 (PATIENT): No lumps. I checked in the bath.
+[SEG0017] person_2 (DOCTOR): Good. Any fever recently?
+[SEG0018] person_1 (PATIENT): No fever.
+[SEG0019] person_2 (DOCTOR): Now, your medicines. What are you taking regularly?
+[SEG0020] person_1 (PATIENT): Metformin, 500 mg, twice a day.
+[SEG0021] person_2 (DOCTOR): Every day, twice?
+[SEG0022] person_1 (PATIENT): Yes, twice a day. Though some nights I forget the second one. So I am not sure I take it every single day.
+[SEG0023] person_2 (DOCTOR): Thank you for being honest. That is important for us. What else?
+[SEG0024] person_1 (PATIENT): Levothyroxine, in the morning. I think 50 micrograms, maybe? I am not fully sure.
+[SEG0025] person_2 (DOCTOR): We will confirm the dose from your records. Anything else?
+[SEG0026] person_1 (PATIENT): A vitamin D capsule, 60000 units, once a week on Sundays.
+[SEG0027] person_2 (DOCTOR): Good. Do you have any allergies to medicines?
+[SEG0028] person_1 (PATIENT): Yes, sulpha drugs. My mother told me. I do not remember what reaction happened.
+[SEG0029] person_2 (DOCTOR): Alright. Sulpha drugs, reaction not remembered. I will note it clearly.
+[SEG0030] person_2 (DOCTOR): What medical conditions do you have, along with those tablets?
+[SEG0031] person_1 (PATIENT): PCOS, since college. Thyroid problem, hypothyroidism. And sugar, type 2 diabetes.
+[SEG0032] person_2 (DOCTOR): PCOS, hypothyroidism and type 2 diabetes. Have you had any operations?
+[SEG0033] person_1 (PATIENT): Appendix removal, in 2015.
+[SEG0034] person_2 (DOCTOR): Any illnesses in your family that I should know about?
+[SEG0035] person_1 (PATIENT): My father has high blood pressure. That is all.
+[SEG0036] person_2 (DOCTOR): And what work do you do?
+[SEG0037] person_1 (PATIENT): I am a software engineer. Sitting job, mostly.
+[SEG0038] person_2 (DOCTOR): Do you drink alcohol?
+[SEG0039] person_1 (PATIENT): No, I do not drink alcohol.
+[SEG0040] person_2 (DOCTOR): And your diet?
+[SEG0041] person_1 (PATIENT): Vegetarian, always.
+[SEG0042] person_2 (DOCTOR): Thank you. Now, let me take some measurements.
+[SEG0043] person_2 (DOCTOR): Blood pressure 124 over 80. Pulse 76. Oxygen saturation 99 percent.
+[SEG0044] person_1 (PATIENT): Is it normal?
+[SEG0045] person_2 (DOCTOR): Quite normal. Your weight is 62 kilos and your height is 160 centimetres. That gives a BMI of 24.2.
+[SEG0046] person_2 (DOCTOR): How is your breathing generally? Any trouble?
+[SEG0047] person_1 (PATIENT): Breathing is fine.
+[SEG0048] person_2 (DOCTOR): And your heart, any chest pain or racing?
+[SEG0049] person_1 (PATIENT): Heart is fine also.
+[SEG0050] person_2 (DOCTOR): Good. Now I will examine your breasts. Please lie back.
+[SEG0051] person_2 (DOCTOR): Both breasts look symmetrical. There is mild tenderness on pressing, on both sides.
+[SEG0052] person_1 (PATIENT): Yes, that is the tender place.
+[SEG0053] person_2 (DOCTOR): I am now checking under the arms. The glands there are not enlarged.
+[SEG0054] person_1 (PATIENT): That is good, no?
+[SEG0055] person_2 (DOCTOR): Yes, good. You can sit up now. Let me explain my thinking step by step.
+[SEG0056] person_2 (DOCTOR): Pain before periods is usually related to hormone changes. I cannot rule out fibrocystic breast changes, which are harmless but common.
+[SEG0057] person_1 (PATIENT): Fibrocystic? Is it cancer?
+[SEG0058] person_2 (DOCTOR): No, it is not a cancer. I only mention the name so you know what we are considering.
+[SEG0059] person_2 (DOCTOR): I also cannot rule out a thyroid or hormone imbalance contributing, since you have the thyroid condition.
+[SEG0060] person_2 (DOCTOR): So I would like to order a thyroid function test, and a prolactin level.
+[SEG0061] person_1 (PATIENT): Blood test?
+[SEG0062] person_2 (DOCTOR): Yes, one sample. I will add an HbA1c as well, to check your sugar control.
+[SEG0063] person_2 (DOCTOR): I will also arrange a breast ultrasound, just to be thorough.
+[SEG0064] person_1 (PATIENT): When can I do it?
+[SEG0065] person_2 (DOCTOR): The front desk will give you a slot. Please do all tests this week.
+[SEG0066] person_1 (PATIENT): I will go today.
+[SEG0067] person_2 (DOCTOR): Good. For the tenderness, a well-fitting supportive bra helps, and cutting down caffeine.
+[SEG0068] person_2 (DOCTOR): Please come back in three weeks with the reports, and we will decide the next step together.
+[SEG0069] person_1 (PATIENT): Three weeks, I will book it. Thank you, doctor.
+[SEG0070] person_2 (DOCTOR): You are welcome. Take care of yourself, and do not downplay things next time.
+
+JSON:

@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00300)
+[SEG0001] person_1 (PATIENT): Morning, doctor, I hope I'm not interrupting.
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): Doctor, it's a routine check-up. It's getting on my nerves now. I did try to ignore it for a while.
+[SEG0004] person_2 (DOCTOR): Have you had a bit of back stiffness?
+[SEG0005] person_1 (PATIENT): Yes, about the same, about a week. With bit of back stiffness, mostly moderate. It happens a couple of times a week. I've also had mild headaches now and then, for four weeks. About mild headaches now and then, I'd say a couple of times a week.
+[SEG0006] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0007] person_1 (PATIENT): No, nothing, I've generally been healthy.
+[SEG0008] person_2 (DOCTOR): Do you smoke?
+[SEG0009] person_1 (PATIENT): I've never smoked.
+[SEG0010] person_2 (DOCTOR): And what do you do for a living?
+[SEG0011] person_1 (PATIENT): I work night shifts at a warehouse.
+[SEG0012] person_2 (DOCTOR): Is anyone at home with you?
+[SEG0013] person_1 (PATIENT): I share a flat with two friends.
+[SEG0014] person_2 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0015] person_1 (PATIENT): I mean, my mother had high blood pressure.
+[SEG0016] person_2 (DOCTOR): Any regular medication?
+[SEG0017] person_1 (PATIENT): No, I don't take anything regularly.
+[SEG0018] person_2 (DOCTOR): Any shortness of breath?
+[SEG0019] person_1 (PATIENT): So, not that I've noticed, no shortness of breath.
+[SEG0020] person_2 (DOCTOR): A few quick ones: blood in the stool, weight loss or low mood?
+[SEG0021] person_1 (PATIENT): Oh, none, as far as I know.
+[SEG0022] person_2 (DOCTOR): Is your urine normal, no changes?
+[SEG0023] person_1 (PATIENT): Yeah, that's normal as far as I know.
+[SEG0024] person_2 (DOCTOR): How's your breathing otherwise?
+[SEG0025] person_1 (PATIENT): Okay, so no, my breathing's been fine.
+[SEG0026] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0027] person_2 (DOCTOR): Rest your hand here...
+[SEG0028] person_2 (DOCTOR): Okay: respiratory rate 15, pulse 73. And blood pressure 120 over 78, temperature 36.8.
+[SEG0029] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0030] person_2 (DOCTOR): Let me just check something.
+[SEG0031] person_2 (DOCTOR): Heart and lung sounds are normal.
+[SEG0032] person_1 (PATIENT): Sure.
+[SEG0033] person_2 (DOCTOR): Almost done with this part.
+[SEG0034] person_2 (DOCTOR): Your tummy is soft with no tenderness.
+[SEG0035] person_2 (DOCTOR): Okay, finished. From what you've told me and what I found, it points towards generally well, nothing worrying today. A tendency towards high cholesterol is still possible.
+[SEG0036] person_1 (PATIENT): Is this going to go away?
+[SEG0037] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like generally well, nothing worrying today. Keep up regular exercise, around a hundred and fifty minutes a week, and go easy on processed food. Right, that's all. Go gently.
+[SEG0038] person_1 (PATIENT): That's everything I wanted to ask. Thank you.
+[SEG0039] person_2 (DOCTOR): All the best.
+
+JSON:

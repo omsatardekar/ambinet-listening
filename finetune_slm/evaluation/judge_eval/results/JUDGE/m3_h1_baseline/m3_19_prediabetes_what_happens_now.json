@@ -1,0 +1,206 @@
+{
+ "run_id": "m3_h1_baseline",
+ "encounter_id": "m3_19_prediabetes_what_happens_now",
+ "title": "A blood sugar result in the pre-diabetes range; anxious man and his wife, an unhurried doctor who lets silences sit",
+ "prompt_sha256": {
+  "precision": "2246a810d1cb417338e522cff551c643d54b2610c8179f628f6107e6eb270692",
+  "recall": "481fac47059ae73868a6576db46e621e1e16f779221aecf09fd52511e382c6cb"
+ },
+ "n_segments": 115,
+ "reference_facts": [
+  {
+   "fid": "D1",
+   "field": "design_fact",
+   "text": "blood sugar result in the pre-diabetes range, found on a routine check",
+   "attributes": {}
+  },
+  {
+   "fid": "D2",
+   "field": "design_fact",
+   "text": "tired and thirstier than usual",
+   "attributes": {}
+  },
+  {
+   "fid": "D3",
+   "field": "design_fact",
+   "text": "denies blurred vision and passing lots of water",
+   "attributes": {}
+  },
+  {
+   "fid": "D4",
+   "field": "design_fact",
+   "text": "denies chest pain",
+   "attributes": {}
+  },
+  {
+   "fid": "D5",
+   "field": "design_fact",
+   "text": "weight 94 kg, BP 128/82",
+   "attributes": {}
+  },
+  {
+   "fid": "D6",
+   "field": "design_fact",
+   "text": "plan: food and activity changes, repeat blood test in six months",
+   "attributes": {}
+  },
+  {
+   "fid": "U1",
+   "field": "design_uncertainty",
+   "text": "The record should show this doubt or gap, not a confident fact: tiredness: he says a month, his wife says since the winter",
+   "attributes": {}
+  },
+  {
+   "fid": "U2",
+   "field": "design_uncertainty",
+   "text": "The record should show this doubt or gap, not a confident fact: the doctor calls it 'in the pre-diabetes range' and a 'warning', not a firm diagnosis, until the repeat test",
+   "attributes": {}
+  }
+ ],
+ "predicted_facts": [
+  {
+   "fid": "chief_complaint[0]",
+   "field": "chief_complaint",
+   "text": "diabetic (reported_by=doctor)",
+   "attributes": {
+    "reported_by": "doctor"
+   }
+  },
+  {
+   "fid": "symptoms[0]",
+   "field": "symptoms",
+   "text": "diabetic (category=cardiovascular, status=present, temporality=current, body_site=cardiovascular, reported_by=doctor, certainty=present)",
+   "attributes": {
+    "category": "cardiovascular",
+    "status": "present",
+    "temporality": "current",
+    "body_site": "cardiovascular",
+    "reported_by": "doctor",
+    "certainty": "present"
+   }
+  },
+  {
+   "fid": "negative_findings[0]",
+   "field": "negative_findings",
+   "text": "diabetic (status=absent, assertion=negative, reported_by=doctor, temporality=current)",
+   "attributes": {
+    "status": "absent",
+    "assertion": "negative",
+    "reported_by": "doctor",
+    "temporality": "current"
+   }
+  },
+  {
+   "fid": "clinical_assessment[0]",
+   "field": "clinical_assessment",
+   "text": "diabetic (certainty=present, stated_by=doctor)",
+   "attributes": {
+    "certainty": "present",
+    "stated_by": "doctor"
+   }
+  },
+  {
+   "fid": "follow_up[0]",
+   "field": "follow_up",
+   "text": "consultation (status=resolved)",
+   "attributes": {
+    "status": "resolved"
+   }
+  }
+ ],
+ "precision": [
+  {
+   "fid": "chief_complaint[0]",
+   "verdict": "contradicted",
+   "critical": true,
+   "segments": [
+    "SEG0011"
+   ],
+   "reason": "Doctor explicitly says patient is not diabetic; only pre-diabetes warning."
+  },
+  {
+   "fid": "symptoms[0]",
+   "verdict": "contradicted",
+   "critical": true,
+   "segments": [
+    "SEG0011"
+   ],
+   "reason": "Doctor states he is not diabetic; symptom/presence is opposite of transcript."
+  },
+  {
+   "fid": "negative_findings[0]",
+   "verdict": "supported",
+   "critical": false,
+   "segments": [
+    "SEG0011"
+   ],
+   "reason": "Doctor says, 'You're not diabetic,' indicating current absence."
+  },
+  {
+   "fid": "clinical_assessment[0]",
+   "verdict": "contradicted",
+   "critical": true,
+   "segments": [
+    "SEG0011"
+   ],
+   "reason": "Doctor assessed pre-diabetes, not diabetes."
+  },
+  {
+   "fid": "follow_up[0]",
+   "verdict": "unsupported",
+   "critical": false,
+   "segments": [],
+   "reason": "No statement that consultation was resolved."
+  }
+ ],
+ "recall": [
+  {
+   "fid": "D1",
+   "verdict": "missing",
+   "matched": [],
+   "reason": "No predicted fact mentions pre-diabetes range or routine check result."
+  },
+  {
+   "fid": "D2",
+   "verdict": "missing",
+   "matched": [],
+   "reason": "No predicted fact mentions tiredness or increased thirst."
+  },
+  {
+   "fid": "D3",
+   "verdict": "missing",
+   "matched": [],
+   "reason": "No predicted fact denies blurred vision or frequent urination."
+  },
+  {
+   "fid": "D4",
+   "verdict": "missing",
+   "matched": [],
+   "reason": "No predicted fact denies chest pain."
+  },
+  {
+   "fid": "D5",
+   "verdict": "missing",
+   "matched": [],
+   "reason": "No predicted fact includes weight or blood pressure values."
+  },
+  {
+   "fid": "D6",
+   "verdict": "missing",
+   "matched": [],
+   "reason": "No predicted fact mentions lifestyle advice or repeat blood test in six months."
+  },
+  {
+   "fid": "U1",
+   "verdict": "missing",
+   "matched": [],
+   "reason": "No predicted fact captures conflicting tiredness duration reports."
+  },
+  {
+   "fid": "U2",
+   "verdict": "missing",
+   "matched": [],
+   "reason": "Predicted facts assert diabetes, not uncertainty or pre-diabetes warning pending repeat test."
+  }
+ ]
+}

@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01125)
+[SEG0001] person_1 (PATIENT): doctor, hi, where would you like me to put my coat?
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_1 (PATIENT): It's being thirsty. I thought I'd wait, but it hasn't gone.
+[SEG0004] person_2 (DOCTOR): Has this been going on for long?
+[SEG0005] person_1 (PATIENT): Around ten days... no wait, it's more like five days.
+[SEG0006] person_2 (DOCTOR): What eases it, if anything?
+[SEG0007] person_1 (PATIENT): only water, and and it's not much
+[SEG0008] person_2 (DOCTOR): Has there been tiredness too?
+[SEG0009] person_1 (PATIENT): yes, since Monday
+[SEG0010] person_2 (DOCTOR): Have you had tingling in your toes?
+[SEG0011] person_1 (PATIENT): Erm, yeah. About four days, I'd say.
+[SEG0012] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0013] person_1 (PATIENT): So, it's worse with night. It's severe, honestly. I told myself I'd wait and see, and here I am. My sister suggested writing things down, but I forgot.
+[SEG0014] person_2 (DOCTOR): have you had being thirsty before, or is this the first time?
+[SEG0015] person_1 (PATIENT): Yes, something like this happened last year, and it went away on its own.
+[SEG0016] person_2 (DOCTOR): Have you had any foot ulcers, vomiting or chest pain?
+[SEG0017] person_1 (PATIENT): nope, nothing like that
+[SEG0018] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0019] person_1 (PATIENT): Nothing like that.
+[SEG0020] person_2 (DOCTOR): Has your skin been okay?
+[SEG0021] person_1 (PATIENT): yeah, no, skin's been fine
+[SEG0022] person_2 (DOCTOR): have you had any previous surgeries?
+[SEG0023] person_1 (PATIENT): no, never
+[SEG0024] person_2 (DOCTOR): what does a normal day of food look like?
+[SEG0025] person_1 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0026] person_2 (DOCTOR): Do you work outside the home?
+[SEG0027] person_1 (PATIENT): I'm a hairdresser, on my feet all day
+[SEG0028] person_2 (DOCTOR): any regular medication, tablets or creams?
+[SEG0029] person_1 (PATIENT): No, I don't take any tablets.
+[SEG0030] person_2 (DOCTOR): Any medical conditions, anything you've been treated for? I ask cos it helps me narrow things down.
+[SEG0031] person_1 (PATIENT): No, nothing I can think of.
+[SEG0032] person_2 (DOCTOR): Is there anything relevant on the family side?
+[SEG0033] person_1 (PATIENT): my father has Parkinson's disease
+[SEG0034] person_2 (DOCTOR): Shall I check your blood pressure and pulse?
+[SEG0035] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0036] person_2 (DOCTOR): Okay: saturation 97 percent, weight 66 kilos, height 179 centimetres, BP is 165 over 100, temperature is 36.5 degrees, pulse is 78 beats a minute.
+[SEG0037] person_1 (PATIENT): Is that okay?
+[SEG0038] person_2 (DOCTOR): I'll explain what these mean in a moment
+[SEG0039] person_2 (DOCTOR): Now I'm going to do a short physical check.
+[SEG0040] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0041] person_2 (DOCTOR): The feeling at the tips of your toes is reduced and the foot pulses are present.
+[SEG0042] person_2 (DOCTOR): Please sit back down.
+[SEG0043] person_2 (DOCTOR): Right, here's what I'm thinking. I'm honestly not certain yet. It could be diabetes not well controlled on current treatment, or it might be early nerve damage.
+[SEG0044] person_2 (DOCTOR): I think a urine albumin test makes sense here, for diabetes review let's get kidney function tests, for diabetes review i'm prescribing gliclazide, 40 milligrams, once a day with breakfast, long term that's for diabetes check your feet daily and book the eye screening a short walk every day, even twenty minutes, will help more than you'd think we'll refer you to the diabetes educator
+[SEG0045] person_2 (DOCTOR): Let's hold off on an HbA1c for now, and if there's no change in a month we can revisit it. Do get help quickly if the symptoms get worse. We'll catch up in three months.
+[SEG0046] person_1 (PATIENT): That's fine with me.
+[SEG0047] person_2 (DOCTOR): That's everything on my side. Anything you're unsure about?
+[SEG0048] person_1 (PATIENT): Thank you, that's helpful.
+
+JSON:

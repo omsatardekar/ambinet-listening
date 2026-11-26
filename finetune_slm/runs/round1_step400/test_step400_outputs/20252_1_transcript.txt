@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20252)
+[SEG0001] person_1 (DOCTOR): Hi there, the the chair's free, sit down.
+[SEG0002] person_2 (PATIENT): Good morning, you know, doctor, thank you.
+[SEG0003] person_1 (DOCTOR): Okay, how are things, what's been happening?
+[SEG0004] person_2 (PATIENT): mainly pain in my heel there's a couple of other things, but that's the main one
+[SEG0005] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0006] person_2 (PATIENT): It's, It's worse with first steps in the morning and standing long. About a six out of ten. It happens once or twice a day.
+[SEG0007] person_1 (DOCTOR): does anything else come with it?
+[SEG0008] person_2 (PATIENT): Yeah, when it starts I tend to get pain after sitting for a while as well. As for pain after sitting for a while, I honestly can't say when that began. It might have been last month or the month before. With pain after sitting for a while, severe, really. I'd say every other day.
+[SEG0009] person_1 (DOCTOR): Let me check a few things. Any fever or numbness in the foot?
+[SEG0010] person_2 (PATIENT): Um, no, nothing to report there.
+[SEG0011] person_1 (DOCTOR): A few quick ones: back pain or swelling?
+[SEG0012] person_2 (PATIENT): Erm, no, nothing to report there.
+[SEG0013] person_1 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0014] person_2 (PATIENT): Let me think, um, no, that's all normal.
+[SEG0015] person_1 (DOCTOR): so, do you take any prescribed or over-the-counter medicines?
+[SEG0016] person_2 (PATIENT): It's, It's hydrocortisone cream, when needed. I'm on insoles, every day.
+[SEG0017] person_1 (DOCTOR): Does your family have any medical conditions?
+[SEG0018] person_2 (PATIENT): Hmm, my father had bowel cancer.
+[SEG0019] person_1 (DOCTOR): Are you allergic to anything? Any allergies to medicines or foods?
+[SEG0020] person_2 (PATIENT): yes, milk. I get stomach cramps
+[SEG0021] person_1 (DOCTOR): tell me about any past illnesses or ongoing conditions take your time, there's no rush
+[SEG0022] person_2 (PATIENT): Eczema, for nearly five years.
+[SEG0023] person_1 (DOCTOR): Yes, eczema is known to us, good to have that clear. And alcohol, how much?
+[SEG0024] person_2 (PATIENT): Nothing, I'm teetotal.
+[SEG0025] person_1 (DOCTOR): any smoking?
+[SEG0026] person_2 (PATIENT): I have about eight cigarettes in a day.
+[SEG0027] person_1 (DOCTOR): What do you do during the day?
+[SEG0028] person_2 (PATIENT): I look after my grandchildren most days.
+[SEG0029] person_1 (DOCTOR): Do you do any exercise?
+[SEG0030] person_2 (PATIENT): I swim twice a week.
+[SEG0031] person_1 (DOCTOR): Is there someone at home?
+[SEG0032] person_2 (PATIENT): My husband and I live above the shop.
+[SEG0033] person_1 (DOCTOR): Let's start with the basic checks.
+[SEG0034] person_1 (DOCTOR): Nearly done with the readings...
+[SEG0035] person_1 (DOCTOR): Okay: pressure 123 over 82, temp 36.6 degrees, heart rate 79.
+[SEG0036] person_1 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0037] person_1 (DOCTOR): Breathe out slowly.
+[SEG0038] person_1 (DOCTOR): There is a sore spot at the inner front of the heel bone and pulling the toes back makes it worse.
+[SEG0039] person_2 (PATIENT): Okay, um, doctor.
+[SEG0040] person_1 (DOCTOR): You can sit up now. Okay, so my impression is this: This looks most like plantar fasciitis.
+[SEG0041] person_2 (PATIENT): I'm scared it's something bad. Is it?
+[SEG0042] person_1 (DOCTOR): It's reasonable to to be concerned, but right now plantar fasciitis is my leading thought, not anything worse. I want a foot X-ray done, that's for heel pain.
+[SEG0043] person_2 (PATIENT): Ah, is that done today?
+[SEG0044] person_1 (DOCTOR): I'm prescribing ibuprofen gel, three times a day, for two weeks. It's for heel pain. Stretch the calf and the sole of the foot before getting out of bed and wear cushioned shoes. I think podiatry should see you too.
+[SEG0045] person_2 (PATIENT): Oh, sure, where do I go?
+[SEG0046] person_1 (DOCTOR): If the the symptoms get worse, that's the point to come in urgently.
+[SEG0047] person_2 (PATIENT): Yes, will do.
+[SEG0048] person_1 (DOCTOR): I'll want another look in six weeks. Okay, I think we're done unless you have questions.
+[SEG0049] person_2 (PATIENT): I think I understand everything. Thanks.
+[SEG0050] person_1 (DOCTOR): Goodbye for now.
+
+JSON:

@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00338)
+[SEG0001] person_1 (NURSE): All set here, doctor. Chart's updated, and I'll read the readings out when you're ready.
+[SEG0002] person_2 (DOCTOR): Thanks. Hello, come in, sit down. What brings you in today?
+[SEG0003] person_3 (CAREGIVER): Uh, you know, doctor, thank you for seeing us. It's blurry vision, doctor. She didn't want to to come, but I insisted.
+[SEG0004] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0005] person_4 (PATIENT): It's, It's amlodipine, 5 milligrams, once a day.
+[SEG0006] person_1 (NURSE): Doctor, our chart from the last visit lists it as 2.5 milligrams.
+[SEG0007] person_2 (DOCTOR): Hm, that's different. Is the latest prescription anywhere near you?
+[SEG0008] person_4 (PATIENT): Uh, um, no, I left it at home. Right, I had metformin at one point, but I'm off it now.
+[SEG0009] person_2 (DOCTOR): On a normal day, how strong is it?
+[SEG0010] person_4 (PATIENT): A A six out of ten, I suppose.
+[SEG0011] person_4 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0012] person_3 (CAREGIVER): Yeah, tell the doctor about the other thing, that's what worries me.
+[SEG0013] person_4 (PATIENT): Yeah, I was getting to that!
+[SEG0014] person_2 (DOCTOR): That's fine, one at a time. I'll ask about everything.
+[SEG0015] person_4 (PATIENT): I've had tiredness too, for about a month. I've been feeling very thirsty too.
+[SEG0016] person_2 (DOCTOR): And what about weight loss or foot sores?
+[SEG0017] person_4 (PATIENT): well, no, none of that at all
+[SEG0018] person_2 (DOCTOR): Let me check a a few things. Any fever, abdominal pain or chest pain?
+[SEG0019] person_4 (PATIENT): no, nothing there
+[SEG0020] person_2 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0021] person_4 (PATIENT): so, no, all normal there
+[SEG0022] person_2 (DOCTOR): And what do you do for a living?
+[SEG0023] person_4 (PATIENT): I work night shifts at a warehouse.
+[SEG0024] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0025] person_4 (PATIENT): right, I've had diabetes, yes so, yes, high cholesterol i kept putting it off, which I know isn't sensible my family kept telling me to get it checked. High blood pressure, for about a year
+[SEG0026] person_2 (DOCTOR): okay, I can see diabetes in your file as well
+[SEG0027] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0028] person_4 (PATIENT): I've never been told I have allergies.
+[SEG0029] person_2 (DOCTOR): Any previous surgeries?
+[SEG0030] person_4 (PATIENT): just my appendix out, about eight years ago
+[SEG0031] person_1 (NURSE): Here are the numbers, doctor. Oxygen saturation is 99 percent, temp 36.8 degrees. Pulse 88, blood pressure 164 over 91.
+[SEG0032] person_2 (DOCTOR): Thanks. Listening to the whole story, it it fits best with diabetes that isn't well controlled. It could also be a medication issue, so we'll keep that open. A urine infection is still possible. I'm sending you for a urine protein test because of diabetes.
+[SEG0033] person_5 (CLINICAL_STAFF): The earliest is Wednesday, 11:30 am.
+[SEG0034] person_4 (PATIENT): That's fine.
+[SEG0035] person_2 (DOCTOR): I'm sending you for an eye check because of diabetes. Kidney function tests is what I'd like next, for diabetes.
+[SEG0036] person_4 (PATIENT): fine by me
+[SEG0037] person_2 (DOCTOR): Have you had any tests for this so far?
+[SEG0038] person_4 (PATIENT): oh, I did have an HbA1c done a few months ago, but the paper's at home
+[SEG0039] person_2 (DOCTOR): you'll be taking glimepiride, 1 milligrams, before breakfast, until we review that should help with blood sugar control check your feet every day, and never walk barefoot cut back on sweets, sugary drinks and white rice, and keep to regular meal times and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+[SEG0040] person_4 (PATIENT): okay, I understand
+[SEG0041] person_2 (DOCTOR): If you vomit repeatedly or become drowsy, or you feel really unwell, please come to to the emergency department. I'd like to see you again in four weeks. Okay, I think we're finished. Is everything clear?
+[SEG0042] person_4 (PATIENT): hmm, you know, I think that's clear thank you for being so thorough
+
+JSON:

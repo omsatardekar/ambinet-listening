@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01819)
+[SEG0001] person_1 (PATIENT): Sorry I'm a little late, doctor.
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What seems to be wrong?
+[SEG0003] person_1 (PATIENT): Mainly cramping tummy pain. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): What's the timeline, when did it begin?
+[SEG0005] person_1 (PATIENT): It's been going on for about a month.
+[SEG0006] person_2 (DOCTOR): Is it bearing on you a lot?
+[SEG0007] person_1 (PATIENT): Severe, really.
+[SEG0008] person_2 (DOCTOR): How frequently does it come?
+[SEG0009] person_1 (PATIENT): I'd say every other day.
+[SEG0010] person_2 (DOCTOR): A few quick ones: fever, vomiting or joint pain?
+[SEG0011] person_1 (PATIENT): No, none that I've noticed.
+[SEG0012] person_2 (DOCTOR): Has your skin been okay?
+[SEG0013] person_1 (PATIENT): No, skin's been fine.
+[SEG0014] person_2 (DOCTOR): How about your heart, any problems like that?
+[SEG0015] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0016] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0017] person_1 (PATIENT): I have heart disease, for two years.
+[SEG0018] person_2 (DOCTOR): Let's run through your medicines.
+[SEG0019] person_1 (PATIENT): It's aspirin, 75 milligrams, once a day.
+[SEG0020] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0021] person_1 (PATIENT): Nothing, I haven't had any operations.
+[SEG0022] person_2 (DOCTOR): Right, are you allergic to anything? Any allergies to medicines or foods?
+[SEG0023] person_1 (PATIENT): Well, not to my knowledge, no.
+[SEG0024] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0025] person_1 (PATIENT): Not much, I mostly stay in these days. I grab fast food at lunch most days. No, I share a house with my brother.
+[SEG0026] person_2 (DOCTOR): Let me get the readings out of the way.
+[SEG0027] person_2 (DOCTOR): Keep your arm relaxed for me...
+[SEG0028] person_2 (DOCTOR): Okay: temp 36.5 degrees, pulse is 68 beats a minute, SpO2 99 percent on room air, BP is 114 over 81.
+[SEG0029] person_2 (DOCTOR): Could you come over to the couch, please?
+[SEG0030] person_2 (DOCTOR): Alright, does that hurt?
+[SEG0031] person_2 (DOCTOR): There is tenderness in the lower right tummy and no guarding.
+[SEG0032] person_2 (DOCTOR): That's the examination finished.
+[SEG0033] person_2 (DOCTOR): Okay, so my impression is this: I can't pin this down yet. We're looking at a flare of inflammatory bowel disease or an infection.
+[SEG0034] person_2 (DOCTOR): I'm sending you for a stool test because of bloody diarrhoea. I'll start you on prednisolone, 40 milligrams, once a day, one week then reduce. You take it by mouth. That should help with inflammatory bowel flare. I'll put all of this in writing so you don't have to remember it.
+[SEG0035] person_1 (PATIENT): Should I carry on if I feel better?
+[SEG0036] person_2 (DOCTOR): Keep up your fluids and call the IBD nurse if you get a fever. Avoid taking any extra painkillers on top of what I'm prescribing without checking with us. The IBD nurse would be the right next step, I'll refer you. Does all of that make sense?
+[SEG0037] person_1 (PATIENT): Erm, great, thank you for your help.
+
+JSON:

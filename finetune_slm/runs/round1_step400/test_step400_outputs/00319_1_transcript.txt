@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00319)
+[SEG0001] person_1 (PATIENT): Well, morning. Nice to finally see you, doctor.
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_1 (PATIENT): Um, so... pain in my right ankle. That's why I came.
+[SEG0004] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0005] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0006] person_2 (DOCTOR): Okay: temp 36.7 degrees, BP is 119 over 72, oxygen saturation is 97 percent, heart rate 84.
+[SEG0007] person_1 (PATIENT): Oh, uh, is that alright, doctor?
+[SEG0008] person_2 (DOCTOR): So, I'll interpret it once I've examined you. How long are we talking about?
+[SEG0009] person_1 (PATIENT): For five days, I'd say.
+[SEG0010] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0011] person_1 (PATIENT): Oh, um, it just comes and goes. It settles a little with ice. I've never really been one for hospitals.
+[SEG0012] person_2 (DOCTOR): Have you had a twist during football?
+[SEG0013] person_1 (PATIENT): Right, yes, since this morning.
+[SEG0014] person_2 (DOCTOR): How much is it bothering you?
+[SEG0015] person_1 (PATIENT): A five out of ten, uh, I suppose. Hmm, as for swelling, I honestly can't say when that began. It might have been last month or the month before. Right, with swelling, pretty moderate, if I'm being honest. It settles a little with elevation.
+[SEG0016] person_2 (DOCTOR): Have you had pain in your right ankle before, or is this the first time?
+[SEG0017] person_1 (PATIENT): Okay, so a bit, last year. It settled by itself back then.
+[SEG0018] person_2 (DOCTOR): Have you noticed pain at the back of the heel, pain in the knee or numbness?
+[SEG0019] person_1 (PATIENT): I haven't had pain at the back of the heel, pain in the knee or numbness, no.
+[SEG0020] person_2 (DOCTOR): Is your urine normal, no changes?
+[SEG0021] person_1 (PATIENT): Uh, that's normal as far as I know.
+[SEG0022] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0023] person_1 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0024] person_2 (DOCTOR): And your work?
+[SEG0025] person_1 (PATIENT): I drive a delivery van all day.
+[SEG0026] person_2 (DOCTOR): Any sport or activity?
+[SEG0027] person_1 (PATIENT): I play badminton on Sundays.
+[SEG0028] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0029] person_1 (PATIENT): Oh, no, nothing like that.
+[SEG0030] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0031] person_1 (PATIENT): Okay, so I take pantoprazole, 40 milligrams, before breakfast for my acidity. Asthalin inhaler. I take it when needed for my asthma. I'd rather not end up on lots of tablets if I can avoid it. Paracetamol. I take it when needed.
+[SEG0032] person_2 (DOCTOR): How much do you take?
+[SEG0033] person_1 (PATIENT): 500 milligrams, I think that's what's on the box.
+[SEG0034] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0035] person_1 (PATIENT): Yes, acid reflux. I've had asthma for about ten years now.
+[SEG0036] person_2 (DOCTOR): Okay, a quick examination now.
+[SEG0037] person_2 (DOCTOR): Let me just check something.
+[SEG0038] person_2 (DOCTOR): There's swelling and bruising on the outer side of the ankle, tender over the ligament.
+[SEG0039] person_2 (DOCTOR): Take your time, no rush.
+[SEG0040] person_2 (DOCTOR): The bones themselves aren't tender and the ankle feels stable when I test it.
+[SEG0041] person_2 (DOCTOR): Okay, finished.
+[SEG0042] person_2 (DOCTOR): Putting it all together, it points towards an ankle sprain. We shouldn't forget a small fracture.
+[SEG0043] person_1 (PATIENT): Is this going to go away?
+[SEG0044] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's an ankle sprain, and we'll know more once the an X-ray of the ankle is back. Just to be sure I understood. You've had pain in your right ankle for five days, and no pain in the knee or pain at the back of the heel.
+[SEG0045] person_1 (PATIENT): Yes, that's right.
+[SEG0046] person_2 (DOCTOR): I'll request an X-ray of the ankle, it'll help with ankle injury.
+[SEG0047] person_1 (PATIENT): Fine by me.
+[SEG0048] person_2 (DOCTOR): The treatment will be ibuprofen, 400 milligrams, three times a day after food, for three days. It's for ankle pain. Rest, ice for twenty minutes at a time, a compression bandage and keep the foot up. Please come and see me in ten days.
+[SEG0049] person_1 (PATIENT): Hmm, I'll make the appointment on my way out.
+[SEG0050] person_2 (DOCTOR): Any last questions?
+[SEG0051] person_1 (PATIENT): Okay, so that's everything I wanted to ask. Thank you.
+[SEG0052] person_2 (DOCTOR): Alright, take care.
+
+JSON:

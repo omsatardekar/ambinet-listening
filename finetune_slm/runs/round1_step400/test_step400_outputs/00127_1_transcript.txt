@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00127)
+[SEG0001] person_1 (PATIENT): Sorry I'm a few minutes behind, doctor.
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_3 (CAREGIVER): Morning, doctor. I'll stay and fill in anything that's missed.
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to have you here.
+[SEG0005] person_3 (CAREGIVER): We came because of trouble sleeping.
+[SEG0006] person_2 (DOCTOR): How long has this been going on?
+[SEG0007] person_1 (PATIENT): Probably two months. Yeah.
+[SEG0008] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0009] person_1 (PATIENT): Yeah, mostly severe. I get some relief from a warm bath.
+[SEG0010] person_1 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0011] person_3 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0012] person_1 (PATIENT): I was getting to that!
+[SEG0013] person_2 (DOCTOR): Have you been feeling exhausted in the day?
+[SEG0014] person_1 (PATIENT): Yeah, that too. About feeling exhausted in the day, maybe a seven out of ten on a bad day.
+[SEG0015] person_2 (DOCTOR): Okay, keep going.
+[SEG0016] person_1 (PATIENT): I've also had trouble concentrating. As for trouble concentrating, it feels severe to me.
+[SEG0017] person_4 (UNKNOWN): Yes, that's right, that's how it was.
+[SEG0018] person_2 (DOCTOR): Any low mood or chest pain at all?
+[SEG0019] person_1 (PATIENT): No, no low mood, no chest pain. I was waking up at three in the morning at one point, but that went away on its own.
+[SEG0020] person_2 (DOCTOR): And what about restless legs, snoring or heavy caffeine?
+[SEG0021] person_1 (PATIENT): No restless legs, snoring or heavy caffeine, none of it.
+[SEG0022] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0023] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0024] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0025] person_1 (PATIENT): I'm on escitalopram, 10 milligrams, once a day. Telmisartan, 40 milligrams, once a day. I take melatonin, 3 milligrams, maybe, at night.
+[SEG0026] person_2 (DOCTOR): Okay, have you got the box or the prescription on you?
+[SEG0027] person_1 (PATIENT): No, it's at home.
+[SEG0028] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0029] person_1 (PATIENT): My father was diabetic.
+[SEG0030] person_2 (DOCTOR): Any previous surgeries?
+[SEG0031] person_1 (PATIENT): I had my thyroid operated on a long time ago.
+[SEG0032] person_2 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0033] person_1 (PATIENT): I've had anxiety for five years now.
+[SEG0034] person_2 (DOCTOR): Ah.
+[SEG0035] person_1 (PATIENT): I have high blood pressure, for two years. I thought it would sort itself out, but it hasn't.
+[SEG0036] person_2 (DOCTOR): Okay, I can see anxiety in your file as well.
+[SEG0037] person_2 (DOCTOR): What's your diet like?
+[SEG0038] person_1 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0039] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0040] person_1 (PATIENT): I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0041] person_2 (DOCTOR): Let me measure a few things.
+[SEG0042] person_2 (DOCTOR): Rest your hand here...
+[SEG0043] person_2 (DOCTOR): Okay: respiratory rate 17, BP is 114 over 69, oxygen saturation is 97 percent, pulse is 82 beats a minute, temperature 36.8.
+[SEG0044] person_1 (PATIENT): Is that normal?
+[SEG0045] person_2 (DOCTOR): Don't worry, I'll go through it in a moment. So, based on your history, this looks most like insomnia, probably stress-related. The reason I say that is that the way you describe it fits together. We shouldn't forget a thyroid problem.
+[SEG0046] person_1 (PATIENT): What are the chances it's something bad?
+[SEG0047] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's insomnia, probably stress-related, and we'll know more once the a sleep study is back. Let me just check I've got this right. You've had trouble sleeping for two months, severe, and no snoring or low mood.
+[SEG0048] person_1 (PATIENT): Mm, that's right.
+[SEG0049] person_2 (DOCTOR): Let's get a sleep study, for insomnia. Let's book a thyroid test to look into insomnia. Same wake-up time every day, no screens in the hour before bed, and no coffee after lunch. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. I'd like you back in four weeks. Okay, we're done for today. Take care.
+[SEG0050] person_1 (PATIENT): Nothing more from me, thanks.
+[SEG0051] person_2 (DOCTOR): All the best.
+
+JSON:

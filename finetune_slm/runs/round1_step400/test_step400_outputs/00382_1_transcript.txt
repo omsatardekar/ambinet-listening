@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00382)
+[SEG0001] person_1 (NURSE): Afternoon, doctor. They're in and comfortable, and I have the measurements ready.
+[SEG0002] person_2 (DOCTOR): Okay, thanks, that's helpful. Hello, please sit. What's been happening?
+[SEG0003] person_3 (CAREGIVER): Hello, doctor, I came in with them, if that's okay.
+[SEG0004] person_2 (DOCTOR): Good, that'll be useful. Pull up a chair.
+[SEG0005] person_3 (CAREGIVER): He's been having been feeling suddenly very hungry, doctor.
+[SEG0006] person_2 (DOCTOR): How long are we talking about?
+[SEG0007] person_4 (PATIENT): So, for about a month, I'd say.
+[SEG0008] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0009] person_4 (PATIENT): It usually comes with a pounding heart with it. I've also had shaky spells, for three weeks. As for shaky spells, pretty severe, if I'm being honest. I've also been sweating, since last Tuesday. The pounding heart with it? That's been for five days. About pounding heart with it, pretty mild, if I'm being honest.
+[SEG0010] person_2 (DOCTOR): Have you noticed weight loss, losing consciousness or seizure?
+[SEG0011] person_4 (PATIENT): No. None of those.
+[SEG0012] person_2 (DOCTOR): A few quick ones: chest pain, confusion or vomiting?
+[SEG0013] person_4 (PATIENT): No, none of those.
+[SEG0014] person_2 (DOCTOR): Neurologically, anything strange?
+[SEG0015] person_4 (PATIENT): Nothing odd there.
+[SEG0016] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0017] person_4 (PATIENT): Yes, high blood pressure. Hmm, I've had diabetes, yes.
+[SEG0018] person_2 (DOCTOR): Ah. And what do you do for a living?
+[SEG0019] person_4 (PATIENT): I work night shifts at a warehouse.
+[SEG0020] person_2 (DOCTOR): Do you get any exercise?
+[SEG0021] person_4 (PATIENT): I walk for about half an hour most days.
+[SEG0022] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0023] person_4 (PATIENT): I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0024] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0025] person_4 (PATIENT): I'm on amlodipine, 5 milligrams, once a day.
+[SEG0026] person_3 (CAREGIVER): Doctor, I think the last prescription for the amlodipine was 10 milligrams. We changed it at the last visit.
+[SEG0027] person_2 (DOCTOR): Alright. Did you bring the up-to-date prescription?
+[SEG0028] person_4 (PATIENT): I don't think I have it with me.
+[SEG0029] person_1 (NURSE): Okay, so the vitals from earlier. Temp 36.9 degrees, weight 94 kilos. Height 173 centimetres, SpO2 99 percent on room air, pulse 72, BMI works out to 31.4, BP is 120 over 76.
+[SEG0030] person_2 (DOCTOR): Good, thank you.
+[SEG0031] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0032] person_4 (PATIENT): Sure.
+[SEG0033] person_2 (DOCTOR): Hold that position for me.
+[SEG0034] person_2 (DOCTOR): Pulse is normal and there's no tremor right now.
+[SEG0035] person_2 (DOCTOR): Good, that's the examination. Right, here's what I'm thinking. My working impression is low sugar episodes related to diabetes medication. The reason I say that is that your story and my examination fit together. It could also be a meal-timing issue, so we'll keep that open.
+[SEG0036] person_4 (PATIENT): Is this something I'll have for good?
+[SEG0037] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's low sugar episodes related to diabetes medication, and we'll watch how it goes. Always keep glucose tablets or a sweet in your bag, and don't skip meals if you've taken your sugar tablet. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0038] person_4 (PATIENT): Understood.
+[SEG0039] person_2 (DOCTOR): Is there anything you wanted to ask?
+[SEG0040] person_4 (PATIENT): No, I think that's everything. Thank you, doctor.
+[SEG0041] person_2 (DOCTOR): Take care.
+
+JSON:

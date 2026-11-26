@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00480)
+[SEG0001] person_1 (PATIENT): Sorry, doctor, I couldn't find the door at first.
+[SEG0002] person_2 (DOCTOR): you're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): mainly I've been passing out once last week that's why I came
+[SEG0004] person_2 (DOCTOR): I'll take a few measurements first.
+[SEG0005] person_2 (DOCTOR): just relax your arm..
+[SEG0006] person_2 (DOCTOR): okay: temperature 36.6, pulse 73, BP is 114 over 81. And SpO2 97 percent on room air
+[SEG0007] person_1 (PATIENT): is that alright, doctor?
+[SEG0008] person_2 (DOCTOR): They help build the picture, I'll tell you more soon. Since when have you had this?
+[SEG0009] person_1 (PATIENT): Five days, I think... sorry, three days, I got that wrong.
+[SEG0010] person_2 (DOCTOR): would you call it mild or bad?
+[SEG0011] person_1 (PATIENT): Severe I'd say
+[SEG0012] person_2 (DOCTOR): Have you been feeling hot and sweaty before it?
+[SEG0013] person_1 (PATIENT): yeah. Five days, I'd say as for feeling hot and sweaty before it, a seven out of ten, I suppose
+[SEG0014] person_2 (DOCTOR): any shaking or jerking?
+[SEG0015] person_1 (PATIENT): not at all, uh, no shaking or jerking
+[SEG0016] person_2 (DOCTOR): A few quick ones: tongue biting, confusion afterwards or palpitations?
+[SEG0017] person_1 (PATIENT): no, not any of them
+[SEG0018] person_2 (DOCTOR): anything with your heart, like skipped beats or fainting?
+[SEG0019] person_1 (PATIENT): Right, my heart's been fine, as far as I know.
+[SEG0020] person_2 (DOCTOR): have you got any chronic problems?
+[SEG0021] person_1 (PATIENT): I've got high blood pressure
+[SEG0022] person_2 (DOCTOR): what about allergies to to medicines or foods or anything else?
+[SEG0023] person_1 (PATIENT): I don't have any known medication allergies.
+[SEG0024] person_2 (DOCTOR): let's go through your medication what are you taking?
+[SEG0025] person_1 (PATIENT): I take amlodipine, 5 milligrams, once a day for my pressure.
+[SEG0026] person_2 (DOCTOR): have you had to have anything operated on?
+[SEG0027] person_1 (PATIENT): uh I had my tonsils out when I was a child
+[SEG0028] person_2 (DOCTOR): so, do you get any exercise?
+[SEG0029] person_1 (PATIENT): I walk for about half an hour most days.
+[SEG0030] person_2 (DOCTOR): What kind of work do you do?
+[SEG0031] person_1 (PATIENT): I work on a farm, it's quite physical.
+[SEG0032] person_2 (DOCTOR): let me tell you where I've got to. I think we're dealing with a simple faint, probably reflex-related at this stage. I want to be honest that this is an impression, not a final answer
+[SEG0033] person_1 (PATIENT): Is it something serious, doctor?
+[SEG0034] person_2 (DOCTOR): I can't promise yet, but most people with a simple faint, probably reflex-related do well once it's treated properly so, to recap quickly you've been passing out once last week for three days, severe, and no tongue biting or palpitations
+[SEG0035] person_1 (PATIENT): yes, that's right
+[SEG0036] person_2 (DOCTOR): An ECG is what I'd like next for syncope drink enough water and avoid standing still for long stretches and sit if you feel it coming come back after the results are back can you run through the plan with me quickly just to be certain?
+[SEG0037] person_1 (PATIENT): so I come back after the results are back is that right?
+[SEG0038] person_2 (DOCTOR): Yes, exactly right. Okay, I think we're finished. Is everything clear?
+[SEG0039] person_1 (PATIENT): Right. Thanks again.
+
+JSON:

@@ -1,0 +1,80 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00036)
+[SEG0001] person_1 (DOCTOR): Okay, hello, come through.
+[SEG0002] person_2 (PATIENT): Thanks. Sorry, I'm a little early.
+[SEG0003] person_3 (CAREGIVER): Doctor, thank you for seeing us.
+[SEG0004] person_1 (DOCTOR): Tell me what's been troubling you.
+[SEG0005] person_4 (FAMILY_MEMBER): He's been having burning when I pass urine, doctor.
+[SEG0006] person_1 (DOCTOR): Roughly when did it start?
+[SEG0007] person_2 (PATIENT): About a week, give or take.
+[SEG0008] person_3 (CAREGIVER): It was closer to two weeks, doctor.
+[SEG0009] person_1 (DOCTOR): Okay, so roughly one to two weeks. Is that right?
+[SEG0010] person_2 (PATIENT): Yeah, roughly.
+[SEG0011] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0012] person_2 (PATIENT): Pretty moderate, if I'm being honest. It happens once or twice a day.
+[SEG0013] person_2 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0014] person_3 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0015] person_2 (PATIENT): I was getting to that! As for cloudy, smelly urine, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0016] person_5 (UNKNOWN): Yes, that's right, that's how it was.
+[SEG0017] person_1 (DOCTOR): What medicines do you take regularly?
+[SEG0018] person_2 (PATIENT): I take iron tablets, once a day.
+[SEG0019] person_2 (PATIENT): It's a... um, I can't remember what it's called. It's a round yellow one.
+[SEG0020] person_1 (DOCTOR): Do you remember what it's for?
+[SEG0021] person_2 (PATIENT): For my acidity, I believe. My wife sets them out for me, I just take what I'm given. It's Asthalin inhaler, when needed.
+[SEG0022] person_3 (CAREGIVER): That's what's prescribed, but I'm not sure he takes it every day.
+[SEG0023] person_2 (PATIENT): I'm on cranberry juice, every day.
+[SEG0024] person_1 (DOCTOR): Have you ever been under the knife?
+[SEG0025] person_2 (PATIENT): I had my thyroid operated on a long time ago.
+[SEG0026] person_1 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0027] person_2 (PATIENT): I've had diabetes for five years now.
+[SEG0028] person_1 (DOCTOR): Uh-huh.
+[SEG0029] person_2 (PATIENT): I've had low haemoglobin for five years now. I have acid reflux.
+[SEG0030] person_1 (DOCTOR): Uh-huh.
+[SEG0031] person_2 (PATIENT): Um, I have asthma, for about a year.
+[SEG0032] person_1 (DOCTOR): Uh-huh. Alright, low haemoglobin and asthma, that matches what I have here. Alright, what about allergies, to medicines or foods or anything else?
+[SEG0033] person_2 (PATIENT): Yes, codeine. I get feeling very drowsy.
+[SEG0034] person_1 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0035] person_2 (PATIENT): My grandmother had breast cancer. My father was diabetic.
+[SEG0036] person_1 (DOCTOR): What kind of work do you do?
+[SEG0037] person_2 (PATIENT): I work on a farm, it's quite physical.
+[SEG0038] person_1 (DOCTOR): Nothing like vomiting?
+[SEG0039] person_2 (PATIENT): Nope, no vomiting.
+[SEG0040] person_3 (CAREGIVER): Actually, doctor, I did notice vomiting. He doesn't always say.
+[SEG0041] person_2 (PATIENT): No, I don't think I did. Maybe a little, I'm not sure.
+[SEG0042] person_1 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. Any vaginal discharge or blood in the urine?
+[SEG0043] person_2 (PATIENT): No, no vaginal discharge, no blood in the urine. I did have pain low in the tummy at one point, but that went away on its own.
+[SEG0044] person_1 (DOCTOR): Right, and what about back pain or similar episode recently?
+[SEG0045] person_2 (PATIENT): No back pain or similar episode recently, none of it.
+[SEG0046] person_1 (DOCTOR): How's your breathing otherwise?
+[SEG0047] person_2 (PATIENT): Breathing's normal.
+[SEG0048] person_1 (DOCTOR): I'll take a few measurements first.
+[SEG0049] person_1 (DOCTOR): Just relax your arm...
+[SEG0050] person_1 (DOCTOR): Okay: SpO2 99 percent on room air, temperature is 36.8 degrees, heart rate 71, BP is 126 over 79.
+[SEG0051] person_2 (PATIENT): Is that okay?
+[SEG0052] person_1 (DOCTOR): Let's look at it together in a minute.
+[SEG0053] person_1 (DOCTOR): Let me examine, it won't take long.
+[SEG0054] person_1 (DOCTOR): Tell me if anything hurts.
+[SEG0055] person_1 (DOCTOR): There's mild tenderness above the pubic bone, and no tenderness in the loins.
+[SEG0056] person_2 (PATIENT): Go ahead.
+[SEG0057] person_1 (DOCTOR): Okay, you can sit up. Stop me if I've got anything wrong. You've had burning when you pass urine, moderate, and no back pain.
+[SEG0058] person_2 (PATIENT): Correct.
+[SEG0059] person_1 (DOCTOR): I'm sending you for a urine culture because of urinary symptoms. Let's get a urine test, for urinary symptoms. It's a routine test and it'll give us a much clearer picture. For this, trimethoprim, 200 milligrams, twice a day, for three days. It's for urine infection. Drink plenty of water and don't hold it in when you need to go.
+[SEG0060] person_1 (DOCTOR): Mhm. Don't skip meals, and try to eat smaller portions more often through the day. Do get help quickly if you get a fever, back pain or vomiting.
+[SEG0061] person_2 (PATIENT): Okay, I understand.
+[SEG0062] person_1 (DOCTOR): Let's review you if it's not better in three days.
+[SEG0063] person_2 (PATIENT): That works for me.
+[SEG0064] person_1 (DOCTOR): Thanks for coming in.
+[SEG0065] person_2 (PATIENT): Nothing more from me, thanks.
+
+JSON:

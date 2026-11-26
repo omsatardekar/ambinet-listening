@@ -1,0 +1,48 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03258)
+[SEG0001] person_1 (PATIENT): Hi doctor, you know, am I too early?
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): Mainly hearing getting worse in both ears. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): I'll just record a few vital signs.
+[SEG0005] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0006] person_2 (DOCTOR): Okay: pulse 75, BP is 116 over 73, SpO2 99 percent on room air, temperature 36.8. What's the timeline, when did it begin?
+[SEG0007] person_1 (PATIENT): It's been like this since last night.
+[SEG0008] person_2 (DOCTOR): Is it a lot or only a little?
+[SEG0009] person_1 (PATIENT): Maybe a eight out of ten on a bad day. And there's hearing better in a noisy room as well, about a week now. With hearing better in a noisy room, I'd call it moderate.
+[SEG0010] person_2 (DOCTOR): Did you notice any vertigo?
+[SEG0011] person_1 (PATIENT): Nope, no vertigo.
+[SEG0012] person_2 (DOCTOR): Any facial weakness, ear pain or discharge?
+[SEG0013] person_1 (PATIENT): No, no facial weakness, ear pain or discharge.
+[SEG0014] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0015] person_1 (PATIENT): No, nothing there.
+[SEG0016] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0017] person_1 (PATIENT): I quit smoking around ten years ago. I'm a bus driver, so I sit for long hours. I grab fast food at lunch most days. I swim twice a week.
+[SEG0018] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0019] person_1 (PATIENT): No surgery, no.
+[SEG0020] person_2 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0021] person_1 (PATIENT): I have depression.
+[SEG0022] person_2 (DOCTOR): Sure.
+[SEG0023] person_1 (PATIENT): I've had migraines for two years now.
+[SEG0024] person_2 (DOCTOR): Yes, depression is known to us, good to have that clear. What's on your current medicine list?
+[SEG0025] person_1 (PATIENT): I'm on mirtazapine, 15 milligrams, at night for my mood. Propranolol. I take it 40 milligrams, twice a day.
+[SEG0026] person_2 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0027] person_2 (DOCTOR): Hold that for a second.
+[SEG0028] person_2 (DOCTOR): Both ear drums look normal and the tuning fork is heard better through the bone.
+[SEG0029] person_1 (PATIENT): Okay, doctor.
+[SEG0030] person_2 (DOCTOR): So, that's the examination finished. Right, here's what I'm thinking. I'd lean towards a conductive hearing loss, possibly otosclerosis. It could also be wax, so we'll keep that open. I'll request a CT scan of the ears, it'll help with possible otosclerosis. A hearing aid or an operation are both options after the tests.
+[SEG0031] person_2 (DOCTOR): Sure. I'd like you to see the ENT clinic as well, and I'll write the referral. I think we're done unless you have questions.
+[SEG0032] person_1 (PATIENT): Great, thank you for your help.
+[SEG0033] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02849)
+[SEG0001] person_1 (PATIENT): Um, morning, doctor. Is this the right room?
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_3 (CAREGIVER): Hello, you know, doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_1 (PATIENT): I've been dealing with a severe headache. Work has been very busy so I kept ignoring it. I'd rather know what's going on than keep guessing.
+[SEG0005] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0006] person_1 (PATIENT): Rosuvastatin, 10 milligrams, maybe, at night for my cholesterol.
+[SEG0007] person_2 (DOCTOR): Do you have the packet or the prescription with you?
+[SEG0008] person_1 (PATIENT): No, it's at home.
+[SEG0009] person_2 (DOCTOR): What's the timeline, when did it begin?
+[SEG0010] person_1 (PATIENT): I mean, about a week, give or take.
+[SEG0011] person_3 (CAREGIVER): I think it's been nearer two weeks, actually.
+[SEG0012] person_2 (DOCTOR): Okay, so roughly one to two weeks. Is that right?
+[SEG0013] person_1 (PATIENT): Yeah, roughly.
+[SEG0014] person_2 (DOCTOR): Is it a lot or only a little?
+[SEG0015] person_1 (PATIENT): Severe, really.
+[SEG0016] person_2 (DOCTOR): Okay, go on.
+[SEG0017] person_1 (PATIENT): There's pain under the right ribs as well.
+[SEG0018] person_2 (DOCTOR): And what about vaginal bleeding, leaking fluid or reduced baby movements?
+[SEG0019] person_1 (PATIENT): No, I'd have said so.
+[SEG0020] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0021] person_1 (PATIENT): Nothing on the skin, no.
+[SEG0022] person_2 (DOCTOR): Have you had any surgical procedures?
+[SEG0023] person_1 (PATIENT): Uh, um, yes, I had a mole taken off my arm, a few years ago. I'd rather not end up on lots of tablets if I can avoid it.
+[SEG0024] person_2 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0025] person_1 (PATIENT): Uh, uh, my uncle has high cholesterol.
+[SEG0026] person_2 (DOCTOR): Do you live by yourself?
+[SEG0027] person_1 (PATIENT): No, I share a house with my brother.
+[SEG0028] person_2 (DOCTOR): How active are you?
+[SEG0029] person_1 (PATIENT): I hardly move around during the day.
+[SEG0030] person_2 (DOCTOR): What about your medical history?
+[SEG0031] person_1 (PATIENT): I've got high cholesterol. I've had an underactive thyroid for nearly five years now. I'm hoping you can tell me something definite.
+[SEG0032] person_2 (DOCTOR): Yes, high cholesterol and an underactive thyroid are known to us, good to have that clear. Do you react to any medicines or foods? Any allergies?
+[SEG0033] person_1 (PATIENT): No, you know, not that I know of.
+[SEG0034] person_2 (DOCTOR): Let me take your readings now.
+[SEG0035] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0036] person_2 (DOCTOR): Okay: pulse 73, BP is 150 over 103, weight 70 kilos, SpO2 97 percent on room air, height 176 centimetres.
+[SEG0037] person_2 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0038] person_1 (PATIENT): Right.
+[SEG0039] person_2 (DOCTOR): I'm just checking this side.
+[SEG0040] person_2 (DOCTOR): Your blood pressure is very high and your reflexes are brisk.
+[SEG0041] person_2 (DOCTOR): That's the examination finished. So where does that leave us? I think we're dealing with severe pre-eclampsia at this stage. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. There's nothing new for me to start or arrange today. Does all of that make sense?
+[SEG0042] person_1 (PATIENT): Right, I'll do that. Thank you, doctor.
+
+JSON:

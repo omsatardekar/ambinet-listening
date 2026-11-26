@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20240)
+[SEG0001] person_1 (DOCTOR): Hello, sorry about the delay, do sit. So, what would you like to start with today?
+[SEG0002] person_2 (PATIENT): Um, it's a bump on my head. I thought I'd wait, but it it hasn't gone.
+[SEG0003] person_1 (DOCTOR): Since when exactly?
+[SEG0004] person_2 (PATIENT): It's been ten days now. It's the not knowing that gets to me. Sorry, I know I'm rambling a bit. And I've been feeling dizzy as well, for three days.
+[SEG0005] person_1 (DOCTOR): how much trouble does it give you?
+[SEG0006] person_2 (PATIENT): Moderate, really.
+[SEG0007] person_1 (DOCTOR): alright, any a headache since the fall as well?
+[SEG0008] person_2 (PATIENT): Yeah, I've had that since this morning. Okay, so as for headache since the fall, honestly, a couple of times a week.
+[SEG0009] person_1 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0010] person_1 (DOCTOR): Keep your arm relaxed for me...
+[SEG0011] person_1 (DOCTOR): Okay: saturation 98 percent, heart rate 76. And temperature 36.9, respiratory rate 15, pressure 109 over 78.
+[SEG0012] person_2 (PATIENT): Is that normal?
+[SEG0013] person_1 (DOCTOR): I'll come back to the numbers
+[SEG0014] person_1 (DOCTOR): okay, time for me to examine you
+[SEG0015] person_2 (PATIENT): fine by me
+[SEG0016] person_1 (DOCTOR): Hold that for a second.
+[SEG0017] person_1 (DOCTOR): There is a small bruise on the forehead, the pupils are equal and reactive, and you are walking steadily.
+[SEG0018] person_1 (DOCTOR): Good, you can sit up again. And double vision, any of that?
+[SEG0019] person_2 (PATIENT): No, uh, none, no double vision.
+[SEG0020] person_1 (DOCTOR): A few quick ones: clear fluid from the nose or ear, weakness or confusion?
+[SEG0021] person_2 (PATIENT): I haven't had clear fluid from the nose or ear, weakness or confusion, no.
+[SEG0022] person_1 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0023] person_2 (PATIENT): Nothing unusual, no.
+[SEG0024] person_1 (DOCTOR): right, do you have any long-term conditions?
+[SEG0025] person_2 (PATIENT): yes, high blood pressure. I have eczema, for about a year
+[SEG0026] person_1 (DOCTOR): Okay, what else?
+[SEG0027] person_1 (DOCTOR): Alright, eczema, that matches what I have here. Does your family have any medical conditions?
+[SEG0028] person_2 (PATIENT): My brother has epilepsy.
+[SEG0029] person_1 (DOCTOR): what do you take on a normal day? I ask because it helps me narrow things down
+[SEG0030] person_2 (PATIENT): It's hydrocortisone cream, when needed.
+[SEG0031] person_1 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0032] person_2 (PATIENT): let me think, yes, trimethoprim, it gives me itching
+[SEG0033] person_1 (DOCTOR): do you get out much?
+[SEG0034] person_2 (PATIENT): Not much, I mostly stay in these days
+[SEG0035] person_1 (DOCTOR): Is there someone at home?
+[SEG0036] person_2 (PATIENT): My husband and I live above the shop.
+[SEG0037] person_1 (DOCTOR): So where does that leave us? I think we're dealing with a minor head injury without worrying signs at this stage.
+[SEG0038] person_2 (PATIENT): What are the odds it's serious?
+[SEG0039] person_1 (DOCTOR): I understand the worry. At the moment I'd say it's a minor head injury without worrying signs, and we'll watch how it goes. For this, paracetamol, 1 gram, every six hours if needed, for three days. It's for headache. Someone should stay with you tonight, and no alcohol or contact sport for now. I'll want another look if the headache gets worse
+[SEG0040] person_2 (PATIENT): I'll note it in my calendar
+[SEG0041] person_1 (DOCTOR): Anything else on your mind before you go?
+[SEG0042] person_2 (PATIENT): Great, thank you for your help.
+
+JSON:

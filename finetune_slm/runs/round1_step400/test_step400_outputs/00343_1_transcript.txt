@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00343)
+[SEG0001] person_1 (NURSE): Doctor, the patient's with us now. I did the usual checks at the front, so just say when you want them.
+[SEG0002] person_2 (DOCTOR): Perfect, thanks. Hello there, so what's the trouble?
+[SEG0003] person_3 (CAREGIVER): Uh, morning, doctor. I'll stay and fill in anything that's missed. We came because of staring spells that others noticed.
+[SEG0004] person_2 (DOCTOR): When did you first notice it?
+[SEG0005] person_4 (PATIENT): ever since... since last night, really
+[SEG0006] person_2 (DOCTOR): On a normal day, how strong is it?
+[SEG0007] person_4 (PATIENT): I'd call it moderate.
+[SEG0008] person_4 (PATIENT): and the other thing I wanted to mention is that I can't really—
+[SEG0009] person_3 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0010] person_4 (PATIENT): Oh, I was getting to that! I've also had a metallic taste before it, for two days.
+[SEG0011] person_2 (DOCTOR): Any an odd smell before it as well?
+[SEG0012] person_4 (PATIENT): yes, I have
+[SEG0013] person_1 (NURSE): Doctor, I've got the readings for you. Temperature 36.6, pressure 124 over 74, heart rate 84.
+[SEG0014] person_2 (DOCTOR): Good, thank you.
+[SEG0015] person_2 (DOCTOR): Right, let me check a few things physically.
+[SEG0016] person_2 (DOCTOR): Hold that position for me.
+[SEG0017] person_2 (DOCTOR): Coordination is normal on finger-to-nose testing.
+[SEG0018] person_2 (DOCTOR): Let me just check something.
+[SEG0019] person_2 (DOCTOR): You're alert, speech is normal and cranial nerves are intact.
+[SEG0020] person_2 (DOCTOR): all done, you can get dressed let me check a few things any alcohol before it or tongue biting?
+[SEG0021] person_4 (PATIENT): No, no alcohol before it, no tongue biting. I did have a strange episode where I blanked out at one point, but that went away on its own.
+[SEG0022] person_2 (DOCTOR): Have you had any losing control of the bladder, jerking movements or head injury?
+[SEG0023] person_4 (PATIENT): No, no losing control of the bladder, jerking movements or head injury.
+[SEG0024] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0025] person_4 (PATIENT): okay, so no, joints are fine
+[SEG0026] person_2 (DOCTOR): do you have any known allergies at all?
+[SEG0027] person_4 (PATIENT): No, none that I know of.
+[SEG0028] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0029] person_4 (PATIENT): My mother has migraines.
+[SEG0030] person_2 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0031] person_4 (PATIENT): I've had anxiety, yes
+[SEG0032] person_2 (DOCTOR): Sure.
+[SEG0033] person_4 (PATIENT): I have heart disease, for about ten years
+[SEG0034] person_2 (DOCTOR): And apart from that?
+[SEG0035] person_2 (DOCTOR): Yes, anxiety and heart disease are known to us, good to have that clear.
+[SEG0036] person_2 (DOCTOR): So, which tablets or creams or inhalers do you use?
+[SEG0037] person_4 (PATIENT): Escitalopram, 10 milligrams, once a day. Clopidogrel, 75 milligrams, maybe, once a day.
+[SEG0038] person_2 (DOCTOR): did you happen to bring the box or the paperwork?
+[SEG0039] person_4 (PATIENT): No, it's at home. Aspirin I don't take anymore.
+[SEG0040] person_2 (DOCTOR): Do you live alone?
+[SEG0041] person_4 (PATIENT): Yes, I live on my own.
+[SEG0042] person_2 (DOCTOR): Do you get any exercise?
+[SEG0043] person_4 (PATIENT): I walk for about half an hour most days.
+[SEG0044] person_2 (DOCTOR): so, based on the history and the examination, I don't have a clear answer today: a possible focal seizure that needs investigating is possible, and so is a faint. A panic episode is still possible
+[SEG0045] person_4 (PATIENT): Is this going to go away?
+[SEG0046] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a possible focal seizure that needs investigating, but I'd like to confirm. I'm going to order blood tests, for episode of altered awareness. The result will help us decide whether anything more is needed.
+[SEG0047] person_4 (PATIENT): where do I go for that?
+[SEG0048] person_2 (DOCTOR): I'd like to arrange an MRI of the brain for possible seizure. I'm sending you for an EEG because of possible seizure. Don't drive until we've looked into this. We'll refer you to the neurology clinic.
+[SEG0049] person_4 (PATIENT): sure, where do I go?
+[SEG0050] person_2 (DOCTOR): And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0051] person_4 (PATIENT): Right, will do.
+[SEG0052] person_2 (DOCTOR): That's it on my side. Anything unclear?
+[SEG0053] person_4 (PATIENT): That's everything I wanted to to ask. Thank you.
+
+JSON:

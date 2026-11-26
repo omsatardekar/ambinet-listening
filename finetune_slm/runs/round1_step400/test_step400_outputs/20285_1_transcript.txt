@@ -1,0 +1,49 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20285)
+[SEG0001] person_1 (PATIENT): Good evening, um, doctor, thanks for seeing me.
+[SEG0002] person_2 (DOCTOR): yes, have a seat. Tell me what's going on
+[SEG0003] person_3 (FAMILY_MEMBER): Morning, doctor. I'll stay and fill in anything that's missed. Let me think, he's been having itching especially at night, doctor.
+[SEG0004] person_2 (DOCTOR): What's the timeline, when did it begin?
+[SEG0005] person_1 (PATIENT): It's been four weeks, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): mostly moderate i'd say once or twice a day yeah, as for small red bumps on my wrists, I honestly can't say when that began it might have been last month or the month before
+[SEG0008] person_2 (DOCTOR): and what about rash on the face or joint pain?
+[SEG0009] person_1 (PATIENT): Hmm, no, I haven't had any of them.
+[SEG0010] person_2 (DOCTOR): And what about oozing or new medicines?
+[SEG0011] person_1 (PATIENT): No, not a single one.
+[SEG0012] person_2 (DOCTOR): right, any change in your bowel habit or your stomach generally?
+[SEG0013] person_1 (PATIENT): Oh, bowels are regular, nothing odd.
+[SEG0014] person_2 (DOCTOR): your breathing, any trouble there?
+[SEG0015] person_1 (PATIENT): No, nothing there.
+[SEG0016] person_2 (DOCTOR): has anyone ever diagnosed you with something?
+[SEG0017] person_1 (PATIENT): Yes, anxiety.
+[SEG0018] person_2 (DOCTOR): mm, okay
+[SEG0019] person_2 (DOCTOR): let's run through your medicines
+[SEG0020] person_1 (PATIENT): Calamine lotion, when needed.
+[SEG0021] person_2 (DOCTOR): Is that long-standing?
+[SEG0022] person_1 (PATIENT): For about three months.
+[SEG0023] person_2 (DOCTOR): Has anything ever caused you a reaction? I mean any allergies.
+[SEG0024] person_1 (PATIENT): No known allergies.
+[SEG0025] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0026] person_1 (PATIENT): I have about eight cigarettes in a day. I used to drink heavily but I stopped four years ago. I swim twice a week. My partner and our baby. I'm a hairdresser, on my feet all day.
+[SEG0027] person_2 (DOCTOR): shall I check your blood pressure and pulse?
+[SEG0028] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0029] person_2 (DOCTOR): Okay: pulse 67, respiratory rate 14, blood pressure 125 over 68, temperature is 36.7 degrees, oxygen saturation is 99 percent.
+[SEG0030] person_2 (DOCTOR): now I'm going to do a short physical check
+[SEG0031] person_2 (DOCTOR): Okay, stay as you are for a a moment.
+[SEG0032] person_2 (DOCTOR): There are small burrow-like tracks and red bumps between the fingers and on the wrists, with scratch marks.
+[SEG0033] person_2 (DOCTOR): So, thank you, you can get dressed. So where does that leave us? The most likely explanation is scabies. I'd also keep eczema in mind. Everyone at home should be treated at the same time, and wash bedding and clothes at a high temperature. I think we're done unless you have questions.
+[SEG0034] person_1 (PATIENT): Great, um, thank you for your help.
+
+JSON:

@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00476)
+[SEG0001] person_1 (PATIENT): Doctor? Hi. I hope I've got the right time.
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_1 (PATIENT): Um, so... blood in my urine. That's why I came. I'd rather know what's going on than keep guessing. I just want to get back to normal, really.
+[SEG0004] person_2 (DOCTOR): Since when have you had this?
+[SEG0005] person_1 (PATIENT): Since yesterday, that's when it began.
+[SEG0006] person_2 (DOCTOR): Let me check a few things. Any difficulty passing urine, recent injury or pain on passing urine?
+[SEG0007] person_1 (PATIENT): I haven't had difficulty passing urine, recent injury or pain on passing urine, no.
+[SEG0008] person_2 (DOCTOR): So, have you noticed any weakness, or anything odd with your balance?
+[SEG0009] person_1 (PATIENT): Nothing odd there.
+[SEG0010] person_2 (DOCTOR): Do you live alone?
+[SEG0011] person_1 (PATIENT): Yes, I live on my own.
+[SEG0012] person_2 (DOCTOR): Do you exercise at all?
+[SEG0013] person_1 (PATIENT): I go to the gym a couple of times a week.
+[SEG0014] person_2 (DOCTOR): Okay, tell me about your work.
+[SEG0015] person_1 (PATIENT): I'm a software engineer, so I'm at a screen all day.
+[SEG0016] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0017] person_1 (PATIENT): No, I've never had anything serious.
+[SEG0018] person_2 (DOCTOR): Any regular medication?
+[SEG0019] person_1 (PATIENT): Nothing, no.
+[SEG0020] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0021] person_1 (PATIENT): Eggs. I come out in... well, stomach cramps.
+[SEG0022] person_2 (DOCTOR): Okay, I'll take a few measurements first.
+[SEG0023] person_2 (DOCTOR): Just relax your arm...
+[SEG0024] person_2 (DOCTOR): Okay: temp 36.6 degrees, pressure 120 over 76. And weight 92 kilos, height 154 centimetres, heart rate 86.
+[SEG0025] person_1 (PATIENT): Is that normal?
+[SEG0026] person_2 (DOCTOR): I'll come back to those numbers.
+[SEG0027] person_2 (DOCTOR): I'll examine you now, bear with me.
+[SEG0028] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0029] person_2 (DOCTOR): Abdomen is soft, no masses, and no tenderness in the loins.
+[SEG0030] person_2 (DOCTOR): Right, you can sit back down. Right, here's what I'm thinking. I'm honestly not certain yet. It could be blood in the urine that needs full investigation, or it might be a kidney stone.
+[SEG0031] person_1 (PATIENT): Doctor, is this dangerous?
+[SEG0032] person_2 (DOCTOR): I can't promise yet, but most people with blood in the urine that needs full investigation do well once it's treated properly. Stop me if I've got anything wrong. You've had blood in your urine, since yesterday, and no pain on passing urine or recent injury.
+[SEG0033] person_1 (PATIENT): Correct.
+[SEG0034] person_2 (DOCTOR): We should do a CT scan of the kidneys and bladder for haematuria. Keep drinking plenty of water, and let us know quickly if you pass clots or can't pass urine. Let's get you seen by the urology clinic, I'll arrange the letter.
+[SEG0035] person_1 (PATIENT): Sure, where do I go?
+[SEG0036] person_2 (DOCTOR): Come back in two weeks. Ask me anything before you go.
+[SEG0037] person_1 (PATIENT): I appreciate it, doctor.
+[SEG0038] person_2 (DOCTOR): See you then.
+
+JSON:

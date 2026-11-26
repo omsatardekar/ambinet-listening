@@ -1,0 +1,85 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_02_low_mood_wife_answers)
+[SEG0001] person_1 (DOCTOR): Sorry, sorry, one second, I just need to close this off or it'll vanish. Right. Mr Pryce, Mrs Pryce, come in, have a seat, wherever.
+[SEG0002] person_2 (FAMILY_MEMBER): Mm-hm.
+[SEG0003] person_2 (FAMILY_MEMBER): Thank you. I'll sit here, shall I? He'll only slouch by the door otherwise.
+[SEG0004] person_3 (PATIENT): I'm fine.
+[SEG0005] person_1 (DOCTOR): Perfect. Now, I've got a note here that says "tired, wants to see someone," which could be about anybody, so can you tell me in your own words what's brought you in today?
+[SEG0006] person_3 (PATIENT): Just tired.
+[SEG0007] person_1 (DOCTOR): Mm.
+[SEG0008] person_2 (FAMILY_MEMBER): He's been like it for weeks, doctor. I'm the one who made the appointment. He wouldn't.
+[SEG0009] person_1 (DOCTOR): Okay. Mr Pryce, is that fair? Is it weeks?
+[SEG0010] person_3 (PATIENT): Probably. Three, I suppose. About three weeks.
+[SEG0011] person_1 (DOCTOR): And when you say tired, is it more that you're sleepy, or that you've got no get up and go, no energy?
+[SEG0012] person_3 (PATIENT): No energy. I get home and I just sit.
+[SEG0013] person_1 (DOCTOR): You just sit. Does the sitting feel restful, or is it that you can't face doing anything else?
+[SEG0014] person_3 (PATIENT): Can't face it.
+[SEG0015] person_2 (FAMILY_MEMBER): Um, he used to do the allotment on Saturdays. He used to be out there every weekend and we'd have the lot, the beans and everything. He hasn't been since, oh, August?
+[SEG0016] person_3 (PATIENT): It's not August.
+[SEG0017] person_2 (FAMILY_MEMBER): Well it was before the leaves, Dennis.
+[SEG0018] person_3 (PATIENT): I don't, I wasn't interested.
+[SEG0019] person_1 (DOCTOR): So, um, that's something that you used to enjoy and you've gone off it?
+[SEG0020] person_3 (PATIENT): Yeah. Gone off most things.
+[SEG0021] person_1 (DOCTOR): Most things. Do you want to give me an example, or two?
+[SEG0022] person_3 (PATIENT): Football. Telly. I used to watch the match with the lads and now I just say I've got a headache.
+[SEG0023] person_1 (DOCTOR): Yes.
+[SEG0024] person_1 (DOCTOR): And that's been the same three weeks, or longer than that?
+[SEG0025] person_3 (PATIENT): About that. Maybe a bit more.
+[SEG0026] person_1 (DOCTOR): Okay. Was there a time before that when you felt tight in the chest, or someone mentioned that? I see something in the notes from the spring.
+[SEG0027] person_3 (PATIENT): Mm.
+[SEG0028] person_3 (PATIENT): Oh, that. It was when the team went down to nine people and I was covering two lots. My chest went all tight, like a band. But that went. It went when they got the temp in.
+[SEG0029] person_1 (DOCTOR): Okay.
+[SEG0030] person_1 (DOCTOR): So it's gone now, that tightness.
+[SEG0031] person_3 (PATIENT): Gone.
+[SEG0032] person_1 (DOCTOR): And has any of it come back at all, say, if work's been a bit much this week?
+[SEG0033] person_3 (PATIENT): No. Just the tired.
+[SEG0034] person_1 (DOCTOR): Right, er, thank you. Now I'm going to ask a few things that I ask everybody, so don't read anything into it. Any pain in your chest at all?
+[SEG0035] person_3 (PATIENT): No.
+[SEG0036] person_1 (DOCTOR): Have you had any thoughts of harming yourself, or feeling that you'd be better off not here?
+[SEG0037] person_3 (PATIENT): No. No, nothing like that.
+[SEG0038] person_2 (FAMILY_MEMBER): Uh, he did say, last Sunday, he said "what's the point" once, but he didn't mean, he wasn't saying.
+[SEG0039] person_3 (PATIENT): I was talking about the car. The MOT.
+[SEG0040] person_2 (FAMILY_MEMBER): Were you.
+[SEG0041] person_3 (PATIENT): Yes.
+[SEG0042] person_1 (DOCTOR): Okay. I'm glad you've said that, Mrs Pryce, and Mr Pryce, I'm going to take it at face value but I'll ask you again before you leave, if that's all right, and I'd rather you tell me straight, whatever it is. Fine?
+[SEG0043] person_3 (PATIENT): Fine.
+[SEG0044] person_1 (DOCTOR): Any weight loss that you've noticed? Trousers loose, that sort of thing?
+[SEG0045] person_3 (PATIENT): No, I don't think so. I've not looked.
+[SEG0046] person_2 (FAMILY_MEMBER): He's not lost anything. If anything he's been eating the biscuits.
+[SEG0047] person_1 (DOCTOR): Good to know. Any panic attacks, sudden feelings of dread or fear, heart racing?
+[SEG0048] person_3 (PATIENT): No, not those.
+[SEG0049] person_1 (DOCTOR): And hearing things, or seeing things that other people don't?
+[SEG0050] person_3 (PATIENT): No!
+[SEG0051] person_1 (DOCTOR): Sorry, I have to ask. Right, a bit of background then. I can see anxiety on your record, going back how long?
+[SEG0052] person_3 (PATIENT): Five years or so. After the redundancy thing at the old place.
+[SEG0053] person_1 (DOCTOR): And depression as well?
+[SEG0054] person_3 (PATIENT): That's what they called it at the time. Before that, I mean. Years back. I don't think about it.
+[SEG0055] person_1 (DOCTOR): Okay. And tablets, what are you taking at the minute?
+[SEG0056] person_3 (PATIENT): Well, uh, the cholesterol one. Atorvastatin. At night, twenty, I think. Twenty. Might be forty. It's the pink ones, small.
+[SEG0057] person_1 (DOCTOR): We'll check that on the system, it doesn't matter right now. Anything else?
+[SEG0058] person_3 (PATIENT): No.
+[SEG0059] person_2 (FAMILY_MEMBER): What about the other one?
+[SEG0060] person_3 (PATIENT): That's not, I'm not on that.
+[SEG0061] person_2 (FAMILY_MEMBER): Dennis.
+[SEG0062] person_3 (PATIENT): I stopped it. I stopped it ages ago, it made me feel like a, flat, like I was behind a window.
+[SEG0063] person_1 (DOCTOR): The sertraline. Is that the one you mean?
+[SEG0064] person_3 (PATIENT): The, yes. The sertraline.
+[SEG0065] person_1 (DOCTOR): When did you stop?
+[SEG0066] person_3 (PATIENT): Spring. March? April. I don't know, it was before the warm weather.
+[SEG0067] person_1 (DOCTOR): And did you stop it all at once, or did you taper off?
+[SEG0068] person_3 (PATIENT): All at once. I just stopped taking it.
+[SEG0069] person_1 (DOCTOR): Hm. I'm not telling you off, I'd just have liked to know. Was anyone aware?
+[SEG0070] person_2 (FAMILY_MEMBER): I only found out in the summer, when I found the box in the drawer, full.
+[SEG0071] person_3 (PATIENT): It's my body.
+[SEG0072] person_2 (FAMILY_MEMBER): I know it is, love.

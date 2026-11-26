@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03670)
+[SEG0001] person_1 (DOCTOR): Right, thanks for waiting, come in.
+[SEG0002] person_2 (PATIENT): Hello, thanks for fitting me in.
+[SEG0003] person_3 (FAMILY_MEMBER): Good morning, doctor. I came along to help out.
+[SEG0004] person_1 (DOCTOR): Sorry about the wait, we're running a bit behind.
+[SEG0005] person_2 (PATIENT): Oh, that's fine. I was just reading something on my phone.
+[SEG0006] person_1 (DOCTOR): So what can I do for you?
+[SEG0007] person_3 (FAMILY_MEMBER): Doctor, it's a sore spot on the front of my shin. That's what we're worried about.
+[SEG0008] person_1 (DOCTOR): Alright, what's the timeline, when did it begin?
+[SEG0009] person_2 (PATIENT): About... well, five days.
+[SEG0010] person_1 (DOCTOR): Mm-hmm. Is it bearing on you a lot?
+[SEG0011] person_2 (PATIENT): Pretty severe, if I'm being honest.
+[SEG0012] person_1 (DOCTOR): What about being told it was shin splints, have you noticed that?
+[SEG0013] person_2 (PATIENT): Mm, yes.
+[SEG0014] person_1 (DOCTOR): Right, any numbness or injury?
+[SEG0015] person_2 (PATIENT): No, uh, nothing to report there.
+[SEG0016] person_1 (DOCTOR): Let me check a few things. Any swelling or fever?
+[SEG0017] person_2 (PATIENT): No, none of those at all.
+[SEG0018] person_1 (DOCTOR): Right, how's your breathing otherwise?
+[SEG0019] person_2 (PATIENT): No problems with breathing.
+[SEG0020] person_1 (DOCTOR): Tell me about any past illnesses or ongoing conditions.
+[SEG0021] person_2 (PATIENT): High blood pressure, for about a year.
+[SEG0022] person_1 (DOCTOR): Alright, high blood pressure, that matches what I have here. Have you got any known allergies?
+[SEG0023] person_2 (PATIENT): Right, uh, not to my knowledge, no.
+[SEG0024] person_1 (DOCTOR): Now some background about your lifestyle.
+[SEG0025] person_2 (PATIENT): I walk the dog every morning. I live with my elderly mother. I grab fast food at lunch most days.
+[SEG0026] person_1 (DOCTOR): Tell me your medicines, please.
+[SEG0027] person_2 (PATIENT): I take hydrochlorothiazide, 12.5 milligrams, every morning. I'd rather know what's going on than keep guessing. Sorry, what was I saying, I take ibuprofen, 400 milligrams, when needed.
+[SEG0028] person_1 (DOCTOR): Roughly how long on that one?
+[SEG0029] person_2 (PATIENT): About a month now.
+[SEG0030] person_1 (DOCTOR): Mm-hmm.
+[SEG0031] person_1 (DOCTOR): Let me take your readings now.
+[SEG0032] person_1 (DOCTOR): That's it, just a little longer...
+[SEG0033] person_1 (DOCTOR): Okay: temperature is 36.5 degrees, SpO2 97 percent on room air, pulse 70, blood pressure 120 over 76.
+[SEG0034] person_1 (DOCTOR): Shall I start the examination?
+[SEG0035] person_2 (PATIENT): Right.
+[SEG0036] person_1 (DOCTOR): Nearly finished here.
+[SEG0037] person_1 (DOCTOR): There is a very localised tender spot on the bone and hopping on that leg hurts.
+[SEG0038] person_1 (DOCTOR): That's all I needed to check.
+[SEG0039] person_1 (DOCTOR): A vitamin D level is what I'd like next, for stress fracture. Stop running, no impact exercise until the scan, swimming or cycling is fine. Come back after the scan. Okay, that's all from me. Any questions?
+[SEG0040] person_2 (PATIENT): Oh, thank you, that's helpful.
+
+JSON:

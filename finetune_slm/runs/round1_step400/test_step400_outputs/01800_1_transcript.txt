@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01800)
+[SEG0001] person_1 (NURSE): Doctor, if you're free, we can start. I've got the numbers noted down.
+[SEG0002] person_2 (DOCTOR): Okay, thanks. Hi, how can I help today?
+[SEG0003] person_3 (PATIENT): Yeah, it's the worst headache of my life. I don't know what's causing it.
+[SEG0004] person_2 (DOCTOR): When was the first time you noticed it?
+[SEG0005] person_3 (PATIENT): For about four days, I'd say.
+[SEG0006] person_2 (DOCTOR): Okay, is it a lot or only a little?
+[SEG0007] person_3 (PATIENT): Pretty severe, if I'm being honest.
+[SEG0008] person_2 (DOCTOR): Has there been coming on in seconds too?
+[SEG0009] person_3 (PATIENT): Yeah. Six months, you know, I'd say.
+[SEG0010] person_2 (DOCTOR): Any head injury, weakness or fever at all?
+[SEG0011] person_3 (PATIENT): No, nothing to report there.
+[SEG0012] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0013] person_3 (PATIENT): I move fine otherwise.
+[SEG0014] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0015] person_3 (PATIENT): No, that's all fine.
+[SEG0016] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0017] person_3 (PATIENT): I'm allergic to trimethoprim, I get itching.
+[SEG0018] person_2 (DOCTOR): Did you ever have any procedures done?
+[SEG0019] person_3 (PATIENT): Yes, I had my septum straightened, in my thirties.
+[SEG0020] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0021] person_3 (PATIENT): Not really, no.
+[SEG0022] person_2 (DOCTOR): Right, do you do any exercise?
+[SEG0023] person_3 (PATIENT): I swim twice a week.
+[SEG0024] person_2 (DOCTOR): Is there someone at home?
+[SEG0025] person_3 (PATIENT): My husband and I live above the shop.
+[SEG0026] person_2 (DOCTOR): Any regular medication, tablets or creams?
+[SEG0027] person_3 (PATIENT): No, I'm not on anything.
+[SEG0028] person_2 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0029] person_3 (PATIENT): My mother has an underactive thyroid.
+[SEG0030] person_1 (NURSE): Doctor, I've got the readings for you. SpO2 97 percent on room air, BP is 154 over 97, respiratory rate 14, pulse is 91 beats a minute, temperature 36.8.
+[SEG0031] person_2 (DOCTOR): Okay, noted.
+[SEG0032] person_2 (DOCTOR): Let's move on to the examination.
+[SEG0033] person_2 (DOCTOR): Take a deep breath for me.
+[SEG0034] person_2 (DOCTOR): Your neck is stiff and you are very sensitive to light.
+[SEG0035] person_2 (DOCTOR): Good, you can sit up again. So where does that leave us? This looks most like a possible bleed around the brain. I'll request a lumbar puncture, it'll help with thunderclap headache. It's a routine test and it'll give us a much clearer picture.
+[SEG0036] person_3 (PATIENT): Right, understood.
+[SEG0037] person_2 (DOCTOR): I'll request an urgent CT scan of the head, it'll help with thunderclap headache. This needs an emergency scan, an ambulance is on its way. I'm going to send a referral to the emergency team. That's everything on my side. Anything you're unsure about?
+[SEG0038] person_3 (PATIENT): No, that's all. Thanks a lot.
+[SEG0039] person_2 (DOCTOR): Have a good day.
+
+JSON:

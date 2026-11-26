@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20231)
+[SEG0001] person_1 (DOCTOR): Afternoon, thanks for coming in.
+[SEG0002] person_2 (PATIENT): Hi doctor, I got here as fast as I could.
+[SEG0003] person_1 (DOCTOR): How are things, what's been happening?
+[SEG0004] person_2 (PATIENT): I'm here because of a rash between my fingers.
+[SEG0005] person_1 (DOCTOR): Let me quickly check your readings.
+[SEG0006] person_1 (DOCTOR): Sit still for a moment...
+[SEG0007] person_1 (DOCTOR): Okay: pulse is 78 beats a minute, respiratory rate 14. And BP is 111 over 68, saturation 99 percent. How long has it been like this?
+[SEG0008] person_2 (PATIENT): Around about three months... no wait, it's more like about a month.
+[SEG0009] person_1 (DOCTOR): How troublesome is it day to day?
+[SEG0010] person_2 (PATIENT): About a six out of ten. Uh, I've also had trouble sleeping, for about a month.
+[SEG0011] person_1 (DOCTOR): I follow.
+[SEG0012] person_1 (DOCTOR): Let me check a few things. Any new medicines, swollen glands, fever or rash on the face?
+[SEG0013] person_2 (PATIENT): No, no new medicines, swollen glands, fever or rash on the face.
+[SEG0014] person_1 (DOCTOR): So, have you had any oozing?
+[SEG0015] person_2 (PATIENT): Definitely no oozing.
+[SEG0016] person_1 (DOCTOR): Is your digestion otherwise okay?
+[SEG0017] person_2 (PATIENT): No, all normal there.
+[SEG0018] person_1 (DOCTOR): Tell me about any past illnesses or ongoing conditions.
+[SEG0019] person_2 (PATIENT): High cholesterol, for about a year. It's the not knowing that gets to me. Asthma, for two years. I've, I've had an underactive thyroid, yes.
+[SEG0020] person_1 (DOCTOR): Alright, asthma, that matches what I have here. Anything surgical in your history?
+[SEG0021] person_2 (PATIENT): I had a wisdom tooth extraction under sedation five years ago.
+[SEG0022] person_1 (DOCTOR): Before we go further, any allergies?
+[SEG0023] person_2 (PATIENT): I'm allergic to amoxicillin, I get a rash all over.
+[SEG0024] person_1 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0025] person_2 (PATIENT): It's rosuvastatin, 10 milligrams, at night. Asthalin inhaler, when needed for my asthma. I took the morning off to come in today. Sorry, I know I'm rambling a bit. Eltroxin. I take it every morning for my thyroid.
+[SEG0026] person_1 (DOCTOR): How much do you take?
+[SEG0027] person_2 (PATIENT): It's 100 micrograms. Calamine lotion, when needed.
+[SEG0028] person_1 (DOCTOR): Is that long-standing?
+[SEG0029] person_2 (PATIENT): For about a month.
+[SEG0030] person_1 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0031] person_2 (PATIENT): Not much, I mostly stay in these days. My partner and our baby. Yes, I work in a bakery, early starts.
+[SEG0032] person_1 (DOCTOR): Alright, over here please and I'll take a look.
+[SEG0033] person_2 (PATIENT): Sure thing.
+[SEG0034] person_1 (DOCTOR): Alright, stay as you are for a moment.
+[SEG0035] person_1 (DOCTOR): There are small burrow-like tracks and red bumps between the fingers and on the wrists, with scratch marks.
+[SEG0036] person_2 (PATIENT): Of course.
+[SEG0037] person_1 (DOCTOR): Thank you, you can get dressed. Taking everything into account, my working impression is scabies. An allergic rash is still possible. I'd like you to take permethrin cream, 5 percent, once, then again after a week, for two weeks. That's for scabies. Everyone at home should be treated at the same time, and wash bedding and clothes at a high temperature. We'll catch up if the itching continues after four weeks. Okay, does all of that make sense?
+[SEG0038] person_2 (PATIENT): Okay, that makes sense. Thanks for explaining.
+[SEG0039] person_1 (DOCTOR): See you soon.
+
+JSON:

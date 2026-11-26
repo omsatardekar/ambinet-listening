@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03504)
+[SEG0001] person_1 (PATIENT): Morning, doctor. Lovely to meet you.
+[SEG0002] person_2 (DOCTOR): Okay, come in. Please sit. How can I help you?
+[SEG0003] person_1 (PATIENT): It's tingling in my feet. I thought I'd wait, um, but it hasn't gone.
+[SEG0004] person_2 (DOCTOR): How long has this been bothering you?
+[SEG0005] person_1 (PATIENT): For three days, I'd say.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): It happens all the time. I'd say moderate. There's mild bloating as well. With mild bloating, I'd give it a eight, out of ten.
+[SEG0008] person_2 (DOCTOR): Shall I check your blood pressure and pulse?
+[SEG0009] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0010] person_2 (DOCTOR): Okay: pulse 82, temperature 36.5, oxygen saturation is 98 percent, BP is 115 over 68.
+[SEG0011] person_1 (PATIENT): Is that okay?
+[SEG0012] person_2 (DOCTOR): We'll go over that shortly.
+[SEG0013] person_2 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0014] person_2 (DOCTOR): Raise your arm for me.
+[SEG0015] person_2 (DOCTOR): The feeling in your feet is reduced and your balance with the eyes closed is poor.
+[SEG0016] person_2 (DOCTOR): That's the examination finished. Have you had any weight loss, bladder problems or back pain?
+[SEG0017] person_1 (PATIENT): No weight loss, bladder problems or back pain, none of it.
+[SEG0018] person_2 (DOCTOR): Alright, have you had diarrhoea, by any chance?
+[SEG0019] person_1 (PATIENT): No diarrhoea, thankfully.
+[SEG0020] person_2 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0021] person_1 (PATIENT): Breathing's normal.
+[SEG0022] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0023] person_1 (PATIENT): No, joints are fine.
+[SEG0024] person_2 (DOCTOR): Tell me your medicines, please.
+[SEG0025] person_1 (PATIENT): Escitalopram, 10 milligrams, once a day for the anxiety.
+[SEG0026] person_2 (DOCTOR): What about your medical history?
+[SEG0027] person_1 (PATIENT): I have anxiety, for nearly five years. I didn't want to make a fuss, you know.
+[SEG0028] person_2 (DOCTOR): Yes, anxiety is known to us, good to have that clear. So, a few questions about your lifestyle now.
+[SEG0029] person_1 (PATIENT): I quit smoking around ten years ago. My partner and our baby. I do a yoga class on Thursdays. Lots of rice, lentils and some fruit.
+[SEG0030] person_2 (DOCTOR): Anything surgical in your history?
+[SEG0031] person_1 (PATIENT): I had a wisdom tooth extraction under sedation five years ago.
+[SEG0032] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0033] person_1 (PATIENT): I don't think I have any, no.
+[SEG0034] person_2 (DOCTOR): So where does that leave us? I'm honestly not certain yet. It could be a possible gut-related cause of nerve symptoms, or it might be a vitamin B12 deficiency.
+[SEG0035] person_2 (DOCTOR): I'd like to arrange a coeliac blood test for neuropathy.
+[SEG0036] person_3 (CLINICAL_STAFF): We have a slot Wednesday at 2 pm, if that works.
+[SEG0037] person_1 (PATIENT): Wednesday, that works for me.
+[SEG0038] person_2 (DOCTOR): Please keep eating gluten normally until the coeliac test is done. If it hasn't settled in a month, we'd think about a B12 level, but not now. If the symptoms get worse, that's the point to come in urgently.
+[SEG0039] person_1 (PATIENT): Alright, I follow.
+[SEG0040] person_2 (DOCTOR): Come back after the results.
+[SEG0041] person_1 (PATIENT): I can manage that.
+[SEG0042] person_2 (DOCTOR): Tell me what you've taken from all that, so I can fill in any gaps.
+[SEG0043] person_1 (PATIENT): So, I come back after the results. Is that right?
+[SEG0044] person_2 (DOCTOR): Alright, yes, exactly right. That's all from me. Any questions?
+[SEG0045] person_1 (PATIENT): Okay, that makes sense. Thanks for explaining.
+[SEG0046] person_2 (DOCTOR): Take care now.
+
+JSON:

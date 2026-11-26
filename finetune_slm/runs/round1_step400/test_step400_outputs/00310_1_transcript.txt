@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00310)
+[SEG0001] person_1 (NURSE): Doctor, we're ready in room two, I've already taken the observations.
+[SEG0002] person_2 (DOCTOR): Perfect, thanks. Hello there, so what's the trouble?
+[SEG0003] person_3 (PATIENT): I've been feeling anxious most of the day.
+[SEG0004] person_2 (DOCTOR): And when did that start?
+[SEG0005] person_3 (PATIENT): I've had it for one week.
+[SEG0006] person_2 (DOCTOR): How would you describe it, mild, moderate, severe?
+[SEG0007] person_3 (PATIENT): Pretty severe, if I'm being honest.
+[SEG0008] person_2 (DOCTOR): And what about weight loss, thoughts of harming myself or low mood?
+[SEG0009] person_3 (PATIENT): No weight loss, thoughts of harming myself or low mood, none of it.
+[SEG0010] person_2 (DOCTOR): Did you notice any fainting?
+[SEG0011] person_3 (PATIENT): No, none, no fainting.
+[SEG0012] person_2 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0013] person_3 (PATIENT): Nothing unusual, no.
+[SEG0014] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0015] person_3 (PATIENT): Hydrocortisone cream, when needed for the eczema.
+[SEG0016] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0017] person_3 (PATIENT): No operations, no.
+[SEG0018] person_2 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0019] person_3 (PATIENT): My mother has diabetes.
+[SEG0020] person_2 (DOCTOR): Right, now some background about your lifestyle.
+[SEG0021] person_3 (PATIENT): Not really, I don't get much exercise. I run a small shop, so I'm on my feet a lot. I stay with my daughter and her family.
+[SEG0022] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0023] person_3 (PATIENT): I have anxiety, for nearly five years. I've had eczema for about a year now. I kept putting it off, which I know isn't sensible. It's the not knowing that gets to me.
+[SEG0024] person_1 (NURSE): Here are the numbers, doctor. Temperature is 37.0 degrees, pulse is 76 beats a minute, oxygen saturation is 97 percent, pressure 128 over 68.
+[SEG0025] person_2 (DOCTOR): Good, thank you.
+[SEG0026] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0027] person_3 (PATIENT): Fine.
+[SEG0028] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0029] person_2 (DOCTOR): Pulse is regular and you're breathing comfortably right now.
+[SEG0030] person_3 (PATIENT): Fine.
+[SEG0031] person_2 (DOCTOR): Thanks, please take a seat again. Putting it all together, I'd lean towards an anxiety disorder.
+[SEG0032] person_3 (PATIENT): Is this something I'll have for good?
+[SEG0033] person_2 (DOCTOR): It's reasonable to be concerned, but right now an anxiety disorder is my leading thought, not anything worse. Let me repeat that back to make sure. You've been feeling anxious most of the day for one week, severe, and no fainting or weight loss.
+[SEG0034] person_3 (PATIENT): Yes, that's right.
+[SEG0035] person_2 (DOCTOR): I'm sending you for an ECG because of palpitations. You'll be taking escitalopram, 5 milligrams, once a day, for two weeks then review. That should help with anxiety. Regular exercise and less caffeine make a real difference. See me again in two weeks.
+[SEG0036] person_3 (PATIENT): Okay, I'll book that.
+[SEG0037] person_2 (DOCTOR): Alright, I'll see you out.
+[SEG0038] person_3 (PATIENT): That's everything I wanted to ask. Thank you.
+
+JSON:

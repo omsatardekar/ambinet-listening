@@ -1,0 +1,48 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00699)
+[SEG0001] person_1 (PATIENT): Morning! Right, so my big toe blew up like a balloon overnight on Tuesday, and I couldn't even put a sheet over it.
+[SEG0002] person_2 (DOCTOR): That sounds miserable. Which toe, and how is it now?
+[SEG0003] person_1 (PATIENT): Left big toe. It's calmer now, but still red, and when it was at its worst, the pain woke me at three in the morning.
+[SEG0004] person_2 (DOCTOR): Has it happened before?
+[SEG0005] person_1 (PATIENT): Once, I think. Last year? Or the year before that. I honestly couldn't tell you when, I just remember it was a bank holiday.
+[SEG0006] person_2 (DOCTOR): Okay, I'll note that you can't date it. Have you had any fever, or felt unwell with it?
+[SEG0007] person_1 (PATIENT): No fever. Felt fine otherwise.
+[SEG0008] person_2 (DOCTOR): Did you knock it or injure it?
+[SEG0009] person_1 (PATIENT): No, nothing. I'd have remembered.
+[SEG0010] person_2 (DOCTOR): Any other joints swollen?
+[SEG0011] person_1 (PATIENT): No, just the toe.
+[SEG0012] person_2 (DOCTOR): What did you take for it?
+[SEG0013] person_1 (PATIENT): Naproxen, 250 mg, twice a day, maybe? I took a few from my wife's pack, then I took them when I remembered, so it was a bit random.
+[SEG0014] person_2 (DOCTOR): Understood. So 250 mg twice a day as you recall it, but taken when you remembered. Any health conditions?
+[SEG0015] person_1 (PATIENT): High blood pressure, that's all.
+[SEG0016] person_2 (DOCTOR): What do you drink, and how's your diet?
+[SEG0017] person_1 (PATIENT): Five or six pints at the weekend, and I do love a prawn curry. Well, I did.
+[SEG0018] person_2 (DOCTOR): Let me check your pulse and blood pressure, and then look at the toe. ~
+[SEG0019] person_1 (PATIENT): Go on. ~
+[SEG0020] person_2 (DOCTOR): Pulse 80, blood pressure 138 over 88, temperature 36.8.
+[SEG0021] person_1 (PATIENT): Good. ~
+[SEG0022] person_2 (DOCTOR): Now the toe, tell me if it hurts.
+[SEG0023] person_1 (PATIENT): Ow. Yes, there. ~
+[SEG0024] person_2 (DOCTOR): The base of the big toe is a bit red and warm, and tender when I press. No swelling elsewhere in the foot.
+[SEG0025] person_1 (PATIENT): Gout? Everyone says gout. ~
+[SEG0026] person_2 (DOCTOR): I'm not going to put a name on it from one look. It's a typical picture, but I'd rather confirm it. I'd like to arrange a blood test for uric acid.
+[SEG0027] person_1 (PATIENT): When? ~
+[SEG0028] person_2 (DOCTOR): Ideally two weeks after an attack, when it's settled, so book it in a fortnight. ~
+[SEG0029] person_1 (PATIENT): Right. And the tablets? ~
+[SEG0030] person_2 (DOCTOR): Don't take someone else's tablets, please. Rest the foot, raise it, and cool it with a cold pack wrapped in a cloth.
+[SEG0031] person_1 (PATIENT): Fair. What about the beer? ~
+[SEG0032] person_2 (DOCTOR): Less beer and fewer prawns would help, and plenty of water.
+[SEG0033] person_1 (PATIENT): Ah. I'll try. ~
+
+JSON:

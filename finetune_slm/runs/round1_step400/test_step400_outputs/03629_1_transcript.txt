@@ -1,0 +1,78 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03629)
+[SEG0001] person_1 (PATIENT): So, hello, doctor. I think it's my turn.
+[SEG0002] person_2 (DOCTOR): not at all, please sit. What seems to to be wrong?
+[SEG0003] person_3 (CAREGIVER): Good morning, doctor. I came along to help out.
+[SEG0004] person_2 (DOCTOR): Please do. Extra information is always welcome.
+[SEG0005] person_1 (PATIENT): It's a tremor. I thought I'd wait, but it hasn't gone.
+[SEG0006] person_2 (DOCTOR): what do you take on a a normal day?
+[SEG0007] person_1 (PATIENT): So, it's a... um, I can't remember what it's called. It's a small white one.
+[SEG0008] person_2 (DOCTOR): Do you remember what it's for?
+[SEG0009] person_1 (PATIENT): for my mood, I believe my son sets them out for me, I just take what I'm given so, it's sumatriptan, 50 milligrams, when needed
+[SEG0010] person_2 (DOCTOR): alright, since when have you been taking it?
+[SEG0011] person_1 (PATIENT): about two months. An antidepressant i take it 100 milligrams, maybe, daily
+[SEG0012] person_2 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0013] person_1 (PATIENT): No, it's at home.
+[SEG0014] person_2 (DOCTOR): How much does it limit you?
+[SEG0015] person_1 (PATIENT): It's severe, honestly.
+[SEG0016] person_2 (DOCTOR): have you been sweating?
+[SEG0017] person_1 (PATIENT): yes, I have
+[SEG0018] person_2 (DOCTOR): Is it constant or in episodes?
+[SEG0019] person_1 (PATIENT): It's once or twice a day.
+[SEG0020] person_2 (DOCTOR): How troublesome is it day to day?
+[SEG0021] person_1 (PATIENT): It feels mild to me.
+[SEG0022] person_2 (DOCTOR): I follow.
+[SEG0023] person_2 (DOCTOR): Understood.
+[SEG0024] person_1 (PATIENT): And, And loose stools, too.
+[SEG0025] person_2 (DOCTOR): how frequently does it it come?
+[SEG0026] person_1 (PATIENT): It's, um... not exactly... well, hard to explain, I mean—
+[SEG0027] person_2 (DOCTOR): Let me put it another way: how many times in a typical day or week?
+[SEG0028] person_1 (PATIENT): honestly, a few times a day
+[SEG0029] person_2 (DOCTOR): Okay, how much trouble does it give you?
+[SEG0030] person_1 (PATIENT): well, it's... hard to say, it's kinda.. i don't know—
+[SEG0031] person_2 (DOCTOR): Okay, take your time. Mild, moderate, or severe, if you had to pick?
+[SEG0032] person_1 (PATIENT): Uh, about a five out of ten.
+[SEG0033] person_2 (DOCTOR): have you had a tremor before, or is this the first time?
+[SEG0034] person_1 (PATIENT): let me think, a bit, last year it settled by itself back then
+[SEG0035] person_4 (UNKNOWN): Mm, that's what happened, yes.
+[SEG0036] person_2 (DOCTOR): Have you noticed stiffness, high fever, seizure or confusion?
+[SEG0037] person_1 (PATIENT): None of those, no.
+[SEG0038] person_2 (DOCTOR): Alright, is your urine normal, no changes?
+[SEG0039] person_1 (PATIENT): No changes there.
+[SEG0040] person_2 (DOCTOR): has anything ever caused you a reaction? I mean any allergies
+[SEG0041] person_1 (PATIENT): Uh, um, no, I've never reacted to anything.
+[SEG0042] person_2 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0043] person_1 (PATIENT): I have depression.
+[SEG0044] person_2 (DOCTOR): mm-hmm
+[SEG0045] person_1 (PATIENT): Migraines, for nearly five years my family kept telling me to get it checked
+[SEG0046] person_2 (DOCTOR): Right, and anything else to add?
+[SEG0047] person_2 (DOCTOR): Right, so depression is already on your record. We'll keep that in mind today. Anything you do to stay fit?
+[SEG0048] person_1 (PATIENT): I do a yoga class on Thursdays.
+[SEG0049] person_2 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0050] person_1 (PATIENT): My grandfather had a stroke. Right, my grandmother had dementia.
+[SEG0051] person_5 (NURSE): Doctor, I've got the readings for you. SpO2 97 percent on room air, respiratory rate 20, temperature is 36.5 degrees. Heart rate 115, pressure 123 over 84.
+[SEG0052] person_2 (DOCTOR): Okay, noted.
+[SEG0053] person_2 (DOCTOR): Could you come over to to the couch, please?
+[SEG0054] person_2 (DOCTOR): Take a deep breath for me.
+[SEG0055] person_2 (DOCTOR): You have brisk reflexes and jerking of the ankles, and your pupils are large.
+[SEG0056] person_2 (DOCTOR): Okay, that's enough for me. Okay, thinking it through, I'd lean towards mild serotonin syndrome from combining medicines. I want to be honest that this is an impression, not a final answer. Anxiety is also on my list.
+[SEG0057] person_1 (PATIENT): Is this serious, doctor?
+[SEG0058] person_2 (DOCTOR): It's reasonable to be concerned, but right now mild serotonin syndrome from combining medicines is my leading thought, not anything worse. Stop me if I've got anything wrong. You've had a tremor, severe, and no high fever or stiffness.
+[SEG0059] person_1 (PATIENT): Exactly.
+[SEG0060] person_2 (DOCTOR): Let's get blood tests, for agitation and clonus. We will stop the migraine tablet and watch you for several hours. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Please don't wait if the symptoms get worse. That's when to be seen urgently. I'll want another look in one day. Let me check I've been clear. What will you do once you get home?
+[SEG0061] person_1 (PATIENT): so, I come back in one day. Is that right?
+[SEG0062] person_2 (DOCTOR): Yes, exactly right. Anything else on your mind before you go?
+[SEG0063] person_1 (PATIENT): Okay, that makes sense. Thanks for explaining.
+
+JSON:

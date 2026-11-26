@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00179)
+[SEG0001] person_1 (DOCTOR): Alright, good morning. Come in, have a seat.
+[SEG0002] person_2 (PATIENT): Hi.
+[SEG0003] person_1 (DOCTOR): What was the main thing you wanted to talk about?
+[SEG0004] person_2 (PATIENT): So the thing is, I've got bruising.
+[SEG0005] person_1 (DOCTOR): What medicines do you take regularly?
+[SEG0006] person_2 (PATIENT): It's alendronate, 70 milligrams, once a week for my bones.
+[SEG0007] person_1 (DOCTOR): How long have you had it?
+[SEG0008] person_2 (PATIENT): It's been five days, I'm fairly sure. I've also had tingling in the fingers.
+[SEG0009] person_1 (DOCTOR): Does it happen all the time or in spells?
+[SEG0010] person_2 (PATIENT): I'd say a couple of times a week.
+[SEG0011] person_1 (DOCTOR): And how severe is it?
+[SEG0012] person_2 (PATIENT): I mean, it feels mild to me. And there's pain in my left wrist after a fall as well, about a week now.
+[SEG0013] person_1 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0014] person_2 (PATIENT): I'd call it mild. I'd say on and off.
+[SEG0015] person_1 (DOCTOR): Any bump to the head, loss of consciousness, deformity or pain in the elbow at all?
+[SEG0016] person_2 (PATIENT): I haven't had bump to the head, loss of consciousness, deformity or pain in the elbow, no.
+[SEG0017] person_1 (DOCTOR): Has your heart given you any trouble?
+[SEG0018] person_2 (PATIENT): No, that's been fine.
+[SEG0019] person_1 (DOCTOR): Anything different when you pass water?
+[SEG0020] person_2 (PATIENT): Nothing there, no.
+[SEG0021] person_1 (DOCTOR): Have you got any chronic problems?
+[SEG0022] person_2 (PATIENT): I've got thin bones.
+[SEG0023] person_1 (DOCTOR): Mm. Right, so thin bones is already on your record. We'll keep that in mind today. Let's talk a little about your daily life and habits.
+[SEG0024] person_2 (PATIENT): I run a small shop, so I'm on my feet a lot. Not really, I don't get much exercise. It's just me and my wife at home now.
+[SEG0025] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0026] person_2 (PATIENT): No, never had any surgery.
+[SEG0027] person_1 (DOCTOR): Do you have any allergies to medicines, food, anything at all?
+[SEG0028] person_2 (PATIENT): Yeah, I was told I'm allergic to peanuts, but I don't remember what reaction I had.
+[SEG0029] person_1 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0030] person_2 (PATIENT): My father had a stroke.
+[SEG0031] person_1 (DOCTOR): I'll take a few measurements first.
+[SEG0032] person_1 (DOCTOR): Hold still for me...
+[SEG0033] person_1 (DOCTOR): Okay: respiratory rate 18, SpO2 97 percent on room air, pressure 127 over 69, heart rate 77, temp 36.7 degrees.
+[SEG0034] person_2 (PATIENT): So, is that alright, doctor?
+[SEG0035] person_1 (DOCTOR): I'll interpret it once I've examined you.
+[SEG0036] person_1 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0037] person_2 (PATIENT): Okay.
+[SEG0038] person_1 (DOCTOR): Let me look at this properly.
+[SEG0039] person_1 (DOCTOR): There's swelling and tenderness at the base of the thumb side of the wrist.
+[SEG0040] person_1 (DOCTOR): Thanks for that. I think an X-ray of the wrist makes sense here, for wrist injury. I'll start you on paracetamol, 650 milligrams, three times a day, for five days. That should help with wrist pain. I'd like you to wear a splint until the X-ray result is confirmed and keep the hand raised. Try to get to bed and wake up at the same time each day, and keep your phone away from the bed.
+[SEG0041] person_1 (DOCTOR): Book a review in a week. Alright, I'll see you out.
+[SEG0042] person_2 (PATIENT): I appreciate it, doctor.
+[SEG0043] person_1 (DOCTOR): Right, goodbye.
+
+JSON:

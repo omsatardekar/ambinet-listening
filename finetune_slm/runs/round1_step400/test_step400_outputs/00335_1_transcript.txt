@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00335)
+[SEG0001] person_1 (DOCTOR): Hello again. Come on in.
+[SEG0002] person_2 (PATIENT): Hi.
+[SEG0003] person_3 (CAREGIVER): Hello, uh, doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_1 (DOCTOR): Good, that'll be useful. Pull up a chair. What brings you in today?
+[SEG0005] person_3 (CAREGIVER): doctor, it's been waking up at three in the morning that's what we're worried about
+[SEG0006] person_1 (DOCTOR): right, and when did that start?
+[SEG0007] person_2 (PATIENT): it's been six months now
+[SEG0008] person_1 (DOCTOR): How would you describe it, mild, moderate, severe?
+[SEG0009] person_2 (PATIENT): About a seven out of ten. As for trouble concentrating, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0010] person_1 (DOCTOR): on a normal day, how strong is it?
+[SEG0011] person_2 (PATIENT): Mostly moderate.
+[SEG0012] person_4 (UNKNOWN): yes, exactly like that
+[SEG0013] person_1 (DOCTOR): Did you get restless legs, heavy caffeine or chest pain?
+[SEG0014] person_2 (PATIENT): No, no restless legs, no heavy caffeine, no chest pain. I was feeling irritable at one point, but that went away on its own.
+[SEG0015] person_1 (DOCTOR): Let me check a few things. Any snoring, low mood or night sweats?
+[SEG0016] person_2 (PATIENT): yeah, no, no snoring, low mood or night sweats
+[SEG0017] person_1 (DOCTOR): is your digestion otherwise okay?
+[SEG0018] person_2 (PATIENT): no, that side's been fine
+[SEG0019] person_1 (DOCTOR): Any procedures or operations?
+[SEG0020] person_2 (PATIENT): I had cataract surgery on my right eye last year.
+[SEG0021] person_1 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0022] person_2 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0023] person_1 (DOCTOR): So, how about smoking?
+[SEG0024] person_2 (PATIENT): I smoke about ten cigarettes a day.
+[SEG0025] person_1 (DOCTOR): alright, what about alcohol?
+[SEG0026] person_2 (PATIENT): A beer or two most evenings, to be honest.
+[SEG0027] person_1 (DOCTOR): Alright, and your work?
+[SEG0028] person_2 (PATIENT): I drive a delivery van all day.
+[SEG0029] person_1 (DOCTOR): Who's at home with you?
+[SEG0030] person_2 (PATIENT): It's just me and my wife at home now.
+[SEG0031] person_1 (DOCTOR): is there anything medical in your background?
+[SEG0032] person_2 (PATIENT): Anxiety, for about ten years. I'd rather not end up on lots of tablets if I can avoid it. I've got high blood pressure. I wasn't sure whether to come in at all, to be honest. I've got acid reflux. Yes, high cholesterol.
+[SEG0033] person_1 (DOCTOR): okay, I can see high blood pressure in your file as well. Let's go through your medication. What are you taking?
+[SEG0034] person_3 (CAREGIVER): She takes escitalopram, 10 milligrams, once a day. She is on omeprazole, 20 milligrams, once a day, I give it to her.
+[SEG0035] person_1 (DOCTOR): Ah.
+[SEG0036] person_3 (CAREGIVER): hmm, she is on rosuvastatin, 10 milligrams, at night for my cholesterol, I give it to her
+[SEG0037] person_1 (DOCTOR): Since when have you been taking it?
+[SEG0038] person_3 (CAREGIVER): For about three months.
+[SEG0039] person_2 (PATIENT): before this I was on atorvastatin; that's been stopped
+[SEG0040] person_5 (NURSE): Doctor, I've got the readings for you. SpO2 99 percent on room air, temp 36.8 degrees. Pulse 70, blood pressure 126 over 77.
+[SEG0041] person_1 (DOCTOR): Okay, noted. Okay, so my impression from what you've said is this: I can't pin this down yet. We're looking at insomnia, probably stress-related or sleep apnoea.
+[SEG0042] person_2 (PATIENT): Is this going to go away?
+[SEG0043] person_1 (DOCTOR): I understand the worry. At the moment I'd say it's insomnia, probably stress-related, and we'll watch how it goes. Same wake-up time every day, no screens in the hour before bed, and no coffee after lunch. That's everything from me. Any other questions?
+[SEG0044] person_2 (PATIENT): No questions. Thank you.
+
+JSON:

@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01696)
+[SEG0001] person_1 (NURSE): Okay, doctor, we're all set in here. I'll give you the numbers when you want them.
+[SEG0002] person_2 (DOCTOR): Great. Hello, come in and sit down. How can I help?
+[SEG0003] person_3 (CAREGIVER): Hello, doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_4 (PATIENT): Well, you know, so the thing is, I've got painful periods. A neighbour of mine said I should see someone about it.
+[SEG0005] person_1 (NURSE): Okay, so the vitals from earlier. BP is 112 over 81, SpO2 98 percent on room air, heart rate 82.
+[SEG0006] person_2 (DOCTOR): Okay, noted. Alright, since when exactly?
+[SEG0007] person_4 (PATIENT): I've had it since Friday.
+[SEG0008] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0009] person_4 (PATIENT): I, I notice it more with first two days. A hot water bottle helps a bit. It happens a couple of times a week.
+[SEG0010] person_2 (DOCTOR): Right, any other symptoms with it?
+[SEG0011] person_4 (PATIENT): It usually comes with a dull ache in my back.
+[SEG0012] person_2 (DOCTOR): Have you been feeling sick on the first day?
+[SEG0013] person_4 (PATIENT): Yes, about the same, about a month. About feeling sick on the first day, it happens all the time. The dull ache in my back? That's been for about a week. Mm, about dull ache in my back, about a three out of ten. It happens once or twice a day.
+[SEG0014] person_2 (DOCTOR): Right, any bleeding between periods, pain with sex, heavy bleeding or fever at all?
+[SEG0015] person_4 (PATIENT): No, um, I haven't had any of them.
+[SEG0016] person_2 (DOCTOR): How about your heart, any problems like that?
+[SEG0017] person_4 (PATIENT): Nothing like that.
+[SEG0018] person_2 (DOCTOR): Right, have you noticed any weakness, or anything odd with your balance?
+[SEG0019] person_4 (PATIENT): No, uh, nothing like that.
+[SEG0020] person_2 (DOCTOR): What about your parents, brothers or sisters, any conditions?
+[SEG0021] person_4 (PATIENT): Mm, my mother had a stroke. Well, my father has Parkinson's disease.
+[SEG0022] person_2 (DOCTOR): Tell me your medicines, please.
+[SEG0023] person_4 (PATIENT): It's something called thyr... thyroxine, 75 micrograms, maybe, every morning.
+[SEG0024] person_2 (DOCTOR): Do you have the packet or the prescription with you?
+[SEG0025] person_4 (PATIENT): No, you know, it's at home. I, I take lansoprazole, 30 milligrams, before breakfast.
+[SEG0026] person_2 (DOCTOR): I follow. So, are there any allergies I should be aware of?
+[SEG0027] person_4 (PATIENT): I don't think I have any, you know, no.
+[SEG0028] person_3 (CAREGIVER): Uh, I'm not sure that's right. I seem to recall a problem with tramadol.
+[SEG0029] person_4 (PATIENT): Sorry, what was I saying, really? I don't think so.
+[SEG0030] person_2 (DOCTOR): Okay, I'll note both of those. Do you have any long-term conditions?
+[SEG0031] person_4 (PATIENT): I've had gout for about a year now.
+[SEG0032] person_2 (DOCTOR): Understood.
+[SEG0033] person_4 (PATIENT): Well, I have an underactive thyroid. I'm not great at remembering details, so bear with me.
+[SEG0034] person_2 (DOCTOR): Hm, okay.
+[SEG0035] person_4 (PATIENT): I've had acid reflux, yes.
+[SEG0036] person_2 (DOCTOR): Right, so gout and acid reflux are already on your record. We'll keep that in mind today.
+[SEG0037] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0038] person_4 (PATIENT): I'm a bus driver, so I sit for long hours. No, I share a house with my brother. Lots of rice, lentils and some fruit.
+[SEG0039] person_2 (DOCTOR): Any surgery in the past?
+[SEG0040] person_4 (PATIENT): Just my appendix taken out, when I was in my twenties.
+[SEG0041] person_2 (DOCTOR): Now I'm going to do a short physical check.
+[SEG0042] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0043] person_2 (DOCTOR): Your tummy is soft and not tender between periods.
+[SEG0044] person_2 (DOCTOR): You can relax now. So, based on the history and the examination, this looks most like primary dysmenorrhoea.
+[SEG0045] person_4 (PATIENT): Sorry, what was I saying, what are the odds it's serious?
+[SEG0046] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's primary dysmenorrhoea, and we'll watch how it goes. Stop me if I've got anything wrong. You've had painful periods, since Friday, and no fever or pain with sex.
+[SEG0047] person_4 (PATIENT): Mm, that's right.
+[SEG0048] person_2 (DOCTOR): You'll be taking naproxen, 250 milligrams, three times a day with food, during periods. That should help with period pain. I'll put all of this in writing so you don't have to remember it. Heat, gentle exercise, and start the tablet at the first sign of pain. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0049] person_2 (DOCTOR): Please don't wait if the symptoms get worse. That's when to be seen urgently.
+[SEG0050] person_4 (PATIENT): Mm, yes, I'll bear that in mind.
+[SEG0051] person_2 (DOCTOR): Book a review in three months. Have I covered everything you wanted?
+[SEG0052] person_4 (PATIENT): I think I understand everything. Thanks.
+
+JSON:

@@ -1,0 +1,70 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00393)
+[SEG0001] person_1 (PATIENT): Okay, so hello doctor, sorry, am I early?
+[SEG0002] person_2 (DOCTOR): That's alright, take a seat. Tell me why you've come.
+[SEG0003] person_1 (PATIENT): It's a weak urine stream, mostly.
+[SEG0004] person_2 (DOCTOR): When did you first notice it?
+[SEG0005] person_1 (PATIENT): Okay, so I've had it for about a year.
+[SEG0006] person_2 (DOCTOR): And how severe is it?
+[SEG0007] person_1 (PATIENT): right, it feels mild to me i mean, as for dribbling at the end, I honestly can't say when that began it might have been last month or the month before about dribbling at the end, I'd say severe
+[SEG0008] person_2 (DOCTOR): Have you had to to have anything operated on?
+[SEG0009] person_1 (PATIENT): Uh, just a a stent put in my heart, two years ago.
+[SEG0010] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0011] person_1 (PATIENT): I have diabetes, for two years. High blood pressure, for about a year. I mean, I have an enlarged prostate, for five years. It's the not knowing that gets to me. I, I have heart disease.
+[SEG0012] person_2 (DOCTOR): alright, high blood pressure and an enlarged prostate, that matches what I have here. Okay, what about alcohol?
+[SEG0013] person_1 (PATIENT): A beer or two most evenings, to be honest.
+[SEG0014] person_2 (DOCTOR): Do you smoke?
+[SEG0015] person_1 (PATIENT): No, I don't smoke and never have
+[SEG0016] person_2 (DOCTOR): Do you exercise at all?
+[SEG0017] person_1 (PATIENT): I go to the gym a couple of times a week.
+[SEG0018] person_2 (DOCTOR): Are you living with family?
+[SEG0019] person_1 (PATIENT): I stay with my daughter and her family
+[SEG0020] person_2 (DOCTOR): And your work?
+[SEG0021] person_1 (PATIENT): I drive a delivery van all day
+[SEG0022] person_2 (DOCTOR): Okay, anyone in the family with similar problems or other conditions?
+[SEG0023] person_1 (PATIENT): uh, my mother has migraines
+[SEG0024] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0025] person_1 (PATIENT): I'm on Glycomet, 500 milligrams, twice a day. So, I take telmisartan, 40 milligrams, once a day.
+[SEG0026] person_2 (DOCTOR): Understood.
+[SEG0027] person_1 (PATIENT): Right, I take tamsulosin, 0.4 milligrams, at night for the prostate.
+[SEG0028] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0029] person_1 (PATIENT): Yes, peanuts, it gives me my lips swelling.
+[SEG0030] person_2 (DOCTOR): And And what about back pain or burning when passing urine?
+[SEG0031] person_1 (PATIENT): No, um, not any of them.
+[SEG0032] person_2 (DOCTOR): okay, and what about blood in the urine or fever?
+[SEG0033] person_1 (PATIENT): No, no blood in the urine or fever.
+[SEG0034] person_2 (DOCTOR): on the cardiac side, anything I should know?
+[SEG0035] person_1 (PATIENT): Yeah, you know, no, that's been fine.
+[SEG0036] person_2 (DOCTOR): can I take your vitals now?
+[SEG0037] person_2 (DOCTOR): One second...
+[SEG0038] person_2 (DOCTOR): Okay: BP is 117 over 70, SpO2 98 percent on room air, pulse is 78 beats a minute. And temperature 36.8.
+[SEG0039] person_2 (DOCTOR): I'd like to examine you now.
+[SEG0040] person_1 (PATIENT): No problem.
+[SEG0041] person_2 (DOCTOR): hold that position for me
+[SEG0042] person_2 (DOCTOR): your bladder isn't palpable and the tummy is soft
+[SEG0043] person_2 (DOCTOR): Take your time, no rush.
+[SEG0044] person_2 (DOCTOR): On rectal examination the prostate feels smooth and enlarged.
+[SEG0045] person_1 (PATIENT): no problem
+[SEG0046] person_2 (DOCTOR): Good, that's the examination.
+[SEG0047] person_2 (DOCTOR): Okay, thinking it through, it points towards an enlarged prostate causing urinary symptoms. Another possibility is a bladder problem. Let me just check I've got this right. You've had a weak urine stream for about a year, mild, and no burning when passing urine or blood in the urine.
+[SEG0048] person_1 (PATIENT): yes, um, that's right
+[SEG0049] person_2 (DOCTOR): I think kidney function tests makes sense here, for urinary symptoms. I'll request an ultrasound of the bladder and prostate, it'll help with urinary symptoms. I think a PSA test makes sense here, for urinary symptoms. Cut back on tea and and coffee after the afternoon and go before you sleep.
+[SEG0050] person_1 (PATIENT): Do I need a urine test? I read it might help.
+[SEG0051] person_2 (DOCTOR): Alright, not at this point, no. It isn't indicated yet. Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency.
+[SEG0052] person_1 (PATIENT): Alright, I know what to look for.
+[SEG0053] person_2 (DOCTOR): please come and see me after the results are back take care, and call us if anything changes
+[SEG0054] person_1 (PATIENT): I appreciate it, doctor.
+[SEG0055] person_2 (DOCTOR): Goodbye.
+
+JSON:

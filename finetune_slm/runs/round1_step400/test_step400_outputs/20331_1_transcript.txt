@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20331)
+[SEG0001] person_1 (DOCTOR): Evening. Let's get started.
+[SEG0002] person_2 (PATIENT): Hello, thanks for fitting me in.
+[SEG0003] person_1 (DOCTOR): What do you need help with?
+[SEG0004] person_2 (PATIENT): Doctor, it's yellow eyes. It's getting on my nerves now.
+[SEG0005] person_1 (DOCTOR): Any regular medication at all?
+[SEG0006] person_2 (PATIENT): No, uh, nothing at the moment.
+[SEG0007] person_1 (DOCTOR): Can you tell me when it first started?
+[SEG0008] person_2 (PATIENT): It's been going on for two days.
+[SEG0009] person_1 (DOCTOR): Have you had any fever, vomiting blood or itching?
+[SEG0010] person_2 (PATIENT): No fever, vomiting blood or itching, none of it.
+[SEG0011] person_1 (DOCTOR): Anything on the skin I should know about?
+[SEG0012] person_2 (PATIENT): No, skin's been fine.
+[SEG0013] person_1 (DOCTOR): Alright, anything unusual with passing urine?
+[SEG0014] person_2 (PATIENT): No changes there.
+[SEG0015] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0016] person_2 (PATIENT): No surgery, no.
+[SEG0017] person_1 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0018] person_2 (PATIENT): No, nothing at all.
+[SEG0019] person_1 (DOCTOR): A few questions about your lifestyle now.
+[SEG0020] person_2 (PATIENT): I hardly move around during the day. I work in accounts at a hospital. I grab fast food at lunch most days.
+[SEG0021] person_1 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0022] person_2 (PATIENT): No, nothing as far as I know.
+[SEG0023] person_1 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0024] person_1 (DOCTOR): Okay, this won't take long...
+[SEG0025] person_1 (DOCTOR): Okay: temperature is 36.5 degrees, heart rate 69, blood pressure 118 over 82.
+[SEG0026] person_2 (PATIENT): Is that okay?
+[SEG0027] person_1 (DOCTOR): They help me see the whole picture, more shortly.
+[SEG0028] person_1 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0029] person_1 (DOCTOR): So, I'm just checking this side.
+[SEG0030] person_1 (DOCTOR): The whites of your eyes are yellow and the liver edge is tender under the right ribs.
+[SEG0031] person_1 (DOCTOR): Right, thank you, you can get dressed.
+[SEG0032] person_1 (DOCTOR): So where does that leave us? The most likely explanation is an acute viral hepatitis. Let me repeat that back to make sure. You've had yellow eyes for two days, and no itching or vomiting blood.
+[SEG0033] person_2 (PATIENT): That's it, yes.
+[SEG0034] person_1 (DOCTOR): I want liver blood tests done, that's for jaundice. I'm going to order an ultrasound of the liver, for jaundice.
+[SEG0035] person_2 (PATIENT): That makes sense.
+[SEG0036] person_1 (DOCTOR): No alcohol at all and avoid paracetamol and other painkillers unless we say. Try to keep a simple diary of when it happens and what you were doing, and bring it to the next visit. I'd like you to see the liver clinic as well, and I'll write the referral. Let's hold off on a hepatitis screen for now, and if there's no change in two weeks we can revisit it.
+[SEG0037] person_1 (DOCTOR): Please come and see me in one week. Anything else on your mind before you go?
+[SEG0038] person_2 (PATIENT): No, that's all. Thanks a lot.
+
+JSON:

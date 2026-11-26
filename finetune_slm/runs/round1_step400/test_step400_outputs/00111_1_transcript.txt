@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00111)
+[SEG0001] person_1 (DOCTOR): Evening. Long day, I imagine. Sit down.
+[SEG0002] person_2 (PATIENT): Hello, doctor. Thanks for seeing me.
+[SEG0003] person_3 (CAREGIVER): doctor, I've come along cos I know the the history, if it helps
+[SEG0004] person_1 (DOCTOR): Please do. Extra information is always welcome. So, how have things been?
+[SEG0005] person_2 (PATIENT): I've been feeling cold all the time.
+[SEG0006] person_1 (DOCTOR): Roughly when did it start?
+[SEG0007] person_2 (PATIENT): I'd say two weeks, maybe.
+[SEG0008] person_3 (CAREGIVER): I think it's been nearer three weeks, actually
+[SEG0009] person_1 (DOCTOR): Okay, so roughly two to three weeks. Is that right?
+[SEG0010] person_2 (PATIENT): Yes, somewhere around that.
+[SEG0011] person_1 (DOCTOR): Does it come along with anything else?
+[SEG0012] person_2 (PATIENT): Constipation goes along with it, most of the time. As for Constipation, maybe a four out of ten on a bad day. And there's dry skin as well, about a year now. As for dry skin, I'd say severe.
+[SEG0013] person_1 (DOCTOR): How about swelling in the neck?
+[SEG0014] person_2 (PATIENT): not at all, no swelling in the neck
+[SEG0015] person_1 (DOCTOR): Alright, did you get palpitations, low mood or trouble swallowing?
+[SEG0016] person_2 (PATIENT): No, no palpitations, low mood or trouble swallowing.
+[SEG0017] person_1 (DOCTOR): Any problems with your joints or muscles?
+[SEG0018] person_2 (PATIENT): No, joints are fine.
+[SEG0019] person_1 (DOCTOR): Any trouble with the waterworks?
+[SEG0020] person_2 (PATIENT): Nothing there, no.
+[SEG0021] person_1 (DOCTOR): okay, are you on any regular medication?
+[SEG0022] person_2 (PATIENT): No, I don't take anything regularly.
+[SEG0023] person_1 (DOCTOR): Any surgery in your history?
+[SEG0024] person_2 (PATIENT): just my tonsils out, when I was a child
+[SEG0025] person_1 (DOCTOR): do you exercise at all?
+[SEG0026] person_2 (PATIENT): I go to the gym a couple of times a week.
+[SEG0027] person_1 (DOCTOR): and your work?
+[SEG0028] person_2 (PATIENT): I drive a delivery van all day.
+[SEG0029] person_1 (DOCTOR): Are you living with family?
+[SEG0030] person_2 (PATIENT): I stay with my daughter and her family.
+[SEG0031] person_1 (DOCTOR): So, tell me about your health in general, any ongoing conditions?
+[SEG0032] person_2 (PATIENT): I've had low haemoglobin, yes.
+[SEG0033] person_1 (DOCTOR): let me measure a few things
+[SEG0034] person_1 (DOCTOR): Alright, almost there...
+[SEG0035] person_1 (DOCTOR): Okay: oxygen saturation is 97 percent, pulse is 72 beats a minute, BP is 120 over 70, weight 53 kilos, temp 36.9 degrees, height 178 centimetres.
+[SEG0036] person_2 (PATIENT): Is that alright, doctor?
+[SEG0037] person_1 (DOCTOR): I'll come back to those numbers. So, based on your history, this is probably an underactive thyroid. I wanna be honest that this is an impression, not a final answer. We shouldn't forget depression. I'm gonna order a thyroid test, for hypothyroid symptoms. I'd like to arrange blood tests for fatigue. I'd rather check than guess, and this is the quickest way to know more.
+[SEG0038] person_2 (PATIENT): Okay, that's fine.
+[SEG0039] person_1 (DOCTOR): Let's use levothyroxine, 50 micrograms, every morning on an empty stomach, until we review. You take it it by mouth. That should help with hypothyroidism.
+[SEG0040] person_2 (PATIENT): okay, thank you
+[SEG0041] person_1 (DOCTOR): Take the thyroid tablet on an empty stomach, half an hour before breakfast, and not with calcium or iron. I'd like to see you again in six weeks.
+[SEG0042] person_2 (PATIENT): Okay, I'll book that.
+[SEG0043] person_1 (DOCTOR): Alright, I'll see you out.
+[SEG0044] person_2 (PATIENT): All good here. Thank you.
+[SEG0045] person_1 (DOCTOR): see you then
+
+JSON:

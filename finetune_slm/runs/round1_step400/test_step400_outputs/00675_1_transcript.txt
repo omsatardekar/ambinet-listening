@@ -1,0 +1,70 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00675)
+[SEG0001] person_3 (FAMILY_MEMBER): Morning, doctor. Sorry, we're a few minutes early. Mia won't say it, so I will, it's the trains. She had another bad one on Monday. ~
+[SEG0002] person_2 (DOCTOR): Thanks, Gareth. Mia, I'd like to hear it from you, whenever you're ready. ~
+[SEG0003] person_1 (PATIENT): Well. It's... the commute. I get these panic attacks on the Northern line. Monday, no, Tuesday. Gareth says Monday.
+[SEG0004] person_2 (DOCTOR): Take your time. What happens in one?
+[SEG0005] person_1 (PATIENT): My heart races, it feels like it's going to burst out of my chest. And then I can't get my breath, and I have to get off.
+[SEG0006] person_2 (DOCTOR): How often does this happen?
+[SEG0007] person_1 (PATIENT): About twice a week at the moment. It was every day in March.
+[SEG0008] person_2 (DOCTOR): Do you feel anything else, dizzy, sweaty?
+[SEG0009] person_1 (PATIENT): Dizzy, yes. The platform sort of tilts.
+[SEG0010] person_2 (DOCTOR): And how are you sleeping?
+[SEG0011] person_1 (PATIENT): Badly. I wake up at three and just lie there thinking about the journey.
+[SEG0012] person_2 (DOCTOR): Have you had any chest pain during these?
+[SEG0013] person_1 (PATIENT): No chest pain. It's the racing that frightens me, not pain.
+[SEG0014] person_2 (DOCTOR): Any thoughts of harming yourself?
+[SEG0015] person_1 (PATIENT): No, no, nothing like that.
+[SEG0016] person_3 (FAMILY_MEMBER): She'd tell you, honestly. ~
+[SEG0017] person_2 (DOCTOR): Thank you, Gareth. Mia, any fainting?
+[SEG0018] person_1 (PATIENT): I've never fainted. Never actually fallen.
+[SEG0019] person_2 (DOCTOR): What are you taking at the moment?
+[SEG0020] person_1 (PATIENT): Sertraline, 100 mg, once a day. Propranolol, 40 mg, when I'm panicky, on the train mostly. And melatonin, 2 mg, at night.
+[SEG0021] person_2 (DOCTOR): Good. Any allergies to anything?
+[SEG0022] person_1 (PATIENT): No, no allergies. Gareth's allergic to everything, not me.
+[SEG0023] person_3 (FAMILY_MEMBER): That's true, I am. ~
+[SEG0024] person_2 (DOCTOR): Anything in your past health?
+[SEG0025] person_1 (PATIENT): Depression, years ago, which is why the sertraline. And irritable bowel syndrome.
+[SEG0026] person_2 (DOCTOR): Ever had surgery?
+[SEG0027] person_1 (PATIENT): Just my tonsils, when I was eight.
+[SEG0028] person_2 (DOCTOR): Does anxiety run in the family?
+[SEG0029] person_1 (PATIENT): My mother has always been a worrier, she was treated for anxiety.
+[SEG0030] person_2 (DOCTOR): What's your job?
+[SEG0031] person_1 (PATIENT): I'm an accountant. Quarter end is hellish, which doesn't help.
+[SEG0032] person_2 (DOCTOR): Coffee?
+[SEG0033] person_1 (PATIENT): Four cups a day. I know.
+[SEG0034] person_2 (DOCTOR): Let me check your pulse and blood pressure. Pulse 88, blood pressure 124 over 80, temperature 36.6, oxygen 99 percent, breathing 16, and weight 62 kilos.
+[SEG0035] person_1 (PATIENT): Is the pulse high? ~
+[SEG0036] person_2 (DOCTOR): A bit quick but you're nervous, which is fair. I'm going to listen to your heart.
+[SEG0037] person_3 (FAMILY_MEMBER): Shall I wait outside? ~
+[SEG0038] person_2 (DOCTOR): Stay, it's fine if Mia's happy. Heart sounds are normal, regular rhythm.
+[SEG0039] person_1 (PATIENT): Oh good. ~
+[SEG0040] person_2 (DOCTOR): And I can see slightly dilated pupils, which fits with a racing heart. Any trouble with your breathing between attacks?
+[SEG0041] person_1 (PATIENT): No, nothing. I'm fine between attacks.
+[SEG0042] person_2 (DOCTOR): Headaches or vision changes, anything neurological?
+[SEG0043] person_1 (PATIENT): No, nothing. No headaches, my vision's normal.
+[SEG0044] person_2 (DOCTOR): Here's my thinking. This looks like panic attacks, and given the coffee and the racing heart, I can't rule out an overactive thyroid.
+[SEG0045] person_1 (PATIENT): Is it my thyroid? ~
+[SEG0046] person_2 (DOCTOR): Possibly not, but I'd like to arrange a thyroid blood test, a blood count, and an ECG today to be sure.
+[SEG0047] person_3 (FAMILY_MEMBER): And the monitor thing, the one for 24 hours? ~
+[SEG0048] person_2 (DOCTOR): Good thought. I'd like to arrange a 24-hour heart monitor as well.
+[SEG0049] person_1 (PATIENT): How long does that take? ~
+[SEG0050] person_2 (DOCTOR): You wear it for a day, you carry on as normal. Also try cutting the coffee down gradually.
+[SEG0051] person_1 (PATIENT): To what? ~
+[SEG0052] person_2 (DOCTOR): Two cups to start. And keep the propranolol for the train for now. ~
+[SEG0053] person_1 (PATIENT): Okay. ~
+[SEG0054] person_2 (DOCTOR): If the attacks haven't eased in four weeks, come back and we'll talk about talking therapy.
+[SEG0055] person_3 (FAMILY_MEMBER): We'll make an appointment. ~
+
+JSON:

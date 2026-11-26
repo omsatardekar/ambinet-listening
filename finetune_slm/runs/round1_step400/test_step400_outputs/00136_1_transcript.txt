@@ -1,0 +1,75 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00136)
+[SEG0001] person_1 (NURSE): Ready for you, doctor. I'll stay in case you need anything.
+[SEG0002] person_2 (DOCTOR): great. Hello, come in and sit down. How can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): Good morning, doctor. I came along to help out.
+[SEG0004] person_2 (DOCTOR): absolutely, come and and sit beside them
+[SEG0005] person_4 (PATIENT): mainly my heart racing there's a couple of other things, but that's the main one sorry, I know I'm rambling a bit i just want to get back to normal, really
+[SEG0006] person_2 (DOCTOR): are you on any tablets or medication?
+[SEG0007] person_3 (FAMILY_MEMBER): It's alendronate, 70 milligrams, once a week, doctor.
+[SEG0008] person_2 (DOCTOR): How long have you been on it?
+[SEG0009] person_3 (FAMILY_MEMBER): for six months she takes sumatriptan, 50 milligrams, when needed she takes aspirin, 75 milligrams, once a day
+[SEG0010] person_2 (DOCTOR): How long have you taken that?
+[SEG0011] person_3 (FAMILY_MEMBER): Two years now.
+[SEG0012] person_2 (DOCTOR): how far back does it go?
+[SEG0013] person_4 (PATIENT): About a week, give or take.
+[SEG0014] person_3 (FAMILY_MEMBER): I think it's been nearer two weeks, actually.
+[SEG0015] person_2 (DOCTOR): Okay, so roughly one to two weeks. Is that right?
+[SEG0016] person_4 (PATIENT): That sounds about right. And I've been feeling anxious and jittery as well.
+[SEG0017] person_2 (DOCTOR): Okay, have you been losing weight even though you're eating well?
+[SEG0018] person_4 (PATIENT): yes, for four weeks i've been feeling hot and sweaty too, for ten days as for feeling hot and sweaty, it's every other day
+[SEG0019] person_2 (DOCTOR): Have you had your heart racing before, or is this the the first time?
+[SEG0020] person_4 (PATIENT): Yes, something like this happened last winter, and it went away on its own.
+[SEG0021] person_2 (DOCTOR): and what about trouble sleeping, diarrhoea or chest pain?
+[SEG0022] person_4 (PATIENT): No, I'd have mentioned it.
+[SEG0023] person_2 (DOCTOR): a few quick ones: shortness of breath or eye bulging?
+[SEG0024] person_4 (PATIENT): No, I'd have mentioned it.
+[SEG0025] person_2 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0026] person_4 (PATIENT): No, that's all normal.
+[SEG0027] person_2 (DOCTOR): Anything on the the skin I should know about?
+[SEG0028] person_4 (PATIENT): No, skin's been fine.
+[SEG0029] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0030] person_4 (PATIENT): I have thin bones.
+[SEG0031] person_2 (DOCTOR): Mhm.
+[SEG0032] person_4 (PATIENT): I have migraines, for about ten years. I've never really been one for hospitals. I'm hoping you can tell me something definite.
+[SEG0033] person_2 (DOCTOR): Okay, so.
+[SEG0034] person_4 (PATIENT): I've got heart disease.
+[SEG0035] person_2 (DOCTOR): do you exercise at all?
+[SEG0036] person_4 (PATIENT): I go to the gym a couple of times a week.
+[SEG0037] person_2 (DOCTOR): And what do you usually eat?
+[SEG0038] person_4 (PATIENT): Mostly home-cooked food, rice and vegetables
+[SEG0039] person_2 (DOCTOR): Who do you live with?
+[SEG0040] person_4 (PATIENT): I live with my family, my husband and two kids
+[SEG0041] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0042] person_4 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0043] person_2 (DOCTOR): Do your parents or siblings have any long-term illnesses?
+[SEG0044] person_4 (PATIENT): My sister has epilepsy. My mother has migraines.
+[SEG0045] person_2 (DOCTOR): so, any procedures or operations?
+[SEG0046] person_4 (PATIENT): Just a stent put in my heart, two years ago. I didn't want to make a fuss, you know.
+[SEG0047] person_1 (NURSE): Doctor, I've got the readings for you. SpO2 99 percent on room air, height 156 centimetres, BMI works out to to 30.0. Heart rate 124, respiratory rate 19, weight 73 kilos, temp 36.7 degrees, pressure 132 over 77.
+[SEG0048] person_2 (DOCTOR): Okay, noted.
+[SEG0049] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0050] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0051] person_2 (DOCTOR): your thyroid feels a little enlarged and smooth
+[SEG0052] person_2 (DOCTOR): just relax, I'll be quick
+[SEG0053] person_2 (DOCTOR): there's a fine tremor in the outstretched hands, and your palms are warm and moist
+[SEG0054] person_4 (PATIENT): Alright.
+[SEG0055] person_2 (DOCTOR): Thanks, please take a seat again. From what you've told me and what I found, I think we're dealing with an overactive thyroid at this stage. I can't rule out a heart rhythm problem yet.
+[SEG0056] person_1 (NURSE): Doctor, I did an ECG before they came in, the result's on your screen.
+[SEG0057] person_2 (DOCTOR): Thanks, I'll look at that. I want a thyroid scan done, that's for hyperthyroidism. Let's book a thyroid test to look into hyperthyroid symptoms.
+[SEG0058] person_4 (PATIENT): Where do I go for that?
+[SEG0059] person_2 (DOCTOR): The treatment will be propranolol, 20 milligrams, twice a day, until we review. You take it by mouth. That should help with palpitations and tremor. Limit tea, coffee and anything that speeds up the heart for now. Do you have any questions?
+[SEG0060] person_4 (PATIENT): no questions. Thank you
+
+JSON:

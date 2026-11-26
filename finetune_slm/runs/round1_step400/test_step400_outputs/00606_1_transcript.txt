@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00606)
+[SEG0001] person_1 (PATIENT): Hi, doc. Sorry, I know I'm early. My sister dropped me off and she drives like there's a fire behind her.
+[SEG0002] person_2 (DOCTOR): No problem at all. Take a seat. What's been going on?
+[SEG0003] person_1 (PATIENT): The nights have been really hard. I can't even tell you. Last night I sat on the porch till four a.m.
+[SEG0004] person_2 (DOCTOR): That sounds exhausting. So the nights have been really hard, and it's wearing you down.
+[SEG0005] person_1 (PATIENT): Yes! And my neighbor's dog barking doesn't help, he's got this bark like a rusty gate.
+[SEG0006] person_2 (DOCTOR): Let's focus on you for a moment. Are you still taking your usual medicines?
+[SEG0007] person_1 (PATIENT): Oh, yes. I take the olanzapine, 10 milligrams, at bedtime, same as always.
+[SEG0008] person_2 (DOCTOR): Olanzapine, 10 milligrams at bedtime. Got it. Anything else?
+[SEG0009] person_1 (PATIENT): The sertraline, 50 mg every morning with my coffee.
+[SEG0010] person_2 (DOCTOR): Sertraline, 50 mg every morning. Nurse, could you check the chart for me?
+[SEG0011] person_3 (NURSE): Sure, one second. The chart here says olanzapine, 15 milligrams at bedtime.
+[SEG0012] person_1 (PATIENT): Fifteen? No, no. It's 10. Isn't it? The pharmacy gave me those little white ones.
+[SEG0013] person_3 (NURSE): The last prescription on file does say 15, but I can't see the bottle.
+[SEG0014] person_2 (DOCTOR): So we have 10 from you and 15 on the chart. We'll sort that out, don't worry. Did you bring the bottle?
+[SEG0015] person_1 (PATIENT): I left it at my sister's. She told me to bring it, and of course I forgot.
+[SEG0016] person_2 (DOCTOR): Easy fix, we'll call the pharmacy afterwards. And the sertraline matches the chart, nurse?
+[SEG0017] person_3 (NURSE): Yes, 50 mg in the morning matches.
+[SEG0018] person_2 (DOCTOR): Good. Have you had a diagnosis of anything in the past, anything long term?
+[SEG0019] person_1 (PATIENT): Schizophrenia. Since my twenties. I've been pretty stable for years until this month.
+[SEG0020] person_2 (DOCTOR): Thank you for telling me. Any allergies to medicines that I should know about?
+[SEG0021] person_1 (PATIENT): Allergies? No, none that I know of.
+[SEG0022] person_2 (DOCTOR): Okay, none known. Let me check your vitals. Your blood pressure is 126 over 78 and your pulse is 88.
+[SEG0023] person_1 (PATIENT): Is that okay? I never know what the numbers are supposed to be.
+[SEG0024] person_2 (DOCTOR): Both numbers are fine for you right now. Hold your hands out in front of you for me.
+[SEG0025] person_1 (PATIENT): Like this?
+[SEG0026] person_2 (DOCTOR): Yes. Your hands are steady. That's reassuring.
+[SEG0027] person_1 (PATIENT): My sister always checks my hands, and I always worry about it. Silly, I know.
+[SEG0028] person_2 (DOCTOR): Plenty of people worry about that, and nothing here suggests it. Now, when did the nights get worse?
+[SEG0029] person_1 (PATIENT): About the time my work changed shifts. I'm on the late schedule now, and it's a mess.
+[SEG0030] person_2 (DOCTOR): So a new shift, less sleep, and the nights getting harder. Is that fair?
+[SEG0031] person_1 (PATIENT): That's fair. I get home at midnight, and then the evening just drags on and on.
+[SEG0032] person_2 (DOCTOR): Here's my impression. This is most likely stress and broken sleep from the shift change, making your nights tougher.
+[SEG0033] person_1 (PATIENT): So it's not the medicine failing?
+[SEG0034] person_2 (DOCTOR): I can't tell yet, and that's why the dose question matters. I'd like to order a blood test to check your medicine levels.
+[SEG0035] person_1 (PATIENT): Okay. Does it hurt?
+[SEG0036] person_2 (DOCTOR): Just a quick needle in the arm. The nurse will take you through to the lab after we're done.
+[SEG0037] person_3 (NURSE): Right this way when you're ready.
+[SEG0038] person_1 (PATIENT): My sister's going to say I told you so about the bottle.
+[SEG0039] person_2 (DOCTOR): Ha. Tell her the pharmacy call is on me. And keep taking both medicines exactly as you do now until we know the dose.
+[SEG0040] person_1 (PATIENT): Same as now. 10 at night, 50 in the morning, as I said.
+[SEG0041] person_2 (DOCTOR): As you remember them, yes. Until we confirm. Try to wind down an hour before bed, dim lights, no phone.
+[SEG0042] person_1 (PATIENT): I can try. The phone is my worst habit.
+[SEG0043] person_2 (DOCTOR): Come back and see me in two weeks, and we'll go through the blood results together.
+[SEG0044] person_1 (PATIENT): Two weeks. I'll put it in my calendar.
+[SEG0045] person_2 (DOCTOR): And if the nights get frightening before then, call the clinic, day or night.
+[SEG0046] person_1 (PATIENT): I will. Thanks for not rushing me, doc.
+[SEG0047] person_2 (DOCTOR): Anytime. So, to recap: bloods today, pharmacy call, same medicines, and back in two weeks.
+[SEG0048] person_1 (PATIENT): Got it. Bloods, pharmacy, same pills, two weeks.
+[SEG0049] person_2 (DOCTOR): Perfect. Take care of yourself.
+[SEG0050] person_3 (NURSE): Follow me, I'll walk you out.
+[SEG0051] person_1 (PATIENT): Bye, everybody.
+
+JSON:

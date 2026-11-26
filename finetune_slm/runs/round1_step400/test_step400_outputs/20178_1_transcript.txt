@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20178)
+[SEG0001] person_1 (DOCTOR): Morning, come on through.
+[SEG0002] person_2 (PATIENT): Afternoon, um, is this seat fine?
+[SEG0003] person_1 (DOCTOR): How are things, what's been happening?
+[SEG0004] person_2 (PATIENT): Hmm, so the thing is, I've got small red bumps on my wrists.
+[SEG0005] person_1 (DOCTOR): I'll note down your vital signs first.
+[SEG0006] person_1 (DOCTOR): Okay, this won't take long...
+[SEG0007] person_1 (DOCTOR): Okay: temperature 36.9, BP is 128 over 74, pulse is 64 beats a minute, SpO2 99 percent on room air. Okay, how long has it been like this?
+[SEG0008] person_2 (PATIENT): I mean, it's been going on for six months.
+[SEG0009] person_1 (DOCTOR): Has there been scratching sores too?
+[SEG0010] person_2 (PATIENT): Yeah, that too.
+[SEG0011] person_1 (DOCTOR): Yes.
+[SEG0012] person_2 (PATIENT): I've also had itching especially at night, for two years.
+[SEG0013] person_1 (DOCTOR): So, and what about rash on the face, oozing, swollen glands or fever?
+[SEG0014] person_2 (PATIENT): No, I'd have said so.
+[SEG0015] person_1 (DOCTOR): Mm, okay. Is your mobility otherwise okay?
+[SEG0016] person_2 (PATIENT): Nothing else aches.
+[SEG0017] person_1 (DOCTOR): Is your chest okay generally?
+[SEG0018] person_2 (PATIENT): No, you know, nothing there.
+[SEG0019] person_1 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0020] person_2 (PATIENT): Calamine lotion, when needed. I've never really been one for hospitals.
+[SEG0021] person_1 (DOCTOR): Right, have you been to theatre before?
+[SEG0022] person_2 (PATIENT): Just my tonsils removed, as a teenager.
+[SEG0023] person_1 (DOCTOR): So, what about your parents, brothers or sisters, any conditions?
+[SEG0024] person_2 (PATIENT): My uncle has high cholesterol.
+[SEG0025] person_1 (DOCTOR): Is there someone at home?
+[SEG0026] person_2 (PATIENT): My husband and I live above the shop.
+[SEG0027] person_1 (DOCTOR): How active are you?
+[SEG0028] person_2 (PATIENT): I hardly move around during the day.
+[SEG0029] person_1 (DOCTOR): Before we go further, any allergies?
+[SEG0030] person_2 (PATIENT): No, you know, nothing as far as I know.
+[SEG0031] person_1 (DOCTOR): Tell me about any past illnesses or ongoing conditions.
+[SEG0032] person_2 (PATIENT): I've, I've had gout for nearly five years now.
+[SEG0033] person_1 (DOCTOR): Sure.
+[SEG0034] person_1 (DOCTOR): Okay, time for me to examine you.
+[SEG0035] person_2 (PATIENT): Right.
+[SEG0036] person_1 (DOCTOR): I'm just checking this side.
+[SEG0037] person_1 (DOCTOR): There are small burrow-like tracks and red bumps between the fingers and on the wrists, with scratch marks.
+[SEG0038] person_1 (DOCTOR): Thank you, you can get dressed. Taking everything into account, the most likely explanation is scabies. We shouldn't forget an allergic rash. You'll be taking permethrin cream, 5 percent, once, then again after a week, for two weeks. That should help with scabies. Come back in two weeks. Before we finish, can you repeat the plan back to me?
+[SEG0039] person_2 (PATIENT): So, I take the permethrin cream, 5 percent, once, then again after a week and come back in two weeks. Is that right?
+[SEG0040] person_1 (DOCTOR): So, yes, exactly right. I think we're done unless you have questions.
+[SEG0041] person_2 (PATIENT): Thank you, doctor, goodbye.
+[SEG0042] person_1 (DOCTOR): Alright, take care now.
+
+JSON:

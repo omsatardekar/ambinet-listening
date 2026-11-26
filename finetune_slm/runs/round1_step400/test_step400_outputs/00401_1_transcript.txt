@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00401)
+[SEG0001] person_1 (PATIENT): Oh, hi, doctor. Is this the right room?
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): It's a dry cough that won't go away. I thought I'd wait, but it hasn't gone.
+[SEG0004] person_2 (DOCTOR): When did it begin?
+[SEG0005] person_1 (PATIENT): Probably about three months. Yeah.
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): Only sipping water, and it's not much. It's every other day. Yes, lying down and after meals. That makes it worse. Maybe a four out of ten on a bad day.
+[SEG0008] person_2 (DOCTOR): Let's do your observations.
+[SEG0009] person_2 (DOCTOR): Rest your hand here...
+[SEG0010] person_2 (DOCTOR): Okay: pulse is 79 beats a minute, respiratory rate 18. And pressure 126 over 74, saturation 97 percent.
+[SEG0011] person_1 (PATIENT): Is that normal?
+[SEG0012] person_2 (DOCTOR): That's fine, we'll come to it.
+[SEG0013] person_2 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0014] person_1 (PATIENT): Fine.
+[SEG0015] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0016] person_2 (DOCTOR): Chest is clear and the throat looks a little red at the back.
+[SEG0017] person_2 (DOCTOR): All done, you can get dressed. Did you get weight loss, coughing up blood or shortness of breath?
+[SEG0018] person_1 (PATIENT): No weight loss, coughing up blood or shortness of breath, none of it.
+[SEG0019] person_2 (DOCTOR): How about your heart, any problems like that?
+[SEG0020] person_1 (PATIENT): No, that's been fine.
+[SEG0021] person_2 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0022] person_1 (PATIENT): No, nothing like that.
+[SEG0023] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0024] person_1 (PATIENT): No, I've never had anything serious.
+[SEG0025] person_2 (DOCTOR): Any previous surgeries?
+[SEG0026] person_1 (PATIENT): No, nothing like that.
+[SEG0027] person_2 (DOCTOR): Are you on any regular medication?
+[SEG0028] person_1 (PATIENT): Nothing, no.
+[SEG0029] person_2 (DOCTOR): Do you have any allergies to medicines, food, anything at all?
+[SEG0030] person_1 (PATIENT): No allergies.
+[SEG0031] person_2 (DOCTOR): And your work?
+[SEG0032] person_1 (PATIENT): I drive a delivery van all day.
+[SEG0033] person_2 (DOCTOR): Anything special about your diet?
+[SEG0034] person_1 (PATIENT): I try to avoid too much sugar.
+[SEG0035] person_2 (DOCTOR): Okay, thinking it through, my working impression is a cough driven by acid reflux. Let's get breathing tests, for chronic cough. Let's get a chest X-ray, for chronic cough.
+[SEG0036] person_1 (PATIENT): How long does that take?
+[SEG0037] person_2 (DOCTOR): You'll be taking pantoprazole, 40 milligrams, before breakfast, for four weeks. You take it by mouth. That's for reflux. The pharmacy will go through the details again when you pick it up.
+[SEG0038] person_1 (PATIENT): Hmm, can I get that from the usual pharmacy?
+[SEG0039] person_2 (DOCTOR): Don't eat for two or three hours before lying down, and raise the head of the bed a little. Cut down on salt and fried food for now, it really does make a difference. If the symptoms get worse, or you feel really unwell, please come to the emergency department. Book a review in a month.
+[SEG0040] person_1 (PATIENT): Yes, I can do that.
+[SEG0041] person_2 (DOCTOR): Look after yourself.
+[SEG0042] person_1 (PATIENT): All good here. Thank you.
+[SEG0043] person_2 (DOCTOR): Right, see you then.
+
+JSON:

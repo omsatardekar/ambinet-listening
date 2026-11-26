@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00417)
+[SEG0001] person_1 (PATIENT): Hello doctor, sorry, am I early?
+[SEG0002] person_2 (DOCTOR): That's alright, take a seat. Tell me why you've come.
+[SEG0003] person_3 (CAREGIVER): Good morning, doctor. I came along to help out. She's been having a night-time cough, doctor.
+[SEG0004] person_2 (DOCTOR): Can I take your vitals now?
+[SEG0005] person_2 (DOCTOR): Hold still for me...
+[SEG0006] person_2 (DOCTOR): Okay: pulse is 97 beats a minute, temperature is 37.3 degrees, oxygen saturation is 90 percent. And blood pressure 131 over 90, respiratory rate 20. How long are we talking about?
+[SEG0007] person_1 (PATIENT): Since last night, that's when it began.
+[SEG0008] person_2 (DOCTOR): And how severe is it?
+[SEG0009] person_1 (PATIENT): Maybe a six out of ten on a bad day.
+[SEG0010] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0011] person_1 (PATIENT): Wheezing goes along with it, most of the time.
+[SEG0012] person_2 (DOCTOR): Have you had shortness of breath on walking?
+[SEG0013] person_1 (PATIENT): Yes, for three days. The, The wheezing? That's been for about two weeks. Okay, so with wheezing, mild, I'd say. It just comes and goes.
+[SEG0014] person_2 (DOCTOR): So, any leg swelling, runny nose or fever at all?
+[SEG0015] person_1 (PATIENT): Nothing like that, no.
+[SEG0016] person_2 (DOCTOR): Let me check a few things. Any weight loss or chest pain?
+[SEG0017] person_1 (PATIENT): No weight loss or chest pain, none of it.
+[SEG0018] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0019] person_1 (PATIENT): Nothing else aches.
+[SEG0020] person_2 (DOCTOR): Right, is your urine normal, no changes?
+[SEG0021] person_1 (PATIENT): No changes there.
+[SEG0022] person_2 (DOCTOR): Do your parents or siblings have any long-term illnesses?
+[SEG0023] person_1 (PATIENT): My uncle had colon cancer.
+[SEG0024] person_2 (DOCTOR): What's your current medication list?
+[SEG0025] person_1 (PATIENT): I used to take Seretide inhaler, but I stopped it.
+[SEG0026] person_2 (DOCTOR): What about operations, anything like that?
+[SEG0027] person_1 (PATIENT): I had my thyroid operated on a long time ago.
+[SEG0028] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0029] person_1 (PATIENT): A beer or two most evenings, to be honest. I've never smoked. I'm mostly vegetarian. I walk for about half an hour most days. I drive a delivery van all day.
+[SEG0030] person_2 (DOCTOR): Do you have any allergies to medicines, food, anything at all?
+[SEG0031] person_1 (PATIENT): Hmm, no allergies that I know of, no.
+[SEG0032] person_3 (CAREGIVER): Hold on, doctor, I think she reacted to penicillin once. I'm not certain, though.
+[SEG0033] person_1 (PATIENT): Maybe, but I don't recall it.
+[SEG0034] person_2 (DOCTOR): Okay, I'll note both of those.
+[SEG0035] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0036] person_1 (PATIENT): I, I have asthma. I have migraines.
+[SEG0037] person_2 (DOCTOR): Okay, so. Okay, I can see asthma in your file as well.
+[SEG0038] person_2 (DOCTOR): Shall we do the examination?
+[SEG0039] person_2 (DOCTOR): Right, tell me if anything hurts.
+[SEG0040] person_2 (DOCTOR): You're speaking in full sentences, which is reassuring.
+[SEG0041] person_2 (DOCTOR): Almost done with this part.
+[SEG0042] person_2 (DOCTOR): I can hear a widespread wheeze on both sides when you breathe out.
+[SEG0043] person_2 (DOCTOR): Good, that's the examination.
+[SEG0044] person_2 (DOCTOR): Putting it all together, I think we're dealing with an asthma flare-up at this stage. I want to be honest that this is an impression, not a final answer. I can't rule out an allergic reaction yet.
+[SEG0045] person_1 (PATIENT): So, should I be worried about this?
+[SEG0046] person_2 (DOCTOR): It's reasonable to be concerned, but right now an asthma flare-up is my leading thought, not anything worse. Let's book a chest X-ray to look into wheeze. Let's book breathing tests to look into asthma. Let's use prednisolone, 30 milligrams, once a day, for five days. You take it by mouth. That's for asthma flare-up. Let me watch you use the inhaler, a lot of people don't get the full dose.
+[SEG0047] person_2 (DOCTOR): The thing that would worry me is if the inhaler isn't helping or you can't speak in full sentences. If that happens, go to emergency.
+[SEG0048] person_1 (PATIENT): Okay, fair enough.
+[SEG0049] person_2 (DOCTOR): Book a review in two weeks. Okay, I think we're finished. Is everything clear?
+[SEG0050] person_1 (PATIENT): Thanks so much, doctor.
+
+JSON:

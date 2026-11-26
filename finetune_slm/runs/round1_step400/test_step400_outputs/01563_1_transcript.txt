@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01563)
+[SEG0001] person_1 (PATIENT): okay, so morning, doctor lovely to meet you
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What seems to be wrong?
+[SEG0003] person_1 (PATIENT): It's vomiting, mostly.
+[SEG0004] person_2 (DOCTOR): what's the timeline, when did it begin?
+[SEG0005] person_1 (PATIENT): It's been three days now.
+[SEG0006] person_2 (DOCTOR): How much trouble does it give you?
+[SEG0007] person_1 (PATIENT): I'd say moderate.
+[SEG0008] person_2 (DOCTOR): a few quick ones: head injury, fever or weakness?
+[SEG0009] person_1 (PATIENT): no, no head injury, fever or weakness
+[SEG0010] person_2 (DOCTOR): Anything unusual with passing urine?
+[SEG0011] person_1 (PATIENT): Nothing there, no.
+[SEG0012] person_2 (DOCTOR): Any regular medication at all?
+[SEG0013] person_1 (PATIENT): No, I'm not on anything.
+[SEG0014] person_2 (DOCTOR): Okay, are you allergic to anything? Any allergies to medicines or foods?
+[SEG0015] person_1 (PATIENT): no, not that I know of
+[SEG0016] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0017] person_1 (PATIENT): No, nothing I can think of.
+[SEG0018] person_2 (DOCTOR): any previous surgeries?
+[SEG0019] person_1 (PATIENT): No, I've never been operated on.
+[SEG0020] person_2 (DOCTOR): And your job?
+[SEG0021] person_1 (PATIENT): I work in accounts at a hospital
+[SEG0022] person_2 (DOCTOR): Do you live by yourself?
+[SEG0023] person_1 (PATIENT): No, I share a house with my brother
+[SEG0024] person_2 (DOCTOR): let me take your readings now
+[SEG0025] person_2 (DOCTOR): sit still for a moment..
+[SEG0026] person_2 (DOCTOR): Okay: temperature 36.7, BP is 165 over 88, heart rate 93. And respiratory rate 17.
+[SEG0027] person_1 (PATIENT): Is that alright, doctor?
+[SEG0028] person_2 (DOCTOR): I'll come back to the numbers.
+[SEG0029] person_2 (DOCTOR): Okay, time for me to to examine you.
+[SEG0030] person_1 (PATIENT): Of course.
+[SEG0031] person_2 (DOCTOR): I'm just checking this side.
+[SEG0032] person_2 (DOCTOR): Your neck is stiff and you are very sensitive to light.
+[SEG0033] person_2 (DOCTOR): good, you can sit up again
+[SEG0034] person_2 (DOCTOR): Putting it all together, I'd lean towards a possible bleed around the brain.
+[SEG0035] person_1 (PATIENT): Is it dangerous, doctor?
+[SEG0036] person_2 (DOCTOR): I can't promise yet, but most people with a possible bleed around the brain do well once it's treated properly. An urgent CT scan of the head is what I'd like next, for thunderclap headache this needs an emergency scan, an ambulance is on its way i'll also refer you to the emergency team
+[SEG0037] person_1 (PATIENT): erm, sure, where do I go?
+[SEG0038] person_2 (DOCTOR): book a review straight away is there anything you'd like me to go over again?
+[SEG0039] person_1 (PATIENT): Okay, that makes sense. Thanks for explaining.
+[SEG0040] person_2 (DOCTOR): Take care now.
+
+JSON:

@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00043)
+[SEG0001] person_1 (DOCTOR): hi, I'm glad you could make it
+[SEG0002] person_2 (PATIENT): Morning.
+[SEG0003] person_1 (DOCTOR): you came on your own today?
+[SEG0004] person_2 (PATIENT): Yes, I managed on my own.
+[SEG0005] person_1 (DOCTOR): Go ahead, tell me what's happening.
+[SEG0006] person_2 (PATIENT): I've been needing to wear a pad
+[SEG0007] person_1 (DOCTOR): Let's do your observations.
+[SEG0008] person_1 (DOCTOR): One second...
+[SEG0009] person_1 (DOCTOR): Okay: BP is 122 over 79, pulse 80, temperature is 36.9 degrees.
+[SEG0010] person_1 (DOCTOR): And then?
+[SEG0011] person_1 (DOCTOR): How would you describe it, mild, moderate, severe?
+[SEG0012] person_2 (PATIENT): I'd give it a three, out of ten.
+[SEG0013] person_1 (DOCTOR): anything that tends to go along with it?
+[SEG0014] person_2 (PATIENT): It usually comes with leaking urine when I cough or sneeze. The leaking urine when I cough or sneeze? That's been for about a week.
+[SEG0015] person_1 (DOCTOR): Does it happen all the time or in spells?
+[SEG0016] person_2 (PATIENT): it's a couple of times a week oh, and a heavy dragging feeling low down as for heavy dragging feeling low down, mild, I'd say
+[SEG0017] person_1 (DOCTOR): Have you had any burning when passing urine, difficulty emptying or constipation?
+[SEG0018] person_2 (PATIENT): Yeah, no, none of that at all.
+[SEG0019] person_1 (DOCTOR): Hm, okay. And what about fever or blood in the urine?
+[SEG0020] person_2 (PATIENT): Right, no, none of that at all.
+[SEG0021] person_1 (DOCTOR): how's your breathing otherwise?
+[SEG0022] person_2 (PATIENT): breathing's normal
+[SEG0023] person_1 (DOCTOR): what about your general health, any conditions you're being treated for?
+[SEG0024] person_2 (PATIENT): I've had high blood pressure, yes. I did try to ignore it for a while. I've had diabetes for nearly five years now.
+[SEG0025] person_1 (DOCTOR): Okay, I can see high blood pressure in your file as well.
+[SEG0026] person_1 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0027] person_2 (PATIENT): my father had a stroke
+[SEG0028] person_1 (DOCTOR): Have you had to have anything operated on?
+[SEG0029] person_2 (PATIENT): Yes, I had a knee arthroscopy, three years ago.
+[SEG0030] person_1 (DOCTOR): Any allergies I should know about?
+[SEG0031] person_2 (PATIENT): No, no allergies to anything.
+[SEG0032] person_1 (DOCTOR): How about smoking?
+[SEG0033] person_2 (PATIENT): I used to smoke but I quit five years ago
+[SEG0034] person_1 (DOCTOR): Do you exercise at all?
+[SEG0035] person_2 (PATIENT): I go to the gym a couple of times a week.
+[SEG0036] person_1 (DOCTOR): what do you do for work?
+[SEG0037] person_2 (PATIENT): I work in an office, mostly sitting at a desk.
+[SEG0038] person_1 (DOCTOR): how do you eat, generally?
+[SEG0039] person_2 (PATIENT): I skip breakfast most days.
+[SEG0040] person_1 (DOCTOR): what medicines are you taking at the moment?
+[SEG0041] person_2 (PATIENT): I'm on losartan, 50 milligrams, once a day for my blood pressure. I'm on Glycomet, 500 milligrams, twice a day. I'd been on telmisartan, not any more though, I stopped
+[SEG0042] person_1 (DOCTOR): Okay, a quick examination now.
+[SEG0043] person_2 (PATIENT): That's fine.
+[SEG0044] person_1 (DOCTOR): almost done with this part
+[SEG0045] person_1 (DOCTOR): No bulge is visible when you cough, and the tummy is soft.
+[SEG0046] person_1 (DOCTOR): okay, finished
+[SEG0047] person_1 (DOCTOR): Taking everything into account, I don't have a clear answer today: stress urinary incontinence is possible, and so is an overactive bladder. I think a bladder diary makes sense here, for urinary symptoms. I'm gonna order a urine test, for urinary leakage. Pelvic floor exercises, three sets a day, make a real difference over a couple of months. See me again in six weeks.
+[SEG0048] person_2 (PATIENT): That works for me.
+[SEG0049] person_1 (DOCTOR): Is there anything you wanted to ask?
+[SEG0050] person_2 (PATIENT): thank you for your time
+
+JSON:

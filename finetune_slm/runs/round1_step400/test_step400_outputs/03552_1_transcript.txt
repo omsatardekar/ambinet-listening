@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03552)
+[SEG0001] person_1 (DOCTOR): Hello, sorry about the delay, do sit.
+[SEG0002] person_2 (PATIENT): Hi thanks.
+[SEG0003] person_1 (DOCTOR): What do you need help with?
+[SEG0004] person_2 (PATIENT): Well mainly a bit breathless since. There's a couple of other things but that's the main one.
+[SEG0005] person_1 (DOCTOR): how long has this been bothering you?
+[SEG0006] person_2 (PATIENT): it's been five days now
+[SEG0007] person_1 (DOCTOR): how much does it limit you?
+[SEG0008] person_2 (PATIENT): I'd give it it a six out of ten.
+[SEG0009] person_1 (DOCTOR): ah
+[SEG0010] person_2 (PATIENT): oh and a faster heartbeat had that since last night
+[SEG0011] person_1 (DOCTOR): How troublesome is it day to day?
+[SEG0012] person_2 (PATIENT): It's mild honestly.
+[SEG0013] person_1 (DOCTOR): I follow. Right, I'll just record a few vital signs.
+[SEG0014] person_1 (DOCTOR): Keep your arm relaxed for me...
+[SEG0015] person_1 (DOCTOR): Okay: pulse 124, blood pressure 135 over 70. And respiratory rate 18, temperature 37.1, saturation 99 percent.
+[SEG0016] person_2 (PATIENT): Is that okay?
+[SEG0017] person_1 (DOCTOR): don't worry, we'll discuss it in a second
+[SEG0018] person_1 (DOCTOR): I'll examine you in a second make yourself comfortable.
+[SEG0019] person_2 (PATIENT): fine by me
+[SEG0020] person_1 (DOCTOR): okay, nearly finished here
+[SEG0021] person_1 (DOCTOR): Your oxygen is lower than expected for someone so young and the left calf is a little swollen.
+[SEG0022] person_1 (DOCTOR): That's all I needed to check. Have you noticed coughing up blood, fever or chest pain?
+[SEG0023] person_2 (PATIENT): I haven't had coughing up blood fever or chest pain no.
+[SEG0024] person_1 (DOCTOR): how are your joints, any aches elsewhere?
+[SEG0025] person_2 (PATIENT): I move fine otherwise.
+[SEG0026] person_1 (DOCTOR): anything on the skin I should know about?
+[SEG0027] person_2 (PATIENT): No skin's been fine.
+[SEG0028] person_1 (DOCTOR): What does a normal day of food look like?
+[SEG0029] person_2 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0030] person_1 (DOCTOR): Who lives with you?
+[SEG0031] person_2 (PATIENT): My partner and our baby.
+[SEG0032] person_1 (DOCTOR): Any regular medication at all?
+[SEG0033] person_2 (PATIENT): no, none
+[SEG0034] person_1 (DOCTOR): so has anything ever caused you a reaction? I mean any allergies
+[SEG0035] person_2 (PATIENT): years back I got a rash from naproxen, so I stay away from it now
+[SEG0036] person_1 (DOCTOR): do you have any medical conditions I should know about?
+[SEG0037] person_2 (PATIENT): not really no
+[SEG0038] person_1 (DOCTOR): Let me tell you where I've got to. It fits best with possible pulmonary embolism without chest pain. I want to be honest that this is an impression, not a final answer.
+[SEG0039] person_1 (DOCTOR): I'm gonna order a CT pulmonary angiogram, for possible embolus
+[SEG0040] person_3 (CLINICAL_STAFF): we have a slot Wednesday at 9 am if that works
+[SEG0041] person_2 (PATIENT): okay, I'll be there
+[SEG0042] person_1 (DOCTOR): We should do a D-dimer for syncope and calf swelling.
+[SEG0043] person_2 (PATIENT): How long will it take?
+[SEG0044] person_1 (DOCTOR): Even without chest pain this needs a scan today, so please go to hospital. Please don't wait if the symptoms get worse. That's when to be seen urgently.
+[SEG0045] person_2 (PATIENT): That's fine by me.
+[SEG0046] person_1 (DOCTOR): See me again straight away. Have I covered everything you wanted?
+[SEG0047] person_2 (PATIENT): Okay that that makes sense. Thanks for explaining.
+
+JSON:

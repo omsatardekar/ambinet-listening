@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01062)
+[SEG0001] person_1 (PATIENT): Hi, doctor, I came as soon as they called me.
+[SEG0002] person_2 (DOCTOR): not at all please sit what seems to be wrong?
+[SEG0003] person_1 (PATIENT): I wanted to get scaly red plaques on my elbows looked at. I didn't wanna make a fuss you know
+[SEG0004] person_2 (DOCTOR): can you tell me when it first started?
+[SEG0005] person_1 (PATIENT): About... well about four days.
+[SEG0006] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): it settles a little with moisturiser i notice it more with stress
+[SEG0008] person_2 (DOCTOR): Has there been pitted nails too?
+[SEG0009] person_1 (PATIENT): yeah. Four weeks, I'd say
+[SEG0010] person_2 (DOCTOR): shall I check your blood pressure and pulse?
+[SEG0011] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0012] person_2 (DOCTOR): Okay: pulse 73, oxygen saturation is 99 percent, respiratory rate 15, temperature 36.4, pressure 112 over 82.
+[SEG0013] person_1 (PATIENT): is that normal?
+[SEG0014] person_2 (DOCTOR): we'll go over that shortly
+[SEG0015] person_2 (DOCTOR): let me look at the area I'll be gentle
+[SEG0016] person_2 (DOCTOR): breathe out slowly
+[SEG0017] person_2 (DOCTOR): there are well-defined silvery plaques on both elbows and a few pits in the nails
+[SEG0018] person_2 (DOCTOR): that's all I needed to check let me check a few things any joint pain or fever?
+[SEG0019] person_1 (PATIENT): no, no joint pain or fever
+[SEG0020] person_2 (DOCTOR): any pus?
+[SEG0021] person_1 (PATIENT): no no pus
+[SEG0022] person_2 (DOCTOR): your breathing any trouble there?
+[SEG0023] person_1 (PATIENT): no problems with breathing
+[SEG0024] person_2 (DOCTOR): neurologically, anything strange?
+[SEG0025] person_1 (PATIENT): no that's all normal
+[SEG0026] person_2 (DOCTOR): Okay tell me your medicines please.
+[SEG0027] person_1 (PATIENT): Metoprolol i take it 50 milligrams, twice a day for my pressure it's aspirin, 75 milligrams, once a day i take a plain emollient, twice a day
+[SEG0028] person_2 (DOCTOR): before we go further any allergies?
+[SEG0029] person_1 (PATIENT): No allergies at all.
+[SEG0030] person_2 (DOCTOR): have you been to theatre before?
+[SEG0031] person_1 (PATIENT): yes I had a triple bypass eight years ago. I didn't want to bother you but it keeps coming back
+[SEG0032] person_2 (DOCTOR): What about your medical history?
+[SEG0033] person_1 (PATIENT): I've had high blood pressure for five years now. I have heart disease.
+[SEG0034] person_2 (DOCTOR): okay, I can see high blood pressure in your file as well
+[SEG0035] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0036] person_1 (PATIENT): I only drink at family occasions. I'm vegetarian and have been for years. Not much, I mostly stay in these days. My partner and our baby
+[SEG0037] person_2 (DOCTOR): Let me tell you where I've got to. This is probably plaque psoriasis. I want to be honest that this is an impression, not a final answer. I'm prescribing calcipotriol and betamethasone, 50 micrograms/0.5 mg per g, once a day, four weeks. That's for psoriasis. Keep the skin well moisturised and avoid picking the plaques. Let's plan a check in four weeks.
+[SEG0038] person_1 (PATIENT): That's fine with me.
+[SEG0039] person_2 (DOCTOR): does all of that make sense?
+[SEG0040] person_1 (PATIENT): that's clear, um, thanks
+
+JSON:

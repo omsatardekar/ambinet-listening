@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00623)
+[SEG0001] person_1 (PATIENT): Hello. Um. I don't really know why we're here, it was Mark's idea. ~
+[SEG0002] person_3 (FAMILY_MEMBER): I'm her husband, doctor. I made the appointment. I hope that's all right. ~
+[SEG0003] person_2 (DOCTOR): Of course it is. Thanks for coming, both of you. Let's start with you, Sarah, what's been going on? ~
+[SEG0004] person_1 (PATIENT): I'm just... tired. I'm a nurse on the acute medical ward, so everyone's tired, it's the job.
+[SEG0005] person_2 (DOCTOR): You're not wrong, but you came in, so I'd like to hear about your tired. ~
+[SEG0006] person_1 (PATIENT): It's a different sort of tired. I wake up and I'm exhausted before I've done anything. I feel exhausted all the time.
+[SEG0007] person_2 (DOCTOR): How long has it been like that?
+[SEG0008] person_1 (PATIENT): Since the winter, probably. I don't know, I stopped counting.
+[SEG0009] person_2 (DOCTOR): Okay. Are you having any trouble sleeping at the moment?
+[SEG0010] person_1 (PATIENT): No, I'm sleeping fine, actually. Seven hours, more or less.
+[SEG0011] person_3 (FAMILY_MEMBER): She's up at three most nights, love. I hear her in the kitchen.
+[SEG0012] person_1 (PATIENT): That's, I just get a glass of water, Mark. That's not being awake.
+[SEG0013] person_2 (DOCTOR): Thanks for telling me, both of you. I'll note what you each said. Have you had any thoughts of harming yourself?
+[SEG0014] person_1 (PATIENT): No. Never. I'd tell you, I'm not that kind of tired.
+[SEG0015] person_2 (DOCTOR): I appreciate that. Let's look at the medicines. What are you taking at the moment?
+[SEG0016] person_1 (PATIENT): Sertraline, 100 mg once a day. Zopiclone, 3.75 mg at night, only when I need it. Omeprazole, 20 mg in the morning, and propranolol, 40 mg for the shakes when I have a bad shift.
+[SEG0017] person_2 (DOCTOR): And the sertraline, you're taking that daily?
+[SEG0018] person_1 (PATIENT): Every day. I never miss it.
+[SEG0019] person_3 (FAMILY_MEMBER): She does miss it, love. I find the strip half full on Sundays.
+[SEG0020] person_1 (PATIENT): That was once, Mark.
+[SEG0021] person_2 (DOCTOR): I'm not going to decide who's right here. I'll just record that you both told me different things. Any allergies to anything?
+[SEG0022] person_1 (PATIENT): Latex. I get a rash on my hands from the gloves.
+[SEG0023] person_2 (DOCTOR): Good to know. And your health background?
+[SEG0024] person_1 (PATIENT): Depression, diagnosed a few years ago. Migraine, and acid reflux, which is what the omeprazole is for.
+[SEG0025] person_2 (DOCTOR): And alcohol, do you drink?
+[SEG0026] person_1 (PATIENT): I have a drink most evenings. A glass of wine, usually. It helps me switch off.
+[SEG0027] person_3 (FAMILY_MEMBER): Mostly a glass. Sometimes two. ~
+[SEG0028] person_2 (DOCTOR): Thanks. Let me check you over. ~
+[SEG0029] person_3 (FAMILY_MEMBER): I'll wait right here. ~
+[SEG0030] person_2 (DOCTOR): Pulse 78, blood pressure 118 over 74, temperature 36.7, oxygen 99 percent. Your pulse is regular.
+[SEG0031] person_1 (PATIENT): Is everything all right? ~
+[SEG0032] person_2 (DOCTOR): Your numbers are fine. Sarah, this isn't weakness, it's what burnout looks like. You've been running on empty. ~
+[SEG0033] person_1 (PATIENT): I'm scared if I stop, I'll fall apart. ~
+[SEG0034] person_2 (DOCTOR): What I'd like is a fit note for two weeks, to start with. We'll talk about your hours with occupational health as well.
+[SEG0035] person_1 (PATIENT): I can't just leave my team short. ~
+[SEG0036] person_3 (FAMILY_MEMBER): Sarah, please. You're not the only nurse in the hospital. ~
+[SEG0037] person_2 (DOCTOR): Take the two weeks, and let's see how you feel at the end. I'd like to see you again in four weeks.
+[SEG0038] person_1 (PATIENT): Four weeks. Okay. Okay, I'll try. ~
+[SEG0039] person_2 (DOCTOR): And Mark, thank you for bringing her. ~
+[SEG0040] person_3 (FAMILY_MEMBER): Thank you, doctor. ~
+
+JSON:

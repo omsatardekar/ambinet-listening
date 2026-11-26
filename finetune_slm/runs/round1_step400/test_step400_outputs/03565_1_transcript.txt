@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03565)
+[SEG0001] person_1 (PATIENT): Hi, doctor, I came as soon as they called me.
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What seems to be wrong?
+[SEG0003] person_1 (PATIENT): Mainly I've been sweating. That's why I came.
+[SEG0004] person_2 (DOCTOR): How long has it been like this?
+[SEG0005] person_1 (PATIENT): It's, It's been about a week, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): Right, can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): It feels mild to me. It happens on and off. My sister suggested writing things down, uh, but I forgot.
+[SEG0008] person_2 (DOCTOR): Let me take your readings now.
+[SEG0009] person_2 (DOCTOR): Keep your arm relaxed for me...
+[SEG0010] person_2 (DOCTOR): Okay: pulse 107, respiratory rate 18, SpO2 97 percent on room air, pressure 135 over 86.
+[SEG0011] person_2 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0012] person_1 (PATIENT): Of course.
+[SEG0013] person_2 (DOCTOR): Let me feel here.
+[SEG0014] person_2 (DOCTOR): You have brisk reflexes and jerking of the ankles, and your pupils are large.
+[SEG0015] person_1 (PATIENT): Of course.
+[SEG0016] person_2 (DOCTOR): You can relax now. Any seizure?
+[SEG0017] person_1 (PATIENT): Not that I've noticed, no seizure.
+[SEG0018] person_2 (DOCTOR): Let me check a few things. Any stiffness or confusion?
+[SEG0019] person_1 (PATIENT): No, you know, none of those at all.
+[SEG0020] person_2 (DOCTOR): I see, go ahead. Is your digestion otherwise okay?
+[SEG0021] person_1 (PATIENT): Bowels are regular, nothing odd.
+[SEG0022] person_2 (DOCTOR): Have you got any known allergies?
+[SEG0023] person_1 (PATIENT): Not currently, but as a youngster naproxen gave me a rash.
+[SEG0024] person_2 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0025] person_1 (PATIENT): My mother had a stroke.
+[SEG0026] person_2 (DOCTOR): What about your medical history?
+[SEG0027] person_1 (PATIENT): Depression, for two years. I've never really been one for hospitals.
+[SEG0028] person_2 (DOCTOR): I see, go ahead. Any regular medication at all?
+[SEG0029] person_1 (PATIENT): No, I'm not on anything.
+[SEG0030] person_2 (DOCTOR): Alright, any smoking?
+[SEG0031] person_1 (PATIENT): I gave up cigarettes last spring.
+[SEG0032] person_2 (DOCTOR): Do you drink alcohol?
+[SEG0033] person_1 (PATIENT): Nothing, I'm teetotal.
+[SEG0034] person_2 (DOCTOR): Do you work outside the home?
+[SEG0035] person_1 (PATIENT): I'm a hairdresser, on my feet all day.
+[SEG0036] person_2 (DOCTOR): Anything you do to stay fit?
+[SEG0037] person_1 (PATIENT): I do a yoga class on Thursdays.
+[SEG0038] person_2 (DOCTOR): Are you on your own at home?
+[SEG0039] person_1 (PATIENT): I live with my elderly mother.
+[SEG0040] person_2 (DOCTOR): Putting it all together, I'd lean towards mild serotonin syndrome from combining medicines. The reason I say that is that your story and my examination fit together.
+[SEG0041] person_2 (DOCTOR): I'm sending you for blood tests because of agitation and clonus.
+[SEG0042] person_3 (CLINICAL_STAFF): The earliest is Thursday, 3:30 pm.
+[SEG0043] person_2 (DOCTOR): We will stop the migraine tablet and watch you for several hours. Avoid taking any extra painkillers on top of what I'm prescribing without checking with us. The thing that would worry me is if the symptoms get worse. If that happens, go to emergency. Come back in one day. I think we're done unless you have questions.
+[SEG0044] person_1 (PATIENT): I think I understand everything. Thanks.
+[SEG0045] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

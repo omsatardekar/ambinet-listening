@@ -1,0 +1,76 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00219)
+[SEG0001] person_1 (PATIENT): Um, hi there, is it alright if I come in now?
+[SEG0002] person_2 (DOCTOR): Yes, do sit. Tell me what's been happening.
+[SEG0003] person_3 (CAREGIVER): Thank you for fitting us in, doctor.
+[SEG0004] person_1 (PATIENT): Yeah, it's neck pain going down my right arm. I don't know what's causing it.
+[SEG0005] person_2 (DOCTOR): When did you first notice it?
+[SEG0006] person_1 (PATIENT): I'd say three days, maybe.
+[SEG0007] person_3 (CAREGIVER): Hm, uh, I'd say more like five days.
+[SEG0008] person_2 (DOCTOR): Okay, so roughly three to five days. Is that right?
+[SEG0009] person_1 (PATIENT): Oh, I suppose so, yes.
+[SEG0010] person_2 (DOCTOR): Is there anything that triggers it?
+[SEG0011] person_1 (PATIENT): I mean, yes, looking up and turning my head. That makes it worse.
+[SEG0012] person_2 (DOCTOR): Alright, does it happen all the time or in spells?
+[SEG0013] person_1 (PATIENT): Okay, uh, so it sort of comes and goes.
+[SEG0014] person_2 (DOCTOR): And how severe is it?
+[SEG0015] person_1 (PATIENT): So, a five out of ten, I suppose. I mean, and there's a weak grip on that side as well, about a month now. And tingling in the thumb and index finger, too.
+[SEG0016] person_2 (DOCTOR): Right, I'd like to examine you now.
+[SEG0017] person_1 (PATIENT): Mm, okay.
+[SEG0018] person_2 (DOCTOR): Take your time, no rush.
+[SEG0019] person_2 (DOCTOR): Tilting the head to the right brings on the arm tingling.
+[SEG0020] person_2 (DOCTOR): Alright, bear with me a second.
+[SEG0021] person_2 (DOCTOR): Biceps power is a little reduced on the right.
+[SEG0022] person_2 (DOCTOR): Okay, finished.
+[SEG0023] person_2 (DOCTOR): Have you had any recent fall, balance problems or headache?
+[SEG0024] person_1 (PATIENT): So, nothing like that, no.
+[SEG0025] person_2 (DOCTOR): Nothing like fever?
+[SEG0026] person_1 (PATIENT): Definitely no fever.
+[SEG0027] person_3 (CAREGIVER): Actually, uh, doctor, I did notice fever. She doesn't always say.
+[SEG0028] person_1 (PATIENT): I mean, no, I don't think I did. Maybe a little, I'm not sure.
+[SEG0029] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. Have you had bladder problems, by any chance?
+[SEG0030] person_1 (PATIENT): Oh, no, I haven't had any bladder problems.
+[SEG0031] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0032] person_1 (PATIENT): Breathing's normal.
+[SEG0033] person_2 (DOCTOR): Any previous surgeries?
+[SEG0034] person_1 (PATIENT): No, nothing like that.
+[SEG0035] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0036] person_1 (PATIENT): I have diabetes, for five years. I've got depression.
+[SEG0037] person_2 (DOCTOR): Right, so diabetes is already on your record. We'll keep that in mind today. Which tablets or creams or inhalers do you use?
+[SEG0038] person_3 (CAREGIVER): Well, uh, it's metformin, 500 milligrams, twice a day for my sugar, doctor. She is on escitalopram, 10 milligrams, once a day, I give it to her.
+[SEG0039] person_2 (DOCTOR): How long has that been going on?
+[SEG0040] person_3 (CAREGIVER): Two years now.
+[SEG0041] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0042] person_1 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0043] person_2 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0044] person_1 (PATIENT): Uh, my father had a heart attack.
+[SEG0045] person_2 (DOCTOR): And alcohol, how much?
+[SEG0046] person_1 (PATIENT): I gave up drinking about three years ago.
+[SEG0047] person_2 (DOCTOR): How's your diet?
+[SEG0048] person_1 (PATIENT): I'm mostly vegetarian.
+[SEG0049] person_2 (DOCTOR): Do you live alone?
+[SEG0050] person_1 (PATIENT): Yes, I live on my own.
+[SEG0051] person_2 (DOCTOR): Let me tell you where I've got to. It points towards a pinched nerve in the neck. We shouldn't forget carpal tunnel syndrome. So, to recap quickly. You've had neck pain going down your right arm, and no balance problems.
+[SEG0052] person_1 (PATIENT): Yes, you've got it.
+[SEG0053] person_2 (DOCTOR): I'll request an X-ray of the neck, it'll help with neck and arm pain.
+[SEG0054] person_1 (PATIENT): How long does that take?
+[SEG0055] person_2 (DOCTOR): I think an MRI of the cervical spine makes sense here, for arm symptoms.
+[SEG0056] person_1 (PATIENT): Okay, noted.
+[SEG0057] person_2 (DOCTOR): I'm going to put you on naproxen, 250 milligrams, twice a day after food, for five days. That's for nerve-related neck pain. I'll put all of this in writing so you don't have to remember it. Keep the neck moving gently and avoid long periods looking down at a phone.
+[SEG0058] person_2 (DOCTOR): Mm. Try to get to bed and wake up at the same time each day, and keep your phone away from the bed. I'll also refer you to physiotherapy. The thing that would worry me is if the symptoms get worse. If that happens, go to emergency. I'd like to see you again after the scan.
+[SEG0059] person_1 (PATIENT): Okay, I'll book that.
+[SEG0060] person_2 (DOCTOR): Look after yourself.
+[SEG0061] person_1 (PATIENT): No, I think that's everything. Thank you, doctor.
+
+JSON:

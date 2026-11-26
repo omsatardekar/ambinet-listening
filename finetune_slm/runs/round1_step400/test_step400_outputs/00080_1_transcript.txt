@@ -1,0 +1,72 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00080)
+[SEG0001] person_1 (DOCTOR): Hi. Thanks for coming in today.
+[SEG0002] person_2 (PATIENT): Hi. Thanks.
+[SEG0003] person_3 (CAREGIVER): Hello, doctor, I came in with them, if that's okay.
+[SEG0004] person_1 (DOCTOR): Yes, that's no problem at all. Please sit. Sorry about the wait, we're running a bit behind.
+[SEG0005] person_2 (PATIENT): Oh, that's fine. I was just reading something on my phone.
+[SEG0006] person_1 (DOCTOR): Okay. Start wherever you like.
+[SEG0007] person_2 (PATIENT): Um, so... pain in my lower back. That's why I came. I kept putting it off, which I know isn't sensible. I thought it would sort itself out, but it hasn't.
+[SEG0008] person_1 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0009] person_3 (CAREGIVER): Yeah, he takes losartan, 50 milligrams, once a day for my blood pressure. It's paracetamol, 650 milligrams, when needed, doctor.
+[SEG0010] person_1 (DOCTOR): How long has that been going on?
+[SEG0011] person_3 (CAREGIVER): For two months.
+[SEG0012] person_2 (PATIENT): Before this I was on amlodipine; that's been stopped.
+[SEG0013] person_1 (DOCTOR): When did it begin?
+[SEG0014] person_2 (PATIENT): For three weeks, I'd say.
+[SEG0015] person_1 (DOCTOR): Is there anything that triggers it?
+[SEG0016] person_2 (PATIENT): I mean, it's worse with sitting for long.
+[SEG0017] person_1 (DOCTOR): Does it happen all the time or in spells?
+[SEG0018] person_2 (PATIENT): Honestly, a few times a day.
+[SEG0019] person_1 (DOCTOR): How would you describe it, mild, moderate, severe?
+[SEG0020] person_2 (PATIENT): Well, it's... hard to say, it's kind of... I don't know—
+[SEG0021] person_1 (DOCTOR): Right, take your time. Mild, moderate, or severe, if you had to pick?
+[SEG0022] person_2 (PATIENT): I mean, um, I'd give it a eight, out of ten. Um, uh, there's a muscle spasm as well.
+[SEG0023] person_1 (DOCTOR): On a normal day, how strong is it?
+[SEG0024] person_2 (PATIENT): Well, it's... hard to say, it's kind of... I don't know—
+[SEG0025] person_1 (DOCTOR): Take your time. Mild, moderate, or severe, if you had to pick?
+[SEG0026] person_2 (PATIENT): It's severe, honestly.
+[SEG0027] person_1 (DOCTOR): What's the pattern, is it there all day?
+[SEG0028] person_2 (PATIENT): It's, um... not exactly... well, hard to explain, I mean—
+[SEG0029] person_1 (DOCTOR): Let me put it another way: how many times in a typical day or week?
+[SEG0030] person_2 (PATIENT): It happens a couple of times a week.
+[SEG0031] person_1 (DOCTOR): Did you get fever, weight loss or weakness in the legs?
+[SEG0032] person_2 (PATIENT): Yeah, no, no fever, no weight loss, no weakness in the legs. I did have pain going into the buttock at one point, but that went away on its own.
+[SEG0033] person_1 (DOCTOR): Did you get bladder problems or numbness in the legs?
+[SEG0034] person_2 (PATIENT): No, none of that at all.
+[SEG0035] person_1 (DOCTOR): Anything unusual with passing urine?
+[SEG0036] person_2 (PATIENT): Nothing there, no.
+[SEG0037] person_1 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0038] person_2 (PATIENT): No, nothing I'm aware of.
+[SEG0039] person_1 (DOCTOR): Are you living with family?
+[SEG0040] person_2 (PATIENT): I stay with my daughter and her family.
+[SEG0041] person_1 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0042] person_2 (PATIENT): I've had high blood pressure, yes. I've had arthritis in my knees for two years now.
+[SEG0043] person_1 (DOCTOR): Is there more?
+[SEG0044] person_1 (DOCTOR): Right, so high blood pressure and arthritis in your knees are already on your record. We'll keep that in mind today. Right, have you ever been under the knife?
+[SEG0045] person_2 (PATIENT): I had my thyroid operated on a long time ago.
+[SEG0046] person_1 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0047] person_2 (PATIENT): Yeah, my father was diabetic.
+[SEG0048] person_4 (NURSE): Doctor, I've got the readings for you. Blood pressure 128 over 80, temp 36.9 degrees, pulse 79.
+[SEG0049] person_1 (DOCTOR): Okay, noted.
+[SEG0050] person_1 (DOCTOR): Right, let me check a few things physically.
+[SEG0051] person_1 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0052] person_1 (DOCTOR): There's tenderness over the muscles on the right of the lower back.
+[SEG0053] person_2 (PATIENT): No problem.
+[SEG0054] person_1 (DOCTOR): Tell me if anything hurts.
+[SEG0055] person_1 (DOCTOR): Straight leg raise is negative on both sides and power in the legs is normal.
+[SEG0056] person_1 (DOCTOR): Thanks for that. Staying gently active heals back pain faster than bed rest, so keep moving. That's everything from me. Any other questions?
+[SEG0057] person_2 (PATIENT): So, okay, thank you. Bye.
+
+JSON:

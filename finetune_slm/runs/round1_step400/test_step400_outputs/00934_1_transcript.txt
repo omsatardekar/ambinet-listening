@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00934)
+[SEG0001] person_1 (PATIENT): Hello, doctor! I've had psoriasis for years, but now my joints are hurting, and my nails look terrible. I thought it was time to come in.
+[SEG0002] person_2 (DOCTOR): Good to meet you. Tell me about the joints first. Which ones?
+[SEG0003] person_1 (PATIENT): Mainly my fingers, and my right knee. They're stiff and swollen.
+[SEG0004] person_2 (DOCTOR): When are they worst?
+[SEG0005] person_1 (PATIENT): In the morning. It takes me a good hour to get going.
+[SEG0006] person_2 (DOCTOR): How long has this been happening?
+[SEG0007] person_1 (PATIENT): About four months. It started slowly.
+[SEG0008] person_2 (DOCTOR): And the nails?
+[SEG0009] person_1 (PATIENT): They're pitted, little dents, and a couple of them have come away from the nail bed.
+[SEG0010] person_2 (DOCTOR): Any eye redness or pain, or back pain at night?
+[SEG0011] person_1 (PATIENT): No. Not that I've noticed.
+[SEG0012] person_2 (DOCTOR): What do you use for the psoriasis?
+[SEG0013] person_1 (PATIENT): A steroid cream on my elbows, calcipotriol, once a day.
+[SEG0014] person_2 (DOCTOR): Do you take anything for the joint pain? ~
+[SEG0015] person_1 (PATIENT): Just ibuprofen, 400 mg, when it's bad.
+[SEG0016] person_2 (DOCTOR): Any other conditions?
+[SEG0017] person_1 (PATIENT): Psoriasis since I was twenty. That's all.
+[SEG0018] person_2 (DOCTOR): Does psoriasis or arthritis run in the family? ~
+[SEG0019] person_1 (PATIENT): My father had psoriasis. ~
+[SEG0020] person_2 (DOCTOR): Do you smoke, or drink alcohol?
+[SEG0021] person_1 (PATIENT): I smoke ten a day. I'd like to cut down.
+[SEG0022] person_2 (DOCTOR): Let me check your blood pressure and pulse. ~
+[SEG0023] person_1 (PATIENT): Go on.
+[SEG0024] person_2 (DOCTOR): Blood pressure 126 over 80, pulse 72, temperature 36.6.
+[SEG0025] person_1 (PATIENT): Normal? ~
+[SEG0026] person_2 (DOCTOR): Normal. Now let me look at your hands and your knee. ~
+[SEG0027] person_1 (PATIENT): Of course.
+[SEG0028] person_2 (DOCTOR): There's swelling and tenderness in several finger joints, and the nails are pitted with lifting. The right knee has a small effusion.
+[SEG0029] person_1 (PATIENT): What does that mean? ~
+[SEG0030] person_2 (DOCTOR): It strongly suggests psoriatic arthritis, and the nail changes support it. I'd also like blood tests and X-rays of your hands.
+[SEG0031] person_1 (PATIENT): Is it serious? ~
+[SEG0032] person_2 (DOCTOR): It can damage joints if it is not treated, so early treatment is important. ~
+[SEG0033] person_1 (PATIENT): What treatment? ~
+[SEG0034] person_2 (DOCTOR): There are several options, and I'd like a rheumatologist to guide it. I'll refer you urgently, and in the meantime take naproxen, 500 mg, twice a day with food.
+[SEG0035] person_1 (PATIENT): All right. ~
+[SEG0036] person_2 (DOCTOR): And it would help your joints and skin to stop smoking. I can help you with that.
+[SEG0037] person_1 (PATIENT): I'd like that. ~
+[SEG0038] person_2 (DOCTOR): I'll see you in four weeks, once the tests are back.
+[SEG0039] person_1 (PATIENT): Thank you, doctor. ~
+
+JSON:

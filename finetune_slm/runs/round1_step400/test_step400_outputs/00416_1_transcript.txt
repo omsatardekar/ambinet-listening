@@ -1,0 +1,74 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00416)
+[SEG0001] person_1 (PATIENT): Hello? Doctor? They told me to come straight in.
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_1 (PATIENT): Uh, I wanted to get a fever looked at.
+[SEG0004] person_2 (DOCTOR): And when did that start?
+[SEG0005] person_1 (PATIENT): It's been five days now.
+[SEG0006] person_2 (DOCTOR): How would you describe it, mild, moderate, severe?
+[SEG0007] person_1 (PATIENT): Yeah, I'd call it severe.
+[SEG0008] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0009] person_1 (PATIENT): Oh, um, it usually comes with a runny nose. So, uh, as for runny nose, I honestly can't say when that began. It might have been last month or the month before. I mean, about runny nose, I'd call it mild.
+[SEG0010] person_2 (DOCTOR): Have you had body aches?
+[SEG0011] person_1 (PATIENT): Yeah, that too. About body aches, it's on and off. Um, um, there's a mild headache as well. With mild headache, honestly, once or twice a day.
+[SEG0012] person_2 (DOCTOR): Have you had a fever before, or is this the first time?
+[SEG0013] person_1 (PATIENT): I, I had a similar thing about six months ago. It went away.
+[SEG0014] person_2 (DOCTOR): I'll take a few measurements first.
+[SEG0015] person_2 (DOCTOR): Right, rest your hand here...
+[SEG0016] person_2 (DOCTOR): Okay: blood pressure 104 over 66, SpO2 97 percent on room air, temperature is 39.0 degrees, heart rate 101.
+[SEG0017] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0018] person_2 (DOCTOR): Let me look at this properly.
+[SEG0019] person_2 (DOCTOR): Chest is clear when I listen, no crackles.
+[SEG0020] person_2 (DOCTOR): Take your time, no rush.
+[SEG0021] person_2 (DOCTOR): The glands in your neck feel a little tender but not big.
+[SEG0022] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0023] person_2 (DOCTOR): Your throat looks red at the back, but there's no pus on the tonsils.
+[SEG0024] person_2 (DOCTOR): Okay, you can sit up.
+[SEG0025] person_2 (DOCTOR): Any vomiting or burning when passing urine?
+[SEG0026] person_1 (PATIENT): Hmm, no, none of that at all.
+[SEG0027] person_2 (DOCTOR): Any chest pain or diarrhoea?
+[SEG0028] person_1 (PATIENT): Yeah, you know, none, as far as I know.
+[SEG0029] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0030] person_1 (PATIENT): Nothing like that.
+[SEG0031] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0032] person_1 (PATIENT): Glimepiride. I take it 2 milligrams, before breakfast for my sugar.
+[SEG0033] person_2 (DOCTOR): When did you start it?
+[SEG0034] person_1 (PATIENT): For six months. Losartan. I take it 50 milligrams, once a day. Paracetamol, 500 milligrams, maybe, when needed.
+[SEG0035] person_2 (DOCTOR): Do you have the packet or the prescription with you?
+[SEG0036] person_1 (PATIENT): No, it's at home.
+[SEG0037] person_2 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0038] person_1 (PATIENT): I have asthma, for nearly five years.
+[SEG0039] person_2 (DOCTOR): Right, any more?
+[SEG0040] person_1 (PATIENT): Yes, diabetes. High blood pressure, for about ten years.
+[SEG0041] person_2 (DOCTOR): Yes, asthma is known to us, good to have that clear.
+[SEG0042] person_2 (DOCTOR): Do you have any known allergies at all?
+[SEG0043] person_1 (PATIENT): I've never been told I have allergies.
+[SEG0044] person_2 (DOCTOR): Who's at home with you?
+[SEG0045] person_1 (PATIENT): It's just me and my wife at home now.
+[SEG0046] person_2 (DOCTOR): What's your diet like?
+[SEG0047] person_1 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0048] person_2 (DOCTOR): Right, here's what I'm thinking. I think we're dealing with a viral illness at this stage. Another possibility is influenza.
+[SEG0049] person_1 (PATIENT): What are the chances it's something bad?
+[SEG0050] person_2 (DOCTOR): It's reasonable to be concerned, but right now a viral illness is my leading thought, not anything worse. Let's get a flu swab, for fever. I want blood tests done, that's for fever. I'm prescribing cetirizine, 10 milligrams, at night, for five days. That should help with blocked nose.
+[SEG0051] person_1 (PATIENT): Is that safe with my other things?
+[SEG0052] person_2 (DOCTOR): Stay home, rest, and keep the fluids up. Warm soups and water, anything that goes down easily. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0053] person_1 (PATIENT): Okay, you know, I understand.
+[SEG0054] person_2 (DOCTOR): Let's review you in five days.
+[SEG0055] person_1 (PATIENT): Oh, good, I'll come back then.
+[SEG0056] person_2 (DOCTOR): Alright, what are the next steps as you understand them?
+[SEG0057] person_1 (PATIENT): So, I take the cetirizine, 10 milligrams, at night and come back in five days. Is that right?
+[SEG0058] person_2 (DOCTOR): Yes, exactly right. Call the clinic if you need us.
+[SEG0059] person_1 (PATIENT): Well, all good here. Thank you.
+
+JSON:

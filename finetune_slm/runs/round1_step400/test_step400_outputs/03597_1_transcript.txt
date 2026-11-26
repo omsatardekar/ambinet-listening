@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03597)
+[SEG0001] person_1 (PATIENT): Hello, uh, doctor. May I come in?
+[SEG0002] person_2 (DOCTOR): Yes, have a seat. Tell me what's going on.
+[SEG0003] person_1 (PATIENT): It's back pain that doesn't go away, mostly.
+[SEG0004] person_2 (DOCTOR): what do you take on a normal day?
+[SEG0005] person_1 (PATIENT): I take Eltroxin, 100 micrograms, every morning for my thyroid. I take clopidogrel, once a day for the stent.
+[SEG0006] person_2 (DOCTOR): do you know the dose?
+[SEG0007] person_1 (PATIENT): 75 milligrams.
+[SEG0008] person_2 (DOCTOR): since when exactly?
+[SEG0009] person_1 (PATIENT): For about a week, I'd say.
+[SEG0010] person_2 (DOCTOR): How troublesome is it day to day?
+[SEG0011] person_1 (PATIENT): Severe, really.
+[SEG0012] person_2 (DOCTOR): have you noticed breathlessness or high fever?
+[SEG0013] person_1 (PATIENT): No, none of those at all.
+[SEG0014] person_2 (DOCTOR): have you noticed chest pain or leg weakness?
+[SEG0015] person_1 (PATIENT): no, none of those at all
+[SEG0016] person_2 (DOCTOR): Is your urine normal, no changes?
+[SEG0017] person_1 (PATIENT): no changes there
+[SEG0018] person_2 (DOCTOR): Alright, what about your medical history?
+[SEG0019] person_1 (PATIENT): Yes, an underactive thyroid. Yes, heart disease.
+[SEG0020] person_2 (DOCTOR): Yes, an underactive thyroid is known to us, good to have that clear.
+[SEG0021] person_2 (DOCTOR): let me ask about allergies, anything at all?
+[SEG0022] person_1 (PATIENT): No, I've never reacted to anything.
+[SEG0023] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0024] person_1 (PATIENT): I retired from the post office two years ago. I swim twice a week. I drink a lot of tea and snack through the day.
+[SEG0025] person_2 (DOCTOR): Let me take your readings now.
+[SEG0026] person_2 (DOCTOR): okay, this won't take long..
+[SEG0027] person_2 (DOCTOR): Okay: respiratory rate 21, temperature is 38.4 degrees, SpO2 97 percent on room air, pressure 113 over 76, pulse 105.
+[SEG0028] person_1 (PATIENT): is that okay?
+[SEG0029] person_2 (DOCTOR): I'll come back to the numbers
+[SEG0030] person_2 (DOCTOR): alright, now I'm going to do a short physical check
+[SEG0031] person_1 (PATIENT): Okay, doctor.
+[SEG0032] person_2 (DOCTOR): tell me if that's sore
+[SEG0033] person_2 (DOCTOR): there is a soft heart murmur you've not had before and a small tender spot on the fingertip
+[SEG0034] person_2 (DOCTOR): That's the examination finished.
+[SEG0035] person_2 (DOCTOR): Putting it all together, the most likely explanation is possible infection of the heart valve causing back and general symptoms. I want to be honest that this is an impression, not a final answer. I'm going to order an MRI of the spine, for persistent back pain with systemic symptoms. I'd rather check than guess, and this is the quickest way to know more.
+[SEG0036] person_3 (CLINICAL_STAFF): We have a slot Monday at 10 am, if that works.
+[SEG0037] person_2 (DOCTOR): this is not an ordinary back strain, so I want tests today cut back on tea, coffee and fizzy drinks for a couple of weeks and see how things settle come back straight away
+[SEG0038] person_1 (PATIENT): I can manage that.
+[SEG0039] person_2 (DOCTOR): right, that's the plan do you want to ask me anything?
+[SEG0040] person_1 (PATIENT): Right, I'll do that. Thank you, doctor.
+
+JSON:

@@ -1,0 +1,154 @@
+{
+ "run_id": "m3_h1_baseline",
+ "encounter_id": "m3_04_hair_thinning_terse",
+ "title": "Hair thinning for six months; terse patient, plain-spoken doctor, minimal information",
+ "prompt_sha256": {
+  "precision": "2246a810d1cb417338e522cff551c643d54b2610c8179f628f6107e6eb270692",
+  "recall": "481fac47059ae73868a6576db46e621e1e16f779221aecf09fd52511e382c6cb"
+ },
+ "n_segments": 102,
+ "reference_facts": [
+  {
+   "fid": "D1",
+   "field": "design_fact",
+   "text": "hair thinning for about six months",
+   "attributes": {}
+  },
+  {
+   "fid": "D2",
+   "field": "design_fact",
+   "text": "more hair coming out in the shower and on the brush",
+   "attributes": {}
+  },
+  {
+   "fid": "D3",
+   "field": "design_fact",
+   "text": "one blood test (iron stores and thyroid) is arranged",
+   "attributes": {}
+  },
+  {
+   "fid": "D4",
+   "field": "design_fact",
+   "text": "one treatment is started: minoxidil foam, twice a day",
+   "attributes": {}
+  }
+ ],
+ "predicted_facts": [
+  {
+   "fid": "chief_complaint[0]",
+   "field": "chief_complaint",
+   "text": "hair thinning (reported_by=doctor)",
+   "attributes": {
+    "reported_by": "doctor"
+   }
+  },
+  {
+   "fid": "symptoms[0]",
+   "field": "symptoms",
+   "text": "hair thinning (category=cardiovascular, status=present, temporality=current, body_site=scalp, reported_by=doctor, certainty=present)",
+   "attributes": {
+    "category": "cardiovascular",
+    "status": "present",
+    "temporality": "current",
+    "body_site": "scalp",
+    "reported_by": "doctor",
+    "certainty": "present"
+   }
+  },
+  {
+   "fid": "negative_findings[0]",
+   "field": "negative_findings",
+   "text": "hair thinning (status=absent, assertion=negative, reported_by=doctor, temporality=current)",
+   "attributes": {
+    "status": "absent",
+    "assertion": "negative",
+    "reported_by": "doctor",
+    "temporality": "current"
+   }
+  },
+  {
+   "fid": "clinical_assessment[0]",
+   "field": "clinical_assessment",
+   "text": "hair thinning (certainty=provisional, stated_by=doctor)",
+   "attributes": {
+    "certainty": "provisional",
+    "stated_by": "doctor"
+   }
+  }
+ ],
+ "precision": [
+  {
+   "fid": "chief_complaint[0]",
+   "verdict": "supported",
+   "critical": false,
+   "segments": [
+    "SEG0003"
+   ],
+   "reason": "Doctor states patient has come about her hair."
+  },
+  {
+   "fid": "symptoms[0]",
+   "verdict": "partially_supported",
+   "critical": false,
+   "segments": [
+    "SEG0003",
+    "SEG0006",
+    "SEG0008"
+   ],
+   "reason": "Hair thinning is current and on scalp, but category 'cardiovascular' is wrong; reported by patient, not doctor."
+  },
+  {
+   "fid": "negative_findings[0]",
+   "verdict": "contradicted",
+   "critical": true,
+   "segments": [
+    "SEG0006",
+    "SEG0008",
+    "SEG0016",
+    "SEG0018"
+   ],
+   "reason": "Transcript says hair thinning is present, not absent."
+  },
+  {
+   "fid": "clinical_assessment[0]",
+   "verdict": "supported",
+   "critical": false,
+   "segments": [
+    "SEG0003",
+    "SEG0029",
+    "SEG0033"
+   ],
+   "reason": "Doctor discusses hair thinning and provisional causes/assessment."
+  }
+ ],
+ "recall": [
+  {
+   "fid": "D1",
+   "verdict": "partially_found",
+   "matched": [
+    "chief_complaint[0]",
+    "symptoms[0]",
+    "clinical_assessment[0]"
+   ],
+   "reason": "Hair thinning present, but six-month duration is missing."
+  },
+  {
+   "fid": "D2",
+   "verdict": "missing",
+   "matched": [],
+   "reason": "No predicted fact mentions increased hair shedding in shower or on brush."
+  },
+  {
+   "fid": "D3",
+   "verdict": "missing",
+   "matched": [],
+   "reason": "No predicted fact mentions blood tests, iron stores, thyroid, or arrangement."
+  },
+  {
+   "fid": "D4",
+   "verdict": "missing",
+   "matched": [],
+   "reason": "No predicted fact mentions starting minoxidil foam twice daily."
+  }
+ ]
+}

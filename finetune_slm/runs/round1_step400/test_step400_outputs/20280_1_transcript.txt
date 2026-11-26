@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20280)
+[SEG0001] person_1 (PATIENT): Good afternoon, uh, doctor.
+[SEG0002] person_2 (DOCTOR): Yes, have a seat. Tell me what's going on.
+[SEG0003] person_1 (PATIENT): I've been feeling dizzy when I stand up, and I wanted to get it checked.
+[SEG0004] person_2 (DOCTOR): Tell me your medicines, please.
+[SEG0005] person_1 (PATIENT): Lisinopril. I take it 10 milligrams, once a day for my pressure.
+[SEG0006] person_2 (DOCTOR): How long has it been like this?
+[SEG0007] person_1 (PATIENT): Probably about two weeks. Yeah.
+[SEG0008] person_2 (DOCTOR): Has there been a dry mouth too?
+[SEG0009] person_1 (PATIENT): So, yes, about the same, five days. Yeah, about dry mouth, it settles a little with sipping water.
+[SEG0010] person_2 (DOCTOR): Have you been feeling dizzy when you stand up at any time before this?
+[SEG0011] person_1 (PATIENT): A bit, about six months ago. It settled by itself back then.
+[SEG0012] person_2 (DOCTOR): Right, have you noticed palpitations or vomiting?
+[SEG0013] person_1 (PATIENT): I haven't had palpitations or vomiting, no.
+[SEG0014] person_2 (DOCTOR): Any fainting, slurred speech or black stools at all?
+[SEG0015] person_1 (PATIENT): No, you know, not a single one.
+[SEG0016] person_2 (DOCTOR): Is your chest okay generally?
+[SEG0017] person_1 (PATIENT): No, nothing there.
+[SEG0018] person_2 (DOCTOR): What operations have you had, if any?
+[SEG0019] person_1 (PATIENT): Um, just my septum straightened, in my thirties.
+[SEG0020] person_2 (DOCTOR): What about your medical history?
+[SEG0021] person_1 (PATIENT): Well, I've had high blood pressure, yes.
+[SEG0022] person_2 (DOCTOR): Yes, carry on.
+[SEG0023] person_1 (PATIENT): I've had an enlarged prostate for nearly five years now. I thought it would sort itself out, but it hasn't. I'm not great at remembering details, so bear with me.
+[SEG0024] person_2 (DOCTOR): Yes, high blood pressure is known to us, good to have that clear.
+[SEG0025] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0026] person_1 (PATIENT): I have about eight cigarettes in a day. I work in accounts at a hospital. I hardly move around during the day. I grab fast food at lunch most days.
+[SEG0027] person_2 (DOCTOR): Alright, does your family have any medical conditions?
+[SEG0028] person_1 (PATIENT): My daughter has type 1 diabetes.
+[SEG0029] person_2 (DOCTOR): Alright, do you react to any medicines or foods? Any allergies?
+[SEG0030] person_1 (PATIENT): I'm allergic to kiwi, I get an itchy mouth.
+[SEG0031] person_2 (DOCTOR): Let me quickly check your readings.
+[SEG0032] person_2 (DOCTOR): Okay, sit still for a moment...
+[SEG0033] person_2 (DOCTOR): Okay: saturation 98 percent, temperature is 36.6 degrees, pressure 104 over 65, pulse is 105 beats a minute.
+[SEG0034] person_2 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0035] person_2 (DOCTOR): Let me feel here.
+[SEG0036] person_2 (DOCTOR): Heart sounds are normal and the chest is clear.
+[SEG0037] person_2 (DOCTOR): Thank you, you can get dressed. Taking everything into account, my working impression is postural low blood pressure, possibly related to medicines or dehydration. I'm sending you for blood tests because of dizziness.
+[SEG0038] person_3 (CLINICAL_STAFF): We have a slot Wednesday at 10 am, if that works.
+[SEG0039] person_2 (DOCTOR): We should do an ECG for dizziness. Get up slowly from lying and sitting, and keep drinking fluids through the day. If it hasn't settled in two weeks, we'd think about a lying and standing blood pressure check, but not now. Right, that's the plan. Do you want to ask me anything?
+[SEG0040] person_1 (PATIENT): That's clear, thanks.
+
+JSON:

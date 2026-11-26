@@ -1,0 +1,73 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00454)
+[SEG0001] person_1 (NURSE): doctor if you're free we can start i've got the the numbers noted down
+[SEG0002] person_2 (DOCTOR): thanks, that's helpful hello, please sit what's been happening?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, thank you for seeing us.
+[SEG0004] person_2 (DOCTOR): Yes, that's no problem at all. Please sit.
+[SEG0005] person_3 (FAMILY_MEMBER): We came cos of trouble hearing in my left ear.
+[SEG0006] person_2 (DOCTOR): Since when have you had this?
+[SEG0007] person_4 (PATIENT): Probably about a month. Yeah.
+[SEG0008] person_2 (DOCTOR): how much is it bothering you?
+[SEG0009] person_4 (PATIENT): pretty moderate, if I'm being honest
+[SEG0010] person_4 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0011] person_3 (FAMILY_MEMBER): Tell the doctor about the other thing, that's what worries me.
+[SEG0012] person_4 (PATIENT): I was getting to that!
+[SEG0013] person_2 (DOCTOR): Any difficulty following conversation in crowds as well?
+[SEG0014] person_4 (PATIENT): Yes, I have. I've been turning the TV up too, you know, for about a year.
+[SEG0015] person_2 (DOCTOR): And how severe is it?
+[SEG0016] person_4 (PATIENT): Pretty severe, if I'm being honest.
+[SEG0017] person_5 (UNKNOWN): mm, that's what happened, yes
+[SEG0018] person_2 (DOCTOR): and what about discharge or ear pain?
+[SEG0019] person_4 (PATIENT): none, as far as I know
+[SEG0020] person_2 (DOCTOR): and what about dizziness or facial weakness?
+[SEG0021] person_4 (PATIENT): no dizziness or facial weakness, none of it it
+[SEG0022] person_2 (DOCTOR): any headache?
+[SEG0023] person_4 (PATIENT): No, no headache.
+[SEG0024] person_2 (DOCTOR): anything unusual with passing urine?
+[SEG0025] person_4 (PATIENT): no changes there
+[SEG0026] person_2 (DOCTOR): have you had any surgery before?
+[SEG0027] person_4 (PATIENT): I had my appendix out about eight years ago
+[SEG0028] person_2 (DOCTOR): what about allergies, to medicines or foods or anything else?
+[SEG0029] person_4 (PATIENT): Latex. I come out in... well, a rash on my hands
+[SEG0030] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0031] person_4 (PATIENT): I've got diabetes.
+[SEG0032] person_2 (DOCTOR): mhm
+[SEG0033] person_4 (PATIENT): I've had high blood pressure for about ten years now. An irregular heartbeat, for five years
+[SEG0034] person_2 (DOCTOR): alright, diabetes, that matches what I have here are you on any tablets or medication?
+[SEG0035] person_4 (PATIENT): I'm on something called glyc... Glycomet, 500 milligrams, maybe, twice a day for my sugar.
+[SEG0036] person_2 (DOCTOR): Have you got the box or the prescription on you?
+[SEG0037] person_4 (PATIENT): Not with me. I'll bring it next time. Amlodipine. I take it 5 milligrams, once a day.
+[SEG0038] person_3 (FAMILY_MEMBER): Well, doctor, I think the last prescription for the amlodipine was 10 milligrams. We changed it at the last visit.
+[SEG0039] person_2 (DOCTOR): right do you happen to have the current prescription here?
+[SEG0040] person_4 (PATIENT): not with me i'll bring it next time i'm on apixaban, 5 milligrams, twice a day
+[SEG0041] person_2 (DOCTOR): A A few questions about your lifestyle now.
+[SEG0042] person_4 (PATIENT): I have a couple of drinks on the weekend. I smoke about ten cigarettes a day. Barely, I'm mostly sedentary these days
+[SEG0043] person_1 (NURSE): Doctor, I've got the readings for you. Heart rate 71, temperature 36.5, BP is 109 over 75. Oxygen saturation is 98 percent.
+[SEG0044] person_2 (DOCTOR): thanks
+[SEG0045] person_2 (DOCTOR): okay, a a quick examination now
+[SEG0046] person_2 (DOCTOR): let me press here
+[SEG0047] person_2 (DOCTOR): There's a lot of wax in the left ear canal, I can't see the drum.
+[SEG0048] person_2 (DOCTOR): bear with me a second
+[SEG0049] person_2 (DOCTOR): the the right ear canal and drum are normal
+[SEG0050] person_2 (DOCTOR): all done, you can get dressed
+[SEG0051] person_2 (DOCTOR): putting it all together it fits best with hearing loss from wax another possibility is an inner ear problem i can't rule out age-related hearing loss yet
+[SEG0052] person_4 (PATIENT): I've been thinking the worst, to to be honest. Is it bad?
+[SEG0053] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's hearing loss from wax and we'll know more once the a hearing test is back. Let's get a hearing test for hearing loss. Let's use ear drops three times a day for five days. That's for wax softening.
+[SEG0054] person_4 (PATIENT): Right understood.
+[SEG0055] person_2 (DOCTOR): please don't use cotton buds or ear candles, they push the wax in further and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+[SEG0056] person_4 (PATIENT): yes I'll keep that in mind
+[SEG0057] person_2 (DOCTOR): I'd like you back after the hearing test is there anything you wanted to ask?
+[SEG0058] person_4 (PATIENT): all good here. Thank you
+
+JSON:

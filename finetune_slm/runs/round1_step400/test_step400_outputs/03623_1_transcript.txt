@@ -1,0 +1,50 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03623)
+[SEG0001] person_1 (PATIENT): Good afternoon, doctor.
+[SEG0002] person_2 (DOCTOR): You're alright, take a seat. What can I do for you?
+[SEG0003] person_1 (PATIENT): Well, I've been having an ache in my jaw.
+[SEG0004] person_2 (DOCTOR): When was the first time you noticed it?
+[SEG0005] person_1 (PATIENT): It's been going on for four weeks.
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): Rest helps a bit. I'd call it moderate.
+[SEG0008] person_2 (DOCTOR): Have you noticed fever, leg swelling or crushing chest pain?
+[SEG0009] person_1 (PATIENT): I haven't had fever, leg swelling or crushing chest pain, no.
+[SEG0010] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0011] person_1 (PATIENT): No, joints are fine.
+[SEG0012] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0013] person_1 (PATIENT): I walk the dog every morning. I'm a hairdresser, on my feet all day. I drink a lot of tea and snack through the day.
+[SEG0014] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0015] person_1 (PATIENT): Nothing, I haven't had any operations.
+[SEG0016] person_2 (DOCTOR): Tell me your medicines, please.
+[SEG0017] person_1 (PATIENT): Telmisartan. I take it 40 milligrams, once a day for my pressure. Erm, I take glibenclamide, 5 milligrams, before breakfast.
+[SEG0018] person_2 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0019] person_1 (PATIENT): I've had high blood pressure for two years now. I've had diabetes, yes.
+[SEG0020] person_2 (DOCTOR): Any other things?
+[SEG0021] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0022] person_1 (PATIENT): Not to my knowledge, no.
+[SEG0023] person_2 (DOCTOR): Let me take your readings now.
+[SEG0024] person_2 (DOCTOR): Keep your arm relaxed for me...
+[SEG0025] person_2 (DOCTOR): Okay: pulse is 111 beats a minute, respiratory rate 19, temperature 36.9, SpO2 98 percent on room air, blood pressure 121 over 86.
+[SEG0026] person_2 (DOCTOR): Alright, over here please and I'll take a look.
+[SEG0027] person_2 (DOCTOR): Look straight ahead.
+[SEG0028] person_2 (DOCTOR): Your heart sounds are normal and your tummy is soft, but your pulse is a little fast.
+[SEG0029] person_2 (DOCTOR): You can relax now.
+[SEG0030] person_2 (DOCTOR): So, based on the history and the examination, my working impression is possible heart attack despite no classic chest pain. Let me just check I've got this right. You've had an ache in your jaw for four weeks, moderate, and no fever or crushing chest pain.
+[SEG0031] person_1 (PATIENT): That's it, yes.
+[SEG0032] person_2 (DOCTOR): I'm going to order a troponin test, for possible heart attack. I'm going to put you on aspirin, 300 milligrams, once now, single dose. It's for possible heart attack. Diabetes can hide the usual pain, so I am treating this as a heart problem until proven otherwise. Avoid taking any extra painkillers on top of what I'm prescribing without checking with us. I'm going to send a referral to the cardiology team.
+[SEG0033] person_1 (PATIENT): Alright, thank you.
+[SEG0034] person_2 (DOCTOR): Let's hold off on an ECG for now, and if there's no change next month we can revisit it. I'd like to see you again straight away. That's all from me. Any questions?
+[SEG0035] person_1 (PATIENT): So, alright, thanks, take care.
+
+JSON:

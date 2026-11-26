@@ -1,0 +1,64 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00487)
+[SEG0001] person_1 (DOCTOR): Afternoon. Take the chair by the desk.
+[SEG0002] person_2 (PATIENT): Morning.
+[SEG0003] person_1 (DOCTOR): So, what's been going on?
+[SEG0004] person_2 (PATIENT): Mainly I've been getting out of puff on the stairs. That's why I came.
+[SEG0005] person_1 (DOCTOR): Is this recent, or has it been a while?
+[SEG0006] person_2 (PATIENT): It's been ten days now.
+[SEG0007] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0008] person_2 (PATIENT): I notice it more with carrying shopping and stairs. Mostly severe. It's a couple of times a week. I've been having put on weight too.
+[SEG0009] person_1 (DOCTOR): Have you been feeling tired?
+[SEG0010] person_2 (PATIENT): Yes, actually. I did have a dry cough at night at one point, but that's gone now.
+[SEG0011] person_1 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0012] person_2 (PATIENT): I've got diabetes.
+[SEG0013] person_1 (DOCTOR): Go on.
+[SEG0014] person_2 (PATIENT): Yes, high blood pressure. Yes, low haemoglobin.
+[SEG0015] person_1 (DOCTOR): Alright, diabetes and high blood pressure, that matches what I have here.
+[SEG0016] person_1 (DOCTOR): Okay, any medication at the moment, including things from the pharmacy?
+[SEG0017] person_2 (PATIENT): Glimepiride, 2 milligrams, before breakfast for my sugar.
+[SEG0018] person_3 (NURSE): Doctor, our chart from the last visit lists it as 4 milligrams.
+[SEG0019] person_1 (DOCTOR): Okay. Have you got the newest prescription or the box with you?
+[SEG0020] person_2 (PATIENT): Well, not with me. I'll bring it next time. Telmisartan. I take it once a day for my pressure.
+[SEG0021] person_1 (DOCTOR): How much do you take?
+[SEG0022] person_2 (PATIENT): 40 milligrams, I think that's what's on the box. Iron tablets. I take it once a day for my blood count. I'm supposed to take it regularly, but I don't always manage.
+[SEG0023] person_1 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0024] person_2 (PATIENT): I work night shifts at a warehouse. I skip breakfast most days. I go to the gym a couple of times a week.
+[SEG0025] person_1 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0026] person_2 (PATIENT): None, as far as I'm aware.
+[SEG0027] person_1 (DOCTOR): Have you had any wheezing?
+[SEG0028] person_2 (PATIENT): No wheezing, thankfully.
+[SEG0029] person_1 (DOCTOR): A few quick ones: chest pain or fever?
+[SEG0030] person_2 (PATIENT): No, nothing there.
+[SEG0031] person_1 (DOCTOR): And what about coughing up blood, calf swelling or palpitations?
+[SEG0032] person_2 (PATIENT): Right, uh, I haven't had coughing up blood, calf swelling or palpitations, no.
+[SEG0033] person_1 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0034] person_2 (PATIENT): Nothing else aches.
+[SEG0035] person_3 (NURSE): Here are the numbers, doctor. Blood pressure 119 over 74, pulse is 82 beats a minute, oxygen saturation is 97 percent. Temperature 36.6.
+[SEG0036] person_1 (DOCTOR): Good, thank you.
+[SEG0037] person_1 (DOCTOR): Let me have a look at you.
+[SEG0038] person_2 (PATIENT): Sure.
+[SEG0039] person_1 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0040] person_1 (DOCTOR): Heart sounds are normal and the chest is clear.
+[SEG0041] person_1 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0042] person_1 (DOCTOR): Your BMI is on the high side and you look a little pale.
+[SEG0043] person_1 (DOCTOR): Thanks for that. From what you've told me and what I found, I think we're dealing with breathlessness with several possible contributors at this stage. Another possibility is anaemia. We should do a chest X-ray for breathlessness. I'd like to arrange blood tests for breathlessness. An echocardiogram is what I'd like next, for breathlessness. That will help us see what's going on underneath and decide the next step.
+[SEG0044] person_2 (PATIENT): Mm, okay.
+[SEG0045] person_1 (DOCTOR): A short daily walk, building up slowly, is a sensible start. Cut back on tea, coffee and fizzy drinks for a couple of weeks and see how things settle. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Do get help quickly if the symptoms get worse. Book a review after the results are back.
+[SEG0046] person_2 (PATIENT): Fine.
+[SEG0047] person_1 (DOCTOR): Good. Let us know how you get on.
+[SEG0048] person_2 (PATIENT): Thank you for your time.
+[SEG0049] person_1 (DOCTOR): Take care.
+
+JSON:

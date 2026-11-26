@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02582)
+[SEG0001] person_1 (PATIENT): Good evening, doctor, thanks for seeing me.
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): Let me think, good afternoon, doctor. I look after them so I thought I'd come. Mm, you know, doctor, it's severe tummy pain out of proportion to the examination. That's what we're worried about.
+[SEG0004] person_2 (DOCTOR): Can you tell me when it first started?
+[SEG0005] person_1 (PATIENT): For four weeks, I'd say.
+[SEG0006] person_2 (DOCTOR): Mm, okay.
+[SEG0007] person_1 (PATIENT): I've had vomiting too, for one week. About vomiting, I'd say mild.
+[SEG0008] person_2 (DOCTOR): Any chest pain, fever or hernia?
+[SEG0009] person_1 (PATIENT): No chest pain, fever or hernia, none of it.
+[SEG0010] person_2 (DOCTOR): Neurologically, anything strange?
+[SEG0011] person_1 (PATIENT): No, that's all normal.
+[SEG0012] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0013] person_1 (PATIENT): No, nothing with my heart.
+[SEG0014] person_2 (DOCTOR): What line of work are you in?
+[SEG0015] person_1 (PATIENT): I'm a bus driver, so I sit for long hours.
+[SEG0016] person_2 (DOCTOR): So, are you on your own at home?
+[SEG0017] person_1 (PATIENT): I live with my elderly mother.
+[SEG0018] person_2 (DOCTOR): Tell me about your eating.
+[SEG0019] person_1 (PATIENT): I drink a lot of tea and snack through the day.
+[SEG0020] person_2 (DOCTOR): Tell me your medicines, please.
+[SEG0021] person_1 (PATIENT): Well, I take something called a bl... a blood thinner, 5 milligrams, maybe, stopped last month.
+[SEG0022] person_2 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0023] person_1 (PATIENT): Mm, not with me. I'll bring it next time.
+[SEG0024] person_2 (DOCTOR): Are you allergic to anything? Any allergies to medicines or foods?
+[SEG0025] person_1 (PATIENT): Right, no, not that I know of.
+[SEG0026] person_2 (DOCTOR): What about your medical history?
+[SEG0027] person_1 (PATIENT): I've had an irregular heartbeat, yes. I'm not great at remembering details, so bear with me. I didn't want to bother you but it keeps coming back.
+[SEG0028] person_2 (DOCTOR): Any previous surgeries?
+[SEG0029] person_1 (PATIENT): No surgery, you know, no.
+[SEG0030] person_2 (DOCTOR): Can I check a few measurements before we carry on?
+[SEG0031] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0032] person_2 (DOCTOR): Okay: height 167 centimetres, BMI works out to 25.5, BP is 129 over 76. And weight 71 kilos, pulse 116.
+[SEG0033] person_2 (DOCTOR): I'll examine you in a second, make yourself comfortable.
+[SEG0034] person_2 (DOCTOR): Alright, I'm just checking this side.
+[SEG0035] person_2 (DOCTOR): Your pulse is irregular, the tummy is soft but terribly painful, and the pain is out of proportion to what I find.
+[SEG0036] person_2 (DOCTOR): That's all I needed to check. So where does that leave us? The most likely explanation is possible bowel ischaemia.
+[SEG0037] person_1 (PATIENT): Okay, so is there something to worry about?
+[SEG0038] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's possible bowel ischaemia, and we'll know more once the an urgent CT angiogram is back.
+[SEG0039] person_2 (DOCTOR): I'm sending you for an urgent CT angiogram because of possible bowel ischaemia. This is an emergency, you are going to hospital now. I'd like you to see the surgical team as well, and I'll write the referral. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0040] person_1 (PATIENT): Okay, uh, makes sense.
+[SEG0041] person_2 (DOCTOR): I think we're done unless you have questions.
+[SEG0042] person_1 (PATIENT): Right, I'll do that. Thank you, doctor.
+[SEG0043] person_2 (DOCTOR): All the best.
+
+JSON:

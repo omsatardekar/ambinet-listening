@@ -1,0 +1,82 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00307)
+[SEG0001] person_1 (DOCTOR): good afternoon. Take a seat, please
+[SEG0002] person_2 (PATIENT): morning
+[SEG0003] person_1 (DOCTOR): How can I help you today?
+[SEG0004] person_2 (PATIENT): Doctor, it's a missed period. It's getting on my nerves now.
+[SEG0005] person_1 (DOCTOR): How long are we talking about?
+[SEG0006] person_2 (PATIENT): Probably ten days. Yeah.
+[SEG0007] person_1 (DOCTOR): how intense does it get?
+[SEG0008] person_2 (PATIENT): Moderate, really. As for needing to pass urine more, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0009] person_1 (DOCTOR): any nausea in the mornings as well?
+[SEG0010] person_2 (PATIENT): yes, I have
+[SEG0011] person_1 (DOCTOR): anything that helps?
+[SEG0012] person_2 (PATIENT): It settles a little with dry biscuits.
+[SEG0013] person_1 (DOCTOR): on a a normal day, how strong is it?
+[SEG0014] person_2 (PATIENT): Maybe a five out of ten on a bad day.
+[SEG0015] person_1 (DOCTOR): have you been feeling tired?
+[SEG0016] person_2 (PATIENT): Yes, actually.
+[SEG0017] person_3 (NURSE): Here are the numbers, doctor. Heart rate 77, height 177 centimetres, blood pressure 115 over 70, weight 69 kilos, BMI works out to 22.0, respiratory rate 18, SpO2 97 percent on room air.
+[SEG0018] person_1 (DOCTOR): okay, noted
+[SEG0019] person_1 (DOCTOR): Okay, a a quick examination now.
+[SEG0020] person_2 (PATIENT): that's fine
+[SEG0021] person_1 (DOCTOR): just relax I'll be quick
+[SEG0022] person_1 (DOCTOR): tummy is soft, non-tender, and the uterus isn't palpable above the pelvic bone yet
+[SEG0023] person_1 (DOCTOR): All done, you can get dressed. And what about burning when passing urine, severe abdominal pain or dizziness?
+[SEG0024] person_2 (PATIENT): no burning when passing urine, severe abdominal pain or dizziness, none of it
+[SEG0025] person_1 (DOCTOR): a few quick ones: vomiting everything or fever?
+[SEG0026] person_2 (PATIENT): none, as far as I know
+[SEG0027] person_1 (DOCTOR): How about your heart, any problems like that?
+[SEG0028] person_2 (PATIENT): My heart's been fine, as far as I know.
+[SEG0029] person_1 (DOCTOR): do you have any allergies to medicines food anything at all?
+[SEG0030] person_2 (PATIENT): no allergies that I know of, no
+[SEG0031] person_1 (DOCTOR): What about alcohol?
+[SEG0032] person_2 (PATIENT): I gave up drinking about three years ago
+[SEG0033] person_1 (DOCTOR): do you smoke?
+[SEG0034] person_2 (PATIENT): I've never smoked
+[SEG0035] person_1 (DOCTOR): Anything special about your diet?
+[SEG0036] person_2 (PATIENT): I try to avoid too much sugar
+[SEG0037] person_1 (DOCTOR): do you have a job?
+[SEG0038] person_2 (PATIENT): I'm a self-employed electrician.
+[SEG0039] person_1 (DOCTOR): what about operations, anything like that?
+[SEG0040] person_2 (PATIENT): well I had my thyroid operated on a long time ago
+[SEG0041] person_1 (DOCTOR): what medicines do you take regularly? Take your time, there's no rush
+[SEG0042] person_2 (PATIENT): Thyronorm, 50 micrograms, every morning
+[SEG0043] person_3 (NURSE): Doctor, our chart from the last visit lists it as 100 micrograms.
+[SEG0044] person_1 (DOCTOR): hm that's different is the latest prescription anywhere near you?
+[SEG0045] person_2 (PATIENT): Not with me. I'll bring it next time. Sumatriptan, 50 milligrams, maybe, when needed for my migraines.
+[SEG0046] person_1 (DOCTOR): Have you got the box or the prescription on you?
+[SEG0047] person_2 (PATIENT): not with me. I'll bring it next time. It's apixaban, 5 milligrams, twice a day
+[SEG0048] person_1 (DOCTOR): I see any long-term health problems I should know about?
+[SEG0049] person_2 (PATIENT): I have an underactive thyroid
+[SEG0050] person_1 (DOCTOR): I see.
+[SEG0051] person_2 (PATIENT): yes migraines
+[SEG0052] person_1 (DOCTOR): Okay.
+[SEG0053] person_2 (PATIENT): Yes an irregular heartbeat.
+[SEG0054] person_1 (DOCTOR): mm-hm right, yes, an underactive thyroid is known to us, good to have that clear is there a family history of anything significant?
+[SEG0055] person_2 (PATIENT): my father had a heart attack
+[SEG0056] person_1 (DOCTOR): Okay so my impression is this: This looks most like an early pregnancy. Another possibility is a late period for another reason. So to recap quickly. You've had a missed period for ten days moderate and no fever or severe abdominal pain.
+[SEG0057] person_2 (PATIENT): That's it, yes.
+[SEG0058] person_3 (NURSE): I've already done a pregnancy test, it's ready for you
+[SEG0059] person_1 (DOCTOR): Okay, noted. We should do blood tests for antenatal screening.
+[SEG0060] person_2 (PATIENT): Where do I go for that?
+[SEG0061] person_1 (DOCTOR): Let's get an early scan, for early pregnancy. The treatment will be folic acid, 5 milligrams, once a day, until twelve weeks. It's for pregnancy. The pharmacy will go through the details again when you pick it up. Small, frequent meals and dry crackers before getting out of bed can calm the morning nausea. If you smoke, this is a good moment to think about stopping, and we can help you with that.
+[SEG0062] person_1 (DOCTOR): and please bring the latest prescription or the medicine boxes to the next visit so we can settle the dose
+[SEG0063] person_2 (PATIENT): alright, I know what to look for
+[SEG0064] person_1 (DOCTOR): see me again in four weeks
+[SEG0065] person_2 (PATIENT): okay, see you then
+[SEG0066] person_1 (DOCTOR): ask me anything before you go
+[SEG0067] person_2 (PATIENT): right thanks again
+
+JSON:

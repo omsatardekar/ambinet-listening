@@ -1,0 +1,74 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03196)
+[SEG0001] person_1 (DOCTOR): Hello, take a a seat, I'll be with you in a second.
+[SEG0002] person_2 (PATIENT): Morning, doctor, sorry about the rush.
+[SEG0003] person_1 (DOCTOR): tell me what's brought you in
+[SEG0004] person_2 (PATIENT): I'm here because of a yellow discharge sorry, I know I'm rambling a bit
+[SEG0005] person_1 (DOCTOR): Can you tell me when it first started?
+[SEG0006] person_2 (PATIENT): For three weeks, I'd say.
+[SEG0007] person_1 (DOCTOR): So, have you noticed anything else alongside it?
+[SEG0008] person_2 (PATIENT): it usually comes with a temperature. Oh, and a red sore wound after my operation. That's been about the same, about two weeks. The temperature? That's been for about four days
+[SEG0009] person_1 (DOCTOR): have you had a yellow discharge before, or is this the first time?
+[SEG0010] person_2 (PATIENT): A bit, about six months ago. It settled by itself back then.
+[SEG0011] person_1 (DOCTOR): Let me check a few things. Any chest pain, breathlessness, calf pain or vomiting?
+[SEG0012] person_2 (PATIENT): Nope, nothing like that.
+[SEG0013] person_1 (DOCTOR): has your heart given you any trouble?
+[SEG0014] person_2 (PATIENT): Nothing like that.
+[SEG0015] person_1 (DOCTOR): Anything different when you pass water?
+[SEG0016] person_2 (PATIENT): no changes there
+[SEG0017] person_1 (DOCTOR): tell me about any past illnesses or ongoing conditions
+[SEG0018] person_2 (PATIENT): I have diabetes, for about ten years. I, I have high cholesterol, for about ten years. I'm not great at remembering details, so bear with me.
+[SEG0019] person_1 (DOCTOR): alright, diabetes and high cholesterol, that matches what I have here what about your parents, brothers or sisters, any conditions?
+[SEG0020] person_2 (PATIENT): My uncle has high cholesterol.
+[SEG0021] person_1 (DOCTOR): What's on your current medicine list?
+[SEG0022] person_2 (PATIENT): I take metformin, 500 milligrams, twice a day for my sugar.
+[SEG0023] person_3 (NURSE): Doctor, our chart from the last visit lists it as 1000 milligrams.
+[SEG0024] person_1 (DOCTOR): Right. Do you happen to have the current prescription here?
+[SEG0025] person_2 (PATIENT): no, I left it at home i take rosuvastatin, 10 milligrams, at night
+[SEG0026] person_1 (DOCTOR): Since when have you been taking it?
+[SEG0027] person_2 (PATIENT): For about a year.
+[SEG0028] person_1 (DOCTOR): any smoking?
+[SEG0029] person_2 (PATIENT): I have about eight cigarettes in a day
+[SEG0030] person_1 (DOCTOR): Do you get out much?
+[SEG0031] person_2 (PATIENT): Not much, I mostly stay in these days.
+[SEG0032] person_1 (DOCTOR): Is there someone at home?
+[SEG0033] person_2 (PATIENT): My husband and I live above the shop.
+[SEG0034] person_1 (DOCTOR): What does a normal day of food look like?
+[SEG0035] person_2 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0036] person_1 (DOCTOR): Did you ever have any procedures done?
+[SEG0037] person_2 (PATIENT): Yes, I had a meniscus repair on my knee, four years ago.
+[SEG0038] person_1 (DOCTOR): Are you allergic to anything? Any allergies to medicines or foods?
+[SEG0039] person_2 (PATIENT): yes, cat fur. I get wheezing. I'm allergic to wheat, I get bloating
+[SEG0040] person_3 (NURSE): Okay, so the vitals from earlier. Respiratory rate 21, pulse 104, blood pressure 123 over 69.
+[SEG0041] person_1 (DOCTOR): Okay, noted.
+[SEG0042] person_1 (DOCTOR): may I examine you now?
+[SEG0043] person_2 (PATIENT): Fine by me.
+[SEG0044] person_1 (DOCTOR): Breathe out slowly.
+[SEG0045] person_1 (DOCTOR): the lower part of the wound is red, hot and weeping pus, and the edges have not come together
+[SEG0046] person_1 (DOCTOR): That's the examination finished. So, based on the history and the examination, I can't pin this down yet. We're looking at a surgical wound infection or a stitch abscess.
+[SEG0047] person_1 (DOCTOR): I think blood tests makes sense here, for wound infection. I'd rather check than guess, and this is the quickest way to know more.
+[SEG0048] person_2 (PATIENT): Where would I go for that?
+[SEG0049] person_1 (DOCTOR): I think a wound swab makes sense here, for wound infection.
+[SEG0050] person_2 (PATIENT): Right, understood.
+[SEG0051] person_1 (DOCTOR): We'll begin with flucloxacillin, 500 milligrams, four times a day, seven days. That should help with wound infection.
+[SEG0052] person_2 (PATIENT): Fine, I'll begin it.
+[SEG0053] person_1 (DOCTOR): keep it clean and dry and use fresh dressings daily don't skip meals, and try to eat smaller portions more often through the day and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+[SEG0054] person_2 (PATIENT): I'll remember that.
+[SEG0055] person_1 (DOCTOR): See me again in two days.
+[SEG0056] person_2 (PATIENT): that's fine with me
+[SEG0057] person_1 (DOCTOR): Anything else on your mind before you go?
+[SEG0058] person_2 (PATIENT): Great, thank you for your help.
+[SEG0059] person_1 (DOCTOR): Okay, all the best.
+
+JSON:

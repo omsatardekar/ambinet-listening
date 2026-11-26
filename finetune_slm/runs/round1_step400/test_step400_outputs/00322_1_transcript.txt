@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00322)
+[SEG0001] person_1 (PATIENT): Hmm, hi there, is it alright if I come in now?
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_1 (PATIENT): it's tiredness all the time, mostly i'm not great at remembering details, so bear with me my family kept telling me to get it it checked
+[SEG0004] person_2 (DOCTOR): when did you first notice it?
+[SEG0005] person_1 (PATIENT): For five days, I'd say.
+[SEG0006] person_2 (DOCTOR): Does it it come along with anything else?
+[SEG0007] person_1 (PATIENT): Hair falling out goes along with it, most of the time. Well, the Hair falling out? That's been for two days.
+[SEG0008] person_2 (DOCTOR): A few measurements, then we'll continue.
+[SEG0009] person_2 (DOCTOR): Almost there...
+[SEG0010] person_2 (DOCTOR): okay: heart rate 86, temp 36.6 degrees. And pressure 116 over 78, SpO2 97 percent on room air
+[SEG0011] person_1 (PATIENT): Is that okay?
+[SEG0012] person_2 (DOCTOR): That's fine, we'll come to it.
+[SEG0013] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0014] person_1 (PATIENT): no problem
+[SEG0015] person_2 (DOCTOR): Let me just check something.
+[SEG0016] person_2 (DOCTOR): You look a little pale in the eyelids.
+[SEG0017] person_2 (DOCTOR): Right, you can sit back down. Any low mood, shortness of breath, blood in the stool or fever at all?
+[SEG0018] person_1 (PATIENT): I haven't had low mood, shortness of breath, blood in the stool or fever, no
+[SEG0019] person_2 (DOCTOR): what about your tummy and bowels, anything unusual there?
+[SEG0020] person_1 (PATIENT): Nothing unusual, no.
+[SEG0021] person_2 (DOCTOR): Any previous surgeries?
+[SEG0022] person_1 (PATIENT): No operations, no.
+[SEG0023] person_2 (DOCTOR): do you have any medical conditions I should know about?
+[SEG0024] person_1 (PATIENT): Well, no, none that I know of.
+[SEG0025] person_2 (DOCTOR): Anything special about your diet?
+[SEG0026] person_1 (PATIENT): I try to avoid too much sugar
+[SEG0027] person_2 (DOCTOR): How about exercise?
+[SEG0028] person_1 (PATIENT): Not really, I don't get much exercise
+[SEG0029] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0030] person_1 (PATIENT): Dust. I come out in... well, itchy eyes.
+[SEG0031] person_2 (DOCTOR): Any regular medication?
+[SEG0032] person_1 (PATIENT): Nothing, uh, no.
+[SEG0033] person_2 (DOCTOR): Putting it all together, I think we're dealing with persistent tiredness, possibly from low iron at this stage.
+[SEG0034] person_1 (PATIENT): is this something I'll have for good?
+[SEG0035] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's persistent tiredness, possibly from low iron, and we'll know more once the a thyroid test is back. Let me repeat that back to make sure. You've had tiredness all the time for five days, and and no blood in the stool or low mood
+[SEG0036] person_1 (PATIENT): Yes, you've got it.
+[SEG0037] person_2 (DOCTOR): I'm sending you for a thyroid test because of fatigue. I'm prescribing vitamin D, 60000 units, once a week, for eight weeks. That should help with low energy. Try to keep a regular sleep time and get some daylight in the morning. Please don't wait if the symptoms get worse. That's when to be seen urgently. Thanks for coming in.
+[SEG0038] person_1 (PATIENT): Right, thanks so much, doctor.
+
+JSON:

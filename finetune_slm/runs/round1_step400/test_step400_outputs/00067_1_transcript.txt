@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00067)
+[SEG0001] person_1 (NURSE): Doctor, this one's ready for you. Everything's on the chart, but I'll go through it.
+[SEG0002] person_2 (DOCTOR): Good, thank you. Welcome, tell me what's brought you in.
+[SEG0003] person_3 (CAREGIVER): Doctor, thank you for seeing us. I mean, we came because of burning when I pass urine.
+[SEG0004] person_2 (DOCTOR): And when did that start?
+[SEG0005] person_4 (PATIENT): Uh, honestly I can't say exactly when it started. It might have been last month or the month before, I really can't pin it down.
+[SEG0006] person_2 (DOCTOR): Would you call it mild or bad?
+[SEG0007] person_4 (PATIENT): Well, it's... hard to say, it's kind of... I don't know—
+[SEG0008] person_2 (DOCTOR): Alright, take your time. Mild, moderate, or severe, if you had to pick?
+[SEG0009] person_4 (PATIENT): Yeah, you know, I'd give it a six, out of ten.
+[SEG0010] person_2 (DOCTOR): I see.
+[SEG0011] person_4 (PATIENT): So, I was just going to say that the main thing is—
+[SEG0012] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0013] person_2 (DOCTOR): Okay, later, thanks. Please go on.
+[SEG0014] person_4 (PATIENT): And I've been needing to go all the time as well.
+[SEG0015] person_2 (DOCTOR): Right, did you get similar episode recently or vomiting?
+[SEG0016] person_4 (PATIENT): Uh, no, no similar episode recently, no vomiting. I did have an urgent need to pass urine at one point, but that went away on its own.
+[SEG0017] person_2 (DOCTOR): And what about vaginal discharge, fever or blood in the urine?
+[SEG0018] person_4 (PATIENT): No vaginal discharge, fever or blood in the urine, none of it.
+[SEG0019] person_2 (DOCTOR): Alright, any rashes or skin problems otherwise?
+[SEG0020] person_4 (PATIENT): Skin's normal.
+[SEG0021] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0022] person_4 (PATIENT): Right, I'm on thyroxine, 75 micrograms, maybe, every morning for my thyroid.
+[SEG0023] person_2 (DOCTOR): Have you got the box or the prescription on you?
+[SEG0024] person_4 (PATIENT): Well, not with me. I'll bring it next time. I take cranberry juice, every day.
+[SEG0025] person_2 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0026] person_4 (PATIENT): My uncle had colon cancer.
+[SEG0027] person_2 (DOCTOR): What's your diet like?
+[SEG0028] person_4 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0029] person_2 (DOCTOR): Okay, what about allergies, to medicines or foods or anything else?
+[SEG0030] person_4 (PATIENT): I think I reacted to some antibiotic once, you know, years ago. I don't remember which one, or what happened exactly.
+[SEG0031] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0032] person_4 (PATIENT): I've got diabetes. I've, I've had an enlarged prostate, yes. An underactive thyroid, for two years.
+[SEG0033] person_1 (NURSE): Okay, so the vitals from earlier. BP is 112 over 76, oxygen saturation is 99 percent, pulse 77.
+[SEG0034] person_2 (DOCTOR): Okay, noted.
+[SEG0035] person_2 (DOCTOR): I'd like to examine you now.
+[SEG0036] person_2 (DOCTOR): I'll go gently.
+[SEG0037] person_2 (DOCTOR): There's mild tenderness above the pubic bone, and no tenderness in the loins.
+[SEG0038] person_2 (DOCTOR): Thanks, please take a seat again. Let me tell you where I've got to. It's hard to say. A urinary tract infection is one possibility and a sexually transmitted infection another, and I'd rather not commit yet.
+[SEG0039] person_4 (PATIENT): Yeah, what are the chances it's something bad?
+[SEG0040] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a urinary tract infection, but I'd like to confirm. So, to recap quickly. You've had burning when you pass urine, and no fever or blood in the urine.
+[SEG0041] person_4 (PATIENT): Mm, that's right.
+[SEG0042] person_1 (NURSE): Doctor, I did a urine test before they came in, the result's on your screen.
+[SEG0043] person_2 (DOCTOR): Great, that saves time. I'm going to order a urine culture, for urinary symptoms. The treatment will be trimethoprim, 200 milligrams, twice a day, for three days. You take it by mouth. That should help with urine infection. Drink plenty of water and don't hold it in when you need to go. Try to keep a simple diary of when it happens and what you were doing, and bring it to the next visit.
+[SEG0044] person_2 (DOCTOR): And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. If you get a fever, back pain or vomiting, or you feel really unwell, please come to the emergency department.
+[SEG0045] person_4 (PATIENT): Got it, thank you.
+[SEG0046] person_2 (DOCTOR): I'll want another look if it's not better in three days.
+[SEG0047] person_4 (PATIENT): Fine.
+[SEG0048] person_2 (DOCTOR): Call the clinic if you need us.
+[SEG0049] person_4 (PATIENT): Uh, um, I think that's clear. Thank you for being so thorough.
+[SEG0050] person_2 (DOCTOR): Take care.
+
+JSON:

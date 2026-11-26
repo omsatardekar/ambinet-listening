@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00664)
+[SEG0001] person_1 (PATIENT): Right, I've got my notes. My hands have been swelling for two weeks and my rings won't come off, and I'm twenty-eight weeks, so I wanted it looked at.
+[SEG0002] person_2 (DOCTOR): Good call. Tell me about the swelling, is it both hands?
+[SEG0003] person_1 (PATIENT): Both, worse in the morning. I also get puffy ankles by the evening, that's been about a week.
+[SEG0004] person_2 (DOCTOR): What about headaches?
+[SEG0005] person_1 (PATIENT): Most afternoons, a band across the front. I wrote them down, five days out of the last seven.
+[SEG0006] person_2 (DOCTOR): Anything else bothering you?
+[SEG0007] person_1 (PATIENT): Heartburn, mainly at night, and a bit of backache. Nothing unusual for this stage, I'd have thought.
+[SEG0008] person_2 (DOCTOR): Any blurred vision or flashing lights?
+[SEG0009] person_1 (PATIENT): No, my vision's been normal.
+[SEG0010] person_2 (DOCTOR): Pain under the ribs on the right?
+[SEG0011] person_1 (PATIENT): No, nothing there.
+[SEG0012] person_2 (DOCTOR): Any bleeding?
+[SEG0013] person_1 (PATIENT): No bleeding at all.
+[SEG0014] person_2 (DOCTOR): And any fluid leaking?
+[SEG0015] person_1 (PATIENT): No, nothing's leaked.
+[SEG0016] person_2 (DOCTOR): What tablets are you taking?
+[SEG0017] person_1 (PATIENT): Ferrous sulfate, 200 mg, once a day. A low-dose aspirin, maybe 75 mg? I'd need to check. And a little orange capsule, I can't remember what it's called, my midwife said it's for my bones.
+[SEG0018] person_2 (DOCTOR): Okay. We'll note the orange capsule as you describe it. Any allergies?
+[SEG0019] person_1 (PATIENT): Latex. I get an itchy rash from the gloves.
+[SEG0020] person_2 (DOCTOR): Thanks, I'll tell the team. Any medical conditions?
+[SEG0021] person_1 (PATIENT): Asthma, since I was a teenager. And migraines, but those have been quiet.
+[SEG0022] person_2 (DOCTOR): Previous operations?
+[SEG0023] person_1 (PATIENT): A caesarean, three years ago, with my first.
+[SEG0024] person_2 (DOCTOR): Any pregnancy problems in your family?
+[SEG0025] person_1 (PATIENT): My mum had pre-eclampsia with me. That's what's worrying me, honestly.
+[SEG0026] person_2 (DOCTOR): That's useful. What do you do for work?
+[SEG0027] person_1 (PATIENT): I'm a primary school teacher. On my feet most of the day.
+[SEG0028] person_2 (DOCTOR): Do you smoke?
+[SEG0029] person_1 (PATIENT): I've never smoked.
+[SEG0030] person_2 (DOCTOR): And alcohol?
+[SEG0031] person_1 (PATIENT): I haven't had a drink since I found out.
+[SEG0032] person_2 (DOCTOR): Can I take your numbers?
+[SEG0033] person_3 (CLINICAL_STAFF): Sorry to interrupt, doctor, I've got the blood pressure cuff ready. Pop it on the left arm, Priya.
+[SEG0034] person_2 (DOCTOR): Thanks. Your blood pressure is 138 over 88, pulse 84, temperature 36.7, oxygen 98 percent, breathing 18, weight 71 kilos.
+[SEG0035] person_1 (PATIENT): Is the pressure high? ~
+[SEG0036] person_2 (DOCTOR): It's a little up for you, so I want to be careful. Let me look at your hands. They're puffy, pitting at the fingers.
+[SEG0037] person_1 (PATIENT): That's what the rings are doing. ~
+[SEG0038] person_2 (DOCTOR): And the ankles look swollen on both sides.
+[SEG0039] person_1 (PATIENT): Yes, they get worse by evening. ~
+[SEG0040] person_2 (DOCTOR): Any trouble with your breathing at the moment?
+[SEG0041] person_1 (PATIENT): No, it's fine, even with the asthma.
+[SEG0042] person_2 (DOCTOR): This could be early pre-eclampsia, but I wouldn't want to call it yet.
+[SEG0043] person_1 (PATIENT): What do I do about that? ~
+[SEG0044] person_2 (DOCTOR): I'd like to test your urine for protein, and arrange blood tests including liver function and platelets.
+[SEG0045] person_3 (CLINICAL_STAFF): I can take the urine sample now if you like. The toilet's just down the hall. ~
+[SEG0046] person_1 (PATIENT): Sure, thanks. ~
+[SEG0047] person_2 (DOCTOR): And I'd like an ultrasound scan of the baby's growth.
+[SEG0048] person_1 (PATIENT): When would the scan be? ~
+[SEG0049] person_2 (DOCTOR): Within the next few days. Reception will phone you. ~
+[SEG0050] person_3 (CLINICAL_STAFF): We'll book it before you leave. ~
+[SEG0051] person_2 (DOCTOR): I'd like to see you again in a week, sooner if you get a bad headache or your vision changes.
+[SEG0052] person_1 (PATIENT): A week. Okay, I'll be here. ~
+
+JSON:

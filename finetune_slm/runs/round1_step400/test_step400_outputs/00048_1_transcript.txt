@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00048)
+[SEG0001] person_1 (DOCTOR): Afternoon. Take the chair by the desk.
+[SEG0002] person_2 (PATIENT): Hello, you know, doctor, thank you.
+[SEG0003] person_1 (DOCTOR): What brings you in today?
+[SEG0004] person_2 (PATIENT): Doctor, it's a fever. It's getting on my nerves now.
+[SEG0005] person_1 (DOCTOR): Is this recent, or has it been a while?
+[SEG0006] person_2 (PATIENT): Yesterday, it came on out of nowhere.
+[SEG0007] person_1 (DOCTOR): Is it mild, moderate or severe?
+[SEG0008] person_2 (PATIENT): Severe, I'd say. There's a blocked nose as well. As for blocked nose, severe, I'd say.
+[SEG0009] person_1 (DOCTOR): Any rash, vomiting or chest pain?
+[SEG0010] person_2 (PATIENT): No. None of those.
+[SEG0011] person_1 (DOCTOR): Have you noticed diarrhoea or shortness of breath?
+[SEG0012] person_2 (PATIENT): No, nothing there.
+[SEG0013] person_1 (DOCTOR): Is your mobility otherwise okay?
+[SEG0014] person_2 (PATIENT): Nothing else aches.
+[SEG0015] person_1 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0016] person_2 (PATIENT): No rashes.
+[SEG0017] person_1 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0018] person_2 (PATIENT): I work on a farm, it's quite physical. I walk for about half an hour most days. I'm mostly vegetarian.
+[SEG0019] person_1 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0020] person_2 (PATIENT): I have high blood pressure. It's a relief to finally sit down and talk about it. I wasn't sure whether to come in at all, to be honest.
+[SEG0021] person_1 (DOCTOR): Right, any more?
+[SEG0022] person_2 (PATIENT): I've got asthma.
+[SEG0023] person_1 (DOCTOR): Yes, asthma is known to us, good to have that clear. Do you have any known allergies at all?
+[SEG0024] person_2 (PATIENT): Not that I know, no.
+[SEG0025] person_1 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0026] person_2 (PATIENT): Telmisartan. I take it 40 milligrams, once a day. Seretide inhaler. I take it twice a day. Dolo, 650 milligrams, when I get the fever.
+[SEG0027] person_1 (DOCTOR): A few measurements, then we'll continue.
+[SEG0028] person_1 (DOCTOR): Hold still for me...
+[SEG0029] person_1 (DOCTOR): Okay: temperature is 38.7 degrees, height 168 centimetres, pulse 88, BMI works out to 32.6, blood pressure 112 over 77, weight 92 kilos.
+[SEG0030] person_1 (DOCTOR): Okay, shall we do the examination?
+[SEG0031] person_1 (DOCTOR): Stay still while I have a look.
+[SEG0032] person_1 (DOCTOR): The glands in your neck feel a little tender but not big.
+[SEG0033] person_1 (DOCTOR): Take your time, no rush.
+[SEG0034] person_1 (DOCTOR): Chest is clear when I listen, no crackles.
+[SEG0035] person_1 (DOCTOR): That's all I need, thank you. Taking everything into account, it points towards a viral upper respiratory infection. An early bacterial throat infection is also on my list.
+[SEG0036] person_2 (PATIENT): Should I be worried about this?
+[SEG0037] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a viral upper respiratory infection, but I'd like to confirm.
+[SEG0038] person_1 (DOCTOR): I'm going to order a throat swab, for sore throat. Blood tests is what I'd like next, for fever. I'll start you on cetirizine, 10 milligrams, at night, for five days. You take it by mouth. It's for blocked nose. It's a commonly used medicine and most people tolerate it well. Stay home, rest, and keep the fluids up. Warm soups and water, anything that goes down easily.
+[SEG0039] person_1 (DOCTOR): If it hasn't settled in a month, we'd think about a flu swab, but not now. Come back if it's not settling in three days. Look after yourself.
+[SEG0040] person_2 (PATIENT): I mean, all good here. Thank you.
+
+JSON:

@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00166)
+[SEG0001] person_1 (PATIENT): Doctor? Hi. I hope I've got the right time.
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): I wanted to to get a lump feeling in the throat looked at.
+[SEG0004] person_2 (DOCTOR): And when did that start?
+[SEG0005] person_1 (PATIENT): About... well, ten days.
+[SEG0006] person_2 (DOCTOR): What about a cough at night, have you noticed that?
+[SEG0007] person_1 (PATIENT): Yes, for about two weeks.
+[SEG0008] person_2 (DOCTOR): what about heartburn, have you noticed that?
+[SEG0009] person_1 (PATIENT): Yes, for about two weeks.
+[SEG0010] person_2 (DOCTOR): And what do you do to cope with it?
+[SEG0011] person_1 (PATIENT): Right, I get some relief from antacids.
+[SEG0012] person_2 (DOCTOR): And what do you usually eat?
+[SEG0013] person_1 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0014] person_2 (DOCTOR): are you working at the moment?
+[SEG0015] person_1 (PATIENT): Yes, I'm a nurse on a busy ward.
+[SEG0016] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0017] person_1 (PATIENT): Seretide inhaler. I take it twice a day. Amlodipine, 5 milligrams, maybe, once a day for my pressure.
+[SEG0018] person_2 (DOCTOR): did you happen to bring the box or the paperwork?
+[SEG0019] person_1 (PATIENT): No, it's at home. I had telmisartan at one point, but I'm off it now.
+[SEG0020] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0021] person_1 (PATIENT): I've had asthma for about ten years now.
+[SEG0022] person_2 (DOCTOR): Mm.
+[SEG0023] person_1 (PATIENT): yes, high blood pressure
+[SEG0024] person_2 (DOCTOR): alright, high blood pressure, that matches what I have here any sign of pain on exertion?
+[SEG0025] person_1 (PATIENT): Uh, no, I haven't had any pain on exertion.
+[SEG0026] person_2 (DOCTOR): Okay, have you noticed trouble swallowing, black stools or anaemia?
+[SEG0027] person_1 (PATIENT): no, no trouble swallowing, black stools or anaemia
+[SEG0028] person_2 (DOCTOR): Any problems with your joints or muscles?
+[SEG0029] person_1 (PATIENT): No, nothing there.
+[SEG0030] person_2 (DOCTOR): Before we go on, a few quick readings.
+[SEG0031] person_2 (DOCTOR): One second...
+[SEG0032] person_2 (DOCTOR): Okay: SpO2 99 percent on room air, pressure 108 over 72, temperature 36.7, pulse 78.
+[SEG0033] person_1 (PATIENT): is that normal?
+[SEG0034] person_2 (DOCTOR): they help build the the picture, I'll tell you more soon
+[SEG0035] person_2 (DOCTOR): I'd like to examine you now
+[SEG0036] person_1 (PATIENT): Yes, doctor.
+[SEG0037] person_2 (DOCTOR): hold that position for me
+[SEG0038] person_2 (DOCTOR): tummy is soft and non-tender
+[SEG0039] person_2 (DOCTOR): That's all I need, thank you. Right, here's what I'm thinking. This looks most like gastro-oesophageal reflux. That's my thinking for now, and it may change as we learn more. I'd also keep gastritis in mind. I'd like to arrange an ECG for chest discomfort. I want an upper endoscopy done, that's for persistent reflux. What I'm giving you is esomeprazole, 40 milligrams, before breakfast, for eight weeks. That should help with reflux.
+[SEG0040] person_1 (PATIENT): Should I keep taking it if I feel better?
+[SEG0041] person_2 (DOCTOR): smaller dinners, earlier in the evening, and prop up the head of the bed with a couple of extra pillows. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+[SEG0042] person_1 (PATIENT): okay, fair enough
+[SEG0043] person_2 (DOCTOR): Let's review you in eight weeks.
+[SEG0044] person_1 (PATIENT): Alright, I'll put it in my diary.
+[SEG0045] person_2 (DOCTOR): any last questions?
+[SEG0046] person_1 (PATIENT): thank you for your time
+
+JSON:

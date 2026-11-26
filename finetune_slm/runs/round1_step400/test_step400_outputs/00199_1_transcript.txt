@@ -1,0 +1,73 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00199)
+[SEG0001] person_1 (NURSE): All set here, doctor. Chart's updated, and I'll read the readings out when you're ready.
+[SEG0002] person_2 (DOCTOR): great. Hello, come in and sit down. How can I help?
+[SEG0003] person_3 (PATIENT): Okay, so mainly I've been waking up at three in the morning. That's why I came. My family kept telling me to get it checked. I'd rather know what's going on than keep guessing.
+[SEG0004] person_2 (DOCTOR): how long are we talking about?
+[SEG0005] person_3 (PATIENT): right, I've had it for six months
+[SEG0006] person_2 (DOCTOR): And how severe is it?
+[SEG0007] person_3 (PATIENT): I'd call it it mild.
+[SEG0008] person_3 (PATIENT): Okay, so I was just going to say that the main thing is—
+[SEG0009] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0010] person_2 (DOCTOR): So, later, thanks. Please go on.
+[SEG0011] person_3 (PATIENT): I've had trouble sleeping too, for about three months.
+[SEG0012] person_2 (DOCTOR): Is there anything that triggers it?
+[SEG0013] person_3 (PATIENT): I notice it more with screens at night. I've been feeling exhausted in the day too, you know, for four weeks. Oh, and trouble concentrating. That's been about the same, two years.
+[SEG0014] person_2 (DOCTOR): how intense does it get?
+[SEG0015] person_3 (PATIENT): Pretty mild, if I'm being honest.
+[SEG0016] person_2 (DOCTOR): Have you been waking up at three in the morning at any time before this?
+[SEG0017] person_3 (PATIENT): I had a similar thing a couple of years ago it went away
+[SEG0018] person_1 (NURSE): here are the numbers, doctor oxygen saturation is 99 percent, pulse is 78 beats a minute, temp 36.7 degrees, pressure 120 over 79.
+[SEG0019] person_2 (DOCTOR): Thanks.
+[SEG0020] person_2 (DOCTOR): And what about low mood or chest pain?
+[SEG0021] person_3 (PATIENT): No, none of that at all.
+[SEG0022] person_2 (DOCTOR): any night sweats or heavy caffeine?
+[SEG0023] person_3 (PATIENT): No, you know, none of that at all.
+[SEG0024] person_2 (DOCTOR): any restless legs or snoring?
+[SEG0025] person_3 (PATIENT): I haven't had restless legs or snoring, no.
+[SEG0026] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0027] person_3 (PATIENT): my heart's been fine, as far as I know
+[SEG0028] person_2 (DOCTOR): What about alcohol?
+[SEG0029] person_3 (PATIENT): I have a couple of drinks on the weekend.
+[SEG0030] person_2 (DOCTOR): are you working or retired?
+[SEG0031] person_3 (PATIENT): Retired. I stopped a few years back.
+[SEG0032] person_2 (DOCTOR): Do you have any known allergies at all?
+[SEG0033] person_3 (PATIENT): Oh, I'm allergic to pollen, I get sneezing.
+[SEG0034] person_2 (DOCTOR): anyone in the family with similar problems or other conditions?
+[SEG0035] person_3 (PATIENT): My father had a heart attack.
+[SEG0036] person_2 (DOCTOR): what about operations, anything like that?
+[SEG0037] person_3 (PATIENT): Just a knee arthroscopy, three years ago.
+[SEG0038] person_2 (DOCTOR): any long-term health problems I should know about?
+[SEG0039] person_3 (PATIENT): I, I have high blood pressure. I've had anxiety, yes. Yes, gout
+[SEG0040] person_2 (DOCTOR): okay
+[SEG0041] person_3 (PATIENT): I've had diabetes for about ten years now.
+[SEG0042] person_2 (DOCTOR): Right, so high blood pressure and diabetes are already on your record. We'll keep that in mind today. What medicines do you take regularly?
+[SEG0043] person_3 (PATIENT): I'm on telmisartan, 40 milligrams, once a day for my pressure. Metformin, 500 milligrams, twice a day for my sugar
+[SEG0044] person_1 (NURSE): Doctor, our chart from the last visit lists it as 1000 milligrams.
+[SEG0045] person_2 (DOCTOR): right. Do you happen to have the current prescription here?
+[SEG0046] person_3 (PATIENT): so, I don't think I have it with me. Melatonin, 3 milligrams, at night. Um, I'd been on ramipril, not any more though, I stopped
+[SEG0047] person_2 (DOCTOR): Listening to the whole story, my working impression is insomnia, probably stress-related. I'd also keep a thyroid problem in mind. Sleep apnoea is also on my list.
+[SEG0048] person_3 (PATIENT): Should I be worried about this?
+[SEG0049] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like insomnia, probably stress-related, but I'd like to confirm. A sleep study is what I'd like next, for insomnia.
+[SEG0050] person_4 (CLINICAL_STAFF): we have a slot Tuesday at 2 pm, if that works
+[SEG0051] person_3 (PATIENT): Tuesday, that works for me.
+[SEG0052] person_2 (DOCTOR): A thyroid test is what I'd like next, for insomnia. Same wake-up time every day, no screens in the hour before bed, and no coffee after lunch. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. The thing that would worry me is if the symptoms get worse. If that happens, go to emergency.
+[SEG0053] person_3 (PATIENT): Okay, I understand.
+[SEG0054] person_2 (DOCTOR): see me again in a month
+[SEG0055] person_3 (PATIENT): That works for me.
+[SEG0056] person_2 (DOCTOR): Good. Let us know how you get on.
+[SEG0057] person_3 (PATIENT): uh, I think that's clear thank you for being so thorough
+[SEG0058] person_2 (DOCTOR): So, safe journey home.
+
+JSON:

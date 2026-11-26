@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00172)
+[SEG0001] person_1 (DOCTOR): Hello again. Come on in.
+[SEG0002] person_2 (PATIENT): Hi, doctor.
+[SEG0003] person_1 (DOCTOR): Lovely day outside, isn't it?
+[SEG0004] person_2 (PATIENT): Uh, it is, I almost forgot I was coming here.
+[SEG0005] person_1 (DOCTOR): so, what's been going on?
+[SEG0006] person_2 (PATIENT): right, I've been wanting to stop smoking, and I wanted to get it checked
+[SEG0007] person_1 (DOCTOR): alright, do you have any known allergies at all?
+[SEG0008] person_2 (PATIENT): hmm, no allergies that I know of, no
+[SEG0009] person_1 (DOCTOR): Any previous surgeries?
+[SEG0010] person_2 (PATIENT): No, nothing like that.
+[SEG0011] person_1 (DOCTOR): Anything special about your diet?
+[SEG0012] person_2 (PATIENT): I try to avoid too much sugar.
+[SEG0013] person_1 (DOCTOR): Okay, do you exercise at all?
+[SEG0014] person_2 (PATIENT): I go to the gym a couple of times a week.
+[SEG0015] person_1 (DOCTOR): Are you on any tablets or medication?
+[SEG0016] person_2 (PATIENT): Okay, so I take ramipril, 5 milligrams, every morning. I did try to ignore it for a while. I'm not great at remembering details, so bear with me.
+[SEG0017] person_1 (DOCTOR): Mhm.
+[SEG0018] person_2 (PATIENT): I take Tiotropium inhaler, once a day.
+[SEG0019] person_1 (DOCTOR): Alright, tell me about your health in general, any ongoing conditions?
+[SEG0020] person_2 (PATIENT): I have high blood pressure, for about a year. I've got COPD.
+[SEG0021] person_1 (DOCTOR): did you get weight loss or alcohol problems?
+[SEG0022] person_2 (PATIENT): no, I'd have mentioned it
+[SEG0023] person_1 (DOCTOR): What about chest pain?
+[SEG0024] person_2 (PATIENT): Not at all, no chest pain.
+[SEG0025] person_1 (DOCTOR): Right, right. Has your heart given you any trouble?
+[SEG0026] person_2 (PATIENT): No, nothing with my heart.
+[SEG0027] person_1 (DOCTOR): I'll check your pressure and pulse.
+[SEG0028] person_1 (DOCTOR): One second...
+[SEG0029] person_1 (DOCTOR): okay: BMI works out to 22.7, saturation 97 percent, height 178 centimetres. And pulse is 68 beats a minute, temp 37.0 degrees, weight 72 kilos, BP is 124 over 71.
+[SEG0030] person_1 (DOCTOR): okay, I need to examine you for this
+[SEG0031] person_2 (PATIENT): okay, ready
+[SEG0032] person_1 (DOCTOR): let me look at this properly
+[SEG0033] person_1 (DOCTOR): chest sounds clear, a bit of wheeze when you breathe out hard
+[SEG0034] person_1 (DOCTOR): Okay, you can sit up. I'll request breathing tests, it'll help with smoker's cough. You'll be taking nicotine patches, 14 milligrams, once a day, for six weeks. That should help with smoking cessation. Pick a quit date this month, and tell your family so they can back you up. Avoid taking any extra painkillers on top of what I'm prescribing without checking with us. I'll also refer you to the the stop-smoking clinic.
+[SEG0035] person_2 (PATIENT): sure, where do I go?
+[SEG0036] person_1 (DOCTOR): let's plan a check in four weeks
+[SEG0037] person_2 (PATIENT): Okay, see you then.
+[SEG0038] person_1 (DOCTOR): Good. Let us know how you get on.
+[SEG0039] person_2 (PATIENT): uh, um, no, you've explained it well thanks
+
+JSON:

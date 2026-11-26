@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00096)
+[SEG0001] person_1 (NURSE): Ready for you, doctor. I'll stay in case you need anything.
+[SEG0002] person_2 (DOCTOR): Thanks. Hello, come in, sit down. What brings you in today?
+[SEG0003] person_3 (PATIENT): I've been losing weight without trying, and and I wanted to get it checked
+[SEG0004] person_2 (DOCTOR): how long have you had it?
+[SEG0005] person_3 (PATIENT): It's been about a month, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0007] person_3 (PATIENT): when it starts I tend to get a cough as well i've had a low fever in the evenings too, for three days
+[SEG0008] person_2 (DOCTOR): How often does it happen?
+[SEG0009] person_3 (PATIENT): It's on and off. About cough, I'd say on and off.
+[SEG0010] person_2 (DOCTOR): Any diarrhoea or chest pain?
+[SEG0011] person_3 (PATIENT): No, nothing there.
+[SEG0012] person_2 (DOCTOR): Have you noticed blood in the stool, shortness of breath or coughing up blood?
+[SEG0013] person_3 (PATIENT): I haven't had blood in the stool, shortness of breath or coughing up blood, no
+[SEG0014] person_2 (DOCTOR): any pins and needles or loss of strength anywhere?
+[SEG0015] person_3 (PATIENT): No, nothing like that.
+[SEG0016] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0017] person_3 (PATIENT): No, nothing there.
+[SEG0018] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0019] person_3 (PATIENT): I've, I've had diabetes for five years now i'd rather not end up on lots of tablets if I can avoid it i have an underactive thyroid. Thin bones, for five years
+[SEG0020] person_2 (DOCTOR): Hm, okay. Yes, an underactive thyroid and thin bones are known to us, good to have that clear. Any drug or food allergies?
+[SEG0021] person_3 (PATIENT): Oh, no, no allergies to anything.
+[SEG0022] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0023] person_3 (PATIENT): I'm on Glycomet, twice a day for my sugar.
+[SEG0024] person_2 (DOCTOR): How much do you take?
+[SEG0025] person_3 (PATIENT): It's 500 milligrams. It's Thyronorm, every morning.
+[SEG0026] person_2 (DOCTOR): How much do you take?
+[SEG0027] person_3 (PATIENT): it's 50 micrograms hmm, I take alendronate, 70 milligrams, once a week for my bones
+[SEG0028] person_1 (NURSE): Doctor, our chart from the last visit lists it as 35 milligrams.
+[SEG0029] person_2 (DOCTOR): Hm, that's different. Is the latest prescription anywhere near you?
+[SEG0030] person_3 (PATIENT): no, I left it at home i was on glimepiride before i stopped taking it
+[SEG0031] person_2 (DOCTOR): so, who do you live with?
+[SEG0032] person_3 (PATIENT): I live with my family, my husband and two kids.
+[SEG0033] person_2 (DOCTOR): What's your diet like?
+[SEG0034] person_3 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0035] person_1 (NURSE): Here are the numbers, doctor. Temperature is 38.8 degrees, respiratory rate 18, BP is 123 over 66, pulse is 89 beats a minute, oxygen saturation is 98 percent.
+[SEG0036] person_2 (DOCTOR): Thanks.
+[SEG0037] person_2 (DOCTOR): Okay, a quick examination now.
+[SEG0038] person_3 (PATIENT): Yes, doctor.
+[SEG0039] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0040] person_2 (DOCTOR): Air entry is a bit reduced at the top of the right lung.
+[SEG0041] person_2 (DOCTOR): Almost done with this part.
+[SEG0042] person_2 (DOCTOR): I can feel a a couple of small glands in your neck, not tender.
+[SEG0043] person_2 (DOCTOR): All done, you can get dressed.
+[SEG0044] person_2 (DOCTOR): Okay, so my impression is this: I think we're dealing with an infection or something chronic going on, I can't say what yet at this stage. We shouldn't forget a thyroid problem. Let me repeat that back to make sure. You've been losing weight without trying for about a month, and no shortness of breath or coughing up blood.
+[SEG0045] person_3 (PATIENT): That's it, yes.
+[SEG0046] person_2 (DOCTOR): I want a sputum test done, that's for chronic cough.
+[SEG0047] person_3 (PATIENT): does it need any preparation?
+[SEG0048] person_2 (DOCTOR): I want a chest X-ray done, that's for weight loss and cough weigh yourself once a week at the same time and note it down try to get to bed and wake up at the same time each day, and keep your phone away from the bed i'll also refer you to the chest clinic and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+[SEG0049] person_3 (PATIENT): Oh, got it, thank you.
+[SEG0050] person_2 (DOCTOR): Book a review after the results are back. Before we finish, can you repeat the plan back to me?
+[SEG0051] person_3 (PATIENT): So, I come back after the results are back. Is that right?
+[SEG0052] person_2 (DOCTOR): Yes, exactly right. Is there anything you wanted to ask?
+[SEG0053] person_3 (PATIENT): Thanks so much, doctor.
+
+JSON:

@@ -1,0 +1,72 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00216)
+[SEG0001] person_1 (DOCTOR): Morning! Make yourself comfortable.
+[SEG0002] person_2 (PATIENT): Thanks. Sorry, I'm a little early.
+[SEG0003] person_1 (DOCTOR): Okay, have you been waiting long?
+[SEG0004] person_2 (PATIENT): Only about ten minutes, no trouble.
+[SEG0005] person_1 (DOCTOR): Right, what's the trouble?
+[SEG0006] person_2 (PATIENT): I've been dealing with cramping pain in the lower tummy.
+[SEG0007] person_1 (DOCTOR): How far back does it go?
+[SEG0008] person_2 (PATIENT): It's been nearly five years, I'm fairly sure.
+[SEG0009] person_1 (DOCTOR): Have you been passing a lot of wind?
+[SEG0010] person_2 (PATIENT): Yes, about the same, three weeks.
+[SEG0011] person_1 (DOCTOR): On a normal day, how strong is it?
+[SEG0012] person_2 (PATIENT): A seven out of ten, I suppose.
+[SEG0013] person_1 (DOCTOR): Have you had cramping pain in the lower tummy before, or is this the first time?
+[SEG0014] person_2 (PATIENT): A bit, last year. It settled by itself back then.
+[SEG0015] person_1 (DOCTOR): Alright, do you have any allergies to medicines, food, anything at all?
+[SEG0016] person_2 (PATIENT): Years back I got wheezing from aspirin, so I stay away from it now.
+[SEG0017] person_1 (DOCTOR): Do your parents or siblings have any long-term illnesses?
+[SEG0018] person_2 (PATIENT): My father had kidney stones.
+[SEG0019] person_1 (DOCTOR): Any previous surgeries?
+[SEG0020] person_2 (PATIENT): No operations, no.
+[SEG0021] person_1 (DOCTOR): And alcohol, how much?
+[SEG0022] person_2 (PATIENT): A beer or two most evenings, to be honest.
+[SEG0023] person_1 (DOCTOR): How about smoking?
+[SEG0024] person_2 (PATIENT): I've never smoked.
+[SEG0025] person_1 (DOCTOR): Who do you live with?
+[SEG0026] person_2 (PATIENT): I live with my family, my husband and two kids.
+[SEG0027] person_1 (DOCTOR): Right, do you have a job?
+[SEG0028] person_2 (PATIENT): I'm a self-employed electrician.
+[SEG0029] person_1 (DOCTOR): What do you do to keep active?
+[SEG0030] person_2 (PATIENT): I cycle to work most mornings.
+[SEG0031] person_1 (DOCTOR): Are you on any tablets or medication?
+[SEG0032] person_2 (PATIENT): Escitalopram, once a day.
+[SEG0033] person_1 (DOCTOR): Do you know the dose?
+[SEG0034] person_2 (PATIENT): 10 milligrams, I think that's what's on the box.
+[SEG0035] person_1 (DOCTOR): Is there anything medical in your background?
+[SEG0036] person_2 (PATIENT): Yes, anxiety.
+[SEG0037] person_1 (DOCTOR): Yes?
+[SEG0038] person_1 (DOCTOR): Okay, yes, anxiety is known to us, good to have that clear.
+[SEG0039] person_1 (DOCTOR): A few quick ones: family history of bowel cancer, weight loss, anaemia or blood in the stool?
+[SEG0040] person_2 (PATIENT): Nothing like that, no.
+[SEG0041] person_1 (DOCTOR): Has there been any fever?
+[SEG0042] person_2 (PATIENT): So, I haven't noticed any fever.
+[SEG0043] person_1 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0044] person_2 (PATIENT): No, nothing with my heart.
+[SEG0045] person_3 (NURSE): Here are the numbers, doctor. Temperature is 36.5 degrees, pressure 112 over 80, pulse 66. Respiratory rate 16, saturation 99 percent.
+[SEG0046] person_1 (DOCTOR): Right, thanks.
+[SEG0047] person_1 (DOCTOR): Okay, I need to examine you for this.
+[SEG0048] person_2 (PATIENT): Mm, okay.
+[SEG0049] person_1 (DOCTOR): Just relax, I'll be quick.
+[SEG0050] person_1 (DOCTOR): Soft tummy, a bit tender on the left lower side, no masses.
+[SEG0051] person_1 (DOCTOR): Okay, you can sit up. So where does that leave us? This is probably irritable bowel syndrome as a working diagnosis. A food intolerance is still possible.
+[SEG0052] person_2 (PATIENT): Is this going to go away?
+[SEG0053] person_1 (DOCTOR): I understand the worry. At the moment I'd say it's irritable bowel syndrome as a working diagnosis, and we'll know more once the a coeliac test is back.
+[SEG0054] person_1 (DOCTOR): I'm going to order a coeliac test, for bloating.
+[SEG0055] person_2 (PATIENT): That sounds sensible.
+[SEG0056] person_1 (DOCTOR): For this, mebeverine, 135 milligrams, three times a day, for four weeks. That should help with abdominal cramps. Note down what you ate before the bad days, it often reveals a pattern. Come back in six weeks. Any last questions?
+[SEG0057] person_2 (PATIENT): Nothing more from me, thanks.
+
+JSON:

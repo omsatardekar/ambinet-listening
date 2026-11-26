@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01474)
+[SEG0001] person_1 (DOCTOR): Right, hello, sorry about the delay, do sit.
+[SEG0002] person_2 (PATIENT): hi, thanks
+[SEG0003] person_1 (DOCTOR): Right, you came on your own today?
+[SEG0004] person_2 (PATIENT): Yes, I managed on my own.
+[SEG0005] person_1 (DOCTOR): what's the problem?
+[SEG0006] person_2 (PATIENT): Well, I've been having being thirsty.
+[SEG0007] person_1 (DOCTOR): Since when exactly?
+[SEG0008] person_2 (PATIENT): About... well, two weeks.
+[SEG0009] person_1 (DOCTOR): understood how troublesome is it day to day?
+[SEG0010] person_2 (PATIENT): It's moderate, honestly. Oh, and recurrent thrush. That's been about the same, about a month.
+[SEG0011] person_1 (DOCTOR): any tiredness as well?
+[SEG0012] person_2 (PATIENT): Mm, yes, for about four days.
+[SEG0013] person_1 (DOCTOR): Have you had being thirsty before, or is this the first time?
+[SEG0014] person_2 (PATIENT): A bit, last winter. It settled by itself back then.
+[SEG0015] person_1 (DOCTOR): Let me take your readings now.
+[SEG0016] person_1 (DOCTOR): That's it, just a little longer...
+[SEG0017] person_1 (DOCTOR): Okay: BMI works out to 27.8, pressure 145 over 98. And height 154 centimetres, temperature 37.0, heart rate 94, weight 66 kilos, SpO2 97 percent on room air.
+[SEG0018] person_2 (PATIENT): Is that that okay?
+[SEG0019] person_1 (DOCTOR): we'll look at it together shortly
+[SEG0020] person_1 (DOCTOR): right, let's have a proper look at you
+[SEG0021] person_1 (DOCTOR): Does that hurt?
+[SEG0022] person_1 (DOCTOR): The feeling at the tips of your toes is reduced and the foot pulses are present.
+[SEG0023] person_1 (DOCTOR): that's all I needed to check
+[SEG0024] person_1 (DOCTOR): Okay, and what about foot ulcers, chest pain or vomiting?
+[SEG0025] person_2 (PATIENT): No, no foot ulcers, chest pain or vomiting.
+[SEG0026] person_1 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0027] person_2 (PATIENT): Nothing odd there.
+[SEG0028] person_1 (DOCTOR): Has your heart given you any trouble?
+[SEG0029] person_2 (PATIENT): Mm, my heart's been fine, as far as I know.
+[SEG0030] person_1 (DOCTOR): Do you have any chronic illnesses?
+[SEG0031] person_2 (PATIENT): I have diabetes. I've been putting this off for weeks.
+[SEG0032] person_1 (DOCTOR): Understood.
+[SEG0033] person_2 (PATIENT): Yes, high blood pressure. Work has been very busy so I kept ignoring it. My family kept telling me to get it checked.
+[SEG0034] person_1 (DOCTOR): any surgery in the the past?
+[SEG0035] person_2 (PATIENT): Uh, yes, I had my appendix taken out, when I was in my twenties.
+[SEG0036] person_1 (DOCTOR): before we go further, any allergies?
+[SEG0037] person_2 (PATIENT): Not to my knowledge, no.
+[SEG0038] person_1 (DOCTOR): Right, now some background about your lifestyle.
+[SEG0039] person_2 (PATIENT): I hardly move around during the day. I grab fast food at lunch most days. I retired from the post office two years ago.
+[SEG0040] person_1 (DOCTOR): Let's run through your medicines.
+[SEG0041] person_2 (PATIENT): It's amlodipine, 5 milligrams, once a day for my pressure.
+[SEG0042] person_1 (DOCTOR): How long has that been going on?
+[SEG0043] person_2 (PATIENT): For six months.
+[SEG0044] person_1 (DOCTOR): Let me tell you where I've got to. This looks most like diabetes not well controlled on current treatment.
+[SEG0045] person_1 (DOCTOR): I'm sending you for kidney function tests because of diabetes review.
+[SEG0046] person_3 (CLINICAL_STAFF): We have a slot Monday at 9 am, if that that works.
+[SEG0047] person_1 (DOCTOR): I'm sending you for an HbA1c because of diabetes review. We'll begin with gliclazide, 40 milligrams, once a day with breakfast, long term. You take it by mouth. That's for diabetes. Check your feet daily and book the the eye screening. Let's get you seen by the diabetes educator, I'll arrange the letter.
+[SEG0048] person_2 (PATIENT): Alright, thank you.
+[SEG0049] person_1 (DOCTOR): I think we're done unless you have questions
+[SEG0050] person_2 (PATIENT): thank you, doctor, goodbye
+[SEG0051] person_1 (DOCTOR): all the best
+
+JSON:

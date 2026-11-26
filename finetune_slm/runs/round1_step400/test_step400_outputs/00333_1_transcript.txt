@@ -1,0 +1,75 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00333)
+[SEG0001] person_1 (NURSE): Okay, doctor, we're all set in here. I'll give you the numbers when you want them.
+[SEG0002] person_2 (DOCTOR): Thanks. Hello, come in, sit down. What brings you in today?
+[SEG0003] person_3 (CAREGIVER): Thank you for fitting us in, doctor.
+[SEG0004] person_4 (PATIENT): Hmm, it's a bad cough. I thought I'd wait, but it hasn't gone.
+[SEG0005] person_2 (DOCTOR): Is this recent, or has it been a while?
+[SEG0006] person_4 (PATIENT): About... well, one week.
+[SEG0007] person_2 (DOCTOR): How bad is it, would you say?
+[SEG0008] person_4 (PATIENT): Mostly severe.
+[SEG0009] person_2 (DOCTOR): Is it constant, or does it come and go?
+[SEG0010] person_4 (PATIENT): It's, um... not exactly... well, hard to explain, I mean—
+[SEG0011] person_2 (DOCTOR): Let me put it another way: how many times in a typical day or week?
+[SEG0012] person_4 (PATIENT): It happens on and off.
+[SEG0013] person_4 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0014] person_3 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0015] person_4 (PATIENT): I was getting to that! I've also had a sore throat, for two days.
+[SEG0016] person_2 (DOCTOR): Would you call it mild or bad?
+[SEG0017] person_4 (PATIENT): I mean, I'd give it a six, out of ten. There's a low fever as well.
+[SEG0018] person_2 (DOCTOR): How intense does it get?
+[SEG0019] person_4 (PATIENT): It's severe, honestly.
+[SEG0020] person_2 (DOCTOR): I see. And what about leg swelling, chest pain or night sweats?
+[SEG0021] person_4 (PATIENT): No, no leg swelling, no chest pain, no night sweats. I was coughing up yellow phlegm at one point, but that went away on its own.
+[SEG0022] person_2 (DOCTOR): Have you noticed shortness of breath, weight loss or coughing up blood?
+[SEG0023] person_4 (PATIENT): No shortness of breath, weight loss or coughing up blood, none of it.
+[SEG0024] person_2 (DOCTOR): Alright, and your skin, any changes there?
+[SEG0025] person_4 (PATIENT): Nothing on the skin, no.
+[SEG0026] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0027] person_4 (PATIENT): I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0028] person_2 (DOCTOR): What about operations, anything like that?
+[SEG0029] person_4 (PATIENT): I had my tonsils out when I was a child.
+[SEG0030] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0031] person_4 (PATIENT): Yeah, I've had asthma, yes. I have high blood pressure. It's a relief to finally sit down and talk about it. I looked a few things up online, and that probably didn't help.
+[SEG0032] person_2 (DOCTOR): Go on. Tell me what you take day to day.
+[SEG0033] person_4 (PATIENT): Asthalin inhaler, when needed.
+[SEG0034] person_2 (DOCTOR): Okay.
+[SEG0035] person_4 (PATIENT): I take ramipril, 5 milligrams, every morning for my blood pressure. Paracetamol, 500 milligrams, when needed. I had Seretide inhaler at one point, but I'm off it now.
+[SEG0036] person_2 (DOCTOR): Are you working at the moment?
+[SEG0037] person_4 (PATIENT): Yes, I'm a nurse on a busy ward.
+[SEG0038] person_2 (DOCTOR): Are you living with family?
+[SEG0039] person_4 (PATIENT): I stay with my daughter and her family.
+[SEG0040] person_2 (DOCTOR): Right, any relatives with health problems I should be aware of?
+[SEG0041] person_4 (PATIENT): My mother had high blood pressure. My brother has asthma.
+[SEG0042] person_1 (NURSE): Doctor, I've got the readings for you. Respiratory rate 19, pressure 104 over 73, pulse is 95 beats a minute. Temp 38.9 degrees, SpO2 96 percent on room air.
+[SEG0043] person_2 (DOCTOR): Okay, noted.
+[SEG0044] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0045] person_2 (DOCTOR): Take your time, no rush.
+[SEG0046] person_2 (DOCTOR): There are a few scattered wheezes on both sides.
+[SEG0047] person_2 (DOCTOR): Bear with me a second.
+[SEG0048] person_2 (DOCTOR): No crackles at the bases.
+[SEG0049] person_2 (DOCTOR): Thanks for that. Let me just check I've got this right. You've had a bad cough for one week, severe, and no leg swelling or coughing up blood.
+[SEG0050] person_4 (PATIENT): That's it, um, yes.
+[SEG0051] person_1 (NURSE): We've already done a chest X-ray this morning, doctor.
+[SEG0052] person_2 (DOCTOR): Thanks, I'll check it. I'll request blood tests, it'll help with cough. You'll be taking azithromycin, 500 milligrams, once a day, for three days. It's for chest infection.
+[SEG0053] person_4 (PATIENT): How long until it works?
+[SEG0054] person_2 (DOCTOR): Steam and warm fluids can ease the cough, and try to sleep with your head propped up. The thing that would worry me is if you become breathless or cough up blood. If that happens, go to emergency.
+[SEG0055] person_4 (PATIENT): Understood.
+[SEG0056] person_2 (DOCTOR): Let's plan a check in a week.
+[SEG0057] person_4 (PATIENT): Alright, I'll put it in my diary.
+[SEG0058] person_2 (DOCTOR): That's it on my side. Anything unclear?
+[SEG0059] person_4 (PATIENT): I appreciate it, doctor.
+[SEG0060] person_2 (DOCTOR): Safe journey home.
+
+JSON:

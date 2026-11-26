@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00274)
+[SEG0001] person_1 (PATIENT): hi doctor is this the right room?
+[SEG0002] person_2 (DOCTOR): right on time sit, please how can I help?
+[SEG0003] person_1 (PATIENT): it's scratch marks on the wrists and waist. I thought I'd wait, but it hasn't gone. I'm not great at remembering details, so bear with me
+[SEG0004] person_2 (DOCTOR): how long have you had it?
+[SEG0005] person_1 (PATIENT): Oh, it's been going on for three weeks.
+[SEG0006] person_2 (DOCTOR): What about terrible itching at night, have you noticed that?
+[SEG0007] person_1 (PATIENT): yes, about the the same, four weeks about terrible itching at night, severe, really honestly, every other day i've, I've also had a rash that started in the finger webs, since yesterday
+[SEG0008] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0009] person_2 (DOCTOR): Almost there...
+[SEG0010] person_2 (DOCTOR): okay: temperature 36.9 oxygen saturation is 99 percent blood pressure 120 over 81 weight 55 kilos respiratory rate 15 heart rate 69 height 183 centimetres
+[SEG0011] person_2 (DOCTOR): Let me have a look at you.
+[SEG0012] person_2 (DOCTOR): Almost done with this part.
+[SEG0013] person_2 (DOCTOR): Tiny linear burrows between the fingers and scratched papules on the the wrists.
+[SEG0014] person_2 (DOCTOR): That's all I need, thank you. How about fever?
+[SEG0015] person_1 (PATIENT): Not that I've noticed, uh, no fever.
+[SEG0016] person_2 (DOCTOR): did you get pus or joint pain?
+[SEG0017] person_1 (PATIENT): I haven't had pus or joint pain, no
+[SEG0018] person_2 (DOCTOR): Is your digestion otherwise okay?
+[SEG0019] person_1 (PATIENT): Nothing unusual no.
+[SEG0020] person_2 (DOCTOR): any breathing difficulties apart from this?
+[SEG0021] person_1 (PATIENT): no problems with breathing
+[SEG0022] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0023] person_1 (PATIENT): Eczema, for two years i just wanna to get back to normal, really
+[SEG0024] person_2 (DOCTOR): right, right
+[SEG0025] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0026] person_1 (PATIENT): I'm on hydrocortisone cream, when needed for the eczema.
+[SEG0027] person_2 (DOCTOR): any sport or activity?
+[SEG0028] person_1 (PATIENT): I play badminton on Sundays.
+[SEG0029] person_2 (DOCTOR): and and what do you usually eat?
+[SEG0030] person_1 (PATIENT): Mostly home-cooked food, rice and vegetables
+[SEG0031] person_2 (DOCTOR): any previous surgeries?
+[SEG0032] person_1 (PATIENT): Just a knee arthroscopy three years ago.
+[SEG0033] person_2 (DOCTOR): Alright, does anything run in the the family?
+[SEG0034] person_1 (PATIENT): um my mother has migraines
+[SEG0035] person_2 (DOCTOR): any allergies I should know about?
+[SEG0036] person_1 (PATIENT): No allergies that I know of, no.
+[SEG0037] person_2 (DOCTOR): So based on the history and the examination the most likely explanation is scabies. An insect-bite reaction is also on my list.
+[SEG0038] person_1 (PATIENT): um, should I be worried about this?
+[SEG0039] person_2 (DOCTOR): nothing I've seen today points to an emergency it looks like scabies
+[SEG0040] person_2 (DOCTOR): everyone in the house should be treated at the same time, and bedding washed hot. Is there anything you wanted to ask?
+[SEG0041] person_1 (PATIENT): Alright, thanks. Bye for now.
+[SEG0042] person_2 (DOCTOR): All the best.
+
+JSON:

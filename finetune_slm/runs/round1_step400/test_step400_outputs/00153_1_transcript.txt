@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00153)
+[SEG0001] person_1 (DOCTOR): Good afternoon. Take a seat, please.
+[SEG0002] person_2 (PATIENT): hello, um, doctor thanks for seeing me
+[SEG0003] person_1 (DOCTOR): What's been bothering you?
+[SEG0004] person_2 (PATIENT): Well, I've been having bloating after milk or ice cream.
+[SEG0005] person_1 (DOCTOR): when did it begin?
+[SEG0006] person_2 (PATIENT): Ever since... since last weekend, really.
+[SEG0007] person_1 (DOCTOR): have you had any previous surgeries?
+[SEG0008] person_2 (PATIENT): okay, so no, never had any surgery
+[SEG0009] person_1 (DOCTOR): do you have any medical conditions I should know about?
+[SEG0010] person_2 (PATIENT): No, nothing, I've generally been healthy.
+[SEG0011] person_1 (DOCTOR): any drug or food allergies?
+[SEG0012] person_2 (PATIENT): So, no allergies that I know of, no.
+[SEG0013] person_1 (DOCTOR): A few questions about your lifestyle now.
+[SEG0014] person_2 (PATIENT): Yes, I live on my own. Yes, I'm a nurse on a busy ward. Not really, I don't get much exercise.
+[SEG0015] person_1 (DOCTOR): any regular medication?
+[SEG0016] person_2 (PATIENT): No, nothing regular.
+[SEG0017] person_1 (DOCTOR): any fever, vomiting or rash at all?
+[SEG0018] person_2 (PATIENT): No, no fever, vomiting or rash.
+[SEG0019] person_1 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0020] person_2 (PATIENT): No, joints are fine.
+[SEG0021] person_1 (DOCTOR): How's your breathing otherwise?
+[SEG0022] person_2 (PATIENT): Breathing's normal.
+[SEG0023] person_1 (DOCTOR): let's do your observations
+[SEG0024] person_1 (DOCTOR): Just relax your arm...
+[SEG0025] person_1 (DOCTOR): okay: oxygen saturation is 98 percent, heart rate 73. And temp 36.9 degrees, BP is 123 over 73.
+[SEG0026] person_2 (PATIENT): Is that okay?
+[SEG0027] person_1 (DOCTOR): That's fine, we'll come to it.
+[SEG0028] person_1 (DOCTOR): I'll examine you now, bear with me
+[SEG0029] person_1 (DOCTOR): Take your time, no rush.
+[SEG0030] person_1 (DOCTOR): Your tummy is soft and non-tender, with active bowel sounds.
+[SEG0031] person_1 (DOCTOR): Okay, finished.
+[SEG0032] person_1 (DOCTOR): Okay, thinking it through, this is probably lactose intolerance.
+[SEG0033] person_2 (PATIENT): Is it something serious, you know, doctor?
+[SEG0034] person_1 (DOCTOR): I understand the worry. At the moment I'd say it's lactose intolerance, and we'll know more once the a coeliac test is back.
+[SEG0035] person_1 (DOCTOR): I'm going to order a coeliac test, for bloating
+[SEG0036] person_2 (PATIENT): mm, okay
+[SEG0037] person_1 (DOCTOR): I think a hydrogen breath test makes sense here, for suspected lactose intolerance try two weeks without dairy and tell me if it makes a difference
+[SEG0038] person_1 (DOCTOR): mm keep an eye out, and if the symptoms get worse, call us the same day or go to emergency
+[SEG0039] person_2 (PATIENT): Understood.
+[SEG0040] person_1 (DOCTOR): Let's plan a check in three weeks.
+[SEG0041] person_2 (PATIENT): sure, that's doable
+[SEG0042] person_1 (DOCTOR): Call the clinic if you need us.
+[SEG0043] person_2 (PATIENT): Thanks, that was helpful.
+[SEG0044] person_1 (DOCTOR): Take care.
+
+JSON:

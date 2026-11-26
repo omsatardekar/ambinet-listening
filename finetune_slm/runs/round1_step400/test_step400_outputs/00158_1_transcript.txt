@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00158)
+[SEG0001] person_1 (PATIENT): Uh, um, hi doctor, sorry, the lift was out and I had to take the stairs.
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): Mainly sensitivity to light. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): How long have you had it?
+[SEG0005] person_1 (PATIENT): Yeah, it's been two days now.
+[SEG0006] person_2 (DOCTOR): On a normal day, how strong is it?
+[SEG0007] person_1 (PATIENT): I'd give it a six, um, out of ten. So, you know, there's flashing lights before it starts as well. And there's vomiting as well, three days now.
+[SEG0008] person_2 (DOCTOR): Any weakness in the arms or legs or slurred speech?
+[SEG0009] person_1 (PATIENT): Uh, uh, no, no weakness in the arms or legs or slurred speech.
+[SEG0010] person_2 (DOCTOR): Any double vision or neck stiffness?
+[SEG0011] person_1 (PATIENT): Well, I haven't had double vision or neck stiffness, no.
+[SEG0012] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0013] person_1 (PATIENT): Well, nothing on the skin, no.
+[SEG0014] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0015] person_1 (PATIENT): Sumatriptan. I take it 50 milligrams, when needed for my migraines. Right, you know, it's Disprin, 325 milligrams, maybe, when it starts.
+[SEG0016] person_2 (DOCTOR): Is the packet here, or the prescription?
+[SEG0017] person_1 (PATIENT): No, you know, it's at home.
+[SEG0018] person_2 (DOCTOR): Are you working at the moment?
+[SEG0019] person_1 (PATIENT): Yes, I'm a nurse on a busy ward.
+[SEG0020] person_2 (DOCTOR): How about exercise?
+[SEG0021] person_1 (PATIENT): Not really, I don't get much exercise.
+[SEG0022] person_2 (DOCTOR): Have you had any surgery before?
+[SEG0023] person_1 (PATIENT): Yes, I had a C-section, about ten years ago.
+[SEG0024] person_2 (DOCTOR): Any diagnoses you've been given before? It helps to be thorough at this stage.
+[SEG0025] person_1 (PATIENT): I've got migraines.
+[SEG0026] person_2 (DOCTOR): Yes?
+[SEG0027] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0028] person_1 (PATIENT): I had a reaction to ibuprofen when I was younger, a rash, and I've avoided it since.
+[SEG0029] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0030] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0031] person_2 (DOCTOR): Okay: weight 83 kilos, saturation 99 percent. And BMI works out to 31.6, temp 36.4 degrees, heart rate 69, pressure 127 over 73, height 162 centimetres.
+[SEG0032] person_2 (DOCTOR): Let me have a look at you.
+[SEG0033] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0034] person_2 (DOCTOR): Cranial nerves look normal, eye movements are full.
+[SEG0035] person_2 (DOCTOR): Hold that position for me.
+[SEG0036] person_2 (DOCTOR): Neck is supple, no stiffness at all.
+[SEG0037] person_1 (PATIENT): Alright.
+[SEG0038] person_2 (DOCTOR): Okay, finished.
+[SEG0039] person_2 (DOCTOR): Taking everything into account, it fits best with a migraine pattern. Let's get an MRI of the brain, for recurrent headaches. I'd like you to take propranolol, 20 milligrams, twice a day, for three months. You take it by mouth. That's for migraine prevention. What I'm giving you is domperidone, 10 milligrams, when nauseous, as needed. You take it by mouth. That should help with migraine nausea.
+[SEG0040] person_1 (PATIENT): Can I get that from the usual pharmacy?
+[SEG0041] person_2 (DOCTOR): Keep a headache diary, things like skipped meals, poor sleep, certain foods and the weather. Try not to skip meals and keep your sleep regular. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0042] person_1 (PATIENT): Okay, fair enough.
+[SEG0043] person_2 (DOCTOR): Do get help quickly if you have the worst headache of your life or any weakness. Come back in a month. What are the next steps as you understand them?
+[SEG0044] person_1 (PATIENT): So, I take the propranolol, 20 milligrams, twice a day and take the domperidone, 10 milligrams, when nauseous. Is that right?
+[SEG0045] person_2 (DOCTOR): Yes, exactly right. Alright, I'll see you out.
+[SEG0046] person_1 (PATIENT): I think that's clear. Thank you for being so thorough.
+
+JSON:

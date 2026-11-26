@@ -1,0 +1,50 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00825)
+[SEG0001] person_3 (CAREGIVER): Doctor, I'm Beth, Mr Quigley's carer. He's got a pain in his neck that goes down his arm, and he won't say much, so I'm here to help.
+[SEG0002] person_1 (PATIENT): It's not that bad. ~
+[SEG0003] person_2 (DOCTOR): Mr Quigley, can you tell me where it hurts?
+[SEG0004] person_1 (PATIENT): Neck. And down this arm. The right.
+[SEG0005] person_2 (DOCTOR): How long has it been going on?
+[SEG0006] person_1 (PATIENT): A few weeks. ~
+[SEG0007] person_3 (CAREGIVER): I'd say a month. It started after he painted the ceiling.
+[SEG0008] person_2 (DOCTOR): Is it worse at certain times?
+[SEG0009] person_1 (PATIENT): At night. And when I turn my head.
+[SEG0010] person_2 (DOCTOR): Any tingling or numbness in your fingers?
+[SEG0011] person_1 (PATIENT): A bit of tingling. In my thumb, and next finger.
+[SEG0012] person_2 (DOCTOR): Any weakness, dropping things?
+[SEG0013] person_1 (PATIENT): No. I can grip fine.
+[SEG0014] person_3 (CAREGIVER): He's dropped a cup twice, though.
+[SEG0015] person_2 (DOCTOR): I'll note that. What are you taking for it?
+[SEG0016] person_3 (CAREGIVER): Naproxen, 500 mg twice a day. Paracetamol, 1 gram, four times a day. And a stomach tablet, omeprazole, 20 mg once a day, to go with the naproxen.
+[SEG0017] person_2 (DOCTOR): Any other conditions?
+[SEG0018] person_3 (CAREGIVER): He had a stroke, two years ago, and high blood pressure.
+[SEG0019] person_2 (DOCTOR): Who's at home with him?
+[SEG0020] person_3 (CAREGIVER): He lives alone, and I come in morning and evening.
+[SEG0021] person_2 (DOCTOR): Pulse, pressure, and so on. ~
+[SEG0022] person_3 (CAREGIVER): I've done them this morning, doctor. Blood pressure 138 over 84, pulse 72, oxygen 97 percent, temperature 36.7.
+[SEG0023] person_2 (DOCTOR): Thanks, Beth. Mr Quigley, I'll test your arm.
+[SEG0024] person_1 (PATIENT): Okay. ~
+[SEG0025] person_2 (DOCTOR): The strength in your right grip is slightly reduced compared to the left, and your thumb and index finger have reduced feeling, and moving your neck towards the right reproduces the arm pain. ~
+[SEG0026] person_3 (CAREGIVER): Is it a trapped nerve? ~
+[SEG0027] person_2 (DOCTOR): It looks that way. I'd say this is a pinched nerve in the neck, cervical radiculopathy, probably from wear in the neck bones.
+[SEG0028] person_1 (PATIENT): Will it get better? ~
+[SEG0029] person_2 (DOCTOR): Often, yes, with time, within a few months. But with the dropped cups and the reduced grip, I'd like to be careful. ~
+[SEG0030] person_3 (CAREGIVER): What do we do? ~
+[SEG0031] person_2 (DOCTOR): Keep using a supportive pillow, avoid heavy lifting, and gentle neck movements.
+[SEG0032] person_3 (CAREGIVER): I'll make sure he doesn't paint any more ceilings. ~
+[SEG0033] person_2 (DOCTOR): Please. If the weakness gets worse, you lose feeling in your hand, you have trouble walking, or lose control of your bladder, come in immediately.
+[SEG0034] person_3 (CAREGIVER): I'll watch for those. ~
+[SEG0035] person_2 (DOCTOR): Continue the tablets as they are. Thank you, Beth. ~
+
+JSON:

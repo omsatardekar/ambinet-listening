@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00498)
+[SEG0001] person_1 (NURSE): Doctor, the patient's with us now. I did the usual checks at the front, so just say when you want them.
+[SEG0002] person_2 (DOCTOR): Good, thank you. Welcome, tell me what's brought you in.
+[SEG0003] person_3 (PATIENT): So, I've been getting out of puff on the stairs, doctor.
+[SEG0004] person_2 (DOCTOR): How long are we talking about?
+[SEG0005] person_3 (PATIENT): Ever since... since this morning, really.
+[SEG0006] person_2 (DOCTOR): Okay, keep going. Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_3 (PATIENT): I'd call it severe. Honestly, a few times a day. It's worse with stairs and carrying shopping.
+[SEG0008] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0009] person_3 (PATIENT): I have low haemoglobin, for two years.
+[SEG0010] person_2 (DOCTOR): Mm.
+[SEG0011] person_2 (DOCTOR): Does anything run in the family?
+[SEG0012] person_3 (PATIENT): My mother had high blood pressure.
+[SEG0013] person_2 (DOCTOR): Tell me about your work.
+[SEG0014] person_3 (PATIENT): I'm a software engineer, so I'm at a screen all day.
+[SEG0015] person_2 (DOCTOR): What do you do to keep active?
+[SEG0016] person_3 (PATIENT): I cycle to work most mornings.
+[SEG0017] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0018] person_3 (PATIENT): Oh, I take iron tablets, once a day.
+[SEG0019] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0020] person_3 (PATIENT): Yes, ibuprofen, it gives me stomach pain.
+[SEG0021] person_2 (DOCTOR): Alright, any previous surgeries?
+[SEG0022] person_3 (PATIENT): No, never had any surgery.
+[SEG0023] person_2 (DOCTOR): Okay, any fever, wheezing, palpitations or calf swelling?
+[SEG0024] person_3 (PATIENT): No, none of those.
+[SEG0025] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0026] person_3 (PATIENT): Uh, nothing on the skin, no.
+[SEG0027] person_1 (NURSE): Okay, so the vitals from earlier. Respiratory rate 17, oxygen saturation is 99 percent, temperature is 36.6 degrees, pulse 69, BP is 118 over 73.
+[SEG0028] person_2 (DOCTOR): Thanks.
+[SEG0029] person_2 (DOCTOR): Shall we do the examination?
+[SEG0030] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0031] person_2 (DOCTOR): Your BMI is on the high side and you look a little pale.
+[SEG0032] person_2 (DOCTOR): Right, I'll go gently.
+[SEG0033] person_2 (DOCTOR): Heart sounds are normal and the chest is clear.
+[SEG0034] person_2 (DOCTOR): That's all I need, thank you.
+[SEG0035] person_2 (DOCTOR): Okay, thinking it through, this looks most like breathlessness with several possible contributors. We should do a chest X-ray for breathlessness. That will help us see what's going on underneath and decide the next step. We should do an echocardiogram for breathlessness. A short daily walk, building up slowly, is a sensible start. Please take the tablets with food so they don't upset your stomach.
+[SEG0036] person_2 (DOCTOR): I'm not ordering blood tests today. If things carry on in two weeks, we'll consider it. If the symptoms get worse, or you feel really unwell, please come to the emergency department. Come back in four weeks.
+[SEG0037] person_3 (PATIENT): Yes, you know, I can do that.
+[SEG0038] person_2 (DOCTOR): That's it on my side. Anything unclear?
+[SEG0039] person_3 (PATIENT): Thank you for your time.
+
+JSON:

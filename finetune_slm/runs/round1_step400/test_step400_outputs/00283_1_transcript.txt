@@ -1,0 +1,64 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00283)
+[SEG0001] person_1 (PATIENT): Hi, doctor, I brought my bag, is it fine to leave it here?
+[SEG0002] person_2 (DOCTOR): No trouble at all, come in. What's been bothering you?
+[SEG0003] person_1 (PATIENT): I've been dealing with a lump on the side of my neck.
+[SEG0004] person_2 (DOCTOR): What's your current medication list?
+[SEG0005] person_1 (PATIENT): Amlodipine, 5 milligrams, maybe, once a day.
+[SEG0006] person_2 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0007] person_1 (PATIENT): No, it's at home. I take clopidogrel, 75 milligrams, once a day.
+[SEG0008] person_2 (DOCTOR): How far back does it go?
+[SEG0009] person_1 (PATIENT): Okay, you know, so it's been about four days now.
+[SEG0010] person_2 (DOCTOR): Would you call it mild or bad?
+[SEG0011] person_1 (PATIENT): I, I'd call it severe.
+[SEG0012] person_2 (DOCTOR): Has there been night sweats too?
+[SEG0013] person_1 (PATIENT): Yes, about the same, ten days. Well, you know, with night sweats, I'd call it mild.
+[SEG0014] person_2 (DOCTOR): Have you been feeling feverish in the evenings?
+[SEG0015] person_1 (PATIENT): Yes, I have. With feeling feverish in the evenings, it happens every other day.
+[SEG0016] person_2 (DOCTOR): Have you had a lump on the side of your neck before, or is this the first time?
+[SEG0017] person_1 (PATIENT): Yes, something like this happened about six months ago, and it went away on its own.
+[SEG0018] person_2 (DOCTOR): Let me check a few things. Any difficulty swallowing, pain in the lump or weight loss?
+[SEG0019] person_1 (PATIENT): No, you know, none of those.
+[SEG0020] person_2 (DOCTOR): How about tooth problems?
+[SEG0021] person_1 (PATIENT): No tooth problems, thankfully.
+[SEG0022] person_2 (DOCTOR): How's your breathing otherwise?
+[SEG0023] person_1 (PATIENT): No problems with breathing.
+[SEG0024] person_2 (DOCTOR): Have you ever been under the knife?
+[SEG0025] person_1 (PATIENT): I mean, I had my gallbladder removed in 2016.
+[SEG0026] person_2 (DOCTOR): Who do you live with?
+[SEG0027] person_1 (PATIENT): I live with my family, my husband and two kids.
+[SEG0028] person_2 (DOCTOR): How about exercise?
+[SEG0029] person_1 (PATIENT): Not really, I don't get much exercise.
+[SEG0030] person_2 (DOCTOR): Are you still working?
+[SEG0031] person_1 (PATIENT): I'm retired now, I was a clerk for years.
+[SEG0032] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0033] person_1 (PATIENT): I've got high blood pressure. Heart disease, for nearly five years.
+[SEG0034] person_2 (DOCTOR): Okay, yes, heart disease is known to us, good to have that clear. I'll check your pressure and pulse.
+[SEG0035] person_2 (DOCTOR): One second...
+[SEG0036] person_2 (DOCTOR): Okay: weight 58 kilos, respiratory rate 16. And height 161 centimetres, temperature is 36.9 degrees, oxygen saturation is 99 percent, pressure 114 over 74, pulse 66.
+[SEG0037] person_2 (DOCTOR): I'll examine you now, bear with me.
+[SEG0038] person_2 (DOCTOR): Take your time, no rush.
+[SEG0039] person_2 (DOCTOR): I can't feel other glands in the neck, armpits or groin.
+[SEG0040] person_2 (DOCTOR): Okay, finished. Having listened and examined, I think we're dealing with a reactive lymph node after a throat infection at this stage. It could also be a persistent infection, so we'll keep that open.
+[SEG0041] person_1 (PATIENT): I've been thinking the worst, to be honest. Is it bad?
+[SEG0042] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a reactive lymph node after a throat infection, and we'll know more once the blood tests is back. I'll request blood tests, it'll help with neck lump.
+[SEG0043] person_1 (PATIENT): That sounds sensible.
+[SEG0044] person_2 (DOCTOR): Let's get an ultrasound of the neck, for neck lump. Check the lump once a week and let me know if it grows or becomes hard. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0045] person_1 (PATIENT): Hmm, yes, I'll keep that in mind.
+[SEG0046] person_2 (DOCTOR): One warning sign to remember: the symptoms get worse. In that case don't wait. I'll want another look in three weeks.
+[SEG0047] person_1 (PATIENT): Hmm, you know, yes, I can do that.
+[SEG0048] person_2 (DOCTOR): Do you have any questions?
+[SEG0049] person_1 (PATIENT): I mean, uh, nothing more from me, thanks.
+
+JSON:

@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03189)
+[SEG0001] person_1 (PATIENT): Hello? Doctor? I was told to come in.
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): It's a red sore wound after my operation, mostly.
+[SEG0004] person_2 (DOCTOR): Did it come on recently?
+[SEG0005] person_1 (PATIENT): Probably six months. Yeah.
+[SEG0006] person_2 (DOCTOR): Would you say mild, moderate or severe?
+[SEG0007] person_1 (PATIENT): Actually, I'd give it a three, out of ten.
+[SEG0008] person_2 (DOCTOR): Any breathlessness, calf pain or chest pain at all?
+[SEG0009] person_1 (PATIENT): I haven't had breathlessness, calf pain or chest pain, no.
+[SEG0010] person_2 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0011] person_1 (PATIENT): Yeah, no problems with breathing.
+[SEG0012] person_2 (DOCTOR): Let's run through your medicines.
+[SEG0013] person_1 (PATIENT): Paracetamol. I take it when needed.
+[SEG0014] person_2 (DOCTOR): Right, do you know the dose?
+[SEG0015] person_1 (PATIENT): It's 1 gram.
+[SEG0016] person_2 (DOCTOR): What about your medical history?
+[SEG0017] person_1 (PATIENT): I have heart failure, for about ten years.
+[SEG0018] person_2 (DOCTOR): Alright, and besides that?
+[SEG0019] person_1 (PATIENT): Oh, I have high cholesterol, for two years.
+[SEG0020] person_2 (DOCTOR): Okay, I can see heart failure in your file as well.
+[SEG0021] person_2 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0022] person_1 (PATIENT): I'm allergic to amoxicillin, I get a rash all over.
+[SEG0023] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0024] person_1 (PATIENT): I'll have a glass of wine with dinner. I've never touched a cigarette. I hardly move around during the day. I drink a lot of tea and snack through the day. I retired from the post office two years ago.
+[SEG0025] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0026] person_2 (DOCTOR): Keep your arm relaxed for me...
+[SEG0027] person_2 (DOCTOR): Okay: pulse is 96 beats a minute, BMI works out to 32.8, temp 38.6 degrees, height 160 centimetres, respiratory rate 16, blood pressure 122 over 68, weight 84 kilos.
+[SEG0028] person_1 (PATIENT): Is that alright, um, doctor?
+[SEG0029] person_2 (DOCTOR): We'll go over that shortly.
+[SEG0030] person_2 (DOCTOR): Let's move on to the examination.
+[SEG0031] person_2 (DOCTOR): Hold that for a second.
+[SEG0032] person_2 (DOCTOR): The lower part of the wound is red, hot and weeping pus, and the edges have not come together.
+[SEG0033] person_2 (DOCTOR): Okay, that's all I needed to check.
+[SEG0034] person_2 (DOCTOR): Putting it all together, I'd lean towards a surgical wound infection.
+[SEG0035] person_1 (PATIENT): Is this permanent?
+[SEG0036] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a surgical wound infection, but I'd like to confirm. We should do a wound swab for wound infection. That will help us see what's going on underneath and decide the next step.
+[SEG0037] person_1 (PATIENT): Do I need to prepare?
+[SEG0038] person_2 (DOCTOR): Keep it clean and dry and use fresh dressings daily. Is there anything you'd like me to go over again?
+[SEG0039] person_1 (PATIENT): Right, I'll do that. Thank you, doctor.
+[SEG0040] person_2 (DOCTOR): Have a good day.
+
+JSON:

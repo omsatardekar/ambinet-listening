@@ -1,0 +1,72 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00443)
+[SEG0001] person_1 (DOCTOR): Afternoon. Take the chair by the desk.
+[SEG0002] person_2 (PATIENT): Hello.
+[SEG0003] person_3 (CAREGIVER): Right, doctor, I'm just here to help with the details.
+[SEG0004] person_1 (DOCTOR): Go ahead, tell me what's happening.
+[SEG0005] person_2 (PATIENT): I've been getting out of puff on the stairs. I kept putting it off, which I know isn't sensible. I thought it would sort itself out, but it hasn't.
+[SEG0006] person_1 (DOCTOR): How long are we talking about?
+[SEG0007] person_2 (PATIENT): I've had it for about a week. I told myself I'd wait and see, and here I am. I'd rather not end up on lots of tablets if I can avoid it.
+[SEG0008] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0009] person_2 (PATIENT): A five out of ten, I suppose. It's worse with stairs. It happens a couple of times a week. I just want to get back to normal, really.
+[SEG0010] person_2 (PATIENT): I was just going to say that the main thing is—
+[SEG0011] person_4 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0012] person_1 (DOCTOR): Later, thanks. Please go on.
+[SEG0013] person_2 (PATIENT): Oh, as for having put on weight, I honestly can't say when that began. It might have been last month or the month before. I've been feeling tired too, for about three months.
+[SEG0014] person_1 (DOCTOR): On a normal day, how strong is it?
+[SEG0015] person_2 (PATIENT): Oh, um, pretty severe, if I'm being honest.
+[SEG0016] person_1 (DOCTOR): I see.
+[SEG0017] person_2 (PATIENT): I mean, I did have a dry cough at night at one point, but that's gone now.
+[SEG0018] person_5 (UNKNOWN): Yes, that's right, that's how it was.
+[SEG0019] person_4 (NURSE): Here are the numbers, doctor. Pressure 110 over 79, saturation 99 percent, pulse 86. Temperature is 36.8 degrees.
+[SEG0020] person_1 (DOCTOR): Thanks.
+[SEG0021] person_1 (DOCTOR): Right, if you're comfortable, I'll examine you now.
+[SEG0022] person_1 (DOCTOR): Just relax, I'll be quick.
+[SEG0023] person_1 (DOCTOR): Heart sounds are normal and the chest is clear.
+[SEG0024] person_1 (DOCTOR): Just relax, I'll be quick.
+[SEG0025] person_1 (DOCTOR): Your BMI is on the high side and you look a little pale.
+[SEG0026] person_1 (DOCTOR): Okay, finished. Any calf swelling or coughing up blood?
+[SEG0027] person_2 (PATIENT): No, nothing there.
+[SEG0028] person_1 (DOCTOR): Any palpitations, chest pain or wheezing at all?
+[SEG0029] person_2 (PATIENT): No, none of that at all.
+[SEG0030] person_1 (DOCTOR): Is your digestion otherwise okay?
+[SEG0031] person_2 (PATIENT): Nothing unusual, no.
+[SEG0032] person_1 (DOCTOR): Alright, how about your heart, any problems like that?
+[SEG0033] person_2 (PATIENT): My heart's been fine, as far as I know.
+[SEG0034] person_1 (DOCTOR): How do you eat, generally?
+[SEG0035] person_2 (PATIENT): I skip breakfast most days.
+[SEG0036] person_1 (DOCTOR): What kind of work do you do?
+[SEG0037] person_2 (PATIENT): I work on a farm, it's quite physical.
+[SEG0038] person_1 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0039] person_2 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0040] person_1 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0041] person_2 (PATIENT): My sister has thyroid problems.
+[SEG0042] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0043] person_2 (PATIENT): No, nothing like that.
+[SEG0044] person_1 (DOCTOR): What medicines are you taking at the moment?
+[SEG0045] person_3 (CAREGIVER): She takes iron tablets, once a day. It's Glycomet, 500 milligrams, twice a day, doctor. Yeah, she is on amlodipine, once a day, I give it to her.
+[SEG0046] person_1 (DOCTOR): Right, how much do you take?
+[SEG0047] person_3 (CAREGIVER): 5 milligrams.
+[SEG0048] person_1 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0049] person_2 (PATIENT): I've got low haemoglobin. I have diabetes.
+[SEG0050] person_1 (DOCTOR): Ah.
+[SEG0051] person_2 (PATIENT): I've had high blood pressure, yes.
+[SEG0052] person_1 (DOCTOR): And then?
+[SEG0053] person_1 (DOCTOR): Right, so low haemoglobin and diabetes are already on your record. We'll keep that in mind today. Having listened and examined, I don't have a clear answer today: breathlessness with several possible contributors is possible, and so is anaemia. So, to recap quickly. You've been getting out of puff on the stairs for about a week, and no wheezing or palpitations.
+[SEG0054] person_2 (PATIENT): That's what happened, yes.
+[SEG0055] person_1 (DOCTOR): Let's book an echocardiogram to look into breathlessness. I'll request a chest X-ray, it'll help with breathlessness. A short daily walk, building up slowly, is a sensible start. Don't skip meals, and try to eat smaller portions more often through the day. Alright, I'll see you out.
+[SEG0056] person_2 (PATIENT): I appreciate it, uh, doctor.
+[SEG0057] person_1 (DOCTOR): Bye for now.
+
+JSON:

@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00057)
+[SEG0001] person_1 (PATIENT): Hi, uh, doctor. Is this the right room?
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_3 (CAREGIVER): Morning, doctor. I'll stay and fill in anything that's missed. Okay, um, so it's fever and joint pains, doctor. She didn't want to come, but I insisted.
+[SEG0004] person_4 (NURSE): Doctor, I've got the readings for you. Weight 93 kilos, heart rate 90. BMI works out to 31.4, respiratory rate 19, SpO2 95 percent on room air, height 172 centimetres, temperature is 38.5 degrees, blood pressure 108 over 72.
+[SEG0005] person_2 (DOCTOR): Thanks. How far back does it go?
+[SEG0006] person_1 (PATIENT): for two weeks, I'd say
+[SEG0007] person_2 (DOCTOR): How intense does it get?
+[SEG0008] person_1 (PATIENT): I'd give it a four, out of ten. So, I've had a headache too, for one week. I mean, about headache, it comes and goes. I've also been feeling wiped out, for about a week. Uh, uh, with feeling wiped out, it's severe, honestly.
+[SEG0009] person_2 (DOCTOR): Okay, a few quick ones: vomiting or cough?
+[SEG0010] person_1 (PATIENT): No vomiting or cough, none of it.
+[SEG0011] person_2 (DOCTOR): Have you had bleeding, by any chance?
+[SEG0012] person_1 (PATIENT): um, no, none, no bleeding
+[SEG0013] person_2 (DOCTOR): Have you noticed diarrhoea, red eyes or neck stiffness?
+[SEG0014] person_1 (PATIENT): no, you know, no diarrhoea, red eyes or neck stiffness
+[SEG0015] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0016] person_1 (PATIENT): no, nothing there
+[SEG0017] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0018] person_1 (PATIENT): I mean, um, that's normal as far as I know.
+[SEG0019] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0020] person_1 (PATIENT): I smoke about ten cigarettes a day. A beer or two most evenings, to be honest. Not really, I don't get much exercise. I live with my family, my husband and two kids. I work night shifts at a warehouse
+[SEG0021] person_2 (DOCTOR): Does anything run in the family?
+[SEG0022] person_1 (PATIENT): My father had kidney stones.
+[SEG0023] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0024] person_1 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0025] person_2 (DOCTOR): Have you ever been under the knife?
+[SEG0026] person_1 (PATIENT): Just a lump removed from my back, years ago.
+[SEG0027] person_2 (DOCTOR): so, any medication at the moment, including things from the pharmacy?
+[SEG0028] person_3 (CAREGIVER): Right, you know, it's escitalopram, once a day, doctor.
+[SEG0029] person_2 (DOCTOR): how much do you take?
+[SEG0030] person_3 (CAREGIVER): 10 milligrams, I think that's what's on the box.
+[SEG0031] person_2 (DOCTOR): Okay.
+[SEG0032] person_3 (CAREGIVER): She takes pantoprazole, 40 milligrams, before breakfast for my acidity. She is on Dolo, 650 milligrams, when it flares, I give it to her.
+[SEG0033] person_2 (DOCTOR): and for how long?
+[SEG0034] person_3 (CAREGIVER): For about a year.
+[SEG0035] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0036] person_1 (PATIENT): High blood pressure, for about ten years. So, you know, I have anxiety, for five years
+[SEG0037] person_2 (DOCTOR): I follow.
+[SEG0038] person_1 (PATIENT): Yes, acid reflux.
+[SEG0039] person_2 (DOCTOR): Can I examine you now?
+[SEG0040] person_1 (PATIENT): Alright.
+[SEG0041] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0042] person_2 (DOCTOR): A fine rash over the chest and back, not itchy to touch.
+[SEG0043] person_2 (DOCTOR): Almost done with this part.
+[SEG0044] person_2 (DOCTOR): Both wrists and several finger joints are puffy and tender.
+[SEG0045] person_1 (PATIENT): Fine.
+[SEG0046] person_2 (DOCTOR): Right, thanks for that.
+[SEG0047] person_2 (DOCTOR): So where does that leave us? This is probably a viral fever with joint involvement, possibly chikungunya. I can't rule out dengue fever yet. We should do a dengue test for fever. I'd rather check than guess, and this is the quickest way to know more.
+[SEG0048] person_1 (PATIENT): Okay, noted.
+[SEG0049] person_2 (DOCTOR): let's book a chikungunya test to look into fever with joint pain avoid anti-inflammatory painkillers until we know it isn't dengue okay, that's everything from me any other questions?
+[SEG0050] person_1 (PATIENT): Right. Thanks again.
+[SEG0051] person_2 (DOCTOR): mind how you go
+
+JSON:

@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20219)
+[SEG0001] person_1 (PATIENT): Good afternoon, you know, doctor.
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): Well, uh, I've been having nearly blacking out.
+[SEG0004] person_2 (DOCTOR): Let's run through your medicines.
+[SEG0005] person_1 (PATIENT): Hmm, I take tamsulosin, 0.4 milligrams, at night. I, I do miss it now and then, to be fair.
+[SEG0006] person_2 (DOCTOR): How long has this been bothering you?
+[SEG0007] person_1 (PATIENT): About... well, about four days. I wasn't sure whether to come in at all, to be honest. I told myself I'd wait and see, and here I am.
+[SEG0008] person_2 (DOCTOR): Is there anything else with it?
+[SEG0009] person_1 (PATIENT): Let me think, when it starts I tend to get a dry mouth as well. I've also had a pounding in my head, since Monday. Ah, about pounding in my head, severe, really. As for dry mouth, mild, I'd say.
+[SEG0010] person_2 (DOCTOR): Did you notice any vomiting?
+[SEG0011] person_1 (PATIENT): Yeah, no, I haven't had any vomiting.
+[SEG0012] person_2 (DOCTOR): Did you get fainting, palpitations or chest pain?
+[SEG0013] person_1 (PATIENT): Let me think, no, I'd have said so.
+[SEG0014] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0015] person_1 (PATIENT): Well, no, that's been fine.
+[SEG0016] person_2 (DOCTOR): Is there anything relevant on the family side?
+[SEG0017] person_1 (PATIENT): My grandmother had dementia.
+[SEG0018] person_2 (DOCTOR): So, tell me about your routine, work, habits, that sort of thing.
+[SEG0019] person_1 (PATIENT): I used to drink heavily but I stopped four years ago. My partner and our baby. I look after my grandchildren most days.
+[SEG0020] person_2 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0021] person_1 (PATIENT): I have an enlarged prostate.
+[SEG0022] person_2 (DOCTOR): So, do you react to any medicines or foods? Any allergies?
+[SEG0023] person_1 (PATIENT): Hmm, yes, milk. I get stomach cramps.
+[SEG0024] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0025] person_1 (PATIENT): No, never.
+[SEG0026] person_3 (NURSE): Doctor, I've got the readings for you. Pressure 97 over 66, temp 37.0 degrees, pulse 110.
+[SEG0027] person_2 (DOCTOR): Okay, noted.
+[SEG0028] person_2 (DOCTOR): Alright, over here please and I'll take a look.
+[SEG0029] person_2 (DOCTOR): Let me feel here.
+[SEG0030] person_2 (DOCTOR): Your blood pressure drops when you stand, from the lying reading to standing.
+[SEG0031] person_2 (DOCTOR): Raise your arm for me.
+[SEG0032] person_2 (DOCTOR): Heart sounds are normal and the chest is clear.
+[SEG0033] person_2 (DOCTOR): All finished, thank you.
+[SEG0034] person_2 (DOCTOR): Taking everything into account, I'd lean towards postural low blood pressure, possibly related to medicines or dehydration. That's my thinking for now, and it may change as we learn more. An abnormal heart rhythm is also on my list.
+[SEG0035] person_1 (PATIENT): Is this permanent?
+[SEG0036] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's postural low blood pressure, possibly related to medicines or dehydration, and we'll know more once the blood tests is back. I'm going to order blood tests, for dizziness. I'm going to order an ECG, for dizziness. Get up slowly from lying and sitting, and keep drinking fluids through the day.
+[SEG0037] person_2 (DOCTOR): Make sure you're drinking plenty of fluids, two to three litres a day if you can, and get proper rest. Book a review in two weeks. That's everything on my side. Anything you're unsure about?
+[SEG0038] person_1 (PATIENT): No, that's all. Thanks a lot.
+[SEG0039] person_2 (DOCTOR): All the best.
+
+JSON:

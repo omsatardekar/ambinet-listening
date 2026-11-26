@@ -1,0 +1,76 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20140)
+[SEG0001] person_1 (DOCTOR): Hello, sorry about the delay, do sit.
+[SEG0002] person_2 (PATIENT): Hi doctor, I got here as fast as I could.
+[SEG0003] person_1 (DOCTOR): Cold out there today?
+[SEG0004] person_2 (PATIENT): Ah, freezing, I could hardly feel my hands.
+[SEG0005] person_1 (DOCTOR): What's the main thing today?
+[SEG0006] person_2 (PATIENT): I wanted to get itching especially at night looked at.
+[SEG0007] person_1 (DOCTOR): Right, did it come on recently?
+[SEG0008] person_2 (PATIENT): Around about three months... no wait, it's more like six months.
+[SEG0009] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0010] person_2 (PATIENT): I'd give it a three, out of ten. It's worse with night. I'd say once or twice a day.
+[SEG0011] person_1 (DOCTOR): Is there anything else with it?
+[SEG0012] person_2 (PATIENT): Erm, when it starts I tend to get a rash between my fingers as well. The rash between my fingers? That's been for four weeks. With rash between my fingers, mostly mild. I've also had scratching sores, for nearly five years.
+[SEG0013] person_1 (DOCTOR): Is it a lot or only a little?
+[SEG0014] person_2 (PATIENT): Maybe a five out of ten on a bad day. As for small red bumps on my wrists, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0015] person_3 (NURSE): Okay, so the vitals from earlier. Pulse 85, BP is 116 over 69, temp 36.5 degrees, respiratory rate 17.
+[SEG0016] person_1 (DOCTOR): Thanks.
+[SEG0017] person_1 (DOCTOR): Let's move on to the examination.
+[SEG0018] person_1 (DOCTOR): So, raise your arm for me.
+[SEG0019] person_1 (DOCTOR): There are small burrow-like tracks and red bumps between the fingers and on the wrists, with scratch marks.
+[SEG0020] person_1 (DOCTOR): Right, you can sit up now.
+[SEG0021] person_1 (DOCTOR): Alright, a few quick ones: swollen glands, fever or joint pain?
+[SEG0022] person_2 (PATIENT): I haven't had swollen glands, fever or joint pain, no.
+[SEG0023] person_1 (DOCTOR): Have you had any rash on the face?
+[SEG0024] person_2 (PATIENT): Not that I've noticed, uh, no rash on the face.
+[SEG0025] person_1 (DOCTOR): Your breathing, any trouble there?
+[SEG0026] person_2 (PATIENT): No, my breathing's been fine.
+[SEG0027] person_1 (DOCTOR): Anything unusual with passing urine?
+[SEG0028] person_2 (PATIENT): No, that's all fine.
+[SEG0029] person_1 (DOCTOR): Right, what about your parents, brothers or sisters, any conditions?
+[SEG0030] person_2 (PATIENT): My mother has an underactive thyroid. My uncle has high cholesterol.
+[SEG0031] person_1 (DOCTOR): Any previous surgeries?
+[SEG0032] person_2 (PATIENT): Nothing, I haven't had any operations.
+[SEG0033] person_1 (DOCTOR): What about alcohol?
+[SEG0034] person_2 (PATIENT): I used to drink heavily but I stopped four years ago.
+[SEG0035] person_1 (DOCTOR): How about smoking?
+[SEG0036] person_2 (PATIENT): I gave up cigarettes last spring.
+[SEG0037] person_1 (DOCTOR): What do you do during the day?
+[SEG0038] person_2 (PATIENT): I look after my grandchildren most days.
+[SEG0039] person_1 (DOCTOR): Do you do any exercise?
+[SEG0040] person_2 (PATIENT): I swim twice a week.
+[SEG0041] person_1 (DOCTOR): Do you live by yourself?
+[SEG0042] person_2 (PATIENT): No, I share a house with my brother.
+[SEG0043] person_1 (DOCTOR): So, what conditions have you been treated for in the past?
+[SEG0044] person_2 (PATIENT): I've got epilepsy. I have an underactive thyroid, for nearly five years.
+[SEG0045] person_1 (DOCTOR): Yes, epilepsy is known to us, good to have that clear. Are there any allergies I should be aware of?
+[SEG0046] person_2 (PATIENT): No known allergies.
+[SEG0047] person_1 (DOCTOR): Which medicines do you take at the moment?
+[SEG0048] person_2 (PATIENT): I'm on lamotrigine, 100 milligrams, twice a day for the fits.
+[SEG0049] person_3 (NURSE): Doctor, our chart from the last visit lists it as 50 milligrams.
+[SEG0050] person_1 (DOCTOR): Right. Do you happen to have the current prescription here?
+[SEG0051] person_2 (PATIENT): Not with me. I'll bring it next time. It's thyroxine, every morning.
+[SEG0052] person_1 (DOCTOR): And what strength is that?
+[SEG0053] person_2 (PATIENT): 75 micrograms. Calamine lotion. I take it when needed. Carbamazepine I don't take anymore.
+[SEG0054] person_1 (DOCTOR): Having listened and examined, I can't pin this down yet. We're looking at scabies or an allergic rash.
+[SEG0055] person_2 (PATIENT): What are the odds it's serious?
+[SEG0056] person_1 (DOCTOR): I understand the worry. At the moment I'd say it's scabies, and we'll watch how it goes.
+[SEG0057] person_1 (DOCTOR): Everyone at home should be treated at the same time, and wash bedding and clothes at a high temperature. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0058] person_2 (PATIENT): I know what to watch for.
+[SEG0059] person_1 (DOCTOR): That's everything on my side. Anything you're unsure about?
+[SEG0060] person_2 (PATIENT): Right, I'll do that. Thank you, doctor.
+[SEG0061] person_1 (DOCTOR): Have a good day.
+
+JSON:

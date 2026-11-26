@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00253)
+[SEG0001] person_1 (PATIENT): Hi, doctor. Long queue outside, but here I am.
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): I mean, I've been dealing with pain in the lower right tummy.
+[SEG0004] person_2 (DOCTOR): Right. Okay, give me more detail on it, whatever comes to mind.
+[SEG0005] person_1 (PATIENT): Moving and coughing definitely sets it off. Pretty severe, if I'm being honest. I, I had a low fever before. That's settled now, though.
+[SEG0006] person_2 (DOCTOR): And what about constipation, jaundice or hernia bulge?
+[SEG0007] person_1 (PATIENT): Right, I haven't had constipation, jaundice or hernia bulge, no.
+[SEG0008] person_2 (DOCTOR): Has there been any burning when passing urine?
+[SEG0009] person_1 (PATIENT): Nope, no burning when passing urine.
+[SEG0010] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0011] person_1 (PATIENT): No, skin's been fine.
+[SEG0012] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0013] person_1 (PATIENT): No, um, that's been fine.
+[SEG0014] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0015] person_1 (PATIENT): I stopped smoking about two years back. I'm mostly vegetarian. I'm retired now, I was a clerk for years.
+[SEG0016] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0017] person_1 (PATIENT): Yes, gout. Yes, an irregular heartbeat. Right, I've had epilepsy for two years now.
+[SEG0018] person_2 (DOCTOR): Go on.
+[SEG0019] person_1 (PATIENT): So, I've had heart disease, yes.
+[SEG0020] person_2 (DOCTOR): Yes, gout and an irregular heartbeat are known to us, good to have that clear. Any allergies I should know about?
+[SEG0021] person_1 (PATIENT): So, I've never been told I have allergies.
+[SEG0022] person_2 (DOCTOR): Have you ever been under the knife?
+[SEG0023] person_1 (PATIENT): I had a stent put in my heart two years ago.
+[SEG0024] person_2 (DOCTOR): What's your current medication list?
+[SEG0025] person_1 (PATIENT): Allopurinol. I take it 100 milligrams, once a day. I'm, I'm on bisoprolol, 2.5 milligrams, once a day.
+[SEG0026] person_2 (DOCTOR): And for how long?
+[SEG0027] person_1 (PATIENT): About a month now.
+[SEG0028] person_2 (DOCTOR): Right.
+[SEG0029] person_1 (PATIENT): Sodium valproate, 500 milligrams, twice a day. I take aspirin, 75 milligrams, once a day. Apixaban I don't take anymore.
+[SEG0030] person_3 (NURSE): Here are the numbers, doctor. Pulse is 95 beats a minute, SpO2 98 percent on room air, respiratory rate 19. BP is 113 over 66, temp 38.1 degrees.
+[SEG0031] person_2 (DOCTOR): Good, thank you.
+[SEG0032] person_2 (DOCTOR): I'll examine you now, bear with me.
+[SEG0033] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0034] person_2 (DOCTOR): Bowel sounds are present.
+[SEG0035] person_1 (PATIENT): Go ahead.
+[SEG0036] person_2 (DOCTOR): Okay, just relax, I'll be quick.
+[SEG0037] person_2 (DOCTOR): There's tenderness in the right lower part and it hurts when I let go suddenly.
+[SEG0038] person_2 (DOCTOR): All done, you can get dressed.
+[SEG0039] person_2 (DOCTOR): So, based on the history and the examination, I'd lean towards possible appendicitis. I want to be honest that this is an impression, not a final answer. We shouldn't forget a gastroenteritis. I want an ultrasound of the abdomen done, that's for right lower abdominal pain.
+[SEG0040] person_1 (PATIENT): Okay, so how long does that take?
+[SEG0041] person_2 (DOCTOR): Please don't eat or drink anything until the surgeons have seen you. I'd like you to see the surgical team as well, and I'll write the referral.
+[SEG0042] person_1 (PATIENT): Alright, thank you.
+[SEG0043] person_2 (DOCTOR): Blood tests is something we might do if this doesn't improve in two weeks. Do get help quickly if the pain gets sharper or spreads across the tummy. I'd like to see you again today after the results. Call the clinic if you need us.
+[SEG0044] person_1 (PATIENT): I mean, nothing more from me, thanks.
+
+JSON:

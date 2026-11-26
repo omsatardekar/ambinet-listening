@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00236)
+[SEG0001] person_1 (DOCTOR): Okay, welcome. Let's see what's going on.
+[SEG0002] person_2 (PATIENT): Hello, doctor, thank you.
+[SEG0003] person_1 (DOCTOR): Right, what's the trouble?
+[SEG0004] person_2 (PATIENT): I've been dealing with a pounding headache.
+[SEG0005] person_1 (DOCTOR): And when did that start?
+[SEG0006] person_2 (PATIENT): It's been going on for three days. I did try to ignore it for a while.
+[SEG0007] person_1 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0008] person_2 (PATIENT): It's once or twice a day. It feels moderate to me.
+[SEG0009] person_1 (DOCTOR): Has there been nausea too?
+[SEG0010] person_2 (PATIENT): Yes, about the same, five days. I was feeling faint at one point, but that's gone now.
+[SEG0011] person_1 (DOCTOR): Let me check a few things. Any fainting or confusion?
+[SEG0012] person_2 (PATIENT): No, not any of them.
+[SEG0013] person_1 (DOCTOR): Let me check a few things. Any fever, passing no urine or vomiting?
+[SEG0014] person_2 (PATIENT): I, I haven't had fever, passing no urine or vomiting, no.
+[SEG0015] person_1 (DOCTOR): So, is your urine normal, no changes?
+[SEG0016] person_2 (PATIENT): That's normal as far as I know.
+[SEG0017] person_1 (DOCTOR): Do you have any allergies to medicines, food, anything at all?
+[SEG0018] person_2 (PATIENT): Yes, eggs. I get stomach cramps.
+[SEG0019] person_1 (DOCTOR): Have you ever been under the knife?
+[SEG0020] person_2 (PATIENT): Yes, I had my thyroid operated on, a long time ago.
+[SEG0021] person_1 (DOCTOR): Are you on any tablets or medication?
+[SEG0022] person_2 (PATIENT): I take amlodipine, 5 milligrams, once a day.
+[SEG0023] person_1 (DOCTOR): Is there anything medical in your background?
+[SEG0024] person_2 (PATIENT): Yes, high blood pressure. I kept putting it off, which I know isn't sensible.
+[SEG0025] person_1 (DOCTOR): Mm. Okay, any relatives with health problems I should be aware of?
+[SEG0026] person_2 (PATIENT): My mother has diabetes.
+[SEG0027] person_1 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0028] person_2 (PATIENT): A beer or two most evenings, to be honest. I live with my family, my husband and two kids. I cycle to work most mornings.
+[SEG0029] person_3 (NURSE): Okay, so the vitals from earlier. Pulse is 106 beats a minute, blood pressure 100 over 59, temperature is 36.7 degrees.
+[SEG0030] person_1 (DOCTOR): Good, thank you.
+[SEG0031] person_1 (DOCTOR): Okay, I need to examine you for this.
+[SEG0032] person_1 (DOCTOR): Tell me if anything hurts.
+[SEG0033] person_1 (DOCTOR): Your skin is warm and a bit clammy.
+[SEG0034] person_1 (DOCTOR): Let me press here.
+[SEG0035] person_1 (DOCTOR): Capillary refill is normal.
+[SEG0036] person_1 (DOCTOR): Okay, finished. Okay, thinking it through, I think we're dealing with heat exhaustion with some dehydration at this stage. I'd like to arrange blood salts for dehydration. The result will help us decide whether anything more is needed. The treatment will be ORS, 1 sachet, three times a day, for two days. That should help with dehydration. Avoid the midday sun for a few days and keep a water bottle with you.
+[SEG0037] person_1 (DOCTOR): Let's plan a check in three days.
+[SEG0038] person_2 (PATIENT): Yes, I can do that.
+[SEG0039] person_1 (DOCTOR): That's everything from me. Any other questions?
+[SEG0040] person_2 (PATIENT): I appreciate it, doctor.
+
+JSON:

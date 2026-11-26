@@ -1,0 +1,79 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00396)
+[SEG0001] person_1 (PATIENT): So, morning. Nice to finally see you, doctor.
+[SEG0002] person_2 (DOCTOR): Not at all please sit. What's the problem?
+[SEG0003] person_3 (CAREGIVER): hello, doctor. I hope it's alright if I stay in for this
+[SEG0004] person_2 (DOCTOR): Absolutely, come and sit beside them.
+[SEG0005] person_4 (FAMILY_MEMBER): Right, it's a pounding headache, doctor. He didn't want to to come, but I insisted.
+[SEG0006] person_2 (DOCTOR): what's your current medication list?
+[SEG0007] person_1 (PATIENT): I'm on amlodipine, 5 milligrams, once a day
+[SEG0008] person_1 (PATIENT): It's a... um, I can't remember what it's called. It's a round yellow one.
+[SEG0009] person_2 (DOCTOR): Do you remember what it's for?
+[SEG0010] person_1 (PATIENT): for my migraines, I believe. My wife sets them out for me, I just take what I'm given. I'm on paracetamol, 500 milligrams, when needed
+[SEG0011] person_2 (DOCTOR): when did it begin?
+[SEG0012] person_1 (PATIENT): about two weeks, give or take
+[SEG0013] person_3 (CAREGIVER): It It was closer to three weeks doctor.
+[SEG0014] person_2 (DOCTOR): okay, so roughly two to three weeks. Is that right?
+[SEG0015] person_1 (PATIENT): Um I suppose so so yes.
+[SEG0016] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is what the pattern is what helps.
+[SEG0017] person_1 (PATIENT): Yes, loud noise. That makes it worse. I get some relief from sleep. I'd say on and off.
+[SEG0018] person_2 (DOCTOR): anything that tends to to go along with it?
+[SEG0019] person_1 (PATIENT): Sensitivity to light goes along with it, most of the time.
+[SEG0020] person_1 (PATIENT): um and the other thing I wanted to mention is that that I can't really—
+[SEG0021] person_4 (FAMILY_MEMBER): Tell the doctor about the other thing, that's what worries me.
+[SEG0022] person_1 (PATIENT): Well, I was getting to that!
+[SEG0023] person_2 (DOCTOR): that's fine one at a time i'll ask about everything
+[SEG0024] person_1 (PATIENT): hmm the sensitivity to light? That's been since yesterday
+[SEG0025] person_2 (DOCTOR): on a normal day, how strong is it?
+[SEG0026] person_1 (PATIENT): Moderate, really i've also had nausea, for two days
+[SEG0027] person_5 (UNKNOWN): Mm, that's what happened, yes.
+[SEG0028] person_2 (DOCTOR): let me check a a few things any neck stiffness, fever, double vision or slurred speech?
+[SEG0029] person_1 (PATIENT): No, no neck stiffness, no fever, no double vision. I did have vomiting at one point, but that went away on its own.
+[SEG0030] person_2 (DOCTOR): Any weakness in the arms or legs or loss of consciousness at all?
+[SEG0031] person_1 (PATIENT): no weakness in the arms or legs or loss of consciousness none of it
+[SEG0032] person_2 (DOCTOR): and your skin, any changes there?
+[SEG0033] person_1 (PATIENT): Nothing on the skin no.
+[SEG0034] person_2 (DOCTOR): alright do your parents or siblings have any long-term illnesses?
+[SEG0035] person_1 (PATIENT): My grandmother had breast cancer. My sister has epilepsy.
+[SEG0036] person_2 (DOCTOR): before I prescribe anything any allergies?
+[SEG0037] person_1 (PATIENT): hmm, there was some antibiotic, I was told I was allergic but I couldn't tell you what it was called or what it did
+[SEG0038] person_2 (DOCTOR): Any smoking?
+[SEG0039] person_1 (PATIENT): I've never smoked
+[SEG0040] person_2 (DOCTOR): Anything special about your diet?
+[SEG0041] person_1 (PATIENT): I try to avoid too much sugar
+[SEG0042] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0043] person_1 (PATIENT): I have high blood pressure.
+[SEG0044] person_2 (DOCTOR): hm, okay
+[SEG0045] person_1 (PATIENT): I've had migraines for about a year now
+[SEG0046] person_2 (DOCTOR): right, so high blood pressure is already on your record we'll keep that in mind today any previous surgeries?
+[SEG0047] person_1 (PATIENT): no, nothing like that
+[SEG0048] person_2 (DOCTOR): let me check your vitals now
+[SEG0049] person_2 (DOCTOR): Rest your hand here...
+[SEG0050] person_2 (DOCTOR): Okay: pulse 66, SpO2 97 percent on room air. And pressure 121 over 82, temp 36.5 degrees.
+[SEG0051] person_2 (DOCTOR): Shall we do the examination?
+[SEG0052] person_2 (DOCTOR): just relax, I'll be quick
+[SEG0053] person_2 (DOCTOR): Neck is supple, no stiffness at all.
+[SEG0054] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0055] person_2 (DOCTOR): Cranial nerves look normal, eye movements are full.
+[SEG0056] person_2 (DOCTOR): Let me just check something.
+[SEG0057] person_2 (DOCTOR): Power in all four limbs is normal.
+[SEG0058] person_2 (DOCTOR): Okay, finished. Let me tell you where I've got to. It fits best with a migraine pattern. Tension-type headache is still possible.
+[SEG0059] person_1 (PATIENT): What are the chances it's something bad?
+[SEG0060] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a migraine pattern. So to recap quickly. You've had a pounding headache and no weakness in the arms or legs or double vision.
+[SEG0061] person_1 (PATIENT): that's it yes
+[SEG0062] person_2 (DOCTOR): For this, domperidone, 10 milligrams, when nauseous, as needed. That should help with migraine nausea. I'll put all of this in writing so you don't have to remember it. I'll want another look in a month. Any last questions?
+[SEG0063] person_1 (PATIENT): Thanks, that was helpful.
+[SEG0064] person_2 (DOCTOR): safe journey home
+
+JSON:

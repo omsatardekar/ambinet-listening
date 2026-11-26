@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01064)
+[SEG0001] person_1 (PATIENT): morning doctor. Lovely to meet you
+[SEG0002] person_2 (DOCTOR): You're alright, take a seat. What can I do for you?
+[SEG0003] person_1 (PATIENT): it's my face drooping on one side, mostly my neighbour said I should get it looked at sorry, I know I'm rambling a bit
+[SEG0004] person_2 (DOCTOR): when did this begin?
+[SEG0005] person_1 (PATIENT): Uh it's been three weeks I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): is it a lot or only a little?
+[SEG0007] person_1 (PATIENT): well, about a four out of ten
+[SEG0008] person_2 (DOCTOR): Is it accompanied by anything?
+[SEG0009] person_1 (PATIENT): It usually comes with slurred speech. The slurred speech? That's been since yesterday. So, um, as for slurred speech, I'd say mild. There was a sudden headache, yes, but that went away.
+[SEG0010] person_2 (DOCTOR): Have you had your face drooping on one side before, or is this the the first time?
+[SEG0011] person_1 (PATIENT): I had a similar thing a couple of years ago. It went away.
+[SEG0012] person_2 (DOCTOR): let me check a few things. Any seizure, loss of consciousness or fever?
+[SEG0013] person_1 (PATIENT): no seizure, loss of consciousness or fever, none of it it
+[SEG0014] person_2 (DOCTOR): is your urine normal, no changes?
+[SEG0015] person_1 (PATIENT): nothing there, no
+[SEG0016] person_2 (DOCTOR): any allergies to tablets, food or anything in the environment?
+[SEG0017] person_1 (PATIENT): yes, cat fur i get wheezing
+[SEG0018] person_2 (DOCTOR): do you have any chronic illnesses?
+[SEG0019] person_1 (PATIENT): I've got an irregular heartbeat
+[SEG0020] person_2 (DOCTOR): Do you drink alcohol?
+[SEG0021] person_1 (PATIENT): I only drink at family occasions.
+[SEG0022] person_2 (DOCTOR): Do you smoke?
+[SEG0023] person_1 (PATIENT): I gave up cigarettes last spring.
+[SEG0024] person_2 (DOCTOR): how are your meals?
+[SEG0025] person_1 (PATIENT): I grab fast food at lunch most days
+[SEG0026] person_2 (DOCTOR): How active are you?
+[SEG0027] person_1 (PATIENT): I hardly move around during the day
+[SEG0028] person_2 (DOCTOR): What do you do during the day?
+[SEG0029] person_1 (PATIENT): I look after my grandchildren most days.
+[SEG0030] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0031] person_1 (PATIENT): Bisoprolol i take it 2.5 milligrams once a day for the heart rhythm
+[SEG0032] person_2 (DOCTOR): let me get the readings out of the way
+[SEG0033] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0034] person_2 (DOCTOR): okay: BMI works out to 31.5, pulse 90, temp 36.5 degrees and and BP is 144 over 96, weight 89 kilos, height 168 centimetres
+[SEG0035] person_2 (DOCTOR): Now I'm going to do a short physical check.
+[SEG0036] person_1 (PATIENT): sure thing
+[SEG0037] person_2 (DOCTOR): take a deep breath for me
+[SEG0038] person_2 (DOCTOR): Your right face droops your right arm is weak and your speech is slurred.
+[SEG0039] person_2 (DOCTOR): all finished, thank you. From what you've told me and what I found, the most likely explanation is a possible stroke, within the treatment window
+[SEG0040] person_1 (PATIENT): Right, I'm scared it's something bad. Is it?
+[SEG0041] person_2 (DOCTOR): nothing I've seen today points to an emergency it looks like a possible stroke, within the treatment window
+[SEG0042] person_2 (DOCTOR): let's get you seen by the stroke team, I'll arrange the letter
+[SEG0043] person_1 (PATIENT): Alright, thank you.
+[SEG0044] person_2 (DOCTOR): if the symptoms change, or you feel really unwell, please come to the emergency department have I covered everything you wanted?
+[SEG0045] person_1 (PATIENT): That's clear, thanks.
+[SEG0046] person_2 (DOCTOR): all the best
+
+JSON:

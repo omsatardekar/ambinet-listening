@@ -1,0 +1,69 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00351)
+[SEG0001] person_1 (DOCTOR): Morning! Make yourself comfortable.
+[SEG0002] person_2 (PATIENT): Hello. Is it okay if I sit here?
+[SEG0003] person_3 (CAREGIVER): Doctor, I'm just here to help with the details.
+[SEG0004] person_1 (DOCTOR): Absolutely, come and sit beside them. What seems to be the problem?
+[SEG0005] person_2 (PATIENT): I wanted to get trouble lifting my arm looked at.
+[SEG0006] person_1 (DOCTOR): Roughly when did it start? I'll explain everything as we go along.
+[SEG0007] person_2 (PATIENT): It's been two weeks, I'm fairly sure.
+[SEG0008] person_1 (DOCTOR): How bad is it, would you say?
+[SEG0009] person_2 (PATIENT): Mostly moderate.
+[SEG0010] person_2 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0011] person_3 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0012] person_2 (PATIENT): Oh, I was getting to that! So, I've also had pain in my right shoulder.
+[SEG0013] person_1 (DOCTOR): What's the pattern, is it there all day?
+[SEG0014] person_2 (PATIENT): I'd say on and off. I've also had pain at night when I lie on it, for about a month.
+[SEG0015] person_1 (DOCTOR): Is there anything that triggers it?
+[SEG0016] person_2 (PATIENT): I notice it more with lying on it. I've also had a click in the shoulder.
+[SEG0017] person_1 (DOCTOR): A few quick ones: numbness in the hand or fever?
+[SEG0018] person_2 (PATIENT): Oh, no, none of that at all.
+[SEG0019] person_1 (DOCTOR): So, have you had any neck pain or chest pain?
+[SEG0020] person_2 (PATIENT): I haven't had neck pain or chest pain, no.
+[SEG0021] person_1 (DOCTOR): Anything different when you pass water?
+[SEG0022] person_2 (PATIENT): No changes there.
+[SEG0023] person_1 (DOCTOR): Any previous surgeries?
+[SEG0024] person_2 (PATIENT): Just a knee arthroscopy, three years ago.
+[SEG0025] person_1 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0026] person_2 (PATIENT): No allergies.
+[SEG0027] person_1 (DOCTOR): Do you smoke?
+[SEG0028] person_2 (PATIENT): I've never smoked.
+[SEG0029] person_1 (DOCTOR): Who do you live with?
+[SEG0030] person_2 (PATIENT): I live with my family, my husband and two kids.
+[SEG0031] person_1 (DOCTOR): Have you got any chronic problems?
+[SEG0032] person_2 (PATIENT): I've got high blood pressure. I mean, uh, I've got diabetes. I thought it would sort itself out, but it hasn't. I've had migraines, yes.
+[SEG0033] person_1 (DOCTOR): Right, so migraines is already on your record. We'll keep that in mind today. Which tablets or creams or inhalers do you use?
+[SEG0034] person_2 (PATIENT): I'm on Glycomet, 500 milligrams, twice a day.
+[SEG0035] person_3 (CAREGIVER): Doctor, I think the last prescription for the Glycomet was 250 milligrams. We changed it at the last visit.
+[SEG0036] person_1 (DOCTOR): Right. Do you happen to have the current prescription here?
+[SEG0037] person_2 (PATIENT): Not with me. I'll bring it next time. So, I'm on something called suma... sumatriptan, 50 milligrams, maybe, when needed for my migraines.
+[SEG0038] person_1 (DOCTOR): Do you have the packet or the prescription with you?
+[SEG0039] person_2 (PATIENT): No, it's at home.
+[SEG0040] person_1 (DOCTOR): Before we go on, a few quick readings.
+[SEG0041] person_1 (DOCTOR): One second...
+[SEG0042] person_1 (DOCTOR): Okay: heart rate 69, pressure 113 over 78, weight 59 kilos, height 164 centimetres, temp 36.8 degrees, BMI works out to 21.9.
+[SEG0043] person_1 (DOCTOR): Let me have a look at you.
+[SEG0044] person_1 (DOCTOR): Stay still while I have a look.
+[SEG0045] person_1 (DOCTOR): Lifting the arm to the side is painful between sixty and a hundred twenty degrees.
+[SEG0046] person_1 (DOCTOR): Take your time, no rush.
+[SEG0047] person_1 (DOCTOR): Neck movements are full and don't reproduce it.
+[SEG0048] person_1 (DOCTOR): Okay, good, that's the examination.
+[SEG0049] person_1 (DOCTOR): Right, here's what I'm thinking. It fits best with a rotator cuff problem. I can't rule out a pinched nerve in the neck yet.
+[SEG0050] person_2 (PATIENT): Do you think it's serious?
+[SEG0051] person_1 (DOCTOR): I understand the worry. At the moment I'd say it's a rotator cuff problem, and we'll watch how it goes. We'll begin with paracetamol, 650 milligrams, three times a day, for five days. You take it by mouth. It's for shoulder pain. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0052] person_2 (PATIENT): Okay, I'll remember. Should I have an X-ray of the shoulder as well?
+[SEG0053] person_1 (DOCTOR): I wouldn't order it today. If anything changes, we'll reconsider. Thanks for coming in.
+[SEG0054] person_2 (PATIENT): All good here. Thank you.
+
+JSON:

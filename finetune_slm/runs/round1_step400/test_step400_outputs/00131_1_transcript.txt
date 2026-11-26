@@ -1,0 +1,72 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00131)
+[SEG0001] person_1 (PATIENT): Hello, doctor. Where would you like me?
+[SEG0002] person_2 (DOCTOR): No trouble at all, come in. What's been bothering you?
+[SEG0003] person_3 (CAREGIVER): Hmm, doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to have you here.
+[SEG0005] person_1 (PATIENT): Hmm, you know, I wanted to get it's got darker looked at.
+[SEG0006] person_2 (DOCTOR): Okay, how far back does it go?
+[SEG0007] person_1 (PATIENT): Probably three days. Yeah.
+[SEG0008] person_1 (PATIENT): Hmm, and the other thing I wanted to mention is that I can't really—
+[SEG0009] person_3 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0010] person_1 (PATIENT): I, I was getting to that!
+[SEG0011] person_2 (DOCTOR): So, that's fine, one at a time. I'll ask about everything. What about another new spot on your arm, have you noticed that?
+[SEG0012] person_1 (PATIENT): Yes, since Monday.
+[SEG0013] person_2 (DOCTOR): Have you had it's got darker before, or is this the first time?
+[SEG0014] person_1 (PATIENT): A bit, about six months ago. It settled by itself back then.
+[SEG0015] person_2 (DOCTOR): So, have you ever been under the knife?
+[SEG0016] person_1 (PATIENT): I mean, I had my gallbladder removed in 2016.
+[SEG0017] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0018] person_1 (PATIENT): Migraines, for about a year.
+[SEG0019] person_2 (DOCTOR): And then?
+[SEG0020] person_1 (PATIENT): Okay, so I've had acid reflux, yes.
+[SEG0021] person_2 (DOCTOR): Alright, migraines and acid reflux, that matches what I have here. Any allergies I should know about?
+[SEG0022] person_1 (PATIENT): Years back I got itching all over from sulfa drugs, so I stay away from it now.
+[SEG0023] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0024] person_1 (PATIENT): Hmm, um, I take something called suma... sumatriptan, 50 milligrams, maybe, when needed for my migraines.
+[SEG0025] person_2 (DOCTOR): Okay, did you happen to bring the box or the paperwork?
+[SEG0026] person_1 (PATIENT): Yeah, no, it's at home. Right, I'm on pantoprazole, 40 milligrams, before breakfast.
+[SEG0027] person_4 (FAMILY_MEMBER): It's meant to be before breakfast, though I don't see he take it every time.
+[SEG0028] person_2 (DOCTOR): Is there a family history of anything significant?
+[SEG0029] person_1 (PATIENT): My father had kidney stones.
+[SEG0030] person_2 (DOCTOR): Do you get any exercise?
+[SEG0031] person_1 (PATIENT): I walk for about half an hour most days.
+[SEG0032] person_2 (DOCTOR): Have you noticed fever, pain, history of sunburn or weight loss?
+[SEG0033] person_1 (PATIENT): No, no fever, no pain, no history of sunburn. I did have a bit of itching on it at one point, but that went away on its own.
+[SEG0034] person_2 (DOCTOR): So, have you had any history of skin cancer?
+[SEG0035] person_1 (PATIENT): Oh, not that I've noticed, no history of skin cancer.
+[SEG0036] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0037] person_1 (PATIENT): Uh, my heart's been fine, as far as I know.
+[SEG0038] person_2 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0039] person_1 (PATIENT): No, joints are fine.
+[SEG0040] person_5 (NURSE): Doctor, I've got the readings for you. Pulse 70, BP is 124 over 81, height 185 centimetres. Weight 89 kilos, respiratory rate 18, BMI works out to 26.0.
+[SEG0041] person_2 (DOCTOR): Good, thank you.
+[SEG0042] person_2 (DOCTOR): Let me have a look at you.
+[SEG0043] person_2 (DOCTOR): Take your time, no rush.
+[SEG0044] person_2 (DOCTOR): I can't feel any glands in the armpit.
+[SEG0045] person_2 (DOCTOR): Take your time, no rush.
+[SEG0046] person_2 (DOCTOR): It's about eight millimetres, with an uneven border and two shades of brown.
+[SEG0047] person_2 (DOCTOR): Okay, you can sit up. Let me tell you where I've got to. My working impression is a pigmented lesion that needs to be looked at more closely. I can't rule out a seborrhoeic keratosis yet. Let me repeat that back to make sure. You've had it's got darker for three days, and no pain or history of skin cancer.
+[SEG0048] person_1 (PATIENT): That's it, you know, yes.
+[SEG0049] person_2 (DOCTOR): I want a dermoscopy done, that's for changing mole. A skin biopsy is what I'd like next, for changing mole. Please use sunscreen and cover up in the midday sun, and check your skin once a month. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0050] person_1 (PATIENT): Right, will do.
+[SEG0051] person_2 (DOCTOR): Please don't wait if the symptoms get worse. That's when to be seen urgently.
+[SEG0052] person_1 (PATIENT): Okay, I understand.
+[SEG0053] person_2 (DOCTOR): Book a review in two weeks.
+[SEG0054] person_1 (PATIENT): Yeah, okay, see you then.
+[SEG0055] person_2 (DOCTOR): Is there anything you wanted to ask?
+[SEG0056] person_1 (PATIENT): Hmm, all good here. Thank you.
+[SEG0057] person_2 (DOCTOR): Bye for now.
+
+JSON:

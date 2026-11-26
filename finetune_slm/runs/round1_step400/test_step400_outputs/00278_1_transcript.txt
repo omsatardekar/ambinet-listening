@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00278)
+[SEG0001] person_1 (DOCTOR): Okay, welcome. Let's see what's going on.
+[SEG0002] person_2 (PATIENT): Hi, doctor.
+[SEG0003] person_1 (DOCTOR): tell me from the beginning, what's been happening?
+[SEG0004] person_2 (PATIENT): mainly I've been passing small clots. That's why I came
+[SEG0005] person_1 (DOCTOR): When did it begin?
+[SEG0006] person_2 (PATIENT): about... well, two days
+[SEG0007] person_1 (DOCTOR): Does it come along with anything else?
+[SEG0008] person_2 (PATIENT): Tiredness goes along with it, you know, most of the time. The Tiredness? That's been for five days.
+[SEG0009] person_1 (DOCTOR): any allergies I should know about?
+[SEG0010] person_2 (PATIENT): Okay, so I've never been told I have allergies.
+[SEG0011] person_1 (DOCTOR): A few questions about your lifestyle now.
+[SEG0012] person_2 (PATIENT): No, I don't smoke and never have. I play badminton on Sundays. Yes, I'm a nurse on a busy ward
+[SEG0013] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0014] person_2 (PATIENT): No, never had any surgery.
+[SEG0015] person_1 (DOCTOR): Right, is there anything medical in your background?
+[SEG0016] person_2 (PATIENT): I've had high blood pressure for about a year now.
+[SEG0017] person_1 (DOCTOR): Right, so high blood pressure is already on your record. We'll keep that in mind today.
+[SEG0018] person_1 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0019] person_2 (PATIENT): It's ramipril, 5 milligrams, every morning.
+[SEG0020] person_1 (DOCTOR): And recent injury, any of that?
+[SEG0021] person_2 (PATIENT): not at all, no recent injury
+[SEG0022] person_1 (DOCTOR): Have you had any difficulty passing urine, flank pain or pain on passing urine?
+[SEG0023] person_2 (PATIENT): no difficulty passing urine, flank pain or pain on passing urine, none of it
+[SEG0024] person_1 (DOCTOR): alright, how are your joints, any aches elsewhere?
+[SEG0025] person_2 (PATIENT): nothing else aches
+[SEG0026] person_1 (DOCTOR): So, is your chest okay generally?
+[SEG0027] person_2 (PATIENT): no, nothing there
+[SEG0028] person_1 (DOCTOR): Let's do your observations.
+[SEG0029] person_1 (DOCTOR): Hold still for me...
+[SEG0030] person_1 (DOCTOR): Okay: pulse 72, pressure 124 over 72, oxygen saturation is 97 percent.
+[SEG0031] person_1 (DOCTOR): Right, let me check a few things physically.
+[SEG0032] person_1 (DOCTOR): take your time, no rush
+[SEG0033] person_1 (DOCTOR): abdomen is soft, no masses, and no tenderness in the loins
+[SEG0034] person_1 (DOCTOR): thanks, please take a seat again
+[SEG0035] person_1 (DOCTOR): Having listened and examined, it's hard to say. Blood in the urine that needs full investigation is one possibility and a urine infection another, and I'd rather not commit yet. Let me just check I've got this right. You've been passing small clots for two days, and no pain on passing urine or recent injury.
+[SEG0036] person_2 (PATIENT): Yes, you've got it.
+[SEG0037] person_1 (DOCTOR): I want a urine test done, that's for haematuria. Keep drinking plenty of water, and let us know quickly if you pass clots or can't pass urine. Book a review in two weeks.
+[SEG0038] person_2 (PATIENT): Hmm, okay, see you then.
+[SEG0039] person_1 (DOCTOR): Alright, I'll see you out.
+[SEG0040] person_2 (PATIENT): Thanks, that was helpful.
+
+JSON:

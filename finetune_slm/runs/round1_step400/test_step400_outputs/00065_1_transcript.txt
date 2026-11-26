@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00065)
+[SEG0001] person_1 (PATIENT): Hi there, is it alright if I come in now?
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_3 (FAMILY_MEMBER): Good morning, doctor. I came along to help out.
+[SEG0004] person_2 (DOCTOR): That's fine, sit down. We'll go through it together.
+[SEG0005] person_1 (PATIENT): Doctor, it's fever and chills. It's getting on my nerves now.
+[SEG0006] person_4 (NURSE): Doctor, I've got the readings for you. Pressure 129 over 81, oxygen saturation is 94 percent, respiratory rate 23. Pulse is 100 beats a minute.
+[SEG0007] person_2 (DOCTOR): Good, thank you. When did you first notice it?
+[SEG0008] person_1 (PATIENT): Ever since... since last Tuesday, really.
+[SEG0009] person_2 (DOCTOR): How much is it bothering you?
+[SEG0010] person_1 (PATIENT): Pretty severe, if I'm being honest. Oh, and a cough with phlegm. Oh, about cough with phlegm, yes, deep breaths. That makes it worse. I've also had shortness of breath, for about two weeks. Yeah, I've also been feeling very weak, for one week. About feeling very weak, a six out of ten, I suppose.
+[SEG0011] person_2 (DOCTOR): Okay, keep going. A few quick ones: coughing up blood, confusion or leg swelling?
+[SEG0012] person_1 (PATIENT): So, no coughing up blood, confusion or leg swelling, none of it.
+[SEG0013] person_2 (DOCTOR): Any palpitations?
+[SEG0014] person_1 (PATIENT): I haven't noticed any palpitations.
+[SEG0015] person_2 (DOCTOR): Any vomiting?
+[SEG0016] person_1 (PATIENT): Nope, um, no vomiting.
+[SEG0017] person_3 (FAMILY_MEMBER): Actually, doctor, I did notice vomiting. She doesn't always say.
+[SEG0018] person_1 (PATIENT): Yeah, no, I don't think I did. Maybe a little, I'm not sure.
+[SEG0019] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. What about your tummy and bowels, anything unusual there?
+[SEG0020] person_1 (PATIENT): No, that side's been fine.
+[SEG0021] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0022] person_1 (PATIENT): Hmm, uh, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0023] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0024] person_1 (PATIENT): I have COPD, for two years.
+[SEG0025] person_2 (DOCTOR): Anything more?
+[SEG0026] person_1 (PATIENT): I've got diabetes. I've had high blood pressure, yes. I've got heart disease.
+[SEG0027] person_2 (DOCTOR): Go on. Yes, COPD is known to us, good to have that clear. Do you live alone?
+[SEG0028] person_1 (PATIENT): Yes, I live on my own.
+[SEG0029] person_2 (DOCTOR): How's your diet?
+[SEG0030] person_1 (PATIENT): I'm mostly vegetarian.
+[SEG0031] person_2 (DOCTOR): What do you do for work?
+[SEG0032] person_1 (PATIENT): I work in an office, mostly sitting at a desk.
+[SEG0033] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0034] person_3 (FAMILY_MEMBER): She takes Tiotropium inhaler, once a day for my chest. I mean, she is on glimepiride, 2 milligrams, before breakfast, I give it to her. Yeah, she is on amlodipine, 5 milligrams, once a day for my pressure, I give it to her. She takes aspirin, 75 milligrams, once a day for my heart.
+[SEG0035] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0036] person_1 (PATIENT): Oh, my grandmother had breast cancer.
+[SEG0037] person_2 (DOCTOR): Have you ever been under the knife?
+[SEG0038] person_1 (PATIENT): Yeah, I had a stent put in my heart two years ago.
+[SEG0039] person_2 (DOCTOR): Putting together what you've described, this looks most like a possible pneumonia on the right side. That's my thinking for now, and it may change as we learn more. Pleurisy is still possible.
+[SEG0040] person_4 (NURSE): Doctor, I did a chest X-ray before they came in, the result's on your screen.
+[SEG0041] person_2 (DOCTOR): Thanks, I'll check it. Blood tests is what I'd like next, for infection.
+[SEG0042] person_1 (PATIENT): Mm, okay.
+[SEG0043] person_2 (DOCTOR): Let's use paracetamol, 500 milligrams, every six hours if needed, for three days. You take it by mouth. It's for fever and body aches. What I'm giving you is amoxicillin-clavulanate, 625 milligrams, three times a day, for five days. You take it by mouth. That's for chest infection. Rest and fluids, and finish every dose of the antibiotic. Take care, and call us if anything changes.
+[SEG0044] person_1 (PATIENT): That's everything I wanted to ask. Thank you.
+
+JSON:

@@ -1,0 +1,71 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02422)
+[SEG0001] person_1 (DOCTOR): Morning, come on through.
+[SEG0002] person_2 (PATIENT): afternoon, um, is this seat fine?
+[SEG0003] person_3 (CAREGIVER): Doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_1 (DOCTOR): That's fine, sit down. We'll go through it together. How are things, what's been happening?
+[SEG0005] person_3 (CAREGIVER): Right, doctor, it's spots on my forehead and chin. That's what we're worried about.
+[SEG0006] person_1 (DOCTOR): How many days or weeks has it been?
+[SEG0007] person_2 (PATIENT): I've had it since Friday.
+[SEG0008] person_1 (DOCTOR): How troublesome is it day to day?
+[SEG0009] person_2 (PATIENT): I'd call it severe.
+[SEG0010] person_1 (DOCTOR): I follow. Is there anything else with it?
+[SEG0011] person_2 (PATIENT): A few blackheads goes along with it, most of the time.
+[SEG0012] person_2 (PATIENT): I was just going to say that the main thing is—
+[SEG0013] person_4 (NURSE): sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0014] person_1 (DOCTOR): Later, thanks. Please go on.
+[SEG0015] person_2 (PATIENT): Okay, so the few blackheads? That's been for two weeks.
+[SEG0016] person_1 (DOCTOR): nothing like painful cysts?
+[SEG0017] person_2 (PATIENT): No, I haven't had any painful cysts.
+[SEG0018] person_1 (DOCTOR): Did you get irregular periods, scarring or low mood?
+[SEG0019] person_2 (PATIENT): Oh, no, no irregular periods, no scarring, no low mood. I did have oily skin at one point, but that went away on its own.
+[SEG0020] person_1 (DOCTOR): Right, any change in your bowel habit or your stomach generally?
+[SEG0021] person_2 (PATIENT): Bowels are regular, nothing odd.
+[SEG0022] person_1 (DOCTOR): Is your urine normal, no changes?
+[SEG0023] person_2 (PATIENT): No, that's all fine.
+[SEG0024] person_1 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0025] person_2 (PATIENT): My uncle has high cholesterol. My mother has an underactive thyroid.
+[SEG0026] person_1 (DOCTOR): anything in your past medical history I should know?
+[SEG0027] person_2 (PATIENT): I have asthma. Thin bones, for two years.
+[SEG0028] person_1 (DOCTOR): Right, is that that everything?
+[SEG0029] person_2 (PATIENT): High blood pressure, for two years.
+[SEG0030] person_1 (DOCTOR): Any previous surgeries?
+[SEG0031] person_2 (PATIENT): well, uh, no, not at all
+[SEG0032] person_1 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0033] person_2 (PATIENT): well, I take Foracort inhaler, twice a day. It's, It's alendronate, 70 milligrams, once a week for my bones
+[SEG0034] person_4 (NURSE): doctor, our chart from the last visit lists it as 35 milligrams
+[SEG0035] person_1 (DOCTOR): Okay. Have you got the newest prescription or the box with you?
+[SEG0036] person_2 (PATIENT): Not with me. I'll bring it next time. I'm, I'm on telmisartan, 40 milligrams, once a day for my pressure. So, I'm on a face wash, twice a day.
+[SEG0037] person_1 (DOCTOR): Right, do you live by yourself?
+[SEG0038] person_2 (PATIENT): No, I share a house with my brother
+[SEG0039] person_1 (DOCTOR): Okay, how active are you?
+[SEG0040] person_2 (PATIENT): I hardly move around during the day.
+[SEG0041] person_1 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0042] person_2 (PATIENT): I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0043] person_4 (NURSE): Doctor, I've got the readings for you. Pressure 123 over 79, temperature 36.5, saturation 98 percent, heart rate 85.
+[SEG0044] person_1 (DOCTOR): So, good, thank you.
+[SEG0045] person_1 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0046] person_2 (PATIENT): Sure thing.
+[SEG0047] person_1 (DOCTOR): does that hurt?
+[SEG0048] person_1 (DOCTOR): There are small blackheads and a few red spots with no deep cysts.
+[SEG0049] person_1 (DOCTOR): That's all I needed to check.
+[SEG0050] person_1 (DOCTOR): right, here's what I'm thinking this looks most like mild acne what I'm giving you is benzoyl peroxide gel, 5%, once a day, eight weeks that's for acne wash gently twice a day and don't squeeze the spots and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose one warning sign to remember: the symptoms get worse in that case don't wait
+[SEG0051] person_2 (PATIENT): I understand.
+[SEG0052] person_1 (DOCTOR): I'd like you back in eight weeks.
+[SEG0053] person_5 (CLINICAL_STAFF): I'll book your follow-up at the the front desk on your way out.
+[SEG0054] person_1 (DOCTOR): Is there anything you'd like me to go over again?
+[SEG0055] person_2 (PATIENT): Hmm, okay, that makes sense. Thanks for explaining.
+[SEG0056] person_1 (DOCTOR): See you soon.
+
+JSON:

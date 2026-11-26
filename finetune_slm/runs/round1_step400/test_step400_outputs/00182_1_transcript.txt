@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00182)
+[SEG0001] person_1 (DOCTOR): Evening. Long day, I imagine. Sit down.
+[SEG0002] person_2 (PATIENT): Thank you.
+[SEG0003] person_1 (DOCTOR): Okay, how can I help you today?
+[SEG0004] person_2 (PATIENT): It's cramping pain in the lower tummy. I thought I'd wait, but it hasn't gone.
+[SEG0005] person_1 (DOCTOR): Is there anything that triggers it?
+[SEG0006] person_2 (PATIENT): It's worse with stress and certain foods. I've had alternating constipation and loose stools too, for about three months. Oh, and bloating. That's been about the same, six months.
+[SEG0007] person_1 (DOCTOR): Let me check your vitals now.
+[SEG0008] person_1 (DOCTOR): Almost there...
+[SEG0009] person_1 (DOCTOR): Okay: heart rate 84, oxygen saturation is 98 percent, BP is 118 over 81, respiratory rate 18.
+[SEG0010] person_1 (DOCTOR): Come over here and I'll have a look.
+[SEG0011] person_1 (DOCTOR): Tell me if anything hurts.
+[SEG0012] person_1 (DOCTOR): Soft tummy, a bit tender on the left lower side, no masses.
+[SEG0013] person_1 (DOCTOR): That's all I need, thank you.
+[SEG0014] person_1 (DOCTOR): Alright, and what about night-time diarrhoea, anaemia, fever or blood in the stool?
+[SEG0015] person_2 (PATIENT): No night-time diarrhoea, anaemia, fever or blood in the stool, none of it.
+[SEG0016] person_1 (DOCTOR): Is your urine normal, no changes?
+[SEG0017] person_2 (PATIENT): Hmm, no, that's all fine.
+[SEG0018] person_1 (DOCTOR): Right, any procedures or operations?
+[SEG0019] person_2 (PATIENT): I had a knee arthroscopy three years ago. I did try to ignore it for a while.
+[SEG0020] person_1 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0021] person_2 (PATIENT): No allergies.
+[SEG0022] person_1 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0023] person_2 (PATIENT): My father had kidney stones.
+[SEG0024] person_1 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0025] person_2 (PATIENT): Right, it's escitalopram, 10 milligrams, once a day.
+[SEG0026] person_1 (DOCTOR): Since when have you been taking it?
+[SEG0027] person_2 (PATIENT): Two months now.
+[SEG0028] person_1 (DOCTOR): And alcohol, how much?
+[SEG0029] person_2 (PATIENT): I don't drink at all.
+[SEG0030] person_1 (DOCTOR): Do you work?
+[SEG0031] person_2 (PATIENT): I run a small shop, so I'm on my feet a lot.
+[SEG0032] person_1 (DOCTOR): And what do you usually eat?
+[SEG0033] person_2 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0034] person_1 (DOCTOR): Are you active at all?
+[SEG0035] person_2 (PATIENT): Barely, I'm mostly sedentary these days.
+[SEG0036] person_1 (DOCTOR): Any long-term health problems I should know about?
+[SEG0037] person_2 (PATIENT): I have anxiety, for nearly five years.
+[SEG0038] person_1 (DOCTOR): And then?
+[SEG0039] person_1 (DOCTOR): Having listened and examined, this is probably irritable bowel syndrome as a working diagnosis. Another possibility is coeliac disease.
+[SEG0040] person_2 (PATIENT): So, uh, is this going to go away?
+[SEG0041] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like irritable bowel syndrome as a working diagnosis, but I'd like to confirm. I'd like to arrange a coeliac test for bloating. It's a routine test and it'll give us a much clearer picture. I'm going to order a stool calprotectin, for bowel symptoms.
+[SEG0042] person_1 (DOCTOR): Let's use mebeverine, 135 milligrams, three times a day, for four weeks. You take it by mouth. That's for abdominal cramps. It's a commonly used medicine and most people tolerate it well.
+[SEG0043] person_2 (PATIENT): Okay, thank you.
+[SEG0044] person_1 (DOCTOR): Regular meals and a bit more fibre, and don't rush your toilet time. Note down what you ate before the bad days, it often reveals a pattern. If the symptoms get worse, or you feel really unwell, please come to the emergency department.
+[SEG0045] person_2 (PATIENT): Yes, I'll watch for that.
+[SEG0046] person_1 (DOCTOR): Take care, and call us if anything changes.
+[SEG0047] person_2 (PATIENT): Alright, thanks. Bye for now.
+
+JSON:

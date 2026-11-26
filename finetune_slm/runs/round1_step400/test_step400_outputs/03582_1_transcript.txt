@@ -1,0 +1,69 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03582)
+[SEG0001] person_1 (PATIENT): Doctor, you know, hi, where would you like me to put my coat?
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): I've been feeling tired and run down.
+[SEG0004] person_2 (DOCTOR): Are you taking anything regularly, including from the the pharmacy?
+[SEG0005] person_1 (PATIENT): I take febuxostat, 80 milligrams, once a day.
+[SEG0006] person_3 (NURSE): doctor, our chart from the last visit lists it as 160 milligrams
+[SEG0007] person_2 (DOCTOR): I see. Is the most recent prescription on you?
+[SEG0008] person_1 (PATIENT): ah, no, I left it at home. It's furosemide, 40 milligrams, every morning
+[SEG0009] person_2 (DOCTOR): when did this begin? These questions might sound routine, but they matter
+[SEG0010] person_1 (PATIENT): Mm, it's been like this since this morning.
+[SEG0011] person_2 (DOCTOR): does anything else come with it?
+[SEG0012] person_1 (PATIENT): Night sweats goes along with it, most of the time
+[SEG0013] person_2 (DOCTOR): Any back pain that doesn't go away as well?
+[SEG0014] person_1 (PATIENT): Mm, yes. I'd been losing a bit of weight, but that went away.
+[SEG0015] person_2 (DOCTOR): Any leg weakness or high fever?
+[SEG0016] person_1 (PATIENT): No leg weakness or high fever, none of it.
+[SEG0017] person_2 (DOCTOR): have you had any breathlessness or chest pain?
+[SEG0018] person_1 (PATIENT): No, no breathlessness or chest pain.
+[SEG0019] person_2 (DOCTOR): So, is your urine normal, no changes?
+[SEG0020] person_1 (PATIENT): that's normal as far as I know
+[SEG0021] person_2 (DOCTOR): Have you got any known allergies?
+[SEG0022] person_1 (PATIENT): yes, diclofenac, it gives me swelling of my lips. Plasters. I come out in... well, a red itchy rash
+[SEG0023] person_2 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0024] person_1 (PATIENT): Yes, thin bones. I've got gout.
+[SEG0025] person_2 (DOCTOR): Sure.
+[SEG0026] person_1 (PATIENT): I've got heart failure.
+[SEG0027] person_2 (DOCTOR): yes, heart failure is known to us, good to to have that clear. Are there any illnesses in your family?
+[SEG0028] person_1 (PATIENT): my sister had breast cancer. My grandfather had a stroke
+[SEG0029] person_2 (DOCTOR): What about alcohol?
+[SEG0030] person_1 (PATIENT): Nothing, I'm teetotal.
+[SEG0031] person_2 (DOCTOR): How about smoking?
+[SEG0032] person_1 (PATIENT): I gave up cigarettes last spring.
+[SEG0033] person_2 (DOCTOR): tell me about your eating
+[SEG0034] person_1 (PATIENT): I drink a lot of tea and snack through the day.
+[SEG0035] person_2 (DOCTOR): Are you on your own at home?
+[SEG0036] person_1 (PATIENT): I live with my elderly mother.
+[SEG0037] person_2 (DOCTOR): anything you do to stay fit?
+[SEG0038] person_1 (PATIENT): I do a yoga class on Thursdays.
+[SEG0039] person_3 (NURSE): Doctor, I've got the readings for you. Temperature 38.2, weight 60 kilos. Pulse is 98 beats a minute, height 182 centimetres, BMI works out to 18.1, blood pressure 120 over 77.
+[SEG0040] person_2 (DOCTOR): Okay, noted.
+[SEG0041] person_2 (DOCTOR): Right, I'd like to check you over now, if that's alright.
+[SEG0042] person_1 (PATIENT): Sure thing.
+[SEG0043] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0044] person_2 (DOCTOR): There is a soft heart murmur you've not had before and a small tender spot on the fingertip.
+[SEG0045] person_2 (DOCTOR): all finished, thank you let me tell you where I've got to i'm honestly not certain yet it could be possible infection of the heart valve causing back and general symptoms, or it might be a muscle strain
+[SEG0046] person_1 (PATIENT): What are the odds it's serious?
+[SEG0047] person_2 (DOCTOR): it's reasonable to be concerned, but right now possible infection of the heart valve causing back and general symptoms is my leading thought, not anything worse
+[SEG0048] person_2 (DOCTOR): Let's get blood cultures, for possible endocarditis. I want an echocardiogram done, that's for new murmur. Let's get an MRI of the spine, for persistent back pain with systemic symptoms. This is not an ordinary back strain, so I want tests today. We'll refer you to the medical admissions unit. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0049] person_1 (PATIENT): Okay, um, I'll look out for that.
+[SEG0050] person_2 (DOCTOR): come back or go to emergency straight away if the symptoms get worse
+[SEG0051] person_1 (PATIENT): um, okay, I'll look out for that
+[SEG0052] person_2 (DOCTOR): I'll want another look straight away. That's all from me. Any questions?
+[SEG0053] person_1 (PATIENT): Okay, so great, thank you for your help.
+[SEG0054] person_2 (DOCTOR): Take care now.
+
+JSON:

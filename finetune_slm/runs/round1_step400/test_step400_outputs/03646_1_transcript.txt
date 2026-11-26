@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03646)
+[SEG0001] person_1 (DOCTOR): Hello, sorry about the delay, do sit. What's the problem?
+[SEG0002] person_2 (PATIENT): So the thing is, I've got tingling in my feet.
+[SEG0003] person_1 (DOCTOR): Has this been going on for long?
+[SEG0004] person_2 (PATIENT): For ten days, I'd say.
+[SEG0005] person_1 (DOCTOR): Rate it for me, mild, moderate or severe?
+[SEG0006] person_2 (PATIENT): A four out of ten, I suppose.
+[SEG0007] person_1 (DOCTOR): Has there been being unsteady too?
+[SEG0008] person_2 (PATIENT): Yes, actually.
+[SEG0009] person_1 (DOCTOR): How troublesome is it day to day?
+[SEG0010] person_2 (PATIENT): Maybe a eight out of ten on a bad day.
+[SEG0011] person_1 (DOCTOR): Yes, carry on.
+[SEG0012] person_1 (DOCTOR): Do you have any long-term conditions?
+[SEG0013] person_2 (PATIENT): I've had asthma for nearly five years now.
+[SEG0014] person_1 (DOCTOR): Any previous surgeries?
+[SEG0015] person_2 (PATIENT): No, never.
+[SEG0016] person_1 (DOCTOR): Any allergies to tablets, food or anything in the environment?
+[SEG0017] person_2 (PATIENT): I don't think I have any, no.
+[SEG0018] person_1 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0019] person_2 (PATIENT): My son has asthma.
+[SEG0020] person_1 (DOCTOR): Let's run through your medicines.
+[SEG0021] person_2 (PATIENT): Foracort inhaler. I take it twice a day for my asthma.
+[SEG0022] person_1 (DOCTOR): So, a few questions about your lifestyle now.
+[SEG0023] person_2 (PATIENT): I work in accounts at a hospital. I walk the dog every morning. I grab fast food at lunch most days.
+[SEG0024] person_1 (DOCTOR): Okay, have you had any weight loss, back pain or diarrhoea?
+[SEG0025] person_2 (PATIENT): No, not a single one.
+[SEG0026] person_1 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0027] person_2 (PATIENT): No, skin's been fine.
+[SEG0028] person_1 (DOCTOR): Is your mobility otherwise okay?
+[SEG0029] person_2 (PATIENT): No, joints are fine.
+[SEG0030] person_1 (DOCTOR): Let me quickly check your readings.
+[SEG0031] person_1 (DOCTOR): Okay, this won't take long...
+[SEG0032] person_1 (DOCTOR): Okay: height 179 centimetres, weight 62 kilos, blood pressure 127 over 80, BMI works out to 19.4, pulse 68, temp 36.8 degrees.
+[SEG0033] person_1 (DOCTOR): May I examine you now?
+[SEG0034] person_1 (DOCTOR): Raise your arm for me.
+[SEG0035] person_1 (DOCTOR): The feeling in your feet is reduced and your balance with the eyes closed is poor.
+[SEG0036] person_1 (DOCTOR): All finished, thank you.
+[SEG0037] person_1 (DOCTOR): Right, here's what I'm thinking. The most likely explanation is a possible gut-related cause of nerve symptoms.
+[SEG0038] person_2 (PATIENT): Do you think it's something serious?
+[SEG0039] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a possible gut-related cause of nerve symptoms, but I'd like to confirm. Let me just check I've got this right. You've had tingling in your feet for ten days, and no weight loss or diarrhoea.
+[SEG0040] person_2 (PATIENT): That's it, yes.
+[SEG0041] person_1 (DOCTOR): I'd like to arrange a coeliac blood test for neuropathy.
+[SEG0042] person_2 (PATIENT): When would that take place?
+[SEG0043] person_1 (DOCTOR): I want a B12 level done, that's for neuropathy. Please keep eating gluten normally until the coeliac test is done. If it hasn't settled next month, we'd think about an HbA1c, but not now. Come back after the results. That's all from me. Any questions?
+[SEG0044] person_2 (PATIENT): I think I understand everything. Thanks.
+[SEG0045] person_1 (DOCTOR): See you soon.
+
+JSON:

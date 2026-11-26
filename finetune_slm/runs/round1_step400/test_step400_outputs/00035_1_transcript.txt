@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00035)
+[SEG0001] person_1 (PATIENT): Hi there, is it alright if I come in now?
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): Yeah, it's a slight slur in my speech. I don't know what's causing it. I didn't want to make a fuss, you know.
+[SEG0004] person_2 (DOCTOR): And when did that start?
+[SEG0005] person_1 (PATIENT): For ten days, I'd say.
+[SEG0006] person_2 (DOCTOR): So, how bad is it, would you say?
+[SEG0007] person_1 (PATIENT): I'd say severe.
+[SEG0008] person_2 (DOCTOR): Any palpitations, chest pain or confusion at all?
+[SEG0009] person_1 (PATIENT): I haven't had palpitations, chest pain or confusion, no.
+[SEG0010] person_2 (DOCTOR): Okay, is your mobility otherwise okay?
+[SEG0011] person_1 (PATIENT): I move fine otherwise.
+[SEG0012] person_2 (DOCTOR): Okay, any medical conditions, anything you've been treated for?
+[SEG0013] person_1 (PATIENT): No, uh, none that I know of.
+[SEG0014] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0015] person_1 (PATIENT): No, no allergies to anything.
+[SEG0016] person_2 (DOCTOR): Have you had any surgery before?
+[SEG0017] person_1 (PATIENT): Just a lump removed from my back, years ago.
+[SEG0018] person_2 (DOCTOR): Who's at home with you?
+[SEG0019] person_1 (PATIENT): It's just me and my wife at home now.
+[SEG0020] person_2 (DOCTOR): Tell me about your work.
+[SEG0021] person_1 (PATIENT): I'm a software engineer, so I'm at a screen all day.
+[SEG0022] person_2 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0023] person_1 (PATIENT): Uh, you know, my father had a heart attack.
+[SEG0024] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0025] person_1 (PATIENT): It's aspirin, 75 milligrams, once a day.
+[SEG0026] person_2 (DOCTOR): Let me measure a few things.
+[SEG0027] person_2 (DOCTOR): Hold still for me...
+[SEG0028] person_2 (DOCTOR): Okay: heart rate 79, temp 36.7 degrees, pressure 167 over 90. And oxygen saturation is 96 percent.
+[SEG0029] person_1 (PATIENT): Is that normal?
+[SEG0030] person_2 (DOCTOR): That's fine, we'll come to it.
+[SEG0031] person_2 (DOCTOR): Let me tell you where I've got to. It points towards a possible mini-stroke, which we need to investigate urgently.
+[SEG0032] person_1 (PATIENT): I've been thinking the worst, uh, to be honest. Is it bad?
+[SEG0033] person_2 (DOCTOR): I can't promise yet, but most people with a possible mini-stroke, which we need to investigate urgently do well once it's treated properly. Just to be sure I understood. You've had a slight slur in your speech for ten days, severe, and no palpitations or chest pain.
+[SEG0034] person_1 (PATIENT): So, that's what happened, yes.
+[SEG0035] person_2 (DOCTOR): I'd like to arrange an ECG for possible stroke. I'd rather check than guess, and this is the quickest way to know more. Don't drive for now, and bring someone with you to the next visit. If the numbness, weakness or speech problem returns, that's the point to come in urgently. We'll catch up after the results are back.
+[SEG0036] person_1 (PATIENT): Okay.
+[SEG0037] person_2 (DOCTOR): Alright, take care, and call us if anything changes.
+[SEG0038] person_1 (PATIENT): Thanks so much, doctor.
+[SEG0039] person_2 (DOCTOR): All the best.
+
+JSON:

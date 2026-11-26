@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00447)
+[SEG0001] person_1 (DOCTOR): Good morning, how are you doing today?
+[SEG0002] person_2 (PATIENT): Hello, doctor. Thanks for seeing me.
+[SEG0003] person_1 (DOCTOR): Weather's turned, hasn't it?
+[SEG0004] person_2 (PATIENT): it has i got caught in the rain walking over
+[SEG0005] person_1 (DOCTOR): so, what was the main thing you wanted to talk about?
+[SEG0006] person_2 (PATIENT): Well, I've been having yellow eyes. I told myself I'd wait and see, and here I am.
+[SEG0007] person_1 (DOCTOR): how long have you had it?
+[SEG0008] person_2 (PATIENT): It's been going on for two weeks. I've had pale stools too, for one week.
+[SEG0009] person_1 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0010] person_2 (PATIENT): No allergies.
+[SEG0011] person_1 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0012] person_2 (PATIENT): Uh, no, none that I know of.
+[SEG0013] person_1 (DOCTOR): Are you on any regular medication?
+[SEG0014] person_2 (PATIENT): No, nothing regular.
+[SEG0015] person_1 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0016] person_2 (PATIENT): I'm mostly vegetarian. Barely, I'm mostly sedentary these days. Retired. I stopped a few years back.
+[SEG0017] person_1 (DOCTOR): Did you get black stools, confusion or fever?
+[SEG0018] person_2 (PATIENT): I haven't had black stools, confusion or fever, no
+[SEG0019] person_1 (DOCTOR): any vomiting blood?
+[SEG0020] person_2 (PATIENT): Definitely no vomiting blood.
+[SEG0021] person_1 (DOCTOR): Okay, has your heart given you any trouble?
+[SEG0022] person_2 (PATIENT): no, nothing with my heart
+[SEG0023] person_1 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0024] person_2 (PATIENT): nothing else aches
+[SEG0025] person_3 (NURSE): Here are the numbers, doctor. Height 181 centimetres, weight 68 kilos. Saturation 99 percent, pulse is 77 beats a minute, BP is 115 over 74, temperature is 36.6 degrees, respiratory rate 14.
+[SEG0026] person_1 (DOCTOR): Good, thank you.
+[SEG0027] person_1 (DOCTOR): Okay, a quick examination now.
+[SEG0028] person_1 (DOCTOR): let me press here
+[SEG0029] person_1 (DOCTOR): Liver edge is just palpable and mildly tender.
+[SEG0030] person_1 (DOCTOR): Okay, finished.
+[SEG0031] person_1 (DOCTOR): Okay, so my impression is this: I'm honestly not certain yet. It could be jaundice with a cause we still need to find, or it might be hepatitis. I'd like to arrange an ultrasound of the abdomen for jaundice. That will help us see what's going on underneath and decide the next step. I'll request a hepatitis screen, it'll help with jaundice. It's a routine test and it'll give us a much clearer picture.
+[SEG0032] person_1 (DOCTOR): please avoid alcohol completely and don't take any painkillers except paracetamol, and not much of that i'm going to send a referral to a liver specialist come back or go to emergency straight away if you vomit blood or become drowsy or confused
+[SEG0033] person_2 (PATIENT): That's clear.
+[SEG0034] person_1 (DOCTOR): Book a review in three days.
+[SEG0035] person_2 (PATIENT): Fine.
+[SEG0036] person_1 (DOCTOR): Okay, I think we're finished. Is everything clear?
+[SEG0037] person_2 (PATIENT): No questions. Thank you.
+
+JSON:

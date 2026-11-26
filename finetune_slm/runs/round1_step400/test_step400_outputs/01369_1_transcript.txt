@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01369)
+[SEG0001] person_1 (DOCTOR): Good morning, grab a a seat.
+[SEG0002] person_2 (PATIENT): good morning, doctor, thank you
+[SEG0003] person_1 (DOCTOR): did the receptionist sort you out quickly?
+[SEG0004] person_2 (PATIENT): yes, she was lovely about it it
+[SEG0005] person_1 (DOCTOR): how are things, what's been happening?
+[SEG0006] person_2 (PATIENT): honestly, it's slurred speech, and my family pushed me to come
+[SEG0007] person_1 (DOCTOR): can you tell me when it first started?
+[SEG0008] person_2 (PATIENT): it's been like this since last night
+[SEG0009] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0010] person_2 (PATIENT): oh, no, not at all
+[SEG0011] person_1 (DOCTOR): do you have any medical conditions I should know about?
+[SEG0012] person_2 (PATIENT): no, you know, nothing I can think of
+[SEG0013] person_1 (DOCTOR): Have you got any known allergies?
+[SEG0014] person_2 (PATIENT): no allergies at all
+[SEG0015] person_1 (DOCTOR): Is there any regular medication you use?
+[SEG0016] person_2 (PATIENT): no, nothing at the moment
+[SEG0017] person_1 (DOCTOR): Do you live by yourself?
+[SEG0018] person_2 (PATIENT): No, I share a house with my brother
+[SEG0019] person_1 (DOCTOR): How are your meals?
+[SEG0020] person_2 (PATIENT): I grab fast food at lunch most days
+[SEG0021] person_1 (DOCTOR): any seizure fever or loss of consciousness?
+[SEG0022] person_2 (PATIENT): none of those, no
+[SEG0023] person_1 (DOCTOR): Has your heart given you any trouble?
+[SEG0024] person_2 (PATIENT): No, that's been fine.
+[SEG0025] person_1 (DOCTOR): Let's start with the basic checks.
+[SEG0026] person_1 (DOCTOR): bear with me while this finishes..
+[SEG0027] person_1 (DOCTOR): okay: height 175 centimetres, respiratory rate 15. And heart rate 89, temp 36.4 degrees, weight 96 kilos, blood pressure 144 over 103.
+[SEG0028] person_2 (PATIENT): Is that okay?
+[SEG0029] person_1 (DOCTOR): Alright, I'll come back to the numbers. Going by what you've described, it's hard to say. A possible stroke, within the treatment window is one possibility and a migraine with aura another, and I'd rather not commit yet.
+[SEG0030] person_2 (PATIENT): let me think, I'm scared it's something bad is it?
+[SEG0031] person_1 (DOCTOR): I can't promise yet but most people with a possible stroke, within the treatment window do well once it's treated properly. I think an urgent CT scan of the head makes sense here for possible stroke. I want a blood sugar test done that's for stroke symptoms. Call an ambulance now you need hospital immediately.
+[SEG0032] person_1 (DOCTOR): mm, okay don't skip meals, and try to eat smaller portions more often through the day if the symptoms change, that's the point to come in urgently we'll catch up straight away
+[SEG0033] person_2 (PATIENT): okay, I'll arrange it
+[SEG0034] person_1 (DOCTOR): anything else on your mind before you go?
+[SEG0035] person_2 (PATIENT): that's clear thanks
+[SEG0036] person_1 (DOCTOR): have a good day
+
+JSON:

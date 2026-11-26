@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00269)
+[SEG0001] person_1 (DOCTOR): Good morning. I hope the wait wasn't too long.
+[SEG0002] person_2 (PATIENT): Hello.
+[SEG0003] person_1 (DOCTOR): How can I help you today?
+[SEG0004] person_2 (PATIENT): It's burning in both feet. I thought I'd wait, but it hasn't gone.
+[SEG0005] person_1 (DOCTOR): Is this recent, or has it been a while?
+[SEG0006] person_2 (PATIENT): Two years, I think... sorry, about a year, I got that wrong.
+[SEG0007] person_1 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps. Take your time, there's no rush.
+[SEG0008] person_2 (PATIENT): It's worse with bedsheets touching them. A seven out of ten, I suppose. Walking around helps a bit.
+[SEG0009] person_1 (DOCTOR): Any numbness in the toes as well?
+[SEG0010] person_2 (PATIENT): Yes, I have.
+[SEG0011] person_1 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0012] person_2 (PATIENT): No, none that I know of.
+[SEG0013] person_1 (DOCTOR): Any regular medication?
+[SEG0014] person_2 (PATIENT): Nothing, no.
+[SEG0015] person_1 (DOCTOR): And your work?
+[SEG0016] person_2 (PATIENT): I drive a delivery van all day.
+[SEG0017] person_1 (DOCTOR): Alright, and what do you usually eat?
+[SEG0018] person_2 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0019] person_1 (DOCTOR): Do you get any exercise?
+[SEG0020] person_2 (PATIENT): I walk for about half an hour most days.
+[SEG0021] person_1 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0022] person_2 (PATIENT): My uncle had colon cancer.
+[SEG0023] person_1 (DOCTOR): Have you ever been under the knife?
+[SEG0024] person_2 (PATIENT): Yes, I had my appendix out, about eight years ago.
+[SEG0025] person_1 (DOCTOR): Have you had back pain, by any chance?
+[SEG0026] person_2 (PATIENT): No. No back pain.
+[SEG0027] person_1 (DOCTOR): A few quick ones: bladder problems or foot ulcers?
+[SEG0028] person_2 (PATIENT): No, nothing there.
+[SEG0029] person_1 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0030] person_2 (PATIENT): Bowels are regular, nothing odd.
+[SEG0031] person_1 (DOCTOR): Let's do your observations.
+[SEG0032] person_1 (DOCTOR): Just relax your arm...
+[SEG0033] person_1 (DOCTOR): Okay: temp 36.7 degrees, pulse 72, blood pressure 114 over 79.
+[SEG0034] person_2 (PATIENT): Is that alright, doctor?
+[SEG0035] person_1 (DOCTOR): That's fine, we'll come to it.
+[SEG0036] person_1 (DOCTOR): I'd like to examine you now.
+[SEG0037] person_1 (DOCTOR): Take your time, no rush.
+[SEG0038] person_1 (DOCTOR): Feeling of light touch is reduced in both feet.
+[SEG0039] person_1 (DOCTOR): That's fine, sit up. Okay, so my impression is this: It points towards peripheral neuropathy, possibly related to sugar.
+[SEG0040] person_2 (PATIENT): Right, do you think it's serious?
+[SEG0041] person_1 (DOCTOR): It's reasonable to be concerned, but right now peripheral neuropathy, possibly related to sugar is my leading thought, not anything worse. I'm going to order a vitamin B12 level, for neuropathy. Okay, I think we're finished. Is everything clear?
+[SEG0042] person_2 (PATIENT): That's everything I wanted to ask. Thank you.
+
+JSON:

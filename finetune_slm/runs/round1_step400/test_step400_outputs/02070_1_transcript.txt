@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02070)
+[SEG0001] person_1 (DOCTOR): morning, come on through where shall we begin?
+[SEG0002] person_2 (PATIENT): okay, so honestly, it's agitation, and my family pushed me to come
+[SEG0003] person_1 (DOCTOR): how long has this been bothering you?
+[SEG0004] person_2 (PATIENT): About... well, ten days.
+[SEG0005] person_1 (DOCTOR): Let me check a few things. Any recent infection or chest pain?
+[SEG0006] person_2 (PATIENT): no, uh, none that I've noticed
+[SEG0007] person_1 (DOCTOR): Is your mobility otherwise okay?
+[SEG0008] person_2 (PATIENT): I move fine otherwise
+[SEG0009] person_1 (DOCTOR): Neurologically, anything strange?
+[SEG0010] person_2 (PATIENT): no weakness or anything
+[SEG0011] person_1 (DOCTOR): Any regular medication, tablets or creams?
+[SEG0012] person_2 (PATIENT): No, nothing at the moment.
+[SEG0013] person_1 (DOCTOR): let's talk a little about your daily life and habits
+[SEG0014] person_2 (PATIENT): Nothing, I'm teetotal. I smoke roughly a pack every two days. I grab fast food at lunch most days. I live with my elderly mother. I swim twice a week
+[SEG0015] person_1 (DOCTOR): has anyone ever diagnosed you with something?
+[SEG0016] person_2 (PATIENT): I've got eczema.
+[SEG0017] person_1 (DOCTOR): yes, eczema is known to us, good to have that clear
+[SEG0018] person_1 (DOCTOR): have you had any previous surgeries?
+[SEG0019] person_2 (PATIENT): No not at all.
+[SEG0020] person_1 (DOCTOR): let me ask about allergies, anything at all?
+[SEG0021] person_2 (PATIENT): uh, no allergies at all
+[SEG0022] person_1 (DOCTOR): let me take your readings now
+[SEG0023] person_1 (DOCTOR): bear with me while this finishes..
+[SEG0024] person_1 (DOCTOR): okay: blood pressure 124 over 77, weight 62 kilos, temperature 39.2. And height 164 centimetres, pulse is 93 beats a minute, saturation 96 percent, BMI works out to 23.1.
+[SEG0025] person_1 (DOCTOR): Now I'm going to do a short physical check
+[SEG0026] person_1 (DOCTOR): raise your arm for me
+[SEG0027] person_1 (DOCTOR): You are hot shaking and your pulse is over one hundred and forty and irregular.
+[SEG0028] person_1 (DOCTOR): That's the examination finished.
+[SEG0029] person_1 (DOCTOR): from what you've told me and what I found, I don't have a clear answer today: a thyroid storm is possible, and so is sepsis
+[SEG0030] person_1 (DOCTOR): I think an ECG makes sense here for fast heart rhythm
+[SEG0031] person_2 (PATIENT): does it hurt?
+[SEG0032] person_1 (DOCTOR): the treatment will be propranolol, 1 milligrams, now, single dose that should help with thyroid storm
+[SEG0033] person_2 (PATIENT): Actually, should I carry on if I feel better?
+[SEG0034] person_1 (DOCTOR): this is an emergency, you will be treated in high dependency. Let's review you straight away
+[SEG0035] person_2 (PATIENT): I'll note it in my calendar
+[SEG0036] person_1 (DOCTOR): what are the next steps as you understand them?
+[SEG0037] person_2 (PATIENT): So, I take the propranolol, 1 milligrams, now and come back straight away. Is that right?
+[SEG0038] person_1 (DOCTOR): okay, yes, exactly right anything else on your mind before you go?
+[SEG0039] person_2 (PATIENT): that's clear thanks
+[SEG0040] person_1 (DOCTOR): See you soon.
+
+JSON:

@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03655)
+[SEG0001] person_1 (PATIENT): Hi, is it okay to come in now?
+[SEG0002] person_2 (DOCTOR): no problem at all, come in what's troubling you?
+[SEG0003] person_1 (PATIENT): so, it's not remembering the last hours i thought I'd wait, but it hasn't gone
+[SEG0004] person_2 (DOCTOR): Can you tell me when it first started? Take your time, there's no rush.
+[SEG0005] person_1 (PATIENT): I've, I've had it for about three months
+[SEG0006] person_2 (DOCTOR): How much does it limit you?
+[SEG0007] person_1 (PATIENT): I'd say moderate.
+[SEG0008] person_2 (DOCTOR): has there been asking the same questions repeatedly too?
+[SEG0009] person_1 (PATIENT): Yeah, that too.
+[SEG0010] person_2 (DOCTOR): Let me take your readings now.
+[SEG0011] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0012] person_2 (DOCTOR): okay: blood pressure 126 over 69, heart rate 75, temperature is 36.6 degrees
+[SEG0013] person_1 (PATIENT): is that okay?
+[SEG0014] person_2 (DOCTOR): so, don't worry, we'll discuss it in a second
+[SEG0015] person_2 (DOCTOR): shall I start the examination?
+[SEG0016] person_1 (PATIENT): okay, doctor
+[SEG0017] person_2 (DOCTOR): I'll listen to your chest now
+[SEG0018] person_2 (DOCTOR): You know who you are but not what happened this morning, and the examination otherwise is normal.
+[SEG0019] person_2 (DOCTOR): So, you can relax now.
+[SEG0020] person_2 (DOCTOR): A few quick ones: seizure, slurred speech or headache?
+[SEG0021] person_1 (PATIENT): Nope, nothing like that.
+[SEG0022] person_2 (DOCTOR): Alright, anything different when you pass water?
+[SEG0023] person_1 (PATIENT): okay, um, so that's normal as far as I know
+[SEG0024] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0025] person_1 (PATIENT): Glibenclamide. I take it 5 milligrams, before breakfast for my sugar.
+[SEG0026] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0027] person_1 (PATIENT): My partner and our baby. I retired from the post office two years ago. Lots of rice, lentils and some fruit.
+[SEG0028] person_2 (DOCTOR): so, any health conditions I should have on record?
+[SEG0029] person_1 (PATIENT): I've, I've had diabetes for two years now.
+[SEG0030] person_2 (DOCTOR): Okay, I can see diabetes in your file as well.
+[SEG0031] person_2 (DOCTOR): Have you got any known allergies?
+[SEG0032] person_1 (PATIENT): um, um, no, I'm not allergic to anything
+[SEG0033] person_2 (DOCTOR): Are there any illnesses in your family?
+[SEG0034] person_1 (PATIENT): Sorry, you know, what was I saying, my son has asthma.
+[SEG0035] person_2 (DOCTOR): Okay, so my impression is this: The most likely explanation is transient global amnesia. I'll request a CT scan of the head, it'll help with acute memory loss. I'd like to arrange a blood sugar for confusion. This usually clears in a day with no lasting effect, but we do a scan first to be safe. A short walk every day, even twenty minutes, will help more than you'd think. I'd like to see you again tomorrow.
+[SEG0036] person_1 (PATIENT): I'll book it on my way out
+[SEG0037] person_2 (DOCTOR): That's everything on my side. Anything you're unsure about?
+[SEG0038] person_1 (PATIENT): alright, thanks, take care
+[SEG0039] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

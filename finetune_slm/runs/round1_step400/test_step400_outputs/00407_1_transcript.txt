@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00407)
+[SEG0001] person_1 (DOCTOR): Hi, I'm glad you could make it. So, did the receptionist sort you out quickly?
+[SEG0002] person_2 (PATIENT): uh, yes, she was lovely about it
+[SEG0003] person_1 (DOCTOR): so how have things been?
+[SEG0004] person_2 (PATIENT): so mainly I've been feeling a bit dizzy after taking all my tablets. That's why I came. I've never really been one for hospitals. I told myself I'd wait and see and here I am
+[SEG0005] person_1 (DOCTOR): are you on any tablets or medication?
+[SEG0006] person_2 (PATIENT): Paracetamol. I take it it when needed for the knee pain
+[SEG0007] person_1 (DOCTOR): Do you know the dose?
+[SEG0008] person_2 (PATIENT): it's 650 milligrams i take atorvastatin 20 milligrams at night
+[SEG0009] person_1 (DOCTOR): And when did that start?
+[SEG0010] person_2 (PATIENT): oh probably three weeks yeah i'd rather know what's going on than keep guessing
+[SEG0011] person_1 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0012] person_2 (PATIENT): pretty mild, if I'm being honest it's a couple of times a week
+[SEG0013] person_1 (DOCTOR): Anything that tends to go along with it?
+[SEG0014] person_2 (PATIENT): An upset stomach goes along with it most of the time. And And I've been feeling drowsy in the afternoon as well for three days. The The upset stomach? That's been since this morning.
+[SEG0015] person_1 (DOCTOR): alright, any falls?
+[SEG0016] person_2 (PATIENT): definitely no falls
+[SEG0017] person_1 (DOCTOR): Did you get vomiting, low mood, black stools or fainting?
+[SEG0018] person_2 (PATIENT): I haven't had vomiting, low mood, black stools or fainting, no.
+[SEG0019] person_1 (DOCTOR): and your skin any changes there?
+[SEG0020] person_2 (PATIENT): No, skin's been fine.
+[SEG0021] person_1 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0022] person_2 (PATIENT): I I move fine otherwise.
+[SEG0023] person_1 (DOCTOR): Let's talk a a little about your daily life and habits.
+[SEG0024] person_2 (PATIENT): I share a flat with two friends. I try to avoid too much sugar. Yes, I'm a nurse on a busy ward
+[SEG0025] person_1 (DOCTOR): what about allergies, to medicines or foods or anything else?
+[SEG0026] person_2 (PATIENT): years back I got vomiting from codeine so I stay away from it now
+[SEG0027] person_1 (DOCTOR): Any diagnoses you've been given before?
+[SEG0028] person_2 (PATIENT): Uh, I have arthritis in my knees, for nearly five years. I have high cholesterol.
+[SEG0029] person_1 (DOCTOR): okay, and what else?
+[SEG0030] person_1 (DOCTOR): Any previous surgeries?
+[SEG0031] person_2 (PATIENT): No operations, uh, no.
+[SEG0032] person_1 (DOCTOR): I'll check your pressure and pulse
+[SEG0033] person_1 (DOCTOR): just relax your arm..
+[SEG0034] person_1 (DOCTOR): okay: oxygen saturation is 99 percent, BP is 127 over 68, pulse 81.
+[SEG0035] person_1 (DOCTOR): From what you've told me it points towards possible side effects from too many medicines. Another possibility is dehydration.
+[SEG0036] person_2 (PATIENT): what are the chances it's something bad?
+[SEG0037] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like possible side effects from too many medicines. Bring every box and bottle you have at home to the next visit, even the herbal ones, and we'll sort them together. That's everything from me. Any other questions?
+[SEG0038] person_2 (PATIENT): all good here. Thank you
+
+JSON:

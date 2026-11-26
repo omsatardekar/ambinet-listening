@@ -1,0 +1,64 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00500)
+[SEG0001] person_1 (NURSE): doctor, if you're free, we can start i've got the numbers noted down
+[SEG0002] person_2 (DOCTOR): thank you. Good morning, tell me what's been going on
+[SEG0003] person_3 (PATIENT): I'm here because of pain in my right shoulder.
+[SEG0004] person_2 (DOCTOR): Roughly when did it start?
+[SEG0005] person_3 (PATIENT): so, honestly I can't say exactly when it started it might have been last month or the month before, I really can't pin it down
+[SEG0006] person_2 (DOCTOR): Can you describe it a a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_3 (PATIENT): Lifting my arm definitely sets it off. Mild, I'd say.
+[SEG0008] person_2 (DOCTOR): right, have you had a dull ache down the arm?
+[SEG0009] person_3 (PATIENT): yes, I have
+[SEG0010] person_2 (DOCTOR): can you describe it a bit more for me? How strong it is, what the pattern is, what helps
+[SEG0011] person_3 (PATIENT): I'd say a few times a day. I'd call it it mild.
+[SEG0012] person_2 (DOCTOR): Any trouble lifting your arm as well?
+[SEG0013] person_3 (PATIENT): Yes, since this morning.
+[SEG0014] person_2 (DOCTOR): have you noticed chest pain, fever or neck pain?
+[SEG0015] person_3 (PATIENT): I haven't had chest pain, fever or neck pain, no.
+[SEG0016] person_2 (DOCTOR): Okay, anything unusual with passing urine?
+[SEG0017] person_3 (PATIENT): That's normal as far as I know.
+[SEG0018] person_2 (DOCTOR): let's talk a little about your daily life and habits
+[SEG0019] person_3 (PATIENT): I don't drink at all. I used to smoke but I quit five years ago. I work in an office, mostly sitting at a desk. I share a flat with two friends. I'm mostly vegetarian
+[SEG0020] person_2 (DOCTOR): any previous surgeries?
+[SEG0021] person_3 (PATIENT): Yeah, I had a knee arthroscopy three years ago.
+[SEG0022] person_2 (DOCTOR): Is there a a family history of anything significant?
+[SEG0023] person_3 (PATIENT): my uncle had colon cancer. My father had a heart attack
+[SEG0024] person_2 (DOCTOR): have you got any chronic problems?
+[SEG0025] person_3 (PATIENT): Diabetes, for two years
+[SEG0026] person_2 (DOCTOR): Right, so diabetes is already on your record. We'll keep that that in mind today.
+[SEG0027] person_2 (DOCTOR): any medication at the moment including things from the the pharmacy?
+[SEG0028] person_3 (PATIENT): Glimepiride. I take it 2 milligrams before breakfast. It's paracetamol 500 milligrams when needed
+[SEG0029] person_1 (NURSE): Doctor, our chart from the last visit lists it as 1000 milligrams.
+[SEG0030] person_2 (DOCTOR): Hm. Do you have the latest prescription with you?
+[SEG0031] person_3 (PATIENT): Not with me. I'll bring it next time. I, I was on metformin before. I stopped taking it.
+[SEG0032] person_2 (DOCTOR): Do you have any known allergies at all?
+[SEG0033] person_3 (PATIENT): uh, I've never been told I have allergies
+[SEG0034] person_1 (NURSE): Okay, so the vitals from earlier. BMI works out to to 33.3, blood pressure 108 over 79, temperature 36.4, pulse is 85 beats a minute, weight 95 kilos, height 169 centimetres, saturation 97 percent.
+[SEG0035] person_2 (DOCTOR): Okay, noted.
+[SEG0036] person_2 (DOCTOR): let me have a look at you
+[SEG0037] person_3 (PATIENT): Go ahead.
+[SEG0038] person_2 (DOCTOR): Okay a little pressure here tell me if it's tender.
+[SEG0039] person_2 (DOCTOR): lifting the arm to the side is painful between sixty and a hundred twenty degrees
+[SEG0040] person_2 (DOCTOR): okay, a little pressure here, tell me if it's tender
+[SEG0041] person_2 (DOCTOR): Neck movements are full and don't reproduce it it
+[SEG0042] person_3 (PATIENT): yes uh doctor
+[SEG0043] person_2 (DOCTOR): That's fine, sit up. Okay, thinking it through, I think we're dealing with a rotator cuff problem at this stage. I can't rule out a pinched nerve in the neck yet.
+[SEG0044] person_3 (PATIENT): should I be worried about this?
+[SEG0045] person_2 (DOCTOR): it's reasonable to be concerned, but right now a rotator cuff problem is my leading thought, not anything worse we should do an X-ray of the shoulder for shoulder pain and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose come back in four weeks
+[SEG0046] person_3 (PATIENT): Good, I'll come back then.
+[SEG0047] person_2 (DOCTOR): call the clinic if you need us
+[SEG0048] person_3 (PATIENT): no, I think that's everything thank you, doctor
+[SEG0049] person_2 (DOCTOR): So all the best.
+
+JSON:

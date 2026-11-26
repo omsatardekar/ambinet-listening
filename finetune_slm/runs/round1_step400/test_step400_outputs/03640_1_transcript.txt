@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03640)
+[SEG0001] person_1 (DOCTOR): Right, thanks for waiting, come in.
+[SEG0002] person_2 (PATIENT): Hi doctor, I got here as fast as I could.
+[SEG0003] person_1 (DOCTOR): Tell me what's brought you in.
+[SEG0004] person_2 (PATIENT): So the thing is, I've got chest tightness when pushing hard.
+[SEG0005] person_1 (DOCTOR): Let me quickly check your readings.
+[SEG0006] person_1 (DOCTOR): Bear with me while this finishes...
+[SEG0007] person_1 (DOCTOR): Okay: BP is 119 over 72, temp 36.8 degrees, saturation 98 percent, pulse is 69 beats a minute.
+[SEG0008] person_2 (PATIENT): Is that normal?
+[SEG0009] person_1 (DOCTOR): That's fine, I'll explain it soon. Can you tell me when it first started?
+[SEG0010] person_2 (PATIENT): Uh, it's been about three months, I'm fairly sure.
+[SEG0011] person_1 (DOCTOR): Is it there all the time or does it come and go?
+[SEG0012] person_2 (PATIENT): It sort of comes and goes.
+[SEG0013] person_1 (DOCTOR): Rate it for me, mild, moderate or severe?
+[SEG0014] person_2 (PATIENT): I'd say mild. As for flutter now and then, I honestly can't say when that began. It might have been last month or the month before. Let me think, as for flutter now and then, it comes and goes. I've also had breathlessness during sport, for three weeks.
+[SEG0015] person_1 (DOCTOR): Have you noticed fainting, leg swelling, fever or cough?
+[SEG0016] person_2 (PATIENT): No, nothing to report there.
+[SEG0017] person_1 (DOCTOR): Anything on the skin I should know about?
+[SEG0018] person_2 (PATIENT): No rashes.
+[SEG0019] person_1 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0020] person_2 (PATIENT): No, that side's been fine.
+[SEG0021] person_1 (DOCTOR): Any health conditions I should have on record?
+[SEG0022] person_2 (PATIENT): I have diabetes. It's the not knowing that gets to me. I looked a few things up online, and that probably didn't help.
+[SEG0023] person_1 (DOCTOR): Alright, diabetes, that matches what I have here. Let's talk a little about your daily life and habits.
+[SEG0024] person_2 (PATIENT): I smoke roughly a pack every two days. I grab fast food at lunch most days. My partner and our baby.
+[SEG0025] person_1 (DOCTOR): What's on your current medicine list?
+[SEG0026] person_2 (PATIENT): I take metformin, 500 milligrams, twice a day.
+[SEG0027] person_1 (DOCTOR): Yes.
+[SEG0028] person_1 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0029] person_2 (PATIENT): Ah, I'm allergic to tramadol, I get feeling very drowsy.
+[SEG0030] person_1 (DOCTOR): Let's move on to the examination.
+[SEG0031] person_2 (PATIENT): Sure thing.
+[SEG0032] person_1 (DOCTOR): Stay as you are for a moment.
+[SEG0033] person_1 (DOCTOR): There is a harsh murmur that gets louder when you stand up.
+[SEG0034] person_1 (DOCTOR): All finished, thank you. Let me tell you where I've got to. This looks most like possible hypertrophic cardiomyopathy. An innocent flow murmur is also on my list.
+[SEG0035] person_2 (PATIENT): What are the odds it's serious?
+[SEG0036] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like possible hypertrophic cardiomyopathy, but I'd like to confirm. We should do an echocardiogram for murmur. Let's get a heart monitor, for palpitations. No competitive sport until the heart scan, and we will check your close family.
+[SEG0037] person_1 (DOCTOR): Yes, carry on. Try to keep a simple diary of when it happens and what you were doing, and bring it to the next visit. I'm going to send a referral to the inherited cardiac conditions clinic. The thing that would worry me is if the symptoms get worse. If that happens, go to emergency.
+[SEG0038] person_2 (PATIENT): Okay, makes sense.
+[SEG0039] person_1 (DOCTOR): I'd like you back after the scan.
+[SEG0040] person_2 (PATIENT): Alright, I'll be back.
+[SEG0041] person_1 (DOCTOR): Is there anything you'd like me to go over again?
+[SEG0042] person_2 (PATIENT): Ah, alright, thanks, take care.
+[SEG0043] person_1 (DOCTOR): All the best.
+
+JSON:

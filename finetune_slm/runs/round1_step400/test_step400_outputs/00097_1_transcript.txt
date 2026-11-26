@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00097)
+[SEG0001] person_1 (NURSE): Doctor, the patient's with us now. I did the usual checks at the front, so just say when you want them.
+[SEG0002] person_2 (DOCTOR): Thanks. Hello, come in, sit down. What brings you in today?
+[SEG0003] person_3 (CAREGIVER): Morning, doctor. I'll stay and fill in anything that's missed. We came because of red scaly patches on my elbows.
+[SEG0004] person_1 (NURSE): Doctor, I've got the readings for you. Heart rate 84, temperature is 36.5 degrees, blood pressure 121 over 72.
+[SEG0005] person_2 (DOCTOR): Alright, thanks. So, how long have you had it?
+[SEG0006] person_4 (PATIENT): I've had it for about a month.
+[SEG0007] person_2 (DOCTOR): Does anything bring it on or make it worse?
+[SEG0008] person_4 (PATIENT): Cold weather and stress definitely sets it off. Oh, and scaling on the scalp. That's been about the same, nearly five years. Oh, and itching. That's been about the same, six months.
+[SEG0009] person_2 (DOCTOR): Has there been stiff fingers in the morning too?
+[SEG0010] person_4 (PATIENT): Yes, about the same, two years.
+[SEG0011] person_2 (DOCTOR): How often does it happen?
+[SEG0012] person_4 (PATIENT): It just comes and goes.
+[SEG0013] person_2 (DOCTOR): Okay, have you had red scaly patches on your elbows before, or is this the first time?
+[SEG0014] person_4 (PATIENT): Right, I had a similar thing last winter. It went away.
+[SEG0015] person_2 (DOCTOR): Did you get joint swelling, weeping or sore throat before it started?
+[SEG0016] person_4 (PATIENT): None, as far as I know.
+[SEG0017] person_2 (DOCTOR): And what about fever, new medicines or eye redness?
+[SEG0018] person_4 (PATIENT): No. None of those.
+[SEG0019] person_2 (DOCTOR): Neurologically, anything strange?
+[SEG0020] person_4 (PATIENT): Oh, no, that's all normal.
+[SEG0021] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0022] person_4 (PATIENT): I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0023] person_2 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0024] person_4 (PATIENT): My mother had high blood pressure. I mean, my brother has asthma.
+[SEG0025] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0026] person_4 (PATIENT): Metformin. I take it 500 milligrams, twice a day. I take ramipril, 5 milligrams, every morning for my blood pressure. Aspirin. I take it 75 milligrams, once a day. Coconut oil. I take it daily.
+[SEG0027] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0028] person_4 (PATIENT): I've had diabetes for about a year now. I've got high blood pressure. I've got heart disease.
+[SEG0029] person_2 (DOCTOR): Hm, okay. Okay, I can see diabetes and high blood pressure in your file as well. How about smoking?
+[SEG0030] person_4 (PATIENT): I smoke about ten cigarettes a day.
+[SEG0031] person_2 (DOCTOR): What do you do for work?
+[SEG0032] person_4 (PATIENT): I work in an office, mostly sitting at a desk.
+[SEG0033] person_2 (DOCTOR): Who's at home with you?
+[SEG0034] person_4 (PATIENT): It's just me and my wife at home now.
+[SEG0035] person_2 (DOCTOR): So, any sport or activity?
+[SEG0036] person_4 (PATIENT): I play badminton on Sundays.
+[SEG0037] person_2 (DOCTOR): Any operations in the past?
+[SEG0038] person_4 (PATIENT): Just a bypass operation, six years ago.
+[SEG0039] person_2 (DOCTOR): Right, let me check a few things physically.
+[SEG0040] person_2 (DOCTOR): Let me just check something.
+[SEG0041] person_2 (DOCTOR): Well-defined thick silvery plaques over both elbows and knees.
+[SEG0042] person_2 (DOCTOR): Let me just check something.
+[SEG0043] person_2 (DOCTOR): A few small pits in the fingernails.
+[SEG0044] person_4 (PATIENT): No problem.
+[SEG0045] person_2 (DOCTOR): Okay, finished. So, based on the history and the examination, I think we're dealing with plaque psoriasis at this stage. A fungal infection is also on my list.
+[SEG0046] person_4 (PATIENT): Is it something serious, doctor?
+[SEG0047] person_2 (DOCTOR): It's reasonable to be concerned, but right now plaque psoriasis is my leading thought, not anything worse. Let's book blood tests to look into baseline before treatment. What I'm giving you is calcipotriol-betamethasone gel, once a day, for four weeks. That's for psoriasis.
+[SEG0048] person_4 (PATIENT): How long until it works?
+[SEG0049] person_2 (DOCTOR): A little sunlight helps psoriasis, but avoid sunburn. Moisturise often. The thing that would worry me is if the symptoms get worse. If that happens, go to emergency. Book a review in four weeks. So, look after yourself.
+[SEG0050] person_4 (PATIENT): Right. Thanks again.
+
+JSON:

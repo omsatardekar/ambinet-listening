@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20164)
+[SEG0001] person_1 (PATIENT): So, hi, doctor, I hope I'm not disturbing you.
+[SEG0002] person_2 (DOCTOR): of course, leave it there. How can I help?
+[SEG0003] person_3 (CAREGIVER): Hello, doctor. I hope it's alright if I stay in for this. We came because of yellow eyes.
+[SEG0004] person_2 (DOCTOR): when was the first time you noticed it?
+[SEG0005] person_1 (PATIENT): I've had it for about two weeks. Erm, um, I've also had no appetite, for one week
+[SEG0006] person_2 (DOCTOR): do you have any medical conditions I should know about?
+[SEG0007] person_1 (PATIENT): no uh nothing at all
+[SEG0008] person_2 (DOCTOR): have you had any previous surgeries?
+[SEG0009] person_1 (PATIENT): no, I've never been operated on
+[SEG0010] person_2 (DOCTOR): right any regular medication tablets or creams?
+[SEG0011] person_1 (PATIENT): I mean, no, I'm not on anything.
+[SEG0012] person_2 (DOCTOR): any inherited conditions that you know of in the family?
+[SEG0013] person_1 (PATIENT): sorry, you know, what was I saying, my father had bowel cancer
+[SEG0014] person_2 (DOCTOR): so any allergies to tablets food or anything in the environment?
+[SEG0015] person_1 (PATIENT): no allergies at all
+[SEG0016] person_2 (DOCTOR): What about alcohol?
+[SEG0017] person_1 (PATIENT): I only drink at family occasions.
+[SEG0018] person_2 (DOCTOR): Do you work outside the home?
+[SEG0019] person_1 (PATIENT): I'm a hairdresser, on my feet all day.
+[SEG0020] person_2 (DOCTOR): is there someone at home?
+[SEG0021] person_1 (PATIENT): My husband and I live above the shop.
+[SEG0022] person_2 (DOCTOR): How are your meals?
+[SEG0023] person_1 (PATIENT): I grab fast food at lunch most days
+[SEG0024] person_2 (DOCTOR): A few quick ones: bleeding, fever or confusion?
+[SEG0025] person_1 (PATIENT): no I'd have said so
+[SEG0026] person_2 (DOCTOR): and what about itching or severe abdominal pain?
+[SEG0027] person_1 (PATIENT): Nope, you know, nothing like that.
+[SEG0028] person_2 (DOCTOR): anything different when you pass water?
+[SEG0029] person_1 (PATIENT): no, that's all fine
+[SEG0030] person_2 (DOCTOR): how are your joints, any aches elsewhere?
+[SEG0031] person_1 (PATIENT): no, nothing there
+[SEG0032] person_2 (DOCTOR): Shall I check your blood pressure and pulse?
+[SEG0033] person_2 (DOCTOR): that's it just a little longer..
+[SEG0034] person_2 (DOCTOR): Okay: oxygen saturation is 98 percent heart rate 68 temperature 36.8. And And pressure 113 over 68.
+[SEG0035] person_2 (DOCTOR): right let's have a proper look at you
+[SEG0036] person_1 (PATIENT): Fine by me.
+[SEG0037] person_2 (DOCTOR): Breathe out slowly.
+[SEG0038] person_2 (DOCTOR): the whites of your eyes are yellow and the liver edge is tender under the right ribs
+[SEG0039] person_2 (DOCTOR): All finished, thank you. So where does that leave us? It It points towards an acute viral hepatitis.
+[SEG0040] person_1 (PATIENT): is this permanent?
+[SEG0041] person_2 (DOCTOR): it's reasonable to be concerned, but right now an acute viral hepatitis is my leading thought, not anything worse. I'm sending you for liver blood tests because of jaundice. I'd rather check than guess, and this is the quickest way to know more. No alcohol at all and avoid paracetamol and other painkillers unless we say. I'd like you to see the liver clinic as well, and I'll write the referral
+[SEG0042] person_2 (DOCTOR): Do get help quickly if you become drowsy or confused. I'd like to see you again after the results. Right, that's the plan. Do you want to ask me anything?
+[SEG0043] person_1 (PATIENT): Right, I'll do that. Thank you, doctor.
+
+JSON:

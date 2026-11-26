@@ -1,0 +1,77 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00386)
+[SEG0001] person_1 (NURSE): Okay, doctor, we're all set in here. I'll give you the numbers when you want them.
+[SEG0002] person_2 (DOCTOR): Thank you. Good morning, tell me what's been going on.
+[SEG0003] person_3 (FAMILY_MEMBER): Um, good morning, doctor. I came along to help out.
+[SEG0004] person_2 (DOCTOR): Yes, that's no problem at all. Please sit.
+[SEG0005] person_4 (PATIENT): It's, It's hives. I thought I'd wait, but it hasn't gone.
+[SEG0006] person_2 (DOCTOR): Roughly when did it start?
+[SEG0007] person_4 (PATIENT): Okay, so it's been ten days now.
+[SEG0008] person_2 (DOCTOR): Is it mild, moderate or severe?
+[SEG0009] person_4 (PATIENT): Maybe a three out of ten on a bad day.
+[SEG0010] person_2 (DOCTOR): Is there anything that takes the edge off?
+[SEG0011] person_4 (PATIENT): Only antihistamines, and it's not much.
+[SEG0012] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0013] person_4 (PATIENT): Welts that move around goes along with it, most of the time.
+[SEG0014] person_4 (PATIENT): I was just going to say that the main thing is—
+[SEG0015] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0016] person_2 (DOCTOR): Later, thanks. Please go on.
+[SEG0017] person_4 (PATIENT): Well, the welts that move around? That's been for about a week. Okay, so and swelling of the lips as well, since Friday.
+[SEG0018] person_2 (DOCTOR): Is it mild, moderate or severe?
+[SEG0019] person_4 (PATIENT): Well, uh, it's... hard to say, it's kind of... I don't know—
+[SEG0020] person_2 (DOCTOR): Take your time. Mild, moderate, or severe, if you had to pick?
+[SEG0021] person_4 (PATIENT): About a eight out of ten.
+[SEG0022] person_1 (NURSE): Here are the numbers, doctor. Oxygen saturation is 98 percent, pressure 117 over 82, respiratory rate 18. Temperature is 36.4 degrees, heart rate 69.
+[SEG0023] person_2 (DOCTOR): Thanks.
+[SEG0024] person_2 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0025] person_2 (DOCTOR): Let me press here.
+[SEG0026] person_2 (DOCTOR): Lips look a little puffy, but the tongue and throat are normal.
+[SEG0027] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0028] person_2 (DOCTOR): There are raised pink welts on the chest and back, some joined together.
+[SEG0029] person_2 (DOCTOR): All done, you can get dressed. Any fever?
+[SEG0030] person_4 (PATIENT): I mean, not at all, no fever.
+[SEG0031] person_3 (FAMILY_MEMBER): Actually, doctor, I did notice fever. He doesn't always say.
+[SEG0032] person_4 (PATIENT): Um, no, I don't think I did. Maybe a little, I'm not sure.
+[SEG0033] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. Have you noticed wheezing, throat tightness or new medicines?
+[SEG0034] person_4 (PATIENT): No, no wheezing, no throat tightness, no new medicines. I did have a burning feeling on the skin at one point, but that went away on its own.
+[SEG0035] person_2 (DOCTOR): And then?
+[SEG0036] person_2 (DOCTOR): Any joint pain or trouble breathing?
+[SEG0037] person_4 (PATIENT): Um, no joint pain or trouble breathing, none of it.
+[SEG0038] person_2 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0039] person_4 (PATIENT): No weakness or anything.
+[SEG0040] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0041] person_4 (PATIENT): It's Seretide inhaler, twice a day for my asthma. I'm, I'm on hydrocortisone cream, when needed.
+[SEG0042] person_4 (PATIENT): Hmm, it's a... um, I can't remember what it's called. It's a little pink tablet.
+[SEG0043] person_2 (DOCTOR): Do you remember what it's for?
+[SEG0044] person_4 (PATIENT): For the gout, I believe. My daughter sets them out for me, I just take what I'm given. I mean, I take cetirizine, 10 milligrams, at night. Asthalin inhaler I don't take anymore.
+[SEG0045] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0046] person_4 (PATIENT): I have asthma, for about ten years. Yes, eczema. I'm not great at remembering details, so bear with me.
+[SEG0047] person_2 (DOCTOR): Okay, so.
+[SEG0048] person_4 (PATIENT): I mean, I have gout, for about ten years. It's the not knowing that gets to me. I wasn't sure whether to come in at all, to be honest.
+[SEG0049] person_2 (DOCTOR): Alright, asthma and eczema, that matches what I have here. Any procedures or operations?
+[SEG0050] person_4 (PATIENT): Just a lump removed from my back, years ago.
+[SEG0051] person_2 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0052] person_4 (PATIENT): My mother has migraines. My brother has asthma.
+[SEG0053] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0054] person_4 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0055] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0056] person_4 (PATIENT): I gave up drinking about three years ago. No, I don't smoke and never have. Yes, I live on my own.
+[SEG0057] person_2 (DOCTOR): From what you've told me and what I found, I think we're dealing with acute urticaria, possibly allergic at this stage. It could also be a viral trigger, so we'll keep that open. I'd also keep a drug reaction in mind.
+[SEG0058] person_4 (PATIENT): Is this something I'll have for good?
+[SEG0059] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's acute urticaria, possibly allergic, and we'll know more once the blood tests is back.
+[SEG0060] person_2 (DOCTOR): I'll request blood tests, it'll help with urticaria. I'm going to order an allergy test, for recurrent urticaria. We'll begin with prednisolone, 20 milligrams, once a day, for three days. It's for hives. Write down anything new you ate, took or used before this started, even small things. Please take the tablets with food so they don't upset your stomach. Book a review in two weeks. Look after yourself.
+[SEG0061] person_4 (PATIENT): Right. Thanks again.
+[SEG0062] person_2 (DOCTOR): Goodbye.
+
+JSON:

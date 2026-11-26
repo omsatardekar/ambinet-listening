@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00189)
+[SEG0001] person_1 (PATIENT): Sorry I'm a few minutes behind, doctor.
+[SEG0002] person_2 (DOCTOR): right on time sit, please how can I help?
+[SEG0003] person_1 (PATIENT): Yeah, it's a dry cough that won't go away. I thought I'd wait, but it hasn't gone. I took the morning off to come in today.
+[SEG0004] person_2 (DOCTOR): any medication at the moment, including things from the pharmacy?
+[SEG0005] person_1 (PATIENT): Ramipril. I take it 5 milligrams, every morning for my blood pressure. A neighbour of mine said I should see someone about it. Aspirin. I take it 75 milligrams, once a day.
+[SEG0006] person_2 (DOCTOR): How bad is it, would you say?
+[SEG0007] person_1 (PATIENT): Hmm, about a four out of ten.
+[SEG0008] person_2 (DOCTOR): Have you been clearing your throat all the time?
+[SEG0009] person_1 (PATIENT): Yes, about the same, two years.
+[SEG0010] person_2 (DOCTOR): Any night sweats?
+[SEG0011] person_1 (PATIENT): No, no night sweats.
+[SEG0012] person_2 (DOCTOR): And what about weight loss, wheezing or shortness of breath?
+[SEG0013] person_1 (PATIENT): Right, um, no, not any of them.
+[SEG0014] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0015] person_1 (PATIENT): That's normal as far as I know.
+[SEG0016] person_2 (DOCTOR): Any procedures or operations?
+[SEG0017] person_1 (PATIENT): yeah, just a stent put in my heart, two years ago
+[SEG0018] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0019] person_1 (PATIENT): No allergies that I know of, no.
+[SEG0020] person_2 (DOCTOR): Alright, moving on to your background, any past medical history?
+[SEG0021] person_1 (PATIENT): Yes, acid reflux. I have high blood pressure. I have heart disease.
+[SEG0022] person_2 (DOCTOR): Alright, acid reflux and high blood pressure, that matches what I have here.
+[SEG0023] person_2 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0024] person_1 (PATIENT): My mother had high blood pressure.
+[SEG0025] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0026] person_1 (PATIENT): I play badminton on Sundays. Yes, I live on my own. I try to avoid too much sugar.
+[SEG0027] person_2 (DOCTOR): First the numbers, if you don't mind.
+[SEG0028] person_2 (DOCTOR): Just relax your arm...
+[SEG0029] person_2 (DOCTOR): Okay: temperature is 36.7 degrees, oxygen saturation is 98 percent, heart rate 85. And blood pressure 111 over 76, respiratory rate 18.
+[SEG0030] person_1 (PATIENT): is that normal?
+[SEG0031] person_2 (DOCTOR): they help build the picture, I'll tell you more soon
+[SEG0032] person_2 (DOCTOR): Can I examine you now?
+[SEG0033] person_2 (DOCTOR): Almost done with this part.
+[SEG0034] person_2 (DOCTOR): Chest is clear and the throat looks a little red at the back.
+[SEG0035] person_2 (DOCTOR): That's fine, sit up.
+[SEG0036] person_2 (DOCTOR): Right, here's what I'm thinking. The most likely explanation is a cough driven by acid reflux.
+[SEG0037] person_1 (PATIENT): Is it something serious, doctor?
+[SEG0038] person_2 (DOCTOR): I can't promise yet, but most people with a cough driven by acid reflux do well once it's treated properly. We should do a chest X-ray for chronic cough
+[SEG0039] person_3 (CLINICAL_STAFF): The earliest is Friday, 3:30 pm.
+[SEG0040] person_2 (DOCTOR): What I'm giving you is pantoprazole, 40 milligrams, before breakfast, for four weeks. That's for reflux. Don't eat for two or three hours before lying down, and raise the head of the bed a little. Come back in a month. Good. Let us know how you get on.
+[SEG0041] person_1 (PATIENT): I, I think that's clear thank you for being so thorough
+[SEG0042] person_2 (DOCTOR): Take care.
+
+JSON:

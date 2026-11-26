@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00688)
+[SEG0001] person_1 (PATIENT): Sorry I'm late, doctor, traffic was dreadful. Marcia drove me. ~
+[SEG0002] person_2 (DOCTOR): No problem. Mr Delaney, what brings you in? ~
+[SEG0003] person_1 (PATIENT): Oh, it's nothing much. I've been feeling a bit low since Dorothy passed. My daughter thinks I should come.
+[SEG0004] person_2 (DOCTOR): I'm sorry for your loss. How long ago?
+[SEG0005] person_1 (PATIENT): About three months. I'm managing, you know.
+[SEG0006] person_3 (FAMILY_MEMBER): He's not eating, doctor. He's lost weight, his trousers are held up with a belt now.
+[SEG0007] person_1 (PATIENT): I eat fine. I just don't have much appetite.
+[SEG0008] person_2 (DOCTOR): Mr Delaney, is that right, you don't have much appetite? ~
+[SEG0009] person_1 (PATIENT): A bit less, maybe. That's all.
+[SEG0010] person_2 (DOCTOR): How are you sleeping?
+[SEG0011] person_1 (PATIENT): Sleeping fine. No trouble sleeping.
+[SEG0012] person_3 (FAMILY_MEMBER): Dad, you're up at three every single night. I hear the kettle.
+[SEG0013] person_1 (PATIENT): I get a cup of tea. It's not a problem. ~
+[SEG0014] person_2 (DOCTOR): Any thoughts that life isn't worth living, or of harming yourself?
+[SEG0015] person_1 (PATIENT): No. Nothing like that.
+[SEG0016] person_3 (FAMILY_MEMBER): He wouldn't say if he did, but he hasn't said anything like it to me. ~
+[SEG0017] person_2 (DOCTOR): Okay. What medicines do you take?
+[SEG0018] person_1 (PATIENT): Lisinopril, 10 mg, once a day. And metformin, 500 mg, twice a day.
+[SEG0019] person_3 (FAMILY_MEMBER): It's 20 mg, Dad. I fill the pill box. The lisinopril is 20.
+[SEG0020] person_1 (PATIENT): I'm sure it's 10, it's what Dorothy used to give me.
+[SEG0021] person_2 (DOCTOR): We'll check the lisinopril dose with the pharmacy. Any allergies to medicines?
+[SEG0022] person_1 (PATIENT): Well. In hospital once something gave me a rash, I think. I don't know what it was. Marcia may remember.
+[SEG0023] person_3 (FAMILY_MEMBER): I don't. They never told us.
+[SEG0024] person_2 (DOCTOR): I'll record it as a possible allergy. What other health conditions do you have?
+[SEG0025] person_1 (PATIENT): High blood pressure, diabetes, the type two, and arthritis in my hands.
+[SEG0026] person_2 (DOCTOR): Any operations?
+[SEG0027] person_1 (PATIENT): A hernia repair, back in 2008.
+[SEG0028] person_2 (DOCTOR): Anyone in the family with depression?
+[SEG0029] person_1 (PATIENT): My brother Frank had it, years ago.
+[SEG0030] person_2 (DOCTOR): How are you living at the moment?
+[SEG0031] person_1 (PATIENT): On my own now, in the same house. I'm a widower.
+[SEG0032] person_2 (DOCTOR): And before you retired?
+[SEG0033] person_1 (PATIENT): I was a mechanic for forty years. Retired now.
+[SEG0034] person_2 (DOCTOR): Let me check your numbers. Blood pressure 134 over 80, pulse 72, temperature 36.5, oxygen 97 percent, breathing 16, and your weight is 70 kilos.
+[SEG0035] person_3 (FAMILY_MEMBER): That's six kilos down from last year. ~
+[SEG0036] person_2 (DOCTOR): Noted. Let me look at you. You look a little thin, and your eyes are tired.
+[SEG0037] person_1 (PATIENT): Everybody says I look tired. ~
+[SEG0038] person_2 (DOCTOR): There's no swelling in your ankles. And your heart sounds are normal.
+[SEG0039] person_1 (PATIENT): That's good, isn't it? ~
+[SEG0040] person_2 (DOCTOR): Any trouble with your breathing or chest?
+[SEG0041] person_1 (PATIENT): No, nothing. Breathing's fine.
+[SEG0042] person_2 (DOCTOR): And your tummy, any vomiting or pain?
+[SEG0043] person_1 (PATIENT): No, nothing there either.
+[SEG0044] person_2 (DOCTOR): This looks like a grief reaction to me, but I can't rule out depression, and I want to check your body too.
+[SEG0045] person_1 (PATIENT): There's nothing wrong with my body. ~
+[SEG0046] person_2 (DOCTOR): Maybe not, but I'd like to arrange a thyroid blood test, a vitamin B12 level, an HbA1c, and kidney function.
+[SEG0047] person_3 (FAMILY_MEMBER): All today? ~
+[SEG0048] person_2 (DOCTOR): Today, yes. And please eat small meals more often.
+[SEG0049] person_1 (PATIENT): If you say so. ~
+[SEG0050] person_2 (DOCTOR): If the sleep and appetite haven't improved in four weeks, come back and we'll talk about support and counselling.
+[SEG0051] person_3 (FAMILY_MEMBER): I'll make sure he does. ~
+
+JSON:

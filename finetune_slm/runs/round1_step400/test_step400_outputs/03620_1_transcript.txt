@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03620)
+[SEG0001] person_1 (PATIENT): hi is it okay to come in now?
+[SEG0002] person_2 (DOCTOR): that's fine, sit down tell me why you came
+[SEG0003] person_1 (PATIENT): honestly, it's a poor appetite, and and my family pushed me to come
+[SEG0004] person_2 (DOCTOR): let me quickly check your readings
+[SEG0005] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0006] person_2 (DOCTOR): okay: heart rate 119, temp 36.8 degrees, pressure 117 over 75.
+[SEG0007] person_1 (PATIENT): is that okay?
+[SEG0008] person_2 (DOCTOR): We'll look at it it together shortly. How long has this been bothering you?
+[SEG0009] person_1 (PATIENT): probably three weeks yeah oh, and an irregular heartbeat had that since last night i'd been feeling weak, but that went away
+[SEG0010] person_2 (DOCTOR): have you had a poor appetite before, or is this the first time?
+[SEG0011] person_1 (PATIENT): yes something like this happened about six months ago and and it went away on its own
+[SEG0012] person_2 (DOCTOR): any tremor or diarrhoea?
+[SEG0013] person_1 (PATIENT): let me think, no, no tremor or diarrhoea
+[SEG0014] person_2 (DOCTOR): any heat intolerance or sweating?
+[SEG0015] person_1 (PATIENT): No, um, not a single one.
+[SEG0016] person_2 (DOCTOR): is your digestion otherwise okay?
+[SEG0017] person_1 (PATIENT): Nothing unusual, no.
+[SEG0018] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0019] person_1 (PATIENT): Nothing on the skin, no.
+[SEG0020] person_2 (DOCTOR): do you take any prescribed or over-the-counter medicines?
+[SEG0021] person_1 (PATIENT): Telmisartan. I take it 40 milligrams once a day. I'm on diclofenac 50 milligrams when needed.
+[SEG0022] person_2 (DOCTOR): tell me about any past illnesses or ongoing conditions it helps to be thorough at this stage
+[SEG0023] person_1 (PATIENT): High blood pressure, for about ten years
+[SEG0024] person_2 (DOCTOR): right, right
+[SEG0025] person_1 (PATIENT): I've had arthritis in my knees for about ten years now
+[SEG0026] person_2 (DOCTOR): hm, okay. Okay, I can see arthritis in your knees in your file as well
+[SEG0027] person_2 (DOCTOR): how are your meals?
+[SEG0028] person_1 (PATIENT): I grab fast food at lunch most days
+[SEG0029] person_2 (DOCTOR): who lives with you?
+[SEG0030] person_1 (PATIENT): My partner and our baby.
+[SEG0031] person_2 (DOCTOR): Any allergies to tablets food or anything in the environment?
+[SEG0032] person_1 (PATIENT): No known allergies.
+[SEG0033] person_2 (DOCTOR): Did you ever have any procedures done?
+[SEG0034] person_1 (PATIENT): Let me think yes I had keyhole surgery on my gallbladder two years back.
+[SEG0035] person_2 (DOCTOR): alright, may I examine you now?
+[SEG0036] person_2 (DOCTOR): look straight ahead
+[SEG0037] person_2 (DOCTOR): Your pulse is fast and irregular and the thyroid feels slightly enlarged.
+[SEG0038] person_2 (DOCTOR): all finished thank you
+[SEG0039] person_2 (DOCTOR): from what you've told me and what I found, this looks most like an overactive thyroid with atrial fibrillation, in an apathetic older patient i'd like to arrange a thyroid test for weight loss and irregular pulse
+[SEG0040] person_1 (PATIENT): does it hurt?
+[SEG0041] person_2 (DOCTOR): I'd like to arrange an ECG for irregular pulse. It is easy to miss in older people because they seem sleepy rather than hot and shaky. Book a review after the results. I think we're done unless you have questions
+[SEG0042] person_1 (PATIENT): Actually, good, thanks, I'll see you then.
+[SEG0043] person_2 (DOCTOR): All the best.
+
+JSON:

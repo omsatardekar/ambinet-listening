@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01298)
+[SEG0001] person_1 (PATIENT): Hello, doctor. I think it's my turn.
+[SEG0002] person_2 (DOCTOR): No problem at all, come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): I mean, mainly taking a lot of tablets. There's a couple of other things, but that's the main one. Sorry, I know I'm rambling a bit. I'm not great at remembering details, so bear with me.
+[SEG0004] person_2 (DOCTOR): How long has it been like this?
+[SEG0005] person_1 (PATIENT): Um, hm. It was either the end of last month or earlier than that. I couldn't tell you the date.
+[SEG0006] person_2 (DOCTOR): I see, go ahead. Would you say mild, moderate or severe?
+[SEG0007] person_1 (PATIENT): Mostly moderate.
+[SEG0008] person_2 (DOCTOR): Have you had tummy pain?
+[SEG0009] person_1 (PATIENT): Yeah, yeah. About two weeks, I'd say. As for tummy pain, it feels moderate to me. I've also been feeling very low, for about three months. With feeling very low, it feels severe to me.
+[SEG0010] person_2 (DOCTOR): And what about drowsiness or chest pain?
+[SEG0011] person_1 (PATIENT): No, you know, none that I've noticed.
+[SEG0012] person_2 (DOCTOR): Has your skin been okay?
+[SEG0013] person_1 (PATIENT): Skin's normal.
+[SEG0014] person_2 (DOCTOR): Any surgery in the past?
+[SEG0015] person_1 (PATIENT): Just a bunion operation, six years ago.
+[SEG0016] person_2 (DOCTOR): So, are you allergic to anything? Any allergies to medicines or foods?
+[SEG0017] person_1 (PATIENT): Grass pollen. I come out in... well, itchy eyes.
+[SEG0018] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0019] person_1 (PATIENT): I used to drink heavily but I stopped four years ago. No, I've never smoked in my life. I work in accounts at a hospital. My partner and our baby. Not much, I mostly stay in these days.
+[SEG0020] person_2 (DOCTOR): Okay, do you have any long-term conditions?
+[SEG0021] person_1 (PATIENT): I have depression, for about ten years. I've been reading about it online and it worried me. I've had an irregular heartbeat for nearly five years now. I've been putting this off for weeks.
+[SEG0022] person_2 (DOCTOR): Alright, depression, that matches what I have here. What do you take on a normal day?
+[SEG0023] person_1 (PATIENT): I'm on something called fluo... fluoxetine, 20 milligrams, maybe, every morning for my mood.
+[SEG0024] person_2 (DOCTOR): Have you got the box or the prescription on you?
+[SEG0025] person_1 (PATIENT): Not with me. I'll bring it next time. Right, um, I take metoprolol, 50 milligrams, twice a day.
+[SEG0026] person_2 (DOCTOR): Let me take your readings now.
+[SEG0027] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0028] person_2 (DOCTOR): Okay: blood pressure 126 over 77, SpO2 97 percent on room air, temperature is 36.9 degrees, heart rate 76.
+[SEG0029] person_2 (DOCTOR): I'll examine you in a second, make yourself comfortable.
+[SEG0030] person_1 (PATIENT): That's alright.
+[SEG0031] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0032] person_2 (DOCTOR): You are awake and alert, with some tenderness under the right ribs.
+[SEG0033] person_1 (PATIENT): Of course.
+[SEG0034] person_2 (DOCTOR): That's all I needed to check.
+[SEG0035] person_2 (DOCTOR): So where does that leave us? This looks most like a significant paracetamol overdose needing urgent treatment. I'd also keep a mixed overdose in mind.
+[SEG0036] person_2 (DOCTOR): We should do a paracetamol level for overdose. I'm going to order liver function tests, for overdose. Let's use acetylcysteine, per protocol, over 21 hours, per protocol. It's for paracetamol overdose.
+[SEG0037] person_1 (PATIENT): Okay, I understand.
+[SEG0038] person_2 (DOCTOR): You need to stay in hospital for treatment, and someone will speak to you about how you are feeling. If you smoke, this is a good moment to think about stopping, and we can help you with that. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Please don't wait if the symptoms get worse. That's when to be seen urgently. I'd like you back straight away.
+[SEG0039] person_1 (PATIENT): That's fine with me.
+[SEG0040] person_2 (DOCTOR): Does all of that make sense?
+[SEG0041] person_1 (PATIENT): Thank you, doctor, goodbye.
+
+JSON:

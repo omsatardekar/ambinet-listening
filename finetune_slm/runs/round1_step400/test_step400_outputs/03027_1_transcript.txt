@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03027)
+[SEG0001] person_1 (PATIENT): Hi, you know, doctor, I came as soon as they called me.
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_3 (CAREGIVER): Um, uh, doctor, I'll sit in if that's okay, I know what's been happening.
+[SEG0004] person_2 (DOCTOR): That's fine, sit down. We'll go through it together.
+[SEG0005] person_3 (CAREGIVER): Actually, we came because of fever and shivers.
+[SEG0006] person_2 (DOCTOR): How long has this been bothering you?
+[SEG0007] person_1 (PATIENT): about... well, about a month
+[SEG0008] person_2 (DOCTOR): have you noticed anything else alongside it?
+[SEG0009] person_1 (PATIENT): Right, it usually comes with confusion.
+[SEG0010] person_2 (DOCTOR): would you say mild, moderate or severe?
+[SEG0011] person_1 (PATIENT): Well, a four out of ten, I suppose.
+[SEG0012] person_2 (DOCTOR): Have you noticed back pain or cough?
+[SEG0013] person_1 (PATIENT): Let me think, no, not a single one.
+[SEG0014] person_2 (DOCTOR): So, did you get fall or vomiting?
+[SEG0015] person_1 (PATIENT): ah, no, nothing to to report there
+[SEG0016] person_2 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0017] person_1 (PATIENT): actually, you know, no, all normal there
+[SEG0018] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0019] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0020] person_2 (DOCTOR): are there any allergies I should be aware of?
+[SEG0021] person_1 (PATIENT): Yes, amoxicillin. I get a rash all over.
+[SEG0022] person_2 (DOCTOR): Okay, what conditions have you been treated for in the past?
+[SEG0023] person_1 (PATIENT): ah, you know, I've had an enlarged prostate for about a year now
+[SEG0024] person_2 (DOCTOR): okay, go on
+[SEG0025] person_1 (PATIENT): I've, I've got high cholesterol.
+[SEG0026] person_2 (DOCTOR): Yes, carry on. Are you active?
+[SEG0027] person_1 (PATIENT): I walk the dog every morning
+[SEG0028] person_2 (DOCTOR): How are your meals?
+[SEG0029] person_1 (PATIENT): I grab fast food at lunch most days.
+[SEG0030] person_2 (DOCTOR): Is there someone at home?
+[SEG0031] person_1 (PATIENT): My husband and I live above the shop.
+[SEG0032] person_2 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0033] person_1 (PATIENT): my father has Parkinson's disease
+[SEG0034] person_2 (DOCTOR): tell me your medicines, please
+[SEG0035] person_1 (PATIENT): Tamsulosin, 0.4 milligrams, at night. A urinary catheter i take it in place
+[SEG0036] person_2 (DOCTOR): How long have you been on it?
+[SEG0037] person_1 (PATIENT): For about a year. Before this I was on atorvastatin; that's been stopped.
+[SEG0038] person_2 (DOCTOR): Right, have you had any previous surgeries?
+[SEG0039] person_1 (PATIENT): No surgery, no.
+[SEG0040] person_2 (DOCTOR): I'll just record a few vital signs.
+[SEG0041] person_2 (DOCTOR): Sit still for a a moment...
+[SEG0042] person_2 (DOCTOR): Okay: pulse is 100 beats a minute, saturation 97 percent. And temp 38.1 degrees, blood pressure 126 over 78.
+[SEG0043] person_2 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0044] person_2 (DOCTOR): Does that hurt?
+[SEG0045] person_2 (DOCTOR): The catheter bag has cloudy urine and there is tenderness above the pubic bone.
+[SEG0046] person_2 (DOCTOR): Okay, that's enough for me. Taking everything into account, I'd lean towards a catheter-related urinary infection. Let me repeat that back to make sure. You've had fever and shivers for about a month, and no vomiting or fall.
+[SEG0047] person_1 (PATIENT): yes, you know, that's right
+[SEG0048] person_2 (DOCTOR): Blood tests is what I'd like next, for fever i think a urine culture makes sense here, for possible urinary infection change the catheter and drink plenty keep an eye out, and if the symptoms get worse, call us the same day or go to emergency
+[SEG0049] person_1 (PATIENT): that's fine by me
+[SEG0050] person_2 (DOCTOR): Book a review in two days. I think we're done unless you have questions.
+[SEG0051] person_1 (PATIENT): That's clear, thanks.
+
+JSON:

@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00980)
+[SEG0001] person_1 (PATIENT): Good morning, doctor. I have no complaints at all, I'm here for my annual health check, and I'd like blood tests, as I've read it's sensible after forty.
+[SEG0002] person_2 (DOCTOR): It is sensible. Let me start with some questions. How are you in yourself? ~
+[SEG0003] person_1 (PATIENT): Very well, honestly. A few small things. I sometimes get mild heartburn after spicy food.
+[SEG0004] person_2 (DOCTOR): How often?
+[SEG0005] person_1 (PATIENT): Perhaps once a week.
+[SEG0006] person_2 (DOCTOR): Anything else?
+[SEG0007] person_1 (PATIENT): My lower back is a little stiff when I wake up. It goes after a shower.
+[SEG0008] person_2 (DOCTOR): Energy levels?
+[SEG0009] person_1 (PATIENT): Fine. A bit tired by the evening, but I work long hours.
+[SEG0010] person_2 (DOCTOR): Any chest pain?
+[SEG0011] person_1 (PATIENT): No chest pain.
+[SEG0012] person_2 (DOCTOR): What do you take at the moment?
+[SEG0013] person_1 (PATIENT): A multivitamin, a little yellow capsule, from the pharmacy. I forget its name. And vitamin C, maybe 500 mg, once a day.
+[SEG0014] person_2 (DOCTOR): Fine. And what do you do for a living?
+[SEG0015] person_1 (PATIENT): I'm a software architect. Desk-bound, I'm afraid.
+[SEG0016] person_2 (DOCTOR): Let me take your numbers. Blood pressure 126 over 78, pulse 68, weight 72 kilos.
+[SEG0017] person_1 (PATIENT): That's good, isn't it? ~
+[SEG0018] person_2 (DOCTOR): Very good. I'm going to feel your tummy.
+[SEG0019] person_1 (PATIENT): Go ahead. ~
+[SEG0020] person_2 (DOCTOR): Your abdomen is soft and not tender.
+[SEG0021] person_1 (PATIENT): Good. ~
+[SEG0022] person_2 (DOCTOR): And the muscles of your lower back are a bit tight on both sides.
+[SEG0023] person_1 (PATIENT): That's the stiffness. ~
+[SEG0024] person_2 (DOCTOR): Overall you're in good shape. I think you're healthy for your age, with only minor, easily managed complaints.
+[SEG0025] person_1 (PATIENT): That's what I hoped. ~
+[SEG0026] person_2 (DOCTOR): For the heartburn, I'd like to start omeprazole, 20 mg, once a day, before breakfast.
+[SEG0027] person_1 (PATIENT): For how long? ~
+[SEG0028] person_2 (DOCTOR): A month, and we'll see. And for the back, I'd suggest paracetamol, 1 gram, when it's stiff.
+[SEG0029] person_1 (PATIENT): I rarely take anything. ~
+[SEG0030] person_2 (DOCTOR): Only when you need it. Now the tests. I'd like to arrange a full blood count with liver and kidney function, and a cholesterol and HbA1c test.
+[SEG0031] person_1 (PATIENT): Do I need to fast? ~
+[SEG0032] person_2 (DOCTOR): For the cholesterol, yes, from midnight. Water is fine. ~
+[SEG0033] person_1 (PATIENT): Okay. ~
+[SEG0034] person_2 (DOCTOR): And stretch your back for a few minutes each morning.
+[SEG0035] person_1 (PATIENT): I'll do that. ~
+[SEG0036] person_2 (DOCTOR): If the heartburn isn't better in four weeks, come back and see me.
+[SEG0037] person_1 (PATIENT): Four weeks. Thank you, doctor. ~
+
+JSON:

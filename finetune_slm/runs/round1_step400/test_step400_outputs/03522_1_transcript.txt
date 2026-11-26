@@ -1,0 +1,80 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03522)
+[SEG0001] person_1 (PATIENT): Hello doctor, sorry, I took a wrong turn on the way here.
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): Actually, doctor, thank you for seeing us.
+[SEG0004] person_2 (DOCTOR): Please do. Extra information is always welcome.
+[SEG0005] person_1 (PATIENT): It's blacking out when I stand quickly, mostly.
+[SEG0006] person_2 (DOCTOR): Right, how long has this been bothering you?
+[SEG0007] person_1 (PATIENT): I've had it it for about a week.
+[SEG0008] person_2 (DOCTOR): So, tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0009] person_1 (PATIENT): I'd call it severe. I notice it more with standing. It just comes and goes.
+[SEG0010] person_2 (DOCTOR): have you noticed anything else alongside it?
+[SEG0011] person_1 (PATIENT): When it starts I tend to get blurred vision on standing as well.
+[SEG0012] person_1 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0013] person_3 (FAMILY_MEMBER): tell the doctor about the other thing, that's what worries me
+[SEG0014] person_1 (PATIENT): I was getting to that!
+[SEG0015] person_2 (DOCTOR): That's fine, one at a time. I'll ask about everything.
+[SEG0016] person_1 (PATIENT): As for feeling lightheaded, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0017] person_2 (DOCTOR): Is it bearing on you a lot?
+[SEG0018] person_1 (PATIENT): I, I'd call it mild
+[SEG0019] person_2 (DOCTOR): Have you ever had an operation?
+[SEG0020] person_1 (PATIENT): I had my appendix taken out when I was in my twenties.
+[SEG0021] person_2 (DOCTOR): Do you have any chronic illnesses?
+[SEG0022] person_1 (PATIENT): High blood pressure, for nearly five years.
+[SEG0023] person_2 (DOCTOR): any other things?
+[SEG0024] person_1 (PATIENT): I've had an enlarged prostate for about ten years now yes, high cholesterol
+[SEG0025] person_2 (DOCTOR): right, right
+[SEG0026] person_1 (PATIENT): I have heart failure. Gout, for about a year.
+[SEG0027] person_2 (DOCTOR): Right, right. Yes, high blood pressure and an enlarged prostate are known to us, good to have that clear.
+[SEG0028] person_2 (DOCTOR): are you taking anything regularly, including from the pharmacy?
+[SEG0029] person_1 (PATIENT): Hydrochlorothiazide. I take it 12.5 milligrams, every morning for my pressure.
+[SEG0030] person_1 (PATIENT): It's, It's a... um, I can't remember what it's called. It's a round yellow one.
+[SEG0031] person_2 (DOCTOR): Do you remember what it's for?
+[SEG0032] person_1 (PATIENT): for my cholesterol, I believe my wife sets them out for me, I just take what I'm given. Metoprolol, 50 milligrams, twice a day
+[SEG0033] person_3 (FAMILY_MEMBER): That's what's prescribed, but I'm not sure he takes it every day.
+[SEG0034] person_1 (PATIENT): Allopurinol, 100 milligrams, maybe, once a day.
+[SEG0035] person_2 (DOCTOR): Okay, have you got the box or the prescription on you?
+[SEG0036] person_1 (PATIENT): No, it's at home. I used to to take valsartan, but I stopped it.
+[SEG0037] person_2 (DOCTOR): are there any illnesses in your family?
+[SEG0038] person_1 (PATIENT): My sister had breast cancer. My brother has epilepsy.
+[SEG0039] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0040] person_1 (PATIENT): I used to drink heavily but I stopped four years ago. I have about eight cigarettes in a day. I swim twice a week. I retired from the post office two years ago
+[SEG0041] person_2 (DOCTOR): have you had palpitations, by any chance?
+[SEG0042] person_1 (PATIENT): Sorry, what was I saying, not that I've noticed, no palpitations.
+[SEG0043] person_2 (DOCTOR): have you noticed head injury, chest pain or seizure?
+[SEG0044] person_1 (PATIENT): No, I haven't had any of them.
+[SEG0045] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0046] person_1 (PATIENT): No, joints are fine.
+[SEG0047] person_2 (DOCTOR): Let me get the readings out of the way.
+[SEG0048] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0049] person_2 (DOCTOR): Okay: pulse is 108 beats a minute, SpO2 96 percent on room air, blood pressure 93 over 56, respiratory rate 19.
+[SEG0050] person_1 (PATIENT): Is that alright, doctor?
+[SEG0051] person_2 (DOCTOR): we'll go over that shortly
+[SEG0052] person_2 (DOCTOR): Right, here's what I'm thinking. It points towards medicine-induced postural hypotension. An arrhythmia is still possible.
+[SEG0053] person_1 (PATIENT): I'm scared it's something bad. Is it?
+[SEG0054] person_2 (DOCTOR): I understand the worry at the moment I'd say it's medicine-induced postural hypotension, and we'll know more once the an ECG is back let me repeat that back to make sure you've had blacking out when you stand quickly for about a week, severe, and no palpitations or head injury
+[SEG0055] person_1 (PATIENT): Mm, that's right.
+[SEG0056] person_2 (DOCTOR): Let's book an ECG to look into syncope. That will help us see what's going on underneath and decide the next step.
+[SEG0057] person_4 (CLINICAL_STAFF): We have a a slot Monday at 11:30 am, if that works.
+[SEG0058] person_1 (PATIENT): Monday, that works for me
+[SEG0059] person_2 (DOCTOR): Blood tests is what I'd like next, for syncope we will move the prostate tablet to bedtime and you should rise slowly and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+[SEG0060] person_1 (PATIENT): I'll remember that.
+[SEG0061] person_2 (DOCTOR): Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency. I'd like you back in two weeks.
+[SEG0062] person_1 (PATIENT): Right.
+[SEG0063] person_2 (DOCTOR): That's everything on my side. Anything you're unsure about?
+[SEG0064] person_1 (PATIENT): no, that's all. Thanks a lot
+[SEG0065] person_2 (DOCTOR): Look after yourself.
+
+JSON:

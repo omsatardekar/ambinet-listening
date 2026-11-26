@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00185)
+[SEG0001] person_1 (DOCTOR): Good morning. Come in have a a seat.
+[SEG0002] person_2 (PATIENT): thank you
+[SEG0003] person_3 (FAMILY_MEMBER): doctor, I'm just here to help with the the details
+[SEG0004] person_1 (DOCTOR): How can I help you today?
+[SEG0005] person_3 (FAMILY_MEMBER): We came because of itching that wakes me at night.
+[SEG0006] person_1 (DOCTOR): When did you first notice it?
+[SEG0007] person_2 (PATIENT): I've, I've had it since Friday.
+[SEG0008] person_1 (DOCTOR): can you describe it a bit more for me? How strong it is what the pattern is what helps
+[SEG0009] person_2 (PATIENT): about a seven out of ten it's a couple of times a week
+[SEG0010] person_1 (DOCTOR): Any redness as well?
+[SEG0011] person_2 (PATIENT): yeah that too. And there's an itchy rash as well about three months now
+[SEG0012] person_1 (DOCTOR): Okay give me more detail on it whatever comes to mind.
+[SEG0013] person_2 (PATIENT): Oh, it's a couple of times a week. I'd call it severe. And, And there's cracked skin on my hands as well, about two weeks now. Well, as for cracked skin on my hands, I'd call it mild.
+[SEG0014] person_1 (DOCTOR): have you had itching that wakes you at night before or is this the first time?
+[SEG0015] person_2 (PATIENT): yes, uh, something like this happened last winter, and it went away on its own
+[SEG0016] person_1 (DOCTOR): and what about fever or new soap or detergent?
+[SEG0017] person_2 (PATIENT): okay so no no fever or new soap or detergent
+[SEG0018] person_1 (DOCTOR): Did you get oozing or similar rash in family members?
+[SEG0019] person_2 (PATIENT): No no oozing or similar rash in family members.
+[SEG0020] person_1 (DOCTOR): any problems with your joints or muscles?
+[SEG0021] person_2 (PATIENT): no nothing there
+[SEG0022] person_1 (DOCTOR): any operations in the past?
+[SEG0023] person_2 (PATIENT): I had a stent put in my heart two years ago.
+[SEG0024] person_1 (DOCTOR): anyone in the the family with similar problems or other conditions?
+[SEG0025] person_2 (PATIENT): hmm, my father had kidney stones. My father had a heart attack
+[SEG0026] person_1 (DOCTOR): a few questions about your lifestyle now
+[SEG0027] person_2 (PATIENT): I smoke, yes, around five a day. I go to the gym a couple of times a week. Mostly home-cooked food, rice and vegetables. Yes, I'm a nurse on a busy ward.
+[SEG0028] person_1 (DOCTOR): what medicines do you take regularly?
+[SEG0029] person_2 (PATIENT): It's Asthalin inhaler, when needed.
+[SEG0030] person_3 (FAMILY_MEMBER): hmm, you know, it's meant to be when needed, though I don't see she take it every time
+[SEG0031] person_2 (PATIENT): I take clopidogrel, 75 milligrams, once a day i'm on moisturiser, twice a day
+[SEG0032] person_1 (DOCTOR): tell me about your health in general, any ongoing conditions?
+[SEG0033] person_2 (PATIENT): I've had eczema for two years now. Yes asthma. I've got heart disease
+[SEG0034] person_1 (DOCTOR): mm. Okay I can see eczema in your file as well. Are there any allergies on your record that I should check?
+[SEG0035] person_2 (PATIENT): uh, not currently, but as a youngster aspirin gave me wheezing
+[SEG0036] person_1 (DOCTOR): I'll take a few measurements first
+[SEG0037] person_1 (DOCTOR): okay give me a moment..
+[SEG0038] person_1 (DOCTOR): Okay: blood pressure 124 over 77, heart rate 79, temperature 36.9. And SpO2 99 percent on room air.
+[SEG0039] person_1 (DOCTOR): right, let me check a few things physically
+[SEG0040] person_1 (DOCTOR): hold that position for me
+[SEG0041] person_1 (DOCTOR): no signs of infection, no crusting
+[SEG0042] person_1 (DOCTOR): Just relax I'll be quick.
+[SEG0043] person_1 (DOCTOR): there are dry red patches in the the creases of both elbows with scratch marks
+[SEG0044] person_2 (PATIENT): okay, ready
+[SEG0045] person_1 (DOCTOR): Okay, you can sit up. You'll be taking cetirizine, 10 milligrams, at night, for one week. You take it by mouth. That's for itching. I'll put all of this in writing so you don't have to remember it. Moisturise right after a bath, thick creams are better than lotions, and use a mild soap. A short walk every day, even twenty minutes, will help more than you'd think. Please come and see me in three weeks.
+[SEG0046] person_1 (DOCTOR): Good. Let us know how you get on.
+[SEG0047] person_2 (PATIENT): Alright, thanks. Bye for now.
+[SEG0048] person_1 (DOCTOR): Safe journey home.
+
+JSON:

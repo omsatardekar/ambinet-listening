@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00288)
+[SEG0001] person_1 (DOCTOR): Good morning, how are you doing today?
+[SEG0002] person_2 (PATIENT): Hi, doctor.
+[SEG0003] person_3 (CAREGIVER): Doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_1 (DOCTOR): Of course, please stay. It's helpful to have you here. Tell me from the beginning, what's been happening?
+[SEG0005] person_2 (PATIENT): So, So the thing is, I've got a mole that has changed.
+[SEG0006] person_1 (DOCTOR): How long are we talking about?
+[SEG0007] person_2 (PATIENT): Hmm, I've had it since Monday.
+[SEG0008] person_1 (DOCTOR): Anything that tends to go along with it?
+[SEG0009] person_2 (PATIENT): It usually comes with it's got darker. Oh, and it bled once. Uh, the it's got darker? That's been for three weeks.
+[SEG0010] person_1 (DOCTOR): Have you noticed lumps in the armpit, history of sunburn or pain?
+[SEG0011] person_2 (PATIENT): Right, no, I'd have mentioned it.
+[SEG0012] person_1 (DOCTOR): Have you noticed fever or weight loss?
+[SEG0013] person_2 (PATIENT): No, none of that at all.
+[SEG0014] person_1 (DOCTOR): Is your urine normal, no changes?
+[SEG0015] person_2 (PATIENT): I mean, that's normal as far as I know.
+[SEG0016] person_1 (DOCTOR): How about your heart, any problems like that?
+[SEG0017] person_2 (PATIENT): No, that's been fine.
+[SEG0018] person_1 (DOCTOR): What medicines do you take regularly?
+[SEG0019] person_2 (PATIENT): Tamsulosin. I take it at night.
+[SEG0020] person_1 (DOCTOR): How much do you take?
+[SEG0021] person_2 (PATIENT): 0.4 milligrams, I think that's what's on the box.
+[SEG0022] person_1 (DOCTOR): Is that long-standing?
+[SEG0023] person_2 (PATIENT): For about a month.
+[SEG0024] person_1 (DOCTOR): And then?
+[SEG0025] person_1 (DOCTOR): Any long-term health problems I should know about? These questions might sound routine, but they matter.
+[SEG0026] person_2 (PATIENT): Well, I've had an enlarged prostate for five years now.
+[SEG0027] person_1 (DOCTOR): Any allergies I should know about?
+[SEG0028] person_2 (PATIENT): No, nothing I'm aware of.
+[SEG0029] person_1 (DOCTOR): What's your diet like?
+[SEG0030] person_2 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0031] person_1 (DOCTOR): Are you still working?
+[SEG0032] person_2 (PATIENT): I'm retired now, I was a clerk for years.
+[SEG0033] person_1 (DOCTOR): Do you get any exercise?
+[SEG0034] person_2 (PATIENT): I walk for about half an hour most days.
+[SEG0035] person_1 (DOCTOR): Can I take your vitals now?
+[SEG0036] person_1 (DOCTOR): Rest your hand here...
+[SEG0037] person_1 (DOCTOR): Okay: temp 36.8 degrees, pressure 112 over 71, saturation 97 percent, pulse 83.
+[SEG0038] person_1 (DOCTOR): Let's do the physical part now.
+[SEG0039] person_1 (DOCTOR): Tell me if anything hurts.
+[SEG0040] person_1 (DOCTOR): I can't feel any glands in the armpit.
+[SEG0041] person_2 (PATIENT): Yes, doctor.
+[SEG0042] person_1 (DOCTOR): That's fine, sit up.
+[SEG0043] person_1 (DOCTOR): Okay, thinking it through, this is probably a pigmented lesion that needs to be looked at more closely. That's my thinking for now, and it may change as we learn more. An atypical mole is also on my list. I'm sending you for a skin biopsy because of changing mole. I'm sending you for a dermoscopy because of changing mole.
+[SEG0044] person_2 (PATIENT): Does it need any preparation?
+[SEG0045] person_1 (DOCTOR): Please use sunscreen and cover up in the midday sun, and check your skin once a month. I'll also refer you to a dermatologist.
+[SEG0046] person_2 (PATIENT): Sure, where do I go?
+[SEG0047] person_1 (DOCTOR): Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency. Let's plan a check after the biopsy results.
+[SEG0048] person_2 (PATIENT): Um, that works for me.
+[SEG0049] person_1 (DOCTOR): Okay, I think we're finished. Is everything clear?
+[SEG0050] person_2 (PATIENT): Okay, so thanks, that was helpful.
+[SEG0051] person_1 (DOCTOR): Mind how you go.
+
+JSON:

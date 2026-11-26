@@ -1,0 +1,50 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02328)
+[SEG0001] person_1 (PATIENT): Hmm, hi, is it okay to come in now?
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What seems to be wrong?
+[SEG0003] person_1 (PATIENT): I wanted to get a hot red swollen big toe looked at. I thought it would sort itself out, but it hasn't.
+[SEG0004] person_2 (DOCTOR): How many days or weeks has it been?
+[SEG0005] person_1 (PATIENT): Yesterday, it came on out of nowhere. My family kept telling me to get it checked.
+[SEG0006] person_2 (DOCTOR): Have you tried anything for it?
+[SEG0007] person_1 (PATIENT): Ice helps a bit.
+[SEG0008] person_2 (DOCTOR): Did you get rash, fever or injury?
+[SEG0009] person_1 (PATIENT): I haven't had rash, fever or injury, no.
+[SEG0010] person_2 (DOCTOR): Alright, any pins and needles or loss of strength anywhere?
+[SEG0011] person_1 (PATIENT): No, um, that's all normal.
+[SEG0012] person_2 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0013] person_1 (PATIENT): It's ibuprofen, 400 milligrams, three times a day.
+[SEG0014] person_2 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0015] person_1 (PATIENT): Um, no, I've never reacted to anything.
+[SEG0016] person_2 (DOCTOR): Alright, do you have any medical conditions I should know about?
+[SEG0017] person_1 (PATIENT): No, I've always been fairly healthy.
+[SEG0018] person_2 (DOCTOR): What does a normal day of food look like?
+[SEG0019] person_1 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0020] person_2 (DOCTOR): Anything you do to stay fit?
+[SEG0021] person_1 (PATIENT): I do a yoga class on Thursdays.
+[SEG0022] person_2 (DOCTOR): I'll note down your vital signs first.
+[SEG0023] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0024] person_2 (DOCTOR): Okay: heart rate 86, pressure 125 over 76, respiratory rate 17. And temperature is 36.9 degrees.
+[SEG0025] person_1 (PATIENT): Is that alright, doctor?
+[SEG0026] person_2 (DOCTOR): I'll come back to the numbers.
+[SEG0027] person_2 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0028] person_1 (PATIENT): Okay, you know, doctor.
+[SEG0029] person_2 (DOCTOR): Raise your arm for me.
+[SEG0030] person_2 (DOCTOR): The big toe joint is red, hot, swollen and exquisitely tender.
+[SEG0031] person_2 (DOCTOR): Okay, that's enough for me.
+[SEG0032] person_2 (DOCTOR): Taking everything into account, it fits best with an acute gout attack. I'm sending you for a uric acid blood test because of gout. Rest the foot, ice it, and drink plenty of water; limit beer and red meat. Don't skip meals, and try to eat smaller portions more often through the day. I'd like to see you again in two weeks.
+[SEG0033] person_1 (PATIENT): Right.
+[SEG0034] person_2 (DOCTOR): Is there anything you'd like me to go over again?
+[SEG0035] person_1 (PATIENT): Alright, thanks, take care.
+
+JSON:

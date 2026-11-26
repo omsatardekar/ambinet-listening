@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03689)
+[SEG0001] person_1 (PATIENT): hello, doctor may I come in?
+[SEG0002] person_2 (DOCTOR): of course, leave it it there how can I help?
+[SEG0003] person_1 (PATIENT): Yeah, it's fainting once. I don't know what's causing it. My family kept telling me to get it checked.
+[SEG0004] person_2 (DOCTOR): How many days or weeks has it been?
+[SEG0005] person_1 (PATIENT): I'd say two weeks. Actually, no, closer to four weeks. I'm not great at remembering details, so bear with me.
+[SEG0006] person_2 (DOCTOR): I'll do your observations first.
+[SEG0007] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0008] person_2 (DOCTOR): Okay: pulse is 125 beats a minute, SpO2 96 percent on room air, BP is 135 over 70. And temperature is 36.8 degrees, respiratory rate 19.
+[SEG0009] person_2 (DOCTOR): may I examine you now?
+[SEG0010] person_2 (DOCTOR): Take a deep breath for me.
+[SEG0011] person_2 (DOCTOR): Your oxygen is lower than expected for someone so young and the left calf is a little swollen.
+[SEG0012] person_1 (PATIENT): okay, doctor
+[SEG0013] person_2 (DOCTOR): Thank you, you can get dressed.
+[SEG0014] person_2 (DOCTOR): did you notice any fever?
+[SEG0015] person_1 (PATIENT): not at all, no fever
+[SEG0016] person_2 (DOCTOR): any chest pain or coughing up blood at all?
+[SEG0017] person_1 (PATIENT): No, not a single one.
+[SEG0018] person_2 (DOCTOR): has your heart given you any trouble?
+[SEG0019] person_1 (PATIENT): Nothing like that.
+[SEG0020] person_2 (DOCTOR): Any problems with your joints or muscles?
+[SEG0021] person_1 (PATIENT): No, joints are fine.
+[SEG0022] person_2 (DOCTOR): what conditions have you been treated for in the past?
+[SEG0023] person_1 (PATIENT): I've had arthritis in my knees, yes.
+[SEG0024] person_2 (DOCTOR): What do you do during the day?
+[SEG0025] person_1 (PATIENT): I look after my grandchildren most days
+[SEG0026] person_2 (DOCTOR): How are your meals?
+[SEG0027] person_1 (PATIENT): I grab fast food at lunch most days.
+[SEG0028] person_2 (DOCTOR): So, do you live by yourself?
+[SEG0029] person_1 (PATIENT): No, I share a house with my brother.
+[SEG0030] person_2 (DOCTOR): Tell me your medicines, please.
+[SEG0031] person_1 (PATIENT): Diclofenac, 50 milligrams, when needed for the joint pain i'm on the contraceptive pill, daily
+[SEG0032] person_2 (DOCTOR): Any allergies to tablets, food or anything in the environment?
+[SEG0033] person_1 (PATIENT): no, not that I know of
+[SEG0034] person_2 (DOCTOR): So where does that leave us? I'd lean towards possible pulmonary embolism without chest pain.
+[SEG0035] person_1 (PATIENT): What are the odds it's serious?
+[SEG0036] person_2 (DOCTOR): It's reasonable to be concerned, but right now possible pulmonary embolism without chest pain is my leading thought, not anything worse.
+[SEG0037] person_2 (DOCTOR): I'm sending you for a D-dimer because of syncope and calf swelling. It's a routine test and it'll give us a much clearer picture.
+[SEG0038] person_1 (PATIENT): How long will it take?
+[SEG0039] person_2 (DOCTOR): Even without chest pain this needs a scan today, so please go to hospital. Come back straight away. Okay, that's everything on my side. Anything you're unsure about?
+[SEG0040] person_1 (PATIENT): I think I understand everything. Thanks.
+
+JSON:

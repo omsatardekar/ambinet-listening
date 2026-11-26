@@ -1,0 +1,76 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20016)
+[SEG0001] person_1 (DOCTOR): Hello sorry about the delay do sit.
+[SEG0002] person_2 (CAREGIVER): actually, thank you for fitting us in, doctor
+[SEG0003] person_1 (DOCTOR): of course please stay it's helpful to have you here what's the problem?
+[SEG0004] person_3 (PATIENT): Yeah, it's a sore on the bottom of my foot. I don't know what's causing it.
+[SEG0005] person_1 (DOCTOR): how many days or weeks has it been?
+[SEG0006] person_3 (PATIENT): Around three weeks I think.
+[SEG0007] person_2 (CAREGIVER): I think it's been nearer a month, actually
+[SEG0008] person_1 (DOCTOR): Okay, so roughly three to four weeks. Is that right?
+[SEG0009] person_3 (PATIENT): I, I suppose so, yes.
+[SEG0010] person_1 (DOCTOR): Okay, have you noticed anything else alongside it?
+[SEG0011] person_3 (PATIENT): Redness around the sore goes along with it, most of the time i've also had a smell from the dressing and I've been feeling feverish as well, for about a week about feeling feverish, it's a couple of times a week
+[SEG0012] person_1 (DOCTOR): hm okay
+[SEG0013] person_1 (DOCTOR): anything surgical in your history?
+[SEG0014] person_3 (PATIENT): yes, um, I had a triple bypass, eight years ago
+[SEG0015] person_1 (DOCTOR): before we go further, any allergies?
+[SEG0016] person_3 (PATIENT): yes, milk, it gives me a rash
+[SEG0017] person_1 (DOCTOR): is there someone at home?
+[SEG0018] person_3 (PATIENT): My husband and I live above the shop
+[SEG0019] person_1 (DOCTOR): Do you work outside the home?
+[SEG0020] person_3 (PATIENT): I'm a hairdresser, on my feet all day.
+[SEG0021] person_1 (DOCTOR): alright, do you follow any particular diet?
+[SEG0022] person_3 (PATIENT): I'm vegetarian and have been for years
+[SEG0023] person_1 (DOCTOR): Do you take any prescribed or over-the-counter medicines?
+[SEG0024] person_2 (CAREGIVER): he is on glibenclamide, before breakfast, I give it to him
+[SEG0025] person_1 (DOCTOR): And And what strength is that?
+[SEG0026] person_2 (CAREGIVER): it's 5 milligrams. It's aspirin, 75 milligrams, once a day for my heart, doctor
+[SEG0027] person_1 (DOCTOR): Anything in your past medical history I should know?
+[SEG0028] person_3 (PATIENT): yes high blood pressure. I have diabetes for about a year
+[SEG0029] person_1 (DOCTOR): Sure.
+[SEG0030] person_3 (PATIENT): I've got heart disease.
+[SEG0031] person_1 (DOCTOR): alright diabetes that matches what I have here. A few quick ones: confusion black toes or chest pain?
+[SEG0032] person_3 (PATIENT): no um I haven't had any of them
+[SEG0033] person_1 (DOCTOR): So what about pain at rest in the leg?
+[SEG0034] person_3 (PATIENT): no, none, no pain at rest in the leg
+[SEG0035] person_1 (DOCTOR): Did you notice any vomiting?
+[SEG0036] person_3 (PATIENT): nope no vomiting
+[SEG0037] person_2 (CAREGIVER): Actually doctor I did notice vomiting. He doesn't always say.
+[SEG0038] person_3 (PATIENT): hmm, no, I don't think I did. Maybe a a little, I'm not sure
+[SEG0039] person_1 (DOCTOR): alright, I'll note both what you've said and what you've noticed. On the cardiac side, anything I should know?
+[SEG0040] person_3 (PATIENT): My heart's been fine, as far as I know.
+[SEG0041] person_1 (DOCTOR): let me get the readings out of the way
+[SEG0042] person_1 (DOCTOR): bear with me while this finishes..
+[SEG0043] person_1 (DOCTOR): okay: pulse 103 temp 38.5 degrees. And pressure 124 over 79 saturation 98 percent
+[SEG0044] person_3 (PATIENT): Is that normal?
+[SEG0045] person_1 (DOCTOR): They help me see the whole picture, more shortly.
+[SEG0046] person_1 (DOCTOR): let's move on to the examination
+[SEG0047] person_1 (DOCTOR): Take a deep breath for me.
+[SEG0048] person_1 (DOCTOR): The pulses at the ankle are weak but I can feel them.
+[SEG0049] person_1 (DOCTOR): take a deep breath for me
+[SEG0050] person_1 (DOCTOR): There is a two-centimetre ulcer on the ball of the right foot with redness around it.
+[SEG0051] person_1 (DOCTOR): That's the examination finished.
+[SEG0052] person_1 (DOCTOR): so where does that leave us? This looks most like an infected diabetic foot ulcer it could also be pressure damage, so we'll keep that open
+[SEG0053] person_3 (PATIENT): actually, what are the odds it's serious?
+[SEG0054] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like an infected diabetic foot ulcer, but I'd like to confirm. Just to be sure I understood. You've had a sore on the bottom of your foot, and no confusion or chest pain.
+[SEG0055] person_3 (PATIENT): exactly
+[SEG0056] person_1 (DOCTOR): we should do blood tests for infection. A foot X-ray is what I'd like next, for ulcer. I'd like you to take amoxicillin/clavulanic acid, 625 milligrams, three times a day, for seven days. You take it by mouth. That should help with foot infection. Keep the weight off that foot and keep the dressing dry. If the redness spreads or you feel unwell with a fever, that's the point to come in urgently
+[SEG0057] person_3 (PATIENT): I understand.
+[SEG0058] person_1 (DOCTOR): let's review you after the swab result
+[SEG0059] person_3 (PATIENT): yes, that's manageable
+[SEG0060] person_1 (DOCTOR): Have I covered everything you wanted?
+[SEG0061] person_3 (PATIENT): alright, thanks, take care
+
+JSON:

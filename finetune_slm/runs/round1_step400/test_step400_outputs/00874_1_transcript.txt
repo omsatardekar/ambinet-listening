@@ -1,0 +1,48 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00874)
+[SEG0001] person_1 (PATIENT): Morning, doctor. My diabetes check is due, but I also get tingling in my feet now, and I wanted to ask about that.
+[SEG0002] person_2 (DOCTOR): Good morning. Let's start with the tingling. Which part of the feet?
+[SEG0003] person_1 (PATIENT): The toes, mostly, on both sides. Like pins and needles.
+[SEG0004] person_2 (DOCTOR): When did you first notice it?
+[SEG0005] person_1 (PATIENT): Oh, I couldn't say. Maybe the spring? Or last winter. I really don't remember.
+[SEG0006] person_2 (DOCTOR): Is it there all the time, or does it come and go?
+[SEG0007] person_1 (PATIENT): It's worse in the evening, when I'm sitting down.
+[SEG0008] person_2 (DOCTOR): Any weakness in the legs, or falls?
+[SEG0009] person_1 (PATIENT): No, nothing like that. My legs feel strong.
+[SEG0010] person_2 (DOCTOR): Tell me about the diabetes medicines you're on.
+[SEG0011] person_1 (PATIENT): Metformin, 500 mg, twice a day. Then a small yellow one in the morning, I don't know the name. And the injection at night.
+[SEG0012] person_2 (DOCTOR): Do you know how many units of the injection you take?
+[SEG0013] person_1 (PATIENT): Twenty, I think. Or perhaps twenty-four. My wife does it, she writes it down.
+[SEG0014] person_2 (DOCTOR): I'll ask you to bring her diary next time, then we'll be sure. Any other conditions besides the diabetes?
+[SEG0015] person_1 (PATIENT): Diabetes, for about ten years. That's all, really.
+[SEG0016] person_2 (DOCTOR): Have you noticed any trouble with your eyes, or sores on your feet?
+[SEG0017] person_1 (PATIENT): No. My eyes are fine, and my feet have no sores.
+[SEG0018] person_2 (DOCTOR): Good. I'll check your pulse, blood pressure and weight now. ~
+[SEG0019] person_1 (PATIENT): Go ahead. ~
+[SEG0020] person_2 (DOCTOR): Pulse 74, blood pressure 134 over 80, weight 88 kilograms, temperature 36.6.
+[SEG0021] person_1 (PATIENT): Is the weight all right? ~
+[SEG0022] person_2 (DOCTOR): It's about the same as last visit. I'd like to test the sensation in your feet with a thread in a moment. ~
+[SEG0023] person_1 (PATIENT): Does it hurt? ~
+[SEG0024] person_2 (DOCTOR): Not at all. Just tell me when you feel it. ~
+[SEG0025] person_1 (PATIENT): Yes. Yes. Hmm, I didn't feel that one. ~
+[SEG0026] person_2 (DOCTOR): Thank you. I'd like to send blood tests for your sugar control, the HbA1c, and also your kidneys and B12.
+[SEG0027] person_1 (PATIENT): All right. ~
+[SEG0028] person_2 (DOCTOR): The tingling may well be early nerve damage from the diabetes, but I'd like the tests to say so.
+[SEG0029] person_1 (PATIENT): Is it serious? ~
+[SEG0030] person_2 (DOCTOR): It's common, and it often settles when the sugars are steady. Please check your feet daily, and wear shoes that fit well.
+[SEG0031] person_1 (PATIENT): I will. ~
+[SEG0032] person_2 (DOCTOR): Come back in three weeks with your wife's diary, and I'll go through the results with you.
+[SEG0033] person_1 (PATIENT): Three weeks. Thank you, doctor. ~
+
+JSON:

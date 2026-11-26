@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03440)
+[SEG0001] person_1 (PATIENT): Good afternoon, doctor.
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_3 (CAREGIVER): Thank you for fitting us in, doctor.
+[SEG0004] person_2 (DOCTOR): Yes, that's no problem at all. Please sit.
+[SEG0005] person_1 (PATIENT): Doctor, you know, it's cloudy smelly urine. It's getting on my nerves now.
+[SEG0006] person_2 (DOCTOR): How many days or weeks has it been? I'll explain everything as we go along.
+[SEG0007] person_1 (PATIENT): About... well, about four days. My neighbour said I should get it looked at.
+[SEG0008] person_2 (DOCTOR): Right, right.
+[SEG0009] person_1 (PATIENT): Oh, and the other thing I wanted to mention is that I can't really—
+[SEG0010] person_3 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0011] person_1 (PATIENT): I was getting to that! I've also had pain in the lower tummy, since last weekend.
+[SEG0012] person_2 (DOCTOR): Okay, is it constant or in episodes?
+[SEG0013] person_1 (PATIENT): It comes and goes. I've also had confusion, for about three months. I did have fever and shivers at one point, but that's gone now.
+[SEG0014] person_2 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0015] person_1 (PATIENT): I take omeprazole, 20 milligrams, once a day for the reflux. Foracort inhaler. I take it twice a day for my asthma.
+[SEG0016] person_4 (FAMILY_MEMBER): Mm, that's what's prescribed, but I'm not sure he takes it every day.
+[SEG0017] person_1 (PATIENT): Diclofenac, 50 milligrams, when needed.
+[SEG0018] person_2 (DOCTOR): What about alcohol?
+[SEG0019] person_1 (PATIENT): Nothing, I'm teetotal.
+[SEG0020] person_2 (DOCTOR): Alright, what's your work?
+[SEG0021] person_1 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0022] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0023] person_1 (PATIENT): Yes, an enlarged prostate. Acid reflux, for two years. I've had asthma for two years now.
+[SEG0024] person_2 (DOCTOR): Understood.
+[SEG0025] person_1 (PATIENT): I have arthritis in my knees, for nearly five years.
+[SEG0026] person_2 (DOCTOR): Right, so an enlarged prostate and asthma are already on your record. We'll keep that in mind today. Does your family have any medical conditions?
+[SEG0027] person_1 (PATIENT): My aunt has rheumatoid arthritis.
+[SEG0028] person_2 (DOCTOR): Okay, have you had any previous surgeries?
+[SEG0029] person_1 (PATIENT): Nothing, I haven't had any operations.
+[SEG0030] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0031] person_1 (PATIENT): Plasters. I come out in... well, a red itchy rash.
+[SEG0032] person_2 (DOCTOR): And what about cough, vomiting or fall?
+[SEG0033] person_1 (PATIENT): Um, no cough, vomiting or fall, none of it.
+[SEG0034] person_2 (DOCTOR): Has there been any back pain?
+[SEG0035] person_1 (PATIENT): Yeah, no, I haven't had any back pain.
+[SEG0036] person_2 (DOCTOR): Is your digestion otherwise okay?
+[SEG0037] person_1 (PATIENT): Erm, bowels are regular, nothing odd.
+[SEG0038] person_2 (DOCTOR): Let me tell you where I've got to. This looks most like a catheter-related urinary infection. We shouldn't forget urosepsis. We should do blood tests for fever.
+[SEG0039] person_1 (PATIENT): Mm, alright.
+[SEG0040] person_2 (DOCTOR): We should do a urine culture for possible urinary infection. We'll begin with co-amoxiclav, 625 milligrams, three times a day, seven days. That should help with catheter urinary infection. Change the catheter and drink plenty. I'll want another look in two days.
+[SEG0041] person_1 (PATIENT): That's fine with me.
+[SEG0042] person_2 (DOCTOR): That's all from me. Any questions?
+[SEG0043] person_1 (PATIENT): Thank you, uh, doctor, goodbye.
+
+JSON:

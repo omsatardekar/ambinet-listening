@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00301)
+[SEG0001] person_1 (PATIENT): Hello doctor, sorry, am I early?
+[SEG0002] person_2 (DOCTOR): That's alright, take a seat. Tell me why you've come.
+[SEG0003] person_1 (PATIENT): Yeah, it's breathlessness when I lie flat. I don't know what's causing it.
+[SEG0004] person_2 (DOCTOR): So, roughly when did it start?
+[SEG0005] person_1 (PATIENT): Probably three days. Yeah.
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): Um, mostly severe. It settles a little with sitting up on pillows. It's every other day.
+[SEG0008] person_2 (DOCTOR): Alright, anything that tends to go along with it?
+[SEG0009] person_1 (PATIENT): Swelling in both ankles goes along with it, most of the time. With swelling in both ankles, severe, I'd say. I've been waking up at night short of breath too.
+[SEG0010] person_2 (DOCTOR): How often does it happen?
+[SEG0011] person_1 (PATIENT): It sort of comes and goes.
+[SEG0012] person_2 (DOCTOR): Does anything make it better?
+[SEG0013] person_1 (PATIENT): Uh, only sitting up, and it's not much.
+[SEG0014] person_2 (DOCTOR): And how severe is it?
+[SEG0015] person_1 (PATIENT): It feels severe to me.
+[SEG0016] person_2 (DOCTOR): Right, any palpitations?
+[SEG0017] person_1 (PATIENT): No, I haven't had any palpitations.
+[SEG0018] person_2 (DOCTOR): Right, any calf pain, chest pain or fainting?
+[SEG0019] person_1 (PATIENT): No. None of those.
+[SEG0020] person_2 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0021] person_1 (PATIENT): I move fine otherwise.
+[SEG0022] person_2 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0023] person_1 (PATIENT): Nothing unusual, no.
+[SEG0024] person_2 (DOCTOR): Any procedures or operations?
+[SEG0025] person_1 (PATIENT): I had a hernia repair about five years back.
+[SEG0026] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0027] person_1 (PATIENT): I've had heart failure for five years now.
+[SEG0028] person_2 (DOCTOR): Okay, and apart from that?
+[SEG0029] person_1 (PATIENT): Yes, high blood pressure.
+[SEG0030] person_2 (DOCTOR): Okay, I can see heart failure in your file as well. What about family history, any illnesses that run in the family?
+[SEG0031] person_1 (PATIENT): Yeah, um, my father had a stroke.
+[SEG0032] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0033] person_1 (PATIENT): I gave up drinking about three years ago. I run a small shop, so I'm on my feet a lot. I skip breakfast most days.
+[SEG0034] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0035] person_1 (PATIENT): I'm on furosemide, 40 milligrams, every morning. Telmisartan. I take it 40 milligrams, once a day for my pressure.
+[SEG0036] person_2 (DOCTOR): Before we go on, a few quick readings.
+[SEG0037] person_2 (DOCTOR): Hold still for me...
+[SEG0038] person_2 (DOCTOR): Okay: temp 37.2 degrees, pressure 121 over 73, heart rate 93. And saturation 89 percent.
+[SEG0039] person_2 (DOCTOR): Okay, a quick examination now.
+[SEG0040] person_2 (DOCTOR): Hold that position for me.
+[SEG0041] person_2 (DOCTOR): There's pitting oedema up to the shins on both legs.
+[SEG0042] person_2 (DOCTOR): Let me look at this properly.
+[SEG0043] person_2 (DOCTOR): I can hear crackles at the bases of both lungs.
+[SEG0044] person_2 (DOCTOR): That's all I need, thank you.
+[SEG0045] person_2 (DOCTOR): From what you've told me and what I found, it's hard to say. Fluid overload related to the heart is one possibility and a chest infection another, and I'd rather not commit yet. We should do an ECG for breathlessness. Weigh yourself every morning, and tell us if you put on more than two kilos in a few days. If the breathlessness gets worse or you can't lie down at all, that's the point to come in urgently.
+[SEG0046] person_2 (DOCTOR): I'd like to see you again in one week.
+[SEG0047] person_1 (PATIENT): Okay, so alright, I'll put it in my diary.
+[SEG0048] person_2 (DOCTOR): How would you describe the plan, so we're on the same page?
+[SEG0049] person_1 (PATIENT): So, I come back in one week. Is that right?
+[SEG0050] person_2 (DOCTOR): Yes, exactly right. So, ask me anything before you go.
+[SEG0051] person_1 (PATIENT): I think that's clear. Thank you for being so thorough.
+[SEG0052] person_2 (DOCTOR): Safe journey home.
+
+JSON:

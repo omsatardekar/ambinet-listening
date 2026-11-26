@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01271)
+[SEG0001] person_1 (NURSE): Morning, doctor. I've settled them in, ready when you are.
+[SEG0002] person_2 (DOCTOR): Thank you. Right, hello, what's the problem?
+[SEG0003] person_3 (PATIENT): Mainly scaly red plaques on my elbows. There's a couple of other things, but that's the main one. It's a relief to finally sit down and talk about it.
+[SEG0004] person_2 (DOCTOR): How long has it been like this?
+[SEG0005] person_3 (PATIENT): Erm, it's been about four days now.
+[SEG0006] person_2 (DOCTOR): Anything that improves it?
+[SEG0007] person_3 (PATIENT): Only moisturiser, and it's not much.
+[SEG0008] person_2 (DOCTOR): Does your family have any medical conditions?
+[SEG0009] person_3 (PATIENT): My uncle has high cholesterol.
+[SEG0010] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0011] person_3 (PATIENT): A plain emollient, twice a day.
+[SEG0012] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0013] person_3 (PATIENT): No, nothing at all.
+[SEG0014] person_2 (DOCTOR): Are you allergic to anything? Any allergies to medicines or foods?
+[SEG0015] person_3 (PATIENT): No known allergies.
+[SEG0016] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0017] person_3 (PATIENT): I walk the dog every morning. Lots of rice, lentils and some fruit. My husband and I live above the shop.
+[SEG0018] person_2 (DOCTOR): Any previous surgeries?
+[SEG0019] person_3 (PATIENT): No, never.
+[SEG0020] person_2 (DOCTOR): Right, how about fever?
+[SEG0021] person_3 (PATIENT): No. No fever.
+[SEG0022] person_2 (DOCTOR): Let me check a few things. Any joint pain or pus?
+[SEG0023] person_3 (PATIENT): Nope, um, nothing like that.
+[SEG0024] person_2 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0025] person_3 (PATIENT): Nothing odd there.
+[SEG0026] person_1 (NURSE): Doctor, I've got the readings for you. Pulse is 65 beats a minute, BP is 115 over 81, SpO2 98 percent on room air, temperature 36.6.
+[SEG0027] person_2 (DOCTOR): Okay, noted.
+[SEG0028] person_2 (DOCTOR): Shall I start the examination?
+[SEG0029] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0030] person_2 (DOCTOR): There are well-defined silvery plaques on both elbows and a few pits in the nails.
+[SEG0031] person_2 (DOCTOR): That's all I needed to check.
+[SEG0032] person_2 (DOCTOR): So, based on the history and the examination, my working impression is plaque psoriasis. I want to be honest that this is an impression, not a final answer.
+[SEG0033] person_3 (PATIENT): I mean, what are the odds it's serious?
+[SEG0034] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's plaque psoriasis, and we'll watch how it goes. What I'm giving you is calcipotriol and betamethasone, 50 micrograms/0.5 mg per g, once a day, four weeks. That's for psoriasis. It's a commonly used medicine and most people tolerate it well.
+[SEG0035] person_3 (PATIENT): Mm, alright.
+[SEG0036] person_2 (DOCTOR): Keep the skin well moisturised and avoid picking the plaques. If you get painful or swollen joints, or you feel really unwell, please come to the emergency department. I'd like to see you again in four weeks. Can you tell me the plan back in your own words, so I know I've explained it clearly?
+[SEG0037] person_3 (PATIENT): So, um, I take the calcipotriol and betamethasone, 50 micrograms/0.5 mg per g, once a day and come back in four weeks. Is that right?
+[SEG0038] person_2 (DOCTOR): Yes, exactly right. Does all of that make sense?
+[SEG0039] person_3 (PATIENT): Good, thanks, I'll see you then.
+
+JSON:

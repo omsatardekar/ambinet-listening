@@ -1,0 +1,72 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_19_prediabetes_what_happens_now)
+[SEG0001] person_1 (PATIENT): Is that bad?
+[SEG0002] person_3 (DOCTOR): It's a bit over, nothing to worry about. So, here's the picture. Your sugar is creeping up. You've got some extra weight around the middle, that's the kind that matters most for sugar, and your family history. Put those together and it's no surprise. But I want to say something about your dad. What was he like when he was your age?
+[SEG0003] person_1 (PATIENT): Um, he was already being treated for it at fifty. He lost his foot at sixty-two. He died at seventy-one. I was the one who looked after him at the end.
+[SEG0004] person_3 (DOCTOR): Mm-hm.
+[SEG0005] person_3 (DOCTOR): I'm sorry. That's a lot to carry, and no wonder you were awake at four.
+[SEG0006] person_1 (PATIENT): Yeah.
+[SEG0007] person_2 (FAMILY_MEMBER): Well, um, he doesn't talk about it. He keeps it all in.
+[SEG0008] person_3 (DOCTOR): Would it help to talk about it, Mark? Or is today about the plan?
+[SEG0009] person_1 (PATIENT): Er, the plan. For now. I might want to talk another day.
+[SEG0010] person_3 (DOCTOR): That's fine. The offer stands, and so does the door.
+[SEG0011] person_3 (DOCTOR): But I want you to hear this, because it's true. You're fifty-two, and you've caught it at the stage where it can be turned around. The research on this is really strong. People who lose five to ten percent of their body weight, and move more, cut their chance of developing diabetes by more than half.
+[SEG0012] person_1 (PATIENT): Half.
+[SEG0013] person_3 (DOCTOR): More than half. Five percent of ninety-four kilos is under five kilos. That's two stone, or thereabouts. That's not a crash diet. That's what you'd lose by cutting out the biscuits and walking half an hour a day.
+[SEG0014] person_2 (FAMILY_MEMBER): Mm.
+[SEG0015] person_2 (FAMILY_MEMBER): He loves his biscuits. And the pub on Fridays.
+[SEG0016] person_1 (PATIENT): It's two beers.
+[SEG0017] person_2 (FAMILY_MEMBER): And the chips.
+[SEG0018] person_1 (PATIENT): Okay, okay.
+[SEG0019] person_3 (DOCTOR): Look, nobody's perfect. Let's pick two or three things, not twenty. What do you eat for breakfast?
+[SEG0020] person_1 (PATIENT): Toast. White. With jam. And coffee with two sugars.
+[SEG0021] person_3 (DOCTOR): One easy swap there. Wholegrain toast, or porridge, and cut the sugar in the coffee down to one, then half. And lunch?
+[SEG0022] person_1 (PATIENT): Sandwich from the servo. Or a pie, if I'm on site.
+[SEG0023] person_3 (DOCTOR): Lunch is harder, I know. Maybe a salad in the sandwich, an apple instead of the chips. What about dinner?
+[SEG0024] person_2 (FAMILY_MEMBER): I cook. Mostly meat and two veg. The potatoes are generous.
+[SEG0025] person_2 (FAMILY_MEMBER): I can do that. I've been wanting to anyway, I just didn't know whether he'd eat it.
+[SEG0026] person_1 (PATIENT): I'd eat it.
+[SEG0027] person_2 (FAMILY_MEMBER): You said it was rabbit food last time.
+[SEG0028] person_1 (PATIENT): It was rabbit food. With no sauce.
+[SEG0029] person_3 (DOCTOR): Julie, a nice sauce is fine. It's the portion of potato and the amount of veg that we're changing, not the flavour. A smaller portion of potato and bigger of veg is the swap there. It doesn't have to be dramatic. And movement. What would you realistically do?
+[SEG0030] person_1 (PATIENT): Walk the dog. We've got a dog, but I sort of let Julie do it.
+[SEG0031] person_2 (FAMILY_MEMBER): He lets me do it.
+[SEG0032] person_1 (PATIENT): I'll do the evening one. Thirty minutes.
+[SEG0033] person_3 (DOCTOR): That's perfect. Thirty minutes a day is the target. And over the next six months, the main aim is to lose a few kilos, maybe five. I'd like to repeat the blood test in six months and see where you are.
+[SEG0034] person_1 (PATIENT): Six months. And if it's gone up?
+[SEG0035] person_3 (DOCTOR): Then we'd talk about the next steps. But I'd expect it to come down, if you stick at it.
+[SEG0036] person_1 (PATIENT): Will I have to go on injections? Like Dad?
+[SEG0037] person_3 (DOCTOR): No. Not at this stage, and not if we do this right. Your dad's story doesn't have to be your story.
+[SEG0038] person_1 (PATIENT): Okay.
+[SEG0039] person_2 (FAMILY_MEMBER): Mark. Did you hear that?
+[SEG0040] person_1 (PATIENT): Yeah. I did. Thanks, doctor. I feel a bit better. A bit lighter.
+[SEG0041] person_2 (FAMILY_MEMBER): What can I do? Besides hiding the biscuits.
+[SEG0042] person_3 (DOCTOR): Honestly, that helps. Do the shopping together, and cook it together, if he's willing. Walk with him at the start, it's easier when it's a habit with someone. And don't nag, because it backfires.
+[SEG0043] person_2 (FAMILY_MEMBER): I do nag.
+[SEG0044] person_3 (DOCTOR): Everybody does. Try to nag about the walk, not about the biscuit. And Mark, if you slip, one bad weekend doesn't undo the good ones. The average over three months is what we measure, not the Friday.
+[SEG0045] person_1 (PATIENT): Three months, like a report card.
+[SEG0046] person_3 (DOCTOR): A bit like a report card, but kind. And it's your numbers against your own numbers, not against anyone else.
+[SEG0047] person_1 (PATIENT): That I can live with.
+[SEG0048] person_3 (DOCTOR): And when you're lying awake at three, try this: get up, write the one thing you're worried about on a pad by the bed, and tell yourself it'll be there at eight. It gets the list out of your head.
+[SEG0049] person_1 (PATIENT): Right.
+[SEG0050] person_1 (PATIENT): I've got a pad. Julie bought it.
+[SEG0051] person_2 (FAMILY_MEMBER): I bought it six months ago.
+[SEG0052] person_1 (PATIENT): And I've never used it. I'll use it.
+[SEG0053] person_3 (DOCTOR): Good. Any other questions?
+[SEG0054] person_1 (PATIENT): Well, um, just one. Is it all right if I still have the pub on Fridays?
+[SEG0055] person_3 (DOCTOR): One or two, yes. Not five.
+[SEG0056] person_1 (PATIENT): Two. I can do two.
+[SEG0057] person_3 (DOCTOR): Right. Julie will help you with the plan, I'll have a note ready at reception with the date for the repeat blood test, and everything we said today.
+[SEG0058] person_2 (FAMILY_MEMBER): Mm.
+[SEG0059] person_2 (FAMILY_MEMBER): Thanks, doctor. He's been a different bloke in the last ten minutes.

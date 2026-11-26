@@ -1,0 +1,48 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20397)
+[SEG0001] person_1 (PATIENT): morning, doctor. Lovely to meet you
+[SEG0002] person_2 (DOCTOR): not at all, please sit. What seems to be wrong?
+[SEG0003] person_1 (PATIENT): honestly, uh, it's the room spinning, and my family pushed me to come
+[SEG0004] person_2 (DOCTOR): what's on your current medicine list?
+[SEG0005] person_1 (PATIENT): I'm on amlodipine, 5 milligrams, once a day i've been putting this off for weeks
+[SEG0006] person_2 (DOCTOR): How long has it been like this?
+[SEG0007] person_1 (PATIENT): For five days, I'd say.
+[SEG0008] person_2 (DOCTOR): Okay give me more detail on it whatever comes to mind.
+[SEG0009] person_1 (PATIENT): Lying down and turning my head definitely sets it off. A seven out of ten I suppose. Lying still helps a bit. It sort of comes and goes. I took the morning off to come in today. I've been reading about it online and it worried me. I've also had a blocked feeling in my ear since yesterday. As for blocked feeling in my ear it's severe honestly
+[SEG0010] person_2 (DOCTOR): any ringing in the ears double vision or headache at all?
+[SEG0011] person_1 (PATIENT): hmm, no, none that that I've noticed
+[SEG0012] person_2 (DOCTOR): Nothing like weakness?
+[SEG0013] person_1 (PATIENT): Erm, no, none, no weakness.
+[SEG0014] person_2 (DOCTOR): any problems with your joints or muscles?
+[SEG0015] person_1 (PATIENT): I move fine otherwise.
+[SEG0016] person_2 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0017] person_1 (PATIENT): I'm allergic to wheat, I get itchy skin.
+[SEG0018] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0019] person_1 (PATIENT): I've got high blood pressure. It's a relief to finally sit down and talk about it it
+[SEG0020] person_2 (DOCTOR): Hm, okay. Right, so high blood pressure is already on your record. We'll keep that in mind today.
+[SEG0021] person_2 (DOCTOR): So, now some background about your lifestyle.
+[SEG0022] person_1 (PATIENT): I gave up cigarettes last spring. I'll have a glass of wine with dinner. My husband and I live above the shop. I drink a lot of tea and snack through the day
+[SEG0023] person_2 (DOCTOR): I'd like to check you over now if that's alright
+[SEG0024] person_2 (DOCTOR): Nearly finished here.
+[SEG0025] person_2 (DOCTOR): I can see a fine jerking of the eyes to the left and your walking is a little unsteady
+[SEG0026] person_2 (DOCTOR): That's all I needed to check.
+[SEG0027] person_2 (DOCTOR): so, based on the history and the examination, I think we're dealing with an inner-ear balance problem such as vestibular neuritis at this stage so, to to recap quickly you've had the room spinning for five days, and no ringing in the ears or double vision
+[SEG0028] person_1 (PATIENT): Yes, that's right.
+[SEG0029] person_2 (DOCTOR): I think a positional test makes sense here, for vertigo. I'm sending you for blood tests because of dizziness. The treatment will be prochlorperazine, 5 milligrams, three times a day, for three days. That should help with nausea and vertigo. I'll put all of this in writing so you don't have to remember it. Start moving around gently as soon as you can, since resting too long slows recovery.
+[SEG0030] person_2 (DOCTOR): Hm okay. Avoid taking any extra painkillers on top of what I'm prescribing without checking with us.
+[SEG0031] person_2 (DOCTOR): I follow we'll refer you to the balance clinic do get help quickly if you get double vision weakness or trouble speaking i'd like you back if it isn't settling in five days right that's the plan do you wanna ask me anything?
+[SEG0032] person_1 (PATIENT): right, I'll do that. Thank you, doctor
+[SEG0033] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

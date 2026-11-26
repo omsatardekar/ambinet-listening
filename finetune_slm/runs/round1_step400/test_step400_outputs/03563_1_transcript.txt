@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03563)
+[SEG0001] person_1 (DOCTOR): hello, good to see you. Please sit
+[SEG0002] person_2 (PATIENT): hi there
+[SEG0003] person_1 (DOCTOR): so so what can I do for you?
+[SEG0004] person_2 (PATIENT): I'm here cos of a swollen calf after a long drive. I'm not great at remembering details, so bear with me. It's a relief to finally sit down and talk about it
+[SEG0005] person_1 (DOCTOR): I'll just record a few vital signs
+[SEG0006] person_1 (DOCTOR): Sit still for a moment...
+[SEG0007] person_1 (DOCTOR): Okay: oxygen saturation is 98 percent, pressure 113 over 77, pulse is 111 beats a minute, respiratory rate 17.
+[SEG0008] person_2 (PATIENT): Right, is that alright, doctor?
+[SEG0009] person_1 (DOCTOR): That's fine, I'll explain it soon.
+[SEG0010] person_1 (DOCTOR): how long has it been like this?
+[SEG0011] person_2 (PATIENT): ever since... since this morning, really
+[SEG0012] person_1 (DOCTOR): And what about fever cough or chest pain?
+[SEG0013] person_2 (PATIENT): mm uh no I haven't had any of them
+[SEG0014] person_1 (DOCTOR): how about coughing up blood?
+[SEG0015] person_2 (PATIENT): No I haven't had any coughing up blood.
+[SEG0016] person_1 (DOCTOR): Has your skin been okay?
+[SEG0017] person_2 (PATIENT): skin's normal
+[SEG0018] person_1 (DOCTOR): is your urine normal, no changes?
+[SEG0019] person_2 (PATIENT): that's normal as far as I know
+[SEG0020] person_1 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0021] person_2 (PATIENT): No no conditions.
+[SEG0022] person_1 (DOCTOR): any previous surgeries?
+[SEG0023] person_2 (PATIENT): nothing, I haven't had any operations
+[SEG0024] person_1 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0025] person_2 (PATIENT): No, I share a house with my brother. I'm a plumber, lots of bending and kneeling. I swim twice a week.
+[SEG0026] person_1 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0027] person_2 (PATIENT): no, I'm not allergic to anything
+[SEG0028] person_1 (DOCTOR): what do you take on a normal day?
+[SEG0029] person_2 (PATIENT): The contraceptive pill, daily
+[SEG0030] person_1 (DOCTOR): Let's move on to the examination.
+[SEG0031] person_1 (DOCTOR): Let me feel here.
+[SEG0032] person_1 (DOCTOR): Your oxygen is lower than expected for someone so young and the left calf is a little swollen.
+[SEG0033] person_1 (DOCTOR): right, good, you can sit up again
+[SEG0034] person_1 (DOCTOR): from what you've told me and what I found this is probably possible pulmonary embolism without chest pain
+[SEG0035] person_2 (PATIENT): is this permanent?
+[SEG0036] person_1 (DOCTOR): I understand the worry at the moment I'd say it's possible pulmonary embolism without chest pain and we'll know more once the a D-dimer is back we should do a D-dimer for syncope and calf swelling i'd rather check than guess and this is the quickest way to know more even without chest pain this needs a scan today so please go to hospital let's get you seen by the emergency team I'll arrange the letter
+[SEG0037] person_1 (DOCTOR): Please come and see me straight away. That's all from me. Any questions?
+[SEG0038] person_2 (PATIENT): right, I'll do that thank you, doctor
+[SEG0039] person_1 (DOCTOR): So, have a good day.
+
+JSON:

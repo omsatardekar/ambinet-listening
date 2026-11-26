@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00086)
+[SEG0001] person_1 (NURSE): All set here, doctor. Chart's updated, and I'll read the readings out when you're ready.
+[SEG0002] person_2 (DOCTOR): Great. Hello, come in and sit down. How can I help?
+[SEG0003] person_3 (PATIENT): I wanted to get a heavy feeling in the left arm looked at. My family kept telling me to get it checked.
+[SEG0004] person_2 (DOCTOR): And when did that start?
+[SEG0005] person_3 (PATIENT): It's been about a week, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_3 (PATIENT): Only resting, and it's not much. It's moderate, honestly. Oh, and tiredness. That's been about the same, about a week. I'd been sweating with it, but that went away.
+[SEG0008] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0009] person_3 (PATIENT): No, none that I know of.
+[SEG0010] person_2 (DOCTOR): Any previous surgeries?
+[SEG0011] person_3 (PATIENT): Just a hernia repair, about five years back.
+[SEG0012] person_2 (DOCTOR): Does anything run in the family?
+[SEG0013] person_3 (PATIENT): My sister has thyroid problems.
+[SEG0014] person_2 (DOCTOR): What do you do for work?
+[SEG0015] person_3 (PATIENT): I work in an office, mostly sitting at a desk.
+[SEG0016] person_2 (DOCTOR): Any sport or activity?
+[SEG0017] person_3 (PATIENT): I play badminton on Sundays.
+[SEG0018] person_2 (DOCTOR): Are you living with family?
+[SEG0019] person_3 (PATIENT): I stay with my daughter and her family.
+[SEG0020] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0021] person_3 (PATIENT): I mean, I have high blood pressure, for nearly five years. It's a relief to finally sit down and talk about it. I did try to ignore it for a while. I have high cholesterol, for five years.
+[SEG0022] person_2 (DOCTOR): Right, right. Right, what medicines are you taking at the moment?
+[SEG0023] person_3 (PATIENT): Ramipril. I take it every morning for my blood pressure.
+[SEG0024] person_2 (DOCTOR): And what strength is that?
+[SEG0025] person_3 (PATIENT): 5 milligrams, I think that's what's on the box. I mean, I'm on something called ator... atorvastatin, 20 milligrams, maybe, at night for my cholesterol.
+[SEG0026] person_2 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0027] person_3 (PATIENT): Not with me. I'll bring it next time. Aspirin, 75 milligrams, once a day.
+[SEG0028] person_2 (DOCTOR): Have you had any pain at rest, cough or swelling in the ankles?
+[SEG0029] person_3 (PATIENT): I haven't had pain at rest, cough or swelling in the ankles, no.
+[SEG0030] person_2 (DOCTOR): Did you notice any fainting?
+[SEG0031] person_3 (PATIENT): No, no fainting.
+[SEG0032] person_2 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0033] person_3 (PATIENT): No, my breathing's been fine.
+[SEG0034] person_2 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0035] person_3 (PATIENT): Right, um, no, all normal there.
+[SEG0036] person_1 (NURSE): Here are the numbers, doctor. Respiratory rate 15, temp 36.5 degrees, BP is 153 over 98. Pulse is 79 beats a minute, oxygen saturation is 97 percent.
+[SEG0037] person_2 (DOCTOR): Okay, noted.
+[SEG0038] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0039] person_2 (DOCTOR): Hold that position for me.
+[SEG0040] person_2 (DOCTOR): Lungs are clear and there's no swelling in your ankles.
+[SEG0041] person_2 (DOCTOR): Okay, finished.
+[SEG0042] person_2 (DOCTOR): From what you've told me and what I found, I can't pin this down yet. We're looking at angina-type chest pain or gastro-oesophageal reflux.
+[SEG0043] person_1 (NURSE): We've already done an ECG this morning, doctor.
+[SEG0044] person_2 (DOCTOR): Alright, thanks, I'll check it. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0045] person_3 (PATIENT): Okay, fair enough.
+[SEG0046] person_2 (DOCTOR): There's nothing new for me to start or arrange today. Okay, we're done for today. Take care.
+[SEG0047] person_3 (PATIENT): I think that's clear. Thank you for being so thorough.
+
+JSON:

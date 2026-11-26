@@ -1,0 +1,64 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20373)
+[SEG0001] person_1 (PATIENT): so, hi doctor, am I too early?
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What seems to be wrong?
+[SEG0003] person_1 (PATIENT): It's burning pain in the upper tummy. I thought I'd wait, but it hasn't gone.
+[SEG0004] person_2 (DOCTOR): have you been feeling full quickly?
+[SEG0005] person_1 (PATIENT): yeah. About a week, I'd say
+[SEG0006] person_2 (DOCTOR): any mild nausea as well?
+[SEG0007] person_1 (PATIENT): yeah, that too. Uh, about mild nausea, about a six out of ten
+[SEG0008] person_2 (DOCTOR): Have you had burning pain in the upper tummy before, or is this the first time?
+[SEG0009] person_1 (PATIENT): yeah, yes, something like this happened about six months ago, and it went away on its own
+[SEG0010] person_2 (DOCTOR): a few quick ones: vomiting blood, black stools or chest pain?
+[SEG0011] person_1 (PATIENT): No, nothing to report there.
+[SEG0012] person_2 (DOCTOR): Nothing like weight loss?
+[SEG0013] person_1 (PATIENT): no, uh, no weight loss
+[SEG0014] person_2 (DOCTOR): Any problems with your joints or muscles?
+[SEG0015] person_1 (PATIENT): No, joints are fine.
+[SEG0016] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0017] person_1 (PATIENT): Nothing there, no.
+[SEG0018] person_2 (DOCTOR): Do you follow any particular diet?
+[SEG0019] person_1 (PATIENT): I'm vegetarian and have been for years
+[SEG0020] person_2 (DOCTOR): How active are you?
+[SEG0021] person_1 (PATIENT): I hardly move around during the day
+[SEG0022] person_2 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0023] person_1 (PATIENT): Yeah, no allergies at all.
+[SEG0024] person_2 (DOCTOR): Let's run through your medicines.
+[SEG0025] person_1 (PATIENT): It's naproxen, twice a day.
+[SEG0026] person_2 (DOCTOR): And what strength is that?
+[SEG0027] person_1 (PATIENT): It's 250 milligrams. Antacid. I take it when needed.
+[SEG0028] person_2 (DOCTOR): is there anything relevant on the family side?
+[SEG0029] person_1 (PATIENT): my brother has epilepsy
+[SEG0030] person_2 (DOCTOR): do you have any long-term conditions?
+[SEG0031] person_1 (PATIENT): Right, I've had arthritis in my knees for five years now. It's the not knowing that gets to me.
+[SEG0032] person_2 (DOCTOR): Mm, okay. Okay, I can see arthritis in your knees in your file as well. Anything surgical in your history?
+[SEG0033] person_1 (PATIENT): I had my tonsils removed as a teenager.
+[SEG0034] person_2 (DOCTOR): let me get the readings out of the way
+[SEG0035] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0036] person_2 (DOCTOR): Okay: respiratory rate 18, BP is 118 over 77, pulse 82.
+[SEG0037] person_2 (DOCTOR): Now I'm going to do a short physical check.
+[SEG0038] person_2 (DOCTOR): Look straight ahead.
+[SEG0039] person_2 (DOCTOR): your tummy is soft with some tenderness in the upper middle part
+[SEG0040] person_2 (DOCTOR): you can sit up now
+[SEG0041] person_2 (DOCTOR): so, based on the history and the examination, I don't have a a clear answer today: dyspepsia possibly related to anti-inflammatory tablets is possible, and so is a stomach ulcer. I'll request blood tests, it'll help with dyspepsia. Let's book a test for the stomach germ to look into dyspepsia. I'm gonna put you on omeprazole, 20 milligrams, once a day, for four weeks. That should help with stomach acid
+[SEG0042] person_1 (PATIENT): How soon will it work?
+[SEG0043] person_2 (DOCTOR): please stop taking the anti-inflammatory tablets for now and use paracetamol for the pain. Book a review in four weeks
+[SEG0044] person_1 (PATIENT): Good, I'll return then.
+[SEG0045] person_2 (DOCTOR): Before we finish, can you repeat the plan back to me?
+[SEG0046] person_1 (PATIENT): So, I take the omeprazole, 20 milligrams, once a day and come back in four weeks. Is that right?
+[SEG0047] person_2 (DOCTOR): Yes, exactly right. Anything else on your mind before you go?
+[SEG0048] person_1 (PATIENT): That's clear, um, thanks.
+[SEG0049] person_2 (DOCTOR): Look after yourself.
+
+JSON:

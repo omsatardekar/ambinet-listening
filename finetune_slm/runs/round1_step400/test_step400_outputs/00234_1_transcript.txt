@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00234)
+[SEG0001] person_1 (PATIENT): Excuse me, doctor, should I sit here?
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): I wanted to get nausea looked at.
+[SEG0004] person_2 (DOCTOR): Okay, since when have you had this?
+[SEG0005] person_1 (PATIENT): So, it's been like this since last weekend.
+[SEG0006] person_2 (DOCTOR): Is it constant, or does it come and go?
+[SEG0007] person_1 (PATIENT): It just comes and goes.
+[SEG0008] person_2 (DOCTOR): Any operations in the past?
+[SEG0009] person_1 (PATIENT): Just cataract surgery on my right eye, last year.
+[SEG0010] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0011] person_1 (PATIENT): I'm on amlodipine, 5 milligrams, once a day. Vertin. I take it when it comes.
+[SEG0012] person_2 (DOCTOR): Right, and what strength is that?
+[SEG0013] person_1 (PATIENT): 16 milligrams.
+[SEG0014] person_2 (DOCTOR): Alright, what do you do for work?
+[SEG0015] person_1 (PATIENT): I work in an office, mostly sitting at a desk.
+[SEG0016] person_2 (DOCTOR): What's your diet like?
+[SEG0017] person_1 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0018] person_2 (DOCTOR): Alright, any diagnoses you've been given before? Just so I get the full picture.
+[SEG0019] person_1 (PATIENT): Yes, high blood pressure.
+[SEG0020] person_2 (DOCTOR): Right, right.
+[SEG0021] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies? Bear with me, I'm just building up the picture.
+[SEG0022] person_1 (PATIENT): I was told I'm allergic to pollen, but I don't remember what reaction I had.
+[SEG0023] person_2 (DOCTOR): Have you noticed numbness in the face, headache or double vision?
+[SEG0024] person_1 (PATIENT): No, nothing there.
+[SEG0025] person_2 (DOCTOR): Mm-hm. Has your heart given you any trouble?
+[SEG0026] person_1 (PATIENT): Hmm, no, that's been fine.
+[SEG0027] person_2 (DOCTOR): Let's do your observations.
+[SEG0028] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0029] person_2 (DOCTOR): Okay: saturation 97 percent, temperature is 36.7 degrees, blood pressure 112 over 75, pulse 67.
+[SEG0030] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0031] person_2 (DOCTOR): Let me press here.
+[SEG0032] person_2 (DOCTOR): Your walking is steady and the finger-nose test is normal.
+[SEG0033] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0034] person_2 (DOCTOR): When I turn your head to the right, your eyes flick sideways, that's called nystagmus.
+[SEG0035] person_2 (DOCTOR): Okay, you can sit up. Putting it all together, my working impression is benign positional vertigo. The reason I say that is that your story and my examination fit together.
+[SEG0036] person_2 (DOCTOR): I'll request a hearing test, it'll help with tinnitus and vertigo.
+[SEG0037] person_1 (PATIENT): Okay, noted.
+[SEG0038] person_2 (DOCTOR): Get up slowly from lying down and sit for a moment first. Let's plan a check in two weeks. Okay, I think we're finished. Is everything clear?
+[SEG0039] person_1 (PATIENT): Alright, thanks. Bye for now.
+
+JSON:

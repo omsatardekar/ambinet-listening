@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03566)
+[SEG0001] person_1 (DOCTOR): Hi there, the chair's free, sit down.
+[SEG0002] person_2 (PATIENT): Hello, doctor.
+[SEG0003] person_1 (DOCTOR): What's the problem?
+[SEG0004] person_2 (PATIENT): Doctor, it's an itchy red rash on the chest. It's getting on my nerves now.
+[SEG0005] person_1 (DOCTOR): When did this begin?
+[SEG0006] person_2 (PATIENT): It's been going on for two months.
+[SEG0007] person_1 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0008] person_2 (PATIENT): Honestly, on and off. I'd give it a three, out of ten. Oh, and spreading over a week. That's been about the same, two months.
+[SEG0009] person_1 (DOCTOR): Any mouth sores, facial swelling or breathing difficulty?
+[SEG0010] person_2 (PATIENT): No, no mouth sores, facial swelling or breathing difficulty.
+[SEG0011] person_1 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0012] person_2 (PATIENT): No, joints are fine.
+[SEG0013] person_1 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0014] person_2 (PATIENT): No, my breathing's been fine.
+[SEG0015] person_1 (DOCTOR): Now some background about your lifestyle.
+[SEG0016] person_2 (PATIENT): I work in accounts at a hospital. Not much, I mostly stay in these days. Lots of rice, lentils and some fruit.
+[SEG0017] person_1 (DOCTOR): Anything in your past medical history I should know?
+[SEG0018] person_2 (PATIENT): Sorry, what was I saying, I've had gout for about a year now.
+[SEG0019] person_1 (DOCTOR): Any previous surgeries?
+[SEG0020] person_2 (PATIENT): Nothing, I haven't had any operations.
+[SEG0021] person_1 (DOCTOR): Tell me your medicines, please.
+[SEG0022] person_2 (PATIENT): Febuxostat, once a day.
+[SEG0023] person_1 (DOCTOR): How much do you take?
+[SEG0024] person_2 (PATIENT): 80 milligrams, I think that's what's on the box. Allopurinol, 100 milligrams, started three weeks ago.
+[SEG0025] person_1 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0026] person_2 (PATIENT): My brother has epilepsy.
+[SEG0027] person_1 (DOCTOR): Before we go further, any allergies?
+[SEG0028] person_2 (PATIENT): I'm allergic to plasters, I get a red itchy rash.
+[SEG0029] person_1 (DOCTOR): Right, I'll just record a few vital signs.
+[SEG0030] person_1 (DOCTOR): Right, keep your arm relaxed for me...
+[SEG0031] person_1 (DOCTOR): Okay: pulse 78, respiratory rate 18, pressure 114 over 79, SpO2 97 percent on room air, temperature is 36.7 degrees.
+[SEG0032] person_2 (PATIENT): Is that alright, doctor?
+[SEG0033] person_1 (DOCTOR): Right, they help me see the whole picture, more shortly.
+[SEG0034] person_1 (DOCTOR): Could you come over to the couch, please?
+[SEG0035] person_2 (PATIENT): Of course.
+[SEG0036] person_1 (DOCTOR): I'm just checking this side.
+[SEG0037] person_1 (DOCTOR): There is a fine pink rash across the chest and arms, with no blistering and the mouth is clear.
+[SEG0038] person_1 (DOCTOR): Okay, that's enough for me.
+[SEG0039] person_1 (DOCTOR): Let's get blood tests, for drug rash. You'll be taking cetirizine, 10 milligrams, once a day, one week. That should help with itch. Please stop the allopurinol and don't restart it until we've spoken to the clinic. Book a review in three days. That's everything on my side. Anything you're unsure about?
+[SEG0040] person_2 (PATIENT): I think I understand everything. Thanks.
+[SEG0041] person_1 (DOCTOR): All the best.
+
+JSON:

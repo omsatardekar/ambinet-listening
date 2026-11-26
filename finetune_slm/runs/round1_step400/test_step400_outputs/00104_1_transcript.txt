@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00104)
+[SEG0001] person_1 (PATIENT): Hello, doctor. It's my turn, I think.
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_3 (FAMILY_MEMBER): Good morning, doctor. I came along to help out.
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to have you here.
+[SEG0005] person_3 (FAMILY_MEMBER): Doctor, um, it's been feeling anxious most of the day. That's what we're worried about.
+[SEG0006] person_2 (DOCTOR): What's your current medication list?
+[SEG0007] person_3 (FAMILY_MEMBER): He takes escitalopram, 10 milligrams, once a day for the anxiety. It's glimepiride, 2 milligrams, before breakfast, doctor.
+[SEG0008] person_2 (DOCTOR): Since when have you had this?
+[SEG0009] person_1 (PATIENT): Right, around three weeks, I think.
+[SEG0010] person_3 (FAMILY_MEMBER): I think it's been nearer a month, actually.
+[SEG0011] person_2 (DOCTOR): Okay, so roughly three to four weeks. Is that right?
+[SEG0012] person_1 (PATIENT): I, I suppose so, yes.
+[SEG0013] person_2 (DOCTOR): Is it mild, moderate or severe?
+[SEG0014] person_1 (PATIENT): Severe, really.
+[SEG0015] person_2 (DOCTOR): Any trouble falling asleep as well?
+[SEG0016] person_1 (PATIENT): Yes, for about three months.
+[SEG0017] person_2 (DOCTOR): Any a tight feeling in the chest as well?
+[SEG0018] person_1 (PATIENT): Yes, I have. With tight feeling in the chest, I'd call it severe.
+[SEG0019] person_2 (DOCTOR): Have you had any low mood or fainting?
+[SEG0020] person_1 (PATIENT): No low mood or fainting, none of it.
+[SEG0021] person_2 (DOCTOR): Have you noticed weight loss, thoughts of harming myself or chest pain on exertion?
+[SEG0022] person_1 (PATIENT): I haven't had weight loss, thoughts of harming myself or chest pain on exertion, no.
+[SEG0023] person_2 (DOCTOR): Alright, is your digestion otherwise okay?
+[SEG0024] person_1 (PATIENT): Bowels are regular, nothing odd.
+[SEG0025] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0026] person_1 (PATIENT): I have a couple of drinks on the weekend. Yes, I live on my own. I work on a farm, it's quite physical. I play badminton on Sundays.
+[SEG0027] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0028] person_1 (PATIENT): No allergies.
+[SEG0029] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0030] person_1 (PATIENT): I have anxiety. I've had diabetes for about ten years now.
+[SEG0031] person_2 (DOCTOR): Okay, yes, anxiety is known to us, good to have that clear. A few measurements, then we'll continue.
+[SEG0032] person_2 (DOCTOR): Hold still for me...
+[SEG0033] person_2 (DOCTOR): Okay: SpO2 97 percent on room air, blood pressure 117 over 73, temperature 36.8, heart rate 83.
+[SEG0034] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0035] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0036] person_2 (DOCTOR): Pulse is regular and you're breathing comfortably right now.
+[SEG0037] person_2 (DOCTOR): All done, you can get dressed. Taking everything into account, I think we're dealing with an anxiety disorder at this stage. A heart rhythm cause is also on my list. I think a thyroid test makes sense here, for anxiety. Slow breathing, in for four and out for six, for a few minutes whenever it builds up. A counsellor would be the right next step, I'll refer you. Book a review in four weeks. Thanks for coming in.
+[SEG0038] person_1 (PATIENT): So, no, you've explained it well. Thanks.
+[SEG0039] person_2 (DOCTOR): Take care.
+
+JSON:

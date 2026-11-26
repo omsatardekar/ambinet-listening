@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03613)
+[SEG0001] person_1 (PATIENT): Good evening, doctor, thanks for seeing me.
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_1 (PATIENT): Well, honestly, it's breathlessness during sport, and my family pushed me to come.
+[SEG0004] person_2 (DOCTOR): What's the timeline, when did it begin?
+[SEG0005] person_1 (PATIENT): It's been one week, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): Well, yes, sport. That makes it worse. Severe, I'd say. And there's a flutter now and then as well, ten days now.
+[SEG0008] person_2 (DOCTOR): Right, how often do you get it?
+[SEG0009] person_1 (PATIENT): Honestly, every other day.
+[SEG0010] person_2 (DOCTOR): Has there been chest tightness when pushing hard too?
+[SEG0011] person_1 (PATIENT): Yes, I have.
+[SEG0012] person_2 (DOCTOR): Have you had breathlessness during sport before, or is this the first time?
+[SEG0013] person_1 (PATIENT): A bit, a couple of years ago. It settled by itself back then.
+[SEG0014] person_2 (DOCTOR): Have you had any fever or leg swelling?
+[SEG0015] person_1 (PATIENT): No, no fever or leg swelling.
+[SEG0016] person_2 (DOCTOR): Any fainting or cough at all?
+[SEG0017] person_1 (PATIENT): I haven't had fainting or cough, no.
+[SEG0018] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0019] person_1 (PATIENT): No, that's all fine.
+[SEG0020] person_2 (DOCTOR): Any previous surgeries?
+[SEG0021] person_1 (PATIENT): Mm, no, I've never been operated on.
+[SEG0022] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0023] person_1 (PATIENT): I have gout, for five years.
+[SEG0024] person_2 (DOCTOR): Okay, go on. Has anyone in your family had anything serious?
+[SEG0025] person_1 (PATIENT): My brother has epilepsy.
+[SEG0026] person_2 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0027] person_1 (PATIENT): Allopurinol. I take it 100 milligrams, once a day for the gout. I didn't want to bother you but it keeps coming back. I kept putting it off, which I know isn't sensible.
+[SEG0028] person_2 (DOCTOR): What does a normal day of food look like?
+[SEG0029] person_1 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0030] person_2 (DOCTOR): Do you get out much?
+[SEG0031] person_1 (PATIENT): Not much, I mostly stay in these days.
+[SEG0032] person_2 (DOCTOR): Can I check a few measurements before we carry on?
+[SEG0033] person_2 (DOCTOR): That's it, just a little longer...
+[SEG0034] person_2 (DOCTOR): Okay: BP is 114 over 75, pulse is 72 beats a minute, SpO2 97 percent on room air. And temperature is 36.8 degrees.
+[SEG0035] person_1 (PATIENT): Is that normal?
+[SEG0036] person_2 (DOCTOR): That's fine, I'll explain it soon.
+[SEG0037] person_2 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0038] person_1 (PATIENT): Of course.
+[SEG0039] person_2 (DOCTOR): Raise your arm for me.
+[SEG0040] person_2 (DOCTOR): There is a harsh murmur that gets louder when you stand up.
+[SEG0041] person_2 (DOCTOR): That's the examination finished.
+[SEG0042] person_2 (DOCTOR): So where does that leave us? I'd lean towards possible hypertrophic cardiomyopathy.
+[SEG0043] person_2 (DOCTOR): Let's book an ECG to look into murmur and family history. The result will help us decide whether anything more is needed. Let's get a heart monitor, for palpitations.
+[SEG0044] person_1 (PATIENT): Okay, I'll do it.
+[SEG0045] person_2 (DOCTOR): I'm going to order an echocardiogram, for murmur.
+[SEG0046] person_1 (PATIENT): That's fine with me.
+[SEG0047] person_2 (DOCTOR): No competitive sport until the heart scan, and we will check your close family. Cut back on tea, coffee and fizzy drinks for a couple of weeks and see how things settle. I'm going to send a referral to the inherited cardiac conditions clinic. Let's review you after the scan. Alright, is there anything you'd like me to go over again?
+[SEG0048] person_1 (PATIENT): Great, thank you for your help.
+
+JSON:

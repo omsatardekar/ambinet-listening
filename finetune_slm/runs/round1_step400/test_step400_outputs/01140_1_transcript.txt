@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01140)
+[SEG0001] person_1 (PATIENT): Let me think, you know, sorry, doctor, shall I sit here?
+[SEG0002] person_2 (DOCTOR): You're alright, take a seat. What can I do for you?
+[SEG0003] person_1 (PATIENT): Doctor, it's a dry cough in the evenings. It's getting on my nerves now.
+[SEG0004] person_2 (DOCTOR): Has this been going on for long?
+[SEG0005] person_1 (PATIENT): About... well, about two weeks.
+[SEG0006] person_2 (DOCTOR): Have you tried anything for it?
+[SEG0007] person_1 (PATIENT): I mean, antihistamine helps a bit. Oh, you know, and there's sneezing fits as well, six months now.
+[SEG0008] person_2 (DOCTOR): How often do you get it?
+[SEG0009] person_1 (PATIENT): It happens a few times a day.
+[SEG0010] person_2 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0011] person_2 (DOCTOR): Nearly finished here.
+[SEG0012] person_2 (DOCTOR): your chest is clear and your nose looks a little swollen inside
+[SEG0013] person_2 (DOCTOR): Okay, that's enough for me.
+[SEG0014] person_2 (DOCTOR): Any shortness of breath, wheeze or fever at all?
+[SEG0015] person_1 (PATIENT): No, um, none that I've noticed.
+[SEG0016] person_2 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0017] person_1 (PATIENT): No, nothing there.
+[SEG0018] person_2 (DOCTOR): right, a few questions about your lifestyle now
+[SEG0019] person_1 (PATIENT): I'm vegetarian and have been for years. I hardly move around during the day. I'm a plumber, lots of bending and kneeling.
+[SEG0020] person_2 (DOCTOR): Has anything ever caused you a reaction? I mean any allergies.
+[SEG0021] person_1 (PATIENT): No known allergies.
+[SEG0022] person_2 (DOCTOR): what about your medical history?
+[SEG0023] person_1 (PATIENT): Yes, COPD. I've had eczema for nearly five years now.
+[SEG0024] person_2 (DOCTOR): mm-hmm yes, eczema is known to us, good to have that that clear have you had any previous surgeries?
+[SEG0025] person_1 (PATIENT): Uh, no, not at all.
+[SEG0026] person_2 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0027] person_1 (PATIENT): Uh, I take Tiotropium inhaler, once a day.
+[SEG0028] person_2 (DOCTOR): Right, right.
+[SEG0029] person_1 (PATIENT): Hydrocortisone cream i take it when needed for the eczema
+[SEG0030] person_2 (DOCTOR): So, how long have you been on it?
+[SEG0031] person_1 (PATIENT): About about three months. So, I take loratadine, 10 milligrams, once a day.
+[SEG0032] person_2 (DOCTOR): Right, is that long-standing?
+[SEG0033] person_1 (PATIENT): For two months.
+[SEG0034] person_2 (DOCTOR): Right, here's what I'm thinking. This is probably seasonal hay fever causing the cough.
+[SEG0035] person_1 (PATIENT): Hmm, is it dangerous, doctor?
+[SEG0036] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's seasonal hay fever causing the cough, and we'll watch how it goes. Just to be sure I understood. You've had a dry cough in the evenings for about two weeks, and no wheeze or shortness of breath.
+[SEG0037] person_1 (PATIENT): Yes, you've got it.
+[SEG0038] person_2 (DOCTOR): You'll be taking fluticasone nasal spray, 50 micrograms, once a day, for the season. It's for hay fever.
+[SEG0039] person_1 (PATIENT): thank you, doctor
+[SEG0040] person_2 (DOCTOR): Keep windows closed on high-pollen days and wash your hair at night. Book a review in a month. That's all from me. Any questions?
+[SEG0041] person_1 (PATIENT): okay, that makes sense thanks for explaining
+
+JSON:

@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00554)
+[SEG0001] person_1 (PATIENT): Right shoulder's still playing up. Thought I'd better come back.
+[SEG0002] person_2 (DOCTOR): Right, let's see where we are with it. Is it the same pain as before, or has anything changed?
+[SEG0003] person_1 (PATIENT): Same. The pain in my shoulder catches when I reach up.
+[SEG0004] person_2 (DOCTOR): And how long has it been going on this time round?
+[SEG0005] person_1 (PATIENT): Three weeks. About that.
+[SEG0006] person_3 (FAMILY_MEMBER): Oh, it's longer than that, love. You were rubbing it at the barbecue and that was ages ago. Six weeks, easily.
+[SEG0007] person_1 (PATIENT): Was it? Felt like three.
+[SEG0008] person_2 (DOCTOR): All right, so somewhere between three and six weeks. What makes it worse?
+[SEG0009] person_1 (PATIENT): Lifting. Overhead stuff, mostly.
+[SEG0010] person_2 (DOCTOR): Anything that eases it? Heat, resting it, tablets?
+[SEG0011] person_1 (PATIENT): Paracetamol takes the edge off. Nothing else.
+[SEG0012] person_2 (DOCTOR): Okay. Last time you also had that tingling in your fingers. Where's that got to?
+[SEG0013] person_1 (PATIENT): Gone. Settled a while back.
+[SEG0014] person_2 (DOCTOR): Do you remember when it first started?
+[SEG0015] person_1 (PATIENT): No idea, honestly. It was just there one day.
+[SEG0016] person_3 (FAMILY_MEMBER): Don't ask me. He never says a word until it's a problem.
+[SEG0017] person_2 (DOCTOR): Fair enough. Any fall or knock to the shoulder in the meantime?
+[SEG0018] person_1 (PATIENT): No.
+[SEG0019] person_2 (DOCTOR): Any chest pain, or pain travelling up into the jaw?
+[SEG0020] person_1 (PATIENT): Nope. Nothing like that.
+[SEG0021] person_2 (DOCTOR): Good. What are you taking at the moment? Include anything from the chemist.
+[SEG0022] person_1 (PATIENT): Ramipril, 5 milligrams once a day, for my high blood pressure. Paracetamol when it's bad. And the omeprazole.
+[SEG0023] person_2 (DOCTOR): What strength is the omeprazole?
+[SEG0024] person_1 (PATIENT): 20 milligrams. Every morning.
+[SEG0025] person_2 (DOCTOR): Any allergies to medicines that I should know about?
+[SEG0026] person_1 (PATIENT): No.
+[SEG0027] person_3 (FAMILY_MEMBER): None that I know of, and I'd know by now.
+[SEG0028] person_2 (DOCTOR): Have you had any operations in the past?
+[SEG0029] person_1 (PATIENT): Appendix. About twenty years ago.
+[SEG0030] person_2 (DOCTOR): And does anything run in the family where shoulders are concerned?
+[SEG0031] person_1 (PATIENT): My dad had a frozen shoulder. Round about my age.
+[SEG0032] person_2 (DOCTOR): Right. Sit still for me and I'll do your blood pressure and pulse.
+[SEG0033] person_2 (DOCTOR): 134 over 82, and your pulse is 72. Perfectly acceptable.
+[SEG0034] person_2 (DOCTOR): Now lift that arm out to the side for me, nice and slow. Keep going up. There, you catch halfway. That's a painful arc as the arm comes out sideways.
+[SEG0035] person_1 (PATIENT): Yeah. That's the spot.
+[SEG0036] person_2 (DOCTOR): So, options. We can do an X-ray, we can do an ultrasound scan, or we can stick with exercises and wait. What would you rather?
+[SEG0037] person_1 (PATIENT): Whichever's quickest.
+[SEG0038] person_2 (DOCTOR): Then let's get a shoulder X-ray booked for this week, and reception will ring you with the time.
+[SEG0039] person_1 (PATIENT): Fine.
+[SEG0040] person_2 (DOCTOR): If it's still sore after the X-ray and a fortnight of exercises, we might do an ultrasound scan on top. Not before.
+[SEG0041] person_2 (DOCTOR): In the meantime, no heavy lifting above shoulder height, and go through the exercise sheet twice a day.
+[SEG0042] person_3 (FAMILY_MEMBER): I'll make sure he does them.
+[SEG0043] person_1 (PATIENT): I'll manage, thanks.
+[SEG0044] person_2 (DOCTOR): Good. Mind that shoulder on the way out, and don't let the door swing back on it.
+
+JSON:

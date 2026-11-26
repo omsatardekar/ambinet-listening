@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02477)
+[SEG0001] person_1 (PATIENT): Hello, doctor. May I come in?
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): Morning, doctor. I'll stay and fill in anything that's missed. Uh, it's a high temperature, doctor. He didn't want to come, but I insisted.
+[SEG0004] person_2 (DOCTOR): Okay, since when exactly?
+[SEG0005] person_1 (PATIENT): About... well, about a week.
+[SEG0006] person_2 (DOCTOR): Okay, is it there all the time or does it come and go?
+[SEG0007] person_1 (PATIENT): Honestly, a couple of times a week.
+[SEG0008] person_2 (DOCTOR): How troublesome is it day to day?
+[SEG0009] person_1 (PATIENT): Maybe a six out of ten on a bad day.
+[SEG0010] person_2 (DOCTOR): Any other symptoms with it?
+[SEG0011] person_1 (PATIENT): When it starts I tend to get a very fast heartbeat as well. Hmm, um, the very fast heartbeat? That's been for six months. I did have agitation at one point, but that's gone now.
+[SEG0012] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0013] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0014] person_2 (DOCTOR): Okay: heart rate 103, BP is 126 over 80, temperature is 38.9 degrees. And SpO2 95 percent on room air.
+[SEG0015] person_1 (PATIENT): Is that alright, doctor?
+[SEG0016] person_2 (DOCTOR): We'll go over that shortly.
+[SEG0017] person_2 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0018] person_2 (DOCTOR): Look straight ahead.
+[SEG0019] person_2 (DOCTOR): You are hot, shaking, and your pulse is over one hundred and forty and irregular.
+[SEG0020] person_2 (DOCTOR): That's the examination finished.
+[SEG0021] person_2 (DOCTOR): And what about chest pain or recent infection?
+[SEG0022] person_1 (PATIENT): No, no chest pain or recent infection.
+[SEG0023] person_2 (DOCTOR): Any pins and needles or loss of strength anywhere?
+[SEG0024] person_1 (PATIENT): Nothing odd there.
+[SEG0025] person_2 (DOCTOR): Do you work outside the home?
+[SEG0026] person_1 (PATIENT): I'm a hairdresser, on my feet all day.
+[SEG0027] person_2 (DOCTOR): How are your meals?
+[SEG0028] person_1 (PATIENT): I grab fast food at lunch most days.
+[SEG0029] person_2 (DOCTOR): How active are you?
+[SEG0030] person_1 (PATIENT): I hardly move around during the day.
+[SEG0031] person_2 (DOCTOR): What about your medical history?
+[SEG0032] person_1 (PATIENT): Hmm, you know, I've had heart disease for two years now. I have eczema.
+[SEG0033] person_2 (DOCTOR): Yes, heart disease and eczema are known to us, good to have that clear.
+[SEG0034] person_2 (DOCTOR): Okay, what's on your current medicine list?
+[SEG0035] person_1 (PATIENT): It's metoprolol, 50 milligrams, twice a day. Hydrocortisone cream. I take it when needed. Aspirin I don't take anymore.
+[SEG0036] person_2 (DOCTOR): Does your family have any medical conditions?
+[SEG0037] person_1 (PATIENT): Sorry, what was I saying, my cousin has psoriasis.
+[SEG0038] person_2 (DOCTOR): Okay, any surgery in the past?
+[SEG0039] person_1 (PATIENT): I had a triple bypass eight years ago.
+[SEG0040] person_2 (DOCTOR): Alright, any allergies to tablets, food or anything in the environment?
+[SEG0041] person_1 (PATIENT): Okay, you know, so I don't think I have any, no.
+[SEG0042] person_2 (DOCTOR): Having listened and examined, my working impression is a thyroid storm. It could also be sepsis, so we'll keep that open.
+[SEG0043] person_1 (PATIENT): Actually, I'm scared it's something bad. Is it?
+[SEG0044] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a thyroid storm, and we'll know more once the an ECG is back. Let's book an ECG to look into fast heart rhythm. This is an emergency, you will be treated in high dependency. Please come and see me straight away. Right, that's the plan. Do you want to ask me anything?
+[SEG0045] person_1 (PATIENT): Great, thank you for your help.
+[SEG0046] person_2 (DOCTOR): All the best.
+
+JSON:

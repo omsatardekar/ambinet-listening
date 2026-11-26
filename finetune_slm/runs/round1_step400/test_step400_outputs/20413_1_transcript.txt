@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20413)
+[SEG0001] person_1 (PATIENT): Let me think, sorry, doctor, shall I sit here?
+[SEG0002] person_2 (DOCTOR): No problem at all, come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): Well, you know, I've been having loud snoring.
+[SEG0004] person_2 (DOCTOR): Since when exactly? These questions might sound routine, but they matter.
+[SEG0005] person_1 (PATIENT): It's been about a month now.
+[SEG0006] person_2 (DOCTOR): Okay, is anything making it worse?
+[SEG0007] person_1 (PATIENT): yes, lying on my back that makes it worse
+[SEG0008] person_2 (DOCTOR): Alright, does anything else come with it?
+[SEG0009] person_1 (PATIENT): My partner noticing pauses in my breathing goes along with it, most of the time.
+[SEG0010] person_2 (DOCTOR): Have you been feeling sleepy during the day?
+[SEG0011] person_1 (PATIENT): Yes, for two months. About feeling sleepy during the day, a three out of ten, I suppose. The my partner noticing pauses in my breathing? That's been for two months.
+[SEG0012] person_2 (DOCTOR): Have you had loud snoring before, or is this the first time?
+[SEG0013] person_1 (PATIENT): Let me think, I had a similar thing last winter. It went away.
+[SEG0014] person_2 (DOCTOR): alright, and chest pain, any of that?
+[SEG0015] person_1 (PATIENT): not at all, uh, no chest pain
+[SEG0016] person_2 (DOCTOR): and what about low mood, leg swelling or palpitations?
+[SEG0017] person_1 (PATIENT): I mean, I haven't had low mood, leg swelling or palpitations, no
+[SEG0018] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0019] person_1 (PATIENT): Skin's normal.
+[SEG0020] person_2 (DOCTOR): has your heart given you any trouble?
+[SEG0021] person_1 (PATIENT): Mm, no, that's been fine.
+[SEG0022] person_2 (DOCTOR): Do you have any long-term conditions?
+[SEG0023] person_1 (PATIENT): Yes, diabetes.
+[SEG0024] person_2 (DOCTOR): Yes, carry on. Yes, diabetes is known to us, good to have that clear. Has anyone in your family had anything serious?
+[SEG0025] person_1 (PATIENT): Yeah, my aunt has rheumatoid arthritis.
+[SEG0026] person_2 (DOCTOR): Has anything ever caused you a reaction? I mean any allergies.
+[SEG0027] person_1 (PATIENT): No, nothing as far as I know.
+[SEG0028] person_2 (DOCTOR): Let's run through your medicines.
+[SEG0029] person_1 (PATIENT): I'm on glimepiride, 2 milligrams, before breakfast.
+[SEG0030] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0031] person_1 (PATIENT): I mean, nothing, I haven't had any operations.
+[SEG0032] person_2 (DOCTOR): What line of work are you in?
+[SEG0033] person_1 (PATIENT): I'm a bus driver, so I sit for long hours.
+[SEG0034] person_2 (DOCTOR): are you active?
+[SEG0035] person_1 (PATIENT): I walk the dog every morning.
+[SEG0036] person_2 (DOCTOR): I'll do your observations first.
+[SEG0037] person_2 (DOCTOR): That's it, just a little longer...
+[SEG0038] person_2 (DOCTOR): Okay: SpO2 97 percent on room air, temperature is 36.8 degrees, height 182 centimetres, BMI works out to 29.0, respiratory rate 16, weight 96 kilos, pressure 151 over 88, pulse 94.
+[SEG0039] person_2 (DOCTOR): Let me tell you where I've got to. The most likely explanation is symptoms that suggest obstructive sleep apnoea. It could also be an under-active thyroid, so we'll keep that open. Try to sleep on your side and avoid alcohol close to bedtime. I think we're done unless you have questions.
+[SEG0040] person_1 (PATIENT): Right, I'll do that. Thank you, doctor.
+[SEG0041] person_2 (DOCTOR): All the best.
+
+JSON:

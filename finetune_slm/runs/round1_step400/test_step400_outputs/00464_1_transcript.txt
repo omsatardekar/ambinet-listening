@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00464)
+[SEG0001] person_1 (DOCTOR): Afternoon. Take the chair by the desk.
+[SEG0002] person_2 (PATIENT): Thanks, doctor. It's been a long few days.
+[SEG0003] person_1 (DOCTOR): Tell me from the beginning, what's been happening?
+[SEG0004] person_2 (PATIENT): So, I've been putting on weight over the last year, doctor.
+[SEG0005] person_1 (DOCTOR): How far back does it go?
+[SEG0006] person_2 (PATIENT): I've had it for three weeks. As for feeling out of breath on stairs, I honestly can't say when that began. It might have been last month or the month before. About feeling out of breath on stairs, I'd call it moderate. I notice it more with stairs.
+[SEG0007] person_1 (DOCTOR): Okay, have you been putting on weight over the last year at any time before this?
+[SEG0008] person_2 (PATIENT): Yes, um, something like this happened a couple of years ago, and it went away on its own.
+[SEG0009] person_1 (DOCTOR): A few measurements, then we'll continue.
+[SEG0010] person_1 (DOCTOR): One second...
+[SEG0011] person_1 (DOCTOR): Okay: temp 36.9 degrees, respiratory rate 17, blood pressure 112 over 70. And pulse is 83 beats a minute.
+[SEG0012] person_2 (PATIENT): Is that normal?
+[SEG0013] person_1 (DOCTOR): Don't worry, I'll go through it in a moment.
+[SEG0014] person_1 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0015] person_1 (DOCTOR): Tell me if anything hurts.
+[SEG0016] person_1 (DOCTOR): Your waist measures about a hundred and four centimetres.
+[SEG0017] person_1 (DOCTOR): Thanks for that. Any irregular periods?
+[SEG0018] person_2 (PATIENT): No, I haven't had any irregular periods.
+[SEG0019] person_1 (DOCTOR): Any palpitations, chest pain, heat intolerance or increased thirst?
+[SEG0020] person_2 (PATIENT): No, I'd have mentioned it.
+[SEG0021] person_1 (DOCTOR): Is your urine normal, no changes?
+[SEG0022] person_2 (PATIENT): Nothing there, no.
+[SEG0023] person_1 (DOCTOR): Alright, what medicines are you taking at the moment?
+[SEG0024] person_2 (PATIENT): Rosuvastatin. I take it at night for my cholesterol.
+[SEG0025] person_1 (DOCTOR): And what strength is that?
+[SEG0026] person_2 (PATIENT): 10 milligrams, I think that's what's on the box. I'm on Glycomet, 500 milligrams, maybe, twice a day.
+[SEG0027] person_1 (DOCTOR): Is the packet here, or the prescription?
+[SEG0028] person_2 (PATIENT): No, it's at home.
+[SEG0029] person_1 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0030] person_2 (PATIENT): Not that I know, uh, no.
+[SEG0031] person_1 (DOCTOR): A few questions about your lifestyle now.
+[SEG0032] person_2 (PATIENT): Not really, I don't get much exercise. I'm a self-employed electrician. I try to avoid too much sugar.
+[SEG0033] person_1 (DOCTOR): Any diagnoses you've been given before?
+[SEG0034] person_2 (PATIENT): I have high cholesterol.
+[SEG0035] person_1 (DOCTOR): Anything more?
+[SEG0036] person_2 (PATIENT): I've had diabetes for five years now.
+[SEG0037] person_1 (DOCTOR): Okay. Okay, I can see diabetes in your file as well. Having listened and examined, my working impression is weight gain with a metabolic cause that needs checking.
+[SEG0038] person_1 (DOCTOR): Let's get a sleep study, for snoring and sleepiness. An HbA1c is what I'd like next, for weight gain.
+[SEG0039] person_2 (PATIENT): Where do I go for that?
+[SEG0040] person_1 (DOCTOR): Start with small, specific changes: smaller portions, no sugary drinks, a thirty-minute walk most days. Try to get to bed and wake up at the same time each day, and keep your phone away from the bed. We'll refer you to a dietitian. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0041] person_2 (PATIENT): That's clear.
+[SEG0042] person_1 (DOCTOR): Let's plan a check after the results are back. Can you run through the plan with me quickly, just to be certain?
+[SEG0043] person_2 (PATIENT): So, I come back after the results are back. Is that right?
+[SEG0044] person_1 (DOCTOR): Yes, exactly right. Okay, we're done for today. Take care.
+[SEG0045] person_2 (PATIENT): That's everything I wanted to ask. Thank you.
+
+JSON:

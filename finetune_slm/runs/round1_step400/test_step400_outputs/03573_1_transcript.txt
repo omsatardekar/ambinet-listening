@@ -1,0 +1,71 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03573)
+[SEG0001] person_1 (NURSE): Doctor, this one's ready for you. Everything's on the chart, but I'll go through it.
+[SEG0002] person_2 (DOCTOR): Alright, thank you. Right, hello, what's the problem?
+[SEG0003] person_3 (PATIENT): I've been feeling muddled and unsteady, and I wanted to get it checked.
+[SEG0004] person_2 (DOCTOR): How long has it been like this?
+[SEG0005] person_3 (PATIENT): Probably about three months. Yeah.
+[SEG0006] person_2 (DOCTOR): How troublesome is it day to day?
+[SEG0007] person_3 (PATIENT): Let me think, a eight out of ten, I suppose.
+[SEG0008] person_3 (PATIENT): I was just going to say that the main thing is—
+[SEG0009] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0010] person_2 (DOCTOR): Later, thanks. Please go on. Right, have you had cramps?
+[SEG0011] person_3 (PATIENT): Yes, actually.
+[SEG0012] person_2 (DOCTOR): Rate it for me, mild, moderate or severe?
+[SEG0013] person_3 (PATIENT): Well, it's... hard to say, it's kind of... I don't know—
+[SEG0014] person_2 (DOCTOR): Take your time. Mild, moderate, or severe, if you had to pick?
+[SEG0015] person_3 (PATIENT): A four out of ten, I suppose.
+[SEG0016] person_4 (UNKNOWN): Yes, exactly like that.
+[SEG0017] person_2 (DOCTOR): Let me check a few things. Any fever, seizure or fall?
+[SEG0018] person_3 (PATIENT): No, no fever, no seizure, no fall. I was feeling sick at one point, but that went away on its own.
+[SEG0019] person_2 (DOCTOR): Have you had weakness on one side, by any chance?
+[SEG0020] person_3 (PATIENT): No, none, no weakness on one side.
+[SEG0021] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0022] person_3 (PATIENT): My heart's been fine, as far as I know.
+[SEG0023] person_2 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0024] person_3 (PATIENT): My grandmother had dementia.
+[SEG0025] person_2 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0026] person_3 (PATIENT): I have high blood pressure, for two years. I've had depression, yes. Arthritis in my knees, for about ten years.
+[SEG0027] person_2 (DOCTOR): Okay, I can see arthritis in your knees in your file as well.
+[SEG0028] person_2 (DOCTOR): Are you on your own at home?
+[SEG0029] person_3 (PATIENT): I live with my elderly mother.
+[SEG0030] person_2 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0031] person_3 (PATIENT): I mean, no, not that I know of.
+[SEG0032] person_2 (DOCTOR): Which medicines do you take at the moment?
+[SEG0033] person_3 (PATIENT): It's a... um, I can't remember what it's called. It's a little pink tablet.
+[SEG0034] person_2 (DOCTOR): Do you remember what it's for?
+[SEG0035] person_3 (PATIENT): For my pressure, I believe. My husband sets them out for me, I just take what I'm given. I'm on sertraline, 50 milligrams, once a day for my mood. It's naproxen, 250 milligrams, twice a day for the knee pain.
+[SEG0036] person_1 (NURSE): Doctor, our chart from the last visit lists it as 500 milligrams.
+[SEG0037] person_2 (DOCTOR): I see. Is the most recent prescription on you?
+[SEG0038] person_3 (PATIENT): I don't think I have it with me.
+[SEG0039] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0040] person_3 (PATIENT): No surgery, no.
+[SEG0041] person_1 (NURSE): Doctor, I've got the readings for you. SpO2 99 percent on room air, pulse is 66 beats a minute. BP is 123 over 77, height 152 centimetres, weight 69 kilos, BMI works out to 29.9.
+[SEG0042] person_2 (DOCTOR): Thanks.
+[SEG0043] person_2 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0044] person_3 (PATIENT): That's alright.
+[SEG0045] person_2 (DOCTOR): Raise your arm for me.
+[SEG0046] person_2 (DOCTOR): You are a bit slow and unsteady, but there is no weakness and your blood pressure is fine.
+[SEG0047] person_2 (DOCTOR): Please sit back down.
+[SEG0048] person_2 (DOCTOR): Right, here's what I'm thinking. This is probably a low salt level, possibly from the new antidepressant. We shouldn't forget dehydration. I'd also keep a urine infection in mind. I think blood tests makes sense here, for confusion.
+[SEG0049] person_5 (CLINICAL_STAFF): We have a slot Friday at 11:30 am, if that works.
+[SEG0050] person_2 (DOCTOR): I'd like to arrange a urine test for confusion. We will stop the new tablet and not drink excess water until we have the result. I'm going to send a referral to the older people's clinic. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0051] person_3 (PATIENT): That's fine by me.
+[SEG0052] person_2 (DOCTOR): Let's plan a check in two days. What are the next steps as you understand them?
+[SEG0053] person_3 (PATIENT): So, I come back in two days. Is that right?
+[SEG0054] person_2 (DOCTOR): Yes, exactly right. Right, that's the plan. Do you want to ask me anything?
+[SEG0055] person_3 (PATIENT): I think I understand everything. Thanks.
+[SEG0056] person_2 (DOCTOR): See you soon.
+
+JSON:

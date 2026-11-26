@@ -1,0 +1,80 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_12_cracked_hands_carer_and_pharmacy_tech)
+[SEG0001] person_1 (DOCTOR): Good morning, come through. Sit yourself down, Mr Hargreaves, is it? You're here for the hands?
+[SEG0002] person_2 (CAREGIVER): Oh, no, no, not me. I'm Dev, I'm Mrs Ambler's carer. She's the one with the hands. I'm only here to help, she gets a bit muddled with the long words.
+[SEG0003] person_1 (DOCTOR): Sure.
+[SEG0004] person_1 (DOCTOR): My mistake, sorry, Dev. Mrs Ambler, hello, I'm Dr Whitfield. And this is Kelly, a pharmacy technician from the chemist downstairs. She's sitting in today as we're looking at your creams, if that's all right.
+[SEG0005] person_3 (CLINICAL_STAFF): Mm-hm.
+[SEG0006] person_3 (CLINICAL_STAFF): Hello. I'll just listen, and tell you if I know anything about the creams.
+[SEG0007] person_4 (PATIENT): Yes. That's all right.
+[SEG0008] person_1 (DOCTOR): Let's have a look at the hands first, if I may. Put them on the desk, here, on the towel. Palms up, and then the backs. Thank you. Oh, I can see. They are very sore-looking.
+[SEG0009] person_4 (PATIENT): Mm.
+[SEG0010] person_4 (PATIENT): They're awful. They crack at the knuckles, in the creases, and then they split and they sting. When I wash up it's like a knife.
+[SEG0011] person_1 (DOCTOR): And the blisters?
+[SEG0012] person_4 (PATIENT): Between the fingers. Little ones. They come and go. They itch like mad before they come up.
+[SEG0013] person_1 (DOCTOR): And how long have they been like this?
+[SEG0014] person_4 (PATIENT): Since the spring. Since about, well, April.
+[SEG0015] person_2 (CAREGIVER): Well, uh, since Christmas, Edna. Because I remember doing the card with you and you couldn't hold the pen.
+[SEG0016] person_4 (PATIENT): That wasn't the same. That was cold.
+[SEG0017] person_2 (CAREGIVER): It was your hands. They were red then.
+[SEG0018] person_3 (CLINICAL_STAFF): Sorry to chip in, but I remember her coming into the shop in August for a cream, and she said they'd been bad for a while even then.
+[SEG0019] person_1 (DOCTOR): I see.
+[SEG0020] person_1 (DOCTOR): So, um, it varies, and it's been on and off for months. I'll say several months. What makes it worse?
+[SEG0021] person_4 (PATIENT): Washing up. Hot water. The bleach, when I do the bathroom. And the cold.
+[SEG0022] person_1 (DOCTOR): Do you wear gloves?
+[SEG0023] person_4 (PATIENT): Sometimes. They make me sweat and itch more.
+[SEG0024] person_1 (DOCTOR): Yes, that's a catch. Okay. When the skin has been dry and flaky, is that still a problem?
+[SEG0025] person_4 (PATIENT): That's better. The flaky bit has gone. It was the skin peeling, like sunburn, but that settled. It's the cracks and the blisters now.
+[SEG0026] person_1 (DOCTOR): Yes.
+[SEG0027] person_1 (DOCTOR): Okay. Any new soap, a new cream, a new washing-up liquid, anything you've started using recently?
+[SEG0028] person_4 (PATIENT): No. Nothing new. I use the same as always.
+[SEG0029] person_1 (DOCTOR): And the skin, is it weeping, oozing, crusty?
+[SEG0030] person_4 (PATIENT): No. Dry. Sore, but dry.
+[SEG0031] person_1 (DOCTOR): Any fever, feeling unwell?
+[SEG0032] person_4 (PATIENT): No.
+[SEG0033] person_1 (DOCTOR): Pain in your joints?
+[SEG0034] person_4 (PATIENT): Well, my knees, but not my hands. Not the joints.
+[SEG0035] person_1 (DOCTOR): Is there a rash anywhere else, on your arms, your face, elbows?
+[SEG0036] person_4 (PATIENT): No. Just the hands. Though I've got a bit on my ankle sometimes, I think.
+[SEG0037] person_1 (DOCTOR): Show me, if there's one now.
+[SEG0038] person_4 (PATIENT): No, not now. It was the spring.
+[SEG0039] person_1 (DOCTOR): And the nails, any changes, pitting, thickening, lifting?
+[SEG0040] person_4 (PATIENT): Not that I've noticed. Dev?
+[SEG0041] person_2 (CAREGIVER): Her nails are fine, doctor.
+[SEG0042] person_1 (DOCTOR): How many times a day would you say you're washing your hands, honestly?
+[SEG0043] person_4 (PATIENT): Oh. I'm a very clean person. After the toilet, before I eat, when I've touched the post. Fifteen? Twenty?
+[SEG0044] person_2 (CAREGIVER): She washes every time the cat comes in.
+[SEG0045] person_4 (PATIENT): He sheds.
+[SEG0046] person_1 (DOCTOR): And is it soap and water, or do you use a gel?
+[SEG0047] person_4 (PATIENT): Er, the soap, from the pump. The pink one. It smells of roses, Dev bought it. And a hand gel when we've been out.
+[SEG0048] person_1 (DOCTOR): Okay. Those can be quite drying, especially the gel. I'll come back to that.
+[SEG0049] person_1 (DOCTOR): Good. You've had eczema before?
+[SEG0050] person_4 (PATIENT): Oh, yes. Since I was little. Mostly the creases of the elbows. It got better as a teenager and comes back when I'm run down.
+[SEG0051] person_1 (DOCTOR): Okay.
+[SEG0052] person_1 (DOCTOR): And what have you been using on the hands?
+[SEG0053] person_4 (PATIENT): Er, a cream. A white one, in a tube, the blue lid. It was very good. I stopped it, though.
+[SEG0054] person_1 (DOCTOR): Do you remember what it's called?
+[SEG0055] person_4 (PATIENT): No. It's the, um. Hydro, something. No. That's another one. It had a funny name. It was prescribed for me.
+[SEG0056] person_3 (CLINICAL_STAFF): Could it be the hydrocortisone? Hydrocortisone one percent is often a white tube with a blue lid.
+[SEG0057] person_4 (PATIENT): Oh, that may be it. Yes.
+[SEG0058] person_1 (DOCTOR): Right. And when did you stop it?
+[SEG0059] person_4 (PATIENT): I don't recall. A few weeks ago. When the flaky bit went, I thought, it's better, so I stopped. And then the cracks started.
+[SEG0060] person_2 (CAREGIVER): Um, it was after the bank holiday, I think. Around then.
+[SEG0061] person_1 (DOCTOR): End of August. Let's say that, roughly. Okay. And apart from the cream?
+[SEG0062] person_4 (PATIENT): I take my tablets. The little white one for cholesterol, I think. At night. And the other is for my legs, the swelling. In the morning. A big one.
+[SEG0063] person_2 (CAREGIVER): Simvastatin at night, and the furosemide in the morning. The furosemide's the water tablet. She's got it round the other way sometimes.
+[SEG0064] person_4 (PATIENT): I have not.
+[SEG0065] person_2 (CAREGIVER): Hm, you said last week the water one was for your cholesterol.
+[SEG0066] person_4 (PATIENT): Did I. Well. Don't tell the doctor.
+[SEG0067] person_1 (DOCTOR): I'm the doctor, Edna. It's fine. And the reflux, I see it on your record.

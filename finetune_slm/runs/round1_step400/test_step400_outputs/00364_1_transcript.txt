@@ -1,0 +1,83 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00364)
+[SEG0001] person_1 (PATIENT): Hi doctor, sorry, the lift was out and I had to take the stairs.
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_3 (CAREGIVER): Thank you for fitting us in, doctor.
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to have you here.
+[SEG0005] person_1 (PATIENT): Um, so... my face drooping on the right side. That's why I came.
+[SEG0006] person_2 (DOCTOR): I'll take a few measurements first.
+[SEG0007] person_2 (DOCTOR): Hold still for me...
+[SEG0008] person_2 (DOCTOR): Okay: BP is 113 over 73, saturation 98 percent, heart rate 86, temp 36.8 degrees.
+[SEG0009] person_1 (PATIENT): Is that okay?
+[SEG0010] person_2 (DOCTOR): I'll interpret it once I've examined you.
+[SEG0011] person_2 (DOCTOR): Since when have you had this?
+[SEG0012] person_1 (PATIENT): About about a month, give or take.
+[SEG0013] person_3 (CAREGIVER): It was closer to about two months, doctor.
+[SEG0014] person_2 (DOCTOR): Okay, so roughly one to two months. Is that right?
+[SEG0015] person_1 (PATIENT): Yeah, roughly.
+[SEG0016] person_2 (DOCTOR): Okay, what about food tasting odd, have you noticed that?
+[SEG0017] person_1 (PATIENT): Yes, for three weeks. About food tasting odd, I'd call it severe.
+[SEG0018] person_2 (DOCTOR): Any a watery eye as well?
+[SEG0019] person_1 (PATIENT): Yes, for two weeks.
+[SEG0020] person_2 (DOCTOR): Have you had any headache?
+[SEG0021] person_1 (PATIENT): Uh, not at all, no headache.
+[SEG0022] person_3 (CAREGIVER): Actually, doctor, I did notice headache. He doesn't always say.
+[SEG0023] person_1 (PATIENT): No, I don't think I did. Maybe a little, I'm not sure.
+[SEG0024] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed.
+[SEG0025] person_2 (DOCTOR): Hm, okay. Did you get slurred speech, hearing changes or recent tick bite?
+[SEG0026] person_1 (PATIENT): No, I'd have mentioned it.
+[SEG0027] person_2 (DOCTOR): Have you had any rash around the ear?
+[SEG0028] person_1 (PATIENT): No rash around the ear, thankfully.
+[SEG0029] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0030] person_1 (PATIENT): No, nothing with my heart.
+[SEG0031] person_2 (DOCTOR): Any problems with your joints or muscles?
+[SEG0032] person_1 (PATIENT): No, joints are fine.
+[SEG0033] person_2 (DOCTOR): So, any previous surgeries?
+[SEG0034] person_1 (PATIENT): Uh, no, never had any surgery.
+[SEG0035] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0036] person_1 (PATIENT): Glimepiride. I take it 2 milligrams, maybe, before breakfast for my sugar.
+[SEG0037] person_2 (DOCTOR): Have you got the box or the prescription on you?
+[SEG0038] person_1 (PATIENT): No, um, it's at home. I take amlodipine, 5 milligrams, once a day.
+[SEG0039] person_2 (DOCTOR): How long have you taken that?
+[SEG0040] person_1 (PATIENT): About six months.
+[SEG0041] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0042] person_1 (PATIENT): I have diabetes, for nearly five years. I have high blood pressure, for two years. I told myself I'd wait and see, and here I am.
+[SEG0043] person_2 (DOCTOR): Right, right.
+[SEG0044] person_1 (PATIENT): Okay, so I've had an enlarged prostate for five years now. I'd rather know what's going on than keep guessing.
+[SEG0045] person_2 (DOCTOR): Right, any more?
+[SEG0046] person_2 (DOCTOR): Yes, diabetes and high blood pressure are known to us, good to have that clear.
+[SEG0047] person_2 (DOCTOR): Do you have any allergies to medicines, food, anything at all? Bear with me, I'm just building up the picture.
+[SEG0048] person_1 (PATIENT): Yeah, no allergies that I know of, no.
+[SEG0049] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0050] person_1 (PATIENT): Well, my uncle had colon cancer. My brother has asthma.
+[SEG0051] person_2 (DOCTOR): Do you get any exercise?
+[SEG0052] person_1 (PATIENT): I walk for about half an hour most days.
+[SEG0053] person_2 (DOCTOR): Do you live alone?
+[SEG0054] person_1 (PATIENT): Yes, I live on my own.
+[SEG0055] person_2 (DOCTOR): Come over here and I'll have a look.
+[SEG0056] person_2 (DOCTOR): Hold that position for me.
+[SEG0057] person_2 (DOCTOR): Left side of the face moves normally, and arm and leg strength is normal.
+[SEG0058] person_2 (DOCTOR): Hold that position for me.
+[SEG0059] person_2 (DOCTOR): You can't wrinkle the right forehead or puff out the right cheek.
+[SEG0060] person_2 (DOCTOR): Thanks, please take a seat again. Putting it all together, my working impression is a Bell's palsy pattern. I'd also keep a stroke in mind. Just to be sure I understood. You've had your face drooping on the right side, and no hearing changes.
+[SEG0061] person_1 (PATIENT): Mm, that's right.
+[SEG0062] person_2 (DOCTOR): I'm sending you for blood sugar testing because of facial palsy. I'm prescribing prednisolone, 50 milligrams, once a day, for seven days. It's for facial weakness.
+[SEG0063] person_1 (PATIENT): Fine, I'll start it.
+[SEG0064] person_2 (DOCTOR): Use lubricating drops through the day and tape the eye shut at night. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. If the weakness spreads to your arm or leg, or your speech changes, that's the point to come in urgently.
+[SEG0065] person_1 (PATIENT): Yes, I'll watch for that.
+[SEG0066] person_2 (DOCTOR): Please come and see me in a week. Good. Let us know how you get on.
+[SEG0067] person_1 (PATIENT): Alright, thanks. Bye for now.
+[SEG0068] person_2 (DOCTOR): Goodbye.
+
+JSON:

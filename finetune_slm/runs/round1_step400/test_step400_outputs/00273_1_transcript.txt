@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00273)
+[SEG0001] person_1 (PATIENT): Hi there, uh, is it alright if I come in now?
+[SEG0002] person_2 (DOCTOR): of course, put it down anywhere. So, how can I help?
+[SEG0003] person_1 (PATIENT): So the thing is, I've got numbness on the left side of my face.
+[SEG0004] person_2 (DOCTOR): which tablets or creams or inhalers do you use?
+[SEG0005] person_1 (PATIENT): I, I take atorvastatin, 20 milligrams, at night for my cholesterol.
+[SEG0006] person_3 (NURSE): doctor, our chart from the last visit lists it as 40 milligrams
+[SEG0007] person_2 (DOCTOR): Okay. Have you got the newest prescription or the box with you?
+[SEG0008] person_1 (PATIENT): Not with me. I'll bring it next time. Glimepiride. I take it it 2 milligrams, before breakfast for my sugar.
+[SEG0009] person_2 (DOCTOR): Right, when did you start it?
+[SEG0010] person_1 (PATIENT): For about three months.
+[SEG0011] person_2 (DOCTOR): When did you first notice it?
+[SEG0012] person_1 (PATIENT): Honestly I can't say exactly when it started. It might have been last month or the month before, um, I really can't pin it it down.
+[SEG0013] person_2 (DOCTOR): Right, would you call it it mild or bad?
+[SEG0014] person_1 (PATIENT): A eight out of ten, I suppose. So, you know, and there's weakness in my left hand as well, five days now. Oh, you know, and tiredness.
+[SEG0015] person_2 (DOCTOR): Let me check a few things. Any loss of vision, palpitations, confusion or trouble swallowing?
+[SEG0016] person_1 (PATIENT): None, um, as far as I know.
+[SEG0017] person_2 (DOCTOR): Has your skin been okay?
+[SEG0018] person_1 (PATIENT): Skin's normal.
+[SEG0019] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0020] person_1 (PATIENT): High cholesterol, for about ten years. It's a relief to finally sit down and talk about it. Sorry, I know I'm rambling a bit. I, I have diabetes.
+[SEG0021] person_2 (DOCTOR): Right, so diabetes is already on your record. We'll keep that in mind today. Tell me about your routine, work, habits, that sort of thing.
+[SEG0022] person_1 (PATIENT): It's just me and my wife at home now. I work night shifts at a warehouse. I cycle to work most mornings.
+[SEG0023] person_2 (DOCTOR): any allergies I should know about?
+[SEG0024] person_1 (PATIENT): I've, I've never been told I have allergies
+[SEG0025] person_2 (DOCTOR): What about operations, anything like that?
+[SEG0026] person_1 (PATIENT): Okay, so yes, I had my gallbladder removed, in 2016.
+[SEG0027] person_3 (NURSE): Here are the numbers, doctor. Temp 36.5 degrees, pulse is 90 beats a minute, blood pressure 170 over 94. Respiratory rate 17, SpO2 98 percent on room air.
+[SEG0028] person_2 (DOCTOR): Okay, noted.
+[SEG0029] person_2 (DOCTOR): let me examine, it won't take long
+[SEG0030] person_2 (DOCTOR): Almost done with this part.
+[SEG0031] person_2 (DOCTOR): There's mild drooping at the left corner of your mouth.
+[SEG0032] person_2 (DOCTOR): I'll go gently.
+[SEG0033] person_2 (DOCTOR): Grip strength is a little weaker on the left.
+[SEG0034] person_2 (DOCTOR): Thanks for that.
+[SEG0035] person_2 (DOCTOR): Putting it all together, it fits best with a possible mini-stroke, which we need to investigate urgently. A pinched nerve is still possible. Let's book an MRI of the brain to look into possible stroke. I'd like to arrange an ECG for possible stroke. We'll begin with clopidogrel, 75 milligrams, once a day, until we review. That should help with stroke prevention. Don't drive for now, and bring someone with you to the next visit.
+[SEG0036] person_2 (DOCTOR): Mhm. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0037] person_1 (PATIENT): yes, I'll keep that in mind
+[SEG0038] person_2 (DOCTOR): book a review in one week
+[SEG0039] person_1 (PATIENT): Fine.
+[SEG0040] person_2 (DOCTOR): Let me check I've been clear. What will you do once you get home?
+[SEG0041] person_1 (PATIENT): So, I take the clopidogrel, 75 milligrams, once a day and come back in one week. Is that right?
+[SEG0042] person_2 (DOCTOR): Yes, exactly right. Any last questions?
+[SEG0043] person_1 (PATIENT): Well, uh, all good here. Thank you.
+
+JSON:

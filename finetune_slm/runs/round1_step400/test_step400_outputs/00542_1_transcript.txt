@@ -1,0 +1,75 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00542)
+[SEG0001] person_1 (PATIENT): Doctor, I've got numbness in my right hand and it's really scaring me. I keep thinking it's a stroke, or my spine.
+[SEG0002] person_2 (DOCTOR): Righto, let's sort it out. Which fingers are numb?
+[SEG0003] person_1 (PATIENT): The thumb, the pointer finger and the middle one. Not the little finger. And it's worse when I'm gripping something, like the steering wheel.
+[SEG0004] person_2 (DOCTOR): How long has it been going on?
+[SEG0005] person_1 (PATIENT): About two months.
+[SEG0006] person_2 (DOCTOR): Does it do anything else, besides numbness?
+[SEG0007] person_1 (PATIENT): Tingling at night, like pins and needles. It wakes me up and I have to shake my hand out. And I've been dropping things, my coffee mug, a screwdriver last week.
+[SEG0008] person_2 (DOCTOR): Any pain?
+[SEG0009] person_1 (PATIENT): A sore ache in the wrist, and sometimes it runs up the forearm. Shaking it out helps a bit.
+[SEG0010] person_2 (DOCTOR): Okay. Any pain in your neck?
+[SEG0011] person_1 (PATIENT): No, no neck pain.
+[SEG0012] person_2 (DOCTOR): Any fall or injury to the wrist?
+[SEG0013] person_1 (PATIENT): No, nothing like that.
+[SEG0014] person_2 (DOCTOR): Any swelling in the wrist or hand?
+[SEG0015] person_1 (PATIENT): No, not that I've noticed.
+[SEG0016] person_2 (DOCTOR): Any weight loss lately?
+[SEG0017] person_1 (PATIENT): No, my weight's been steady. If anything it's gone up.
+[SEG0018] person_2 (DOCTOR): What do you do for work?
+[SEG0019] person_1 (PATIENT): I work on a production line, packing parts, same movement all day with a scanner gun.
+[SEG0020] person_2 (DOCTOR): We'll come to that. What medicines are you on?
+[SEG0021] person_1 (PATIENT): Metformin, 500 mg twice a day, for the diabetes. Every day, never miss. Well, mostly. The evening one I sometimes forget.
+[SEG0022] person_2 (DOCTOR): Fair enough. Anything else?
+[SEG0023] person_1 (PATIENT): There's a small white tablet for my cholesterol, I take it at night. I can't remember the name of it, my wife keeps the box.
+[SEG0024] person_2 (DOCTOR): Okay. Do you have any allergies?
+[SEG0025] person_1 (PATIENT): Penicillin. I was told as a kid I'm allergic to it, but I honestly don't remember what happened.
+[SEG0026] person_2 (DOCTOR): Fine, I'll note it down. What other conditions have you got?
+[SEG0027] person_1 (PATIENT): Type 2 diabetes, about six years. High cholesterol. Gout, though I haven't had a flare this year. And sleep apnoea, I use a machine at night.
+[SEG0028] person_2 (DOCTOR): Good. Any operations?
+[SEG0029] person_1 (PATIENT): A hernia repair, about eight years ago.
+[SEG0030] person_2 (DOCTOR): Family history of anything important?
+[SEG0031] person_1 (PATIENT): My father had a heart attack at sixty. And my sister has carpal tunnel syndrome, she's a hairdresser.
+[SEG0032] person_2 (DOCTOR): Interesting. Do you smoke or drink?
+[SEG0033] person_1 (PATIENT): I quit smoking five years ago. And I have two beers on the weekend, no more.
+[SEG0034] person_2 (DOCTOR): Do you exercise at all?
+[SEG0035] person_1 (PATIENT): I walk the dog on Sundays. That's about it, to be honest.
+[SEG0036] person_2 (DOCTOR): Alright. Any chest pain or palpitations?
+[SEG0037] person_1 (PATIENT): No, my heart feels fine.
+[SEG0038] person_2 (DOCTOR): And passing urine, any trouble there, more than usual?
+[SEG0039] person_1 (PATIENT): No, that's normal. I'm drinking the same as always.
+[SEG0040] person_2 (DOCTOR): Let me check your numbers. Blood pressure is 136 over 84, pulse is 80 beats per minute.
+[SEG0041] person_2 (DOCTOR): Hands out, palms up. I'll tap over the wrist crease here. Tell me what you feel.
+[SEG0042] person_1 (PATIENT): Ow, tingling shoots into my fingers. That's exactly the feeling.
+[SEG0043] person_2 (DOCTOR): The tapping over the wrist brings on the tingling. Now push the backs of your hands together, wrists bent, and hold for a minute.
+[SEG0044] person_1 (PATIENT): It's coming on already. Pins and needles in the same three fingers.
+[SEG0045] person_2 (DOCTOR): Yep. Bending the wrist like that brings on the same tingling. Now light touch on each fingertip, eyes closed.
+[SEG0046] person_1 (PATIENT): It's duller on the thumb and the first two fingers. The little finger feels normal.
+[SEG0047] person_2 (DOCTOR): Reduced feeling in the thumb, index and middle fingers, then. And squeeze my fingers as hard as you can.
+[SEG0048] person_1 (PATIENT): Like this? It doesn't feel strong.
+[SEG0049] person_2 (DOCTOR): Grip is a little weaker on the right than the left. Based on all this, it looks like carpal tunnel syndrome, where a nerve gets squeezed in the wrist.
+[SEG0050] person_1 (PATIENT): So it's not a stroke? Or my spine?
+[SEG0051] person_2 (DOCTOR): Nothing here points to either. Your job could well be the trigger.
+[SEG0052] person_1 (PATIENT): What do we do about it?
+[SEG0053] person_2 (DOCTOR): I'd like to arrange a nerve conduction study, to measure how well the nerve is working. And a blood test for your HbA1c, to check your sugar control.
+[SEG0054] person_1 (PATIENT): Okay. And if the nerve test is normal?
+[SEG0055] person_2 (DOCTOR): Then I might consider an X-ray of your neck, but we'll hold off on that for now.
+[SEG0056] person_3 (CLINICAL_STAFF): Doctor, I've got a wrist splint in the right size here. Shall I show him how to put it on?
+[SEG0057] person_2 (DOCTOR): Please do. Wear it at night, so the wrist stays straight while you sleep. And take short breaks from the scanner gun during the day.
+[SEG0058] person_1 (PATIENT): I'll do it, and I'll tell my supervisor. And the follow-up?
+[SEG0059] person_2 (DOCTOR): Come back if it's not better in four weeks, and bring the tablet box this time so we can get its name.
+[SEG0060] person_1 (PATIENT): Right, my wife will find it. Thank you, doctor.
+
+JSON:

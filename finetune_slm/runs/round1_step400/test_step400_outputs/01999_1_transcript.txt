@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01999)
+[SEG0001] person_1 (PATIENT): Uh, good evening, doctor, thanks for seeing me.
+[SEG0002] person_2 (DOCTOR): that's fine, sit down tell me why you came
+[SEG0003] person_3 (CAREGIVER): good morning, doctor. I came along to help out. It's, It's been feeling faint, doctor. She didn't want to come, but I insisted
+[SEG0004] person_2 (DOCTOR): What's the timeline, when did it begin?
+[SEG0005] person_1 (PATIENT): Around about a month, I think.
+[SEG0006] person_3 (CAREGIVER): I think it's been nearer about two months, actually.
+[SEG0007] person_2 (DOCTOR): okay, so roughly one to two months is that right?
+[SEG0008] person_1 (PATIENT): That sounds about right.
+[SEG0009] person_2 (DOCTOR): tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse
+[SEG0010] person_1 (PATIENT): it comes and goes. Mostly severe. Work has been very busy so I kept ignoring it
+[SEG0011] person_2 (DOCTOR): Have you noticed anything else alongside it?
+[SEG0012] person_1 (PATIENT): it usually comes with a very fast heartbeat the, The very fast heartbeat? That's been for about four days with very fast heartbeat, about a eight out of ten i've been sweating too
+[SEG0013] person_2 (DOCTOR): Let's start with the basic checks.
+[SEG0014] person_2 (DOCTOR): keep your arm relaxed for me..
+[SEG0015] person_2 (DOCTOR): okay: temperature is 37.0 degrees, saturation 99 percent, pulse 97. And blood pressure 98 over 60.
+[SEG0016] person_2 (DOCTOR): Right, could you come over to the couch, please?
+[SEG0017] person_2 (DOCTOR): look straight ahead
+[SEG0018] person_2 (DOCTOR): your pulse is over one hundred and eighty and your blood pressure is low
+[SEG0019] person_2 (DOCTOR): All finished, thank you.
+[SEG0020] person_2 (DOCTOR): Any fever, cough or leg swelling at all?
+[SEG0021] person_1 (PATIENT): No, none that I've noticed.
+[SEG0022] person_2 (DOCTOR): So, any problems with your joints or muscles?
+[SEG0023] person_1 (PATIENT): no, joints are fine
+[SEG0024] person_2 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0025] person_1 (PATIENT): Breathing's normal.
+[SEG0026] person_2 (DOCTOR): Anything surgical in your history?
+[SEG0027] person_1 (PATIENT): just a bunion operation, six years ago
+[SEG0028] person_2 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0029] person_1 (PATIENT): Um, my father has Parkinson's disease.
+[SEG0030] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0031] person_1 (PATIENT): Yes, I work in a bakery, early starts. I do a yoga class on Thursdays. I drink a lot of tea and snack through the day
+[SEG0032] person_2 (DOCTOR): tell me about any past illnesses or ongoing conditions
+[SEG0033] person_1 (PATIENT): I've had heart disease for about a year now.
+[SEG0034] person_2 (DOCTOR): I follow.
+[SEG0035] person_1 (PATIENT): High blood pressure, for about a year.
+[SEG0036] person_2 (DOCTOR): Okay, I can see high blood pressure in your file as well. Any allergies to tablets, food or anything in the environment?
+[SEG0037] person_1 (PATIENT): no, I've never reacted to anything
+[SEG0038] person_2 (DOCTOR): let's run through your medicines
+[SEG0039] person_1 (PATIENT): I take ramipril, 5 milligrams, every morning i'd been on telmisartan, not any more though, I stopped
+[SEG0040] person_2 (DOCTOR): So, based on the history and the examination, this looks most like a dangerous fast heart rhythm. I want to be honest that this is an impression, not a final answer.
+[SEG0041] person_1 (PATIENT): I'm scared it's something bad is it?
+[SEG0042] person_2 (DOCTOR): It's reasonable to be concerned, but right now a dangerous fast heart rhythm is my leading thought, not anything worse. Let me repeat that back to make sure. You've been feeling faint, severe, and no cough or leg swelling.
+[SEG0043] person_1 (PATIENT): Yes, that's right.
+[SEG0044] person_2 (DOCTOR): we should do an urgent ECG for fast heart rhythm
+[SEG0045] person_1 (PATIENT): How long will it take?
+[SEG0046] person_2 (DOCTOR): we should do blood tests for arrhythmia lie flat, I am calling the emergency team and preparing to shock the heart don't skip meals, and try to eat smaller portions more often through the day i'm gonna send a referral to the emergency team do get help quickly if the symptoms get worse
+[SEG0047] person_1 (PATIENT): Okay, I'll look out for that.
+[SEG0048] person_2 (DOCTOR): Please come and and see me straight away.
+[SEG0049] person_1 (PATIENT): right
+[SEG0050] person_2 (DOCTOR): Does all of that make sense?
+[SEG0051] person_1 (PATIENT): Good, thanks, I'll see you then.
+
+JSON:

@@ -1,0 +1,64 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00060)
+[SEG0001] person_1 (PATIENT): Yeah, morning. Nice to finally see you, doctor.
+[SEG0002] person_2 (DOCTOR): No trouble at all, come in. What's been bothering you?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, thank you for seeing us.
+[SEG0004] person_1 (PATIENT): Well, um, I've been having fever and chills.
+[SEG0005] person_2 (DOCTOR): How long has this been going on?
+[SEG0006] person_1 (PATIENT): About... well, two weeks.
+[SEG0007] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0008] person_1 (PATIENT): Honestly, a couple of times a week. Severe, I'd say. I've also had shortness of breath, for five days. As for shortness of breath, only resting, and it's not much.
+[SEG0009] person_2 (DOCTOR): Have you been feeling very weak?
+[SEG0010] person_1 (PATIENT): Yeah, I've had that since Friday.
+[SEG0011] person_2 (DOCTOR): What about sharp pain on the right side when you breathe in, have you noticed that?
+[SEG0012] person_1 (PATIENT): Yeah, that too.
+[SEG0013] person_2 (DOCTOR): Any coughing up blood, palpitations or recent travel?
+[SEG0014] person_1 (PATIENT): No, none of those.
+[SEG0015] person_2 (DOCTOR): Did you notice any leg swelling?
+[SEG0016] person_1 (PATIENT): No. No leg swelling.
+[SEG0017] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0018] person_1 (PATIENT): No, nothing with my heart.
+[SEG0019] person_2 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0020] person_1 (PATIENT): Yeah, no, that's all normal.
+[SEG0021] person_2 (DOCTOR): Have you had to have anything operated on?
+[SEG0022] person_1 (PATIENT): I had my thyroid operated on a long time ago.
+[SEG0023] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0024] person_1 (PATIENT): I have diabetes, for about a year. I have high blood pressure, for two years.
+[SEG0025] person_2 (DOCTOR): Alright, high blood pressure, that matches what I have here. Any medication at the moment, including things from the pharmacy?
+[SEG0026] person_3 (FAMILY_MEMBER): She takes ramipril, 5 milligrams, every morning for my blood pressure.
+[SEG0027] person_1 (PATIENT): I used to take telmisartan, but I stopped it.
+[SEG0028] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0029] person_1 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0030] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0031] person_1 (PATIENT): I smoke, yes, around five a day. A beer or two most evenings, to be honest. I try to avoid too much sugar. I walk for about half an hour most days.
+[SEG0032] person_2 (DOCTOR): A few measurements, then we'll continue.
+[SEG0033] person_2 (DOCTOR): Hold still for me...
+[SEG0034] person_2 (DOCTOR): Okay: BP is 139 over 75, heart rate 90. And respiratory rate 22, BMI works out to 17.3, height 180 centimetres, SpO2 91 percent on room air, weight 56 kilos, temp 37.2 degrees.
+[SEG0035] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0036] person_2 (DOCTOR): Let me just check something.
+[SEG0037] person_2 (DOCTOR): Breathing rate is a bit fast.
+[SEG0038] person_2 (DOCTOR): Let me press here.
+[SEG0039] person_2 (DOCTOR): There's bronchial breathing and crackles at the right lower zone.
+[SEG0040] person_2 (DOCTOR): Thanks for that.
+[SEG0041] person_2 (DOCTOR): Okay, so my impression is this: This looks most like a possible pneumonia on the right side. A pulmonary embolism is still possible. We should do a sputum culture for pneumonia. That will help us see what's going on underneath and decide the next step.
+[SEG0042] person_1 (PATIENT): That sounds sensible.
+[SEG0043] person_2 (DOCTOR): We should do blood tests for infection. Let's get a chest X-ray, for suspected pneumonia.
+[SEG0044] person_1 (PATIENT): Is that done here?
+[SEG0045] person_2 (DOCTOR): We'll begin with paracetamol, 500 milligrams, every six hours if needed, for three days. It's for fever and body aches. Rest and fluids, and finish every dose of the antibiotic. If you smoke, this is a good moment to think about stopping, and we can help you with that. Do get help quickly if the breathlessness worsens or you become drowsy.
+[SEG0046] person_1 (PATIENT): Okay, I'll remember.
+[SEG0047] person_2 (DOCTOR): Book a review in three days. That's everything from me. Any other questions?
+[SEG0048] person_1 (PATIENT): Okay, so nothing more from me, thanks.
+[SEG0049] person_2 (DOCTOR): Safe journey home.
+
+JSON:

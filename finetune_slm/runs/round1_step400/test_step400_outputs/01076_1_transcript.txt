@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01076)
+[SEG0001] person_1 (PATIENT): Hi doctor, um, am I too early?
+[SEG0002] person_2 (DOCTOR): No problem at all, come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): Sorry, uh, what was I saying, it's being thirsty. I thought I'd wait, but it hasn't gone. I told my wife I'd come today.
+[SEG0004] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0005] person_1 (PATIENT): Glibenclamide. I take it 5 milligrams, before breakfast for my sugar.
+[SEG0006] person_2 (DOCTOR): Right, right. Has there been tingling in your toes too?
+[SEG0007] person_1 (PATIENT): Yeah, um, I've had that since yesterday. Sorry, um, what was I saying, with tingling in my toes, a four out of ten, I suppose. It happens every other day. I notice it more with night.
+[SEG0008] person_2 (DOCTOR): A few quick ones: foot ulcers, chest pain or vomiting?
+[SEG0009] person_1 (PATIENT): No foot ulcers, chest pain or vomiting, none of it.
+[SEG0010] person_2 (DOCTOR): How are your bowels, any trouble?
+[SEG0011] person_1 (PATIENT): Bowels are regular, nothing odd.
+[SEG0012] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0013] person_1 (PATIENT): No problems with breathing.
+[SEG0014] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies? Bear with me, I'm just building up the picture.
+[SEG0015] person_1 (PATIENT): Hmm, no, I'm not allergic to anything.
+[SEG0016] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0017] person_1 (PATIENT): I have diabetes, for about a year.
+[SEG0018] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0019] person_1 (PATIENT): I walk the dog every morning. I grab fast food at lunch most days. I live with my elderly mother.
+[SEG0020] person_2 (DOCTOR): Any previous surgeries?
+[SEG0021] person_1 (PATIENT): No, not at all.
+[SEG0022] person_2 (DOCTOR): I'll do your observations first.
+[SEG0023] person_2 (DOCTOR): Sit still for a moment...
+[SEG0024] person_2 (DOCTOR): Okay: BP is 155 over 90, pulse is 82 beats a minute, saturation 98 percent, BMI works out to 27.4, weight 80 kilos, height 171 centimetres.
+[SEG0025] person_2 (DOCTOR): Alright, over here please and I'll take a look.
+[SEG0026] person_2 (DOCTOR): I'll listen to your chest now.
+[SEG0027] person_2 (DOCTOR): The feeling at the tips of your toes is reduced and the foot pulses are present.
+[SEG0028] person_2 (DOCTOR): That's all I needed to check.
+[SEG0029] person_2 (DOCTOR): From what you've told me and what I found, my working impression is diabetes not well controlled on current treatment.
+[SEG0030] person_1 (PATIENT): Well, what are the odds it's serious?
+[SEG0031] person_2 (DOCTOR): I can't promise yet, but most people with diabetes not well controlled on current treatment do well once it's treated properly.
+[SEG0032] person_2 (DOCTOR): I'm sending you for an HbA1c because of diabetes review.
+[SEG0033] person_3 (CLINICAL_STAFF): The earliest is Thursday, 9 am.
+[SEG0034] person_2 (DOCTOR): We should do a urine albumin test for diabetes review. I think kidney function tests makes sense here, for diabetes review.
+[SEG0035] person_1 (PATIENT): Mm, alright.
+[SEG0036] person_2 (DOCTOR): Check your feet daily and book the eye screening.
+[SEG0037] person_2 (DOCTOR): Yes, carry on. See me again in three months. Does all of that make sense?
+[SEG0038] person_1 (PATIENT): Great, thank you for your help.
+[SEG0039] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

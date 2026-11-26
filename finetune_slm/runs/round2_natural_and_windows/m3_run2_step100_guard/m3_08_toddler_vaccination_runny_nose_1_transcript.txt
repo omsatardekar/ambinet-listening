@@ -1,0 +1,110 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_08_toddler_vaccination_runny_nose)
+[SEG0001] person_1 (FAMILY_MEMBER): Good morning. Thank you for seeing us. I do hope we haven't come at an awkward time, I know that Maisie's slot is meant to be just for her injections but there is, well, there are a couple of things I'd like to ask first, if that is permitted.
+[SEG0002] person_2 (DOCTOR): Of course it is, good morning. Come in, both of you. I'm Dr Kessler, and this is Nurse Priya, who'll be doing the injections. And you must be Maisie.
+[SEG0003] person_3 (PATIENT): Hello.
+[SEG0004] person_2 (DOCTOR): Hello, Maisie. That's a lovely cardigan. Is that a rabbit?
+[SEG0005] person_3 (PATIENT): Bunny.
+[SEG0006] person_2 (DOCTOR): A bunny. What's his name?
+[SEG0007] person_3 (PATIENT): Mr Hops.
+[SEG0008] person_2 (DOCTOR): Mr Hops. Oh, that's a very good name. Would you like to sit on Mummy's knee while we talk? Good girl. Right then, Mrs Adeyemi, tell me what you'd like to ask.
+[SEG0009] person_1 (FAMILY_MEMBER): Well, she's due her immunisations, the twelve month ones, I'm aware she's a little late, and her three-year-four-month. Actually it's a combined appointment, the receptionist did tell me, I've written it down. But she has had a runny nose for the last three days, and I wasn't sure whether we should have come at all, or whether you would send us away.
+[SEG0010] person_2 (DOCTOR): Let's take a look at that. Tell me about the nose.
+[SEG0011] person_1 (FAMILY_MEMBER): Well, uh, it started on Monday. It is clear, mostly, a little green this morning. She's had a slight cough, no, actually, no cough, I take that back. Just the nose. And she's been a little grumpy but she's eating and drinking.
+[SEG0012] person_2 (DOCTOR): And any temperature?
+[SEG0013] person_1 (FAMILY_MEMBER): I took it at seven this morning, it was thirty-seven point two. No Calpol has been given in the last twenty-four hours, I wanted to be honest about that. I did give her some on Monday evening.
+[SEG0014] person_2 (DOCTOR): That's very helpful, thank you. And any wheeze, noisy breathing, difficulty feeding?
+[SEG0015] person_1 (FAMILY_MEMBER): None of those.
+[SEG0016] person_2 (DOCTOR): Good. Ears, is she pulling at them?
+[SEG0017] person_1 (FAMILY_MEMBER): Not that I've noticed.
+[SEG0018] person_3 (PATIENT): Nose.
+[SEG0019] person_2 (DOCTOR): Nose? Is your nose runny, Maisie?
+[SEG0020] person_3 (PATIENT): Yeah. Sniff.
+[SEG0021] person_2 (DOCTOR): Very good sniff. Now, you mentioned a couple of things.
+[SEG0022] person_1 (FAMILY_MEMBER): Hm, the second one, and this is why I wanted to be sure, is that she had a reaction to egg. When she was about a year old. I wanted to mention it before anyone does the injections, because I've read that some of the vaccines are made using egg, and I was not certain whether it is relevant.
+[SEG0023] person_2 (DOCTOR): Mm.
+[SEG0024] person_2 (DOCTOR): It is the right thing to mention. Tell me exactly what happened.
+[SEG0025] person_1 (FAMILY_MEMBER): I gave her scrambled egg for the first time. About ten minutes later her face came up in a sort of rash, little raised blotches, mostly around her mouth and her cheeks. And her top lip swelled up. I called the ambulance, in fact. By the time they came it had started to go down, and she was perfectly happy.
+[SEG0026] person_2 (DOCTOR): That sounds frightening. Was she wheezing, or struggling to breathe, or floppy?
+[SEG0027] person_1 (FAMILY_MEMBER): No. She wasn't floppy. She was looking round and playing. I remember being struck by how normal she was, while I was absolutely beside myself.
+[SEG0028] person_2 (DOCTOR): Did she vomit?
+[SEG0029] person_1 (FAMILY_MEMBER): I don't believe so. There might have been a little sick on her bib, I can't swear to it.
+[SEG0030] person_2 (DOCTOR): Okay. Was she seen afterwards?
+[SEG0031] person_1 (FAMILY_MEMBER): Yes, we went to the hospital and they observed her for a few hours, and they said that it was an allergic reaction to egg, and that we should avoid it, and that we'd be referred to the allergy clinic. We went in the spring.
+[SEG0032] person_2 (DOCTOR): And what did the allergy clinic say?
+[SEG0033] person_1 (FAMILY_MEMBER): Hm, they did a skin test, and it was a small reaction. And they said to try her on baked egg, in a cake, say, and she has been fine with that. So she has baked egg in muffins and things, but I do not give her scrambled or boiled. They said to keep it up for the time being.
+[SEG0034] person_2 (DOCTOR): Sure.
+[SEG0035] person_2 (DOCTOR): That's exactly right, and it's very sensible. Has she had any other reactions to foods, medicines, anything else?
+[SEG0036] person_1 (FAMILY_MEMBER): Uh, not to my knowledge. She had a nappy rash cream once that made her bottom rather red, but I think that was the rash itself.
+[SEG0037] person_2 (DOCTOR): I see.
+[SEG0038] person_2 (DOCTOR): Fine. Now, the injections she is due today. The measles, mumps and rubella one, and the four-in-one booster. Neither of those, in this country, is a concern with egg allergy. The old advice was different, but it's been changed, because the amount of egg protein in the MMR is minuscule, and the evidence is that it's safe even in children who've had a proper reaction. We'd just keep an eye on her for fifteen minutes afterwards, as we always do.
+[SEG0039] person_1 (FAMILY_MEMBER): Mm-hm.
+[SEG0040] person_1 (FAMILY_MEMBER): That's a relief, I must say. I had been worrying about it all week.
+[SEG0041] person_2 (DOCTOR): I'm glad you said, though. Is she on any medicines?
+[SEG0042] person_1 (FAMILY_MEMBER): None regularly. A drop of vitamin D, every morning. Nothing else.
+[SEG0043] person_2 (DOCTOR): Any previous illnesses, hospital stays?
+[SEG0044] person_1 (FAMILY_MEMBER): Hm, she was in hospital when she was five months old, with bronchiolitis. Four days. She needed some oxygen. She's been well since, apart from the usual colds.
+[SEG0045] person_2 (DOCTOR): Thank you. And how is her development, is she talking, running about?
+[SEG0046] person_1 (FAMILY_MEMBER): She's a chatterbox, as you can hear. She can jump and she can climb the stairs. She's not too keen on the potty.
+[SEG0047] person_3 (PATIENT): Potty bad.
+[SEG0048] person_1 (FAMILY_MEMBER): Quite.
+[SEG0049] person_2 (DOCTOR): How's she sleeping? Does she go down all right?
+[SEG0050] person_1 (FAMILY_MEMBER): Reasonably well, thank you, apart from the nose this week. She goes down at seven and wakes at about six. Occasionally she comes into our bed in the small hours, which my husband permits and I do not.
+[SEG0051] person_2 (DOCTOR): Okay.
+[SEG0052] person_2 (DOCTOR): Ha. That's the usual war. And eating generally, apart from the egg, is she a good eater?
+[SEG0053] person_1 (FAMILY_MEMBER): Fair. She'll eat pasta and anything yellow. Vegetables are a negotiation. I do hide a little spinach in the sauce.
+[SEG0054] person_2 (DOCTOR): That's what everyone does. As long as she's growing and has energy, it's fine. And teeth, has she seen a dentist?
+[SEG0055] person_1 (FAMILY_MEMBER): Well, uh, not yet. I intended to, I'll make an appointment this week.
+[SEG0056] person_2 (DOCTOR): Please do. Free for under tens, and the sooner she gets used to the chair, the better.
+[SEG0057] person_2 (DOCTOR): Fair comment. Now, the nose. A runny nose by itself is not a reason to postpone. What I look for is a fever, a temperature over thirty-eight, or a child who looks unwell. Can I have a look at her? Maisie, would you let me look in your ears? It tickles a bit, like a little torch.
+[SEG0058] person_3 (PATIENT): Okay.
+[SEG0059] person_2 (DOCTOR): Ear is clear on this side, no redness. Now the other. Good girl. And open your mouth wide, like a lion, ahh. Throat looks a little pink, which is normal with a cold. Her chest sounds clear, breathing is easy. Heart sounds are fine. She looks very well.
+[SEG0060] person_1 (FAMILY_MEMBER): Mm.
+[SEG0061] person_1 (FAMILY_MEMBER): She is a robust little thing, always has been.
+[SEG0062] person_2 (DOCTOR): Right. I'll let Nurse Priya take the temperature before anything else is done. If it's below thirty-eight and she's playing, I'm happy for her to have both vaccines today.
+[SEG0063] person_4 (NURSE): Right.
+[SEG0064] person_4 (NURSE): Maisie, can I put this little thermometer in your ear? It goes beep.
+[SEG0065] person_3 (PATIENT): Beep.
+[SEG0066] person_4 (NURSE): Thirty-seven point one. That's fine.
+[SEG0067] person_2 (DOCTOR): Good, then I would go ahead, if you're happy, Mrs Adeyemi. The only snag is that if she is brewing something, she might be a bit more fevered than usual afterwards, a day or two. That doesn't mean the injection caused a problem, but it can feel like it.
+[SEG0068] person_1 (FAMILY_MEMBER): I'm happy to proceed, but I should say that I'm also a bit anxious about whether it will affect her system, with the cold on top.
+[SEG0069] person_2 (DOCTOR): It's a reasonable thing to wonder about, and the honest answer is that a minor cold doesn't make the vaccine less safe or less effective. If I thought she was getting a proper illness, a fever, a chest infection, I'd put it off. I don't.
+[SEG0070] person_1 (FAMILY_MEMBER): Mm.
+[SEG0071] person_1 (FAMILY_MEMBER): Then yes, thank you.
+[SEG0072] person_2 (DOCTOR): Priya, I'll leave her with you.
+[SEG0073] person_4 (NURSE): Of course. Maisie, can you do me a favour, hold Mr Hops tight? He's going to be very brave, and so are you. We'll do your left arm first, then your leg. A little scratch.
+[SEG0074] person_3 (PATIENT): No.
+[SEG0075] person_1 (FAMILY_MEMBER): Er, it's all right, darling. Mummy's here. Look at the ceiling, look at the star.
+[SEG0076] person_4 (NURSE): There, that's one. Well done. Now the other.
+[SEG0077] person_3 (PATIENT): Ow! Ow!
+[SEG0078] person_1 (FAMILY_MEMBER): I know, I know, well done, darling, all over, all done.
+[SEG0079] person_4 (NURSE): Two plasters, and a sticker for her cardigan. Do you want a bunny sticker or a dinosaur one?
+[SEG0080] person_3 (PATIENT): Bunny.
+[SEG0081] person_2 (DOCTOR): She's got her priorities straight. Mrs Adeyemi, if you would stay in the waiting room for fifteen minutes, so we can watch for any reaction. If her lip or face swells, or she gets hives, or has trouble breathing, you go to the nurse at once, or ring for help.
+[SEG0082] person_1 (FAMILY_MEMBER): I understand. And what shall I give her for the soreness?
+[SEG0083] person_2 (DOCTOR): Calpol if she's grumpy or hot, at the dose on the bottle for her weight. Nothing in the next few hours unless she needs it. The arm might be red or lumpy for a few days, and that's normal.
+[SEG0084] person_1 (FAMILY_MEMBER): Thank you. And the next appointment?
+[SEG0085] person_2 (DOCTOR): She doesn't need more injections for a while. Priya will give you her red book back.
+[SEG0086] person_4 (NURSE): Here you are, I've written today in it. Thank you for coming, Maisie.
+[SEG0087] person_3 (PATIENT): Bye-bye, bunny.
+[SEG0088] person_4 (NURSE): Mrs Adeyemi, it's been fifteen minutes. How is she looking?
+[SEG0089] person_1 (FAMILY_MEMBER): She's quite cheerful, actually. She's been drawing on the paper you gave her. No rash that I can see, and her lip looks the same as ever.
+[SEG0090] person_4 (NURSE): Right.
+[SEG0091] person_4 (NURSE): Let me have a look. Maisie, can you show me your tongue? Lovely. No swelling, no hives, breathing's lovely and calm. She's all clear. You're free to go.
+[SEG0092] person_1 (FAMILY_MEMBER): Thank you ever so much. I feel so much better having mentioned it.
+[SEG0093] person_4 (NURSE): Well, uh, you did the right thing. If anything at all changes in the next few hours, a rash, her face puffing up, she's hard to wake, or she's breathing in a funny way, you ring 999, don't wait. Otherwise, it's just a sore arm and a grumpy toddler.
+[SEG0094] person_1 (FAMILY_MEMBER): Well, um, a grumpy toddler I can manage. Come along, Maisie, say thank you to the nurse.
+[SEG0095] person_3 (PATIENT): Fank you.
+
+JSON:

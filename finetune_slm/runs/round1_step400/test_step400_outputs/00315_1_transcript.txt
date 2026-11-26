@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00315)
+[SEG0001] person_1 (PATIENT): Hello? Doctor? They told me to come straight in.
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_3 (FAMILY_MEMBER): Thank you for fitting us in, doctor.
+[SEG0004] person_1 (PATIENT): It's sharp heel pain with my first steps in the morning, mostly.
+[SEG0005] person_2 (DOCTOR): Since when have you had this?
+[SEG0006] person_1 (PATIENT): Oh, I've had it since last Tuesday.
+[SEG0007] person_2 (DOCTOR): Ah. How intense does it get?
+[SEG0008] person_1 (PATIENT): I mean, I'd call it mild.
+[SEG0009] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0010] person_1 (PATIENT): When it starts I tend to get a tender spot on the sole as well. I've also had limping a bit by the evening, since yesterday.
+[SEG0011] person_2 (DOCTOR): Would you call it mild or bad?
+[SEG0012] person_1 (PATIENT): I'd give it a six, uh, out of ten. The tender spot on the sole? That's been for four weeks. As for tender spot on the sole, about a eight out of ten.
+[SEG0013] person_2 (DOCTOR): Okay, a few measurements, then we'll continue.
+[SEG0014] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0015] person_2 (DOCTOR): Okay: temperature 36.7, pulse is 83 beats a minute, respiratory rate 15, oxygen saturation is 98 percent, pressure 119 over 80.
+[SEG0016] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0017] person_1 (PATIENT): Mm, okay.
+[SEG0018] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0019] person_2 (DOCTOR): Pressing on the inner heel brings on the pain.
+[SEG0020] person_1 (PATIENT): Alright.
+[SEG0021] person_2 (DOCTOR): I'll go gently.
+[SEG0022] person_2 (DOCTOR): The ankle and foot move fully.
+[SEG0023] person_1 (PATIENT): No problem.
+[SEG0024] person_2 (DOCTOR): Good, that's the examination.
+[SEG0025] person_2 (DOCTOR): Let me check a few things. Any fever, numbness in the foot or back pain?
+[SEG0026] person_1 (PATIENT): Right, you know, no fever, numbness in the foot or back pain, none of it.
+[SEG0027] person_2 (DOCTOR): Any pain in other joints or recent injury at all?
+[SEG0028] person_1 (PATIENT): No, none of those.
+[SEG0029] person_2 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0030] person_1 (PATIENT): No, um, all normal there.
+[SEG0031] person_2 (DOCTOR): Any pins and needles or loss of strength anywhere?
+[SEG0032] person_1 (PATIENT): Hmm, no, nothing like that.
+[SEG0033] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0034] person_1 (PATIENT): I don't have any known medication allergies.
+[SEG0035] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0036] person_1 (PATIENT): No, none that I know of.
+[SEG0037] person_2 (DOCTOR): What kind of work do you do?
+[SEG0038] person_1 (PATIENT): I work on a farm, it's quite physical.
+[SEG0039] person_2 (DOCTOR): And what do you usually eat?
+[SEG0040] person_1 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0041] person_2 (DOCTOR): Any regular medication?
+[SEG0042] person_1 (PATIENT): No, I don't take anything regularly.
+[SEG0043] person_2 (DOCTOR): Have you had to have anything operated on?
+[SEG0044] person_1 (PATIENT): So, just a lump removed from my back, years ago.
+[SEG0045] person_2 (DOCTOR): Taking everything into account, I'd lean towards plantar fasciitis. Another possibility is a stress reaction in the bone. I'll request an X-ray of the foot, it'll help with heel pain. Roll the sole over a bottle and stretch the calf against a wall twice a day. Cut down on salt and fried food for now, it really does make a difference. I'd like you to see physiotherapy as well, and I'll write the referral.
+[SEG0046] person_1 (PATIENT): Alright, uh, thank you.
+[SEG0047] person_2 (DOCTOR): The thing that would worry me is if the symptoms get worse. If that happens, go to emergency. Come back in six weeks. Look after yourself.
+[SEG0048] person_1 (PATIENT): Thank you for your time.
+
+JSON:

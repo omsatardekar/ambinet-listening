@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00254)
+[SEG0001] person_1 (DOCTOR): hi nice to see you sit down please
+[SEG0002] person_2 (PATIENT): hi, uh, doctor
+[SEG0003] person_1 (DOCTOR): what seems to be the problem?
+[SEG0004] person_2 (PATIENT): Mainly constipation. There's a couple of other things uh but that's the main one. I'm hoping you can tell me something definite. It's the not knowing that gets to me.
+[SEG0005] person_1 (DOCTOR): how intense does it get?
+[SEG0006] person_2 (PATIENT): maybe a five out of ten on a a bad day and there's a little bright blood on the paper as well, three weeks now
+[SEG0007] person_1 (DOCTOR): let me check a few things. Any abdominal swelling, black stools or vomiting?
+[SEG0008] person_2 (PATIENT): I haven't had abdominal swelling, black stools or vomiting, no
+[SEG0009] person_1 (DOCTOR): have you noticed weight loss or pain on passing stool?
+[SEG0010] person_2 (PATIENT): I mean no weight loss or pain on passing stool none of it.
+[SEG0011] person_1 (DOCTOR): any breathing difficulties apart from this?
+[SEG0012] person_2 (PATIENT): breathing's normal
+[SEG0013] person_1 (DOCTOR): Any problems with your joints or muscles?
+[SEG0014] person_2 (PATIENT): I move fine otherwise.
+[SEG0015] person_1 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0016] person_2 (PATIENT): it's It's Thyronorm 50 micrograms every morning
+[SEG0017] person_1 (DOCTOR): I see.
+[SEG0018] person_2 (PATIENT): Glycomet. I take it twice a day for my sugar
+[SEG0019] person_1 (DOCTOR): Do you know the dose?
+[SEG0020] person_2 (PATIENT): 500 milligrams.
+[SEG0021] person_1 (DOCTOR): Any drug or food allergies?
+[SEG0022] person_2 (PATIENT): I had a reaction to penicillin when I was younger hives and I've avoided it since
+[SEG0023] person_1 (DOCTOR): tell me about your health in general any ongoing conditions?
+[SEG0024] person_2 (PATIENT): I have an underactive thyroid, for two years my family kept telling me to get it checked i'd rather not end up on lots of tablets if I can avoid it. Diabetes, for about a year
+[SEG0025] person_1 (DOCTOR): any others?
+[SEG0026] person_1 (DOCTOR): alright an underactive thyroid and and diabetes that matches what I have here so any previous surgeries?
+[SEG0027] person_2 (PATIENT): Well, no, nothing like that.
+[SEG0028] person_1 (DOCTOR): now some background about your lifestyle
+[SEG0029] person_2 (PATIENT): No, I don't smoke and never have. I work in an office, mostly sitting at a desk. I skip breakfast most days. I share a flat with two friends
+[SEG0030] person_1 (DOCTOR): Let me check your vitals now.
+[SEG0031] person_1 (DOCTOR): Almost there...
+[SEG0032] person_1 (DOCTOR): Okay: respiratory rate 16, oxygen saturation is 98 percent, pulse is 74 beats a minute, BP is 111 over 76, temperature 36.7.
+[SEG0033] person_2 (PATIENT): is that normal?
+[SEG0034] person_1 (DOCTOR): I'll explain what that that means shortly
+[SEG0035] person_1 (DOCTOR): okay a quick examination now
+[SEG0036] person_1 (DOCTOR): Just relax, I'll be quick.
+[SEG0037] person_1 (DOCTOR): There's no mass in the tummy.
+[SEG0038] person_2 (PATIENT): Alright.
+[SEG0039] person_1 (DOCTOR): bear with me a second
+[SEG0040] person_1 (DOCTOR): I can feel firm stool in the left lower abdomen
+[SEG0041] person_1 (DOCTOR): Thanks please take a seat again.
+[SEG0042] person_1 (DOCTOR): So based on the history and the examination it fits best with chronic constipation. The reason I say that that is that your story and my examination fit together. I can't rule out an underactive thyroid yet. A colonoscopy is what I'd like next for constipation and rectal bleeding. The result will help us decide whether anything more is needed. Blood tests is what I'd like next for constipation.
+[SEG0043] person_2 (PATIENT): will it hurt?
+[SEG0044] person_1 (DOCTOR): I'm going to put you on lactulose, 15 ml, at night, for two weeks. That's for constipation. More fibre, more water, and give yourself ten unhurried minutes after breakfast. If the symptoms get worse, that's the point to come in urgently. See me again in three weeks. Okay, I think we're finished. Is everything clear?
+[SEG0045] person_2 (PATIENT): Right. Thanks again.
+[SEG0046] person_1 (DOCTOR): Goodbye.
+
+JSON:

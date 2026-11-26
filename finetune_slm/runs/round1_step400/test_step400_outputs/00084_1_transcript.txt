@@ -1,0 +1,74 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00084)
+[SEG0001] person_1 (PATIENT): Morning. Nice to finally see you, doctor.
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_3 (CAREGIVER): Okay, um, so hello, doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_2 (DOCTOR): Absolutely, come and sit beside them.
+[SEG0005] person_1 (PATIENT): I wanted to get a red eye looked at. I told myself I'd wait and see, and here I am.
+[SEG0006] person_2 (DOCTOR): How long have you had it?
+[SEG0007] person_1 (PATIENT): So, um, it's been going on for five days.
+[SEG0008] person_2 (DOCTOR): Does anything make it better?
+[SEG0009] person_1 (PATIENT): Only a cold compress, and it's not much.
+[SEG0010] person_1 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0011] person_3 (CAREGIVER): I mean, tell the doctor about the other thing, that's what worries me.
+[SEG0012] person_1 (PATIENT): I was getting to that! As for watering, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0013] person_2 (DOCTOR): Alright, how intense does it get?
+[SEG0014] person_1 (PATIENT): Okay, you know, so it feels severe to me.
+[SEG0015] person_4 (UNKNOWN): Yes, exactly like that.
+[SEG0016] person_2 (DOCTOR): A few quick ones: loss of vision or sensitivity to light?
+[SEG0017] person_1 (PATIENT): Hmm, no, no loss of vision, no sensitivity to light. I did have a sticky discharge in the morning at one point, but that went away on its own.
+[SEG0018] person_2 (DOCTOR): Let me check a few things. Any cold, pain in the eye or contact lens?
+[SEG0019] person_1 (PATIENT): Uh, you know, none, as far as I know.
+[SEG0020] person_2 (DOCTOR): Okay. And your skin, any changes there?
+[SEG0021] person_1 (PATIENT): No rashes.
+[SEG0022] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0023] person_1 (PATIENT): Right, no problems with breathing.
+[SEG0024] person_2 (DOCTOR): What's your current medication list?
+[SEG0025] person_1 (PATIENT): Hydrocortisone cream. I take it when needed for the eczema. Tamsulosin. I take it 0.4 milligrams, at night for the prostate.
+[SEG0026] person_5 (FAMILY_MEMBER): So, it's meant to be at night, though I don't see he take it every time.
+[SEG0027] person_1 (PATIENT): I take apixaban, 5 milligrams, maybe, twice a day.
+[SEG0028] person_2 (DOCTOR): Is the packet here, or the prescription?
+[SEG0029] person_1 (PATIENT): Not with me. I'll bring it next time.
+[SEG0030] person_2 (DOCTOR): Do you exercise at all?
+[SEG0031] person_1 (PATIENT): I go to the gym a couple of times a week.
+[SEG0032] person_2 (DOCTOR): Is there a family history of anything significant?
+[SEG0033] person_1 (PATIENT): Hmm, uh, my father had a stroke.
+[SEG0034] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0035] person_1 (PATIENT): I've had eczema, yes.
+[SEG0036] person_2 (DOCTOR): Anything more?
+[SEG0037] person_1 (PATIENT): Well, I've had an enlarged prostate for five years now.
+[SEG0038] person_2 (DOCTOR): Right.
+[SEG0039] person_1 (PATIENT): Okay, you know, so I've had an irregular heartbeat for about a year now.
+[SEG0040] person_2 (DOCTOR): Understood. Okay, I can see an enlarged prostate and an irregular heartbeat in your file as well. Any drug or food allergies?
+[SEG0041] person_1 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0042] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0043] person_2 (DOCTOR): Hold still for me...
+[SEG0044] person_2 (DOCTOR): Okay: BP is 116 over 70, saturation 97 percent, temperature 36.9, pulse 78.
+[SEG0045] person_1 (PATIENT): Is that okay?
+[SEG0046] person_2 (DOCTOR): They help build the picture, I'll tell you more soon.
+[SEG0047] person_2 (DOCTOR): I'd like to examine you now.
+[SEG0048] person_2 (DOCTOR): Let me look at this properly.
+[SEG0049] person_2 (DOCTOR): The white of the eye is pink all over, and there's some sticky discharge on the lashes.
+[SEG0050] person_1 (PATIENT): Mm, okay.
+[SEG0051] person_2 (DOCTOR): Take your time, no rush.
+[SEG0052] person_2 (DOCTOR): Your vision is normal on the chart and the pupil reacts well.
+[SEG0053] person_2 (DOCTOR): All done, you can get dressed. Right, here's what I'm thinking. This is probably conjunctivitis. I'd also keep a corneal problem in mind. We shouldn't forget an allergic eye problem.
+[SEG0054] person_1 (PATIENT): Is this something I'll have for good?
+[SEG0055] person_2 (DOCTOR): It's reasonable to be concerned, but right now conjunctivitis is my leading thought, not anything worse.
+[SEG0056] person_2 (DOCTOR): Let's book an eye swab to look into red eye. I'm going to put you on chloramphenicol eye drops, four times a day, for five days. That should help with conjunctivitis.
+[SEG0057] person_1 (PATIENT): Should I keep taking it if I feel better?
+[SEG0058] person_2 (DOCTOR): Wash your hands often, don't share towels, and don't rub the eye. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. The thing that would worry me is if your vision drops or the pain gets severe. If that happens, go to emergency. Let's review you in a week. That's everything from me. Any other questions?
+[SEG0059] person_1 (PATIENT): Right, thanks, that was helpful.
+
+JSON:

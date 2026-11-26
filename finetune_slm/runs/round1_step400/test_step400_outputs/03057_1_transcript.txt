@@ -1,0 +1,46 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03057)
+[SEG0001] person_1 (DOCTOR): Hello, take a seat, I'll be with you in a second. Start wherever you like, I'm listening.
+[SEG0002] person_2 (PATIENT): Honestly, it's fever and shivers, and my family pushed me to come.
+[SEG0003] person_1 (DOCTOR): When was the first time you noticed it?
+[SEG0004] person_2 (PATIENT): Ten days, I think... sorry, five days, I got that wrong. I kept putting it off, which I know isn't sensible.
+[SEG0005] person_1 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0006] person_2 (PATIENT): It, It sort of comes and goes. About a four out of ten. There's confusion as well. I've had cloudy smelly urine too, for about a month. As for pain in the lower tummy, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0007] person_1 (DOCTOR): Did you notice any fall?
+[SEG0008] person_2 (PATIENT): No. No fall.
+[SEG0009] person_1 (DOCTOR): A few quick ones: back pain, cough or vomiting?
+[SEG0010] person_2 (PATIENT): No, not a single one.
+[SEG0011] person_1 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0012] person_2 (PATIENT): I move fine otherwise.
+[SEG0013] person_1 (DOCTOR): Okay, do you take any prescribed or over-the-counter medicines?
+[SEG0014] person_2 (PATIENT): Mm, I'm on a urinary catheter, in place.
+[SEG0015] person_1 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0016] person_2 (PATIENT): Yeah, my cousin has psoriasis. Erm, my father had bowel cancer.
+[SEG0017] person_1 (DOCTOR): Have you got any known allergies?
+[SEG0018] person_2 (PATIENT): So, no, not that I know of.
+[SEG0019] person_1 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0020] person_2 (PATIENT): I used to drink heavily but I stopped four years ago. I have about eight cigarettes in a day. I look after my grandchildren most days. I live with my elderly mother. I swim twice a week.
+[SEG0021] person_1 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0022] person_2 (PATIENT): Oh, you know, I have an enlarged prostate, for nearly five years.
+[SEG0023] person_1 (DOCTOR): Alright, an enlarged prostate, that matches what I have here. Let's start with the basic checks.
+[SEG0024] person_1 (DOCTOR): Okay, this won't take long...
+[SEG0025] person_1 (DOCTOR): Okay: blood pressure 108 over 76, SpO2 98 percent on room air. And temperature 38.0, pulse 88.
+[SEG0026] person_1 (DOCTOR): From what you've told me, this is probably a catheter-related urinary infection. I'd also keep urosepsis in mind. Let me just check I've got this right. You've had fever and shivers for five days, and no cough or back pain.
+[SEG0027] person_2 (PATIENT): That's it, yes.
+[SEG0028] person_1 (DOCTOR): Blood tests is what I'd like next, for fever.
+[SEG0029] person_2 (PATIENT): When would that take place?
+[SEG0030] person_1 (DOCTOR): I'm going to order a urine culture, for possible urinary infection. I'll start you on co-amoxiclav, 625 milligrams, three times a day, seven days. That's for catheter urinary infection. Change the catheter and drink plenty. See me again in two days. I think we're done unless you have questions.
+[SEG0031] person_2 (PATIENT): Okay, so okay, that makes sense. Thanks for explaining.
+
+JSON:

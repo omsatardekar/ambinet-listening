@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20319)
+[SEG0001] person_1 (DOCTOR): Hi, sit anywhere you like.
+[SEG0002] person_2 (PATIENT): Hi doctor, I got here as fast as I could.
+[SEG0003] person_1 (DOCTOR): What would you like to start with today?
+[SEG0004] person_2 (PATIENT): Uh, I've been dealing with a rash between my fingers.
+[SEG0005] person_1 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0006] person_2 (PATIENT): Calamine lotion, when needed. I've been reading about it online and it worried me.
+[SEG0007] person_1 (DOCTOR): How many days or weeks has it been?
+[SEG0008] person_2 (PATIENT): Oh, for three weeks, I'd say. It's the not knowing that gets to me. I've never really been one for hospitals.
+[SEG0009] person_1 (DOCTOR): have you had trouble sleeping?
+[SEG0010] person_2 (PATIENT): Um, you know, yes, about the same, two years.
+[SEG0011] person_1 (DOCTOR): Let me check a few things. Any swollen glands, rash on the face, joint pain or oozing?
+[SEG0012] person_2 (PATIENT): no, I haven't had any of them
+[SEG0013] person_1 (DOCTOR): Is your chest okay generally?
+[SEG0014] person_2 (PATIENT): Breathing's normal.
+[SEG0015] person_1 (DOCTOR): Okay, are you in work at the moment?
+[SEG0016] person_2 (PATIENT): Yes, I work in a bakery, early starts.
+[SEG0017] person_1 (DOCTOR): what does a a normal day of food look like?
+[SEG0018] person_2 (PATIENT): Lots of rice, lentils and some fruit
+[SEG0019] person_1 (DOCTOR): Do you do any exercise?
+[SEG0020] person_2 (PATIENT): I swim twice a week.
+[SEG0021] person_1 (DOCTOR): has anyone ever diagnosed you with something?
+[SEG0022] person_2 (PATIENT): I've had arthritis in my knees for about ten years now. Sorry, I know I'm rambling a bit.
+[SEG0023] person_1 (DOCTOR): Sure. Have you got any known allergies?
+[SEG0024] person_2 (PATIENT): not to my knowledge, no
+[SEG0025] person_1 (DOCTOR): Let me get the readings out of the way.
+[SEG0026] person_1 (DOCTOR): That's it, just a little longer...
+[SEG0027] person_1 (DOCTOR): okay: pulse is 64 beats a minute, temp 36.5 degrees, blood pressure 110 over 69, respiratory rate 18.
+[SEG0028] person_1 (DOCTOR): listening to the whole story, this is probably scabies
+[SEG0029] person_2 (PATIENT): will it clear up?
+[SEG0030] person_1 (DOCTOR): I understand the worry. At the moment I'd say it's scabies, and we'll watch how it goes. Stop me if I've got anything wrong. You've had a rash between your fingers for three weeks, and no swollen glands or oozing.
+[SEG0031] person_2 (PATIENT): Yes, uh, you've got it.
+[SEG0032] person_1 (DOCTOR): for this, permethrin cream, 5 percent, once, then again after a week, for two weeks that's for scabies everyone at home should be treated at the same time, and wash bedding and clothes at a high temperature i'd like you back if the itching continues after four weeks
+[SEG0033] person_2 (PATIENT): I can manage that.
+[SEG0034] person_1 (DOCTOR): Have I covered everything you wanted?
+[SEG0035] person_2 (PATIENT): No, that's all. Thanks a lot.
+[SEG0036] person_1 (DOCTOR): Take care now.
+
+JSON:

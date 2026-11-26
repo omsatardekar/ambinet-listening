@@ -1,0 +1,74 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00141)
+[SEG0001] person_1 (DOCTOR): good morning i hope the wait wasn't too long
+[SEG0002] person_2 (PATIENT): Hi.
+[SEG0003] person_3 (FAMILY_MEMBER): hmm, you know, thank you for fitting us in, doctor
+[SEG0004] person_1 (DOCTOR): Please do. Extra information is always welcome. Did the receptionist sort you out quickly?
+[SEG0005] person_2 (PATIENT): Hmm, yes, she was lovely about it.
+[SEG0006] person_1 (DOCTOR): So, what's been going on?
+[SEG0007] person_2 (PATIENT): um, so... a fever. That's why I came
+[SEG0008] person_1 (DOCTOR): How long are we talking about? These questions might sound routine, but they matter.
+[SEG0009] person_2 (PATIENT): I've had it since Monday
+[SEG0010] person_1 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0011] person_2 (PATIENT): Hmm, you know, it's a few times a day. I'd say moderate.
+[SEG0012] person_1 (DOCTOR): Anything that tends to go along with it?
+[SEG0013] person_2 (PATIENT): A small cut that wasn't healing goes along with it, most of the time
+[SEG0014] person_2 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0015] person_3 (FAMILY_MEMBER): uh, uh, tell the the doctor about the other thing, that's what worries me
+[SEG0016] person_2 (PATIENT): um, I was getting to that!
+[SEG0017] person_1 (DOCTOR): what about a red swollen area on your leg, have you noticed that?
+[SEG0018] person_2 (PATIENT): Yes, you know, actually. As for red swollen area on my leg, honestly, all the time. Oh, you know, the small cut that wasn't healing? That's been for two days.
+[SEG0019] person_1 (DOCTOR): How about vomiting?
+[SEG0020] person_2 (PATIENT): No, none, no vomiting.
+[SEG0021] person_3 (FAMILY_MEMBER): Well, actually, doctor, I did notice vomiting. She doesn't always say.
+[SEG0022] person_2 (PATIENT): no, I don't think I did maybe a little, I'm not sure
+[SEG0023] person_1 (DOCTOR): alright, I'll note both what you've said and what you've noticed let me check a few things any red streaks going up the leg, calf pain or numbness around it?
+[SEG0024] person_2 (PATIENT): no, um, no red streaks going up the leg, no calf pain, no numbness around it i did have pain in that area at one point, but that that went away on its own
+[SEG0025] person_1 (DOCTOR): Let me check a few things. Any shortness of breath or pus?
+[SEG0026] person_2 (PATIENT): Um, no, no shortness of breath or pus.
+[SEG0027] person_1 (DOCTOR): Is your digestion otherwise okay?
+[SEG0028] person_2 (PATIENT): no, that side's been fine
+[SEG0029] person_1 (DOCTOR): So, anything different when you pass water?
+[SEG0030] person_2 (PATIENT): That's normal as far as I know.
+[SEG0031] person_1 (DOCTOR): Any long-term health problems I should know about?
+[SEG0032] person_2 (PATIENT): uh, I've had diabetes for nearly five years now
+[SEG0033] person_1 (DOCTOR): mm-hm
+[SEG0034] person_2 (PATIENT): I have eczema.
+[SEG0035] person_1 (DOCTOR): Okay, I can see diabetes in your file as well. Any relatives with health problems I should be aware of?
+[SEG0036] person_2 (PATIENT): My grandmother had breast cancer.
+[SEG0037] person_1 (DOCTOR): Have you ever reacted badly to to a medicine or food? Any allergies?
+[SEG0038] person_2 (PATIENT): yeah, I think I reacted to some antibiotic once, years ago i don't remember which one, or what happened exactly
+[SEG0039] person_1 (DOCTOR): are you on any tablets or medication?
+[SEG0040] person_2 (PATIENT): It's a... um, I can't remember what it's called. It's a small white one.
+[SEG0041] person_1 (DOCTOR): Do you remember what it's for?
+[SEG0042] person_2 (PATIENT): For my sugar, I believe. My husband sets them out for me, I just take what I'm given. It's hydrocortisone cream, when needed. Glimepiride I don't take anymore.
+[SEG0043] person_1 (DOCTOR): What about operations, anything like that?
+[SEG0044] person_2 (PATIENT): Yes, I had a hernia repair, about five years back.
+[SEG0045] person_1 (DOCTOR): Do you exercise at all?
+[SEG0046] person_2 (PATIENT): I go to the gym a couple of times a week.
+[SEG0047] person_1 (DOCTOR): Do you work?
+[SEG0048] person_2 (PATIENT): I run a small shop, so I'm on my feet a lot.
+[SEG0049] person_4 (NURSE): Here are the numbers, doctor. Temp 38.1 degrees, BMI works out to 27.0, height 154 centimetres, blood pressure 110 over 69, heart rate 98, SpO2 97 percent on room air, weight 64 kilos.
+[SEG0050] person_1 (DOCTOR): okay, noted
+[SEG0051] person_1 (DOCTOR): Right, let me check a few things physically.
+[SEG0052] person_1 (DOCTOR): Let me just check something.
+[SEG0053] person_1 (DOCTOR): There's a small scab where the cut was, no pus coming out.
+[SEG0054] person_1 (DOCTOR): just relax, I'll be quick
+[SEG0055] person_1 (DOCTOR): The skin on the lower leg is red, warm and swollen, about the size of my palm.
+[SEG0056] person_1 (DOCTOR): so, good, that's the examination. Let's book blood tests to look into infection. Let's book a wound swab to look into infected wound. I'd like you to take clindamycin, 300 milligrams, three times a day, for seven days. That should help with skin infection. Mark the edge of the redness with a pen so we can see whether it spreads. Keep the leg raised on a pillow when you're sitting
+[SEG0057] person_1 (DOCTOR): Come back or go to emergency straight away if the redness spreads or the fever gets higher. We'll catch up in a week. Call the clinic if you need us.
+[SEG0058] person_2 (PATIENT): Alright, thanks. Bye for now.
+[SEG0059] person_1 (DOCTOR): Safe journey home.
+
+JSON:

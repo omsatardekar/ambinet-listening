@@ -1,0 +1,70 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00229)
+[SEG0001] person_1 (PATIENT): Hi doctor. Is this the right room?
+[SEG0002] person_2 (DOCTOR): No trouble at all come in. What's been bothering you?
+[SEG0003] person_1 (PATIENT): um, so... breathlessness when I lie flat that's why I came it's the not knowing that gets to me
+[SEG0004] person_2 (DOCTOR): right how far back does it go?
+[SEG0005] person_1 (PATIENT): I've had it since yesterday.
+[SEG0006] person_2 (DOCTOR): does it happen all the time or in spells?
+[SEG0007] person_1 (PATIENT): honestly, a couple of times a week
+[SEG0008] person_2 (DOCTOR): Okay, keep going. Anything you do that brings it on?
+[SEG0009] person_1 (PATIENT): Yes, lying flat. That makes it worse.
+[SEG0010] person_2 (DOCTOR): How much is it bothering you?
+[SEG0011] person_1 (PATIENT): I'd give it a three, out of ten
+[SEG0012] person_2 (DOCTOR): Does it it come along with anything else?
+[SEG0013] person_1 (PATIENT): so, when it starts I tend to get tiredness as well
+[SEG0014] person_2 (DOCTOR): I'll check your pressure and and pulse.
+[SEG0015] person_2 (DOCTOR): hold still for me..
+[SEG0016] person_2 (DOCTOR): okay: pressure 135 over 87, heart rate 89, saturation 92 percent, temperature is 36.9 degrees
+[SEG0017] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0018] person_1 (PATIENT): Go ahead.
+[SEG0019] person_2 (DOCTOR): bear with me a second
+[SEG0020] person_2 (DOCTOR): Neck veins are raised
+[SEG0021] person_2 (DOCTOR): Good, that's the examination. Did you get palpitations or chest pain?
+[SEG0022] person_1 (PATIENT): no palpitations or chest pain none of it
+[SEG0023] person_2 (DOCTOR): okay keep going. Did you notice any fever?
+[SEG0024] person_1 (PATIENT): Um, uh, not at all, no fever.
+[SEG0025] person_2 (DOCTOR): Okay, keep going. What about your tummy and bowels, anything unusual there?
+[SEG0026] person_1 (PATIENT): no, that side's been fine
+[SEG0027] person_2 (DOCTOR): do you drink alcohol?
+[SEG0028] person_1 (PATIENT): I don't drink at all
+[SEG0029] person_2 (DOCTOR): any smoking?
+[SEG0030] person_1 (PATIENT): I've never smoked
+[SEG0031] person_2 (DOCTOR): do you have a job?
+[SEG0032] person_1 (PATIENT): I'm a self-employed electrician
+[SEG0033] person_2 (DOCTOR): do you live alone?
+[SEG0034] person_1 (PATIENT): Yes, I live on my own.
+[SEG0035] person_2 (DOCTOR): so, any sport or activity?
+[SEG0036] person_1 (PATIENT): I play badminton on Sundays
+[SEG0037] person_2 (DOCTOR): okay, any diagnoses you've been given before?
+[SEG0038] person_1 (PATIENT): I've had heart failure, yes
+[SEG0039] person_2 (DOCTOR): hm okay
+[SEG0040] person_2 (DOCTOR): Have you had any surgery before?
+[SEG0041] person_1 (PATIENT): I had a lump removed from my back years ago
+[SEG0042] person_2 (DOCTOR): Alright, tell me what you take day to day.
+[SEG0043] person_1 (PATIENT): Furosemide. I take it 40 milligrams, every morning.
+[SEG0044] person_2 (DOCTOR): Okay, so. Does anything run in the family?
+[SEG0045] person_1 (PATIENT): my sister has epilepsy
+[SEG0046] person_2 (DOCTOR): What about allergies to medicines or foods or anything else?
+[SEG0047] person_1 (PATIENT): not that I know, no
+[SEG0048] person_2 (DOCTOR): so, based on the history and the examination, this is probably fluid overload related to the heart
+[SEG0049] person_1 (PATIENT): Well, do you think it's serious?
+[SEG0050] person_2 (DOCTOR): I can't promise yet, but most people with fluid overload related to the heart do well once it's treated properly. I'll request blood tests, it'll help with heart failure review. We should do a chest X-ray for breathlessness. Keep the salt and the fluids moderate, no more than about one and a half litres a day. Weigh yourself every morning, and tell us if you put on more than two kilos in a few days
+[SEG0051] person_2 (DOCTOR): I'm not ordering an ECG today if things carry on in a month we'll consider it book a review in one week can you run through the plan with me quickly just to be certain?
+[SEG0052] person_1 (PATIENT): so, I come back in one week is that right?
+[SEG0053] person_2 (DOCTOR): yes, exactly right. Ask me anything before you go
+[SEG0054] person_1 (PATIENT): okay thank you. Bye
+[SEG0055] person_2 (DOCTOR): Bye for now.
+
+JSON:

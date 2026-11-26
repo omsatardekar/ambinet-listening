@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20494)
+[SEG0001] person_1 (PATIENT): good afternoon, doctor
+[SEG0002] person_2 (DOCTOR): Yes have a seat. Tell me what's going on.
+[SEG0003] person_1 (PATIENT): so, I've been feeling dizzy when I stand up, doctor i've been putting this off for weeks
+[SEG0004] person_2 (DOCTOR): okay how long has it been like this? It helps to be thorough at this stage
+[SEG0005] person_1 (PATIENT): Yesterday, it it came on out of nowhere
+[SEG0006] person_2 (DOCTOR): Does anything set it off?
+[SEG0007] person_1 (PATIENT): it's worse with getting out of bed
+[SEG0008] person_2 (DOCTOR): any previous surgeries?
+[SEG0009] person_1 (PATIENT): Nothing I haven't had any operations.
+[SEG0010] person_2 (DOCTOR): do you have any medical conditions I should know about?
+[SEG0011] person_1 (PATIENT): no, nothing at all
+[SEG0012] person_2 (DOCTOR): do you get out much?
+[SEG0013] person_1 (PATIENT): Not much, I mostly stay in these days.
+[SEG0014] person_2 (DOCTOR): so do you follow any particular diet?
+[SEG0015] person_1 (PATIENT): I'm vegetarian and have been for years.
+[SEG0016] person_2 (DOCTOR): any regular medication at all?
+[SEG0017] person_1 (PATIENT): no, I don't take any tablets
+[SEG0018] person_2 (DOCTOR): and palpitations, any of that?
+[SEG0019] person_1 (PATIENT): no no palpitations
+[SEG0020] person_2 (DOCTOR): okay, a few quick ones: vomiting, fainting or chest pain?
+[SEG0021] person_1 (PATIENT): no not a single one
+[SEG0022] person_2 (DOCTOR): is your digestion otherwise okay?
+[SEG0023] person_1 (PATIENT): no, all normal there
+[SEG0024] person_2 (DOCTOR): I'll do your observations first
+[SEG0025] person_2 (DOCTOR): Keep your arm relaxed for me...
+[SEG0026] person_2 (DOCTOR): okay: BP is 99 over 61, oxygen saturation is 96 percent, heart rate 110, temperature is 36.9 degrees, respiratory rate 19.
+[SEG0027] person_1 (PATIENT): Is that alright, doctor?
+[SEG0028] person_2 (DOCTOR): I'll explain what these mean in a moment
+[SEG0029] person_2 (DOCTOR): Now I'm going to to do a short physical check.
+[SEG0030] person_2 (DOCTOR): hold that for a second
+[SEG0031] person_2 (DOCTOR): your blood pressure drops when you stand, from the lying reading to standing
+[SEG0032] person_2 (DOCTOR): hold that for a second
+[SEG0033] person_2 (DOCTOR): Heart sounds are normal and the chest is clear
+[SEG0034] person_2 (DOCTOR): you can sit up now from what you've told me and what I found, the most likely explanation is postural low blood pressure, possibly related to medicines or dehydration i'll request blood tests, it'll help with dizziness
+[SEG0035] person_3 (CLINICAL_STAFF): the earliest is Monday, 2 pm
+[SEG0036] person_1 (PATIENT): Monday that works for me
+[SEG0037] person_2 (DOCTOR): get up slowly from lying and sitting, and keep drinking fluids through the day. A short walk every day, even twenty minutes, will help more than you'd think. Right, that's the plan. Do you want to ask me anything?
+[SEG0038] person_1 (PATIENT): Okay, that that makes sense. Thanks for explaining.
+
+JSON:

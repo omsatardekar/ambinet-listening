@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03040)
+[SEG0001] person_1 (DOCTOR): Welcome. Make yourself comfortable.
+[SEG0002] person_2 (PATIENT): Hello, um, thanks for fitting me in.
+[SEG0003] person_1 (DOCTOR): What's been worrying you?
+[SEG0004] person_2 (PATIENT): honestly, it's hearing getting worse in both ears, and my family pushed me to come
+[SEG0005] person_1 (DOCTOR): so, I'll do your observations first
+[SEG0006] person_1 (DOCTOR): sit still for a moment..
+[SEG0007] person_1 (DOCTOR): Okay: SpO2 98 percent on room air, pressure 124 over 76, temperature is 36.8 degrees, pulse is 78 beats a minute. Right, has this been going on for long?
+[SEG0008] person_2 (PATIENT): Ever since... since last weekend, really. My neighbour said I should get it looked at.
+[SEG0009] person_1 (DOCTOR): Any other symptoms with it?
+[SEG0010] person_2 (PATIENT): It usually comes with ringing in the ears. The ringing in the ears? That's been for about four days. About ringing in the ears, it just comes and goes.
+[SEG0011] person_1 (DOCTOR): So, did you get facial weakness, vertigo or discharge?
+[SEG0012] person_2 (PATIENT): no facial weakness, vertigo or discharge, none of it
+[SEG0013] person_1 (DOCTOR): I follow. What about your tummy and bowels, anything unusual there?
+[SEG0014] person_2 (PATIENT): No, that side's been fine.
+[SEG0015] person_1 (DOCTOR): Now some background about your lifestyle.
+[SEG0016] person_2 (PATIENT): No, I've never smoked in my life. Nothing, I'm teetotal. No, I share a house with my brother. I'm a bus driver, so I sit for long hours
+[SEG0017] person_1 (DOCTOR): Have you got any known allergies?
+[SEG0018] person_2 (PATIENT): Not to my knowledge, no.
+[SEG0019] person_1 (DOCTOR): Any regular medication at all?
+[SEG0020] person_2 (PATIENT): No, I don't take any tablets.
+[SEG0021] person_1 (DOCTOR): So, any previous surgeries?
+[SEG0022] person_2 (PATIENT): No, not at all.
+[SEG0023] person_1 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0024] person_2 (PATIENT): No, I've always been fairly healthy.
+[SEG0025] person_1 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0026] person_2 (PATIENT): okay, doctor
+[SEG0027] person_1 (DOCTOR): I'm just checking this side.
+[SEG0028] person_1 (DOCTOR): Both ear drums look normal and the tuning fork is heard better through the bone
+[SEG0029] person_2 (PATIENT): Fine by me.
+[SEG0030] person_1 (DOCTOR): That's the examination finished. From what you've told me and what I found, it points towards a conductive hearing loss, possibly otosclerosis.
+[SEG0031] person_2 (PATIENT): Is this permanent?
+[SEG0032] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a conductive hearing loss, possibly otosclerosis, but I'd like to confirm. Let's get a CT scan of the ears, for possible otosclerosis. I'd rather check than guess, and this is the quickest way to know more. I'll request a hearing test, it'll help with hearing loss. A hearing aid or an operation are both options after the tests.
+[SEG0033] person_1 (DOCTOR): if the symptoms get worse, that's the point to come in urgently i'd like you back after the tests
+[SEG0034] person_2 (PATIENT): Good, I'll return then.
+[SEG0035] person_1 (DOCTOR): that's all from me. Any questions?
+[SEG0036] person_2 (PATIENT): I think I understand everything thanks
+
+JSON:

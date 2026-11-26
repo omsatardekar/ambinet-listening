@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00175)
+[SEG0001] person_1 (NURSE): Afternoon, doctor. They're in and comfortable, and I have the measurements ready.
+[SEG0002] person_2 (DOCTOR): Thanks. Hello, come in, sit down. What brings you in today?
+[SEG0003] person_3 (FAMILY_MEMBER): Hello, doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_2 (DOCTOR): of course, please stay. It's helpful to have you here
+[SEG0005] person_4 (PATIENT): Yeah, it's burning when I pass urine. I don't know what's causing it.
+[SEG0006] person_2 (DOCTOR): How long have you had it?
+[SEG0007] person_4 (PATIENT): It's been like this since Monday.
+[SEG0008] person_2 (DOCTOR): can you describe it a bit more for me? How strong it is, what the pattern is, what helps
+[SEG0009] person_4 (PATIENT): I get some relief from drinking water maybe a five out of ten on a bad day i'd say once or twice a day as for urgent need to pass urine, I honestly can't say when that began it might have been last month or the month before
+[SEG0010] person_2 (DOCTOR): How much is it bothering you?
+[SEG0011] person_4 (PATIENT): Severe, really
+[SEG0012] person_2 (DOCTOR): have you had cloudy, smelly urine?
+[SEG0013] person_4 (PATIENT): Yes, actually.
+[SEG0014] person_2 (DOCTOR): have you had burning when you pass urine before, or is this the first time?
+[SEG0015] person_4 (PATIENT): A bit, last winter. It settled by itself back then.
+[SEG0016] person_1 (NURSE): Doctor, I've got the readings for you. Respiratory rate 15, temperature 36.8, blood pressure 123 over 72. Pulse 84, saturation 97 percent.
+[SEG0017] person_2 (DOCTOR): Okay, noted.
+[SEG0018] person_2 (DOCTOR): Shall we do the the examination?
+[SEG0019] person_2 (DOCTOR): a little pressure here, tell me if it's tender
+[SEG0020] person_2 (DOCTOR): there's mild tenderness above the pubic bone, and no tenderness in the loins
+[SEG0021] person_2 (DOCTOR): Right, thanks, please take a seat again. And what about fever, back pain, vomiting or vaginal discharge?
+[SEG0022] person_4 (PATIENT): Yeah, no fever, back pain, vomiting or vaginal discharge, none of it.
+[SEG0023] person_2 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0024] person_4 (PATIENT): Nothing else aches.
+[SEG0025] person_2 (DOCTOR): tell me about your routine, work, habits, that sort of thing
+[SEG0026] person_4 (PATIENT): Yes, I'm a nurse on a busy ward. I play badminton on Sundays. I share a flat with two friends
+[SEG0027] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0028] person_4 (PATIENT): I've had diabetes for nearly five years now. I've had high cholesterol for about a year now.
+[SEG0029] person_2 (DOCTOR): alright, high cholesterol, that that matches what I have here. Alright, do you have any known allergies at all?
+[SEG0030] person_4 (PATIENT): Not that I know, no.
+[SEG0031] person_2 (DOCTOR): Do your parents or siblings have any long-term illnesses?
+[SEG0032] person_4 (PATIENT): my mother had high blood pressure my sister has epilepsy
+[SEG0033] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0034] person_4 (PATIENT): I'm on Glycomet, 500 milligrams, twice a day. My sister suggested writing things down, but I forgot. Rosuvastatin. I take it 10 milligrams, maybe, at night.
+[SEG0035] person_2 (DOCTOR): Do you have the packet or the prescription with you?
+[SEG0036] person_4 (PATIENT): Yeah, not with me. I'll bring it next time.
+[SEG0037] person_2 (DOCTOR): So where does that leave us? I think we're dealing with a urinary tract infection at this stage. A sexually transmitted infection is also on my list.
+[SEG0038] person_4 (PATIENT): I mean, is this something I'll have for good?
+[SEG0039] person_2 (DOCTOR): I can't promise yet, but most people with a urinary tract infection do well once it's treated properly
+[SEG0040] person_2 (DOCTOR): I want a urine culture done, that's for urinary symptoms.
+[SEG0041] person_1 (NURSE): we've already done a urine test this morning, doctor
+[SEG0042] person_2 (DOCTOR): okay, noted i'll start you on nitrofurantoin, 100 milligrams, twice a day, for five days that should help with urine infection drink plenty of water and don't hold it in when you need to go and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+[SEG0043] person_4 (PATIENT): Got it, uh, thank you.
+[SEG0044] person_2 (DOCTOR): The thing that would worry me is if you get a fever, back pain or vomiting. If that happens, go to emergency.
+[SEG0045] person_4 (PATIENT): Got it, thank you.
+[SEG0046] person_2 (DOCTOR): book a review in a week alright, I'll see you out
+[SEG0047] person_4 (PATIENT): that's everything I wanted to ask. Thank you
+[SEG0048] person_2 (DOCTOR): right, see you then
+
+JSON:

@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00456)
+[SEG0001] person_1 (PATIENT): Hi, uh, doctor. Is this the right room?
+[SEG0002] person_2 (DOCTOR): No trouble at all, come in. What's been bothering you?
+[SEG0003] person_1 (PATIENT): I've been getting lost on familiar roads, and I wanted to get it checked.
+[SEG0004] person_2 (DOCTOR): When did it begin?
+[SEG0005] person_1 (PATIENT): I've had it for six months.
+[SEG0006] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0007] person_1 (PATIENT): It usually comes with difficulty finding words.
+[SEG0008] person_2 (DOCTOR): Okay, have you been forgetting things lately?
+[SEG0009] person_1 (PATIENT): Yes, for three weeks. I'd been misplacing things, but that went away.
+[SEG0010] person_2 (DOCTOR): Let me measure a few things.
+[SEG0011] person_2 (DOCTOR): One second...
+[SEG0012] person_2 (DOCTOR): Okay: blood pressure 118 over 74, SpO2 99 percent on room air, temperature 36.4. And heart rate 78.
+[SEG0013] person_2 (DOCTOR): Can I examine you now?
+[SEG0014] person_1 (PATIENT): Go ahead.
+[SEG0015] person_2 (DOCTOR): Hold that position for me.
+[SEG0016] person_2 (DOCTOR): Your gait is steady and the tone in your limbs is normal.
+[SEG0017] person_2 (DOCTOR): That's fine, sit up. And what about hallucinations or low mood?
+[SEG0018] person_1 (PATIENT): No, not any of them.
+[SEG0019] person_2 (DOCTOR): Has there been any trouble with bladder control?
+[SEG0020] person_1 (PATIENT): I haven't noticed any trouble with bladder control.
+[SEG0021] person_2 (DOCTOR): And what about falls, weakness on one side or headache?
+[SEG0022] person_1 (PATIENT): Oh, no, none of those.
+[SEG0023] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0024] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0025] person_2 (DOCTOR): Any operations in the past?
+[SEG0026] person_1 (PATIENT): Just a hernia repair, about five years back.
+[SEG0027] person_2 (DOCTOR): Are you living with family?
+[SEG0028] person_1 (PATIENT): I stay with my daughter and her family.
+[SEG0029] person_2 (DOCTOR): And what do you usually eat?
+[SEG0030] person_1 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0031] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0032] person_1 (PATIENT): I have high cholesterol.
+[SEG0033] person_2 (DOCTOR): Right.
+[SEG0034] person_1 (PATIENT): I've had diabetes, yes. High blood pressure, for about ten years. I'd rather not end up on lots of tablets if I can avoid it.
+[SEG0035] person_2 (DOCTOR): Right. Right, so diabetes and high blood pressure are already on your record. We'll keep that in mind today. Right, any medication at the moment, including things from the pharmacy?
+[SEG0036] person_1 (PATIENT): I'm on something called rosu... rosuvastatin, 10 milligrams, maybe, at night for my cholesterol.
+[SEG0037] person_2 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0038] person_1 (PATIENT): Not with me. I'll bring it next time. Ramipril, 5 milligrams, every morning.
+[SEG0039] person_2 (DOCTOR): Let me tell you where I've got to. It points towards memory difficulties that need to be worked up. I want to be honest that this is an impression, not a final answer. We shouldn't forget early dementia.
+[SEG0040] person_2 (DOCTOR): Let's get a vitamin B12 level, for memory loss. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0041] person_1 (PATIENT): Understood.
+[SEG0042] person_2 (DOCTOR): Right, that's all. Go gently.
+[SEG0043] person_1 (PATIENT): Alright, thanks. Bye for now.
+
+JSON:

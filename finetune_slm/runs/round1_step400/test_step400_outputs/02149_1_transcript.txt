@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02149)
+[SEG0001] person_1 (PATIENT): Erm, uh, good evening, doctor, thanks for seeing me.
+[SEG0002] person_2 (DOCTOR): Yes, have a seat. Tell me what's going on.
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, thank you for seeing us.
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to have you here.
+[SEG0005] person_1 (PATIENT): I'm here because of a hot red swollen big toe.
+[SEG0006] person_2 (DOCTOR): How long has it been like this?
+[SEG0007] person_1 (PATIENT): For two days, I'd say.
+[SEG0008] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0009] person_1 (PATIENT): Ice helps a bit. Touch definitely sets it off. Oh, and pain that woke me. That's been about the same, three days. About pain that woke me, pretty moderate, if I'm being honest.
+[SEG0010] person_2 (DOCTOR): Tell me about any past illnesses or ongoing conditions.
+[SEG0011] person_1 (PATIENT): Gout, for nearly five years.
+[SEG0012] person_2 (DOCTOR): Okay, I can see gout in your file as well. Let's run through your medicines.
+[SEG0013] person_1 (PATIENT): Febuxostat, 80 milligrams, once a day.
+[SEG0014] person_2 (DOCTOR): Roughly how long on that one?
+[SEG0015] person_1 (PATIENT): About two months.
+[SEG0016] person_2 (DOCTOR): Have you been to theatre before?
+[SEG0017] person_1 (PATIENT): Yes, I had my septum straightened, in my thirties.
+[SEG0018] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0019] person_1 (PATIENT): Nothing, I'm teetotal. No, I've never smoked in my life. I do a yoga class on Thursdays. I work in accounts at a hospital. I grab fast food at lunch most days.
+[SEG0020] person_2 (DOCTOR): So, do you react to any medicines or foods? Any allergies?
+[SEG0021] person_1 (PATIENT): No, nothing as far as I know.
+[SEG0022] person_2 (DOCTOR): A few quick ones: rash, fever or injury?
+[SEG0023] person_1 (PATIENT): I haven't had rash, fever or injury, no.
+[SEG0024] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0025] person_1 (PATIENT): No, nothing there.
+[SEG0026] person_2 (DOCTOR): I'll do your observations first.
+[SEG0027] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0028] person_2 (DOCTOR): Okay: saturation 97 percent, temperature 36.5, respiratory rate 17, blood pressure 110 over 72, heart rate 77.
+[SEG0029] person_2 (DOCTOR): May I examine you now?
+[SEG0030] person_1 (PATIENT): Yes, that's fine.
+[SEG0031] person_2 (DOCTOR): Take a deep breath for me.
+[SEG0032] person_2 (DOCTOR): The big toe joint is red, hot, swollen and exquisitely tender.
+[SEG0033] person_2 (DOCTOR): You can relax now. I'll request a uric acid blood test, it'll help with gout. I'd like to arrange kidney function tests for gout treatment. I'd like you to take naproxen, 500 milligrams, twice a day with food, five days. It's for gout flare.
+[SEG0034] person_1 (PATIENT): That's simple enough.
+[SEG0035] person_2 (DOCTOR): Rest the foot, ice it, and drink plenty of water; limit beer and red meat.
+[SEG0036] person_2 (DOCTOR): I see, go ahead. Please don't wait if the symptoms get worse. That's when to be seen urgently.
+[SEG0037] person_1 (PATIENT): Well, thank you, that's clear.
+[SEG0038] person_2 (DOCTOR): Come back in two weeks. That's everything on my side. Anything you're unsure about?
+[SEG0039] person_1 (PATIENT): So, thank you, doctor, goodbye.
+
+JSON:

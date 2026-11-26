@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00474)
+[SEG0001] person_1 (PATIENT): Morning, doctor, I hope I'm not interrupting.
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): I've been getting out of puff on the stairs.
+[SEG0004] person_2 (DOCTOR): When did you first notice it?
+[SEG0005] person_1 (PATIENT): Yesterday, it came on out of nowhere. It's a relief to finally sit down and talk about it.
+[SEG0006] person_2 (DOCTOR): is it mild, moderate or severe?
+[SEG0007] person_1 (PATIENT): I'd say moderate. And I've been having put on weight as well, for six months. Oh, and a dry cough at night. That's been about the same, six months.
+[SEG0008] person_2 (DOCTOR): Can I take your vitals now?
+[SEG0009] person_2 (DOCTOR): Almost there...
+[SEG0010] person_2 (DOCTOR): okay: temp 36.7 degrees, saturation 99 percent, pulse 85, blood pressure 122 over 77.
+[SEG0011] person_1 (PATIENT): Is that normal?
+[SEG0012] person_2 (DOCTOR): I'll interpret it once I've examined you.
+[SEG0013] person_2 (DOCTOR): Can I examine you now?
+[SEG0014] person_1 (PATIENT): okay
+[SEG0015] person_2 (DOCTOR): I'll go gently.
+[SEG0016] person_2 (DOCTOR): Heart sounds are normal and the chest is clear.
+[SEG0017] person_2 (DOCTOR): All done, you can get dressed. Okay, did you get palpitations or wheezing?
+[SEG0018] person_1 (PATIENT): None, as far as I know.
+[SEG0019] person_2 (DOCTOR): Have you had any fever, coughing up blood or calf swelling?
+[SEG0020] person_1 (PATIENT): no, I'd have mentioned it
+[SEG0021] person_2 (DOCTOR): right, is your mobility otherwise okay?
+[SEG0022] person_1 (PATIENT): no, nothing there
+[SEG0023] person_2 (DOCTOR): are you on any tablets or medication?
+[SEG0024] person_1 (PATIENT): It's iron tablets, once a day for my blood count. I do miss it now and then, to be fair.
+[SEG0025] person_2 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0026] person_1 (PATIENT): I've had low haemoglobin, yes.
+[SEG0027] person_2 (DOCTOR): Do you have a job?
+[SEG0028] person_1 (PATIENT): I'm a self-employed electrician.
+[SEG0029] person_2 (DOCTOR): Do you get any exercise?
+[SEG0030] person_1 (PATIENT): I walk for about half an hour most days
+[SEG0031] person_2 (DOCTOR): have you had any previous surgeries?
+[SEG0032] person_1 (PATIENT): no, never had any surgery
+[SEG0033] person_2 (DOCTOR): Taking everything into account, it fits best with breathlessness with several possible contributors. That's my thinking for now, and it may change as we learn more.
+[SEG0034] person_1 (PATIENT): Do you think it's serious?
+[SEG0035] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's breathlessness with several possible contributors, and we'll know more once the blood tests is back. Stop me if I've got anything wrong. You've been getting out of puff on the stairs, yesterday, moderate, and no wheezing or coughing up blood.
+[SEG0036] person_1 (PATIENT): that's it, yes
+[SEG0037] person_2 (DOCTOR): I think blood tests makes sense here, for breathlessness.
+[SEG0038] person_1 (PATIENT): Does it need any preparation?
+[SEG0039] person_2 (DOCTOR): Let's get an echocardiogram, for breathlessness. A short daily walk, building up slowly, is a sensible start. Come back after the results are back.
+[SEG0040] person_1 (PATIENT): That works for me.
+[SEG0041] person_2 (DOCTOR): That's everything from me. Any other questions?
+[SEG0042] person_1 (PATIENT): One thing: no, actually that's all. Thanks.
+
+JSON:

@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03574)
+[SEG0001] person_1 (PATIENT): Morning, doctor. Lovely to meet you.
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): So, I've been feeling tired and run down, doctor.
+[SEG0004] person_2 (DOCTOR): How long has this been bothering you?
+[SEG0005] person_1 (PATIENT): It's been going on for about three months.
+[SEG0006] person_2 (DOCTOR): Would you say mild, moderate or severe?
+[SEG0007] person_1 (PATIENT): Mild, really.
+[SEG0008] person_2 (DOCTOR): Is there anything else with it?
+[SEG0009] person_1 (PATIENT): It usually comes with night sweats.
+[SEG0010] person_2 (DOCTOR): Any breathlessness or high fever?
+[SEG0011] person_1 (PATIENT): No, I haven't had any of them.
+[SEG0012] person_2 (DOCTOR): Any chest pain or leg weakness?
+[SEG0013] person_1 (PATIENT): No, nothing to report there.
+[SEG0014] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0015] person_1 (PATIENT): No, nothing there.
+[SEG0016] person_2 (DOCTOR): Tell me about any past illnesses or ongoing conditions.
+[SEG0017] person_1 (PATIENT): Oh, I've had COPD for five years now. I've been putting this off for weeks.
+[SEG0018] person_2 (DOCTOR): Understood.
+[SEG0019] person_1 (PATIENT): Arthritis in my knees, for about a year.
+[SEG0020] person_2 (DOCTOR): Yes, COPD is known to us, good to have that clear. Have you got any known allergies?
+[SEG0021] person_1 (PATIENT): I don't think I have any, no.
+[SEG0022] person_2 (DOCTOR): Can you list what you take, tablets, creams or inhalers? Take your time, there's no rush.
+[SEG0023] person_1 (PATIENT): Tiotropium inhaler, once a day for my chest. I take naproxen, twice a day for the knee pain.
+[SEG0024] person_2 (DOCTOR): And what strength is that?
+[SEG0025] person_1 (PATIENT): 250 milligrams, I think that's what's on the box.
+[SEG0026] person_2 (DOCTOR): Roughly how long on that one?
+[SEG0027] person_1 (PATIENT): Two months now.
+[SEG0028] person_2 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0029] person_1 (PATIENT): My uncle has high cholesterol.
+[SEG0030] person_2 (DOCTOR): Are you in work at the moment?
+[SEG0031] person_1 (PATIENT): Yes, I work in a bakery, early starts.
+[SEG0032] person_2 (DOCTOR): Who lives with you?
+[SEG0033] person_1 (PATIENT): My partner and our baby.
+[SEG0034] person_2 (DOCTOR): Do you get out much?
+[SEG0035] person_1 (PATIENT): Not much, I mostly stay in these days.
+[SEG0036] person_2 (DOCTOR): Can I check a few measurements before we carry on?
+[SEG0037] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0038] person_2 (DOCTOR): Okay: pressure 116 over 70, height 180 centimetres, weight 62 kilos, pulse is 92 beats a minute, respiratory rate 18, temperature 38.6, oxygen saturation is 97 percent, BMI works out to 19.1.
+[SEG0039] person_1 (PATIENT): Is that okay?
+[SEG0040] person_2 (DOCTOR): Don't worry, we'll discuss it in a second.
+[SEG0041] person_2 (DOCTOR): Could you come over to the couch, please?
+[SEG0042] person_1 (PATIENT): Okay, doctor.
+[SEG0043] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0044] person_2 (DOCTOR): There is a soft heart murmur you've not had before and a small tender spot on the fingertip.
+[SEG0045] person_2 (DOCTOR): That's the examination finished. From what you've told me and what I found, the most likely explanation is possible infection of the heart valve causing back and general symptoms. I'd also keep a muscle strain in mind. I'm going to order an MRI of the spine, for persistent back pain with systemic symptoms. That will help us see what's going on underneath and decide the next step. Let's get an echocardiogram, for new murmur.
+[SEG0046] person_2 (DOCTOR): This is not an ordinary back strain, so I want tests today. We'll refer you to the medical admissions unit. Please don't wait if the symptoms get worse. That's when to be seen urgently. Does all of that make sense?
+[SEG0047] person_1 (PATIENT): Thank you, uh, that's helpful.
+
+JSON:

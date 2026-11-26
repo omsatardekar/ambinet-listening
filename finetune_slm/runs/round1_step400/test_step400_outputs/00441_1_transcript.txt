@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00441)
+[SEG0001] person_1 (DOCTOR): Good morning, how are you doing today?
+[SEG0002] person_1 (DOCTOR): Did you come far?
+[SEG0003] person_2 (PATIENT): Not too far, about half an hour by bus.
+[SEG0004] person_1 (DOCTOR): So, what seems to be the problem?
+[SEG0005] person_2 (PATIENT): Um, so... a dry cough and fever. That's why I came.
+[SEG0006] person_1 (DOCTOR): Roughly when did it start?
+[SEG0007] person_2 (PATIENT): Probably two weeks. Yeah.
+[SEG0008] person_1 (DOCTOR): How often does it happen?
+[SEG0009] person_2 (PATIENT): It's a few times a day.
+[SEG0010] person_1 (DOCTOR): Have you had any chest pain or diarrhoea?
+[SEG0011] person_2 (PATIENT): None, as far as I know.
+[SEG0012] person_1 (DOCTOR): Right, have you noticed shortness of breath or rash?
+[SEG0013] person_2 (PATIENT): Hmm, none, as far as I know.
+[SEG0014] person_1 (DOCTOR): Is your digestion otherwise okay?
+[SEG0015] person_2 (PATIENT): No, all normal there.
+[SEG0016] person_1 (DOCTOR): A few questions about your lifestyle now.
+[SEG0017] person_2 (PATIENT): I'm mostly vegetarian. I'm a self-employed electrician. Yes, I live on my own.
+[SEG0018] person_1 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0019] person_2 (PATIENT): I've got high blood pressure.
+[SEG0020] person_1 (DOCTOR): Right, so high blood pressure is already on your record. We'll keep that in mind today.
+[SEG0021] person_1 (DOCTOR): What about operations, anything like that?
+[SEG0022] person_2 (PATIENT): I had my appendix out about eight years ago.
+[SEG0023] person_1 (DOCTOR): Any drug or food allergies?
+[SEG0024] person_2 (PATIENT): No, no allergies to anything.
+[SEG0025] person_1 (DOCTOR): Are you on any tablets or medication?
+[SEG0026] person_2 (PATIENT): Ramipril, 5 milligrams, every morning.
+[SEG0027] person_1 (DOCTOR): Let's do your observations.
+[SEG0028] person_1 (DOCTOR): Almost there...
+[SEG0029] person_1 (DOCTOR): Okay: BP is 116 over 73, height 159 centimetres, pulse 96, temp 38.2 degrees, weight 64 kilos.
+[SEG0030] person_1 (DOCTOR): Can I examine you now?
+[SEG0031] person_1 (DOCTOR): I'll go gently.
+[SEG0032] person_1 (DOCTOR): Throat is mildly red.
+[SEG0033] person_2 (PATIENT): Yes, doctor.
+[SEG0034] person_1 (DOCTOR): Stay still while I have a look.
+[SEG0035] person_1 (DOCTOR): Chest is clear, no crackles or wheeze.
+[SEG0036] person_1 (DOCTOR): Right, that's all I need, thank you. Putting it all together, I'd lean towards a viral respiratory illness, possibly COVID-19. I'll request a COVID test, it'll help with viral respiratory illness. What I'm giving you is paracetamol, 500 milligrams, every six hours if needed, for three days. You take it by mouth. That should help with fever and aches. Stay home until you're fever-free and wear a mask around others for a few days.
+[SEG0037] person_1 (DOCTOR): One warning sign to remember: you become short of breath. In that case don't wait. Call the clinic if you need us.
+[SEG0038] person_2 (PATIENT): Thank you for your time.
+[SEG0039] person_1 (DOCTOR): Bye for now.
+
+JSON:

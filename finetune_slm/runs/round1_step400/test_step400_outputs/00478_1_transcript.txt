@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00478)
+[SEG0001] person_1 (NURSE): Okay, doctor, we're all set in here. I'll give you the numbers when you want them.
+[SEG0002] person_2 (DOCTOR): Thanks. Hello, come in, sit down. What brings you in today?
+[SEG0003] person_3 (PATIENT): mainly a high fever. There's a couple of other things, but that's the main one. I've never really been one for hospitals
+[SEG0004] person_2 (DOCTOR): How long are we talking about?
+[SEG0005] person_3 (PATIENT): It's been five days, I'm fairly sure. I kept putting it off, which I know isn't sensible. I told myself I'd wait and see, and here I am.
+[SEG0006] person_2 (DOCTOR): right okay, give me more detail on it, whatever comes to to mind
+[SEG0007] person_3 (PATIENT): It settles a little with paracetamol. It's a few times a day.
+[SEG0008] person_2 (DOCTOR): What about no appetite, have you noticed that?
+[SEG0009] person_3 (PATIENT): Yes, actually.
+[SEG0010] person_2 (DOCTOR): Let me check a few things. Any blood in the stool, cough or vomiting?
+[SEG0011] person_3 (PATIENT): No, not any of them.
+[SEG0012] person_2 (DOCTOR): ah. Has there been any abdominal pain?
+[SEG0013] person_3 (PATIENT): No, none, no abdominal pain.
+[SEG0014] person_2 (DOCTOR): Anything unusual with passing urine?
+[SEG0015] person_3 (PATIENT): No changes there.
+[SEG0016] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0017] person_3 (PATIENT): Skin's normal.
+[SEG0018] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0019] person_3 (PATIENT): Not that I know, no.
+[SEG0020] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0021] person_3 (PATIENT): I have diabetes, for about ten years
+[SEG0022] person_2 (DOCTOR): Okay, anything else?
+[SEG0023] person_3 (PATIENT): I've had high blood pressure for two years now. I'm not great at remembering details, so bear with me.
+[SEG0024] person_2 (DOCTOR): Yes, diabetes is known to us, good to have that clear.
+[SEG0025] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0026] person_3 (PATIENT): It's, It's Glycomet, 500 milligrams, twice a day. Telmisartan, 40 milligrams, once a day.
+[SEG0027] person_2 (DOCTOR): Roughly how long on that one?
+[SEG0028] person_3 (PATIENT): about two years. I take Dolo, 650 milligrams, when I get the fever
+[SEG0029] person_2 (DOCTOR): How long has that been going on?
+[SEG0030] person_3 (PATIENT): About about three months.
+[SEG0031] person_2 (DOCTOR): a few questions about your lifestyle now
+[SEG0032] person_3 (PATIENT): I don't drink at all. Mostly home-cooked food, rice and vegetables. I drive a delivery van all day. I go to the gym a couple of times a week
+[SEG0033] person_2 (DOCTOR): have you ever been under the knife?
+[SEG0034] person_3 (PATIENT): I had cataract surgery on my right eye last year.
+[SEG0035] person_1 (NURSE): Okay, so the vitals from earlier. Temperature 38.9, heart rate 93. Blood pressure 104 over 76, respiratory rate 18.
+[SEG0036] person_2 (DOCTOR): Good, thank you.
+[SEG0037] person_2 (DOCTOR): I'd like to examine you now.
+[SEG0038] person_2 (DOCTOR): Let me just check something.
+[SEG0039] person_2 (DOCTOR): There's a faint rash on your forearms, it blanches when I press.
+[SEG0040] person_2 (DOCTOR): Good, that's the examination.
+[SEG0041] person_2 (DOCTOR): Let me tell you where I've got to. It points towards a febrile illness that could be dengue. We shouldn't forget malaria. I'm going to order a dengue test, for fever. Drink a lot, coconut water, ORS, whatever you can manage. A malaria test is something we might do if this doesn't improve next month. Book a review in two days. That's it on my side. Anything unclear?
+[SEG0042] person_3 (PATIENT): Okay, thank you. Bye.
+[SEG0043] person_2 (DOCTOR): Safe journey home.
+
+JSON:

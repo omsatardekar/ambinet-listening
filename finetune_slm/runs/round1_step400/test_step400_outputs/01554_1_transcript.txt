@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01554)
+[SEG0001] person_1 (PATIENT): Sorry, doctor, shall I sit here?
+[SEG0002] person_2 (DOCTOR): No problem at all, come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): It's loose stools with blood, mostly.
+[SEG0004] person_2 (DOCTOR): how many days or weeks has it been?
+[SEG0005] person_1 (PATIENT): I've had it for two weeks.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): It happens a couple of times a week. Severe, really.
+[SEG0008] person_2 (DOCTOR): What about mouth ulcers, have you noticed that?
+[SEG0009] person_1 (PATIENT): Yes, about the same, about two weeks. With mouth ulcers, moderate, really.
+[SEG0010] person_2 (DOCTOR): So, have you noticed fever, vomiting or weight loss?
+[SEG0011] person_1 (PATIENT): No, none that I've noticed.
+[SEG0012] person_2 (DOCTOR): Yes. What about joint pain?
+[SEG0013] person_1 (PATIENT): Nope, no joint pain.
+[SEG0014] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0015] person_1 (PATIENT): no, that's been fine
+[SEG0016] person_2 (DOCTOR): How's your breathing otherwise?
+[SEG0017] person_1 (PATIENT): Breathing's normal.
+[SEG0018] person_2 (DOCTOR): do you have any medical conditions I should know about?
+[SEG0019] person_1 (PATIENT): No, no conditions.
+[SEG0020] person_2 (DOCTOR): Right, any surgery in the past?
+[SEG0021] person_1 (PATIENT): Just part of my thyroid removed, years back.
+[SEG0022] person_2 (DOCTOR): So, are you allergic to anything? Any allergies to medicines or foods?
+[SEG0023] person_1 (PATIENT): Trimethoprim. I come out in... well, a rash.
+[SEG0024] person_2 (DOCTOR): Is there any regular medication you use?
+[SEG0025] person_1 (PATIENT): Nothing regular, no.
+[SEG0026] person_2 (DOCTOR): Alright, do you do any exercise?
+[SEG0027] person_1 (PATIENT): I swim twice a week.
+[SEG0028] person_2 (DOCTOR): What line of work are you in?
+[SEG0029] person_1 (PATIENT): I'm a bus driver, so I sit for long hours.
+[SEG0030] person_2 (DOCTOR): Is there someone at home?
+[SEG0031] person_1 (PATIENT): My husband and I live above the shop.
+[SEG0032] person_2 (DOCTOR): Are there any illnesses in your family?
+[SEG0033] person_1 (PATIENT): My father has Parkinson's disease.
+[SEG0034] person_2 (DOCTOR): I'll do your observations first.
+[SEG0035] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0036] person_2 (DOCTOR): Okay: temperature 36.9, BP is 114 over 77, oxygen saturation is 97 percent, respiratory rate 18, heart rate 76.
+[SEG0037] person_2 (DOCTOR): I'll need to examine you for this, it won't take long
+[SEG0038] person_2 (DOCTOR): Raise your arm for me.
+[SEG0039] person_2 (DOCTOR): There is tenderness in the lower right tummy and no guarding.
+[SEG0040] person_2 (DOCTOR): Please sit back down.
+[SEG0041] person_2 (DOCTOR): So where does that leave us? I'd lean towards a flare of inflammatory bowel disease. I'd like to arrange a stool test for bloody diarrhoea. It's a routine test and it'll give us a much clearer picture.
+[SEG0042] person_1 (PATIENT): That makes sense.
+[SEG0043] person_2 (DOCTOR): What I'm giving you is prednisolone, 40 milligrams, once a day, one week then reduce. It's for inflammatory bowel flare. Keep up your fluids and call the IBD nurse if you get a fever. Cut back on tea, coffee and fizzy drinks for a couple of weeks and see how things settle. I'd like to see you again in two weeks.
+[SEG0044] person_1 (PATIENT): alright, I'll be back
+[SEG0045] person_2 (DOCTOR): does all of that make sense?
+[SEG0046] person_1 (PATIENT): Uh, no, that's all. Thanks a lot.
+[SEG0047] person_2 (DOCTOR): So, goodbye for now.
+
+JSON:

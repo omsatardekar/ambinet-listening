@@ -1,0 +1,75 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00568)
+[SEG0001] person_2 (DOCTOR): Good morning. Mr Gopal Rathore, correct? And you are...?
+[SEG0002] person_3 (CAREGIVER): Good morning, doctor. I am Sunita, I stay with him as his carer. Yes, he is Mr Rathore.
+[SEG0003] person_1 (PATIENT): Yes, yes, Gopal Rathore. You know, the lift downstairs was not working, so we took the stairs very slowly, and that itself shows the problem.
+[SEG0004] person_2 (DOCTOR): Let us start there, then. What is the problem?
+[SEG0005] person_1 (PATIENT): I am more breathless than last winter, doctor. Last winter also I was breathless, but this time it is more, and my grandson's wedding is in March, so I told Sunita...
+[SEG0006] person_2 (DOCTOR): One thing at a time, please. How long has this extra breathlessness been going on?
+[SEG0007] person_1 (PATIENT): Two weeks, I think. Only two weeks.
+[SEG0008] person_3 (CAREGIVER): Three weeks, sir. I am counting from the day you stopped walking to the park.
+[SEG0009] person_2 (DOCTOR): Two, three weeks. So roughly two to three weeks, let us say. Any cough with it?
+[SEG0010] person_1 (PATIENT): Yes, cough also, every morning, with some white phlegm. That one is old, it is always there.
+[SEG0011] person_2 (DOCTOR): White phlegm, fine. Any wheezing, any whistling sound in the chest?
+[SEG0012] person_1 (PATIENT): Wheezing, yes, at night, when I lie down. I hear it myself, and Sunita also hears.
+[SEG0013] person_2 (DOCTOR): Any chest pain?
+[SEG0014] person_1 (PATIENT): No chest pain, doctor. That I would have told you immediately.
+[SEG0015] person_2 (DOCTOR): Good. Coughing up any blood?
+[SEG0016] person_1 (PATIENT): No blood, no. Only the white phlegm.
+[SEG0017] person_2 (DOCTOR): Fine. Any swelling in your legs or ankles?
+[SEG0018] person_1 (PATIENT): No swelling in my legs, doctor. These legs are the same as always.
+[SEG0019] person_3 (CAREGIVER): Sir, his ankles are swollen in the evenings, doctor. When I take off his socks they leave deep marks.
+[SEG0020] person_2 (DOCTOR): Noted. We will come back to that. Now medicines. Which inhalers and tablets are you on?
+[SEG0021] person_1 (PATIENT): Tiotropium inhaler, once a day in the morning. And the blue inhaler, salbutamol, when I am breathless, which is many times now.
+[SEG0022] person_2 (DOCTOR): And tablets?
+[SEG0023] person_1 (PATIENT): One small white tablet for the pressure. The name I cannot recall, my daughter wrote it somewhere. Sunita, what is it?
+[SEG0024] person_3 (CAREGIVER): I am sorry, doctor, only the box has the name and it is at home. White, small, round, once in the morning.
+[SEG0025] person_2 (DOCTOR): Okay. Any other health problems?
+[SEG0026] person_1 (PATIENT): COPD, ten years now. Also high blood pressure, and diabetes, controlled by diet only. Arthritis in the knees also, that is why I do not walk much.
+[SEG0027] person_2 (DOCTOR): Any operations in the past?
+[SEG0028] person_1 (PATIENT): Cataract operation, five years ago, left eye. And my appendix, in 1988.
+[SEG0029] person_2 (DOCTOR): Any allergies to medicines?
+[SEG0030] person_1 (PATIENT): Yes, penicillin. I get a rash all over. A doctor in 1990 told me never to take it.
+[SEG0031] person_2 (DOCTOR): Noted. In the family, any chest or heart problems?
+[SEG0032] person_1 (PATIENT): My father died of a heart attack at sixty. My brother has asthma, he lives in Pune, a funny man, once he...
+[SEG0033] person_2 (DOCTOR): Thank you. Did you ever smoke?
+[SEG0034] person_1 (PATIENT): Yes, thirty years I smoked, beedis. I stopped eight years back.
+[SEG0035] person_2 (DOCTOR): And alcohol?
+[SEG0036] person_1 (PATIENT): I do not drink alcohol at all. I was a bank clerk, retired now, and bank people are careful, you know.
+[SEG0037] person_2 (DOCTOR): Okay. Let me check your vitals, then listen to your chest.
+[SEG0038] person_1 (PATIENT): Yes, of course. Sunita, hold my shawl.
+[SEG0039] person_2 (DOCTOR): Blood pressure 138 over 82, pulse 96, oxygen 91 percent, breathing rate 22, temperature 37.2 degrees.
+[SEG0040] person_1 (PATIENT): Is the oxygen low? My neighbour had oxygen once...
+[SEG0041] person_2 (DOCTOR): A little low for a normal person, but you have COPD. Now deep breaths in and out, mouth open.
+[SEG0042] person_1 (PATIENT): Okay. Like this? Cough, sorry.
+[SEG0043] person_2 (DOCTOR): There is wheeze on both sides, and the air entry is reduced at the bottom of both lungs. Your lips are not blue, which is good.
+[SEG0044] person_2 (DOCTOR): Quickly, how are your stomach and bowels? And passing urine?
+[SEG0045] person_1 (PATIENT): Stomach is fine, fine. Urine also normal.
+[SEG0046] person_2 (DOCTOR): So this looks like a COPD flare-up, probably an infection on top of the old problem. But I cannot rule out fluid on the lungs yet.
+[SEG0047] person_1 (PATIENT): Fluid? In my lungs? My uncle also had fluid and...
+[SEG0048] person_2 (DOCTOR): Please, Mr Rathore, listen. I will order a chest X-ray and blood tests today, and a lung function test, spirometry.
+[SEG0049] person_1 (PATIENT): All today? Sunita has to cook lunch at one o'clock.
+[SEG0050] person_2 (DOCTOR): X-ray and blood tests today. Spirometry I am booking for next week, reception will give you the date.
+[SEG0051] person_2 (DOCTOR): And if the swelling in the ankles continues, I might arrange an echocardiogram, a heart scan, to look at the heart.
+[SEG0052] person_1 (PATIENT): Heart scan? My heart is strong, doctor.
+[SEG0053] person_2 (DOCTOR): Continue both inhalers as you are, and use the blue one when needed. I want to see you again if you are not better in one week.
+[SEG0054] person_3 (CAREGIVER): And if he is worse in the night, doctor? Should I call you?
+[SEG0055] person_2 (DOCTOR): If he cannot speak full sentences, or his lips turn blue, call an ambulance straight away.
+[SEG0056] person_1 (PATIENT): Doctor, can I bathe in cold water? My grandson says it is good for health.
+[SEG0057] person_2 (DOCTOR): Warm water is fine, Mr Rathore. Avoid very cold air and keep the windows shut at night.
+[SEG0058] person_3 (CAREGIVER): I will make sure, doctor. Thank you.
+[SEG0059] person_1 (PATIENT): Thank you, doctor. And please come to the wedding also, there will be good food.
+[SEG0060] person_2 (DOCTOR): Ha, we shall see. Take care, both of you.
+
+JSON:

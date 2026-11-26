@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00313)
+[SEG0001] person_1 (PATIENT): I mean doctor hello I've got my papers here where should I put them?
+[SEG0002] person_2 (DOCTOR): yes, come in, take a seat what can I do for you today?
+[SEG0003] person_1 (PATIENT): it's headaches in the mornings, mostly
+[SEG0004] person_2 (DOCTOR): And when did that start?
+[SEG0005] person_1 (PATIENT): I've had it for two months.
+[SEG0006] person_2 (DOCTOR): can you describe it a bit more for me? How strong it is, what the pattern is, what helps
+[SEG0007] person_1 (PATIENT): okay so it happens a few times a day. I'd call it mild
+[SEG0008] person_2 (DOCTOR): What about a ringing in the ears, have you noticed that?
+[SEG0009] person_1 (PATIENT): yes, about the same, three weeks
+[SEG0010] person_2 (DOCTOR): What's the pattern, is it there all day?
+[SEG0011] person_1 (PATIENT): honestly, a couple of times a week
+[SEG0012] person_2 (DOCTOR): Have you had headaches in the mornings before or is this the first time?
+[SEG0013] person_1 (PATIENT): a a bit, last winter it settled by itself back then
+[SEG0014] person_2 (DOCTOR): so, what medicines do you take regularly?
+[SEG0015] person_1 (PATIENT): It's telmisartan, 40 milligrams, once a day for my pressure.
+[SEG0016] person_2 (DOCTOR): any long-term health problems I should know about?
+[SEG0017] person_1 (PATIENT): I've got high blood pressure. A neighbour of mine said I should see someone about it.
+[SEG0018] person_2 (DOCTOR): okay, I can see high blood pressure in your file as well what about family history, any illnesses that run in the the family?
+[SEG0019] person_1 (PATIENT): Oh my brother has asthma.
+[SEG0020] person_2 (DOCTOR): are you living with family?
+[SEG0021] person_1 (PATIENT): I stay with my daughter and her family.
+[SEG0022] person_2 (DOCTOR): do you get any exercise?
+[SEG0023] person_1 (PATIENT): I walk for about half an hour most days.
+[SEG0024] person_2 (DOCTOR): Anything special about your diet?
+[SEG0025] person_1 (PATIENT): I try to avoid too much sugar.
+[SEG0026] person_2 (DOCTOR): Do you have any known allergies at all?
+[SEG0027] person_1 (PATIENT): No allergies that I know of no.
+[SEG0028] person_2 (DOCTOR): Let me check a few things. Any weakness or chest pain?
+[SEG0029] person_1 (PATIENT): Um uh I haven't had weakness or chest pain no.
+[SEG0030] person_2 (DOCTOR): right. Let me check a few things. Any palpitations or vision changes?
+[SEG0031] person_1 (PATIENT): hmm, um, no, not any of them
+[SEG0032] person_2 (DOCTOR): Is your digestion otherwise okay?
+[SEG0033] person_1 (PATIENT): hmm, bowels are regular, nothing odd
+[SEG0034] person_2 (DOCTOR): Let's get your blood pressure and and the other basics.
+[SEG0035] person_2 (DOCTOR): Just relax your arm...
+[SEG0036] person_2 (DOCTOR): okay: respiratory rate 18, pulse is 75 beats a minute, blood pressure 155 over 100. And saturation 99 percent, temp 36.7 degrees
+[SEG0037] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0038] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0039] person_2 (DOCTOR): there's mild pitting swelling at both ankles
+[SEG0040] person_2 (DOCTOR): let me look at this properly
+[SEG0041] person_2 (DOCTOR): Heart sounds are normal.
+[SEG0042] person_2 (DOCTOR): that's all I need thank you
+[SEG0043] person_2 (DOCTOR): okay thinking it through this is probably hypertension that isn't well controlled. We shouldn't forget a side effect from the current tablet
+[SEG0044] person_1 (PATIENT): I mean doctor is this dangerous?
+[SEG0045] person_2 (DOCTOR): nothing I've seen today points to an emergency it looks like hypertension that isn't well controlled the treatment will be amlodipine, 5 milligrams, once a day, long term that's for high blood pressure
+[SEG0046] person_1 (PATIENT): okay, thank you
+[SEG0047] person_2 (DOCTOR): Come back in a month. That's everything from me. Any other questions?
+[SEG0048] person_1 (PATIENT): I appreciate it, you know, doctor.
+
+JSON:

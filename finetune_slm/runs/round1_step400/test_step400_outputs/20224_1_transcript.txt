@@ -1,0 +1,82 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20224)
+[SEG0001] person_1 (PATIENT): Hello, doctor. I think it's my turn.
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_3 (CAREGIVER): Hello, um, doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_2 (DOCTOR): absolutely, come and sit beside them
+[SEG0005] person_3 (CAREGIVER): She's been having the room spinning, doctor.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): honestly, a few times a day pretty severe, if I'm being honest
+[SEG0008] person_2 (DOCTOR): alright, is it accompanied by anything?
+[SEG0009] person_1 (PATIENT): when it starts I tend to get a recent cold as well
+[SEG0010] person_1 (PATIENT): mm, and the other thing I wanted to mention is that that I can't really—
+[SEG0011] person_3 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0012] person_1 (PATIENT): I was getting to that!
+[SEG0013] person_2 (DOCTOR): That's fine, one at a time. I'll ask about everything. What about a blocked feeling in your ear, have you noticed that?
+[SEG0014] person_1 (PATIENT): Yeah. Ten days, I'd say. As for recent cold, I'd call it severe.
+[SEG0015] person_2 (DOCTOR): Have you had the room spinning before, or is this the first time?
+[SEG0016] person_1 (PATIENT): Sorry, what was I saying, yes, something like this happened last winter, and it went away on its own.
+[SEG0017] person_2 (DOCTOR): Any smoking?
+[SEG0018] person_1 (PATIENT): I quit smoking around ten years ago.
+[SEG0019] person_2 (DOCTOR): What about alcohol?
+[SEG0020] person_1 (PATIENT): I used to drink heavily but I stopped four years ago.
+[SEG0021] person_2 (DOCTOR): Are you in work at the moment?
+[SEG0022] person_1 (PATIENT): Yes, I work in a bakery, early starts.
+[SEG0023] person_2 (DOCTOR): how active are you?
+[SEG0024] person_1 (PATIENT): I hardly move around during the day.
+[SEG0025] person_2 (DOCTOR): Before we go further, any allergies?
+[SEG0026] person_1 (PATIENT): not to my knowledge, no
+[SEG0027] person_2 (DOCTOR): Are there any illnesses in your family?
+[SEG0028] person_1 (PATIENT): My father has Parkinson's disease.
+[SEG0029] person_2 (DOCTOR): have you had any previous surgeries?
+[SEG0030] person_1 (PATIENT): No, I've never been operated on.
+[SEG0031] person_2 (DOCTOR): What about your medical history?
+[SEG0032] person_1 (PATIENT): I've got high blood pressure. Yes, heart disease.
+[SEG0033] person_2 (DOCTOR): Right, right.
+[SEG0034] person_1 (PATIENT): I've had COPD for about a year now.
+[SEG0035] person_2 (DOCTOR): yes, COPD is known to us, good to have that clear
+[SEG0036] person_2 (DOCTOR): What do you take on a normal day?
+[SEG0037] person_1 (PATIENT): I take hydrochlorothiazide, 12.5 milligrams, every morning. It's aspirin, 75 milligrams, maybe, once a day.
+[SEG0038] person_2 (DOCTOR): Have you got the box or the prescription on you?
+[SEG0039] person_1 (PATIENT): So, not with me. I'll bring it next time. It's Tiotropium inhaler, once a day.
+[SEG0040] person_2 (DOCTOR): Have you had any weakness, headache or ringing in the ears?
+[SEG0041] person_1 (PATIENT): No, no weakness, no headache, no ringing in the ears. I did have being unsteady at one point, but that went away on its own.
+[SEG0042] person_2 (DOCTOR): Have you had any slurred speech, hearing loss or double vision?
+[SEG0043] person_1 (PATIENT): actually, no, no slurred speech, hearing loss or double vision
+[SEG0044] person_2 (DOCTOR): Any problems with your joints or muscles?
+[SEG0045] person_1 (PATIENT): I move fine otherwise
+[SEG0046] person_2 (DOCTOR): Is your chest okay generally?
+[SEG0047] person_1 (PATIENT): No problems with breathing.
+[SEG0048] person_2 (DOCTOR): Shall I check your blood pressure and pulse?
+[SEG0049] person_2 (DOCTOR): right, bear with me while this finishes..
+[SEG0050] person_2 (DOCTOR): Okay: blood pressure 127 over 68, saturation 97 percent, pulse 67, respiratory rate 15.
+[SEG0051] person_1 (PATIENT): Is that normal?
+[SEG0052] person_2 (DOCTOR): We'll go over that shortly.
+[SEG0053] person_2 (DOCTOR): could you come over to the couch, please?
+[SEG0054] person_2 (DOCTOR): does that hurt?
+[SEG0055] person_2 (DOCTOR): I can see a fine jerking of the eyes to the left and your walking is a little unsteady
+[SEG0056] person_1 (PATIENT): Fine by me.
+[SEG0057] person_2 (DOCTOR): that's the examination finished. From what you've told me and what I found, it fits best with an inner-ear balance problem such as vestibular neuritis. I want to be honest that that this is an impression, not a final answer. I can't rule out benign positional vertigo yet
+[SEG0058] person_1 (PATIENT): Do you think it's something serious?
+[SEG0059] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like an inner-ear balance problem such as vestibular neuritis, but I'd like to confirm.
+[SEG0060] person_2 (DOCTOR): I'm sending you for blood tests because of dizziness
+[SEG0061] person_4 (CLINICAL_STAFF): We have a slot Friday at 11:30 am, if that works.
+[SEG0062] person_2 (DOCTOR): Let's book a positional test to look into vertigo. We'll begin with prochlorperazine, 5 milligrams, three times a day, for three days. That's for nausea and vertigo. Start moving around gently as soon as you can, since resting too long slows recovery. Let's get you seen by the balance clinic, I'll arrange the letter.
+[SEG0063] person_1 (PATIENT): okay
+[SEG0064] person_2 (DOCTOR): And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Keep an eye out, and and if you get double vision, weakness or trouble speaking, call us the same day or go to emergency. See me again in a week.
+[SEG0065] person_1 (PATIENT): alright, I'll be back
+[SEG0066] person_2 (DOCTOR): Right, that's the plan. Do you want to ask me anything?
+[SEG0067] person_1 (PATIENT): I think I understand everything. Thanks.
+
+JSON:

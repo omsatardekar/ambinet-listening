@@ -1,0 +1,75 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00211)
+[SEG0001] person_1 (DOCTOR): Good morning. I hope the wait wasn't too long.
+[SEG0002] person_2 (PATIENT): Thanks, doctor. It's been a long few days.
+[SEG0003] person_1 (DOCTOR): Go ahead, tell me what's happening.
+[SEG0004] person_2 (PATIENT): it's palpitations i thought I'd wait, but it hasn't gone
+[SEG0005] person_1 (DOCTOR): What medicines do you take regularly?
+[SEG0006] person_2 (PATIENT): um, you know, it's something called esci... escitalopram, 10 milligrams, maybe, once a day
+[SEG0007] person_1 (DOCTOR): did you happen to bring the box or the paperwork?
+[SEG0008] person_2 (PATIENT): No, it's at home. I mean, um, it's Thyronorm, 50 micrograms, every morning. Telmisartan. I take it 40 milligrams, once a day.
+[SEG0009] person_1 (DOCTOR): And when did that start?
+[SEG0010] person_2 (PATIENT): I've, I've had it for two months
+[SEG0011] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0012] person_2 (PATIENT): I, I'd call it moderate. It happens a few times a day
+[SEG0013] person_1 (DOCTOR): does it come along with anything else?
+[SEG0014] person_2 (PATIENT): When it starts I tend to get lightheadedness as well. Oh, and shortness of breath with it. That's been about the same, about a week. Okay, you know, so with shortness of breath with it, about a eight out of ten.
+[SEG0015] person_1 (DOCTOR): Have you had palpitations before, or is this the first time?
+[SEG0016] person_2 (PATIENT): I mean, uh, yes, something like this happened last winter, and it went away on its own.
+[SEG0017] person_1 (DOCTOR): How about weight loss?
+[SEG0018] person_2 (PATIENT): Um, um, not at all, no weight loss.
+[SEG0019] person_1 (DOCTOR): Any fever, tremor or leg swelling at all?
+[SEG0020] person_2 (PATIENT): I haven't had fever, tremor or leg swelling, no.
+[SEG0021] person_1 (DOCTOR): any rashes or skin problems otherwise?
+[SEG0022] person_2 (PATIENT): yeah, no, skin's been fine
+[SEG0023] person_1 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0024] person_2 (PATIENT): Um, I've had anxiety for five years now.
+[SEG0025] person_1 (DOCTOR): Okay, and what else?
+[SEG0026] person_2 (PATIENT): I have an underactive thyroid, for five years.
+[SEG0027] person_1 (DOCTOR): okay, anything else?
+[SEG0028] person_2 (PATIENT): hmm, uh, I have high blood pressure it's a relief to finally sit down and talk about it i'd rather not end up on lots of tablets if I can avoid it
+[SEG0029] person_1 (DOCTOR): Yes, an underactive thyroid and high blood pressure are known to us, good to have that clear. Any smoking?
+[SEG0030] person_2 (PATIENT): I've never smoked
+[SEG0031] person_1 (DOCTOR): do you drink alcohol?
+[SEG0032] person_2 (PATIENT): I don't drink at all.
+[SEG0033] person_1 (DOCTOR): Do you have a job?
+[SEG0034] person_2 (PATIENT): I'm a self-employed electrician
+[SEG0035] person_1 (DOCTOR): Are you living with family?
+[SEG0036] person_2 (PATIENT): I stay with my daughter and her family
+[SEG0037] person_1 (DOCTOR): Any previous surgeries?
+[SEG0038] person_2 (PATIENT): Yeah, no, nothing like that.
+[SEG0039] person_1 (DOCTOR): Does anything run in the family?
+[SEG0040] person_2 (PATIENT): my father had a stroke i mean, my sister has epilepsy
+[SEG0041] person_1 (DOCTOR): let's do your observations
+[SEG0042] person_1 (DOCTOR): Rest your hand here...
+[SEG0043] person_1 (DOCTOR): Okay: respiratory rate 20, SpO2 97 percent on room air, temperature 36.8, pulse is 121 beats a minute, blood pressure 131 over 74.
+[SEG0044] person_2 (PATIENT): Is that normal?
+[SEG0045] person_1 (DOCTOR): I'll interpret it once I've examined you.
+[SEG0046] person_1 (DOCTOR): Okay, I need to examine you for this.
+[SEG0047] person_1 (DOCTOR): Take your time, no rush.
+[SEG0048] person_1 (DOCTOR): pulse is irregular right now
+[SEG0049] person_1 (DOCTOR): Hold that position for me.
+[SEG0050] person_1 (DOCTOR): No murmurs and the neck veins aren't distended.
+[SEG0051] person_1 (DOCTOR): Okay, you can sit up.
+[SEG0052] person_1 (DOCTOR): Taking everything into account, my working impression is a possible heart rhythm problem like atrial fibrillation. A thyroid problem is still possible. I'd like to arrange an echocardiogram for palpitations.
+[SEG0053] person_3 (CLINICAL_STAFF): The The earliest is Thursday, 9 am.
+[SEG0054] person_2 (PATIENT): That's fine.
+[SEG0055] person_1 (DOCTOR): I'd like to arrange a Holter monitor for palpitations. I want an ECG done, that's for palpitations. I'm prescribing metoprolol, 25 milligrams, twice a day, until we review. You take it by mouth. That's for palpitations. The pharmacy will go through the details again when you pick it up
+[SEG0056] person_2 (PATIENT): Well, is that safe with my other things?
+[SEG0057] person_1 (DOCTOR): Cut back on tea, coffee and energy drinks, and note the time whenever it happens. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. A thyroid test is something we might do if this doesn't improve next month. See me again after the results are back.
+[SEG0058] person_2 (PATIENT): Sure, that's doable.
+[SEG0059] person_1 (DOCTOR): That's everything from me. Any other questions?
+[SEG0060] person_2 (PATIENT): Okay, um, thank you. Bye.
+
+JSON:

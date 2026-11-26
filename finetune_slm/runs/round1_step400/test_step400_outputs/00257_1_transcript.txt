@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00257)
+[SEG0001] person_1 (PATIENT): uh good evening doctor thank you for staying late
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): hello, uh, doctor. I hope it's alright if I stay in for this
+[SEG0004] person_2 (DOCTOR): that's fine sit down we'll go through it together
+[SEG0005] person_1 (PATIENT): so, I've been wanting to stop smoking, doctor i'd rather know what's going on than keep guessing and there's cravings, mostly after meals as well, two weeks now
+[SEG0006] person_2 (DOCTOR): is it mild moderate or severe?
+[SEG0007] person_1 (PATIENT): Moderate I'd say
+[SEG0008] person_2 (DOCTOR): any irritability when you try to cut down as well?
+[SEG0009] person_1 (PATIENT): mm um yes
+[SEG0010] person_2 (DOCTOR): Okay. Let me check your vitals now.
+[SEG0011] person_2 (DOCTOR): So rest your hand here...
+[SEG0012] person_2 (DOCTOR): okay: height 161 centimetres, weight 82 kilos, heart rate 68, blood pressure 119 over 78, respiratory rate 17, SpO2 97 percent on room air
+[SEG0013] person_1 (PATIENT): oh, is that alright, doctor?
+[SEG0014] person_2 (DOCTOR): I'll come back to those numbers
+[SEG0015] person_2 (DOCTOR): Come over here and I'll have a look.
+[SEG0016] person_2 (DOCTOR): I'll go gently
+[SEG0017] person_2 (DOCTOR): chest sounds clear, a bit of wheeze when you breathe out hard
+[SEG0018] person_2 (DOCTOR): That's all I need thank you.
+[SEG0019] person_2 (DOCTOR): have you had any weight loss or low mood?
+[SEG0020] person_1 (PATIENT): um you know none as far as I know
+[SEG0021] person_2 (DOCTOR): Have you had any alcohol problems or coughing up blood?
+[SEG0022] person_1 (PATIENT): right none as far as I know
+[SEG0023] person_2 (DOCTOR): how are your bowels, any trouble?
+[SEG0024] person_1 (PATIENT): hmm uh no that side's been fine
+[SEG0025] person_2 (DOCTOR): has your heart given you any trouble?
+[SEG0026] person_1 (PATIENT): My heart's been fine as far as I know.
+[SEG0027] person_2 (DOCTOR): is there anything medical in your background?
+[SEG0028] person_1 (PATIENT): I've had COPD, yes. I just want to get back to normal, really.
+[SEG0029] person_2 (DOCTOR): anyone in the family with similar problems or other conditions?
+[SEG0030] person_1 (PATIENT): My father was diabetic.
+[SEG0031] person_2 (DOCTOR): let's talk a a little about your daily life and habits
+[SEG0032] person_1 (PATIENT): I don't drink at all. I've never smoked. I'm a self-employed electrician. I live with my family, my husband and two kids. I skip breakfast most days.
+[SEG0033] person_2 (DOCTOR): okay, are you on any regular medication?
+[SEG0034] person_1 (PATIENT): nothing no
+[SEG0035] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0036] person_1 (PATIENT): well, you know, no, none that that I know of
+[SEG0037] person_2 (DOCTOR): okay thinking it through I'd lean towards nicotine dependence. I want to be honest that this is an impression not a final answer. Early chronic bronchitis is also on my list. I think breathing tests makes sense here for smoker's cough
+[SEG0038] person_1 (PATIENT): will it hurt?
+[SEG0039] person_2 (DOCTOR): I'm gonna put you on nicotine patches, 14 milligrams, once a day, for six weeks that's for smoking cessation
+[SEG0040] person_1 (PATIENT): I mean should I keep taking it if I feel better?
+[SEG0041] person_2 (DOCTOR): Pick a quit date this month, and tell your family so they can back you up. Let's plan a check in two weeks.
+[SEG0042] person_1 (PATIENT): okay
+[SEG0043] person_2 (DOCTOR): Right, can you run through the plan with me quickly, just to to be certain?
+[SEG0044] person_1 (PATIENT): so, you know, I come back in two weeks. Is that right?
+[SEG0045] person_2 (DOCTOR): yes, exactly right. Good. Let us know how you get on
+[SEG0046] person_1 (PATIENT): yeah, thank you for your time
+
+JSON:

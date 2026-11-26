@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03243)
+[SEG0001] person_1 (PATIENT): Good afternoon, uh, doctor.
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What seems to be wrong?
+[SEG0003] person_1 (PATIENT): Um, doctor, it's confusion. It's getting on my nerves now.
+[SEG0004] person_2 (DOCTOR): When was the first time you noticed it?
+[SEG0005] person_1 (PATIENT): It's been about a month now. I've also had cloudy smelly urine.
+[SEG0006] person_2 (DOCTOR): So, do you have any long-term conditions?
+[SEG0007] person_1 (PATIENT): I have an irregular heartbeat, for five years.
+[SEG0008] person_2 (DOCTOR): Okay, go on.
+[SEG0009] person_1 (PATIENT): I've got thin bones.
+[SEG0010] person_2 (DOCTOR): Yes, an irregular heartbeat and thin bones are known to us, good to have that clear. Alright, before we go further, any allergies? It helps to be thorough at this stage.
+[SEG0011] person_1 (PATIENT): Yes, plasters, it gives me a red itchy rash.
+[SEG0012] person_2 (DOCTOR): Any previous surgeries?
+[SEG0013] person_1 (PATIENT): No, not at all.
+[SEG0014] person_2 (DOCTOR): Right, tell me your medicines, please.
+[SEG0015] person_1 (PATIENT): I'm on bisoprolol, 2.5 milligrams, once a day. Alendronate. I take it 70 milligrams, once a week.
+[SEG0016] person_2 (DOCTOR): When did you start it?
+[SEG0017] person_1 (PATIENT): About six months.
+[SEG0018] person_2 (DOCTOR): Are you in work at the moment?
+[SEG0019] person_1 (PATIENT): Yes, I work in a bakery, early starts.
+[SEG0020] person_2 (DOCTOR): Do you do any exercise?
+[SEG0021] person_1 (PATIENT): I swim twice a week.
+[SEG0022] person_2 (DOCTOR): Do you follow any particular diet?
+[SEG0023] person_1 (PATIENT): I'm vegetarian and have been for years.
+[SEG0024] person_2 (DOCTOR): How about fall?
+[SEG0025] person_1 (PATIENT): I haven't noticed any fall.
+[SEG0026] person_2 (DOCTOR): Alright, did you get vomiting, back pain or cough?
+[SEG0027] person_1 (PATIENT): Uh, no, no vomiting, back pain or cough.
+[SEG0028] person_2 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0029] person_1 (PATIENT): Nothing unusual, no.
+[SEG0030] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0031] person_1 (PATIENT): Breathing's normal.
+[SEG0032] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0033] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0034] person_2 (DOCTOR): Okay: pulse 95, blood pressure 108 over 73, respiratory rate 17, temperature is 38.0 degrees.
+[SEG0035] person_1 (PATIENT): Is that normal?
+[SEG0036] person_2 (DOCTOR): They help me see the whole picture, more shortly.
+[SEG0037] person_2 (DOCTOR): May I examine you now?
+[SEG0038] person_1 (PATIENT): Yeah, no problem.
+[SEG0039] person_2 (DOCTOR): Nearly finished here.
+[SEG0040] person_2 (DOCTOR): The catheter bag has cloudy urine and there is tenderness above the pubic bone.
+[SEG0041] person_2 (DOCTOR): Okay, that's enough for me.
+[SEG0042] person_2 (DOCTOR): I'm going to order a urine culture, for possible urinary infection.
+[SEG0043] person_3 (CLINICAL_STAFF): I can book that for Monday at 3:30 pm.
+[SEG0044] person_2 (DOCTOR): I'm prescribing co-amoxiclav, 625 milligrams, three times a day, seven days. It's for catheter urinary infection. Change the catheter and drink plenty. I'd like to see you again in two days.
+[SEG0045] person_1 (PATIENT): Good, I'll return then.
+[SEG0046] person_2 (DOCTOR): That's everything on my side. Anything you're unsure about?
+[SEG0047] person_1 (PATIENT): I mean, thank you, doctor, goodbye.
+[SEG0048] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

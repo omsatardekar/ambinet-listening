@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03209)
+[SEG0001] person_1 (PATIENT): Hello? Doctor? I was told to come in.
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_1 (PATIENT): I've been dealing with a red sore wound after my operation.
+[SEG0004] person_2 (DOCTOR): When was the first time you noticed it?
+[SEG0005] person_1 (PATIENT): For ten days, I'd say.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): About a six out of ten. Dressing helps a bit. I've had a temperature too, for six months. With temperature, honestly, all the time. And a yellow discharge, too.
+[SEG0008] person_2 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0009] person_1 (PATIENT): Yes, anxiety.
+[SEG0010] person_2 (DOCTOR): Are there any illnesses in your family?
+[SEG0011] person_1 (PATIENT): My mother had a stroke.
+[SEG0012] person_2 (DOCTOR): Do you get out much?
+[SEG0013] person_1 (PATIENT): Not much, I mostly stay in these days.
+[SEG0014] person_2 (DOCTOR): Okay, do you follow any particular diet?
+[SEG0015] person_1 (PATIENT): I'm vegetarian and have been for years.
+[SEG0016] person_2 (DOCTOR): So, what do you take on a normal day?
+[SEG0017] person_1 (PATIENT): Mm, it's escitalopram, 10 milligrams, once a day for the anxiety.
+[SEG0018] person_2 (DOCTOR): When did you start it?
+[SEG0019] person_1 (PATIENT): For two years.
+[SEG0020] person_2 (DOCTOR): Has there been any breathlessness?
+[SEG0021] person_1 (PATIENT): No breathlessness, thankfully.
+[SEG0022] person_2 (DOCTOR): And what about vomiting, chest pain or calf pain?
+[SEG0023] person_1 (PATIENT): No, none of those at all.
+[SEG0024] person_2 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0025] person_1 (PATIENT): Breathing's normal.
+[SEG0026] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0027] person_1 (PATIENT): Okay, so no, that's been fine.
+[SEG0028] person_2 (DOCTOR): Let me quickly check your readings.
+[SEG0029] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0030] person_2 (DOCTOR): Okay: blood pressure 124 over 71, pulse 92, SpO2 97 percent on room air.
+[SEG0031] person_2 (DOCTOR): Let's move on to the examination.
+[SEG0032] person_1 (PATIENT): Yes, that's fine.
+[SEG0033] person_2 (DOCTOR): Stay as you are for a moment.
+[SEG0034] person_2 (DOCTOR): The lower part of the wound is red, hot and weeping pus, and the edges have not come together.
+[SEG0035] person_2 (DOCTOR): Thank you, you can get dressed. Stop me if I've got anything wrong. You've had a red sore wound after your operation for ten days, and no calf pain or breathlessness.
+[SEG0036] person_1 (PATIENT): That's it, yes.
+[SEG0037] person_2 (DOCTOR): Let's get a wound swab, for wound infection. Let's book blood tests to look into wound infection. What I'm giving you is flucloxacillin, 500 milligrams, four times a day, seven days. That should help with wound infection. Keep it clean and dry and use fresh dressings daily. The thing that would worry me is if the symptoms get worse. If that happens, go to emergency.
+[SEG0038] person_1 (PATIENT): Okay, makes sense.
+[SEG0039] person_2 (DOCTOR): Okay, tell me what you've taken from all that, so I can fill in any gaps.
+[SEG0040] person_1 (PATIENT): So, I take the flucloxacillin, 500 milligrams, four times a day. Is that right?
+[SEG0041] person_2 (DOCTOR): So, yes, exactly right. Right, that's the plan. Do you want to ask me anything?
+[SEG0042] person_1 (PATIENT): Okay, that makes sense. Thanks for explaining.
+
+JSON:

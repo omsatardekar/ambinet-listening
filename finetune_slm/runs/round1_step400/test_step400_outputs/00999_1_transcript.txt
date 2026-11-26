@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00999)
+[SEG0001] person_3 (FAMILY_MEMBER): Hi, doctor. This is Oscar, he's seven. His eczema's flared, and I'm worried about the steroid cream, I've read it thins the skin, and I'm not sure we should keep using it.
+[SEG0002] person_2 (DOCTOR): Understandable. Oscar, where's the itchiest bit?
+[SEG0003] person_1 (PATIENT): Elbows. And behind the knees.
+[SEG0004] person_2 (DOCTOR): Is your skin dry?
+[SEG0005] person_1 (PATIENT): Very.
+[SEG0006] person_2 (DOCTOR): Does it keep you awake?
+[SEG0007] person_3 (FAMILY_MEMBER): He scratches in his sleep, he wakes up crying.
+[SEG0008] person_2 (DOCTOR): Any weeping or crusting?
+[SEG0009] person_3 (FAMILY_MEMBER): No, nothing wet.
+[SEG0010] person_2 (DOCTOR): What are you using?
+[SEG0011] person_3 (FAMILY_MEMBER): Hydrocortisone cream, once a day, on the red bits. And cetirizine syrup.
+[SEG0012] person_1 (PATIENT): I have 5 ml.
+[SEG0013] person_3 (FAMILY_MEMBER): It's 10 ml, Oscar. I measure it.
+[SEG0014] person_2 (DOCTOR): I'll check the label. Oscar, any allergies? Anything you can't eat?
+[SEG0015] person_1 (PATIENT): I'm not allergic to anything.
+[SEG0016] person_3 (FAMILY_MEMBER): Well, the egg, last year, he came up in hives, I'm not sure it was an allergy though.
+[SEG0017] person_2 (DOCTOR): I'll record both. Any other history?
+[SEG0018] person_3 (FAMILY_MEMBER): Just the eczema, since a baby.
+[SEG0019] person_2 (DOCTOR): And school?
+[SEG0020] person_1 (PATIENT): Year two.
+[SEG0021] person_2 (DOCTOR): Swimming?
+[SEG0022] person_3 (FAMILY_MEMBER): Lessons on Saturday. The chlorine stings him.
+[SEG0023] person_2 (DOCTOR): Let me check him. Temperature 36.7, pulse 90, breathing 20, oxygen 99 percent, weight 24 kilos, height 120 centimetres.
+[SEG0024] person_3 (FAMILY_MEMBER): All fine? ~
+[SEG0025] person_2 (DOCTOR): All good. Oscar, show me your elbows.
+[SEG0026] person_1 (PATIENT): Here. ~
+[SEG0027] person_2 (DOCTOR): Dry, red, scaly patches in both elbow creases and behind the knees.
+[SEG0028] person_3 (FAMILY_MEMBER): That's what I see. ~
+[SEG0029] person_2 (DOCTOR): And some scratch marks, but no sign of crusting.
+[SEG0030] person_3 (FAMILY_MEMBER): Good. ~
+[SEG0031] person_2 (DOCTOR): Any wheeze or cough?
+[SEG0032] person_3 (FAMILY_MEMBER): No, nothing at all.
+[SEG0033] person_2 (DOCTOR): This looks like an eczema flare, but I can't rule out a skin infection on top, so I'd like to arrange a skin swab.
+[SEG0034] person_3 (FAMILY_MEMBER): Is the steroid cream safe? ~
+[SEG0035] person_2 (DOCTOR): Used the way I describe, yes. Short bursts on red areas only, thinning happens with long, heavy use.
+[SEG0036] person_3 (FAMILY_MEMBER): That's reassuring. ~
+[SEG0037] person_2 (DOCTOR): Moisturise generously, several times a day.
+[SEG0038] person_3 (FAMILY_MEMBER): Will do. ~
+[SEG0039] person_2 (DOCTOR): I'd like to see you again in two weeks.
+[SEG0040] person_3 (FAMILY_MEMBER): Two weeks. Thank you. ~
+
+JSON:

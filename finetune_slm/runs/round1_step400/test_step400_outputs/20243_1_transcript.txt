@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20243)
+[SEG0001] person_1 (PATIENT): Hello doctor, sorry, I took a wrong turn on the way here.
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): Honestly, it's sore, gritty eyes, and my family pushed me to come.
+[SEG0004] person_2 (DOCTOR): What's on your current medicine list? Take your time, there's no rush.
+[SEG0005] person_1 (PATIENT): Hydrocortisone cream. I take it when needed for the eczema. Though honestly, some days I forget to take it.
+[SEG0006] person_2 (DOCTOR): What's the timeline, when did it begin?
+[SEG0007] person_1 (PATIENT): About two weeks, I think... sorry, four weeks, I got that wrong.
+[SEG0008] person_2 (DOCTOR): Is it bearing on you a lot?
+[SEG0009] person_1 (PATIENT): Moderate, really.
+[SEG0010] person_2 (DOCTOR): What aggravates it, if anything?
+[SEG0011] person_1 (PATIENT): Yes, wind. That makes it worse.
+[SEG0012] person_2 (DOCTOR): Any other symptoms with it?
+[SEG0013] person_1 (PATIENT): It usually comes with red eyes in the evening. Uh, the red eyes in the evening? That's been for four weeks.
+[SEG0014] person_2 (DOCTOR): And what about loss of vision, double vision or flashing lights?
+[SEG0015] person_1 (PATIENT): Uh, nope, nothing like that.
+[SEG0016] person_2 (DOCTOR): Any eye pain or sensitivity to light?
+[SEG0017] person_1 (PATIENT): No eye pain or sensitivity to light, none of it.
+[SEG0018] person_2 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0019] person_1 (PATIENT): No, all normal there.
+[SEG0020] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0021] person_1 (PATIENT): No, nothing with my heart.
+[SEG0022] person_2 (DOCTOR): Do you live by yourself?
+[SEG0023] person_1 (PATIENT): No, I share a house with my brother.
+[SEG0024] person_2 (DOCTOR): Okay, what's your work?
+[SEG0025] person_1 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0026] person_2 (DOCTOR): What about your medical history?
+[SEG0027] person_1 (PATIENT): I've, I've had eczema, yes.
+[SEG0028] person_2 (DOCTOR): Right, so eczema is already on your record. We'll keep that in mind today. Okay, do you react to any medicines or foods? Any allergies?
+[SEG0029] person_1 (PATIENT): No, not that I know of.
+[SEG0030] person_2 (DOCTOR): Anything surgical in your history?
+[SEG0031] person_1 (PATIENT): I had a wisdom tooth extraction under sedation five years ago.
+[SEG0032] person_2 (DOCTOR): Let's start with the basic checks.
+[SEG0033] person_2 (DOCTOR): So, nearly done with the readings...
+[SEG0034] person_2 (DOCTOR): Okay: height 151 centimetres, saturation 99 percent, weight 57 kilos, heart rate 83, BMI works out to 25.0, BP is 120 over 69.
+[SEG0035] person_1 (PATIENT): Is that normal?
+[SEG0036] person_2 (DOCTOR): I'll interpret them after the examination.
+[SEG0037] person_2 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0038] person_2 (DOCTOR): I'll listen to your chest now.
+[SEG0039] person_2 (DOCTOR): The eyes are slightly red with no discharge and the front of the eye looks clear.
+[SEG0040] person_2 (DOCTOR): Okay, that's enough for me. So where does that leave us? It fits best with dry eye syndrome. The reason I say that is that your story and my examination fit together. We shouldn't forget allergic conjunctivitis. I think an eye test makes sense here, for blurred vision. That's everything on my side. Anything you're unsure about?
+[SEG0041] person_1 (PATIENT): Thank you, that's helpful.
+
+JSON:

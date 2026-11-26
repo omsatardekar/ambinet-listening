@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00128)
+[SEG0001] person_1 (PATIENT): Afternoon, doctor.
+[SEG0002] person_2 (DOCTOR): That's alright, take a seat. Tell me why you've come.
+[SEG0003] person_3 (CAREGIVER): Doctor, um, thank you for seeing us. Yeah, it's irregular periods, doctor. She didn't want to come, but I insisted.
+[SEG0004] person_2 (DOCTOR): How far back does it go?
+[SEG0005] person_1 (PATIENT): About three days, you know, give or take.
+[SEG0006] person_3 (CAREGIVER): I, I think it's been nearer five days, actually.
+[SEG0007] person_2 (DOCTOR): Okay, so roughly three to five days. Is that right?
+[SEG0008] person_1 (PATIENT): Yeah, I suppose so, yes.
+[SEG0009] person_2 (DOCTOR): Okay. How would you describe it, mild, moderate, severe?
+[SEG0010] person_1 (PATIENT): Okay, so I'd call it mild.
+[SEG0011] person_2 (DOCTOR): Uh-huh. What about night sweats, have you noticed that?
+[SEG0012] person_1 (PATIENT): Oh, yes, about the same, two months. As for night sweats, it happens a couple of times a week. Uh, I've had poor sleep too, for three days.
+[SEG0013] person_2 (DOCTOR): And how severe is it?
+[SEG0014] person_1 (PATIENT): Mostly mild.
+[SEG0015] person_2 (DOCTOR): Have you had irregular periods before, or is this the first time?
+[SEG0016] person_1 (PATIENT): A bit, last year. It settled by itself back then.
+[SEG0017] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0018] person_1 (PATIENT): Yeah, none, as far as I'm aware.
+[SEG0019] person_2 (DOCTOR): Which tablets or creams or inhalers do you use? I'll explain everything as we go along.
+[SEG0020] person_1 (PATIENT): Thyronorm. I take it 50 micrograms, every morning. Alendronate, 70 milligrams, once a week for my bones.
+[SEG0021] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0022] person_1 (PATIENT): I have an underactive thyroid, for nearly five years. I have thin bones, for five years.
+[SEG0023] person_2 (DOCTOR): Do you drink alcohol?
+[SEG0024] person_1 (PATIENT): A beer or two most evenings, to be honest.
+[SEG0025] person_2 (DOCTOR): What do you do for work?
+[SEG0026] person_1 (PATIENT): I work in an office, mostly sitting at a desk.
+[SEG0027] person_2 (DOCTOR): Any sport or activity?
+[SEG0028] person_1 (PATIENT): I play badminton on Sundays.
+[SEG0029] person_2 (DOCTOR): Okay, who's at home with you?
+[SEG0030] person_1 (PATIENT): It's just me and my wife at home now.
+[SEG0031] person_2 (DOCTOR): How about heavy bleeding?
+[SEG0032] person_1 (PATIENT): No, um, no heavy bleeding.
+[SEG0033] person_2 (DOCTOR): Alright, any breast lumps, palpitations or bleeding after sex?
+[SEG0034] person_1 (PATIENT): So, no breast lumps, palpitations or bleeding after sex, none of it.
+[SEG0035] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0036] person_1 (PATIENT): No rashes.
+[SEG0037] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0038] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0039] person_2 (DOCTOR): Okay: BP is 114 over 82, heart rate 83, respiratory rate 18, temperature is 36.9 degrees.
+[SEG0040] person_1 (PATIENT): Is that normal?
+[SEG0041] person_2 (DOCTOR): We'll put it in context in a moment.
+[SEG0042] person_2 (DOCTOR): Come over here and I'll have a look.
+[SEG0043] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0044] person_2 (DOCTOR): Blood pressure and pulse are fine, and there are no breast lumps on examination.
+[SEG0045] person_2 (DOCTOR): Okay, that's all I need, thank you. Taking everything into account, this is probably perimenopausal symptoms. That's my thinking for now, and it may change as we learn more. Another possibility is anaemia.
+[SEG0046] person_2 (DOCTOR): Have you had any tests for this so far?
+[SEG0047] person_1 (PATIENT): I had a thyroid test done at another clinic last year. I don't have the report with me.
+[SEG0048] person_2 (DOCTOR): I think blood tests makes sense here, for irregular periods.
+[SEG0049] person_1 (PATIENT): Does it need any preparation?
+[SEG0050] person_2 (DOCTOR): I think a bone density scan makes sense here, for menopause. Layers of clothing, a fan by the bed, and cutting down on caffeine and spicy food can help the flushes. Make sure you're drinking plenty of fluids, two to three litres a day if you can, and get proper rest. Please come and see me after the results are back.
+[SEG0051] person_1 (PATIENT): I'll make the appointment on my way out.
+[SEG0052] person_2 (DOCTOR): Look after yourself.
+[SEG0053] person_1 (PATIENT): Hmm, that's everything I wanted to ask. Thank you.
+
+JSON:

@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03569)
+[SEG0001] person_1 (PATIENT): Hello doctor, sorry, I took a wrong turn on the way here.
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): So, um, I've been losing weight, doctor. I didn't want to bother you but it keeps coming back.
+[SEG0004] person_2 (DOCTOR): When was the first time you noticed it?
+[SEG0005] person_1 (PATIENT): It's been going on for two days. I'm hoping you can tell me something definite.
+[SEG0006] person_2 (DOCTOR): What about a poor appetite, have you noticed that?
+[SEG0007] person_1 (PATIENT): Yes, actually.
+[SEG0008] person_2 (DOCTOR): Any heat intolerance, sweating or tremor?
+[SEG0009] person_1 (PATIENT): I, I haven't had heat intolerance, sweating or tremor, no.
+[SEG0010] person_2 (DOCTOR): Has there been any diarrhoea?
+[SEG0011] person_1 (PATIENT): Not that I've noticed, you know, no diarrhoea.
+[SEG0012] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0013] person_1 (PATIENT): Skin's normal.
+[SEG0014] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0015] person_1 (PATIENT): No surgery, no.
+[SEG0016] person_2 (DOCTOR): What about your medical history?
+[SEG0017] person_1 (PATIENT): Eczema, for about a year.
+[SEG0018] person_2 (DOCTOR): Ah.
+[SEG0019] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0020] person_1 (PATIENT): I'm a bus driver, so I sit for long hours. I swim twice a week. I grab fast food at lunch most days.
+[SEG0021] person_2 (DOCTOR): Let's run through your medicines. I'm asking so that we don't miss anything.
+[SEG0022] person_1 (PATIENT): I'm on hydrocortisone cream, when needed for the eczema.
+[SEG0023] person_2 (DOCTOR): Understood.
+[SEG0024] person_2 (DOCTOR): Shall I check your blood pressure and pulse?
+[SEG0025] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0026] person_2 (DOCTOR): Okay: pressure 123 over 85, weight 56 kilos, pulse 126. And respiratory rate 20, height 180 centimetres.
+[SEG0027] person_1 (PATIENT): Is that alright, doctor?
+[SEG0028] person_2 (DOCTOR): We'll go over that shortly.
+[SEG0029] person_2 (DOCTOR): May I examine you now?
+[SEG0030] person_2 (DOCTOR): Okay, I'll listen to your chest now.
+[SEG0031] person_2 (DOCTOR): Your pulse is fast and irregular and the thyroid feels slightly enlarged.
+[SEG0032] person_2 (DOCTOR): Thank you, you can get dressed.
+[SEG0033] person_2 (DOCTOR): Taking everything into account, I'd lean towards an overactive thyroid with atrial fibrillation, in an apathetic older patient. Let's book an ECG to look into irregular pulse. It is easy to miss in older people because they seem sleepy rather than hot and shaky. If it hasn't settled next month, we'd think about a thyroid test, but not now. Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency.
+[SEG0034] person_2 (DOCTOR): Please come and see me after the results. Before we finish, can you repeat the plan back to me?
+[SEG0035] person_1 (PATIENT): So, I come back after the results. Is that right?
+[SEG0036] person_2 (DOCTOR): Yes, exactly right. Okay, anything else on your mind before you go?
+[SEG0037] person_1 (PATIENT): That's clear, thanks.
+[SEG0038] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

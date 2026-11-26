@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00284)
+[SEG0001] person_1 (PATIENT): Hi doctor, sorry, the lift was out and I had to take the stairs.
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_1 (PATIENT): It's exhaustion since I had the flu. I thought I'd wait, but it hasn't gone.
+[SEG0004] person_2 (DOCTOR): Right, how far back does it go?
+[SEG0005] person_1 (PATIENT): Oh, it's been like this since last Tuesday.
+[SEG0006] person_2 (DOCTOR): On a a normal day, how strong is it?
+[SEG0007] person_1 (PATIENT): Severe, really.
+[SEG0008] person_2 (DOCTOR): is there anything that triggers it?
+[SEG0009] person_1 (PATIENT): I notice it more with walking far
+[SEG0010] person_2 (DOCTOR): Any aching legs as well?
+[SEG0011] person_1 (PATIENT): I mean, yes, about the same, two months with aching legs, maybe a four out of ten on a bad day it's once or twice a day i've had brain fog too, for ten days about brain fog, I'd call it moderate
+[SEG0012] person_2 (DOCTOR): Has there been any swollen legs?
+[SEG0013] person_1 (PATIENT): no, none, no swollen legs
+[SEG0014] person_2 (DOCTOR): so, and what about chest pain, shortness of breath or fever?
+[SEG0015] person_1 (PATIENT): No, none of that at all.
+[SEG0016] person_2 (DOCTOR): How about your heart, any problems like that?
+[SEG0017] person_1 (PATIENT): nothing like that
+[SEG0018] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0019] person_1 (PATIENT): yeah, I have asthma, for two years
+[SEG0020] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0021] person_1 (PATIENT): Seretide inhaler. I take it twice a day.
+[SEG0022] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0023] person_1 (PATIENT): My father had kidney stones.
+[SEG0024] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0025] person_1 (PATIENT): I have a couple of drinks on the weekend. It's just me and my wife at home now. I go to the gym a couple of times a week. I'm mostly vegetarian
+[SEG0026] person_2 (DOCTOR): do you have any allergies to medicines, food, anything at all?
+[SEG0027] person_1 (PATIENT): no allergies
+[SEG0028] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0029] person_2 (DOCTOR): Hold still for me...
+[SEG0030] person_2 (DOCTOR): Okay: SpO2 97 percent on room air, BP is 116 over 79, heart rate 77.
+[SEG0031] person_1 (PATIENT): Is that okay?
+[SEG0032] person_2 (DOCTOR): I'll come back to those numbers.
+[SEG0033] person_2 (DOCTOR): Okay, a quick examination now.
+[SEG0034] person_2 (DOCTOR): let me just check something
+[SEG0035] person_2 (DOCTOR): Chest sounds clear all over.
+[SEG0036] person_2 (DOCTOR): Right, you can sit back down. Let me tell you where I've got to. This is probably post-viral fatigue. I'd also keep anaemia in mind.
+[SEG0037] person_1 (PATIENT): doctor, is this dangerous?
+[SEG0038] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's post-viral fatigue, and we'll know more once the a thyroid test is back. I think a thyroid test makes sense here, for fatigue. I'm sending you for blood tests because of fatigue. Pace yourself, a little more activity each day but stop before you're wiped out. Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency.
+[SEG0039] person_2 (DOCTOR): I'd like to see you again in a month any last questions?
+[SEG0040] person_1 (PATIENT): Thanks so much, doctor.
+[SEG0041] person_2 (DOCTOR): Bye for now.
+
+JSON:

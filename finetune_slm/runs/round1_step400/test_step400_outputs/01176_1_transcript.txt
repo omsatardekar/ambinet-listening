@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01176)
+[SEG0001] person_1 (PATIENT): Sorry, doctor, shall I sit here?
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_3 (CAREGIVER): Thank you for fitting us in, doctor.
+[SEG0004] person_2 (DOCTOR): Absolutely, come and sit beside them.
+[SEG0005] person_1 (PATIENT): I've been feeling a bit muddled.
+[SEG0006] person_2 (DOCTOR): Let's start with the basic checks.
+[SEG0007] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0008] person_2 (DOCTOR): Okay: pulse is 98 beats a minute, temperature 36.7, blood pressure 98 over 59.
+[SEG0009] person_2 (DOCTOR): Okay, can you tell me when it first started?
+[SEG0010] person_1 (PATIENT): Honestly I can't say exactly when it started. It might have been last month or the month before, I really can't pin it down.
+[SEG0011] person_2 (DOCTOR): Any constipation as well?
+[SEG0012] person_1 (PATIENT): Yes, about the same, two weeks.
+[SEG0013] person_2 (DOCTOR): What about a dry mouth, have you noticed that?
+[SEG0014] person_1 (PATIENT): Yes, I have.
+[SEG0015] person_2 (DOCTOR): Ah. Have you been feeling a bit muddled at any time before this?
+[SEG0016] person_1 (PATIENT): I had a similar thing about six months ago. It went away.
+[SEG0017] person_2 (DOCTOR): And what about fever, falls or chest pain?
+[SEG0018] person_1 (PATIENT): No, I haven't had any of them.
+[SEG0019] person_2 (DOCTOR): How's your breathing otherwise?
+[SEG0020] person_1 (PATIENT): No, my breathing's been fine.
+[SEG0021] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0022] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0023] person_2 (DOCTOR): Does your family have any medical conditions?
+[SEG0024] person_1 (PATIENT): My cousin has psoriasis.
+[SEG0025] person_2 (DOCTOR): Has anything ever caused you a reaction? I mean any allergies.
+[SEG0026] person_1 (PATIENT): Years back I got itching from trimethoprim, so I stay away from it now.
+[SEG0027] person_2 (DOCTOR): Any previous surgeries?
+[SEG0028] person_1 (PATIENT): No, I've never been operated on.
+[SEG0029] person_2 (DOCTOR): Do you have any chronic illnesses?
+[SEG0030] person_1 (PATIENT): Arthritis in my knees, for nearly five years.
+[SEG0031] person_2 (DOCTOR): Right, and anything else to add?
+[SEG0032] person_1 (PATIENT): I have high blood pressure.
+[SEG0033] person_2 (DOCTOR): Yes, arthritis in your knees is known to us, good to have that clear. What do you take on a normal day?
+[SEG0034] person_1 (PATIENT): Diclofenac, 50 milligrams, when needed. I take hydrochlorothiazide, 12.5 milligrams, every morning. I'm on a sleeping tablet, 3.75 milligrams, at night.
+[SEG0035] person_2 (DOCTOR): Who lives with you?
+[SEG0036] person_1 (PATIENT): My partner and our baby.
+[SEG0037] person_2 (DOCTOR): What does a normal day of food look like?
+[SEG0038] person_1 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0039] person_2 (DOCTOR): And your job?
+[SEG0040] person_1 (PATIENT): I work in accounts at a hospital.
+[SEG0041] person_2 (DOCTOR): May I examine you now?
+[SEG0042] person_1 (PATIENT): Right.
+[SEG0043] person_2 (DOCTOR): Let me feel here.
+[SEG0044] person_2 (DOCTOR): Your blood pressure drops a little on standing.
+[SEG0045] person_2 (DOCTOR): Good, you can sit up again. Taking everything into account, my working impression is side effects from several medicines taken together. Dehydration is still possible.
+[SEG0046] person_1 (PATIENT): Is it dangerous, doctor?
+[SEG0047] person_2 (DOCTOR): I can't promise yet, but most people with side effects from several medicines taken together do well once it's treated properly. I'm going to order a medication review, for polypharmacy.
+[SEG0048] person_1 (PATIENT): When would that take place?
+[SEG0049] person_2 (DOCTOR): We will stop the sleeping tablet slowly over two weeks. I think the pharmacist should see you too. Does all of that make sense?
+[SEG0050] person_1 (PATIENT): Erm, no, that's all. Thanks a lot.
+
+JSON:

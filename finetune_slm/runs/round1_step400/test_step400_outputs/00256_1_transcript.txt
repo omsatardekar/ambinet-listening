@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00256)
+[SEG0001] person_1 (PATIENT): Excuse me, doctor, should I sit here?
+[SEG0002] person_2 (DOCTOR): Yes, do sit. Tell me what's been happening.
+[SEG0003] person_1 (PATIENT): Um, so... dark urine. That's why I came. I looked a few things up online, and that probably didn't help.
+[SEG0004] person_2 (DOCTOR): how long has this been going on?
+[SEG0005] person_1 (PATIENT): so, uh, I'm not sure when it began, to to be honest. Some weeks ago, but I can't say how many
+[SEG0006] person_2 (DOCTOR): anything that helps?
+[SEG0007] person_1 (PATIENT): It settles a little with drinking more water.
+[SEG0008] person_2 (DOCTOR): I see.
+[SEG0009] person_1 (PATIENT): I mean, I've also been feeling dizzy when I stand, for two weeks
+[SEG0010] person_2 (DOCTOR): Let me check a few things. Any blood in the stool, confusion or fever?
+[SEG0011] person_1 (PATIENT): I haven't had blood in the stool, confusion or fever, no
+[SEG0012] person_2 (DOCTOR): any vomiting or fainting at all?
+[SEG0013] person_1 (PATIENT): No. None of those.
+[SEG0014] person_2 (DOCTOR): on the cardiac side, anything I should know?
+[SEG0015] person_1 (PATIENT): I mean, no, that's been fine.
+[SEG0016] person_2 (DOCTOR): What about your tummy and and bowels, anything unusual there?
+[SEG0017] person_1 (PATIENT): Yeah, um, no, that side's been fine.
+[SEG0018] person_2 (DOCTOR): have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0019] person_1 (PATIENT): No, um, no allergies to anything.
+[SEG0020] person_2 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0021] person_1 (PATIENT): Oh, um, I've had diabetes for about a year now.
+[SEG0022] person_2 (DOCTOR): Is there a family history of anything significant?
+[SEG0023] person_1 (PATIENT): My sister has epilepsy.
+[SEG0024] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0025] person_1 (PATIENT): I stopped smoking about two years back. A beer or two most evenings, to be honest. I work night shifts at a warehouse. Not really, I don't get much exercise. I stay with my daughter and her family.
+[SEG0026] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0027] person_1 (PATIENT): I'm on Glycomet, twice a day.
+[SEG0028] person_2 (DOCTOR): how much do you take?
+[SEG0029] person_1 (PATIENT): 500 milligrams, I think that's what's on the box.
+[SEG0030] person_2 (DOCTOR): roughly how long on that one?
+[SEG0031] person_1 (PATIENT): Two years now.
+[SEG0032] person_2 (DOCTOR): okay
+[SEG0033] person_1 (PATIENT): It's ORS, whenever I remember.
+[SEG0034] person_2 (DOCTOR): Can I take your vitals now?
+[SEG0035] person_2 (DOCTOR): Just relax your arm...
+[SEG0036] person_2 (DOCTOR): okay: saturation 96 percent, pressure 95 over 63, heart rate 99, respiratory rate 20.
+[SEG0037] person_1 (PATIENT): Is that alright, doctor?
+[SEG0038] person_2 (DOCTOR): Don't worry, I'll go through it in a moment.
+[SEG0039] person_2 (DOCTOR): going by what you've described, it points towards dehydration from a stomach bug we shouldn't forget an electrolyte imbalance i'd like to arrange blood salts for dehydration
+[SEG0040] person_1 (PATIENT): mm, you know, okay
+[SEG0041] person_2 (DOCTOR): Small, frequent sips are better than a big glass at once, and keep going even if you don't feel thirsty. Try to get to bed and wake up at the same time each day, and keep your phone away from the bed. Good. Let us know how you get on.
+[SEG0042] person_1 (PATIENT): thank you for your time
+
+JSON:

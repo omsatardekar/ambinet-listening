@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02837)
+[SEG0001] person_1 (PATIENT): Good afternoon, doctor.
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): I wanted to get a severe headache looked at.
+[SEG0004] person_2 (DOCTOR): Alright, since when exactly?
+[SEG0005] person_1 (PATIENT): Probably ten days. Yeah.
+[SEG0006] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): It sort of comes and goes. I'd say moderate.
+[SEG0008] person_2 (DOCTOR): Alright, any other symptoms with it?
+[SEG0009] person_1 (PATIENT): It usually comes with pain under the right ribs. As for pain under the right ribs, I'd say severe.
+[SEG0010] person_2 (DOCTOR): Sure.
+[SEG0011] person_2 (DOCTOR): Have you noticed vaginal bleeding, reduced baby movements or leaking fluid?
+[SEG0012] person_1 (PATIENT): No, none that I've noticed.
+[SEG0013] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0014] person_1 (PATIENT): Nothing there, um, no.
+[SEG0015] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0016] person_1 (PATIENT): No, that's been fine.
+[SEG0017] person_2 (DOCTOR): Are you in work at the moment?
+[SEG0018] person_1 (PATIENT): Yes, I work in a bakery, early starts.
+[SEG0019] person_2 (DOCTOR): How active are you?
+[SEG0020] person_1 (PATIENT): I hardly move around during the day.
+[SEG0021] person_2 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0022] person_1 (PATIENT): Okay, so my uncle has high cholesterol.
+[SEG0023] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0024] person_1 (PATIENT): No, nothing at all.
+[SEG0025] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0026] person_1 (PATIENT): Walnuts. I come out in... well, hives.
+[SEG0027] person_2 (DOCTOR): Do you take any regular medication?
+[SEG0028] person_1 (PATIENT): Yeah, no, nothing at the moment.
+[SEG0029] person_2 (DOCTOR): Let me take your readings now.
+[SEG0030] person_2 (DOCTOR): Keep your arm relaxed for me...
+[SEG0031] person_2 (DOCTOR): Okay: pulse 75, SpO2 97 percent on room air, temperature is 36.7 degrees. And BP is 164 over 90. Okay, so my impression from what you've said is this: It points towards severe pre-eclampsia.
+[SEG0032] person_1 (PATIENT): I'm scared it's something bad. Is it?
+[SEG0033] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like severe pre-eclampsia, but I'd like to confirm.
+[SEG0034] person_2 (DOCTOR): We should do urgent blood tests for pre-eclampsia.
+[SEG0035] person_1 (PATIENT): Where would I go for that?
+[SEG0036] person_2 (DOCTOR): You'll be taking labetalol, 200 milligrams, once now, single dose. That's for severe hypertension. The pharmacy will go through the details again when you pick it up. You need to go to the maternity unit straight away. I'd like to see you again straight away. That's all from me. Any questions?
+[SEG0037] person_1 (PATIENT): That's clear, thanks.
+
+JSON:

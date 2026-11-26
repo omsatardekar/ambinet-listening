@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00473)
+[SEG0001] person_1 (PATIENT): Yeah, hi doctor, sorry, the lift was out and I had to take the stairs.
+[SEG0002] person_2 (DOCTOR): Yes, do sit. Tell me what's been happening.
+[SEG0003] person_3 (FAMILY_MEMBER): Thank you for fitting us in, doctor. We came because of alternating constipation and loose stools.
+[SEG0004] person_2 (DOCTOR): When did you first notice it?
+[SEG0005] person_1 (PATIENT): For nearly five years, I'd say.
+[SEG0006] person_2 (DOCTOR): How would you describe it, mild, moderate, severe?
+[SEG0007] person_1 (PATIENT): I'd say mild.
+[SEG0008] person_2 (DOCTOR): Alright, anything that tends to go along with it?
+[SEG0009] person_1 (PATIENT): Cramping pain in the lower tummy goes along with it, most of the time. As for cramping pain in the lower tummy, I honestly can't say when that began. It might have been last month or the month before. As for cramping pain in the lower tummy, about a six out of ten. It's once or twice a day. I've also been passing a lot of wind, for about a month.
+[SEG0010] person_1 (PATIENT): With passing a lot of wind, I'd say mild.
+[SEG0011] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0012] person_1 (PATIENT): A beer or two most evenings, to be honest. No, I don't smoke and never have. I eat out quite a lot, to be honest. I share a flat with two friends.
+[SEG0013] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0014] person_1 (PATIENT): Yes, anxiety. I've had acid reflux, yes. I just want to get back to normal, really. A neighbour of mine said I should see someone about it.
+[SEG0015] person_2 (DOCTOR): Alright, acid reflux, that matches what I have here. What medicines do you take regularly?
+[SEG0016] person_1 (PATIENT): I'm on omeprazole, 20 milligrams, once a day for the reflux.
+[SEG0017] person_3 (FAMILY_MEMBER): She is supposed to take it once a day, but I can't say she always does.
+[SEG0018] person_1 (PATIENT): I take Colospa, when it cramps.
+[SEG0019] person_2 (DOCTOR): Alright, any procedures or operations?
+[SEG0020] person_1 (PATIENT): I, I had my appendix out about eight years ago. I'm not great at remembering details, so bear with me.
+[SEG0021] person_2 (DOCTOR): How about fever?
+[SEG0022] person_1 (PATIENT): Definitely no fever.
+[SEG0023] person_3 (FAMILY_MEMBER): Actually, doctor, I did notice fever. She doesn't always say.
+[SEG0024] person_1 (PATIENT): No, um, I don't think I did. Maybe a little, I'm not sure.
+[SEG0025] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. Any weight loss or night-time diarrhoea?
+[SEG0026] person_1 (PATIENT): No. None of those.
+[SEG0027] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0028] person_1 (PATIENT): Skin's normal.
+[SEG0029] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0030] person_2 (DOCTOR): One second...
+[SEG0031] person_2 (DOCTOR): Okay: temperature 36.7, oxygen saturation is 99 percent, pressure 108 over 74, pulse 68.
+[SEG0032] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0033] person_2 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0034] person_2 (DOCTOR): Soft tummy, a bit tender on the left lower side, no masses.
+[SEG0035] person_2 (DOCTOR): Thanks, please take a seat again. From what you've told me and what I found, this looks most like irritable bowel syndrome as a working diagnosis. The reason I say that is that your story and my examination fit together. Coeliac disease is also on my list.
+[SEG0036] person_1 (PATIENT): Is this something I'll have for good?
+[SEG0037] person_2 (DOCTOR): It's reasonable to be concerned, but right now irritable bowel syndrome as a working diagnosis is my leading thought, not anything worse.
+[SEG0038] person_2 (DOCTOR): Blood tests is what I'd like next, for bowel symptoms. That will help us see what's going on underneath and decide the next step. A coeliac test is what I'd like next, for bloating.
+[SEG0039] person_1 (PATIENT): Mm, okay.
+[SEG0040] person_2 (DOCTOR): Regular meals and a bit more fibre, and don't rush your toilet time. Come back after the results are back. Okay, good. Let us know how you get on.
+[SEG0041] person_1 (PATIENT): That's everything I wanted to ask. Thank you.
+[SEG0042] person_2 (DOCTOR): Mind how you go.
+
+JSON:

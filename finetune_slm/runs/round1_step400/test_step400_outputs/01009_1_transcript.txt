@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01009)
+[SEG0001] person_1 (PATIENT): Good afternoon, doctor.
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_1 (PATIENT): So the thing is, I've got sudden hearing loss in one ear. I thought it would sort itself out, but it hasn't.
+[SEG0004] person_2 (DOCTOR): Shall I check your blood pressure and pulse?
+[SEG0005] person_2 (DOCTOR): Keep your arm relaxed for me...
+[SEG0006] person_2 (DOCTOR): Okay: weight 52 kilos, temp 36.6 degrees, BMI works out to 16.2, height 179 centimetres, pulse 68, blood pressure 121 over 81, saturation 99 percent.
+[SEG0007] person_1 (PATIENT): Is that alright, doctor?
+[SEG0008] person_2 (DOCTOR): I'll interpret them after the examination.
+[SEG0009] person_2 (DOCTOR): Since when exactly?
+[SEG0010] person_1 (PATIENT): I mean, it's been four weeks now.
+[SEG0011] person_2 (DOCTOR): Mm, okay. Have you noticed dizziness or facial weakness?
+[SEG0012] person_1 (PATIENT): No, none of those at all.
+[SEG0013] person_2 (DOCTOR): Okay, how about ear pain?
+[SEG0014] person_1 (PATIENT): I haven't noticed any ear pain.
+[SEG0015] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0016] person_1 (PATIENT): Breathing's normal.
+[SEG0017] person_2 (DOCTOR): So, have you got any known allergies?
+[SEG0018] person_1 (PATIENT): Hmm, no, not that I know of.
+[SEG0019] person_2 (DOCTOR): Tell me your medicines, please.
+[SEG0020] person_1 (PATIENT): Sorry, what was I saying, it's ramipril, every morning for my blood pressure.
+[SEG0021] person_2 (DOCTOR): How much do you take?
+[SEG0022] person_1 (PATIENT): It's 5 milligrams.
+[SEG0023] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0024] person_1 (PATIENT): I look after my grandchildren most days. I drink a lot of tea and snack through the day. I live with my elderly mother.
+[SEG0025] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0026] person_1 (PATIENT): High blood pressure, for about ten years.
+[SEG0027] person_2 (DOCTOR): Mm-hmm.
+[SEG0028] person_2 (DOCTOR): Now I'm going to do a short physical check.
+[SEG0029] person_1 (PATIENT): Fine by me.
+[SEG0030] person_2 (DOCTOR): Alright, does that hurt?
+[SEG0031] person_2 (DOCTOR): The ear drum looks normal and the tuning fork is heard louder in the other ear.
+[SEG0032] person_1 (PATIENT): Sure thing.
+[SEG0033] person_2 (DOCTOR): Please sit back down.
+[SEG0034] person_2 (DOCTOR): So, based on the history and the examination, I'd lean towards sudden hearing loss needing urgent treatment.
+[SEG0035] person_1 (PATIENT): Oh, uh, what are the odds it's serious?
+[SEG0036] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like sudden hearing loss needing urgent treatment, but I'd like to confirm. We should do an MRI scan for sudden hearing loss. An urgent hearing test is what I'd like next, for sudden hearing loss. Let's use prednisolone, 60 milligrams, once a day, seven days. You take it by mouth. That should help with sudden hearing loss.
+[SEG0037] person_1 (PATIENT): That's simple enough.
+[SEG0038] person_2 (DOCTOR): This is time-critical, so I'm starting treatment today. I'd like you to see the ENT team as well, and I'll write the referral.
+[SEG0039] person_1 (PATIENT): Okay.
+[SEG0040] person_2 (DOCTOR): One warning sign to remember: the symptoms get worse. In that case don't wait.
+[SEG0041] person_1 (PATIENT): I know what to watch for.
+[SEG0042] person_2 (DOCTOR): I'd like to see you again in one week.
+[SEG0043] person_1 (PATIENT): Yes, that's manageable.
+[SEG0044] person_2 (DOCTOR): Have I covered everything you wanted?
+[SEG0045] person_1 (PATIENT): Good, thanks, I'll see you then.
+[SEG0046] person_2 (DOCTOR): All the best.
+
+JSON:

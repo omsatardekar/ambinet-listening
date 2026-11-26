@@ -1,0 +1,117 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_04_hair_thinning_terse)
+[SEG0001] person_1 (DOCTOR): Hello, come in, take a seat anywhere. It's Ms Farrell, isn't it? Have I got that right, Farrell, or is it Farrel with one r?
+[SEG0002] person_2 (PATIENT): Farrell. Two r's.
+[SEG0003] person_1 (DOCTOR): Two r's, good, I'll fix that on the screen. I'm Dr Whitlock. And it says here you've come about your hair. Is that right?
+[SEG0004] person_2 (PATIENT): Yeah.
+[SEG0005] person_1 (DOCTOR): Tell me about it.
+[SEG0006] person_2 (PATIENT): It's thinning.
+[SEG0007] person_1 (DOCTOR): Thinning. Okay. Where? All over, or in a particular patch?
+[SEG0008] person_2 (PATIENT): All over, kind of. More at the top.
+[SEG0009] person_1 (DOCTOR): Right. And how long has that been going on?
+[SEG0010] person_2 (PATIENT): About six months. Maybe a bit less.
+[SEG0011] person_1 (DOCTOR): Six months. Did it come on gradually, or was there a point where you thought, hang on, that's different?
+[SEG0012] person_2 (PATIENT): Gradually. Then I noticed in the summer.
+[SEG0013] person_1 (DOCTOR): What did you notice, exactly?
+[SEG0014] person_2 (PATIENT): Parting looked wider. In photos.
+[SEG0015] person_1 (DOCTOR): Mm-hm. And is hair coming out, are you seeing it fall, or is it more that it just looks thinner?
+[SEG0016] person_2 (PATIENT): It's coming out. In the shower. On my brush.
+[SEG0017] person_1 (DOCTOR): A lot, or a bit more than you'd expect?
+[SEG0018] person_2 (PATIENT): A lot more. It blocks the plughole every time.
+[SEG0019] person_1 (DOCTOR): Okay. Can you give me a feel for how much? Is it a few strands, or a handful?
+[SEG0020] person_2 (PATIENT): A handful in the shower. Sometimes two.
+[SEG0021] person_1 (DOCTOR): That's a fair amount. Does the hair come out with the root, there's a little white bulb on the end?
+[SEG0022] person_2 (PATIENT): Some do. I didn't really look.
+[SEG0023] person_1 (DOCTOR): Fair enough, it's not exactly a hobby. Is the scalp itchy, sore, flaky, anything on the skin itself?
+[SEG0024] person_2 (PATIENT): No. It's fine. Normal.
+[SEG0025] person_1 (DOCTOR): Any patches where you can see bare skin?
+[SEG0026] person_2 (PATIENT): No, no bald bit. Just thinner.
+[SEG0027] person_1 (DOCTOR): Right. Okay. Let me have a look at it. Could you lean forward for me and let me part it, just here and along the middle? That's it. Bear with me, I'm using a bit of light.
+[SEG0028] person_2 (PATIENT): Okay.
+[SEG0029] person_1 (DOCTOR): Mm. The skin of the scalp itself looks healthy to me, there's no redness, no scaling, no scarring that I can see, and I can see the hair's lighter at the parting than it is at the sides, but it's all still there, if that makes sense.
+[SEG0030] person_2 (PATIENT): Is that good?
+[SEG0031] person_1 (DOCTOR): It's a good sign, yes. It tells me the follicles are alive. They're not destroyed, they're just not producing as well as they should.
+[SEG0032] person_2 (PATIENT): Why though?
+[SEG0033] person_1 (DOCTOR): Plain truth, there are a lot of reasons, and I don't know yet which one is yours. Let me explain how hair works, because it helps. Think of your hair like a lawn. Each blade is on its own little cycle. It grows for years, then it rests for a few months, and then it falls out and a new one starts underneath. At any one time most of the lawn is growing and a small bit is resting. If something nudges a lot of the grass into the resting phase at once, you suddenly get more falling out, and the lawn looks thin, even though nothing is wrong with the soil.
+[SEG0034] person_2 (PATIENT): Mm-hm.
+[SEG0035] person_2 (PATIENT): So it's like, a switch.
+[SEG0036] person_1 (DOCTOR): A bit like that, yes. A lot of different things can flip it. Some of them are bodily things, like low iron, or your thyroid being a bit off. Others are the stuff that goes on around it.
+[SEG0037] person_2 (PATIENT): Like what?
+[SEG0038] person_1 (DOCTOR): Well, uh, it depends on what's been happening to you in the last half year or so, I would guess. Has anything big happened? A bad illness, a big change, a very strict diet?
+[SEG0039] person_2 (PATIENT): Not really.
+[SEG0040] person_1 (DOCTOR): A new job, a move?
+[SEG0041] person_2 (PATIENT): I changed jobs in April. It's fine though.
+[SEG0042] person_1 (DOCTOR): Okay. It might be nothing, it might be a little something. These things usually show up two or three months after, which would fit. I wouldn't read too much into it. But I don't want to guess about something that a blood test can tell me. So I'd like to check your iron stores and your thyroid, to start with.
+[SEG0043] person_2 (PATIENT): Right.
+[SEG0044] person_2 (PATIENT): Is that all it could be?
+[SEG0045] person_1 (DOCTOR): No, it's the short list of things we can actually test for, and hair is stubborn, plenty of people have everything normal and still shed for a while. Hormones, stress, a virus a few months back, even a crash diet can do it, and none of those show on a simple test.
+[SEG0046] person_2 (PATIENT): Yeah.
+[SEG0047] person_2 (PATIENT): I had Covid in the spring.
+[SEG0048] person_1 (DOCTOR): There you go, that's another possible nudge. It doesn't change what we do today, but it makes it more likely that this settles by itself over time.
+[SEG0049] person_2 (PATIENT): Just those two?
+[SEG0050] person_1 (DOCTOR): Those are the two that matter most in somebody your age. If they're both fine, then we know where we are, and if they aren't, we fix them. It's one tube, a bit of blood from your arm. The nurse can do it on your way out.
+[SEG0051] person_2 (PATIENT): Okay.
+[SEG0052] person_1 (DOCTOR): Now, have you been doing anything to your hair? Colouring, straightening, tight ponytails, anything like that?
+[SEG0053] person_2 (PATIENT): I put it up in a bun for work. Pretty tight.
+[SEG0054] person_1 (DOCTOR): How tight?
+[SEG0055] person_2 (PATIENT): Tight. It gives me a headache sometimes.
+[SEG0056] person_1 (DOCTOR): Mm. Okay. That's worth knowing. A very tight bun every day can pull on the hair at the front and the sides, and it can thin it out over the years. It's not the whole story, because yours is thinner at the top, but it won't be helping. Loosen it where you can. A soft band, not an elastic, and not the same place every day.
+[SEG0057] person_2 (PATIENT): Okay.
+[SEG0058] person_1 (DOCTOR): And shampoo, do you wash every day, or every other?
+[SEG0059] person_2 (PATIENT): Every other day. Sometimes every three.
+[SEG0060] person_1 (DOCTOR): That's fine. People think washing makes more hair come out, it doesn't, it just makes you see what was ready to come out anyway. All that hair in the plughole was going to fall whether you washed or not. It was simply sitting there waiting for you.
+[SEG0061] person_2 (PATIENT): Right.
+[SEG0062] person_2 (PATIENT): That's what my sister said.
+[SEG0063] person_1 (DOCTOR): Your sister's right. Did she say anything else useful?
+[SEG0064] person_2 (PATIENT): She said biotin. She takes it.
+[SEG0065] person_1 (DOCTOR): Hm. Biotin, honestly, unless you're short of it, which is rare, it won't do anything for hair. Save your money. If your iron turns out low, that's a different story, an iron supplement will help. But I wouldn't start anything before the blood result, because if you take iron when you don't need it, it'll make you constipated and do nothing for you.
+[SEG0066] person_2 (PATIENT): Okay. So wait.
+[SEG0067] person_1 (DOCTOR): Wait for the result, yes, on that front. But I do want to give you something to be getting on with. There's a treatment that's been around a long time, called minoxidil. It comes as a foam you rub into the scalp. It's not magic, and it doesn't cure whatever caused this, but it keeps the follicles in the growing phase for longer and it fattens up the thin hairs.
+[SEG0068] person_2 (PATIENT): Does it work?
+[SEG0069] person_1 (DOCTOR): For most people it helps a bit, for some it helps a lot, and for a few it does nothing. About one in five get a really noticeable result. The rest get less.
+[SEG0070] person_2 (PATIENT): Okay.
+[SEG0071] person_2 (PATIENT): How long before I see anything?
+[SEG0072] person_1 (DOCTOR): This is where you need to be patient. At least four months, and probably six. And I have to warn you, for the first month or two you may shed more hair, not less. That's the foam waking up the follicles and pushing the old, tired hairs out to make room.
+[SEG0073] person_2 (PATIENT): Great.
+[SEG0074] person_1 (DOCTOR): I know. It puts people off, so I'd rather you hear it from me. If you stop at week three because it looks worse, you've thrown it away.
+[SEG0075] person_2 (PATIENT): Okay.
+[SEG0076] person_1 (DOCTOR): How you use it. Half a capful, about a thumb's worth of foam, onto dry scalp, twice a day, morning and evening. Part the hair and rub it in at the thin bit, then wash your hands, don't touch your face or let it drip on your forehead. It can grow hair in places you don't want it.
+[SEG0077] person_2 (PATIENT): On my face?
+[SEG0078] person_1 (DOCTOR): Only if it runs. It's not common. Some people get a bit of itch or flakiness on the scalp, that's the most usual thing, and if it happens, tell the pharmacist and they'll swap you to another sort.
+[SEG0079] person_2 (PATIENT): Is it expensive?
+[SEG0080] person_1 (DOCTOR): About fifteen pounds a month, give or take, and I'll write it up so the chemist knows what to give you. It's not on the NHS list for this, so you'll pay. You'll need to keep using it though, that's the catch, if you stop, you'll lose what you've gained within a few months.
+[SEG0081] person_2 (PATIENT): So forever.
+[SEG0082] person_1 (DOCTOR): As long as you want the effect. Some people are happy with that, some aren't. It's your choice, entirely.
+[SEG0083] person_2 (PATIENT): I'll try it.
+[SEG0084] person_1 (DOCTOR): Can I ask how much it's bothering you? Honestly. Some people shrug at this, and for others it's the only thing they think about.
+[SEG0085] person_2 (PATIENT): Mm-hm.
+[SEG0086] person_2 (PATIENT): Well, uh, it's getting to me a bit. I don't wear my hair down any more. I check the parting in every window I walk past.
+[SEG0087] person_1 (DOCTOR): Okay.
+[SEG0088] person_1 (DOCTOR): That's very common, and it's a real thing, not vanity. Have you tried anything to cover it?
+[SEG0089] person_2 (PATIENT): Those fibre powder things. It looked like soot. My sister laughed.
+[SEG0090] person_1 (DOCTOR): Ha. Yes, the cheaper ones can do that. A different parting helps more than people think, a zigzag, or on the other side, it breaks up the line of the scalp. And a good cut with some layers makes thin hair look fuller.
+[SEG0091] person_2 (PATIENT): Mm.
+[SEG0092] person_2 (PATIENT): I've got a cut booked on Saturday.
+[SEG0093] person_1 (DOCTOR): Tell the hairdresser exactly what you've told me, they see this every day, and they'll know what to do.
+[SEG0094] person_2 (PATIENT): Okay. That's helpful actually.
+[SEG0095] person_1 (DOCTOR): And if the results of the tests turn out normal, don't be disheartened. It would mean nothing is hiding in the background, and the foam is just doing its job on a lawn that needs a little encouragement.
+[SEG0096] person_2 (PATIENT): Okay.
+[SEG0097] person_1 (DOCTOR): Good. I'll put it through and the receptionist will give you the blood form on your way out. Anything you want to ask?
+[SEG0098] person_2 (PATIENT): Does it matter that I dye it?
+[SEG0099] person_1 (DOCTOR): Not really. Just don't put the foam on straight after colouring, give it a day or two, otherwise the scalp's tender.
+[SEG0100] person_2 (PATIENT): Okay. Thanks.
+[SEG0101] person_1 (DOCTOR): Pleasure. And do loosen that bun.
+[SEG0102] person_2 (PATIENT): I will. I'll try.
+
+JSON:

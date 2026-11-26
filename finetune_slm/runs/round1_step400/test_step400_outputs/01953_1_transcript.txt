@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01953)
+[SEG0001] person_1 (PATIENT): Good evening, doctor, thanks for seeing me.
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_1 (PATIENT): I mean, mainly a fall and pain in my left hip. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): Has this been going on for long? I ask because it it helps me narrow things down.
+[SEG0005] person_1 (PATIENT): it's been like this since last weekend i'd rather know what's going on than keep guessing
+[SEG0006] person_2 (DOCTOR): How much does it limit you?
+[SEG0007] person_1 (PATIENT): pretty moderate, if I'm being honest so, there's pain in my groin as well
+[SEG0008] person_2 (DOCTOR): Have you had a a fall and pain in your left hip before, or is this the first time?
+[SEG0009] person_1 (PATIENT): Actually, I had a a similar thing last winter. It went away.
+[SEG0010] person_2 (DOCTOR): Have you had any loss of consciousness, numbness, chest pain or head injury?
+[SEG0011] person_1 (PATIENT): No, no loss of consciousness, numbness, chest pain or head injury.
+[SEG0012] person_2 (DOCTOR): so, have you noticed any weakness, or anything odd with your balance?
+[SEG0013] person_1 (PATIENT): Nothing odd there.
+[SEG0014] person_2 (DOCTOR): Do you have any long-term conditions?
+[SEG0015] person_1 (PATIENT): Sorry, uh, what was I saying, I have thin bones, for about a year.
+[SEG0016] person_2 (DOCTOR): Right, so thin bones is already on your record. We'll keep that in mind today. Have you had any previous surgeries?
+[SEG0017] person_1 (PATIENT): No surgery, no.
+[SEG0018] person_2 (DOCTOR): let's run through your medicines
+[SEG0019] person_1 (PATIENT): it's paracetamol, 1 gram, when needed
+[SEG0020] person_2 (DOCTOR): Are there any illnesses in your family?
+[SEG0021] person_1 (PATIENT): My mother had a stroke.
+[SEG0022] person_2 (DOCTOR): Now some background about your lifestyle
+[SEG0023] person_1 (PATIENT): No, I've never smoked in my life. I'll have a glass of wine with dinner. Not much, I mostly stay in these days. I drink a lot of tea and snack through the day. I live with my elderly mother
+[SEG0024] person_2 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0025] person_1 (PATIENT): no, not that I know of
+[SEG0026] person_2 (DOCTOR): Let's start with the basic checks.
+[SEG0027] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0028] person_2 (DOCTOR): Okay: respiratory rate 15, saturation 99 percent, pressure 116 over 68, temp 37.0 degrees, pulse is 80 beats a a minute.
+[SEG0029] person_1 (PATIENT): Is that normal?
+[SEG0030] person_2 (DOCTOR): they help me see the whole picture, more shortly let me tell you where I've got to i think we're dealing with a probable hip fracture at this stage i'm going to order an X-ray of the hip, for hip fracture
+[SEG0031] person_3 (CLINICAL_STAFF): I can book that for Wednesday at 2 pm.
+[SEG0032] person_1 (PATIENT): Right, you know, okay, I'll be there.
+[SEG0033] person_2 (DOCTOR): we should do blood tests for pre-operative i'd like you to take morphine, 2.5 milligrams, now, single dose that's for hip pain lie still, I am arranging an ambulance and pain relief let's get you seen by the orthopaedic team, I'll arrange the letter
+[SEG0034] person_1 (PATIENT): Alright, thank you.
+[SEG0035] person_2 (DOCTOR): See me again straight away.
+[SEG0036] person_1 (PATIENT): Alright, I'll be back.
+[SEG0037] person_2 (DOCTOR): can you tell me the plan back in your own words, so I know I've explained it clearly?
+[SEG0038] person_1 (PATIENT): So, uh, I take the morphine, 2.5 milligrams, now and come back straight away. Is that right?
+[SEG0039] person_2 (DOCTOR): Right, yes, exactly right. That's everything on my side. Anything you're unsure about?
+[SEG0040] person_1 (PATIENT): Great, thank you for your help.
+[SEG0041] person_2 (DOCTOR): All the best.
+
+JSON:

@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03532)
+[SEG0001] person_1 (DOCTOR): Hello, sorry about the delay, do sit.
+[SEG0002] person_2 (PATIENT): Hello, doctor.
+[SEG0003] person_1 (DOCTOR): Have you been waiting long?
+[SEG0004] person_2 (PATIENT): Only about ten minutes, uh, honestly.
+[SEG0005] person_1 (DOCTOR): What's the problem?
+[SEG0006] person_2 (PATIENT): It's a sore spot on the front of my shin, mostly.
+[SEG0007] person_1 (DOCTOR): Would you say mild, moderate or severe?
+[SEG0008] person_2 (PATIENT): Moderate, really.
+[SEG0009] person_1 (DOCTOR): So, is it there all the time or does it come and go?
+[SEG0010] person_2 (PATIENT): I'd say once or twice a day.
+[SEG0011] person_1 (DOCTOR): Does anything help it?
+[SEG0012] person_2 (PATIENT): I get some relief from rest.
+[SEG0013] person_1 (DOCTOR): What about pain at night, have you noticed that?
+[SEG0014] person_2 (PATIENT): Yeah. Five days, I'd say. As for pain at night, severe, really.
+[SEG0015] person_1 (DOCTOR): Any sign of fever?
+[SEG0016] person_2 (PATIENT): Definitely no fever.
+[SEG0017] person_1 (DOCTOR): I follow. Did you get injury, swelling or numbness?
+[SEG0018] person_2 (PATIENT): No, none of those at all.
+[SEG0019] person_1 (DOCTOR): So, anything with your heart, like skipped beats or fainting?
+[SEG0020] person_2 (PATIENT): No, you know, that's been fine.
+[SEG0021] person_1 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0022] person_2 (PATIENT): No, you know, skin's been fine.
+[SEG0023] person_1 (DOCTOR): What do you do during the day?
+[SEG0024] person_2 (PATIENT): I look after my grandchildren most days.
+[SEG0025] person_1 (DOCTOR): Okay, anything you do to stay fit?
+[SEG0026] person_2 (PATIENT): I do a yoga class on Thursdays.
+[SEG0027] person_1 (DOCTOR): Do you take any prescribed or over-the-counter medicines?
+[SEG0028] person_2 (PATIENT): Alendronate. I take it once a week.
+[SEG0029] person_1 (DOCTOR): Do you know the dose?
+[SEG0030] person_2 (PATIENT): 70 milligrams, I think that's what's on the box.
+[SEG0031] person_1 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0032] person_2 (PATIENT): I have thin bones, for about a year.
+[SEG0033] person_1 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0034] person_2 (PATIENT): No, I've never reacted to anything.
+[SEG0035] person_1 (DOCTOR): Any previous surgeries?
+[SEG0036] person_2 (PATIENT): Nothing, I haven't had any operations.
+[SEG0037] person_1 (DOCTOR): I'll note down your vital signs first.
+[SEG0038] person_1 (DOCTOR): Bear with me while this finishes...
+[SEG0039] person_1 (DOCTOR): Okay: BP is 109 over 76, respiratory rate 14. And pulse is 76 beats a minute, temperature 36.7.
+[SEG0040] person_2 (PATIENT): Is that normal?
+[SEG0041] person_1 (DOCTOR): We'll go over that shortly.
+[SEG0042] person_1 (DOCTOR): May I examine you now?
+[SEG0043] person_2 (PATIENT): Yes, that's fine.
+[SEG0044] person_1 (DOCTOR): Nearly finished here.
+[SEG0045] person_1 (DOCTOR): There is a very localised tender spot on the bone and hopping on that leg hurts.
+[SEG0046] person_1 (DOCTOR): That's the examination finished. Having listened and examined, this looks most like a possible stress fracture rather than shin splints. I want to be honest that this is an impression, not a final answer. Shin splints is still possible.
+[SEG0047] person_1 (DOCTOR): An MRI of the shin is what I'd like next, for possible stress fracture. Let's book a vitamin D level to look into stress fracture.
+[SEG0048] person_2 (PATIENT): Where would I go for that?
+[SEG0049] person_1 (DOCTOR): Stop running, no impact exercise until the scan, swimming or cycling is fine. Book a review after the scan. Tell me what you've taken from all that, so I can fill in any gaps.
+[SEG0050] person_2 (PATIENT): So, I come back after the scan. Is that right?
+[SEG0051] person_1 (DOCTOR): Yes, exactly right. Does all of that make sense?
+[SEG0052] person_2 (PATIENT): No, that's all. Thanks a lot.
+
+JSON:

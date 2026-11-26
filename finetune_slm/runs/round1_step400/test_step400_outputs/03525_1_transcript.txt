@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03525)
+[SEG0001] person_1 (PATIENT): Hello? Doctor? I was told to come in.
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_1 (PATIENT): Yeah, it's a bump on the head yesterday. I don't know what's causing it.
+[SEG0004] person_2 (DOCTOR): Okay, what's the timeline, when did it begin?
+[SEG0005] person_1 (PATIENT): Yesterday, it came on out of nowhere. I've also been feeling fine otherwise, since this morning. As for feeling fine otherwise, I'd give it a five, out of ten.
+[SEG0006] person_2 (DOCTOR): Nothing like vomiting?
+[SEG0007] person_1 (PATIENT): No, I haven't had any vomiting.
+[SEG0008] person_2 (DOCTOR): Any seizure, confusion or drowsiness at all?
+[SEG0009] person_1 (PATIENT): I haven't had seizure, confusion or drowsiness, no.
+[SEG0010] person_2 (DOCTOR): How are your bowels, any trouble?
+[SEG0011] person_1 (PATIENT): Nothing unusual, no.
+[SEG0012] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0013] person_1 (PATIENT): No, skin's been fine.
+[SEG0014] person_2 (DOCTOR): Any past operations I should know about?
+[SEG0015] person_1 (PATIENT): I had a wisdom tooth extraction under sedation five years ago.
+[SEG0016] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0017] person_1 (PATIENT): An irregular heartbeat, for two years.
+[SEG0018] person_2 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0019] person_1 (PATIENT): It's, It's metoprolol, 50 milligrams, twice a day. A blood thinner. I take it twice a day.
+[SEG0020] person_2 (DOCTOR): And what strength is that?
+[SEG0021] person_1 (PATIENT): 5 milligrams.
+[SEG0022] person_2 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0023] person_1 (PATIENT): My father had bowel cancer.
+[SEG0024] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0025] person_1 (PATIENT): Mm, no, nothing as far as I know.
+[SEG0026] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0027] person_1 (PATIENT): I'm a bus driver, so I sit for long hours. I live with my elderly mother. I hardly move around during the day.
+[SEG0028] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0029] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0030] person_2 (DOCTOR): Okay: oxygen saturation is 99 percent, pulse is 66 beats a minute, temp 36.8 degrees, BP is 123 over 75, respiratory rate 17.
+[SEG0031] person_2 (DOCTOR): Right, let's have a proper look at you.
+[SEG0032] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0033] person_2 (DOCTOR): You are alert and orientated with a small bruise on the forehead and normal limb strength.
+[SEG0034] person_2 (DOCTOR): Thank you, you can get dressed. Okay, so my impression is this: I can't pin this down yet. We're looking at a minor head injury but on a blood thinner, which needs a scan or a simple bump. Let me just check I've got this right. You've had a bump on the head yesterday, yesterday, and no confusion or drowsiness.
+[SEG0035] person_1 (PATIENT): Yes, you've got it.
+[SEG0036] person_2 (DOCTOR): Even though you feel fine, a blood thinner means we scan, delayed bleeding can happen.
+[SEG0037] person_2 (DOCTOR): Yes. Is there anything you'd like me to go over again?
+[SEG0038] person_1 (PATIENT): Okay, that makes sense. Thanks for explaining.
+
+JSON:

@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00178)
+[SEG0001] person_1 (PATIENT): morning. Nice to finally see you, doctor
+[SEG0002] person_2 (DOCTOR): yes, come in, take a seat what can I do for you today?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, um, I'm just here to help with the details.
+[SEG0004] person_2 (DOCTOR): good, that'll be useful. Pull up a chair
+[SEG0005] person_3 (FAMILY_MEMBER): I mean, doctor, it's been losing weight without trying. That's what we're worried about.
+[SEG0006] person_2 (DOCTOR): Roughly when did it start?
+[SEG0007] person_1 (PATIENT): I've had it it for six months
+[SEG0008] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0009] person_1 (PATIENT): It usually comes with loss of appetite. I mean, the loss of appetite? That's been for ten days. Hmm, there was night sweats, yes, but that went away.
+[SEG0010] person_2 (DOCTOR): have you had any surgery before?
+[SEG0011] person_1 (PATIENT): Yes, I had a lump removed from my back, years ago.
+[SEG0012] person_2 (DOCTOR): are there any allergies on your record that I should check?
+[SEG0013] person_1 (PATIENT): I mean, you know, I've never been told I have allergies.
+[SEG0014] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0015] person_3 (FAMILY_MEMBER): He takes Glycomet, twice a day.
+[SEG0016] person_2 (DOCTOR): Do you know the dose?
+[SEG0017] person_3 (FAMILY_MEMBER): 500 milligrams, I think that's what's on the box. It's hydrocortisone cream, when needed, doctor.
+[SEG0018] person_2 (DOCTOR): Right, any long-term health problems I should know about?
+[SEG0019] person_1 (PATIENT): I have diabetes.
+[SEG0020] person_2 (DOCTOR): okay
+[SEG0021] person_1 (PATIENT): I've had eczema, yes.
+[SEG0022] person_2 (DOCTOR): Okay, I can see diabetes in your file as well. What do you do to keep active?
+[SEG0023] person_1 (PATIENT): I cycle to work most mornings.
+[SEG0024] person_2 (DOCTOR): How's your diet?
+[SEG0025] person_1 (PATIENT): I'm mostly vegetarian
+[SEG0026] person_2 (DOCTOR): Who do you live with?
+[SEG0027] person_1 (PATIENT): I live with my family, my husband and two kids
+[SEG0028] person_2 (DOCTOR): Did you get lumps in the neck, shortness of breath or coughing up blood?
+[SEG0029] person_1 (PATIENT): No, nothing there.
+[SEG0030] person_2 (DOCTOR): have you had diarrhoea, by any chance?
+[SEG0031] person_1 (PATIENT): no diarrhoea, thankfully
+[SEG0032] person_3 (FAMILY_MEMBER): Actually, doctor, I did notice diarrhoea. He doesn't always say.
+[SEG0033] person_1 (PATIENT): No, I don't think I did. Maybe a little, I'm not sure.
+[SEG0034] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. Did you get chest pain or blood in the stool?
+[SEG0035] person_1 (PATIENT): no, nothing there
+[SEG0036] person_2 (DOCTOR): is your urine normal, no changes?
+[SEG0037] person_1 (PATIENT): No changes there.
+[SEG0038] person_4 (NURSE): Okay, so the vitals from earlier. BMI works out to 22.5, weight 52 kilos, temperature 38.1, pulse 99, height 152 centimetres, oxygen saturation is 96 percent, pressure 115 over 77.
+[SEG0039] person_2 (DOCTOR): okay, noted
+[SEG0040] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0041] person_2 (DOCTOR): right, stay still while I have a look
+[SEG0042] person_2 (DOCTOR): air entry is a bit reduced at the top of the right lung
+[SEG0043] person_2 (DOCTOR): So, just relax, I'll be quick.
+[SEG0044] person_2 (DOCTOR): I can feel a couple of small glands in your neck, not tender.
+[SEG0045] person_2 (DOCTOR): That's all I need, thank you.
+[SEG0046] person_2 (DOCTOR): Putting it all together, it points towards an infection or something chronic going on, I can't say what yet. A thyroid problem is also on my list.
+[SEG0047] person_2 (DOCTOR): Let's book a sputum test to look into chronic cough. A chest X-ray is what I'd like next, for weight loss and cough.
+[SEG0048] person_1 (PATIENT): Does it need any preparation?
+[SEG0049] person_2 (DOCTOR): Weigh yourself once a week at the same time and note it down. Cut back on tea, coffee and fizzy drinks for a couple of weeks and see how things settle. I'll also refer you to the chest clinic. Let's plan a check after the results are back. Okay, we're done for today. Take care.
+[SEG0050] person_1 (PATIENT): Thanks, that was helpful.
+
+JSON:

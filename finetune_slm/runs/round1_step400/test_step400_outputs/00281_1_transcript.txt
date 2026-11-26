@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00281)
+[SEG0001] person_1 (DOCTOR): Good morning. I hope the wait wasn't too long.
+[SEG0002] person_2 (PATIENT): Hello.
+[SEG0003] person_3 (CAREGIVER): Thank you for fitting us in, doctor.
+[SEG0004] person_1 (DOCTOR): That's fine, sit down. We'll go through it together. What seems to be the problem?
+[SEG0005] person_2 (PATIENT): It's yellow eyes, mostly.
+[SEG0006] person_2 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0007] person_3 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0008] person_2 (PATIENT): I was getting to that! Oh, and itching all over. That's been about the same, three weeks.
+[SEG0009] person_1 (DOCTOR): What's the pattern, is it there all day?
+[SEG0010] person_2 (PATIENT): It's a few times a day.
+[SEG0011] person_4 (NURSE): Here are the numbers, doctor. Oxygen saturation is 97 percent, blood pressure 110 over 68, temp 36.9 degrees. Pulse is 84 beats a minute.
+[SEG0012] person_1 (DOCTOR): Thanks.
+[SEG0013] person_1 (DOCTOR): And what about confusion, fever, vomiting blood or black stools?
+[SEG0014] person_2 (PATIENT): No, no confusion, no fever, no vomiting blood. I did have dark urine at one point, but that went away on its own.
+[SEG0015] person_1 (DOCTOR): Did you notice any swelling of the tummy?
+[SEG0016] person_2 (PATIENT): No swelling of the tummy, thankfully.
+[SEG0017] person_1 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0018] person_2 (PATIENT): No, my breathing's been fine.
+[SEG0019] person_1 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0020] person_2 (PATIENT): Nothing else aches.
+[SEG0021] person_1 (DOCTOR): Any long-term health problems I should know about?
+[SEG0022] person_2 (PATIENT): Diabetes, for nearly five years. Yes, high cholesterol. I have heart failure. I'm hoping you can tell me something definite.
+[SEG0023] person_1 (DOCTOR): Yes, heart failure is known to us, good to have that clear. So, any previous surgeries?
+[SEG0024] person_2 (PATIENT): Yes, I had a hysterectomy, about twelve years ago.
+[SEG0025] person_1 (DOCTOR): Any sport or activity?
+[SEG0026] person_2 (PATIENT): I play badminton on Sundays.
+[SEG0027] person_1 (DOCTOR): How's your diet?
+[SEG0028] person_2 (PATIENT): I'm mostly vegetarian.
+[SEG0029] person_1 (DOCTOR): Are you on any tablets or medication?
+[SEG0030] person_2 (PATIENT): I'm on glimepiride, 2 milligrams, before breakfast for my sugar.
+[SEG0031] person_1 (DOCTOR): When did you start it?
+[SEG0032] person_2 (PATIENT): For two years. Furosemide. I take it 40 milligrams, maybe, every morning.
+[SEG0033] person_1 (DOCTOR): Do you have the packet or the prescription with you?
+[SEG0034] person_2 (PATIENT): Not with me. I'll bring it next time. I used to take metformin, but I stopped it.
+[SEG0035] person_1 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0036] person_2 (PATIENT): My mother had high blood pressure. My uncle had colon cancer.
+[SEG0037] person_1 (DOCTOR): Do you have any allergies to medicines, food, anything at all?
+[SEG0038] person_2 (PATIENT): I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0039] person_1 (DOCTOR): Right, here's what I'm thinking. This looks most like jaundice with a cause we still need to find. A gallstone blocking the bile duct is still possible. I'm sending you for an ultrasound of the abdomen because of jaundice. I'd rather check than guess, and this is the quickest way to know more.
+[SEG0040] person_5 (CLINICAL_STAFF): We have a slot Wednesday at 3:30 pm, if that works.
+[SEG0041] person_1 (DOCTOR): Liver function tests is what I'd like next, for jaundice. Please avoid alcohol completely and don't take any painkillers except paracetamol, and not much of that. I'm going to send a referral to a liver specialist. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0042] person_2 (PATIENT): Right, will do.
+[SEG0043] person_1 (DOCTOR): If you vomit blood or become drowsy or confused, or you feel really unwell, please come to the emergency department. Take care, and call us if anything changes.
+[SEG0044] person_2 (PATIENT): Thanks so much, doctor.
+[SEG0045] person_1 (DOCTOR): Goodbye.
+
+JSON:

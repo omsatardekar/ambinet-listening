@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03510)
+[SEG0001] person_1 (NURSE): Doctor, I've brought them through. The observations are done, whenever you need them.
+[SEG0002] person_2 (DOCTOR): Thank you. Right, hello, what's the problem?
+[SEG0003] person_3 (FAMILY_MEMBER): Right, doctor, I'll sit in if that's okay, I know what's been happening. She's been having a milky discharge from my breasts, doctor.
+[SEG0004] person_2 (DOCTOR): What's the timeline, when did it begin?
+[SEG0005] person_4 (PATIENT): About three days, give or take.
+[SEG0006] person_3 (FAMILY_MEMBER): I think it's been nearer five days, um, actually.
+[SEG0007] person_2 (DOCTOR): Okay, so roughly three to five days. Is that right?
+[SEG0008] person_4 (PATIENT): Yes, uh, somewhere around that.
+[SEG0009] person_4 (PATIENT): I was just going to say that the main thing is—
+[SEG0010] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0011] person_2 (DOCTOR): So, later, thanks. Please go on.
+[SEG0012] person_4 (PATIENT): Oh, you know, and periods stopped for four months. Ah, and there's being told it was just stress as well, about two weeks now.
+[SEG0013] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0014] person_4 (PATIENT): I don't think I have any, um, no.
+[SEG0015] person_3 (FAMILY_MEMBER): Hold on, doctor, I think she reacted to tramadol once. I'm not certain, though.
+[SEG0016] person_4 (PATIENT): I, I don't remember that.
+[SEG0017] person_2 (DOCTOR): Alright, so that's unclear. I'll record what each of you said. Okay, tell me about any past illnesses or ongoing conditions.
+[SEG0018] person_4 (PATIENT): I've had heart disease for about ten years now.
+[SEG0019] person_2 (DOCTOR): I see, go ahead.
+[SEG0020] person_4 (PATIENT): I've had migraines for about a year now.
+[SEG0021] person_2 (DOCTOR): Which medicines do you take at the moment?
+[SEG0022] person_4 (PATIENT): Mm, uh, I'm on clopidogrel, 75 milligrams, once a day for the stent. I mean, I'm on propranolol, twice a day.
+[SEG0023] person_2 (DOCTOR): Do you know the dose?
+[SEG0024] person_4 (PATIENT): 40 milligrams, I think that's what's on the box.
+[SEG0025] person_2 (DOCTOR): Sure.
+[SEG0026] person_4 (PATIENT): Sumatriptan I don't take anymore.
+[SEG0027] person_2 (DOCTOR): Who lives with you?
+[SEG0028] person_4 (PATIENT): My partner and our baby.
+[SEG0029] person_2 (DOCTOR): Right, how are your meals?
+[SEG0030] person_4 (PATIENT): I grab fast food at lunch most days.
+[SEG0031] person_2 (DOCTOR): What operations have you had, if any?
+[SEG0032] person_4 (PATIENT): Just part of my thyroid removed, years back.
+[SEG0033] person_2 (DOCTOR): What about weight change?
+[SEG0034] person_4 (PATIENT): No weight change, thankfully.
+[SEG0035] person_2 (DOCTOR): Any hot flushes, visual changes or positive pregnancy test?
+[SEG0036] person_4 (PATIENT): No, um, no hot flushes, no visual changes, no positive pregnancy test. I did have headaches at one point, but that went away on its own.
+[SEG0037] person_2 (DOCTOR): Mm-hmm. Any problems with your joints or muscles?
+[SEG0038] person_4 (PATIENT): Nothing else aches.
+[SEG0039] person_2 (DOCTOR): How's your breathing otherwise?
+[SEG0040] person_4 (PATIENT): No problems with breathing.
+[SEG0041] person_1 (NURSE): Doctor, I've got the readings for you. Pulse is 80 beats a minute, weight 66 kilos, height 155 centimetres. Saturation 97 percent, blood pressure 125 over 82.
+[SEG0042] person_2 (DOCTOR): Good, thank you.
+[SEG0043] person_2 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0044] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0045] person_2 (DOCTOR): You are not pregnant by the urine test, the breasts express a little milk, and there is no visual field loss.
+[SEG0046] person_4 (PATIENT): That's alright.
+[SEG0047] person_2 (DOCTOR): Right, that's all I needed to check. Okay, thinking it through, I'd lean towards raised prolactin or a thyroid problem rather than stress. I'd also keep pituitary tumour in mind. Let me just check I've got this right. You've had a milky discharge from your breasts, and no visual changes or positive pregnancy test.
+[SEG0048] person_4 (PATIENT): Yes, that's right.
+[SEG0049] person_2 (DOCTOR): Don't stress about stress as the cause, the tests will tell us. The thing that would worry me is if the symptoms get worse. If that happens, go to emergency. I think we're done unless you have questions.
+[SEG0050] person_4 (PATIENT): Okay, that makes sense. Thanks for explaining.
+[SEG0051] person_2 (DOCTOR): Look after yourself.
+
+JSON:

@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00426)
+[SEG0001] person_1 (DOCTOR): Good afternoon. Have a seat and we'll begin.
+[SEG0002] person_2 (PATIENT): Thanks, doctor. It's been a long few days.
+[SEG0003] person_3 (CAREGIVER): Good morning, doctor. I came along to help out.
+[SEG0004] person_1 (DOCTOR): weather's turned, hasn't it?
+[SEG0005] person_2 (PATIENT): it, It has i got caught in the rain walking over
+[SEG0006] person_1 (DOCTOR): so, how have things been?
+[SEG0007] person_2 (PATIENT): Um, so... a lump on the side of my neck. That's why I came.
+[SEG0008] person_1 (DOCTOR): how long are we talking about?
+[SEG0009] person_2 (PATIENT): it's been going on for about four days
+[SEG0010] person_1 (DOCTOR): How bad is it, would you say?
+[SEG0011] person_2 (PATIENT): Mostly moderate.
+[SEG0012] person_1 (DOCTOR): Have you been feeling feverish in the evenings?
+[SEG0013] person_2 (PATIENT): Yeah. Four weeks, I'd say.
+[SEG0014] person_1 (DOCTOR): right, have you had a lump on the side of your neck before, or is this the first time?
+[SEG0015] person_2 (PATIENT): Well, a bit, last year. It settled by itself back then.
+[SEG0016] person_1 (DOCTOR): have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0017] person_2 (PATIENT): no allergies that that I know of, no
+[SEG0018] person_1 (DOCTOR): have you got any chronic problems?
+[SEG0019] person_2 (PATIENT): I've got anxiety.
+[SEG0020] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0021] person_2 (PATIENT): No operations, no.
+[SEG0022] person_1 (DOCTOR): Any regular medication?
+[SEG0023] person_2 (PATIENT): no, uh, I don't take anything regularly
+[SEG0024] person_1 (DOCTOR): Let's talk a a little about your daily life and habits.
+[SEG0025] person_2 (PATIENT): Mostly home-cooked food, rice and vegetables. I work on a farm, it's quite physical. I live with my family, my husband and two kids
+[SEG0026] person_1 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0027] person_2 (PATIENT): my sister has thyroid problems
+[SEG0028] person_1 (DOCTOR): Nothing like weight loss?
+[SEG0029] person_2 (PATIENT): No, I haven't had any weight loss.
+[SEG0030] person_1 (DOCTOR): A few quick ones: lumps elsewhere, cough or difficulty swallowing?
+[SEG0031] person_2 (PATIENT): I haven't had lumps elsewhere, cough or difficulty swallowing, no.
+[SEG0032] person_1 (DOCTOR): Ah. Any problems with your joints or muscles?
+[SEG0033] person_2 (PATIENT): Nothing else aches.
+[SEG0034] person_1 (DOCTOR): Let me check your vitals now.
+[SEG0035] person_1 (DOCTOR): Rest your hand here...
+[SEG0036] person_1 (DOCTOR): Okay: BMI works out to 18.1, heart rate 72. And temperature is 36.9 degrees, saturation 97 percent, pressure 115 over 80, respiratory rate 15, height 171 centimetres, weight 53 kilos.
+[SEG0037] person_1 (DOCTOR): Okay, I need to examine you for this.
+[SEG0038] person_1 (DOCTOR): Let me press here.
+[SEG0039] person_1 (DOCTOR): I can't feel other glands in the neck, armpits or groin.
+[SEG0040] person_2 (PATIENT): Fine.
+[SEG0041] person_1 (DOCTOR): good, that's the the examination
+[SEG0042] person_1 (DOCTOR): From what you've told me and what I found, it fits best with a reactive lymph node after a throat infection. It could also be something that needs a tissue diagnosis, so we'll keep that open.
+[SEG0043] person_1 (DOCTOR): we should do blood tests for neck lump. That will help us see what's going on underneath and decide the next step. We should do an ultrasound of the neck for neck lump. It's a routine test and it'll give us a much clearer picture. Check the lump once a week and let me know if it grows or becomes hard
+[SEG0044] person_1 (DOCTOR): Try to get to bed and wake up at the the same time each day, and keep your phone away from the bed. We'll catch up in three weeks. How would you describe the plan, so we're on the same page?
+[SEG0045] person_2 (PATIENT): So, I come back in three weeks. Is that right?
+[SEG0046] person_1 (DOCTOR): Yes, exactly right. That's everything from me. Any other questions?
+[SEG0047] person_2 (PATIENT): Alright, um, thanks. Bye for now.
+
+JSON:

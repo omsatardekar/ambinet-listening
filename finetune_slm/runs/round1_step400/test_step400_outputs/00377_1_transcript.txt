@@ -1,0 +1,50 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00377)
+[SEG0001] person_1 (PATIENT): Uh, morning, doctor, I hope I'm not interrupting.
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): Mainly aching in my thighs. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): Since when have you had this?
+[SEG0005] person_1 (PATIENT): About... well, four weeks. I took the morning off to come in today.
+[SEG0006] person_2 (DOCTOR): How much is it bothering you?
+[SEG0007] person_1 (PATIENT): I'd say moderate. Oh, and weakness getting out of a chair. That's been about the same, about a month. And there's cramps as well, four weeks now.
+[SEG0008] person_2 (DOCTOR): Any sign of joint swelling?
+[SEG0009] person_1 (PATIENT): No joint swelling, thankfully.
+[SEG0010] person_2 (DOCTOR): Did you get recent heavy exercise, numbness, fever or rash?
+[SEG0011] person_1 (PATIENT): No, um, nothing there.
+[SEG0012] person_2 (DOCTOR): Right, is your chest okay generally?
+[SEG0013] person_1 (PATIENT): No, nothing there.
+[SEG0014] person_2 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0015] person_1 (PATIENT): No, that side's been fine.
+[SEG0016] person_2 (DOCTOR): Have you had to have anything operated on?
+[SEG0017] person_1 (PATIENT): I had a stent put in my heart two years ago.
+[SEG0018] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0019] person_1 (PATIENT): Losartan, 50 milligrams, once a day. Atorvastatin. I take it 20 milligrams, at night. A neighbour of mine said I should see someone about it.
+[SEG0020] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0021] person_1 (PATIENT): Yes, high blood pressure. I've had high cholesterol for about a year now. Yes, heart disease.
+[SEG0022] person_2 (DOCTOR): Okay, I can see high cholesterol in your file as well. Let's talk a little about your daily life and habits.
+[SEG0023] person_1 (PATIENT): I have a couple of drinks on the weekend. I've never smoked. I work night shifts at a warehouse. I share a flat with two friends. I try to avoid too much sugar.
+[SEG0024] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0025] person_1 (PATIENT): I don't have any known medication allergies.
+[SEG0026] person_2 (DOCTOR): Can I take your vitals now?
+[SEG0027] person_2 (DOCTOR): One second...
+[SEG0028] person_2 (DOCTOR): Okay: BP is 124 over 77, temp 36.6 degrees, heart rate 74, saturation 97 percent.
+[SEG0029] person_2 (DOCTOR): I'll examine you now, bear with me.
+[SEG0030] person_2 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0031] person_2 (DOCTOR): The muscles are mildly tender when I squeeze.
+[SEG0032] person_2 (DOCTOR): So, that's all I need, thank you.
+[SEG0033] person_2 (DOCTOR): Right, here's what I'm thinking. I think we're dealing with muscle symptoms that may be related to the cholesterol tablet at this stage. I want a thyroid test done, that's for muscle weakness. So, that's everything from me. Any other questions?
+[SEG0034] person_1 (PATIENT): Thanks, that was helpful.
+[SEG0035] person_2 (DOCTOR): See you then.
+
+JSON:

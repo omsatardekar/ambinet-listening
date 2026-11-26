@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00061)
+[SEG0001] person_1 (NURSE): Ready for you, doctor. I'll stay in case you need anything.
+[SEG0002] person_2 (DOCTOR): Okay, thanks. Hi, how can I help today?
+[SEG0003] person_3 (FAMILY_MEMBER): I mean, thank you for fitting us in, doctor.
+[SEG0004] person_2 (DOCTOR): Yes, that's no problem at all. Please sit.
+[SEG0005] person_3 (FAMILY_MEMBER): Doctor, it's a little chest discomfort. That's what we're worried about.
+[SEG0006] person_2 (DOCTOR): Since when have you had this?
+[SEG0007] person_4 (PATIENT): Well, I'd say three days, maybe.
+[SEG0008] person_3 (FAMILY_MEMBER): Hm, I'd say more like five days.
+[SEG0009] person_2 (DOCTOR): Okay, so roughly three to five days. Is that right?
+[SEG0010] person_4 (PATIENT): That sounds about right.
+[SEG0011] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0012] person_4 (PATIENT): So, it settles a little with resting. I'd say mild. And there's ankle swelling in the evenings as well, three weeks now.
+[SEG0013] person_2 (DOCTOR): On a normal day, how strong is it?
+[SEG0014] person_4 (PATIENT): Moderate, really. I've had breathlessness on slopes too, for six months. With breathlessness on slopes, I'd give it a four, out of ten.
+[SEG0015] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0016] person_4 (PATIENT): Yeah, no allergies that I know of, no.
+[SEG0017] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0018] person_4 (PATIENT): Yeah, I take rosuvastatin, 10 milligrams, at night.
+[SEG0019] person_3 (FAMILY_MEMBER): Doctor, um, I think the last prescription for the rosuvastatin was 20 milligrams. We changed it at the last visit.
+[SEG0020] person_2 (DOCTOR): Okay. Have you got the newest prescription or the box with you?
+[SEG0021] person_4 (PATIENT): Not with me. I'll bring it next time. Clopidogrel, 75 milligrams, once a day for the stent. I used to take metformin, but I stopped it.
+[SEG0022] person_2 (DOCTOR): What do you do to keep active?
+[SEG0023] person_4 (PATIENT): I cycle to work most mornings.
+[SEG0024] person_2 (DOCTOR): How's your diet?
+[SEG0025] person_4 (PATIENT): I'm mostly vegetarian.
+[SEG0026] person_2 (DOCTOR): Who's at home with you?
+[SEG0027] person_4 (PATIENT): It's just me and my wife at home now.
+[SEG0028] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0029] person_4 (PATIENT): I've got high cholesterol. I'd rather know what's going on than keep guessing. I have diabetes, for about a year. Heart disease, for nearly five years.
+[SEG0030] person_2 (DOCTOR): Sure. Alright, high cholesterol, that matches what I have here.
+[SEG0031] person_2 (DOCTOR): Have you noticed fainting, palpitations, pain at rest or bruising?
+[SEG0032] person_4 (PATIENT): Well, no. None of those.
+[SEG0033] person_2 (DOCTOR): How are your bowels, any trouble?
+[SEG0034] person_4 (PATIENT): So, no, that side's been fine.
+[SEG0035] person_1 (NURSE): Here are the numbers, doctor. Heart rate 74, temperature 36.6. SpO2 98 percent on room air, BP is 117 over 79, respiratory rate 17.
+[SEG0036] person_2 (DOCTOR): Okay, thanks.
+[SEG0037] person_2 (DOCTOR): Come over here and I'll have a look.
+[SEG0038] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0039] person_2 (DOCTOR): The scar on your chest has healed well.
+[SEG0040] person_2 (DOCTOR): Let me look at this properly.
+[SEG0041] person_2 (DOCTOR): Chest is clear and heart sounds are normal.
+[SEG0042] person_2 (DOCTOR): Good, that's the examination.
+[SEG0043] person_2 (DOCTOR): Right, here's what I'm thinking. I'd lean towards stable recovery after the heart event. Medication side effects is also on my list.
+[SEG0044] person_1 (NURSE): Doctor, I did an ECG before they came in, the result's on your screen.
+[SEG0045] person_2 (DOCTOR): Perfect. I want an echocardiogram done, that's for follow-up. Please don't stop the blood thinner on your own, even if you feel fine. Try to keep a simple diary of when it happens and what you were doing, and bring it to the next visit. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0046] person_2 (DOCTOR): If it hasn't settled in a month, we'd think about a lipid profile, but not now. One warning sign to remember: the symptoms get worse. In that case don't wait.
+[SEG0047] person_4 (PATIENT): Yes, I'll keep that in mind.
+[SEG0048] person_2 (DOCTOR): Come back in six weeks.
+[SEG0049] person_4 (PATIENT): Um, I'll make the appointment on my way out.
+[SEG0050] person_2 (DOCTOR): Right, that's all. Go gently.
+[SEG0051] person_4 (PATIENT): One thing: no, actually that's all. Thanks.
+[SEG0052] person_2 (DOCTOR): All the best.
+
+JSON:

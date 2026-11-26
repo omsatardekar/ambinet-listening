@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20436)
+[SEG0001] person_1 (PATIENT): Hello, doctor. I think it's my turn.
+[SEG0002] person_2 (DOCTOR): Okay, of course, leave it there. How can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_1 (PATIENT): I'm here because of a tight feeling in my chest when I walk uphill.
+[SEG0005] person_2 (DOCTOR): How long has this been bothering you?
+[SEG0006] person_1 (PATIENT): I've had it for about a year.
+[SEG0007] person_2 (DOCTOR): Rate it for me, mild, moderate or severe?
+[SEG0008] person_1 (PATIENT): About a five out of ten.
+[SEG0009] person_2 (DOCTOR): Anything that improves it?
+[SEG0010] person_1 (PATIENT): I get some relief from stopping and resting.
+[SEG0011] person_2 (DOCTOR): Does anything else come with it?
+[SEG0012] person_1 (PATIENT): A heaviness in my left arm goes along with it, most of the time. Right, as for heaviness in my left arm, resting helps a bit.
+[SEG0013] person_2 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0014] person_1 (PATIENT): Oh, my grandfather had a stroke.
+[SEG0015] person_2 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0016] person_1 (PATIENT): I've had high blood pressure for five years now.
+[SEG0017] person_2 (DOCTOR): Yes.
+[SEG0018] person_1 (PATIENT): I have diabetes. I'm hoping you can tell me something definite. I wasn't sure whether to come in at all, to be honest.
+[SEG0019] person_2 (DOCTOR): Do you take any prescribed or over-the-counter medicines?
+[SEG0020] person_1 (PATIENT): I'm on lisinopril, 10 milligrams, once a day for my pressure. I've been reading about it online and it worried me. Glimepiride. I take it 2 milligrams, before breakfast for my sugar.
+[SEG0021] person_2 (DOCTOR): Have you got any known allergies?
+[SEG0022] person_1 (PATIENT): No, not that I know of.
+[SEG0023] person_2 (DOCTOR): Are you on your own at home?
+[SEG0024] person_1 (PATIENT): I live with my elderly mother.
+[SEG0025] person_2 (DOCTOR): How active are you?
+[SEG0026] person_1 (PATIENT): I hardly move around during the day.
+[SEG0027] person_2 (DOCTOR): What line of work are you in?
+[SEG0028] person_1 (PATIENT): I'm a bus driver, so I sit for long hours.
+[SEG0029] person_2 (DOCTOR): Have you had any cough, palpitations or pain between the shoulder blades?
+[SEG0030] person_1 (PATIENT): I haven't had cough, palpitations or pain between the shoulder blades, no.
+[SEG0031] person_2 (DOCTOR): And pain at rest, any of that?
+[SEG0032] person_1 (PATIENT): Nope, no pain at rest.
+[SEG0033] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0034] person_1 (PATIENT): No, my breathing's been fine.
+[SEG0035] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0036] person_1 (PATIENT): No changes there.
+[SEG0037] person_2 (DOCTOR): I'll do your observations first.
+[SEG0038] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0039] person_2 (DOCTOR): Okay: SpO2 99 percent on room air, pressure 120 over 81, temp 36.7 degrees. And pulse is 86 beats a minute.
+[SEG0040] person_2 (DOCTOR): Let me tell you where I've got to. My working impression is exertional angina until proven otherwise. I'd also keep reflux-related chest pain in mind.
+[SEG0041] person_1 (PATIENT): Will it clear up?
+[SEG0042] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's exertional angina until proven otherwise, and we'll watch how it goes.
+[SEG0043] person_2 (DOCTOR): We'll refer you to the cardiology clinic.
+[SEG0044] person_1 (PATIENT): Alright, thank you.
+[SEG0045] person_2 (DOCTOR): I'd like to see you again in two weeks. Right, that's the plan. Do you want to ask me anything?
+[SEG0046] person_1 (PATIENT): Good, thanks, I'll see you then.
+
+JSON:

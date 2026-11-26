@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03687)
+[SEG0001] person_1 (DOCTOR): Hi there, the chair's free, sit down.
+[SEG0002] person_2 (PATIENT): Actually, hello. I hope I'm not late.
+[SEG0003] person_1 (DOCTOR): Have you been waiting long?
+[SEG0004] person_2 (PATIENT): Only about ten minutes, no trouble.
+[SEG0005] person_1 (DOCTOR): What do you need help with?
+[SEG0006] person_2 (PATIENT): Um, you know, so... blacking out when I stand quickly. That's why I came. My neighbour said I should get it looked at.
+[SEG0007] person_1 (DOCTOR): How long has this been bothering you?
+[SEG0008] person_2 (PATIENT): Probably four weeks. Yeah. I kept putting it off, you know, which I know isn't sensible.
+[SEG0009] person_1 (DOCTOR): Would you say mild, moderate or severe?
+[SEG0010] person_2 (PATIENT): I, I'd give it a six, out of ten.
+[SEG0011] person_1 (DOCTOR): How often do you get it?
+[SEG0012] person_2 (PATIENT): It happens once or twice a day.
+[SEG0013] person_2 (PATIENT): Hmm, I was just going to say that the main thing is—
+[SEG0014] person_3 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0015] person_1 (DOCTOR): Later, thanks. Please go on.
+[SEG0016] person_2 (PATIENT): And there's blurred vision on standing as well, two months now. I've also been feeling lightheaded, for about four days.
+[SEG0017] person_1 (DOCTOR): Okay, and what about palpitations or chest pain?
+[SEG0018] person_2 (PATIENT): No, you know, no palpitations, no chest pain. I did have a new prostate tablet at one point, but that went away on its own.
+[SEG0019] person_1 (DOCTOR): And what about head injury or seizure?
+[SEG0020] person_2 (PATIENT): I haven't had head injury or seizure, no.
+[SEG0021] person_1 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0022] person_2 (PATIENT): Nothing like that.
+[SEG0023] person_1 (DOCTOR): Have you ever had an operation?
+[SEG0024] person_2 (PATIENT): I had a mole taken off my arm a few years ago.
+[SEG0025] person_1 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0026] person_2 (PATIENT): An enlarged prostate, for nearly five years.
+[SEG0027] person_1 (DOCTOR): Tell me your medicines, please. I'm asking so that we don't miss anything.
+[SEG0028] person_2 (PATIENT): Um, it's a... um, I can't remember what it's called. It's a little pink tablet.
+[SEG0029] person_1 (DOCTOR): Do you remember what it's for?
+[SEG0030] person_2 (PATIENT): For the prostate, I believe. My wife sets them out for me, I just take what I'm given.
+[SEG0031] person_1 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0032] person_2 (PATIENT): I've never had an allergy.
+[SEG0033] person_1 (DOCTOR): And alcohol, how much?
+[SEG0034] person_2 (PATIENT): I used to drink heavily but I stopped four years ago.
+[SEG0035] person_1 (DOCTOR): Are you active?
+[SEG0036] person_2 (PATIENT): I walk the dog every morning.
+[SEG0037] person_3 (NURSE): Doctor, I've got the readings for you. Oxygen saturation is 99 percent, temp 36.4 degrees, BP is 104 over 65. Pulse 99.
+[SEG0038] person_1 (DOCTOR): Thanks.
+[SEG0039] person_1 (DOCTOR): I'll examine you in a second, make yourself comfortable.
+[SEG0040] person_1 (DOCTOR): I'll listen to your chest now.
+[SEG0041] person_1 (DOCTOR): Your blood pressure drops a long way when you stand and your heart sounds are normal.
+[SEG0042] person_2 (PATIENT): That's alright.
+[SEG0043] person_1 (DOCTOR): Okay, you can sit up now. Taking everything into account, this looks most like medicine-induced postural hypotension. It could also be an arrhythmia, so we'll keep that open.
+[SEG0044] person_2 (PATIENT): Is this permanent?
+[SEG0045] person_1 (DOCTOR): It's reasonable to be concerned, but right now medicine-induced postural hypotension is my leading thought, not anything worse. So, to recap quickly. You've had blacking out when you stand quickly for four weeks, and no chest pain or palpitations.
+[SEG0046] person_2 (PATIENT): Yes, that's right.
+[SEG0047] person_3 (NURSE): I've already done an ECG, it's ready for you.
+[SEG0048] person_1 (DOCTOR): Thanks, I'll have a look. I'm sending you for blood tests because of syncope.
+[SEG0049] person_4 (CLINICAL_STAFF): We have a slot Wednesday at 2 pm, if that works.
+[SEG0050] person_1 (DOCTOR): We will move the prostate tablet to bedtime and you should rise slowly. Avoid taking any extra painkillers on top of what I'm prescribing without checking with us.
+[SEG0051] person_1 (DOCTOR): Understood. I'd like you back in two weeks. Does all of that make sense?
+[SEG0052] person_2 (PATIENT): Okay, uh, that makes sense. Thanks for explaining.
+
+JSON:

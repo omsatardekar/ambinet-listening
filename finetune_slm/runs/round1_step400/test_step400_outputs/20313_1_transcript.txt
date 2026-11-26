@@ -1,0 +1,76 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20313)
+[SEG0001] person_1 (NURSE): Doctor, your next patient is here. I've done the basics, I'll read them out in a moment.
+[SEG0002] person_2 (DOCTOR): Thanks. Hello, come in, sit down. What brings you in today?
+[SEG0003] person_3 (CAREGIVER): Doctor, thank you for seeing us.
+[SEG0004] person_4 (PATIENT): So, So the thing is, I've got a tight feeling in my chest when I walk uphill.
+[SEG0005] person_2 (DOCTOR): Did it come on recently?
+[SEG0006] person_4 (PATIENT): Mm, it's been six months, I'm fairly sure. My family kept telling me to get it checked. I told my wife I'd come today.
+[SEG0007] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0008] person_4 (PATIENT): Yes, walking uphill. That makes it worse. A eight out of ten, I suppose.
+[SEG0009] person_4 (PATIENT): I was just going to say that the main thing is—
+[SEG0010] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0011] person_2 (DOCTOR): Okay, later, thanks. Please go on.
+[SEG0012] person_4 (PATIENT): And, And breathlessness on exertion, too. And there's a heaviness in my left arm as well, you know, about three months now.
+[SEG0013] person_2 (DOCTOR): Rate it for me, mild, moderate or severe?
+[SEG0014] person_4 (PATIENT): I, I'd call it moderate.
+[SEG0015] person_5 (UNKNOWN): Mm, that's what happened, yes.
+[SEG0016] person_1 (NURSE): Doctor, I've got the readings for you. Pulse is 64 beats a minute, respiratory rate 15, pressure 117 over 79. Oxygen saturation is 99 percent.
+[SEG0017] person_2 (DOCTOR): Okay, noted.
+[SEG0018] person_2 (DOCTOR): Alright, over here please and I'll take a look.
+[SEG0019] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0020] person_2 (DOCTOR): Heart sounds are normal, no murmur, and the chest is clear.
+[SEG0021] person_2 (DOCTOR): I'm just checking this side.
+[SEG0022] person_2 (DOCTOR): There is no swelling in your ankles.
+[SEG0023] person_2 (DOCTOR): Good, you can sit up again.
+[SEG0024] person_2 (DOCTOR): A few quick ones: ankle swelling or cough?
+[SEG0025] person_4 (PATIENT): No, none of those at all.
+[SEG0026] person_2 (DOCTOR): Have you had any palpitations or pain between the shoulder blades?
+[SEG0027] person_4 (PATIENT): No, no palpitations or pain between the shoulder blades.
+[SEG0028] person_2 (DOCTOR): Any fainting or pain at rest at all?
+[SEG0029] person_4 (PATIENT): Uh, no, I'd have said so.
+[SEG0030] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0031] person_4 (PATIENT): Nothing there, no.
+[SEG0032] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0033] person_4 (PATIENT): Let me think, uh, no, joints are fine.
+[SEG0034] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0035] person_4 (PATIENT): I gave up cigarettes last spring. I'll have a glass of wine with dinner. I look after my grandchildren most days. I live with my elderly mother.
+[SEG0036] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0037] person_4 (PATIENT): I don't think I have any, no.
+[SEG0038] person_3 (CAREGIVER): So, hold on, doctor, I think he reacted to amoxicillin once. I'm not certain, though.
+[SEG0039] person_4 (PATIENT): I don't remember that.
+[SEG0040] person_2 (DOCTOR): Okay, I'll note both of those. Are you taking anything regularly, including from the pharmacy?
+[SEG0041] person_4 (PATIENT): Atorvastatin. I take it 20 milligrams, at night.
+[SEG0042] person_3 (CAREGIVER): I mean, doctor, I think the last prescription for the atorvastatin was 10 milligrams. We changed it at the last visit.
+[SEG0043] person_2 (DOCTOR): Okay. Have you got the newest prescription or the box with you?
+[SEG0044] person_4 (PATIENT): I mean, not with me. I'll bring it next time. Sitagliptin, 100 milligrams, once a day for my sugar. Hmm, you know, I take metoprolol, 50 milligrams, twice a day.
+[SEG0045] person_3 (CAREGIVER): Let me think, that's what's prescribed, but I'm not sure he takes it every day.
+[SEG0046] person_4 (PATIENT): Let me think, I'm on pantoprazole, 40 milligrams, before breakfast for my acidity. Before this I was on ramipril; that's been stopped.
+[SEG0047] person_2 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0048] person_4 (PATIENT): Oh, I have high cholesterol, for nearly five years. I've had diabetes for five years now.
+[SEG0049] person_2 (DOCTOR): Right, right.
+[SEG0050] person_4 (PATIENT): I, I have high blood pressure.
+[SEG0051] person_2 (DOCTOR): Yes.
+[SEG0052] person_4 (PATIENT): Yes, acid reflux.
+[SEG0053] person_2 (DOCTOR): Okay, what else?
+[SEG0054] person_2 (DOCTOR): Okay, I can see high cholesterol and high blood pressure in your file as well. Have you had any previous surgeries?
+[SEG0055] person_4 (PATIENT): No, not at all.
+[SEG0056] person_2 (DOCTOR): Let me tell you where I've got to. It points towards exertional angina until proven otherwise. I can't rule out a muscle strain yet.
+[SEG0057] person_4 (PATIENT): Is it dangerous, doctor?
+[SEG0058] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's exertional angina until proven otherwise, and we'll watch how it goes. If the tightness comes, stop, sit down and use the spray under your tongue. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0059] person_4 (PATIENT): Hmm, uh, could I get an ECG done? A friend had it.
+[SEG0060] person_2 (DOCTOR): Not at this point, no. It isn't indicated yet. Book a review after the test results are back. Alright, that's all from me. Any questions?
+[SEG0061] person_4 (PATIENT): No, that's all. Thanks a lot.
+
+JSON:

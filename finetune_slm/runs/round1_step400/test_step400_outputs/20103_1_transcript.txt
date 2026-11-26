@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20103)
+[SEG0001] person_1 (NURSE): Doctor, this one's ready for you. Everything's on the chart, but I'll go through it.
+[SEG0002] person_2 (DOCTOR): Alright, thank you. Good morning, tell me what's been going on.
+[SEG0003] person_3 (PATIENT): Sorry, um, what was I saying, honestly, it's yellow eyes, and my family pushed me to come.
+[SEG0004] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0005] person_3 (PATIENT): It's escitalopram, 10 milligrams, maybe, once a day.
+[SEG0006] person_2 (DOCTOR): Do you have the packet or the prescription with you?
+[SEG0007] person_3 (PATIENT): No, um, it's at home.
+[SEG0008] person_2 (DOCTOR): What's the timeline, when did it begin?
+[SEG0009] person_3 (PATIENT): Well, uh, it's been going on for five days. I did have pale stools at one point, but that's gone now.
+[SEG0010] person_2 (DOCTOR): Have you had yellow eyes before, or is this the first time?
+[SEG0011] person_3 (PATIENT): I had a similar thing last year. It went away.
+[SEG0012] person_2 (DOCTOR): Have you had any vomiting blood, itching, bleeding or confusion?
+[SEG0013] person_3 (PATIENT): Nope, nothing like that.
+[SEG0014] person_2 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0015] person_3 (PATIENT): Let me think, um, no, that's all normal.
+[SEG0016] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0017] person_3 (PATIENT): Skin's normal.
+[SEG0018] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0019] person_3 (PATIENT): No, not at all.
+[SEG0020] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0021] person_3 (PATIENT): I have eczema. I'm hoping you can tell me something definite.
+[SEG0022] person_2 (DOCTOR): Mm, okay.
+[SEG0023] person_3 (PATIENT): Yes, anxiety.
+[SEG0024] person_2 (DOCTOR): Okay, I can see anxiety in your file as well. Let's talk a little about your daily life and habits.
+[SEG0025] person_3 (PATIENT): Nothing, I'm teetotal. I have about eight cigarettes in a day. I look after my grandchildren most days. I walk the dog every morning. My husband and I live above the shop.
+[SEG0026] person_2 (DOCTOR): Before we go further, any allergies?
+[SEG0027] person_3 (PATIENT): So, um, no allergies at all.
+[SEG0028] person_1 (NURSE): Doctor, I've got the readings for you. Oxygen saturation is 99 percent, temperature is 36.7 degrees, pulse is 64 beats a minute, pressure 114 over 81.
+[SEG0029] person_2 (DOCTOR): Good, thank you.
+[SEG0030] person_2 (DOCTOR): Alright, over here please and I'll take a look.
+[SEG0031] person_3 (PATIENT): Fine by me.
+[SEG0032] person_2 (DOCTOR): Breathe out slowly.
+[SEG0033] person_2 (DOCTOR): The whites of your eyes are yellow and the liver edge is tender under the right ribs.
+[SEG0034] person_2 (DOCTOR): Good, you can sit up again. Having listened and examined, I'm honestly not certain yet. It could be an acute viral hepatitis, or it might be a drug-related liver problem.
+[SEG0035] person_3 (PATIENT): Is this permanent?
+[SEG0036] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's an acute viral hepatitis, and we'll know more once the an ultrasound of the liver is back.
+[SEG0037] person_2 (DOCTOR): Let's book an ultrasound of the liver to look into jaundice. Let's book liver blood tests to look into jaundice. No alcohol at all and avoid paracetamol and other painkillers unless we say. The liver clinic would be the right next step, I'll refer you.
+[SEG0038] person_3 (PATIENT): Alright, thank you.
+[SEG0039] person_2 (DOCTOR): And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0040] person_3 (PATIENT): Thank you, that's clear.
+[SEG0041] person_2 (DOCTOR): A hepatitis screen is something we might do if this doesn't improve next month. Please don't wait if you become drowsy or confused. That's when to be seen urgently. I'd like to see you again after the results.
+[SEG0042] person_3 (PATIENT): Good, I'll return then.
+[SEG0043] person_2 (DOCTOR): Have I covered everything you wanted?
+[SEG0044] person_3 (PATIENT): Right, um, I'll do that. Thank you, doctor.
+
+JSON:

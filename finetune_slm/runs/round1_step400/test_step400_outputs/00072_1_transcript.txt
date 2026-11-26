@@ -1,0 +1,77 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00072)
+[SEG0001] person_1 (PATIENT): I mean, excuse me, doctor, should I sit here?
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_3 (CAREGIVER): Good morning, uh, doctor. I came along to help out.
+[SEG0004] person_2 (DOCTOR): Good, that'll be useful. Pull up a chair.
+[SEG0005] person_3 (CAREGIVER): We came because of pain in the lower right tummy.
+[SEG0006] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0007] person_1 (PATIENT): It's apixaban, 5 milligrams, maybe, twice a day.
+[SEG0008] person_2 (DOCTOR): do you have the packet or the prescription with you?
+[SEG0009] person_1 (PATIENT): Not with me. I'll bring it next time. Before this I was on losartan; that's been stopped.
+[SEG0010] person_2 (DOCTOR): How long have you had it?
+[SEG0011] person_1 (PATIENT): probably two weeks yeah
+[SEG0012] person_2 (DOCTOR): okay, give me more detail on it, whatever comes to mind
+[SEG0013] person_1 (PATIENT): I'd say a few times a day. It settles a little with lying still. Moderate, really.
+[SEG0014] person_2 (DOCTOR): does it come along with anything else?
+[SEG0015] person_1 (PATIENT): When it starts I tend to get nausea as well. Oh, um, and a low fever. That's been about the same, five days. About low fever, about a six out of ten. The, The nausea? That's been since Friday.
+[SEG0016] person_2 (DOCTOR): What's the pattern, is it there all day?
+[SEG0017] person_1 (PATIENT): It's every other day.
+[SEG0018] person_2 (DOCTOR): and what about diarrhoea, hernia bulge, jaundice or constipation?
+[SEG0019] person_1 (PATIENT): No, um, nothing there.
+[SEG0020] person_2 (DOCTOR): Right, and what about burning when passing urine or blood in the stool?
+[SEG0021] person_1 (PATIENT): No, um, nothing there.
+[SEG0022] person_2 (DOCTOR): How's your breathing otherwise?
+[SEG0023] person_1 (PATIENT): Oh, no, my breathing's been fine.
+[SEG0024] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0025] person_1 (PATIENT): right, um, no, skin's been fine
+[SEG0026] person_2 (DOCTOR): tell me about your health in general, any ongoing conditions?
+[SEG0027] person_1 (PATIENT): I have an irregular heartbeat, for about a year. I didn't want to make a fuss, you know.
+[SEG0028] person_2 (DOCTOR): I see
+[SEG0029] person_1 (PATIENT): I've had high blood pressure for two years now.
+[SEG0030] person_2 (DOCTOR): Okay, I can see high blood pressure in your file as well. Any drug or food allergies?
+[SEG0031] person_1 (PATIENT): Shellfish. I come out in... well, hives.
+[SEG0032] person_2 (DOCTOR): So, is there a family history of anything significant?
+[SEG0033] person_1 (PATIENT): Oh, uh, my sister has thyroid problems. My mother has diabetes.
+[SEG0034] person_2 (DOCTOR): do you drink alcohol?
+[SEG0035] person_1 (PATIENT): I have a couple of drinks on the weekend.
+[SEG0036] person_2 (DOCTOR): And what do you usually eat?
+[SEG0037] person_1 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0038] person_2 (DOCTOR): Are you still working?
+[SEG0039] person_1 (PATIENT): I'm retired now, I was a clerk for years.
+[SEG0040] person_2 (DOCTOR): What about operations, anything like that?
+[SEG0041] person_1 (PATIENT): Just my gallbladder removed, in 2016.
+[SEG0042] person_2 (DOCTOR): Can I take your vitals now?
+[SEG0043] person_2 (DOCTOR): Just relax your arm...
+[SEG0044] person_2 (DOCTOR): Okay: pulse 94, SpO2 97 percent on room air, temperature 39.3, blood pressure 106 over 77.
+[SEG0045] person_1 (PATIENT): is that alright, doctor?
+[SEG0046] person_2 (DOCTOR): We'll put it in context in a moment.
+[SEG0047] person_2 (DOCTOR): Okay, I'd like to to examine you now.
+[SEG0048] person_2 (DOCTOR): tell me if anything hurts
+[SEG0049] person_2 (DOCTOR): Bowel sounds are present.
+[SEG0050] person_2 (DOCTOR): Bear with me a second.
+[SEG0051] person_2 (DOCTOR): there's tenderness in the right lower part and it hurts when I let go suddenly
+[SEG0052] person_1 (PATIENT): Sure.
+[SEG0053] person_2 (DOCTOR): That's fine, sit up. Having listened and examined, this is probably possible appendicitis. I'd also keep a gastroenteritis in mind.
+[SEG0054] person_1 (PATIENT): Should I be worried about this?
+[SEG0055] person_2 (DOCTOR): I can't promise yet, but most people with possible appendicitis do well once it's treated properly. An ultrasound of the abdomen is what I'd like next, for right lower abdominal pain.
+[SEG0056] person_1 (PATIENT): oh, where do I go for that?
+[SEG0057] person_2 (DOCTOR): I want a urine test done, that's for abdominal pain. It's a routine test and it'll give us a much clearer picture. I want blood tests done, that's for abdominal pain.
+[SEG0058] person_1 (PATIENT): Okay, that's fine.
+[SEG0059] person_2 (DOCTOR): please don't eat or drink anything until the surgeons have seen you please take the tablets with food so they don't upset your stomach and please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose if the pain gets sharper or spreads across the tummy, or you feel really unwell, please come to the emergency department book a review today after the results
+[SEG0060] person_2 (DOCTOR): Is there anything you wanted to ask?
+[SEG0061] person_1 (PATIENT): Okay, so no questions. Thank you.
+[SEG0062] person_2 (DOCTOR): Bye for now.
+
+JSON:

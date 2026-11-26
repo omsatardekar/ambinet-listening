@@ -1,0 +1,136 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_06_hip_groin_pain_grandmother)
+[SEG0001] person_1 (FAMILY_MEMBER): She won't tell you the half of it, so I'll say it now, doctor, because she's been limping for months and she just keeps saying it's fine and then goes and picks up the baby.
+[SEG0002] person_2 (PATIENT): Sharon, let me sit down, for goodness' sake.
+[SEG0003] person_1 (FAMILY_MEMBER): Sorry. Sorry, Mum. Sit.
+[SEG0004] person_3 (DOCTOR): Morning, both. Hello, Mrs Doyle, I'm Dr Nguyen. Is it all right if the nurse sits in, as well? She'll do your checks in a minute.
+[SEG0005] person_2 (PATIENT): Right.
+[SEG0006] person_2 (PATIENT): Yes, that's fine. Hello, love.
+[SEG0007] person_4 (NURSE): Hi there, Mrs Doyle. I'm Lyn.
+[SEG0008] person_3 (DOCTOR): Right. Let's start from the beginning, because I'd rather hear it from you, Mrs Doyle, and then I'll come to Sharon for the bits you've forgotten. What's the trouble?
+[SEG0009] person_2 (PATIENT): Oh, it's just the, here, in my groin. The right one. A pain, in the, down here, where the leg joins on.
+[SEG0010] person_3 (DOCTOR): In the crease, at the top of the thigh?
+[SEG0011] person_2 (PATIENT): That's it. Deep in. Not on the skin.
+[SEG0012] person_3 (DOCTOR): Is it there all the time?
+[SEG0013] person_2 (PATIENT): Well, uh, not all the time. It's when I get up. After sitting. I get up from the couch and I have to, you know, stand a minute till it lets go.
+[SEG0014] person_3 (DOCTOR): I see.
+[SEG0015] person_3 (DOCTOR): So it eases once you get going?
+[SEG0016] person_2 (PATIENT): Eventually. And then if I do too much, it comes back in the evening.
+[SEG0017] person_3 (DOCTOR): And how long have you had it?
+[SEG0018] person_2 (PATIENT): Six months, about. Since the winter.
+[SEG0019] person_1 (FAMILY_MEMBER): It's longer than that, Mum.
+[SEG0020] person_2 (PATIENT): It's six months.
+[SEG0021] person_1 (FAMILY_MEMBER): Uh, it was before the school holidays last year, she was doing the pick-ups in the car and she was already holding on to the door to get out. That's, what, thirteen months? More.
+[SEG0022] person_2 (PATIENT): That's not the same thing. That was my knee.
+[SEG0023] person_1 (FAMILY_MEMBER): Well, um, it wasn't the knee, the knee she walks on fine.
+[SEG0024] person_3 (DOCTOR): Okay, um, okay. It's useful, both of you. Mrs Doyle, let's say it's somewhere between six months and a year, and we'll see if that changes. Does the pain go anywhere else? Down the leg, into the knee, into the back?
+[SEG0025] person_2 (PATIENT): Hm, a bit down the front of the thigh. Not to the foot. And the back's all right.
+[SEG0026] person_3 (DOCTOR): Have you ever had it before? Same place?
+[SEG0027] person_2 (PATIENT): Years ago. Two years ago maybe. That settled by itself. I put it down to the gardening and I just rested for a few weeks and it went.
+[SEG0028] person_3 (DOCTOR): Right.
+[SEG0029] person_3 (DOCTOR): Any limp now?
+[SEG0030] person_2 (PATIENT): Er, a little, I suppose. Not so much. Not any more.
+[SEG0031] person_1 (FAMILY_MEMBER): She's got a limp, Mum, you're limping like a pirate by the end of the day.
+[SEG0032] person_2 (PATIENT): I am not.
+[SEG0033] person_3 (DOCTOR): Honestly, I'll see in a minute, I'll watch you walk. Is the hip stiff? Does it feel tight, like it doesn't want to move?
+[SEG0034] person_2 (PATIENT): Er, after sitting, yes. Stiff for a few minutes. Putting my shoes on is a nightmare.
+[SEG0035] person_3 (DOCTOR): Okay. Now a few questions to rule things out. Have you noticed any swelling in the leg?
+[SEG0036] person_2 (PATIENT): No.
+[SEG0037] person_3 (DOCTOR): Fever, or feeling hot and shivery?
+[SEG0038] person_2 (PATIENT): No fevers.
+[SEG0039] person_3 (DOCTOR): Have you had a fall, or knocked it?
+[SEG0040] person_2 (PATIENT): No. I haven't fallen. I'm very careful.
+[SEG0041] person_3 (DOCTOR): Losing weight without trying to?
+[SEG0042] person_2 (PATIENT): Ha. I wish.
+[SEG0043] person_3 (DOCTOR): And what about the back, any back pain, shooting down the leg, pins and needles?
+[SEG0044] person_2 (PATIENT): Well, uh, not really. A bit of an ache sometimes, but nothing shooting.
+[SEG0045] person_3 (DOCTOR): Is a bit of an ache the usual, or does that count?
+[SEG0046] person_2 (PATIENT): Oh, it's the usual. Everybody my age has an ache.
+[SEG0047] person_3 (DOCTOR): Okay.
+[SEG0048] person_5 (UNKNOWN): Is Jim in there? Has anyone seen Jim?
+[SEG0049] person_3 (DOCTOR): Sorry, one moment. Hello? Can I help you? Hm. They've gone. Right. Where were we. Mrs Doyle, how's your general health? Any other conditions?
+[SEG0050] person_2 (PATIENT): Blood pressure. About a year, I think, since they found it when I went for the knee. And the arthritis in my knees, the doctor said that's wear and tear.
+[SEG0051] person_3 (DOCTOR): Both knees?
+[SEG0052] person_2 (PATIENT): Both. The left more.
+[SEG0053] person_3 (DOCTOR): And your tablets?
+[SEG0054] person_2 (PATIENT): Hydrochlorothiazide, the water one, twelve and a half, in the morning. And the arthritis tablets, I get them from the chemist, the, whatever, diclofenac. No. Naproxen. No, it's the other one, the pink one.
+[SEG0055] person_1 (FAMILY_MEMBER): Mm.
+[SEG0056] person_1 (FAMILY_MEMBER): Well, uh, it's diclofenac, Mum, it says on the box, I've seen it. It's the one the doctor gave you last time.
+[SEG0057] person_2 (PATIENT): Is it? Okay. Diclofenac, fifty, I take them when I need them, twice a day on the bad days.
+[SEG0058] person_3 (DOCTOR): How many bad days do you have?
+[SEG0059] person_2 (PATIENT): A lot, lately.
+[SEG0060] person_3 (DOCTOR): Right, er, we'll talk about that. And I see here you have something for fits?
+[SEG0061] person_2 (PATIENT): Oh. It's an old thing. Leviteracetam. Levetiracetam. I had a funny turn years ago and they put me on it. I've never had one since.
+[SEG0062] person_3 (DOCTOR): Yes.
+[SEG0063] person_3 (DOCTOR): Okay, um, it's good to know. Now, who lives at home with you?
+[SEG0064] person_2 (PATIENT): My mum, she's ninety-one, she's with me. I look after her. And the grandchildren, most days. The two little ones. Their mum's at work.
+[SEG0065] person_1 (FAMILY_MEMBER): That's me. I'm at work.
+[SEG0066] person_2 (PATIENT): It's no trouble, I like having them.
+[SEG0067] person_3 (DOCTOR): That's a lot of lifting. Is there any illness in the family, anything like bowel cancer, or dementia?
+[SEG0068] person_2 (PATIENT): Er, my dad had bowel cancer. That's what he died of. And my gran had the dementia.
+[SEG0069] person_3 (DOCTOR): I'm sorry to hear that. Okay, thank you. Lyn, would you mind doing the checks?
+[SEG0070] person_4 (NURSE): Sure. Mrs Doyle, can I take your blood pressure first? Arm out, and relax it.
+[SEG0071] person_2 (PATIENT): Go on.
+[SEG0072] person_4 (NURSE): One eighteen over seventy-seven. Perfect. Pulse is eighty-two, regular.
+[SEG0073] person_2 (PATIENT): Is that good?
+[SEG0074] person_4 (NURSE): That's lovely. Oxygen, ninety-seven, breathing fifteen, and the temperature is thirty-six point eight.
+[SEG0075] person_3 (DOCTOR): Good, thank you, Lyn. Mrs Doyle, I'm going to ask you to get up and walk to the door and back, just normally, and I'll watch.
+[SEG0076] person_2 (PATIENT): Right.
+[SEG0077] person_2 (PATIENT): Now? I'm all stiff.
+[SEG0078] person_3 (DOCTOR): That's what I want to see.
+[SEG0079] person_2 (PATIENT): Right.
+[SEG0080] person_3 (DOCTOR): Thanks. You do drop your pelvis a bit on the right when you put the weight through, and you're taking shorter steps on that side. It's a small limp, but it is there. Come and lie on the couch.
+[SEG0081] person_1 (FAMILY_MEMBER): Told you.
+[SEG0082] person_2 (PATIENT): Oh, be quiet.
+[SEG0083] person_3 (DOCTOR): I'm going to bend the hip up, then roll it in and out, as far as it will go. Tell me when it hurts.
+[SEG0084] person_2 (PATIENT): Ah. There. That's the spot.
+[SEG0085] person_3 (DOCTOR): Right hip, turning the leg inwards and outwards is painful and quite limited compared with the left one. The left goes much further.
+[SEG0086] person_2 (PATIENT): Is that bad?
+[SEG0087] person_3 (DOCTOR): It tells me a lot. Sit up, whenever you're ready. What I think this is, Mrs Doyle, is wear and tear in the hip joint, arthritis in the hip, the same sort you have in your knees. It very often presents as pain in the groin and not in the hip itself, which is why people look in the wrong place for months. That's what I think is most likely. The other possibility is that something in the lower back is pinching a nerve and it's showing up in the groin, but your back sounds fine to me.
+[SEG0088] person_2 (PATIENT): Mm.
+[SEG0089] person_2 (PATIENT): So it is the hip.
+[SEG0090] person_3 (DOCTOR): Probably. I'd like an X-ray to confirm it, and to see how far gone it is. And I'd like some blood tests, for inflammation, just to make sure nothing else is going on, because of the family history and the pain.
+[SEG0091] person_2 (PATIENT): Yeah.
+[SEG0092] person_2 (PATIENT): Will I need an operation?
+[SEG0093] person_3 (DOCTOR): Not today, and not necessarily at all. A lot of people do well with exercises, a walking stick, and sensible pain relief. If the X-ray shows a lot of damage and the pain keeps getting in the way, we'd talk about a hip replacement down the track. But let's see the picture first.
+[SEG0094] person_1 (FAMILY_MEMBER): Mm-hm.
+[SEG0095] person_1 (FAMILY_MEMBER): What about the lifting? The babies?
+[SEG0096] person_3 (DOCTOR): That's the hard one, Sharon. It's not about stopping, but it is about not hauling a toddler on and off the floor all day with a hip like that. Could somebody else do the heavy part?
+[SEG0097] person_1 (FAMILY_MEMBER): I could talk to my husband, he could take some Fridays.
+[SEG0098] person_2 (PATIENT): I don't need Fridays.
+[SEG0099] person_1 (FAMILY_MEMBER): Mum.
+[SEG0100] person_3 (DOCTOR): I'm not going to tell you what to do, Mrs Doyle. But it would help to have a rest day.
+[SEG0101] person_2 (PATIENT): We'll see.
+[SEG0102] person_3 (DOCTOR): Fair. And in the meantime, there are a few things that really do help. A walking stick in the opposite hand, so the left, takes a surprising amount of load off the right hip. Gentle strengthening for the muscles around it, a physio can set you up with that, and keeping your weight steady.
+[SEG0103] person_2 (PATIENT): A stick. I'll look like my mother.
+[SEG0104] person_1 (FAMILY_MEMBER): Your mother has a very stylish stick, Mum.
+[SEG0105] person_2 (PATIENT): She does, she bought it online.
+[SEG0106] person_3 (DOCTOR): There you go. And the stairs at home, how are those?
+[SEG0107] person_2 (PATIENT): Fourteen steps. I count them.
+[SEG0108] person_3 (DOCTOR): Hold the rail with the left hand going up, and lead with the good leg going up, bad leg going down. Up with the good, down with the bad.
+[SEG0109] person_2 (PATIENT): Up with the good, down with the bad. I'll tell Mum, she'll like that.
+[SEG0110] person_1 (FAMILY_MEMBER): Can I ask, doctor, is it something I'll get? She's got the knees and now the hip, and I'm forty-four.
+[SEG0111] person_3 (DOCTOR): It does run in families a bit, yes, but it depends on a lot of other things, like weight, and what you've done with your joints over the years. At forty-four, the best thing you can do is keep moving and don't carry extra weight. I wouldn't lose sleep over it.
+[SEG0112] person_1 (FAMILY_MEMBER): Right.
+[SEG0113] person_1 (FAMILY_MEMBER): Right. I'll keep walking, then.
+[SEG0114] person_3 (DOCTOR): Good.
+[SEG0115] person_3 (DOCTOR): Now, the diclofenac. Because of your blood pressure, and your age, I'd rather you didn't take it every day for months. Use paracetamol first and the diclofenac only on the really bad days, with food.
+[SEG0116] person_2 (PATIENT): Right. Paracetamol, then the pink one.
+[SEG0117] person_3 (DOCTOR): That's it. I'll print the X-ray request and the blood form, and the nurse will help you find where to go.
+[SEG0118] person_2 (PATIENT): Thank you, doctor.
+[SEG0119] person_3 (DOCTOR): You're welcome. Any other questions?
+[SEG0120] person_2 (PATIENT): Only, can I still have my walk with the dog?
+[SEG0121] person_3 (DOCTOR): Slowly, yes. It's good for it.
+
+JSON:

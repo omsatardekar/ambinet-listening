@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01779)
+[SEG0001] person_1 (PATIENT): Hello, doctor. I think it's my turn.
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_3 (CAREGIVER): Erm, hello, doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_1 (PATIENT): It's the worst headache of my life. I thought I'd wait, but it hasn't gone.
+[SEG0005] person_2 (DOCTOR): What's the timeline, when did it begin?
+[SEG0006] person_1 (PATIENT): Ever since... since yesterday, really.
+[SEG0007] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0008] person_1 (PATIENT): Pretty mild, if I'm being honest. It happens all the time.
+[SEG0009] person_1 (PATIENT): Sorry, what was I saying, I was just going to say that the main thing is—
+[SEG0010] person_4 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0011] person_2 (DOCTOR): Later, thanks. Please go on.
+[SEG0012] person_1 (PATIENT): Oh, and a stiff neck. As for stiff neck, about a three out of ten.
+[SEG0013] person_2 (DOCTOR): Mm-hmm.
+[SEG0014] person_1 (PATIENT): As for vomiting, I honestly can't say when that began. It might have been last month or the month before. About vomiting, it's mild, honestly.
+[SEG0015] person_2 (DOCTOR): Have you had head injury, by any chance?
+[SEG0016] person_1 (PATIENT): Nope, no head injury.
+[SEG0017] person_2 (DOCTOR): And what about fever or weakness?
+[SEG0018] person_1 (PATIENT): No, no fever, no weakness. I did have coming on in seconds at one point, but that went away on its own.
+[SEG0019] person_2 (DOCTOR): Right, anything with your heart, like skipped beats or fainting?
+[SEG0020] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0021] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0022] person_1 (PATIENT): No, that's all fine.
+[SEG0023] person_2 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0024] person_1 (PATIENT): I've got heart failure. Heart disease, for nearly five years. It's the not knowing that gets to me. Gout, for about ten years.
+[SEG0025] person_2 (DOCTOR): Okay, I can see gout in your file as well. Right, do you take any prescribed or over-the-counter medicines?
+[SEG0026] person_1 (PATIENT): I'm on furosemide, 40 milligrams, every morning.
+[SEG0027] person_4 (NURSE): Doctor, our chart from the last visit lists it as 20 milligrams.
+[SEG0028] person_2 (DOCTOR): Right. Do you happen to have the current prescription here?
+[SEG0029] person_1 (PATIENT): Not with me. I'll bring it next time. I take clopidogrel, 75 milligrams, once a day.
+[SEG0030] person_2 (DOCTOR): And for how long?
+[SEG0031] person_1 (PATIENT): For two years.
+[SEG0032] person_1 (PATIENT): It's a... um, I can't remember what it's called. It's a little pink tablet.
+[SEG0033] person_2 (DOCTOR): Alright, do you remember what it's for?
+[SEG0034] person_1 (PATIENT): For the gout, I believe. My daughter sets them out for me, I just take what I'm given.
+[SEG0035] person_2 (DOCTOR): And alcohol, how much?
+[SEG0036] person_1 (PATIENT): I'll have a glass of wine with dinner.
+[SEG0037] person_2 (DOCTOR): How are your meals?
+[SEG0038] person_1 (PATIENT): I grab fast food at lunch most days.
+[SEG0039] person_2 (DOCTOR): So, any allergies to tablets, food or anything in the environment?
+[SEG0040] person_1 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0041] person_4 (NURSE): Okay, so the vitals from earlier. Weight 93 kilos, BMI works out to 41.3, temp 36.4 degrees, height 150 centimetres, pulse is 92 beats a minute, BP is 146 over 91, oxygen saturation is 98 percent.
+[SEG0042] person_2 (DOCTOR): Okay, noted.
+[SEG0043] person_2 (DOCTOR): Could you come over to the couch, please?
+[SEG0044] person_2 (DOCTOR): Hold that for a second.
+[SEG0045] person_2 (DOCTOR): Your neck is stiff and you are very sensitive to light.
+[SEG0046] person_2 (DOCTOR): That's the examination finished. So where does that leave us? I think we're dealing with a possible bleed around the brain at this stage. I can't rule out a migraine yet.
+[SEG0047] person_1 (PATIENT): Will it clear up?
+[SEG0048] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a possible bleed around the brain, and we'll know more once the an urgent CT scan of the head is back.
+[SEG0049] person_2 (DOCTOR): I'd like to arrange an urgent CT scan of the head for thunderclap headache. I want a lumbar puncture done, that's for thunderclap headache. This needs an emergency scan, an ambulance is on its way. The emergency team would be the right next step, I'll refer you. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0050] person_1 (PATIENT): Thank you, that's clear.
+[SEG0051] person_2 (DOCTOR): Do get help quickly if the symptoms get worse. Does all of that make sense?
+[SEG0052] person_1 (PATIENT): Thank you, that's helpful.
+[SEG0053] person_2 (DOCTOR): Have a good day.
+
+JSON:

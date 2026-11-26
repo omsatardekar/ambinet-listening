@@ -1,0 +1,72 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00475)
+[SEG0001] person_1 (PATIENT): sorry, doctor, I couldn't find the door at first
+[SEG0002] person_2 (DOCTOR): yes, come in, take a seat what can I do for you today?
+[SEG0003] person_1 (PATIENT): So the thing is, I've got pain in the lower right tummy.
+[SEG0004] person_2 (DOCTOR): Since when have you had this?
+[SEG0005] person_1 (PATIENT): Probably about four days. Yeah.
+[SEG0006] person_2 (DOCTOR): alright, how often does it happen?
+[SEG0007] person_1 (PATIENT): I'd say once or twice a day.
+[SEG0008] person_2 (DOCTOR): Right, how intense does it get?
+[SEG0009] person_1 (PATIENT): Mild, I'd say there's a low fever as well okay, so with low fever, Mild, I'd say oh, there was vomiting once, yes, but that went away
+[SEG0010] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0011] person_1 (PATIENT): My mother had high blood pressure.
+[SEG0012] person_2 (DOCTOR): do you have any medical conditions, anything you've been treated for?
+[SEG0013] person_1 (PATIENT): Yes, an underactive thyroid. I have an irregular heartbeat, for two years. I'd rather not end up on lots of tablets if I can avoid it. I've had heart disease, yes. I wasn't sure whether to come in at all, to be honest.
+[SEG0014] person_2 (DOCTOR): And apart from that?
+[SEG0015] person_1 (PATIENT): I've got high blood pressure.
+[SEG0016] person_2 (DOCTOR): Hm, okay. Okay, I can see an underactive thyroid and an irregular heartbeat in your file as well.
+[SEG0017] person_2 (DOCTOR): do you exercise at all?
+[SEG0018] person_1 (PATIENT): I go to the gym a couple of times a week
+[SEG0019] person_2 (DOCTOR): Are you living with family?
+[SEG0020] person_1 (PATIENT): I stay with my daughter and her family
+[SEG0021] person_2 (DOCTOR): How do you eat, generally?
+[SEG0022] person_1 (PATIENT): I skip breakfast most days
+[SEG0023] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0024] person_1 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0025] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0026] person_1 (PATIENT): I'm on Thyronorm, every morning
+[SEG0027] person_2 (DOCTOR): how much do you take?
+[SEG0028] person_1 (PATIENT): 50 micrograms, I think that's what's on the box it's bisoprolol, 2.5 milligrams, once a day i'm on aspirin, 75 milligrams, once a day for my heart. Amlodipine, once a day
+[SEG0029] person_2 (DOCTOR): Okay, and what strength is that?
+[SEG0030] person_1 (PATIENT): 5 milligrams
+[SEG0031] person_2 (DOCTOR): have you noticed constipation, hernia bulge, burning when passing urine or blood in the stool?
+[SEG0032] person_1 (PATIENT): no, nothing there
+[SEG0033] person_2 (DOCTOR): Any problems with your joints or muscles?
+[SEG0034] person_1 (PATIENT): Nothing else aches.
+[SEG0035] person_2 (DOCTOR): Anything unusual with passing urine?
+[SEG0036] person_1 (PATIENT): Nothing there, no.
+[SEG0037] person_2 (DOCTOR): Right, before we go on, a few quick readings.
+[SEG0038] person_2 (DOCTOR): rest your hand here..
+[SEG0039] person_2 (DOCTOR): Okay: saturation 98 percent, respiratory rate 20, blood pressure 120 over 74, pulse 96, temperature 38.5.
+[SEG0040] person_1 (PATIENT): Is that normal?
+[SEG0041] person_2 (DOCTOR): that's fine, we'll come to it
+[SEG0042] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0043] person_2 (DOCTOR): I'll go gently
+[SEG0044] person_2 (DOCTOR): Bowel sounds are present.
+[SEG0045] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0046] person_2 (DOCTOR): There's tenderness in the right lower part and it hurts when I let go suddenly.
+[SEG0047] person_1 (PATIENT): okay
+[SEG0048] person_2 (DOCTOR): Thanks for that.
+[SEG0049] person_2 (DOCTOR): Putting it all together, I can't pin this down yet. We're looking at possible appendicitis or a gastroenteritis.
+[SEG0050] person_1 (PATIENT): is this going to go away?
+[SEG0051] person_2 (DOCTOR): nothing I've seen today points to an emergency it looks like possible appendicitis, but I'd like to to confirm let's book an ultrasound of the abdomen to look into right lower abdominal pain
+[SEG0052] person_3 (CLINICAL_STAFF): the earliest is Thursday, 9 am
+[SEG0053] person_1 (PATIENT): Okay, I'll be there.
+[SEG0054] person_2 (DOCTOR): we should do blood tests for abdominal pain. Please don't eat or drink anything until the surgeons have seen you. Cut down on salt and fried food for now, it really does make a difference. If the pain gets sharper or spreads across the tummy, that's the point to come in urgently. Book a review today after the results
+[SEG0055] person_1 (PATIENT): okay, see you then
+[SEG0056] person_2 (DOCTOR): okay, good. Let us know how you get on
+[SEG0057] person_1 (PATIENT): right, alright, thanks bye for now
+
+JSON:

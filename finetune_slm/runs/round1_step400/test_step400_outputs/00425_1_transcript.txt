@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00425)
+[SEG0001] person_1 (PATIENT): Hello? Doctor? They told me to come straight in.
+[SEG0002] person_2 (DOCTOR): not at all, please sit what's the problem?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, I'm just here to help with the details.
+[SEG0004] person_1 (PATIENT): So, um, I've been getting breathless walking short distances, doctor.
+[SEG0005] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0006] person_1 (PATIENT): I'm on telmisartan, 40 milligrams, once a day for my pressure
+[SEG0007] person_3 (FAMILY_MEMBER): Doctor, I think the the last prescription for the telmisartan was 20 milligrams. We changed it at the last visit.
+[SEG0008] person_2 (DOCTOR): okay. Have you got the newest prescription or the box with you?
+[SEG0009] person_1 (PATIENT): oh, I don't think I have it it with me. Tiotropium inhaler, once a day
+[SEG0010] person_2 (DOCTOR): how long are we talking about?
+[SEG0011] person_1 (PATIENT): It's been going on for about a month.
+[SEG0012] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and and whether anything makes it better or worse.
+[SEG0013] person_1 (PATIENT): I'd call it it severe. It happens a few times a day. Only stopping to rest, and it's not much.
+[SEG0014] person_2 (DOCTOR): Does it it come along with anything else?
+[SEG0015] person_1 (PATIENT): hmm, it usually comes with occasional wheeze uh, the occasional wheeze? That's been for about a month about occasional wheeze, I'd call it severe i'd say every other day
+[SEG0016] person_2 (DOCTOR): So, any tiredness as well?
+[SEG0017] person_1 (PATIENT): Yeah, you know, that too. And there's a feeling that I can't take a deep breath as well, six months now.
+[SEG0018] person_2 (DOCTOR): Has there been any fever?
+[SEG0019] person_1 (PATIENT): I haven't noticed any fever.
+[SEG0020] person_3 (FAMILY_MEMBER): Actually, you know, doctor, I did notice fever. She doesn't always say.
+[SEG0021] person_1 (PATIENT): No, I don't think I did. Maybe a little, I'm not sure.
+[SEG0022] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. Has there been any coughing up blood?
+[SEG0023] person_1 (PATIENT): definitely no coughing up blood
+[SEG0024] person_2 (DOCTOR): and what about night sweats, weight loss or leg swelling?
+[SEG0025] person_1 (PATIENT): Hmm, no, none of that at all.
+[SEG0026] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0027] person_1 (PATIENT): No rashes.
+[SEG0028] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0029] person_1 (PATIENT): nothing else aches
+[SEG0030] person_2 (DOCTOR): Do you have any allergies to medicines, food, anything at all?
+[SEG0031] person_1 (PATIENT): no allergies that I know of, no
+[SEG0032] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0033] person_1 (PATIENT): Yes, high blood pressure. Yes, COPD.
+[SEG0034] person_2 (DOCTOR): uh-huh okay, I can see COPD in your file as well
+[SEG0035] person_2 (DOCTOR): Right, and what do you do for a living?
+[SEG0036] person_1 (PATIENT): I work night shifts at a warehouse.
+[SEG0037] person_2 (DOCTOR): Anything special about your diet?
+[SEG0038] person_1 (PATIENT): I try to avoid too much sugar.
+[SEG0039] person_2 (DOCTOR): Let's do your observations.
+[SEG0040] person_2 (DOCTOR): One second...
+[SEG0041] person_2 (DOCTOR): okay: respiratory rate 21, temp 37.0 degrees, BP is 130 over 90. And And weight 86 kilos, BMI works out to 36.3, SpO2 94 percent on room air, heart rate 100, height 154 centimetres
+[SEG0042] person_2 (DOCTOR): Right, let me check a few things physically.
+[SEG0043] person_2 (DOCTOR): Take your time, no rush.
+[SEG0044] person_2 (DOCTOR): There are fine crackles at the bases of both lungs.
+[SEG0045] person_2 (DOCTOR): Take your time, no rush.
+[SEG0046] person_2 (DOCTOR): No clubbing in the fingers.
+[SEG0047] person_2 (DOCTOR): Right, you can sit back down. Okay, thinking it through, I'd lean towards chronic breathlessness that needs a proper work-up. It could also be a lung condition, so we'll keep that open. Let me repeat that back to make sure. You've been getting breathless walking short distances for about a month, severe, and no weight loss or night sweats.
+[SEG0048] person_1 (PATIENT): correct
+[SEG0049] person_2 (DOCTOR): I'll request an echocardiogram, it'll help with breathlessness. We should do a CT scan of the chest for chronic breathlessness. I'd rather check than guess, and this is the quickest way to know more. We should do breathing tests for chronic breathlessness. Try a daily walk and note how far you get before you need to stop. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0050] person_2 (DOCTOR): let's plan a check in four weeks do you have any questions?
+[SEG0051] person_1 (PATIENT): Thanks, that was helpful.
+[SEG0052] person_2 (DOCTOR): Goodbye.
+
+JSON:

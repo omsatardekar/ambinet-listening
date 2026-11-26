@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00564)
+[SEG0001] person_2 (DOCTOR): Good morning, Mr Whitcombe. The booking note says you've noticed black stools since starting ibuprofen. Is that right?
+[SEG0002] person_1 (PATIENT): Good morning, doctor. Yes, that is right. I have been passing black stools, and it rather alarmed my wife.
+[SEG0003] person_2 (DOCTOR): I'm not surprised. Describe them for me. Is it like tar, or more a dark brown?
+[SEG0004] person_1 (PATIENT): Quite like tar, I would say. Very dark, rather sticky, and unpleasant to flush away, if you will forgive me.
+[SEG0005] person_2 (DOCTOR): And when did you first notice it?
+[SEG0006] person_1 (PATIENT): I'm afraid I cannot say with any confidence. Possibly last week, possibly the week before. I did not make a note.
+[SEG0007] person_2 (DOCTOR): That's fine, plenty of people don't. Now, tell me about the ibuprofen. Who started you on it?
+[SEG0008] person_1 (PATIENT): My GP prescribed it for my knees. I take the 400 milligrams, I believe. The box is on the kitchen shelf, I'm afraid.
+[SEG0009] person_2 (DOCTOR): And how often are you meant to take them?
+[SEG0010] person_1 (PATIENT): Three times a day, with food. I take them every day, though I must admit I often forget the lunchtime one.
+[SEG0011] person_2 (DOCTOR): Right. Think of ibuprofen as a bit of sandpaper on the lining of your stomach. Fine for a while, but it can wear that lining thin.
+[SEG0012] person_1 (PATIENT): I see. I had rather assumed that taking it with food made it perfectly safe.
+[SEG0013] person_2 (DOCTOR): It helps a little, but it doesn't make it safe. Have you been sick at all?
+[SEG0014] person_1 (PATIENT): No, not once. I have felt quite well in that respect.
+[SEG0015] person_2 (DOCTOR): Good. Any pain in the stomach, even a dull ache after meals?
+[SEG0016] person_1 (PATIENT): No pain at all, which is partly why I put off coming.
+[SEG0017] person_2 (DOCTOR): Fair enough. What about dizziness, say when you stand up quickly?
+[SEG0018] person_1 (PATIENT): No, I have been quite steady on my feet, thank you.
+[SEG0019] person_2 (DOCTOR): Is the ibuprofen your only regular medicine?
+[SEG0020] person_1 (PATIENT): Yes, just that one. I try to avoid taking tablets where I can.
+[SEG0021] person_2 (DOCTOR): Any other health problems I should know about?
+[SEG0022] person_1 (PATIENT): Osteoarthritis, which is the reason for the knees. And I have high cholesterol, but I manage that with diet.
+[SEG0023] person_2 (DOCTOR): Sensible. And how are the knees managing generally?
+[SEG0024] person_1 (PATIENT): Stiff in the mornings, but they loosen up. Ibuprofen takes the edge off, I will say.
+[SEG0025] person_2 (DOCTOR): Understood. Any operations in the past?
+[SEG0026] person_1 (PATIENT): One. I had a hernia repair, about twelve years ago. It went very smoothly.
+[SEG0027] person_2 (DOCTOR): You said you take it with food. Do you take it with a drink of any sort, milk or tea perhaps?
+[SEG0028] person_1 (PATIENT): Just a cup of tea with my breakfast. Nothing more elaborate than that, I'm afraid.
+[SEG0029] person_2 (DOCTOR): Good. Let me check you over. I'll take your pulse and blood pressure first, then feel your tummy.
+[SEG0030] person_1 (PATIENT): Of course. Shall I roll up my sleeve?
+[SEG0031] person_2 (DOCTOR): Yes please. Pulse is 92, blood pressure 118 over 74, oxygen level 98 percent, and your temperature is 36.8 degrees.
+[SEG0032] person_1 (PATIENT): Are those numbers all right?
+[SEG0033] person_2 (DOCTOR): They're acceptable, nothing that worries me today. Now, lie back for me, and tell me if anything is sore.
+[SEG0034] person_1 (PATIENT): Certainly. It's perfectly comfortable so far.
+[SEG0035] person_2 (DOCTOR): Your tummy feels soft all the way round, which is reassuring.
+[SEG0036] person_1 (PATIENT): That is a relief. May I ask what happens now?
+[SEG0037] person_2 (DOCTOR): I'd rather not put a name on this just yet. But the first step is simple. Stop the ibuprofen from today.
+[SEG0038] person_1 (PATIENT): Understood. Should I simply stop it altogether, or cut down?
+[SEG0039] person_2 (DOCTOR): Stop it altogether, and don't swap it for any similar painkiller from the chemist either. Those cause the same trouble.
+[SEG0040] person_1 (PATIENT): I shall be careful about that. My knees may complain, I suppose.
+[SEG0041] person_2 (DOCTOR): They might, and we can talk about gentler options for them another time.
+[SEG0042] person_1 (PATIENT): Thank you. Is there anything I should watch for in the meantime?
+[SEG0043] person_2 (DOCTOR): Yes. If the stools stay black, or you feel faint, or you bring up blood, go to A and E straight away.
+[SEG0044] person_1 (PATIENT): I will, doctor. I'll let my wife know as well.
+[SEG0045] person_2 (DOCTOR): Good idea. She sounds sensible. Mind how you go, Mr Whitcombe.
+[SEG0046] person_1 (PATIENT): Thank you very much. Good morning.
+
+JSON:

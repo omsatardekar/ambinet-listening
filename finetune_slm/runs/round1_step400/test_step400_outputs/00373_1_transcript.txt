@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00373)
+[SEG0001] person_1 (PATIENT): Hello doctor, sorry, am I early?
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): so the thing is, you know, I've got a burning pain in the upper tummy
+[SEG0004] person_2 (DOCTOR): how far back does it go?
+[SEG0005] person_1 (PATIENT): Probably about four days. Yeah. I told myself I'd wait and see, and here I am. I kept putting it off, which I know isn't sensible.
+[SEG0006] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): I'd say mild. Spicy food definitely sets it off. Antacids helps a bit. Honestly, once or twice a day.
+[SEG0008] person_2 (DOCTOR): I'll check your pressure and pulse
+[SEG0009] person_2 (DOCTOR): Okay, one second...
+[SEG0010] person_2 (DOCTOR): Okay: temp 36.4 degrees, SpO2 97 percent on room air. And heart rate 79, pressure 127 over 72, respiratory rate 17.
+[SEG0011] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0012] person_2 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0013] person_2 (DOCTOR): No guarding and no lumps.
+[SEG0014] person_2 (DOCTOR): Thanks, please take a seat again.
+[SEG0015] person_2 (DOCTOR): Any black stools, weight loss or vomiting blood?
+[SEG0016] person_1 (PATIENT): none, as far as I know
+[SEG0017] person_2 (DOCTOR): Is your chest okay generally?
+[SEG0018] person_1 (PATIENT): No problems with breathing.
+[SEG0019] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0020] person_1 (PATIENT): I've had acid reflux for five years now.
+[SEG0021] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0022] person_1 (PATIENT): Omeprazole. I take it 20 milligrams, once a day. It's a relief to finally sit down and talk about it. Gelusil, after meals.
+[SEG0023] person_2 (DOCTOR): Do you have any allergies to medicines, food, anything at all?
+[SEG0024] person_1 (PATIENT): Yes, I'm allergic to eggs.
+[SEG0025] person_2 (DOCTOR): have you had any previous surgeries?
+[SEG0026] person_1 (PATIENT): No, never had any surgery.
+[SEG0027] person_2 (DOCTOR): right, and what do you do for a living?
+[SEG0028] person_1 (PATIENT): I work night shifts at a warehouse.
+[SEG0029] person_2 (DOCTOR): Do you live alone?
+[SEG0030] person_1 (PATIENT): Yes, I live on my own.
+[SEG0031] person_2 (DOCTOR): Anything special about your diet?
+[SEG0032] person_1 (PATIENT): I try to avoid too much sugar.
+[SEG0033] person_2 (DOCTOR): Okay, so my impression is this: It fits best with gastritis.
+[SEG0034] person_1 (PATIENT): Do you think it's serious?
+[SEG0035] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's gastritis, and we'll know more once the an H. pylori test is back.
+[SEG0036] person_2 (DOCTOR): I think an H. pylori test makes sense here, for dyspepsia
+[SEG0037] person_1 (PATIENT): Fine by me.
+[SEG0038] person_2 (DOCTOR): Avoid spicy, oily food and don't take anti-inflammatory painkillers on an empty stomach. Please come and see me in four weeks.
+[SEG0039] person_1 (PATIENT): I'll make the appointment on my way out.
+[SEG0040] person_2 (DOCTOR): Ask me anything before you go.
+[SEG0041] person_1 (PATIENT): So, one thing: no, actually that's all. Thanks.
+[SEG0042] person_2 (DOCTOR): Safe journey home.
+
+JSON:

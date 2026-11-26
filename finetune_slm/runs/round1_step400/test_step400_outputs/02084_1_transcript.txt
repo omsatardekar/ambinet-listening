@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02084)
+[SEG0001] person_1 (NURSE): Doctor, I've brought them through. The observations are done, whenever you need them.
+[SEG0002] person_2 (DOCTOR): Thank you. Good morning, tell me what's been going on.
+[SEG0003] person_3 (PATIENT): It's spots on my forehead and chin, mostly.
+[SEG0004] person_2 (DOCTOR): Any regular medication at all?
+[SEG0005] person_3 (PATIENT): Nothing regular, uh, no.
+[SEG0006] person_2 (DOCTOR): How many days or weeks has it been?
+[SEG0007] person_3 (PATIENT): It's been three days, I'm fairly sure.
+[SEG0008] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0009] person_3 (PATIENT): Moderate, I'd say. It's worse with before periods. I'm hoping you can tell me something definite. I've been reading about it online and it worried me.
+[SEG0010] person_2 (DOCTOR): have you noticed anything else alongside it?
+[SEG0011] person_3 (PATIENT): Oily skin goes along with it, most of the time. As for few blackheads, I honestly can't say when that began. It might have been last month or the month before
+[SEG0012] person_2 (DOCTOR): Any irregular periods?
+[SEG0013] person_3 (PATIENT): No irregular periods, thankfully.
+[SEG0014] person_2 (DOCTOR): a few quick ones: painful cysts, scarring or low mood?
+[SEG0015] person_3 (PATIENT): no, you know, not a single one
+[SEG0016] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0017] person_3 (PATIENT): Nothing there, no.
+[SEG0018] person_2 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0019] person_3 (PATIENT): Bowels are regular, nothing odd.
+[SEG0020] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0021] person_3 (PATIENT): I'll have a glass of wine with dinner. I gave up cigarettes last spring. I swim twice a week. I'm a plumber, lots of bending and kneeling. I live with my elderly mother.
+[SEG0022] person_2 (DOCTOR): Is there anything relevant on the family side?
+[SEG0023] person_3 (PATIENT): my mother has an underactive thyroid
+[SEG0024] person_2 (DOCTOR): are there any allergies I should be aware of?
+[SEG0025] person_3 (PATIENT): I've never had an allergy.
+[SEG0026] person_2 (DOCTOR): Okay, did you ever have any procedures done?
+[SEG0027] person_3 (PATIENT): Erm, uh, I had my septum straightened in my thirties.
+[SEG0028] person_2 (DOCTOR): Do you have any chronic illnesses?
+[SEG0029] person_3 (PATIENT): Uh, I have high blood pressure, for five years.
+[SEG0030] person_2 (DOCTOR): Right, so high blood pressure is already on your record. We'll keep that in mind today.
+[SEG0031] person_1 (NURSE): doctor, I've got the readings for you temperature is 36.8 degrees, blood pressure 112 over 80, saturation 99 percent pulse is 81 beats a a minute
+[SEG0032] person_2 (DOCTOR): good, thank you
+[SEG0033] person_2 (DOCTOR): Putting together what you've described, this is probably mild acne.
+[SEG0034] person_3 (PATIENT): Do you think it's something serious?
+[SEG0035] person_2 (DOCTOR): nothing I've seen today points to an emergency it looks like mild acne
+[SEG0036] person_2 (DOCTOR): I'm gonna put you on benzoyl peroxide gel, 5%, once a day, eight weeks. That's for acne.
+[SEG0037] person_3 (PATIENT): Should I take that with food?
+[SEG0038] person_2 (DOCTOR): Wash gently twice a day and don't squeeze the spots. We'll catch up in eight weeks. Tell me what you've taken from all that, so I can fill in any gaps.
+[SEG0039] person_3 (PATIENT): So, I take the benzoyl peroxide gel, 5%, once a day and come back in eight weeks. Is that right?
+[SEG0040] person_2 (DOCTOR): Yes, exactly right. Have I covered everything you wanted?
+[SEG0041] person_3 (PATIENT): Mm, um, alright, thanks, take care.
+[SEG0042] person_2 (DOCTOR): have a good day
+
+JSON:

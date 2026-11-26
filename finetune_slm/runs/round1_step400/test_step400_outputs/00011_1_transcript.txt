@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00011)
+[SEG0001] person_1 (PATIENT): Doctor, hello, I've got my papers here, where should I put them?
+[SEG0002] person_2 (DOCTOR): right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): Well, I've been having itchy watery eyes.
+[SEG0004] person_2 (DOCTOR): how bad is it, would you say?
+[SEG0005] person_1 (PATIENT): it's moderate, honestly
+[SEG0006] person_2 (DOCTOR): Any a dry cough as well?
+[SEG0007] person_1 (PATIENT): yes, since yesterday
+[SEG0008] person_2 (DOCTOR): Does it happen all the time or in spells?
+[SEG0009] person_1 (PATIENT): It comes and goes. Oh, and sneezing fits. That's been about the same, one week. Right, you know, with sneezing fits, yes, dust. That makes it worse.
+[SEG0010] person_2 (DOCTOR): Any rash or loss of smell?
+[SEG0011] person_1 (PATIENT): No rash or loss of smell, none of it.
+[SEG0012] person_2 (DOCTOR): Let me check a few things. Any wheezing, shortness of breath or facial pain?
+[SEG0013] person_1 (PATIENT): No, uh, not any of them.
+[SEG0014] person_2 (DOCTOR): Neurologically, anything strange?
+[SEG0015] person_1 (PATIENT): No weakness or anything.
+[SEG0016] person_2 (DOCTOR): any medication at the moment, including things from the pharmacy?
+[SEG0017] person_1 (PATIENT): Seretide inhaler, twice a day. Right, I'm supposed to take it regularly, but I don't always manage.
+[SEG0018] person_2 (DOCTOR): Right, do you have any medical conditions, anything you've been treated for?
+[SEG0019] person_1 (PATIENT): Asthma, for five years.
+[SEG0020] person_2 (DOCTOR): Alright, asthma, that matches what I have here. What about family history, any illnesses that run in the family?
+[SEG0021] person_1 (PATIENT): Well, my father had a stroke.
+[SEG0022] person_2 (DOCTOR): any drug or food allergies?
+[SEG0023] person_1 (PATIENT): no, um, no allergies to anything
+[SEG0024] person_2 (DOCTOR): Okay, have you had any surgery before?
+[SEG0025] person_1 (PATIENT): Okay, so I had a lump removed from my back years ago.
+[SEG0026] person_2 (DOCTOR): now some background about your lifestyle
+[SEG0027] person_1 (PATIENT): I live with my family, my husband and two kids. Retired. I stopped a few years back. I play badminton on Sundays.
+[SEG0028] person_3 (NURSE): okay, so so the vitals from earlier. Pulse 65, respiratory rate 17, pressure 112 over 75. SpO2 97 percent on room air, temperature 36.6.
+[SEG0029] person_2 (DOCTOR): thanks
+[SEG0030] person_2 (DOCTOR): Can I examine you now?
+[SEG0031] person_1 (PATIENT): Alright.
+[SEG0032] person_2 (DOCTOR): tell me if anything hurts
+[SEG0033] person_2 (DOCTOR): Chest is clear, no wheeze.
+[SEG0034] person_2 (DOCTOR): let me look at this properly
+[SEG0035] person_2 (DOCTOR): The inside of your nose is pale and swollen.
+[SEG0036] person_2 (DOCTOR): alright, thanks, please take a seat again right, here's what I'm thinking this is probably allergic rhinitis i'd also keep sinusitis in mind
+[SEG0037] person_1 (PATIENT): Yeah, do you think it's serious?
+[SEG0038] person_2 (DOCTOR): it's reasonable to be concerned, but right now allergic rhinitis is my leading thought, not anything worse let's book an allergy test to look into allergic rhinitis the treatment will be levocetirizine, 5 milligrams, at night, for two weeks you take it by mouth that's for allergy symptoms the treatment will be fluticasone nasal spray, 50 micrograms, one spray each side daily, for four weeks that's for allergic rhinitis
+[SEG0039] person_2 (DOCTOR): keep the windows closed in the early morning and wash the bedsheets weekly in hot water. If the symptoms get worse, or you feel really unwell, please come to the emergency department. I'd like to see you again in a month. Any last questions?
+[SEG0040] person_1 (PATIENT): Alright, thanks. Bye for now.
+
+JSON:

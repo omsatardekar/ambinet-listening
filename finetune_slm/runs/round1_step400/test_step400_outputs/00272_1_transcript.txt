@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00272)
+[SEG0001] person_1 (PATIENT): Hi there, is it alright if I come in now?
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_3 (CAREGIVER): Morning, doctor. I'll stay and fill in anything that's missed. It's a burning pain in the upper tummy, doctor. He didn't want to come, but I insisted.
+[SEG0004] person_2 (DOCTOR): Let's do your observations.
+[SEG0005] person_2 (DOCTOR): Hold still for me...
+[SEG0006] person_2 (DOCTOR): Okay: heart rate 78, temperature is 36.6 degrees, BP is 119 over 71. And oxygen saturation is 97 percent.
+[SEG0007] person_1 (PATIENT): Is that normal?
+[SEG0008] person_2 (DOCTOR): I'll explain what that means shortly.
+[SEG0009] person_2 (DOCTOR): Since when have you had this?
+[SEG0010] person_1 (PATIENT): Around six months... no wait, it's more like about a month.
+[SEG0011] person_2 (DOCTOR): Does it happen all the time or in spells?
+[SEG0012] person_1 (PATIENT): Honestly, on and off.
+[SEG0013] person_2 (DOCTOR): Do you notice anything setting it off?
+[SEG0014] person_1 (PATIENT): Yes, spicy food and an empty stomach. That makes it worse.
+[SEG0015] person_2 (DOCTOR): How much is it bothering you?
+[SEG0016] person_1 (PATIENT): A seven out of ten, I suppose. I've also had nausea, for about a week. There's bloating after meals as well. About bloating after meals, it feels moderate to me.
+[SEG0017] person_2 (DOCTOR): Have you noticed jaundice, trouble swallowing, vomiting blood or fever?
+[SEG0018] person_1 (PATIENT): No, uh, nothing there.
+[SEG0019] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0020] person_1 (PATIENT): No rashes.
+[SEG0021] person_2 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0022] person_1 (PATIENT): Nothing odd there.
+[SEG0023] person_2 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0024] person_1 (PATIENT): I don't drink at all. Not really, I don't get much exercise. I skip breakfast most days.
+[SEG0025] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0026] person_3 (CAREGIVER): He is on diclofenac, when needed, I give it to him.
+[SEG0027] person_2 (DOCTOR): And what strength is that?
+[SEG0028] person_3 (CAREGIVER): 50 milligrams, I think that's what's on the box.
+[SEG0029] person_2 (DOCTOR): Roughly how long on that one?
+[SEG0030] person_3 (CAREGIVER): For six months. He takes Digene, when it burns.
+[SEG0031] person_2 (DOCTOR): Roughly how long on that one?
+[SEG0032] person_3 (CAREGIVER): Six months now.
+[SEG0033] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0034] person_1 (PATIENT): I have arthritis in my knees, for nearly five years.
+[SEG0035] person_2 (DOCTOR): Any operations in the past?
+[SEG0036] person_1 (PATIENT): I had a knee arthroscopy three years ago.
+[SEG0037] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0038] person_1 (PATIENT): No, none that I know of.
+[SEG0039] person_2 (DOCTOR): I'd like to examine you now.
+[SEG0040] person_2 (DOCTOR): Hold that position for me.
+[SEG0041] person_2 (DOCTOR): No guarding and no lumps.
+[SEG0042] person_2 (DOCTOR): Okay, finished. Okay, thinking it through, I'd lean towards gastritis. It could also be acid reflux, so we'll keep that open. Avoid spicy, oily food and don't take anti-inflammatory painkillers on an empty stomach. Okay, I think we're finished. Is everything clear?
+[SEG0043] person_1 (PATIENT): Okay, thank you. Bye.
+[SEG0044] person_2 (DOCTOR): Goodbye.
+
+JSON:

@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00380)
+[SEG0001] person_1 (NURSE): Morning, doctor. I've settled them in, ready when you are.
+[SEG0002] person_2 (DOCTOR): Alright, thanks. Hello, come in, sit down. What brings you in today?
+[SEG0003] person_3 (PATIENT): I've been going to the toilet a lot, even at night. I told myself I'd wait and see, and here I am.
+[SEG0004] person_2 (DOCTOR): What medicines are you taking at the moment? Just so I get the full picture.
+[SEG0005] person_3 (PATIENT): Allopurinol. I take it 100 milligrams, once a day for the gout. It's something called biso... bisoprolol, 2.5 milligrams, maybe, once a day.
+[SEG0006] person_2 (DOCTOR): is the the packet here, or the prescription?
+[SEG0007] person_3 (PATIENT): Not with me. I'll bring it next time. I take spironolactone, 25 milligrams, once a day.
+[SEG0008] person_2 (DOCTOR): How long has this been going on?
+[SEG0009] person_3 (PATIENT): I've had it since last Tuesday.
+[SEG0010] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0011] person_3 (PATIENT): It usually comes with itching around the private area.
+[SEG0012] person_2 (DOCTOR): Have you had tiredness?
+[SEG0013] person_3 (PATIENT): Yes, about the same, two days. Um, the the itching around the private area? That's been since Monday. With itching around the private area, I'd say severe.
+[SEG0014] person_2 (DOCTOR): Have you been going to the toilet a lot, even at night at any time before this?
+[SEG0015] person_3 (PATIENT): A bit, about six months ago. It settled by itself back then.
+[SEG0016] person_2 (DOCTOR): A few quick ones: fruity smell on the breath, blurred vision, fever or abdominal pain?
+[SEG0017] person_3 (PATIENT): I haven't had fruity smell on the breath, blurred vision, fever or abdominal pain, no
+[SEG0018] person_2 (DOCTOR): what about your tummy and bowels, anything unusual there?
+[SEG0019] person_3 (PATIENT): Yeah, no, that side's been fine.
+[SEG0020] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0021] person_3 (PATIENT): I've never been told I have allergies.
+[SEG0022] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0023] person_3 (PATIENT): I used to smoke but I quit five years ago. I try to avoid too much sugar. I teach at a primary school.
+[SEG0024] person_2 (DOCTOR): Any previous surgeries?
+[SEG0025] person_3 (PATIENT): So, yes, I had a lump removed from my back, years ago.
+[SEG0026] person_2 (DOCTOR): What about your general health, any conditions you're being treated for? Take your time, there's no rush.
+[SEG0027] person_3 (PATIENT): Okay, so yes, gout. I didn't wanna make a fuss, you know.
+[SEG0028] person_2 (DOCTOR): and then?
+[SEG0029] person_3 (PATIENT): I have an irregular heartbeat. I did try to ignore it for a while.
+[SEG0030] person_2 (DOCTOR): Is there more?
+[SEG0031] person_3 (PATIENT): Yeah, I've had heart failure, yes.
+[SEG0032] person_2 (DOCTOR): Right, right.
+[SEG0033] person_3 (PATIENT): I've got high cholesterol.
+[SEG0034] person_2 (DOCTOR): Right, so gout and an irregular heartbeat are already on your record. We'll keep that in mind today.
+[SEG0035] person_2 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0036] person_3 (PATIENT): My father was diabetic. My father had a heart attack.
+[SEG0037] person_1 (NURSE): Doctor, I've got the readings for you. Temperature is 36.4 degrees, oxygen saturation is 97 percent, weight 78 kilos, pressure 115 over 81, height 167 centimetres, pulse is 81 beats a minute.
+[SEG0038] person_2 (DOCTOR): Okay, noted.
+[SEG0039] person_2 (DOCTOR): I'd like to examine you now.
+[SEG0040] person_2 (DOCTOR): let me look at this properly
+[SEG0041] person_2 (DOCTOR): You're a little dry, but alert, and your breathing is normal.
+[SEG0042] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0043] person_2 (DOCTOR): Your tummy is soft and non-tender.
+[SEG0044] person_2 (DOCTOR): Good, that's the examination.
+[SEG0045] person_2 (DOCTOR): putting it all together, it fits best with possible new-onset diabetes a urine infection is also on my list
+[SEG0046] person_1 (NURSE): I've already done a blood sugar test, it's ready for you.
+[SEG0047] person_2 (DOCTOR): Thanks, I'll look at that. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0048] person_3 (PATIENT): Okay, fair enough.
+[SEG0049] person_2 (DOCTOR): I don't need to add any tests or treatment at this point. Is there anything you wanted to ask?
+[SEG0050] person_3 (PATIENT): nothing more from me, um, thanks
+
+JSON:

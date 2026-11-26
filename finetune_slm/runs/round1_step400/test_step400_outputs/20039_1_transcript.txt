@@ -1,0 +1,73 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20039)
+[SEG0001] person_1 (PATIENT): hi doctor, am I too early?
+[SEG0002] person_2 (DOCTOR): Come in. Please sit. How can I help you?
+[SEG0003] person_3 (CAREGIVER): Hello, doctor, I came in with them, if that's okay.
+[SEG0004] person_2 (DOCTOR): Good, that'll be useful. Pull up a chair.
+[SEG0005] person_1 (PATIENT): I'm here cos of the room spinning.
+[SEG0006] person_2 (DOCTOR): how many days or weeks has it been?
+[SEG0007] person_1 (PATIENT): I'd say a week, maybe
+[SEG0008] person_4 (FAMILY_MEMBER): I think it's been nearer two weeks, actually
+[SEG0009] person_2 (DOCTOR): okay, so roughly one to two weeks is that right?
+[SEG0010] person_1 (PATIENT): Yes, uh, somewhere around that.
+[SEG0011] person_2 (DOCTOR): What do you do to make it better?
+[SEG0012] person_1 (PATIENT): It It settles a little with lying still.
+[SEG0013] person_2 (DOCTOR): Is it there all the time or does it come and go?
+[SEG0014] person_1 (PATIENT): honestly, a few times a day
+[SEG0015] person_2 (DOCTOR): Does anything set it off?
+[SEG0016] person_1 (PATIENT): It's worse with lying down and turning my head.
+[SEG0017] person_2 (DOCTOR): How much does it limit you?
+[SEG0018] person_1 (PATIENT): A five out of ten, I suppose.
+[SEG0019] person_1 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0020] person_3 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0021] person_1 (PATIENT): Yeah, you know, I was getting to that! And And a recent cold, too.
+[SEG0022] person_2 (DOCTOR): have you had the room spinning before, or is this the first time?
+[SEG0023] person_1 (PATIENT): a bit, about six months ago it it settled by itself back then
+[SEG0024] person_5 (UNKNOWN): Mm, that's what happened, yes.
+[SEG0025] person_2 (DOCTOR): Any hearing loss, weakness, headache or slurred speech at all?
+[SEG0026] person_1 (PATIENT): No, no hearing loss, no weakness, no headache. I did have being unsteady at one point, but that went away on its own.
+[SEG0027] person_2 (DOCTOR): Have you had any ringing in the ears or double vision?
+[SEG0028] person_1 (PATIENT): No, none that I've noticed.
+[SEG0029] person_2 (DOCTOR): How about your heart, any problems like that?
+[SEG0030] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0031] person_2 (DOCTOR): Alright, any muscle or joint problems besides this?
+[SEG0032] person_1 (PATIENT): Nothing else aches.
+[SEG0033] person_2 (DOCTOR): Do you have any long-term conditions?
+[SEG0034] person_1 (PATIENT): High blood pressure, for about a year. I have diabetes, for about ten years. I have arthritis in my knees, for about a year.
+[SEG0035] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0036] person_1 (PATIENT): No allergies at all.
+[SEG0037] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0038] person_1 (PATIENT): I take telmisartan, 40 milligrams, once a day.
+[SEG0039] person_3 (CAREGIVER): It's meant to be once a day, though I don't see she take it every time.
+[SEG0040] person_1 (PATIENT): I'm on metformin, 500 milligrams, twice a day for my sugar.
+[SEG0041] person_2 (DOCTOR): What about your parents, brothers or sisters, any conditions?
+[SEG0042] person_1 (PATIENT): My brother has epilepsy.
+[SEG0043] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0044] person_1 (PATIENT): I'll have a glass of wine with dinner. No, I've never smoked in my life. I hardly move around during the day. I work in accounts at a hospital
+[SEG0045] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0046] person_1 (PATIENT): No surgery, um, no.
+[SEG0047] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0048] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0049] person_2 (DOCTOR): Okay: pulse 71, SpO2 99 percent on room air, BP is 112 over 75, temperature 36.7.
+[SEG0050] person_2 (DOCTOR): Shall I start the examination?
+[SEG0051] person_2 (DOCTOR): Okay, does that hurt?
+[SEG0052] person_2 (DOCTOR): I can see a fine jerking of the eyes to the left and your walking is a little unsteady
+[SEG0053] person_1 (PATIENT): Yeah, no problem.
+[SEG0054] person_2 (DOCTOR): that's the examination finished putting it all together, this is probably an inner-ear balance problem such as vestibular neuritis we shouldn't forget a problem in the brain stem i'll request blood tests, it'll help with dizziness i want a positional test done, that's for vertigo i'm prescribing prochlorperazine, 5 milligrams, three times a day, for three days that should help with nausea and vertigo
+[SEG0055] person_2 (DOCTOR): Start moving around gently as soon as you can, since resting too long slows recovery. I'd like you to see the balance clinic as well, and I'll write the referral.
+[SEG0056] person_1 (PATIENT): Okay.
+[SEG0057] person_2 (DOCTOR): the thing that would worry me is if you get double vision, weakness or trouble speaking. If that happens, go to emergency. Does all of that make sense?
+[SEG0058] person_1 (PATIENT): thank you, um, doctor, goodbye
+
+JSON:

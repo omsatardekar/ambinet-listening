@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00196)
+[SEG0001] person_1 (PATIENT): Doctor, hello, I've got my papers here, where should I put them?
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_1 (PATIENT): Doctor, it's poor appetite. It's getting on my nerves now.
+[SEG0004] person_2 (DOCTOR): Since when have you had this?
+[SEG0005] person_1 (PATIENT): About... well, about a month. I wasn't sure whether to come in at all, to be honest.
+[SEG0006] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0007] person_1 (PATIENT): It, It usually comes with trouble sleeping. Well, the trouble sleeping? That's been for two years.
+[SEG0008] person_2 (DOCTOR): Did you get drinking more than usual, thoughts of harming myself or hearing voices?
+[SEG0009] person_1 (PATIENT): No drinking more than usual, thoughts of harming myself or hearing voices, none of it.
+[SEG0010] person_2 (DOCTOR): Have you had any weight loss or panic attacks?
+[SEG0011] person_1 (PATIENT): Yeah, none, as far as I know.
+[SEG0012] person_2 (DOCTOR): Understood. Has your heart given you any trouble?
+[SEG0013] person_1 (PATIENT): No, nothing with my heart.
+[SEG0014] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0015] person_1 (PATIENT): I work on a farm, it's quite physical. I go to the gym a couple of times a week. It's just me and my wife at home now.
+[SEG0016] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0017] person_1 (PATIENT): Well, I'm on escitalopram, 10 milligrams, once a day. Clopidogrel, 75 milligrams, once a day. I, I'd been on sertraline, not any more though, I stopped.
+[SEG0018] person_2 (DOCTOR): Have you had any surgery before?
+[SEG0019] person_1 (PATIENT): I had a bypass operation six years ago.
+[SEG0020] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0021] person_1 (PATIENT): Well, I've had depression for five years now. I'd rather not end up on lots of tablets if I can avoid it. Okay, so I've had heart disease, yes. My family kept telling me to get it checked.
+[SEG0022] person_2 (DOCTOR): Uh-huh. Do you have any allergies to medicines, food, anything at all?
+[SEG0023] person_1 (PATIENT): Yes, I'm allergic to latex.
+[SEG0024] person_2 (DOCTOR): Can I take your vitals now?
+[SEG0025] person_2 (DOCTOR): Just relax your arm...
+[SEG0026] person_2 (DOCTOR): Okay: blood pressure 109 over 81, temperature is 36.7 degrees, heart rate 80. And respiratory rate 16, SpO2 99 percent on room air.
+[SEG0027] person_2 (DOCTOR): Okay, a quick examination now.
+[SEG0028] person_1 (PATIENT): That's fine.
+[SEG0029] person_2 (DOCTOR): Let me just check something.
+[SEG0030] person_2 (DOCTOR): You're well kempt and speaking clearly, and you maintain good eye contact.
+[SEG0031] person_2 (DOCTOR): Good, that's the examination. Right, here's what I'm thinking. My working impression is a depressive episode. Another possibility is a reaction to recent stress.
+[SEG0032] person_1 (PATIENT): Oh, is it something serious, doctor?
+[SEG0033] person_2 (DOCTOR): It's reasonable to be concerned, but right now a depressive episode is my leading thought, not anything worse.
+[SEG0034] person_2 (DOCTOR): I want blood tests done, that's for low mood.
+[SEG0035] person_1 (PATIENT): Will it hurt?
+[SEG0036] person_2 (DOCTOR): Is there anything you wanted to ask?
+[SEG0037] person_1 (PATIENT): Thank you for your time.
+[SEG0038] person_2 (DOCTOR): All the best.
+
+JSON:

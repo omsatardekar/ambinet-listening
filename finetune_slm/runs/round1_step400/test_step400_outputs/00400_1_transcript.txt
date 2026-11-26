@@ -1,0 +1,71 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00400)
+[SEG0001] person_1 (DOCTOR): Morning! Make yourself comfortable.
+[SEG0002] person_2 (PATIENT): Hi.
+[SEG0003] person_3 (CAREGIVER): Doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_1 (DOCTOR): That's fine, sit down. We'll go through it together. How can I help you today?
+[SEG0005] person_2 (PATIENT): I'm here because of exhaustion since I had the flu. It's the not knowing that gets to me.
+[SEG0006] person_1 (DOCTOR): How long has this been going on?
+[SEG0007] person_2 (PATIENT): About about a month, give or take.
+[SEG0008] person_3 (CAREGIVER): I think it's been nearer about two months, actually.
+[SEG0009] person_1 (DOCTOR): Okay, so roughly one to two months. Is that right?
+[SEG0010] person_2 (PATIENT): So, I suppose so, yes.
+[SEG0011] person_1 (DOCTOR): How bad is it, would you say?
+[SEG0012] person_2 (PATIENT): Well, it's... hard to say, it's kind of... I don't know—
+[SEG0013] person_1 (DOCTOR): Take your time. Mild, moderate, or severe, if you had to pick?
+[SEG0014] person_2 (PATIENT): It's mild, honestly.
+[SEG0015] person_1 (DOCTOR): Is it worse with anything in particular?
+[SEG0016] person_2 (PATIENT): Yes, walking far. That makes it worse.
+[SEG0017] person_2 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0018] person_3 (CAREGIVER): I mean, uh, tell the doctor about the other thing, that's what worries me.
+[SEG0019] person_2 (PATIENT): Right, I was getting to that!
+[SEG0020] person_1 (DOCTOR): That's fine, one at a time. I'll ask about everything.
+[SEG0021] person_2 (PATIENT): I mean, there's poor sleep as well.
+[SEG0022] person_4 (UNKNOWN): Yes, that's right, that's how it was.
+[SEG0023] person_1 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0024] person_2 (PATIENT): I take Seretide inhaler, twice a day for my asthma. It's, It's sertraline, 50 milligrams, once a day for my mood. Paracetamol, 500 milligrams, maybe, when needed.
+[SEG0025] person_1 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0026] person_2 (PATIENT): Not with me. I'll bring it next time.
+[SEG0027] person_1 (DOCTOR): Do you exercise at all?
+[SEG0028] person_2 (PATIENT): I go to the gym a couple of times a week.
+[SEG0029] person_1 (DOCTOR): Any allergies I should know about?
+[SEG0030] person_2 (PATIENT): So, no, no allergies to anything.
+[SEG0031] person_1 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0032] person_2 (PATIENT): I've got asthma.
+[SEG0033] person_1 (DOCTOR): Mm-hm.
+[SEG0034] person_2 (PATIENT): Oh, I have depression, for about a year. Sorry, I know I'm rambling a bit.
+[SEG0035] person_1 (DOCTOR): Okay, and what else?
+[SEG0036] person_1 (DOCTOR): Alright, a few quick ones: fever or swollen legs?
+[SEG0037] person_2 (PATIENT): No, no fever, no swollen legs. I did have brain fog at one point, but that went away on its own.
+[SEG0038] person_1 (DOCTOR): A few quick ones: shortness of breath, weight loss or chest pain?
+[SEG0039] person_2 (PATIENT): Right, no. None of those.
+[SEG0040] person_1 (DOCTOR): Go on. How about your heart, any problems like that?
+[SEG0041] person_2 (PATIENT): My heart's been fine, as far as I know.
+[SEG0042] person_1 (DOCTOR): How's your breathing otherwise?
+[SEG0043] person_2 (PATIENT): No, my breathing's been fine.
+[SEG0044] person_5 (NURSE): Doctor, I've got the readings for you. BP is 127 over 74, saturation 98 percent, pulse 72, temp 36.5 degrees.
+[SEG0045] person_1 (DOCTOR): Good, thank you.
+[SEG0046] person_1 (DOCTOR): Right, let me check a few things physically.
+[SEG0047] person_2 (PATIENT): Okay.
+[SEG0048] person_1 (DOCTOR): Hold that position for me.
+[SEG0049] person_1 (DOCTOR): Chest sounds clear all over.
+[SEG0050] person_1 (DOCTOR): Right, you can sit back down. Okay, thinking it through, I'd lean towards post-viral fatigue. A thyroid problem is also on my list. Anaemia is also on my list.
+[SEG0051] person_2 (PATIENT): Do you think it's serious?
+[SEG0052] person_1 (DOCTOR): It's reasonable to be concerned, but right now post-viral fatigue is my leading thought, not anything worse. I think blood tests makes sense here, for fatigue. I'm sending you for a thyroid test because of fatigue.
+[SEG0053] person_2 (PATIENT): Alright, when would that be?
+[SEG0054] person_1 (DOCTOR): Pace yourself, a little more activity each day but stop before you're wiped out.
+[SEG0055] person_1 (DOCTOR): Go on. Cut back on tea, coffee and fizzy drinks for a couple of weeks and see how things settle. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency. Let's plan a check in four weeks. Is there anything you wanted to ask?
+[SEG0056] person_2 (PATIENT): I think that's clear. Thank you for being so thorough.
+
+JSON:

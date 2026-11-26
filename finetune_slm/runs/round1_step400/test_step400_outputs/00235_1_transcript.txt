@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00235)
+[SEG0001] person_1 (DOCTOR): good morning. I hope the wait wasn't too long. Did the receptionist sort you out quickly?
+[SEG0002] person_2 (PATIENT): yes, she was lovely about it
+[SEG0003] person_1 (DOCTOR): so, what's been going on?
+[SEG0004] person_2 (PATIENT): um, so... itching that's why I came
+[SEG0005] person_1 (DOCTOR): Alright, how long has this been going on?
+[SEG0006] person_2 (PATIENT): hmm for five days I'd say
+[SEG0007] person_1 (DOCTOR): And And how severe is it?
+[SEG0008] person_2 (PATIENT): pretty severe, if I'm being honest. I've also been feeling achy, for about a month. There was burning pain before the rash came, yes, but that went away
+[SEG0009] person_1 (DOCTOR): Have you had any rash on the face, immune problems or eye pain?
+[SEG0010] person_2 (PATIENT): No, no rash on the face, immune problems or eye pain.
+[SEG0011] person_1 (DOCTOR): ah. Have you had any blurred vision, weakness or rash on the other side?
+[SEG0012] person_2 (PATIENT): no blurred vision, weakness or rash on the other side, none of it
+[SEG0013] person_1 (DOCTOR): is your digestion otherwise okay?
+[SEG0014] person_2 (PATIENT): bowels are regular, nothing odd
+[SEG0015] person_1 (DOCTOR): how's your breathing otherwise?
+[SEG0016] person_2 (PATIENT): No, nothing there.
+[SEG0017] person_1 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0018] person_2 (PATIENT): Well, my father was diabetic.
+[SEG0019] person_1 (DOCTOR): What's your current medication list?
+[SEG0020] person_2 (PATIENT): oh, I take metformin, 500 milligrams, twice a day for my sugar. Sumatriptan, 50 milligrams, when needed so, before this I was on glimepiride; that's been stopped
+[SEG0021] person_1 (DOCTOR): Right, any drug or food allergies? These questions might sound routine, but they matter.
+[SEG0022] person_2 (PATIENT): I, I think I reacted to some antibiotic once, um, years ago i don't remember which one, or what happened exactly
+[SEG0023] person_1 (DOCTOR): any diagnoses you've been given before?
+[SEG0024] person_2 (PATIENT): Diabetes for about ten years. Yes high blood pressure. I have migraines.
+[SEG0025] person_1 (DOCTOR): alright diabetes that matches what I have here have you had any surgery before?
+[SEG0026] person_2 (PATIENT): yes I had a hernia repair about five years back
+[SEG0027] person_1 (DOCTOR): now some background about your lifestyle
+[SEG0028] person_2 (PATIENT): I used to smoke but I quit five years ago. I have a couple of drinks on the weekend. I go to the gym a couple of times a week. I try to avoid too much sugar. I run a small shop, so I'm on my feet a lot.
+[SEG0029] person_1 (DOCTOR): A few measurements, then we'll continue.
+[SEG0030] person_1 (DOCTOR): hold still for me..
+[SEG0031] person_1 (DOCTOR): Okay: oxygen saturation is 98 percent, pressure 118 over 79, temp 36.4 degrees, heart rate 81, respiratory rate 18.
+[SEG0032] person_2 (PATIENT): is that okay?
+[SEG0033] person_1 (DOCTOR): don't worry I'll go through it in a a moment
+[SEG0034] person_1 (DOCTOR): Let me examine it won't take long.
+[SEG0035] person_2 (PATIENT): Sure.
+[SEG0036] person_1 (DOCTOR): Just relax, I'll be quick.
+[SEG0037] person_1 (DOCTOR): Grouped blisters on a red base along one rib on the left not crossing the midline
+[SEG0038] person_1 (DOCTOR): Okay, finished. Right, here's what I'm thinking. I think we're dealing with shingles at this stage. An insect-bite reaction is still possible. Let me just check I've got this right. You've had itching for five days, severe, and no immune problems or rash on the face.
+[SEG0039] person_2 (PATIENT): exactly
+[SEG0040] person_1 (DOCTOR): I'll start you on aciclovir, 800 milligrams, five times a day, for seven days. That should help with shingles. It's a commonly used medicine and most people tolerate it well. Keep the blisters clean and covered, and avoid contact with anyone pregnant or newborn until they crust. Okay, we're done for today. Take care.
+[SEG0041] person_2 (PATIENT): uh, all good here. Thank you
+
+JSON:

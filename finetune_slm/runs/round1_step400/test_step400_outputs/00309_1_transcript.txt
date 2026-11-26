@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00309)
+[SEG0001] person_1 (PATIENT): Good morning, doctor. Can I come in?
+[SEG0002] person_2 (DOCTOR): you're fine, sit down so, what brings you in?
+[SEG0003] person_3 (CAREGIVER): Hello, doctor. I hope it's alright if I stay in for this. Doctor, it's gritty tired eyes. That's what we're worried about.
+[SEG0004] person_2 (DOCTOR): can I take your vitals now?
+[SEG0005] person_2 (DOCTOR): Hold still for me...
+[SEG0006] person_2 (DOCTOR): Okay: weight 57 kilos, height 158 centimetres, respiratory rate 18, pressure 116 over 69, temperature 36.9, heart rate 71.
+[SEG0007] person_1 (PATIENT): Is that normal?
+[SEG0008] person_2 (DOCTOR): They help build the picture, I'll tell you more soon. When did you first notice it?
+[SEG0009] person_1 (PATIENT): it's been going on for five days
+[SEG0010] person_2 (DOCTOR): can you describe it a bit more for me? How strong it is, what the pattern is, what helps
+[SEG0011] person_1 (PATIENT): mostly severe it settles a little with blinking breaks
+[SEG0012] person_1 (PATIENT): so, and the other thing I wanted to mention is that I can't really—
+[SEG0013] person_4 (FAMILY_MEMBER): Tell the doctor about the other thing, that's what worries me.
+[SEG0014] person_1 (PATIENT): I was getting to that! And redness by the evening as well, since last weekend. Watery eyes in the wind was there, but it's gone away on its own
+[SEG0015] person_2 (DOCTOR): A few quick ones: dry mouth, sensitivity to light or double vision?
+[SEG0016] person_1 (PATIENT): No, none of those.
+[SEG0017] person_2 (DOCTOR): did you get discharge or loss of vision?
+[SEG0018] person_1 (PATIENT): no, none of those
+[SEG0019] person_2 (DOCTOR): Is your urine normal, no changes?
+[SEG0020] person_1 (PATIENT): no changes there
+[SEG0021] person_2 (DOCTOR): okay, and your skin, any changes there?
+[SEG0022] person_1 (PATIENT): No rashes.
+[SEG0023] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0024] person_1 (PATIENT): yes, arthritis in my knees i have an irregular heartbeat
+[SEG0025] person_2 (DOCTOR): Right.
+[SEG0026] person_1 (PATIENT): I've had heart disease, yes i've, I've had thin bones, yes
+[SEG0027] person_2 (DOCTOR): so, before I prescribe anything, any allergies?
+[SEG0028] person_1 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0029] person_2 (DOCTOR): okay, do you get any exercise?
+[SEG0030] person_1 (PATIENT): I walk for about half an hour most days.
+[SEG0031] person_2 (DOCTOR): Are you living with family?
+[SEG0032] person_1 (PATIENT): I stay with my daughter and her family.
+[SEG0033] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0034] person_1 (PATIENT): It's paracetamol, when needed.
+[SEG0035] person_2 (DOCTOR): Do you know the dose?
+[SEG0036] person_1 (PATIENT): 650 milligrams, I think that's what's on the the box. It's apixaban, 5 milligrams, twice a day. I take aspirin, 75 milligrams, once a day. My family kept telling me to get it checked. I take alendronate, 70 milligrams, once a week for my bones.
+[SEG0037] person_2 (DOCTOR): So, do your parents or siblings have any long-term illnesses?
+[SEG0038] person_1 (PATIENT): my mother had high blood pressure
+[SEG0039] person_2 (DOCTOR): right, let me check a a few things physically
+[SEG0040] person_1 (PATIENT): Yes, doctor.
+[SEG0041] person_2 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0042] person_2 (DOCTOR): the eyes look a little pink but the corneas are clear
+[SEG0043] person_2 (DOCTOR): Okay, finished. So where does that leave us? I'd lean towards dry eye. An allergic eye problem is also on my list.
+[SEG0044] person_1 (PATIENT): I've been thinking the worst, to be honest. Is it bad?
+[SEG0045] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's dry eye, and we'll know more once the an eye check is back. I'm sending you for an eye check cos of gritty eyes.
+[SEG0046] person_1 (PATIENT): Fine by me.
+[SEG0047] person_2 (DOCTOR): What I'm giving you is lubricating eye drops, four times a day, for one month. That should help with dry eye.
+[SEG0048] person_1 (PATIENT): Okay, and I take that after food?
+[SEG0049] person_2 (DOCTOR): look away from the screen every twenty minutes and blink fully. Cut down on salt and fried food for now, it really does make a difference. Let's plan a check in four weeks. Okay, we're done for today. Take care
+[SEG0050] person_1 (PATIENT): No, you've explained it well. Thanks.
+[SEG0051] person_2 (DOCTOR): Mind how you go.
+
+JSON:

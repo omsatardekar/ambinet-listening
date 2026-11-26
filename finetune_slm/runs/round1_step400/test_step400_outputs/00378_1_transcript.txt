@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00378)
+[SEG0001] person_1 (PATIENT): Right, hello? Doctor? They told me to come straight in.
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): Um, I've been waking up at night with pins and needles. I didn't want to make a fuss, you know.
+[SEG0004] person_2 (DOCTOR): how far back does it go?
+[SEG0005] person_1 (PATIENT): About... well, four weeks.
+[SEG0006] person_2 (DOCTOR): okay, give me more detail on it, whatever comes to mind
+[SEG0007] person_1 (PATIENT): oh, uh, it settles a little with shaking my hand. Honestly, every other day. A three out of ten, I suppose. I told myself I'd wait and see, and here I am. There's a weak grip as well
+[SEG0008] person_2 (DOCTOR): Any bladder problems or headache at all?
+[SEG0009] person_1 (PATIENT): No, I'd have mentioned it.
+[SEG0010] person_2 (DOCTOR): Any weakness in the legs or trouble walking at all?
+[SEG0011] person_1 (PATIENT): I mean, you know, I haven't had weakness in the legs or trouble walking, no.
+[SEG0012] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0013] person_1 (PATIENT): Right, no, that's all fine.
+[SEG0014] person_2 (DOCTOR): which tablets or creams or inhalers do you use?
+[SEG0015] person_1 (PATIENT): Paracetamol. I take it 500 milligrams, when needed
+[SEG0016] person_2 (DOCTOR): And for how long?
+[SEG0017] person_1 (PATIENT): For about a year.
+[SEG0018] person_2 (DOCTOR): So, any allergies I should know about?
+[SEG0019] person_1 (PATIENT): Hmm, yes, dust. I get itchy eyes.
+[SEG0020] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0021] person_1 (PATIENT): I gave up drinking about three years ago. I smoke, yes, around five a day. Yes, I'm a nurse on a busy ward. I try to avoid too much sugar. I stay with my daughter and her family.
+[SEG0022] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0023] person_1 (PATIENT): No, I've never had anything serious.
+[SEG0024] person_2 (DOCTOR): have you had to have anything operated on?
+[SEG0025] person_1 (PATIENT): Uh, I had my tonsils out when I was a child.
+[SEG0026] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0027] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0028] person_2 (DOCTOR): okay: height 175 centimetres, pulse is 86 beats a minute, weight 59 kilos, temp 36.6 degrees, BMI works out to 19.3, respiratory rate 18, pressure 116 over 74.
+[SEG0029] person_2 (DOCTOR): Right, let me check a few things physically.
+[SEG0030] person_2 (DOCTOR): Let me just check something.
+[SEG0031] person_2 (DOCTOR): Bending the wrist for a minute brings on the numbness.
+[SEG0032] person_1 (PATIENT): Okay.
+[SEG0033] person_2 (DOCTOR): Bear with me a second.
+[SEG0034] person_2 (DOCTOR): Tapping over the wrist reproduces the the tingling.
+[SEG0035] person_2 (DOCTOR): Right, you can sit back down. Having listened and and examined, this looks most like carpal tunnel syndrome. Diabetic neuropathy is still possible.
+[SEG0036] person_1 (PATIENT): uh, is this going to go away?
+[SEG0037] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like carpal tunnel syndrome. Alright, there's nothing new for me to start or arrange today. Okay, we're done for today. Take care.
+[SEG0038] person_1 (PATIENT): No, you know, you've explained it well. Thanks.
+
+JSON:

@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00183)
+[SEG0001] person_1 (DOCTOR): Evening. Long day, I imagine. Sit down. So, what's been going on?
+[SEG0002] person_2 (PATIENT): So So the thing is, I've got burning in both feet.
+[SEG0003] person_1 (DOCTOR): How far back does it go?
+[SEG0004] person_2 (PATIENT): so around about three months... no wait it's more like two months
+[SEG0005] person_1 (DOCTOR): okay, do you notice anything setting it off?
+[SEG0006] person_2 (PATIENT): yes bedsheets touching them that that makes it worse
+[SEG0007] person_1 (DOCTOR): how intense does it get?
+[SEG0008] person_2 (PATIENT): Hmm I'd call it severe.
+[SEG0009] person_1 (DOCTOR): anything that tends to go along with it?
+[SEG0010] person_2 (PATIENT): when it it starts I tend to get pins and needles in the legs as well right, the pins and needles in the legs? That's been for about a month
+[SEG0011] person_1 (DOCTOR): which tablets or creams or inhalers do you use?
+[SEG0012] person_2 (PATIENT): It's metformin 500 milligrams twice a day. Omeprazole. I take it 20 milligrams once a day for the reflux. Okay so so I'm on paracetamol when needed.
+[SEG0013] person_1 (DOCTOR): do you know the dose?
+[SEG0014] person_2 (PATIENT): 500 milligrams, I think that's what's on the the box
+[SEG0015] person_1 (DOCTOR): Ah. Is anyone at home with you?
+[SEG0016] person_2 (PATIENT): I share a flat with two friends.
+[SEG0017] person_1 (DOCTOR): and what do you usually eat?
+[SEG0018] person_2 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0019] person_1 (DOCTOR): do you have any medical conditions, anything you've been treated for?
+[SEG0020] person_2 (PATIENT): yes, diabetes. I have acid reflux
+[SEG0021] person_1 (DOCTOR): So So do your parents or siblings have any long-term illnesses?
+[SEG0022] person_2 (PATIENT): My sister has thyroid problems.
+[SEG0023] person_1 (DOCTOR): Any drug or food allergies?
+[SEG0024] person_2 (PATIENT): I don't have any known medication allergies.
+[SEG0025] person_1 (DOCTOR): have you noticed foot ulcers fever back pain or hand symptoms?
+[SEG0026] person_2 (PATIENT): So, no, no foot ulcers, fever, back pain or hand symptoms.
+[SEG0027] person_1 (DOCTOR): mhm how are your joints, any aches elsewhere?
+[SEG0028] person_2 (PATIENT): nothing else aches
+[SEG0029] person_1 (DOCTOR): let me measure a few things
+[SEG0030] person_1 (DOCTOR): rest your hand here..
+[SEG0031] person_1 (DOCTOR): okay: saturation 97 percent heart rate 67 BP is 126 over 81.
+[SEG0032] person_2 (PATIENT): is that normal?
+[SEG0033] person_1 (DOCTOR): we'll put it in context in a moment
+[SEG0034] person_1 (DOCTOR): Let me have a look at you.
+[SEG0035] person_1 (DOCTOR): stay still while I have a look
+[SEG0036] person_1 (DOCTOR): Ankle reflexes are absent
+[SEG0037] person_1 (DOCTOR): that's all I need, thank you
+[SEG0038] person_1 (DOCTOR): Okay, thinking it through, the most likely explanation is peripheral neuropathy, possibly related to sugar.
+[SEG0039] person_2 (PATIENT): I've been thinking the worst, to be honest is it bad?
+[SEG0040] person_1 (DOCTOR): nothing I've seen today points to an emergency it looks like peripheral neuropathy, possibly related to sugar i'd like you to take pregabalin, 75 milligrams, at night, for four weeks that's for nerve pain please come and see me after the results are back can you run through the plan with me quickly, just to be certain?
+[SEG0041] person_2 (PATIENT): so, I take the pregabalin, 75 milligrams, at night and come back after the results are back is that right?
+[SEG0042] person_1 (DOCTOR): Yes, exactly right. Okay, that's it on my side. Anything unclear?
+[SEG0043] person_2 (PATIENT): That's everything I wanted to ask. Thank you.
+
+JSON:

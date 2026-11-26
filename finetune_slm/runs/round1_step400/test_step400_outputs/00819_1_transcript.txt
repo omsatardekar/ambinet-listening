@@ -1,0 +1,73 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00819)
+[SEG0001] person_1 (PATIENT): Hi. Sorry, it's probably nothing. Dan made me come.
+[SEG0002] person_3 (FAMILY_MEMBER): It's not nothing. She's been throwing up for days.
+[SEG0003] person_2 (DOCTOR): Good morning to you both. Let's start with you, though. What's been happening?
+[SEG0004] person_1 (PATIENT): I've just been a bit queasy. Since I found out I was pregnant, really. It's what everyone gets, isn't it?
+[SEG0005] person_2 (DOCTOR): Tell me a bit more about the queasy feeling.
+[SEG0006] person_1 (PATIENT): It's pretty constant, I suppose, though worse in the mornings. It's only been about two weeks.
+[SEG0007] person_3 (FAMILY_MEMBER): Three weeks, Em. It started the weekend we went to your mum's. That's three weeks on Saturday.
+[SEG0008] person_1 (PATIENT): Is it? I thought two weeks. Maybe it is three.
+[SEG0009] person_2 (DOCTOR): So somewhere between two and three weeks. And the being sick, how often is that happening?
+[SEG0010] person_1 (PATIENT): Um, three or four times a day. Sometimes more. It's not that bad, honestly.
+[SEG0011] person_3 (FAMILY_MEMBER): On Tuesday it was more like five. She was bringing up water by the end.
+[SEG0012] person_2 (DOCTOR): Hm. What else have you noticed?
+[SEG0013] person_1 (PATIENT): Just tired. Wiped out, really. I fell asleep on the sofa at seven o'clock last night, which isn't like me.
+[SEG0014] person_2 (DOCTOR): Anything when you stand up, or move around?
+[SEG0015] person_1 (PATIENT): A bit dizzy when I get up quickly. It passes.
+[SEG0016] person_2 (DOCTOR): Anything else you'd like to tell me?
+[SEG0017] person_1 (PATIENT): No. Not really. I don't want to make a fuss.
+[SEG0018] person_2 (DOCTOR): It isn't a fuss. Let me ask about a few specifics. Any bleeding, or pain in your tummy?
+[SEG0019] person_1 (PATIENT): No, neither.
+[SEG0020] person_2 (DOCTOR): Any burning when you pass water, or a fever?
+[SEG0021] person_1 (PATIENT): No. None of that.
+[SEG0022] person_2 (DOCTOR): How about your breathing, any trouble there?
+[SEG0023] person_1 (PATIENT): No, my breathing is fine.
+[SEG0024] person_2 (DOCTOR): And your heart? Any trouble on that side?
+[SEG0025] person_1 (PATIENT): No, nothing odd there either.
+[SEG0026] person_2 (DOCTOR): Tell me about your health in general. Any conditions, past or present?
+[SEG0027] person_1 (PATIENT): I've got an underactive thyroid, and asthma since I was a kid. And anxiety, on and off. That's it.
+[SEG0028] person_2 (DOCTOR): What medicines are you taking at the moment? Take your time.
+[SEG0029] person_1 (PATIENT): Levothyroxine every morning on an empty stomach. The blue inhaler, salbutamol, when I need it. Folic acid once a day. And cyclizine from my GP for the sickness, 50 milligrams three times a day. I take it regularly.
+[SEG0030] person_3 (FAMILY_MEMBER): She misses the lunchtime one most days, doctor. I've seen it sitting on the kitchen counter.
+[SEG0031] person_1 (PATIENT): Sometimes I forget. It's not a big deal.
+[SEG0032] person_2 (DOCTOR): Thank you both. Do you have any allergies?
+[SEG0033] person_1 (PATIENT): No, none that I know of.
+[SEG0034] person_2 (DOCTOR): Have you had any operations in the past?
+[SEG0035] person_1 (PATIENT): My appendix out, when I was fifteen.
+[SEG0036] person_2 (DOCTOR): Does anything run in the family that I should know about?
+[SEG0037] person_1 (PATIENT): Mum has thyroid problems, that's probably where mine comes from. And my sister was horribly sick in both her pregnancies.
+[SEG0038] person_2 (DOCTOR): That's helpful to know. Do you smoke, or drink?
+[SEG0039] person_1 (PATIENT): I gave up smoking two years ago. And I haven't touched a drink since the test came back positive.
+[SEG0040] person_2 (DOCTOR): And what do you do for work?
+[SEG0041] person_1 (PATIENT): I'm a teaching assistant at a primary school. Which is fun, until the dinner smells hit at twelve.
+[SEG0042] person_2 (DOCTOR): I can imagine. Right, I'm going to take a few measurements first, then I'll examine you.
+[SEG0043] person_1 (PATIENT): Okay.
+[SEG0044] person_2 (DOCTOR): Blood pressure is 112/70 mmHg. Pulse is 96 bpm. Temperature 36.8 degrees Celsius. Oxygen saturation 99 percent. And on the scales you are 61 kilograms.
+[SEG0045] person_1 (PATIENT): Is that all right?
+[SEG0046] person_2 (DOCTOR): Nothing alarming in those numbers. Now lie back for me, and let me feel your tummy. The abdomen is soft, and there is no tenderness anywhere.
+[SEG0047] person_1 (PATIENT): Good.
+[SEG0048] person_2 (DOCTOR): So, here is where I am. Sickness is very common in early pregnancy, but I can't rule out hyperemesis, the severe kind, given how often you are being sick.
+[SEG0049] person_1 (PATIENT): Right. Is that likely?
+[SEG0050] person_2 (DOCTOR): I don't know yet, which is why I'd like to do a few things today. A urine test, to look for ketones, and blood tests to check your salts and your kidneys. And I'll book an ultrasound scan to see how the pregnancy is getting on.
+[SEG0051] person_1 (PATIENT): Okay. Is the cyclizine all right for the baby?
+[SEG0052] person_2 (DOCTOR): Yes, it's one of the usual choices in pregnancy. Please carry on with it, and try to take the lunchtime dose as well.
+[SEG0053] person_3 (FAMILY_MEMBER): I'll text her at twelve every day.
+[SEG0054] person_1 (PATIENT): Dan, please.
+[SEG0055] person_2 (DOCTOR): That's a perfectly good plan. Small meals, little and often, dry biscuits before you get out of bed, sips of fluid all day, and ginger if you like it. If you can't keep any fluids down for 24 hours, come back and see me that same day, don't wait.
+[SEG0056] person_1 (PATIENT): Right. Thank you. I'm sure it'll settle by itself.
+[SEG0057] person_2 (DOCTOR): I hope so. We'll see how you get on.
+[SEG0058] person_3 (FAMILY_MEMBER): Thanks, doctor.
+
+JSON:

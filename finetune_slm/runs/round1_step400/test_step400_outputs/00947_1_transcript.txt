@@ -1,0 +1,76 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00947)
+[SEG0001] person_2 (DOCTOR): Good afternoon, Mr Doyle, Mrs Doyle. The booking says inhaler technique review. What's been happening? ~
+[SEG0002] person_1 (PATIENT): Well, the breathing, you know. Not good. A bit all over the place.
+[SEG0003] person_2 (DOCTOR): Can you say more? When are you breathless?
+[SEG0004] person_1 (PATIENT): Going up the hill to the shops. Or, I don't know, sometimes sitting.
+[SEG0005] person_3 (FAMILY_MEMBER): Not sitting, Tom. When you hurry. And he coughs all the time, doctor, morning mostly.
+[SEG0006] person_2 (DOCTOR): And does he wheeze?
+[SEG0007] person_3 (FAMILY_MEMBER): At night, yes. I can hear it from my side of the bed.
+[SEG0008] person_2 (DOCTOR): Any chest pain?
+[SEG0009] person_1 (PATIENT): No pain, no.
+[SEG0010] person_2 (DOCTOR): Fever?
+[SEG0011] person_1 (PATIENT): No fever.
+[SEG0012] person_2 (DOCTOR): Coughing up blood?
+[SEG0013] person_1 (PATIENT): No blood.
+[SEG0014] person_2 (DOCTOR): Swollen ankles?
+[SEG0015] person_3 (FAMILY_MEMBER): No, his ankles are fine.
+[SEG0016] person_2 (DOCTOR): Weight loss?
+[SEG0017] person_3 (FAMILY_MEMBER): No, if anything he's put on a bit.
+[SEG0018] person_2 (DOCTOR): And which inhalers do you use at the moment, Tom?
+[SEG0019] person_1 (PATIENT): The blue one. The puffer. I can't remember what it's called. The blue one, for when I'm wheezy.
+[SEG0020] person_4 (CLINICAL_STAFF): It's in his bag, doctor, I can read it for you later, but I think the label's worn off.
+[SEG0021] person_2 (DOCTOR): That's fine, we'll find it on the record. Any allergies to medicines?
+[SEG0022] person_1 (PATIENT): No allergies.
+[SEG0023] person_2 (DOCTOR): What conditions have you got?
+[SEG0024] person_1 (PATIENT): Asthma, since I was a boy. And hay fever.
+[SEG0025] person_2 (DOCTOR): Any operations?
+[SEG0026] person_1 (PATIENT): Tonsils, as a lad. And a hernia in 2012.
+[SEG0027] person_2 (DOCTOR): Asthma in the family?
+[SEG0028] person_1 (PATIENT): My mother had it.
+[SEG0029] person_2 (DOCTOR): Do you smoke?
+[SEG0030] person_1 (PATIENT): I stopped smoking ten years ago.
+[SEG0031] person_2 (DOCTOR): And what did you do for work?
+[SEG0032] person_3 (FAMILY_MEMBER): He was a postman, thirty years. Retired.
+[SEG0033] person_2 (DOCTOR): Do you get out walking?
+[SEG0034] person_1 (PATIENT): When I can. The dog needs it more than me.
+[SEG0035] person_2 (DOCTOR): Let me check you. Pulse 84, blood pressure 140 over 86, temperature 36.7, oxygen 94 percent, breathing 18, weight 80 kilos.
+[SEG0036] person_3 (FAMILY_MEMBER): Is the oxygen all right? ~
+[SEG0037] person_2 (DOCTOR): A bit lower than I'd like, but not alarming. Let me listen. Big breaths, Tom.
+[SEG0038] person_1 (PATIENT): Like this? ~
+[SEG0039] person_2 (DOCTOR): I can hear wheeze on both sides, mostly when you breathe out.
+[SEG0040] person_1 (PATIENT): That's the whistle. ~
+[SEG0041] person_2 (DOCTOR): And your chest is moving well, with no signs of struggling. Your heart sounds are normal.
+[SEG0042] person_3 (FAMILY_MEMBER): That's good. ~
+[SEG0043] person_2 (DOCTOR): Any palpitations, any trouble with your heart?
+[SEG0044] person_1 (PATIENT): No, nothing at all.
+[SEG0045] person_2 (DOCTOR): Any heartburn or trouble swallowing?
+[SEG0046] person_1 (PATIENT): No, nothing. I eat like a horse.
+[SEG0047] person_2 (DOCTOR): Now I'd like to see how you use the blue puffer. Priya, would you hand him the demonstration one? ~
+[SEG0048] person_4 (CLINICAL_STAFF): Of course. Here you are, Mr Doyle. Breathe out first, then press, and breathe in slowly. ~
+[SEG0049] person_1 (PATIENT): Like that? ~
+[SEG0050] person_4 (CLINICAL_STAFF): You pressed, and then you breathed in too fast, and held it for just a second. ~
+[SEG0051] person_2 (DOCTOR): That's the common problem. The medicine is hitting the back of your throat instead of the lungs. ~
+[SEG0052] person_3 (FAMILY_MEMBER): So it's not working? ~
+[SEG0053] person_2 (DOCTOR): Not as well as it could. I think the poor technique is limiting the benefit of the inhaler.
+[SEG0054] person_1 (PATIENT): Oh dear. I've been doing it wrong for years. ~
+[SEG0055] person_2 (DOCTOR): It's very common, you're not alone. I'd like to start tiotropium, 18 micrograms, once a day, from a different type of inhaler, and a budesonide inhaler, 200 micrograms, twice a day.
+[SEG0056] person_3 (FAMILY_MEMBER): Will he need a spacer? ~
+[SEG0057] person_4 (CLINICAL_STAFF): I'll show you both devices and a spacer, Mrs Doyle. They make it much easier. ~
+[SEG0058] person_2 (DOCTOR): Thank you, Priya. I'd also like to arrange spirometry, to measure your breathing properly, and a chest X-ray.
+[SEG0059] person_1 (PATIENT): When? ~
+[SEG0060] person_2 (DOCTOR): This month. And I'd like to see you again in four weeks to see how the new inhalers are doing.
+[SEG0061] person_3 (FAMILY_MEMBER): Four weeks. We'll write it on the calendar. ~
+
+JSON:

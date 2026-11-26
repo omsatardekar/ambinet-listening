@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20418)
+[SEG0001] person_1 (DOCTOR): Evening. Let's get started. Did you find the place alright?
+[SEG0002] person_2 (PATIENT): Yes, it was easy enough. The parking was the hard part.
+[SEG0003] person_1 (DOCTOR): Where shall we begin?
+[SEG0004] person_2 (PATIENT): Mainly yellow eyes. There's a couple of other things, but that's the main one.
+[SEG0005] person_1 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0006] person_2 (PATIENT): I'm on alendronate, once a week.
+[SEG0007] person_1 (DOCTOR): And what strength is that?
+[SEG0008] person_2 (PATIENT): 70 milligrams, I think that's what's on the box.
+[SEG0009] person_1 (DOCTOR): Alright, what's the timeline, when did it begin?
+[SEG0010] person_2 (PATIENT): So, it's been one week now.
+[SEG0011] person_1 (DOCTOR): Yes, carry on. Have you noticed anything else alongside it?
+[SEG0012] person_2 (PATIENT): Pale stools goes along with it, most of the time. The pale stools? That's been for about two weeks.
+[SEG0013] person_1 (DOCTOR): Mm-hmm. A few quick ones: itching, confusion or vomiting blood?
+[SEG0014] person_2 (PATIENT): Mm, no, none of those at all.
+[SEG0015] person_1 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0016] person_2 (PATIENT): Breathing's normal.
+[SEG0017] person_1 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0018] person_2 (PATIENT): Ah, no, nothing with my heart.
+[SEG0019] person_1 (DOCTOR): Any previous surgeries?
+[SEG0020] person_2 (PATIENT): Hmm, nothing, I haven't had any operations.
+[SEG0021] person_1 (DOCTOR): Tell me about any past illnesses or ongoing conditions.
+[SEG0022] person_2 (PATIENT): I've got thin bones.
+[SEG0023] person_1 (DOCTOR): A few questions about your lifestyle now.
+[SEG0024] person_2 (PATIENT): I used to drink heavily but I stopped four years ago. Lots of rice, lentils and some fruit. No, I share a house with my brother.
+[SEG0025] person_1 (DOCTOR): So, do you react to any medicines or foods? Any allergies?
+[SEG0026] person_2 (PATIENT): Yes, naproxen, it gives me stomach pain.
+[SEG0027] person_1 (DOCTOR): I'll note down your vital signs first.
+[SEG0028] person_1 (DOCTOR): Nearly done with the readings...
+[SEG0029] person_1 (DOCTOR): Okay: SpO2 98 percent on room air, temperature is 36.5 degrees, pulse 86, blood pressure 125 over 74.
+[SEG0030] person_2 (PATIENT): Is that normal?
+[SEG0031] person_1 (DOCTOR): They help me see the whole picture, more shortly.
+[SEG0032] person_1 (DOCTOR): Going by what you've described, I don't have a clear answer today: an acute viral hepatitis is possible, and so is gallstones blocking the bile duct.
+[SEG0033] person_2 (PATIENT): I'm scared it's something bad. Is it?
+[SEG0034] person_1 (DOCTOR): It's reasonable to be concerned, but right now an acute viral hepatitis is my leading thought, not anything worse.
+[SEG0035] person_1 (DOCTOR): Let's book a hepatitis screen to look into jaundice. No alcohol at all and avoid paracetamol and other painkillers unless we say.
+[SEG0036] person_1 (DOCTOR): Ah. See me again after the results. Right, that's the plan. Do you want to ask me anything?
+[SEG0037] person_2 (PATIENT): Ah, um, I think I understand everything. Thanks.
+[SEG0038] person_1 (DOCTOR): Have a good day.
+
+JSON:

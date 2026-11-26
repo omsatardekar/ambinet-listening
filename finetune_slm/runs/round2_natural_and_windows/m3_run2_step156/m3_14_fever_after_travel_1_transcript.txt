@@ -1,0 +1,120 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_14_fever_after_travel)
+[SEG0001] person_1 (FAMILY_MEMBER): She's had a fever for three days, doctor, a terrible one, with shaking, and we've just come back from Ghana, so I said straight to hospital.
+[SEG0002] person_2 (PATIENT): Mm.
+[SEG0003] person_2 (PATIENT): Well, uh, not hospital, Suresh, we came to the clinic, it's the same thing. Doctor, I'm so sorry, I haven't slept, I'm shivering now, look, my hands.
+[SEG0004] person_3 (DOCTOR): Hello, I'm Dr Menon. Please sit, both of you. Mrs Pillai, is that right? Let me get you a blanket, if you're cold. Nurse, a blanket, please, from the cupboard. There you go. Is that better?
+[SEG0005] person_2 (PATIENT): Yes. Thank you. It comes in waves, you know, the cold and then the heat.
+[SEG0006] person_3 (DOCTOR): Tell me about it from the start. When did you first feel unwell?
+[SEG0007] person_2 (PATIENT): Um, it was Sunday, so three days ago, I woke up and I had a pounding headache. But actually the headache is older. I have had a headache for a week, since we were still there, but it was dull then. On Sunday it was like a drum.
+[SEG0008] person_3 (DOCTOR): Sure.
+[SEG0009] person_3 (DOCTOR): Okay. And the fever?
+[SEG0010] person_2 (PATIENT): Sunday night. I got into bed and I started shaking, my teeth were chattering, I put on two jumpers and the duvet. And then an hour later I was burning, throwing everything off. Then sweating. The sheet was soaked. Then I fell asleep. And then the next night the same.
+[SEG0011] person_3 (DOCTOR): Yes.
+[SEG0012] person_3 (DOCTOR): And has it come at the same time of day, each night?
+[SEG0013] person_2 (PATIENT): Evenings, mainly. But last night it was early, about four in the afternoon.
+[SEG0014] person_3 (DOCTOR): Have you measured your temperature?
+[SEG0015] person_1 (FAMILY_MEMBER): I did, doctor, last night. It was thirty-nine point five. On the forehead one.
+[SEG0016] person_3 (DOCTOR): Okay. Any sweating in between, during the day?
+[SEG0017] person_2 (PATIENT): Well, uh, a lot. Even sitting still. I change my top two times a day.
+[SEG0018] person_3 (DOCTOR): Right. Have you been vomiting?
+[SEG0019] person_2 (PATIENT): A bit nauseous, but no vomiting.
+[SEG0020] person_3 (DOCTOR): Diarrhoea?
+[SEG0021] person_2 (PATIENT): No. My stomach is fine. If anything I'm a bit bunged up.
+[SEG0022] person_3 (DOCTOR): Any rash, anywhere on your body?
+[SEG0023] person_2 (PATIENT): No rash. I looked. I looked this morning, everywhere.
+[SEG0024] person_3 (DOCTOR): Any stiffness of the neck, or pain when you look at a bright light?
+[SEG0025] person_2 (PATIENT): No. My neck is fine. It's the head, the front, behind my eyes.
+[SEG0026] person_3 (DOCTOR): Cough, sore throat, breathlessness?
+[SEG0027] person_2 (PATIENT): Hm, no cough. I do have my asthma, but it's not worse. Is that important?
+[SEG0028] person_3 (DOCTOR): I'll come to that. Tell me about the trip. Where did you go, and for how long?
+[SEG0029] person_2 (PATIENT): Accra. To see Suresh's cousin. Three weeks in total. We got back eleven days ago, I think. Ten or eleven.
+[SEG0030] person_1 (FAMILY_MEMBER): Eleven. Sunday week.
+[SEG0031] person_3 (DOCTOR): And where were you staying, the city or somewhere more rural?
+[SEG0032] person_2 (PATIENT): Hm, the city, but we did go up to a village for a wedding for two days. In the evenings we sat outside. There were so many mosquitoes. I got bitten, my ankles were covered.
+[SEG0033] person_3 (DOCTOR): Did you take any antimalarial tablets before you went?
+[SEG0034] person_2 (PATIENT): Ah. That's the thing. We went to the pharmacy, and they said you need a prescription, and then we went to the doctor and he gave us the form, and then we ran out of time before the flight, and we thought, well, we have been before and nothing happened.
+[SEG0035] person_1 (FAMILY_MEMBER): Mm.
+[SEG0036] person_1 (FAMILY_MEMBER): Hm, we didn't collect them. It was my fault. I said, we'll be fine.
+[SEG0037] person_2 (PATIENT): No, it was both of us. It wasn't one of us.
+[SEG0038] person_3 (DOCTOR): I understand. I'm not here to tell you off, but it does mean I have to take malaria seriously. Have you been told by anyone that you've had malaria before?
+[SEG0039] person_2 (PATIENT): Never.
+[SEG0040] person_3 (DOCTOR): And the vaccinations, yellow fever?
+[SEG0041] person_2 (PATIENT): Yes, we had that one, I've got the card.
+[SEG0042] person_3 (DOCTOR): Good. Who else is unwell, at home or among the family?
+[SEG0043] person_1 (FAMILY_MEMBER): I'm fine. The children are fine. My cousin's wife had a fever the week before we left but she was better in two days.
+[SEG0044] person_3 (DOCTOR): Okay. Now, your health in general. You mentioned asthma.
+[SEG0045] person_2 (PATIENT): Nearly five years. Since after my second child. I use the Foracort inhaler. Twice a day. The brown one.
+[SEG0046] person_3 (DOCTOR): What dose?
+[SEG0047] person_2 (PATIENT): It's, I don't know, the two hundred and something. Two puffs, morning and night.
+[SEG0048] person_3 (DOCTOR): Fine, we'll check. Any other medicines?
+[SEG0049] person_2 (PATIENT): Dolo. For the fever.
+[SEG0050] person_3 (DOCTOR): How much Dolo have you taken?
+[SEG0051] person_2 (PATIENT): Six-fifty each time. And I've been taking it, let me think, whenever the fever came up. Four, five a day. Maybe six. I don't know, I lose count.
+[SEG0052] person_1 (FAMILY_MEMBER): Yeah.
+[SEG0053] person_1 (FAMILY_MEMBER): I put them out for her. I think it was four, doctor. No, five, yesterday.
+[SEG0054] person_2 (PATIENT): Five, Suresh, you counted five and I took one more when you were asleep.
+[SEG0055] person_3 (DOCTOR): Okay. So about five or six in twenty-four hours, which is slightly over the limit, we'll watch that. What's your temperature after you take one?
+[SEG0056] person_2 (PATIENT): Well, uh, it comes down a little and then it goes right up again.
+[SEG0057] person_3 (DOCTOR): Allergies?
+[SEG0058] person_2 (PATIENT): None. I don't have any.
+[SEG0059] person_3 (DOCTOR): Do you smoke?
+[SEG0060] person_2 (PATIENT): Yes. About half a pack a day. I know. I've been meaning to stop.
+[SEG0061] person_3 (DOCTOR): And alcohol?
+[SEG0062] person_2 (PATIENT): I used to drink a lot. I stopped four years ago.
+[SEG0063] person_3 (DOCTOR): Well done. Family illnesses?
+[SEG0064] person_2 (PATIENT): My grandmother had dementia. That's all.
+[SEG0065] person_3 (DOCTOR): Thank you. Let's check you. I need your temperature, pulse and pressure, and then I'll feel your tummy. Is that all right?
+[SEG0066] person_2 (PATIENT): Yes. Please.
+[SEG0067] person_3 (DOCTOR): The temperature is thirty-nine point two. Pulse, a hundred and five. Pressure one oh eight over seventy-eight, oxygen ninety-seven. You're running a high fever and your pulse is fast, as you'd expect.
+[SEG0068] person_2 (PATIENT): Is that bad?
+[SEG0069] person_3 (DOCTOR): It's what I'd expect with this, and I'm not alarmed by the numbers, but I'm taking it seriously. Lie back for me. I'm going to feel your tummy under the ribs on the left.
+[SEG0070] person_2 (PATIENT): Ooh.
+[SEG0071] person_3 (DOCTOR): Sorry. Is that sore?
+[SEG0072] person_2 (PATIENT): Um, a bit tender, but it doesn't hurt. It just feels odd.
+[SEG0073] person_3 (DOCTOR): I can just feel the tip of your spleen. That's mildly enlarged. And your chest is clear. Your heart sounds are fast but regular.
+[SEG0074] person_1 (FAMILY_MEMBER): Is that a bad sign?
+[SEG0075] person_3 (DOCTOR): Spleen swelling can happen with malaria, and with a few other infections. It adds to my concern, it doesn't prove anything. Right. I'm going to be honest with you, both of you, because I'd want you to be. A fever that begins during or after a trip to West Africa in someone who hasn't taken antimalarial tablets is malaria until proven otherwise. That's the rule we work to. It might be something else, and dengue fever is the main alternative, which can look very much like this, and which is also carried by mosquitoes. There are other possibilities too, like typhoid. But the first thing is to rule out malaria today, now.
+[SEG0076] person_2 (PATIENT): Mm-hm.
+[SEG0077] person_2 (PATIENT): Oh God. Is it dangerous?
+[SEG0078] person_3 (DOCTOR): Malaria can be dangerous, particularly the sort you get in Africa, but it's also very treatable if we catch it in time, and we've caught it early. You're alert, your breathing is fine, you are able to talk to me. That's reassuring.
+[SEG0079] person_1 (FAMILY_MEMBER): What tests?
+[SEG0080] person_3 (DOCTOR): Rapid blood test for malaria, which gives an answer in fifteen minutes, and a blood film that the lab looks at under the microscope, which we'll do at the same time. And blood cultures, which check for typhoid and other infections in the blood. We'll do those all right now, and the nurse will take them while you're here.
+[SEG0081] person_2 (PATIENT): And if it's malaria?
+[SEG0082] person_3 (DOCTOR): Then you'd be treated in hospital to start with, and I'd arrange that today. The treatment is a drip or tablets depending on the type and how unwell you are. You'd probably be in for a couple of days.
+[SEG0083] person_2 (PATIENT): The children. Who'll collect the children?
+[SEG0084] person_1 (FAMILY_MEMBER): I'll sort the children. My sister will take them.
+[SEG0085] person_3 (DOCTOR): Good. Don't worry about that for now. Keep drinking water, as much as you can, little and often. Keep taking the paracetamol, but not more than four in twenty-four hours, spaced out, and tell me if you have to take more.
+[SEG0086] person_2 (PATIENT): Okay.
+[SEG0087] person_2 (PATIENT): Four. I'll stick to four.
+[SEG0088] person_3 (DOCTOR): And I want you to understand the warning signs. If you become confused or very drowsy, if you can't keep fluids down, if your urine stops, or if you get short of breath, tell the nurse, tell me, or press the bell. These are signs of severe malaria.
+[SEG0089] person_1 (FAMILY_MEMBER): We will.
+[SEG0090] person_1 (FAMILY_MEMBER): Doctor, can I ask. Can she pass it to us? To me, to the children? We've all been in the same bed, the same house.
+[SEG0091] person_3 (DOCTOR): Good question, and the answer is no, not directly. Malaria isn't passed from person to person like flu. It needs a mosquito to bite her, and then bite you. There aren't any of the right kind of mosquitoes around here at this time of year, so the risk to the family is very low. You can hug your children.
+[SEG0092] person_1 (FAMILY_MEMBER): Mm-hm.
+[SEG0093] person_1 (FAMILY_MEMBER): Thank God. She's been keeping away from them for two days, she cries when she hears them downstairs.
+[SEG0094] person_2 (PATIENT): I haven't even held the little one.
+[SEG0095] person_3 (DOCTOR): You can, when you're better, and probably before. What matters for you, Suresh, is that you were in Ghana as well, for the same three weeks, in the same evenings by the wedding. If you get a fever, any fever, in the next few months, you tell the doctor at once that you've travelled.
+[SEG0096] person_1 (FAMILY_MEMBER): I'll tell them. Should I be tested now?
+[SEG0097] person_3 (DOCTOR): Not if you're well. But I'll give you a note, and if you feel hot or shivery, come straight in.
+[SEG0098] person_2 (PATIENT): And what about the inhaler, should I stop that?
+[SEG0099] person_3 (DOCTOR): No, absolutely carry on with the asthma inhaler. That's separate. Your breathing is good and it's important to keep it controlled. Keep it with you in hospital.
+[SEG0100] person_2 (PATIENT): And the cigarettes. I've been trying to stop.
+[SEG0101] person_3 (DOCTOR): We'll talk about that another time, when you're well. It's the last thing to worry about today.
+[SEG0102] person_3 (DOCTOR): The nurse will take the blood in a moment. Let me get you something to drink, you look parched. And I'll come back with the result.
+[SEG0103] person_2 (PATIENT): Right.
+[SEG0104] person_2 (PATIENT): Thank you, doctor. I thought it was just flu.
+[SEG0105] person_3 (DOCTOR): It might be, but I'd rather know.
+
+JSON:

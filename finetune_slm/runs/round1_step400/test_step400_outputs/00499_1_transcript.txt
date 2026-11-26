@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00499)
+[SEG0001] person_1 (DOCTOR): hello. Right, let's get started
+[SEG0002] person_2 (CAREGIVER): Right, hello, doctor, I came in with them, if that's okay.
+[SEG0003] person_1 (DOCTOR): tell me from the beginning, what's been happening?
+[SEG0004] person_2 (CAREGIVER): She's been having puffiness around the eyes in the morning, doctor.
+[SEG0005] person_1 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0006] person_2 (CAREGIVER): She is on diclofenac, 50 milligrams, when I get pain, I give it to her.
+[SEG0007] person_1 (DOCTOR): and how severe is it?
+[SEG0008] person_3 (PATIENT): I'd say mild. I've also had foamy urine, for nearly five years. Oh, and tiredness.
+[SEG0009] person_1 (DOCTOR): Any chest pain, blood in the urine, fever or breathlessness?
+[SEG0010] person_3 (PATIENT): No, no chest pain, blood in the urine, fever or breathlessness.
+[SEG0011] person_1 (DOCTOR): What about reduced urine output?
+[SEG0012] person_3 (PATIENT): No, I haven't had any reduced urine output.
+[SEG0013] person_1 (DOCTOR): Anything on the skin I should know about?
+[SEG0014] person_3 (PATIENT): Skin's normal.
+[SEG0015] person_1 (DOCTOR): are there any allergies on your record that I should check?
+[SEG0016] person_3 (PATIENT): Yeah, years back I got a rash from aspirin, so I stay away from it now.
+[SEG0017] person_1 (DOCTOR): Okay, any previous surgeries?
+[SEG0018] person_3 (PATIENT): I had a knee arthroscopy three years ago.
+[SEG0019] person_1 (DOCTOR): How's your diet?
+[SEG0020] person_3 (PATIENT): I'm mostly vegetarian
+[SEG0021] person_1 (DOCTOR): Are you working at the moment?
+[SEG0022] person_3 (PATIENT): Yes, I'm a nurse on a busy ward.
+[SEG0023] person_1 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0024] person_3 (PATIENT): Yes, kidney disease.
+[SEG0025] person_1 (DOCTOR): Sure.
+[SEG0026] person_1 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0027] person_1 (DOCTOR): Okay, give me a moment...
+[SEG0028] person_1 (DOCTOR): Okay: oxygen saturation is 98 percent, heart rate 84, pressure 154 over 93, temperature is 36.7 degrees.
+[SEG0029] person_1 (DOCTOR): Let's do the physical part now.
+[SEG0030] person_3 (PATIENT): Fine.
+[SEG0031] person_1 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0032] person_1 (DOCTOR): There's pitting swelling at both ankles, and your blood pressure is on the high side.
+[SEG0033] person_1 (DOCTOR): Right, you can sit back down. So, based on the history and the examination, I'd lean towards progression of the kidney problem. A medication effect on the kidneys is also on my list.
+[SEG0034] person_3 (PATIENT): yeah, what are the chances it's something bad?
+[SEG0035] person_1 (DOCTOR): It's reasonable to be concerned, but right now progression of the kidney problem is my leading thought, not anything worse. Let's get kidney function tests, for chronic kidney disease. Let's get a urine protein test, for chronic kidney disease. Stay off anti-inflammatory painkillers like diclofenac or ibuprofen, they're hard on the kidneys. Keep an eye on salt and protein portions, a dietitian can help with the specifics.
+[SEG0036] person_1 (DOCTOR): don't skip meals, and try to eat smaller portions more often through the day i'm going to send a referral to a kidney specialist please don't wait if the symptoms get worse that's when to be seen urgently
+[SEG0037] person_3 (PATIENT): right, you know, will do
+[SEG0038] person_1 (DOCTOR): I'd like you back after the results are back.
+[SEG0039] person_3 (PATIENT): Yes, I can do that.
+[SEG0040] person_1 (DOCTOR): Alright, I'll see you out.
+[SEG0041] person_3 (PATIENT): Alright, thanks. Bye for now.
+[SEG0042] person_1 (DOCTOR): Take care.
+
+JSON:

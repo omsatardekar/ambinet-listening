@@ -1,0 +1,80 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01865)
+[SEG0001] person_1 (NURSE): Doctor, your next patient is here. I've done the basics, I'll read them out in a moment.
+[SEG0002] person_2 (DOCTOR): Okay, thanks. Hi, how can I help today?
+[SEG0003] person_3 (FAMILY_MEMBER): Thank you for fitting us in, doctor.
+[SEG0004] person_2 (DOCTOR): Absolutely, come and sit beside them.
+[SEG0005] person_3 (FAMILY_MEMBER): We came because of loose stools with blood.
+[SEG0006] person_2 (DOCTOR): What do you take on a normal day?
+[SEG0007] person_4 (PATIENT): Hydrocortisone cream, when needed for the eczema. It's Thyronorm, every morning.
+[SEG0008] person_2 (DOCTOR): How much do you take?
+[SEG0009] person_4 (PATIENT): 50 micrograms, I think that's what's on the box. Sodium valproate. I take it 500 milligrams, twice a day.
+[SEG0010] person_2 (DOCTOR): Roughly how long on that one?
+[SEG0011] person_4 (PATIENT): For about a year.
+[SEG0012] person_2 (DOCTOR): How long has this been bothering you?
+[SEG0013] person_4 (PATIENT): I'd say three days, maybe.
+[SEG0014] person_3 (FAMILY_MEMBER): It was closer to five days, doctor.
+[SEG0015] person_2 (DOCTOR): Okay, so roughly three to five days. Is that right?
+[SEG0016] person_4 (PATIENT): Yeah, roughly.
+[SEG0017] person_2 (DOCTOR): Is it a lot or only a little?
+[SEG0018] person_4 (PATIENT): I'd give it a four, out of ten.
+[SEG0019] person_2 (DOCTOR): Is it constant or in episodes?
+[SEG0020] person_4 (PATIENT): Honestly, every other day.
+[SEG0021] person_2 (DOCTOR): Have you had cramping tummy pain?
+[SEG0022] person_4 (PATIENT): Yes, about the same, two days. About cramping tummy pain, it happens on and off.
+[SEG0023] person_2 (DOCTOR): What about mouth ulcers, have you noticed that?
+[SEG0024] person_4 (PATIENT): Yeah, that too.
+[SEG0025] person_2 (DOCTOR): Understood.
+[SEG0026] person_4 (PATIENT): Oh, and tiredness.
+[SEG0027] person_2 (DOCTOR): Any fever?
+[SEG0028] person_4 (PATIENT): Not that I've noticed, no fever.
+[SEG0029] person_3 (FAMILY_MEMBER): Actually, doctor, I did notice fever. He doesn't always say.
+[SEG0030] person_4 (PATIENT): No, I don't think I did. Maybe a little, I'm not sure.
+[SEG0031] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. And what about vomiting, weight loss or joint pain?
+[SEG0032] person_4 (PATIENT): No, not a single one.
+[SEG0033] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0034] person_4 (PATIENT): Oh, no, that's all fine.
+[SEG0035] person_2 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0036] person_4 (PATIENT): No known allergies.
+[SEG0037] person_2 (DOCTOR): Any previous surgeries?
+[SEG0038] person_4 (PATIENT): Nothing, I haven't had any operations.
+[SEG0039] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0040] person_4 (PATIENT): I have eczema, for about a year. I have an underactive thyroid, for about ten years. I've got epilepsy.
+[SEG0041] person_2 (DOCTOR): Okay, I can see eczema in your file as well. Do you smoke?
+[SEG0042] person_4 (PATIENT): I have about eight cigarettes in a day.
+[SEG0043] person_2 (DOCTOR): Do you live by yourself?
+[SEG0044] person_4 (PATIENT): No, I share a house with my brother.
+[SEG0045] person_2 (DOCTOR): Do you do any exercise?
+[SEG0046] person_4 (PATIENT): I swim twice a week.
+[SEG0047] person_2 (DOCTOR): Do you work outside the home?
+[SEG0048] person_4 (PATIENT): I'm a hairdresser, on my feet all day.
+[SEG0049] person_1 (NURSE): Doctor, I've got the readings for you. Temperature 36.9, BP is 118 over 78, respiratory rate 15, pulse 66, oxygen saturation is 98 percent.
+[SEG0050] person_2 (DOCTOR): Okay, noted.
+[SEG0051] person_2 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0052] person_4 (PATIENT): Sure thing.
+[SEG0053] person_2 (DOCTOR): Nearly finished here.
+[SEG0054] person_2 (DOCTOR): There is tenderness in the lower right tummy and no guarding.
+[SEG0055] person_2 (DOCTOR): Thank you, you can get dressed.
+[SEG0056] person_2 (DOCTOR): Putting it all together, this is probably a flare of inflammatory bowel disease. I can't rule out an infection yet.
+[SEG0057] person_4 (PATIENT): What are the odds it's serious?
+[SEG0058] person_2 (DOCTOR): It's reasonable to be concerned, but right now a flare of inflammatory bowel disease is my leading thought, not anything worse.
+[SEG0059] person_2 (DOCTOR): I'd like to arrange blood tests for flare. I think a stool test makes sense here, for bloody diarrhoea.
+[SEG0060] person_4 (PATIENT): That's fine with me.
+[SEG0061] person_2 (DOCTOR): I'd like you to take prednisolone, 40 milligrams, once a day, one week then reduce. It's for inflammatory bowel flare.
+[SEG0062] person_4 (PATIENT): Alright, I'll pick it up today.
+[SEG0063] person_2 (DOCTOR): Keep up your fluids and call the IBD nurse if you get a fever. Please come and see me in two weeks. Anything else on your mind before you go?
+[SEG0064] person_4 (PATIENT): Thank you, doctor, goodbye.
+[SEG0065] person_2 (DOCTOR): Right, look after yourself.
+
+JSON:

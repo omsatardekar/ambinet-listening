@@ -1,0 +1,69 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00457)
+[SEG0001] person_1 (PATIENT): Good afternoon, you know, doctor, the receptionist said you'd see me now.
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): Um, um, so... blood on the toilet paper. That's why I came. I wasn't sure whether to come in at all, to be honest.
+[SEG0004] person_2 (DOCTOR): Is this recent, or has it been a while?
+[SEG0005] person_1 (PATIENT): I'd say about four days. Actually, no, closer to two days.
+[SEG0006] person_2 (DOCTOR): Is it worse with anything in particular?
+[SEG0007] person_1 (PATIENT): I notice it more with hard stools. Oh, you know, and pain when I pass stool. That's been about the same, four weeks. As for pain when I pass stool, honestly, all the time. And a small lump near the back passage, too.
+[SEG0008] person_2 (DOCTOR): Any fever or change in bowel habit at all?
+[SEG0009] person_1 (PATIENT): I, I haven't had fever or change in bowel habit, no.
+[SEG0010] person_2 (DOCTOR): Any black stools, abdominal pain or family history of bowel cancer?
+[SEG0011] person_1 (PATIENT): No, none of that at all.
+[SEG0012] person_2 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0013] person_1 (PATIENT): No, nothing there.
+[SEG0014] person_2 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0015] person_1 (PATIENT): Nothing odd there.
+[SEG0016] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0017] person_1 (PATIENT): I take iron tablets, once a day.
+[SEG0018] person_2 (DOCTOR): Do your parents or siblings have any long-term illnesses?
+[SEG0019] person_1 (PATIENT): My brother has asthma.
+[SEG0020] person_2 (DOCTOR): Do you have any known allergies at all?
+[SEG0021] person_1 (PATIENT): Yes, I'm allergic to penicillin.
+[SEG0022] person_2 (DOCTOR): Do you drink alcohol?
+[SEG0023] person_1 (PATIENT): A beer or two most evenings, to be honest.
+[SEG0024] person_2 (DOCTOR): Okay, any sport or activity?
+[SEG0025] person_1 (PATIENT): I play badminton on Sundays.
+[SEG0026] person_2 (DOCTOR): Do you live alone?
+[SEG0027] person_1 (PATIENT): Yes, I live on my own.
+[SEG0028] person_2 (DOCTOR): Alright, tell me about your work.
+[SEG0029] person_1 (PATIENT): I'm a software engineer, so I'm at a screen all day.
+[SEG0030] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0031] person_1 (PATIENT): I have low haemoglobin. I'm not great at remembering details, so bear with me.
+[SEG0032] person_2 (DOCTOR): Right, so low haemoglobin is already on your record. We'll keep that in mind today.
+[SEG0033] person_2 (DOCTOR): A few measurements, then we'll continue.
+[SEG0034] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0035] person_2 (DOCTOR): Okay: pulse 69, temperature 36.5, oxygen saturation is 97 percent, blood pressure 123 over 75.
+[SEG0036] person_2 (DOCTOR): Right, if you're comfortable, I'll examine you now.
+[SEG0037] person_1 (PATIENT): Mm, okay.
+[SEG0038] person_2 (DOCTOR): Almost done with this part.
+[SEG0039] person_2 (DOCTOR): There's a small external pile at the edge, and I don't see any fissure.
+[SEG0040] person_1 (PATIENT): Okay.
+[SEG0041] person_2 (DOCTOR): Thanks for that.
+[SEG0042] person_2 (DOCTOR): Putting it all together, it points towards haemorrhoids. Something higher up in the bowel that we shouldn't miss is still possible.
+[SEG0043] person_1 (PATIENT): What are the chances it's something bad?
+[SEG0044] person_2 (DOCTOR): I can't promise yet, but most people with haemorrhoids do well once it's treated properly. I want a colonoscopy done, that's for rectal bleeding.
+[SEG0045] person_1 (PATIENT): Okay, that's fine.
+[SEG0046] person_2 (DOCTOR): I'll start you on lactulose, 15 ml, at night, for two weeks. That should help with constipation.
+[SEG0047] person_1 (PATIENT): Right, understood.
+[SEG0048] person_2 (DOCTOR): Soak in a warm bath for ten minutes after you pass stool, and don't strain. A colorectal surgeon would be the right next step, I'll refer you. See me again in three weeks.
+[SEG0049] person_1 (PATIENT): So, yes, I can do that.
+[SEG0050] person_2 (DOCTOR): Let me check I've been clear. What will you do once you get home?
+[SEG0051] person_1 (PATIENT): So, I take the lactulose, 15 ml, at night and come back in three weeks. Is that right?
+[SEG0052] person_2 (DOCTOR): Yes, exactly right. Okay, good. Let us know how you get on.
+[SEG0053] person_1 (PATIENT): Okay, thank you. Bye.
+[SEG0054] person_2 (DOCTOR): Mind how you go.
+
+JSON:

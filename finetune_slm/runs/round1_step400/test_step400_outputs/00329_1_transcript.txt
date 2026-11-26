@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00329)
+[SEG0001] person_1 (PATIENT): Afternoon, doctor.
+[SEG0002] person_2 (DOCTOR): Yes, do sit. Tell me what's been happening.
+[SEG0003] person_1 (PATIENT): So, mainly tiredness. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): So, when did you first notice it?
+[SEG0005] person_1 (PATIENT): okay, uh, so for about a year, I'd say
+[SEG0006] person_2 (DOCTOR): Yes?
+[SEG0007] person_1 (PATIENT): well, um, I've also been putting on weight, for about a month
+[SEG0008] person_2 (DOCTOR): What about alcohol?
+[SEG0009] person_1 (PATIENT): I gave up drinking about three years ago.
+[SEG0010] person_2 (DOCTOR): Is anyone at home with you?
+[SEG0011] person_1 (PATIENT): I share a flat with two friends.
+[SEG0012] person_2 (DOCTOR): Do you have a job?
+[SEG0013] person_1 (PATIENT): I'm a self-employed electrician.
+[SEG0014] person_2 (DOCTOR): any regular medication?
+[SEG0015] person_1 (PATIENT): Nothing, no.
+[SEG0016] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0017] person_1 (PATIENT): I mean, none, as far as I'm aware
+[SEG0018] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0019] person_1 (PATIENT): No, none that I know of.
+[SEG0020] person_2 (DOCTOR): Right, and what about heavy periods or palpitations?
+[SEG0021] person_1 (PATIENT): No. None of those.
+[SEG0022] person_2 (DOCTOR): Any low mood, hair loss or trouble swallowing?
+[SEG0023] person_1 (PATIENT): I haven't had low mood, hair loss or trouble swallowing, no.
+[SEG0024] person_2 (DOCTOR): on the cardiac side, anything I should know?
+[SEG0025] person_1 (PATIENT): Nothing like that.
+[SEG0026] person_2 (DOCTOR): Let me measure a few things.
+[SEG0027] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0028] person_2 (DOCTOR): Okay: temperature is 36.6 degrees, pulse is 69 beats a a minute, oxygen saturation is 99 percent, respiratory rate 14, blood pressure 122 over 77.
+[SEG0029] person_1 (PATIENT): Is that alright, doctor?
+[SEG0030] person_2 (DOCTOR): I'll explain what that means shortly.
+[SEG0031] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0032] person_1 (PATIENT): Okay.
+[SEG0033] person_2 (DOCTOR): Let me press here.
+[SEG0034] person_2 (DOCTOR): Your pulse is slow, about fifty-six, and the thyroid isn't enlarged.
+[SEG0035] person_2 (DOCTOR): Let me look at this properly.
+[SEG0036] person_2 (DOCTOR): Reflexes are a a bit slow to relax.
+[SEG0037] person_2 (DOCTOR): All done, you can get dressed.
+[SEG0038] person_2 (DOCTOR): Putting it all together, I can't pin this down yet. We're looking at an underactive thyroid or depression. Just to be sure I understood. You've had tiredness for about a year, and no heavy periods or low mood.
+[SEG0039] person_1 (PATIENT): That's what happened, yes.
+[SEG0040] person_2 (DOCTOR): We should do blood tests for fatigue. For this, levothyroxine, 50 micrograms, every morning on an empty stomach, until we review. That's for hypothyroidism. Take the thyroid tablet on an empty stomach, half an hour before breakfast, and not with calcium or iron. I'd like you back in six weeks. That's it on my side. Anything unclear?
+[SEG0041] person_1 (PATIENT): I appreciate it, you know, doctor.
+[SEG0042] person_2 (DOCTOR): All the best.
+
+JSON:

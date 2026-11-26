@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00399)
+[SEG0001] person_1 (DOCTOR): Okay, welcome. Let's see what's going on.
+[SEG0002] person_2 (PATIENT): hello doctor thanks for seeing me
+[SEG0003] person_1 (DOCTOR): did the receptionist sort you out quickly?
+[SEG0004] person_2 (PATIENT): yes she was lovely about it
+[SEG0005] person_1 (DOCTOR): what was the main thing you wanted to talk about?
+[SEG0006] person_2 (PATIENT): uh, it's a lump on the side of my neck i thought I'd wait, but it hasn't gone
+[SEG0007] person_1 (DOCTOR): how far back does it it go?
+[SEG0008] person_2 (PATIENT): probably two days. Yeah. I've also had itching all over for about four days. About itching all over it happens all the time
+[SEG0009] person_1 (DOCTOR): Mm. Alright, did you notice any cough?
+[SEG0010] person_2 (PATIENT): not at all, no cough
+[SEG0011] person_1 (DOCTOR): have you noticed pain in the lump, lumps elsewhere or weight loss?
+[SEG0012] person_2 (PATIENT): I haven't had pain in the lump, lumps elsewhere or weight loss, no
+[SEG0013] person_1 (DOCTOR): How about your heart, any problems like that?
+[SEG0014] person_2 (PATIENT): My heart's been fine, as far as I know.
+[SEG0015] person_1 (DOCTOR): alright, moving on to your background, any past medical history?
+[SEG0016] person_2 (PATIENT): yes, migraines
+[SEG0017] person_1 (DOCTOR): alright migraines that matches what I have here any previous surgeries?
+[SEG0018] person_2 (PATIENT): No operations, no.
+[SEG0019] person_1 (DOCTOR): do you exercise at all?
+[SEG0020] person_2 (PATIENT): I go to the gym a couple of times a week.
+[SEG0021] person_1 (DOCTOR): Tell me about your work.
+[SEG0022] person_2 (PATIENT): I'm a software engineer, so I'm at a screen all day
+[SEG0023] person_1 (DOCTOR): How do you eat generally?
+[SEG0024] person_2 (PATIENT): I skip breakfast most days
+[SEG0025] person_1 (DOCTOR): Right, any allergies I should know about?
+[SEG0026] person_2 (PATIENT): None as far as I'm aware.
+[SEG0027] person_1 (DOCTOR): right what's your current medication list?
+[SEG0028] person_2 (PATIENT): Sumatriptan. I take it 50 milligrams, when needed for my migraines
+[SEG0029] person_1 (DOCTOR): Do your parents or siblings have any long-term illnesses?
+[SEG0030] person_2 (PATIENT): my father had a stroke
+[SEG0031] person_1 (DOCTOR): Can I take your vitals now?
+[SEG0032] person_1 (DOCTOR): just relax your arm..
+[SEG0033] person_1 (DOCTOR): Okay: saturation 97 percent, pulse is 74 beats a minute, blood pressure 127 over 69, temperature is 36.8 degrees.
+[SEG0034] person_2 (PATIENT): Is that normal?
+[SEG0035] person_1 (DOCTOR): I'll come back to those numbers
+[SEG0036] person_1 (DOCTOR): let me have a look at you
+[SEG0037] person_1 (DOCTOR): almost done with this part
+[SEG0038] person_1 (DOCTOR): I can't feel other glands in the neck armpits or groin
+[SEG0039] person_1 (DOCTOR): okay, finished
+[SEG0040] person_1 (DOCTOR): okay thinking it through my working impression is a reactive lymph node after a throat infection
+[SEG0041] person_2 (PATIENT): Should I be worried about this?
+[SEG0042] person_1 (DOCTOR): nothing I've seen today points to an emergency it looks like a reactive lymph node after a throat infection but I'd like to confirm. An ultrasound of the neck is what I'd like next for neck lump
+[SEG0043] person_2 (PATIENT): right, is that done here?
+[SEG0044] person_1 (DOCTOR): right, that's all go gently
+[SEG0045] person_2 (PATIENT): Thank you for your time.
+
+JSON:

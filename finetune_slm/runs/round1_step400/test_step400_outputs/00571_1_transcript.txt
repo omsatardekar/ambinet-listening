@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00571)
+[SEG0001] person_2 (DOCTOR): Mr Haldane, thanks for coming. I've got the letter from your GP here, saying you've had sore eyes since some welding. Have I got that right?
+[SEG0002] person_1 (PATIENT): That's about the size of it. Eye pain, mostly. Nothing dramatic.
+[SEG0003] person_2 (DOCTOR): So, eye pain since welding. Tell me how it started.
+[SEG0004] person_1 (PATIENT): I was welding most of the afternoon on Tuesday. Or it might have been Wednesday, they've run into one another. Anyway, that night it began to feel gritty and sore.
+[SEG0005] person_2 (DOCTOR): So it came on that night, but you can't pin down whether it was Tuesday or Wednesday. That's fine, it isn't essential.
+[SEG0006] person_1 (PATIENT): Sorry. I should have kept a note.
+[SEG0007] person_2 (DOCTOR): No need to apologise. Were you wearing your helmet with the visor down the whole time?
+[SEG0008] person_1 (PATIENT): Mostly. I lifted it for a minute or two to check a join. Probably longer than I'd care to admit.
+[SEG0009] person_2 (DOCTOR): Thank you, that's an honest answer. Does anything make the pain worse?
+[SEG0010] person_1 (PATIENT): Bright lights bother me. I wore sunglasses indoors yesterday, and felt daft.
+[SEG0011] person_2 (DOCTOR): Not daft, sensible. How would you rate the pain, mild, moderate, or worse?
+[SEG0012] person_1 (PATIENT): Moderate. I can work through it, but I wouldn't want to.
+[SEG0013] person_2 (DOCTOR): Understood. Any loss of vision, or things going blurry or dark in the middle?
+[SEG0014] person_1 (PATIENT): No, my sight's the same. Just sore.
+[SEG0015] person_2 (DOCTOR): Good. So pain, bright lights make it worse, and your sight is unchanged. Do you wear glasses?
+[SEG0016] person_1 (PATIENT): Short-sighted, since I was a teenager. I've got my glasses in my pocket.
+[SEG0017] person_2 (DOCTOR): And does any eye trouble run in the family?
+[SEG0018] person_1 (PATIENT): My mother had glaucoma. She lost a fair bit of her vision in the end.
+[SEG0019] person_2 (DOCTOR): I'm sorry to hear that, and thank you, it's worth knowing. What's your job, exactly?
+[SEG0020] person_1 (PATIENT): I'm a welder at a boatyard. Twenty-two years now, so I should know better.
+[SEG0021] person_2 (DOCTOR): Twenty-two years, so you know the risks well. Before I look at the eyes properly, any allergies I should know about?
+[SEG0022] person_1 (PATIENT): Yes, actually. I'm allergic to some kind of eye drops. I come up in a reaction, but I can't recall what it was. Years ago.
+[SEG0023] person_2 (DOCTOR): So an allergy to certain eye drops, reaction not remembered. I'll note that, and we'll steer clear of any drops until we know more.
+[SEG0024] person_1 (PATIENT): Fine. Is the examination going to hurt?
+[SEG0025] person_2 (DOCTOR): I'll keep it gentle. First the checks we do for everyone. Pressure, pulse, temperature and oxygen.
+[SEG0026] person_2 (DOCTOR): Blood pressure is 132 over 84, pulse 70, temperature 36.7 degrees, and oxygen 99 percent.
+[SEG0027] person_1 (PATIENT): Sounds fine to me.
+[SEG0028] person_2 (DOCTOR): It is. Now chin on the rest please, and look straight at the light. A bit of glare, I'm sorry.
+[SEG0029] person_1 (PATIENT): Ow. That's bright.
+[SEG0030] person_2 (DOCTOR): Both eyes look red, and the surface of both looks roughened, like a freshly sanded table top.
+[SEG0031] person_1 (PATIENT): Is that bad?
+[SEG0032] person_2 (DOCTOR): It's what I'd expect. A welder who lifted his visor, red eyes, a rough surface. That looks most like a flash burn, what we call arc eye.
+[SEG0033] person_1 (PATIENT): And does that settle by itself? I was expecting drops or something.
+[SEG0034] person_2 (DOCTOR): It usually does, so no drops this time. I'm not prescribing anything. Cool damp cloth over closed eyes, rest, and sunglasses outdoors.
+[SEG0035] person_1 (PATIENT): How long before I'm back at the boatyard?
+[SEG0036] person_2 (DOCTOR): Two or three days off, and no welding at all until I've seen the eyes again.
+[SEG0037] person_1 (PATIENT): Right. That's awkward but doable. Could I drive home?
+[SEG0038] person_2 (DOCTOR): In your sunglasses, yes, but get a lift if someone can come. Do you want a note for your foreman?
+[SEG0039] person_1 (PATIENT): Please. He likes things on paper.
+[SEG0040] person_2 (DOCTOR): I'll write that today. I'd also like to see you again in three days, to check the surface has healed.
+[SEG0041] person_1 (PATIENT): Three days. I'll ring the boatyard and tell them.
+[SEG0042] person_2 (DOCTOR): Good. And please, always visor down, even for a quick glance at a join.
+[SEG0043] person_1 (PATIENT): Fair point. Old habits.
+[SEG0044] person_2 (DOCTOR): So to recap: rest, a cool cloth, sunglasses, and back here in three days. Ring the clinic if the pain gets sharply worse.
+[SEG0045] person_1 (PATIENT): Will do. Thanks, doctor.
+[SEG0046] person_2 (DOCTOR): Take care of those eyes, Mr Haldane.
+
+JSON:

@@ -1,0 +1,74 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00244)
+[SEG0001] person_1 (DOCTOR): Hi there, come on in.
+[SEG0002] person_2 (PATIENT): thanks. Sorry, I'm a little early
+[SEG0003] person_3 (CAREGIVER): okay, so hello, doctor i hope it's alright if I stay in for this
+[SEG0004] person_1 (DOCTOR): What seems to be the problem?
+[SEG0005] person_3 (CAREGIVER): he's been waking up at night short of breath doctor
+[SEG0006] person_1 (DOCTOR): and when did that start?
+[SEG0007] person_2 (PATIENT): Probably about four days. Yeah.
+[SEG0008] person_1 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0009] person_2 (PATIENT): uh only sitting up and it's not much it feels mild to me i'd say every other day well I've also had a dry cough at night about dry cough at night moderate really it sort of comes and goes i've also had swelling in both ankles
+[SEG0010] person_1 (DOCTOR): Any coughing up blood or fainting at all?
+[SEG0011] person_2 (PATIENT): Hmm, no, none of that at all.
+[SEG0012] person_1 (DOCTOR): any fever chest pain or palpitations at all?
+[SEG0013] person_2 (PATIENT): No none of those.
+[SEG0014] person_1 (DOCTOR): Anything with your nerves like weakness or numbness?
+[SEG0015] person_2 (PATIENT): no, that's all normal
+[SEG0016] person_1 (DOCTOR): so, anything on the skin I should know about?
+[SEG0017] person_2 (PATIENT): No rashes.
+[SEG0018] person_1 (DOCTOR): so, have you got any chronic problems?
+[SEG0019] person_2 (PATIENT): Well, I've had heart failure for nearly five years now.
+[SEG0020] person_1 (DOCTOR): is there more?
+[SEG0021] person_2 (PATIENT): I've had heart disease for about a year now. Yes, high blood pressure.
+[SEG0022] person_1 (DOCTOR): is there more?
+[SEG0023] person_2 (PATIENT): I've, I've got diabetes
+[SEG0024] person_1 (DOCTOR): Ah. Okay I can see heart failure in your file as well. Any operations in the past?
+[SEG0025] person_2 (PATIENT): Yes, I had a hernia repair, about five years back.
+[SEG0026] person_1 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0027] person_2 (PATIENT): So I'm on furosemide 40 milligrams every morning. Aspirin. I take it 75 milligrams once a day for my heart.
+[SEG0028] person_3 (CAREGIVER): I mean you know doctor I think the last prescription for the aspirin was 150 milligrams. We changed it at the last visit.
+[SEG0029] person_1 (DOCTOR): Okay. Have you got the newest prescription or the box with you?
+[SEG0030] person_2 (PATIENT): I don't think I have it with me oh, um, I'm on ramipril, 5 milligrams, every morning for my blood pressure
+[SEG0031] person_1 (DOCTOR): now some background about your lifestyle
+[SEG0032] person_2 (PATIENT): I walk for about half an hour most days. I work in an office, mostly sitting at a desk. It's just me and my wife at home now.
+[SEG0033] person_1 (DOCTOR): do you have any known allergies at all?
+[SEG0034] person_2 (PATIENT): No allergies that I know of no.
+[SEG0035] person_3 (CAREGIVER): actually I remember he had some kind of reaction to ibuprofen before i couldn't swear to it
+[SEG0036] person_2 (PATIENT): really? I don't think so
+[SEG0037] person_1 (DOCTOR): fair enough I'll write down both versions
+[SEG0038] person_4 (NURSE): Doctor I've got the readings for you. Pulse 100 pressure 141 over 84 saturation 93 percent temp 36.8 degrees.
+[SEG0039] person_1 (DOCTOR): good thank you
+[SEG0040] person_1 (DOCTOR): let me examine, it won't take long
+[SEG0041] person_2 (PATIENT): alright
+[SEG0042] person_1 (DOCTOR): let me press here
+[SEG0043] person_1 (DOCTOR): I can hear crackles at the bases of both lungs
+[SEG0044] person_1 (DOCTOR): Let me look at this properly.
+[SEG0045] person_1 (DOCTOR): Neck veins are raised.
+[SEG0046] person_1 (DOCTOR): Tell me if anything hurts.
+[SEG0047] person_1 (DOCTOR): There's pitting oedema up to the the shins on both legs.
+[SEG0048] person_2 (PATIENT): Okay.
+[SEG0049] person_1 (DOCTOR): okay, you can sit up. Right, here's what I'm thinking. I'd lean towards fluid overload related to the heart. The reason I say that is that your story and my examination fit together. A chest infection is still possible
+[SEG0050] person_2 (PATIENT): Is it it something serious, doctor?
+[SEG0051] person_1 (DOCTOR): I can't promise yet, but most people with fluid overload related to the heart do well once it's treated properly.
+[SEG0052] person_4 (NURSE): we've already done an ECG this morning, doctor
+[SEG0053] person_1 (DOCTOR): thanks, I'll check it i'm going to order an echocardiogram, for breathlessness and swelling i'd rather check than guess, and this is the quickest way to know more
+[SEG0054] person_2 (PATIENT): mm okay
+[SEG0055] person_1 (DOCTOR): I want blood tests done that's for heart failure review keep the salt and the fluids moderate no more than about one and a half litres a day weigh yourself every morning and tell us if you put on more than two kilos in a few days and please bring the latest prescription or the medicine boxes to the next visit so we can settle the dose
+[SEG0056] person_2 (PATIENT): oh, yes, I'll keep that in mind
+[SEG0057] person_1 (DOCTOR): book a review in one week call the clinic if you need us
+[SEG0058] person_2 (PATIENT): Thanks, that was helpful.
+[SEG0059] person_1 (DOCTOR): Mind how you go.
+
+JSON:

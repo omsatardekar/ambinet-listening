@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03538)
+[SEG0001] person_1 (DOCTOR): Right, thanks for waiting, come in.
+[SEG0002] person_2 (PATIENT): Hello, doctor.
+[SEG0003] person_1 (DOCTOR): How are things, what's been happening?
+[SEG0004] person_2 (PATIENT): I've been feeling tired.
+[SEG0005] person_1 (DOCTOR): Since when exactly?
+[SEG0006] person_2 (PATIENT): Erm, it's been about two weeks now.
+[SEG0007] person_1 (DOCTOR): Is it a lot or only a little?
+[SEG0008] person_2 (PATIENT): I'd give it a eight, out of ten. I mean, um, I've had tingling in my feet too, for ten days.
+[SEG0009] person_1 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0010] person_2 (PATIENT): It happens once or twice a day. Mostly mild. I told my wife I'd come today. Um, I've had being unsteady too, for about a week. About being unsteady, I'd call it severe.
+[SEG0011] person_1 (DOCTOR): Are you allergic to anything? Any allergies to medicines or foods?
+[SEG0012] person_2 (PATIENT): I've never had an allergy.
+[SEG0013] person_1 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0014] person_2 (PATIENT): Hmm, you know, no, I've always been fairly healthy.
+[SEG0015] person_1 (DOCTOR): Did you ever have any procedures done?
+[SEG0016] person_2 (PATIENT): Yes, I had a bunion operation, six years ago.
+[SEG0017] person_1 (DOCTOR): Do you drink alcohol?
+[SEG0018] person_2 (PATIENT): I only drink at family occasions.
+[SEG0019] person_1 (DOCTOR): What do you do during the day?
+[SEG0020] person_2 (PATIENT): I look after my grandchildren most days.
+[SEG0021] person_1 (DOCTOR): What does a normal day of food look like?
+[SEG0022] person_2 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0023] person_1 (DOCTOR): Alright, are you on your own at home?
+[SEG0024] person_2 (PATIENT): I live with my elderly mother.
+[SEG0025] person_1 (DOCTOR): Do you take any regular medication?
+[SEG0026] person_2 (PATIENT): Nothing regular, uh, no.
+[SEG0027] person_1 (DOCTOR): Have you had any weight loss?
+[SEG0028] person_2 (PATIENT): Nope, uh, no weight loss.
+[SEG0029] person_1 (DOCTOR): Yes. Any diarrhoea, back pain or bladder problems at all?
+[SEG0030] person_2 (PATIENT): Um, no, I'd have said so.
+[SEG0031] person_1 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0032] person_2 (PATIENT): No, nothing there.
+[SEG0033] person_1 (DOCTOR): How about your heart, any problems like that?
+[SEG0034] person_2 (PATIENT): Um, you know, no, nothing with my heart.
+[SEG0035] person_1 (DOCTOR): Shall I check your blood pressure and pulse?
+[SEG0036] person_1 (DOCTOR): Bear with me while this finishes...
+[SEG0037] person_1 (DOCTOR): Okay: respiratory rate 18, heart rate 73, saturation 99 percent, blood pressure 124 over 80.
+[SEG0038] person_1 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0039] person_1 (DOCTOR): Okay, breathe out slowly.
+[SEG0040] person_1 (DOCTOR): The feeling in your feet is reduced and your balance with the eyes closed is poor.
+[SEG0041] person_1 (DOCTOR): Okay, that's enough for me.
+[SEG0042] person_1 (DOCTOR): Let me tell you where I've got to. I think we're dealing with a possible gut-related cause of nerve symptoms at this stage. That's my thinking for now, and it may change as we learn more. Let's book a coeliac blood test to look into neuropathy. I'm going to order a B12 level, for neuropathy.
+[SEG0043] person_2 (PATIENT): That makes sense.
+[SEG0044] person_1 (DOCTOR): Please keep eating gluten normally until the coeliac test is done. Come back after the results. So, that's all from me. Any questions?
+[SEG0045] person_2 (PATIENT): I, I think I understand everything. Thanks.
+[SEG0046] person_1 (DOCTOR): See you soon.
+
+JSON:

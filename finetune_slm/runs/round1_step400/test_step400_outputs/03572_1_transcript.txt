@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03572)
+[SEG0001] person_1 (DOCTOR): Right then, come on in.
+[SEG0002] person_2 (PATIENT): Hello, um, doctor.
+[SEG0003] person_3 (CAREGIVER): Um, good morning, doctor. I came along to help out.
+[SEG0004] person_1 (DOCTOR): What's the problem?
+[SEG0005] person_3 (CAREGIVER): Doctor, it's not remembering the last hours. That's what we're worried about.
+[SEG0006] person_1 (DOCTOR): Has this been going on for long?
+[SEG0007] person_2 (PATIENT): Uh, you know, it's been going on for about two weeks.
+[SEG0008] person_1 (DOCTOR): Is it bearing on you a lot?
+[SEG0009] person_2 (PATIENT): Mild, I'd say.
+[SEG0010] person_2 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0011] person_4 (FAMILY_MEMBER): Um, uh, tell the doctor about the other thing, that's what worries me.
+[SEG0012] person_2 (PATIENT): Sorry, what was I saying, I was getting to that!
+[SEG0013] person_1 (DOCTOR): That's fine, one at a time. I'll ask about everything.
+[SEG0014] person_2 (PATIENT): Oh, as for asking the same questions repeatedly, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0015] person_1 (DOCTOR): Have you had any headache, slurred speech, weakness or seizure?
+[SEG0016] person_2 (PATIENT): Hmm, uh, no, no headache, no slurred speech, no weakness. I was feeling fine otherwise at one point, but that went away on its own.
+[SEG0017] person_1 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0018] person_2 (PATIENT): My heart's been fine, you know, as far as I know.
+[SEG0019] person_1 (DOCTOR): Have you had any surgical procedures?
+[SEG0020] person_2 (PATIENT): I mean, uh, I had my tonsils removed as a teenager. I'd rather know what's going on than keep guessing.
+[SEG0021] person_1 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0022] person_2 (PATIENT): Sertraline. I take it 50 milligrams, maybe, once a day for my mood.
+[SEG0023] person_1 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0024] person_2 (PATIENT): Uh, you know, not with me. I'll bring it next time. It's tamsulosin, at night.
+[SEG0025] person_1 (DOCTOR): And what strength is that?
+[SEG0026] person_2 (PATIENT): 0.4 milligrams, I think that's what's on the box. Furosemide. I take it 40 milligrams, every morning for the fluid.
+[SEG0027] person_1 (DOCTOR): Any smoking?
+[SEG0028] person_2 (PATIENT): I gave up cigarettes last spring.
+[SEG0029] person_1 (DOCTOR): Do you do any exercise?
+[SEG0030] person_2 (PATIENT): I swim twice a week.
+[SEG0031] person_1 (DOCTOR): Right, what do you do during the day?
+[SEG0032] person_2 (PATIENT): I look after my grandchildren most days.
+[SEG0033] person_1 (DOCTOR): Do you have any chronic illnesses?
+[SEG0034] person_2 (PATIENT): Depression, for about ten years.
+[SEG0035] person_1 (DOCTOR): Hm, okay.
+[SEG0036] person_2 (PATIENT): An enlarged prostate, for nearly five years.
+[SEG0037] person_1 (DOCTOR): Is that everything?
+[SEG0038] person_2 (PATIENT): Yeah, you know, I've had heart failure, yes.
+[SEG0039] person_1 (DOCTOR): Are you allergic to anything? Any allergies to medicines or foods?
+[SEG0040] person_2 (PATIENT): Yeah, yes, kiwi, it gives me hives.
+[SEG0041] person_1 (DOCTOR): Let me take your readings now.
+[SEG0042] person_1 (DOCTOR): Right, keep your arm relaxed for me...
+[SEG0043] person_1 (DOCTOR): Okay: blood pressure 124 over 81, temp 36.4 degrees, heart rate 70, respiratory rate 14.
+[SEG0044] person_1 (DOCTOR): Alright, over here please and I'll take a look.
+[SEG0045] person_1 (DOCTOR): Tell me if that's sore.
+[SEG0046] person_1 (DOCTOR): You know who you are but not what happened this morning, and the examination otherwise is normal.
+[SEG0047] person_1 (DOCTOR): You can sit up now.
+[SEG0048] person_1 (DOCTOR): Let me tell you where I've got to. This is probably transient global amnesia. I'd also keep a seizure in mind. I'd also keep a stroke in mind. Stop me if I've got anything wrong. You've had not remembering the last hours for about two weeks, mild, and no slurred speech or headache.
+[SEG0049] person_2 (PATIENT): That's it, you know, yes.
+[SEG0050] person_1 (DOCTOR): I'm going to order a blood sugar, for confusion. The result will help us decide whether anything more is needed. A CT scan of the head is what I'd like next, for acute memory loss. This usually clears in a day with no lasting effect, but we do a scan first to be safe. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0051] person_1 (DOCTOR): Come back or go to emergency straight away if the symptoms get worse. Let's plan a check tomorrow. Is there anything you'd like me to go over again?
+[SEG0052] person_2 (PATIENT): Well, thank you, that's helpful.
+
+JSON:

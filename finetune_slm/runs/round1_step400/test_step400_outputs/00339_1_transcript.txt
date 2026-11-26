@@ -1,0 +1,79 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00339)
+[SEG0001] person_1 (PATIENT): Sorry I'm a few minutes behind, doctor.
+[SEG0002] person_2 (DOCTOR): That's alright, take a seat. Tell me why you've come.
+[SEG0003] person_3 (CAREGIVER): Doctor, I'm just here to to help with the details.
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to to have you here.
+[SEG0005] person_1 (PATIENT): I wanted to to get severe pain in my right side that comes in waves looked at.
+[SEG0006] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0007] person_1 (PATIENT): It's allopurinol, 100 milligrams, once a day. I'm on telmisartan, 40 milligrams, once a day.
+[SEG0008] person_2 (DOCTOR): How long are we talking about?
+[SEG0009] person_1 (PATIENT): around a week, I think
+[SEG0010] person_3 (CAREGIVER): It was closer to two weeks, doctor.
+[SEG0011] person_2 (DOCTOR): Okay, so roughly one to two weeks. Is that right?
+[SEG0012] person_1 (PATIENT): That sounds about right.
+[SEG0013] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0014] person_1 (PATIENT): It feels moderate to me. A hot water bottle helps a bit. Honestly, on and off. I thought it would sort itself out, but it hasn't.
+[SEG0015] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0016] person_1 (PATIENT): Nausea goes along with it, most of the time.
+[SEG0017] person_2 (DOCTOR): Any restlessness, you can't sit still as well?
+[SEG0018] person_1 (PATIENT): yes, about the same, about a week as for nausea, I honestly can't say when that began it might have been last month or the month before
+[SEG0019] person_2 (DOCTOR): have you had severe pain in your right side that comes in waves before, or is this the first time?
+[SEG0020] person_1 (PATIENT): right, uh, I had a similar thing last year it went away
+[SEG0021] person_2 (DOCTOR): right, and what about previous kidney stones or vomiting?
+[SEG0022] person_1 (PATIENT): No previous kidney stones or vomiting, none of it.
+[SEG0023] person_2 (DOCTOR): have you had any testicular pain or burning when passing urine?
+[SEG0024] person_1 (PATIENT): Nothing like that, you know, no.
+[SEG0025] person_2 (DOCTOR): anything with your nerves, like weakness or numbness?
+[SEG0026] person_1 (PATIENT): no, that's all normal
+[SEG0027] person_2 (DOCTOR): Alright, do you smoke?
+[SEG0028] person_1 (PATIENT): I smoke, yes, around five a day.
+[SEG0029] person_2 (DOCTOR): alright, how about exercise?
+[SEG0030] person_1 (PATIENT): Not really, I don't get much exercise.
+[SEG0031] person_2 (DOCTOR): What kind of work do you do?
+[SEG0032] person_1 (PATIENT): I work on a farm, it's quite physical.
+[SEG0033] person_2 (DOCTOR): So, how do you eat, generally?
+[SEG0034] person_1 (PATIENT): I skip breakfast most days
+[SEG0035] person_2 (DOCTOR): Right, have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0036] person_1 (PATIENT): No allergies that I know of, no.
+[SEG0037] person_2 (DOCTOR): alright, any diagnoses you've been given before?
+[SEG0038] person_1 (PATIENT): I've had gout for two years now. I've had high blood pressure, yes.
+[SEG0039] person_2 (DOCTOR): okay, I can see gout in your file as well is there a family history of anything significant?
+[SEG0040] person_1 (PATIENT): my mother has migraines
+[SEG0041] person_2 (DOCTOR): First the numbers, if you don't mind.
+[SEG0042] person_2 (DOCTOR): Almost there...
+[SEG0043] person_2 (DOCTOR): Okay: oxygen saturation is 96 percent, temperature 37.0, respiratory rate 17. And pulse is 115 beats a minute, pressure 117 over 74.
+[SEG0044] person_1 (PATIENT): Is that okay?
+[SEG0045] person_2 (DOCTOR): I'll explain what that means shortly.
+[SEG0046] person_2 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0047] person_1 (PATIENT): sure
+[SEG0048] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0049] person_2 (DOCTOR): There's tenderness in the right loin when I tap, and your tummy is soft.
+[SEG0050] person_2 (DOCTOR): Okay, you can sit up. Stop me if I've got anything wrong. You've had severe pain in your right side that comes in waves, moderate, and no previous kidney stones or testicular pain.
+[SEG0051] person_1 (PATIENT): That's what happened, yes.
+[SEG0052] person_2 (DOCTOR): Any scans or blood work done already?
+[SEG0053] person_1 (PATIENT): I did have an ultrasound of the kidneys done last year, but the paper's at home.
+[SEG0054] person_2 (DOCTOR): I'd like to arrange a CT scan of the kidneys and bladder for suspected renal colic.
+[SEG0055] person_1 (PATIENT): Mm, okay.
+[SEG0056] person_2 (DOCTOR): I think kidney function tests makes sense here, for renal colic. I'd like you to take paracetamol, 1 gram, every six hours if needed, for three days. That's for pain. You'll be taking tamsulosin, 0.4 milligrams, at night, for two weeks. That's for stone passage.
+[SEG0057] person_1 (PATIENT): Fine, I'll start it.
+[SEG0058] person_2 (DOCTOR): Drink three litres of water a day and try to strain your urine so we can catch the stone if it passes. Cut back on tea, coffee and fizzy drinks for a couple of weeks and see how things settle. I'm gonna send a referral to the urology team.
+[SEG0059] person_1 (PATIENT): okay
+[SEG0060] person_2 (DOCTOR): We'll catch up after the scan.
+[SEG0061] person_1 (PATIENT): Yes, I can do that.
+[SEG0062] person_2 (DOCTOR): alright, I'll see you out
+[SEG0063] person_1 (PATIENT): Right, no, you've explained it well. Thanks.
+[SEG0064] person_2 (DOCTOR): see you then
+
+JSON:

@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00481)
+[SEG0001] person_1 (PATIENT): Morning, doctor, I hope I'm not interrupting.
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_1 (PATIENT): Doctor, it's an itchy rash. It's getting on my nerves now.
+[SEG0004] person_3 (NURSE): Here are the numbers, doctor. Temperature 36.7, pulse is 65 beats a minute, pressure 115 over 71. Respiratory rate 16, saturation 97 percent.
+[SEG0005] person_2 (DOCTOR): Thanks. How long has this been going on?
+[SEG0006] person_1 (PATIENT): It's been two months now.
+[SEG0007] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0008] person_1 (PATIENT): Mostly mild. It's worse with soap and sweating. Honestly, a few times a day. Oh, and itching that wakes me at night.
+[SEG0009] person_2 (DOCTOR): Is it constant, or does it come and go?
+[SEG0010] person_1 (PATIENT): It happens a few times a day.
+[SEG0011] person_2 (DOCTOR): Have you had any similar rash in family members or new soap or detergent?
+[SEG0012] person_1 (PATIENT): No, no similar rash in family members or new soap or detergent.
+[SEG0013] person_2 (DOCTOR): Did you get oozing, fever or breathing trouble?
+[SEG0014] person_1 (PATIENT): I haven't had oozing, fever or breathing trouble, no.
+[SEG0015] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0016] person_1 (PATIENT): No, nothing there.
+[SEG0017] person_2 (DOCTOR): Neurologically, anything strange?
+[SEG0018] person_1 (PATIENT): No weakness or anything.
+[SEG0019] person_2 (DOCTOR): So, what about family history, any illnesses that run in the family?
+[SEG0020] person_1 (PATIENT): My sister has thyroid problems.
+[SEG0021] person_2 (DOCTOR): Right, any long-term health problems I should know about?
+[SEG0022] person_1 (PATIENT): Yeah, I have eczema, for about a year.
+[SEG0023] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0024] person_1 (PATIENT): Hydrocortisone cream, when needed.
+[SEG0025] person_2 (DOCTOR): Any allergies I should know about? Just so I get the full picture.
+[SEG0026] person_1 (PATIENT): No, uh, none that I know of.
+[SEG0027] person_2 (DOCTOR): What about alcohol?
+[SEG0028] person_1 (PATIENT): I don't drink at all.
+[SEG0029] person_2 (DOCTOR): Any smoking?
+[SEG0030] person_1 (PATIENT): I stopped smoking about two years back.
+[SEG0031] person_2 (DOCTOR): Do you work?
+[SEG0032] person_1 (PATIENT): I run a small shop, so I'm on my feet a lot.
+[SEG0033] person_2 (DOCTOR): How about exercise?
+[SEG0034] person_1 (PATIENT): Not really, I don't get much exercise.
+[SEG0035] person_2 (DOCTOR): What's your diet like?
+[SEG0036] person_1 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0037] person_2 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0038] person_1 (PATIENT): No problem.
+[SEG0039] person_2 (DOCTOR): I'll go gently.
+[SEG0040] person_2 (DOCTOR): There are dry red patches in the creases of both elbows with scratch marks.
+[SEG0041] person_1 (PATIENT): No problem.
+[SEG0042] person_2 (DOCTOR): I'll go gently.
+[SEG0043] person_2 (DOCTOR): No signs of infection, no crusting.
+[SEG0044] person_2 (DOCTOR): Okay, you can sit up. I'm going to put you on mometasone cream, once a day, for two weeks. That should help with eczema. Moisturise right after a bath, thick creams are better than lotions, and use a mild soap. Let's review you in two weeks. Ask me anything before you go.
+[SEG0045] person_1 (PATIENT): Hmm, no, I think that's everything. Thank you, doctor.
+[SEG0046] person_2 (DOCTOR): Okay, bye for now.
+
+JSON:

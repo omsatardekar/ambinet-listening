@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_15_irregular_periods_night_sweats)
+[SEG0001] person_1 (DOCTOR): Well done. Alcohol?
+[SEG0002] person_2 (PATIENT): Er, a glass of wine, perhaps two at the weekend. And I'm vegetarian, have been for years, since college, so I try to eat well. Lots of lentils.
+[SEG0003] person_1 (DOCTOR): Right.
+[SEG0004] person_1 (DOCTOR): And sleep, other than the sweats? Do you get back to sleep afterwards?
+[SEG0005] person_2 (PATIENT): Eventually. I lie there thinking about the list. The list of everything I haven't done. The school fundraiser, my daughter's dentist, whether we've paid the water bill. Then it's four o'clock and the alarm's at six.
+[SEG0006] person_1 (DOCTOR): I see.
+[SEG0007] person_1 (DOCTOR): So, um, you're short on sleep, which will itself make the mood worse.
+[SEG0008] person_2 (PATIENT): That's what I think. I'm like a toddler who hasn't had a nap.
+[SEG0009] person_1 (DOCTOR): Any trouble with your memory or concentration?
+[SEG0010] person_2 (PATIENT): Oh, God, yes. I went upstairs for something on Sunday and stood there for a full minute. I couldn't remember what. Then I came back down and it was the iron.
+[SEG0011] person_1 (DOCTOR): Mm.
+[SEG0012] person_1 (DOCTOR): That's what's often called brain fog, and it goes with the transition for lots of women. It's real, it's not in your head.
+[SEG0013] person_2 (PATIENT): Thank you, I needed to hear that.
+[SEG0014] person_1 (DOCTOR): Right. Okay, let me check a few things. I'll take your pulse, and your pressure, and listen to your chest, and then feel your neck and the thyroid, and I'd like to examine your breasts as well. Is that all right?
+[SEG0015] person_2 (PATIENT): That's fine, go ahead.
+[SEG0016] person_1 (DOCTOR): Pulse eighty-one, regular. Blood pressure one twenty-eight over seventy-three. Temperature is thirty-six point eight, respiratory rate fourteen, and oxygen ninety-seven. Everything is within normal limits.
+[SEG0017] person_2 (PATIENT): Great.
+[SEG0018] person_1 (DOCTOR): I'm feeling your thyroid now, swallow for me. Good, that feels normal. Now, lie back, please. I'll check both breasts, systematically. Let me know if it's sore.
+[SEG0019] person_2 (PATIENT): Fine.
+[SEG0020] person_1 (DOCTOR): There are no lumps in either breast, and the underarm glands are normal. Thank you, you can sit up.
+[SEG0021] person_2 (PATIENT): So I'm not dying.
+[SEG0022] person_1 (DOCTOR): You're not dying. Here's what I think, Dana, and you can tell me if it doesn't ring true. Putting together the irregular periods, the night sweats, the flushes, and the mood changes, at your age, it sounds like perimenopause, the transition, which can last several years. I'd put that as the most likely explanation. But I don't want to put all my money on it, because some of those symptoms, the tiredness and the sweats, can also come from an overactive thyroid, or low iron, and I'd like to rule those out.
+[SEG0023] person_2 (PATIENT): Ahh. My sister's going to be insufferable.
+[SEG0024] person_1 (DOCTOR): She might be right this time. I'd like to take some blood to check your thyroid and your blood count. I don't routinely do hormone levels at your age because they swing so much they're not very reliable, but if I'm unsure we can add them.
+[SEG0025] person_2 (PATIENT): Okay, blood. I don't love needles but I'll do it.
+[SEG0026] person_1 (DOCTOR): And because of your thin bones, I'd like to organise a bone density scan, a DEXA, because the drop in oestrogen speeds up bone loss, and we should see where you are now. It's painless, about ten minutes.
+[SEG0027] person_2 (PATIENT): Is that why they put me on the tablet?
+[SEG0028] person_1 (DOCTOR): It is, and you're doing the right thing with it. Is there anything you do for your calcium, dairy, supplements?
+[SEG0029] person_2 (PATIENT): Yoghurt. Cheese. I'm vegetarian, remember, not vegan. I eat a lot of cheese.
+[SEG0030] person_1 (DOCTOR): Perfect. Some people with osteoporosis shouldn't be sitting on cheese, but in your case, it's good. Now, as for the symptoms, there's a lot we can do. Dress in layers, keep the bedroom cool, avoid spicy food and alcohol in the evening, since those set off the flushes. Regular exercise is genuinely helpful, and it helps your bones.
+[SEG0031] person_2 (PATIENT): I walk, I do the Tuesday walk with the book club. Mostly we talk about the book for ten minutes and the rest is about everyone's children.
+[SEG0032] person_1 (DOCTOR): That counts. And there are treatments, like hormone replacement, which is a reasonable option for many women your age, especially with the bone problem. I don't want to start that today, because I want your blood results and a proper conversation about the pros and cons. But I want you to know it's there.
+[SEG0033] person_2 (PATIENT): Okay.
+[SEG0034] person_2 (PATIENT): I've heard it gives you cancer.
+[SEG0035] person_1 (DOCTOR): The picture is more nuanced than that, and for most women under sixty the benefits outweigh the risks. We'll go through it together. Does that work for you?
+[SEG0036] person_2 (PATIENT): Yes. Thank you. It's such a relief to just say it all. I've been holding it in, because I kept thinking everybody else is doing this beautifully.
+[SEG0037] person_1 (DOCTOR): Nobody is doing it beautifully. I'll have my receptionist book the scan, and you can have the blood test on the way out. We'll talk again once the results are in.
+[SEG0038] person_2 (PATIENT): Perfect. Oh, and don't forget the avocados.
+[SEG0039] person_1 (DOCTOR): I won't.

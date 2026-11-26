@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03615)
+[SEG0001] person_1 (PATIENT): Okay, you know, so doctor, hi, where would you like me to put my coat?
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_1 (PATIENT): Doctor, it's fainting once. It's getting on my nerves now. I wasn't sure whether to come in at all, to be honest.
+[SEG0004] person_2 (DOCTOR): Let me take your readings now.
+[SEG0005] person_2 (DOCTOR): Nearly done with the the readings...
+[SEG0006] person_2 (DOCTOR): Okay: BP is 129 over 72, saturation 97 percent, respiratory rate 19, pulse is 119 beats a minute. Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): I'd say every other day. Mostly severe.
+[SEG0008] person_2 (DOCTOR): has there been a faster heartbeat too?
+[SEG0009] person_1 (PATIENT): Yes, um, actually.
+[SEG0010] person_2 (DOCTOR): How about cough?
+[SEG0011] person_1 (PATIENT): No, I haven't had any cough.
+[SEG0012] person_2 (DOCTOR): so, did you get coughing up blood, fever or chest pain?
+[SEG0013] person_1 (PATIENT): None of those, no.
+[SEG0014] person_2 (DOCTOR): Is your urine normal, no changes?
+[SEG0015] person_1 (PATIENT): right, that's normal as far as I know
+[SEG0016] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0017] person_1 (PATIENT): Actually, you know, nothing on the skin, no.
+[SEG0018] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0019] person_1 (PATIENT): I only drink at family occasions. I drink a lot of tea and snack through the day. Not much, I mostly stay in these days. No, I share a house with my brother.
+[SEG0020] person_2 (DOCTOR): do you have any chronic illnesses?
+[SEG0021] person_1 (PATIENT): so, I've had heart disease, yes
+[SEG0022] person_2 (DOCTOR): have you had any previous surgeries?
+[SEG0023] person_1 (PATIENT): Let me think, nothing, I haven't had any operations.
+[SEG0024] person_2 (DOCTOR): can you list what you take, tablets, creams or inhalers?
+[SEG0025] person_1 (PATIENT): Clopidogrel. I take it 75 milligrams, once a day for the stent. Though honestly, uh, some days I forget to take it. I take the contraceptive pill, daily.
+[SEG0026] person_2 (DOCTOR): I follow. Is there anything relevant on the family side?
+[SEG0027] person_1 (PATIENT): my uncle has high cholesterol
+[SEG0028] person_2 (DOCTOR): Are you allergic to anything? Any allergies to medicines or foods?
+[SEG0029] person_1 (PATIENT): I've never had an allergy.
+[SEG0030] person_2 (DOCTOR): Shall I start the examination?
+[SEG0031] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0032] person_2 (DOCTOR): your oxygen is lower than expected for someone so young and the left calf is a little swollen
+[SEG0033] person_2 (DOCTOR): you can sit up now
+[SEG0034] person_2 (DOCTOR): okay, so my impression is this: I think we're dealing with possible pulmonary embolism without chest pain at this stage. I'll request a CT pulmonary angiogram, it'll help with possible embolus
+[SEG0035] person_1 (PATIENT): Mm, alright.
+[SEG0036] person_2 (DOCTOR): I'll request a D-dimer, it'll help with syncope and calf swelling even without chest pain this needs a scan today, so please go to hospital let's get you seen by the emergency team, I'll arrange the letter please don't wait if the symptoms get worse that's when to be seen urgently i'd like to see you again straight away that's all from me any questions?
+[SEG0037] person_1 (PATIENT): hmm, okay, that that makes sense thanks for explaining
+[SEG0038] person_2 (DOCTOR): Have a good day.
+
+JSON:

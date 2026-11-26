@@ -1,0 +1,64 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02341)
+[SEG0001] person_1 (DOCTOR): Hello, take a seat, I'll be with you in a second.
+[SEG0002] person_2 (PATIENT): Hello, doctor.
+[SEG0003] person_1 (DOCTOR): How are things, what's been happening?
+[SEG0004] person_2 (PATIENT): Um, so... being very breathless. That's why I came.
+[SEG0005] person_1 (DOCTOR): So, what's the timeline, when did it begin?
+[SEG0006] person_2 (PATIENT): Oh, for about four days, I'd say.
+[SEG0007] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0008] person_2 (PATIENT): Lying flat definitely sets it off. I'd give it a five, you know, out of ten. As for pounding heart, I honestly can't say when that began. It might have been last month or the month before. Okay, so I'd been sweating, but that went away.
+[SEG0009] person_1 (DOCTOR): Let's run through your medicines.
+[SEG0010] person_2 (PATIENT): I take metoprolol, twice a day.
+[SEG0011] person_1 (DOCTOR): Right, do you know the dose?
+[SEG0012] person_2 (PATIENT): 50 milligrams. Atorvastatin, 20 milligrams, at night for my cholesterol. Glimepiride. I take it 2 milligrams, before breakfast.
+[SEG0013] person_1 (DOCTOR): Any surgery in the past?
+[SEG0014] person_2 (PATIENT): Right, you know, yes, I had part of my thyroid removed, years back.
+[SEG0015] person_1 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0016] person_2 (PATIENT): No, I'm not allergic to anything.
+[SEG0017] person_1 (DOCTOR): So, anything in your past medical history I should know?
+[SEG0018] person_2 (PATIENT): Erm, yes, high blood pressure. I told myself I'd wait and see, and here I am. I kept putting it off, which I know isn't sensible. Yes, heart failure. I've had high cholesterol for five years now.
+[SEG0019] person_1 (DOCTOR): Any other things?
+[SEG0020] person_2 (PATIENT): Diabetes, for five years.
+[SEG0021] person_1 (DOCTOR): Alright, diabetes, that matches what I have here. And alcohol, how much?
+[SEG0022] person_2 (PATIENT): Nothing, I'm teetotal.
+[SEG0023] person_1 (DOCTOR): Do you work outside the home?
+[SEG0024] person_2 (PATIENT): I'm a hairdresser, on my feet all day.
+[SEG0025] person_1 (DOCTOR): Do you follow any particular diet?
+[SEG0026] person_2 (PATIENT): I'm vegetarian and have been for years.
+[SEG0027] person_1 (DOCTOR): Do you do any exercise?
+[SEG0028] person_2 (PATIENT): I swim twice a week.
+[SEG0029] person_1 (DOCTOR): Any fever, calf pain or wheeze at all?
+[SEG0030] person_2 (PATIENT): No, I haven't had any of them.
+[SEG0031] person_1 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0032] person_2 (PATIENT): No, that side's been fine.
+[SEG0033] person_1 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0034] person_2 (PATIENT): Well, you know, no weakness or anything.
+[SEG0035] person_1 (DOCTOR): I'll note down your vital signs first.
+[SEG0036] person_1 (DOCTOR): Okay, this won't take long...
+[SEG0037] person_1 (DOCTOR): Okay: temp 37.2 degrees, pressure 128 over 89, oxygen saturation is 90 percent, pulse is 92 beats a minute, respiratory rate 26.
+[SEG0038] person_1 (DOCTOR): Shall I start the examination?
+[SEG0039] person_1 (DOCTOR): Stay as you are for a moment.
+[SEG0040] person_1 (DOCTOR): There are crackles all the way up both lungs and you are breathing very fast.
+[SEG0041] person_1 (DOCTOR): Alright, that's the examination finished.
+[SEG0042] person_1 (DOCTOR): Having listened and examined, I think we're dealing with acute pulmonary oedema at this stage. It could also be a severe chest infection, so we'll keep that open. Let me just check I've got this right. You've had being very breathless for about four days, and no wheeze or calf pain.
+[SEG0043] person_2 (PATIENT): Exactly.
+[SEG0044] person_1 (DOCTOR): Blood tests is what I'd like next, for pulmonary oedema. Let's get a chest X-ray, for pulmonary oedema. An ECG is what I'd like next, for pulmonary oedema. I'm prescribing furosemide, 40 milligrams, once now, single dose. It's for fluid on the lungs. Sit upright, I am giving oxygen and a water tablet injection now. I'll also refer you to the emergency team.
+[SEG0045] person_1 (DOCTOR): The thing that would worry me is if the symptoms get worse. If that happens, go to emergency.
+[SEG0046] person_2 (PATIENT): Okay, makes sense.
+[SEG0047] person_1 (DOCTOR): Anything else on your mind before you go?
+[SEG0048] person_2 (PATIENT): No, that's all. Thanks a lot.
+[SEG0049] person_1 (DOCTOR): Have a good day.
+
+JSON:

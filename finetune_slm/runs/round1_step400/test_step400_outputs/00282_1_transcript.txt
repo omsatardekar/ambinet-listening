@@ -1,0 +1,75 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00282)
+[SEG0001] person_1 (NURSE): okay, doctor, we're all set in here. I'll give you the numbers when you want them
+[SEG0002] person_2 (DOCTOR): okay, thanks. Hi, how can I help today?
+[SEG0003] person_3 (CAREGIVER): Hello um doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_2 (DOCTOR): Of course please stay. It's helpful to have you here.
+[SEG0005] person_3 (CAREGIVER): doctor it's bruising. That's what we're worried about
+[SEG0006] person_2 (DOCTOR): And when did that start?
+[SEG0007] person_4 (PATIENT): It's been going on for about two weeks.
+[SEG0008] person_4 (PATIENT): Hmm, I was just going to say that the the main thing is—
+[SEG0009] person_1 (NURSE): sorry to to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0010] person_2 (DOCTOR): Later thanks. Please go on.
+[SEG0011] person_4 (PATIENT): I've, I've had a weak grip too, for two days
+[SEG0012] person_2 (DOCTOR): right, on a normal day, how strong is it?
+[SEG0013] person_4 (PATIENT): okay, so pretty moderate, if I'm being honest oh, and tingling in the fingers that's been about the same, one week
+[SEG0014] person_2 (DOCTOR): How often does it happen?
+[SEG0015] person_4 (PATIENT): It's, um... not exactly... well, hard to explain, I mean—
+[SEG0016] person_2 (DOCTOR): Let me put it another way: how many times in a typical day or week?
+[SEG0017] person_4 (PATIENT): it's on and off
+[SEG0018] person_2 (DOCTOR): and how severe is it?
+[SEG0019] person_4 (PATIENT): Well it's... hard to say it's kind of... I don't know—
+[SEG0020] person_2 (DOCTOR): take your time. Mild moderate or severe if you had to pick?
+[SEG0021] person_4 (PATIENT): I'd say mild. And there's pain in my left wrist after a fall as well, one week now.
+[SEG0022] person_2 (DOCTOR): how much is it bothering you?
+[SEG0023] person_4 (PATIENT): it's severe, honestly
+[SEG0024] person_5 (UNKNOWN): Yes exactly like that.
+[SEG0025] person_2 (DOCTOR): Alright, have you noticed pain in the shoulder or numbness?
+[SEG0026] person_4 (PATIENT): no I'd have mentioned it
+[SEG0027] person_2 (DOCTOR): alright, any pain in the elbow, bump to the head or loss of consciousness at all?
+[SEG0028] person_4 (PATIENT): No, I'd have mentioned it.
+[SEG0029] person_2 (DOCTOR): right, is your digestion otherwise okay?
+[SEG0030] person_4 (PATIENT): nothing unusual, no
+[SEG0031] person_2 (DOCTOR): anything unusual with passing urine?
+[SEG0032] person_4 (PATIENT): no changes there
+[SEG0033] person_2 (DOCTOR): right which tablets or creams or inhalers do you use?
+[SEG0034] person_4 (PATIENT): it's alendronate, 70 milligrams, once a week for my bones
+[SEG0035] person_3 (CAREGIVER): That's what's prescribed, but I'm not sure he takes it every day.
+[SEG0036] person_4 (PATIENT): Hydrocortisone cream. I take it when needed. Sumatriptan. I take it 50 milligrams when needed. I told myself I'd wait and see and here I am. Paracetamol 500 milligrams when needed.
+[SEG0037] person_2 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0038] person_4 (PATIENT): my father was diabetic
+[SEG0039] person_2 (DOCTOR): Alright, what about allergies, to medicines or foods or anything else?
+[SEG0040] person_4 (PATIENT): I think I reacted to some antibiotic once, years ago i don't remember which one, or what happened exactly
+[SEG0041] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0042] person_4 (PATIENT): I stopped smoking about two years back. I gave up drinking about three years ago. I live with my family, my husband and two kids.
+[SEG0043] person_2 (DOCTOR): is there anything medical in your background?
+[SEG0044] person_4 (PATIENT): I have thin bones, for nearly five years okay, so I've had eczema, yes a neighbour of mine said I should see someone about it i've had migraines, yes
+[SEG0045] person_2 (DOCTOR): Alright, migraines, that matches what I have here. Have you had any previous surgeries?
+[SEG0046] person_4 (PATIENT): no never had any surgery
+[SEG0047] person_1 (NURSE): Okay, so so the vitals from earlier. Blood pressure 122 over 81, saturation 99 percent, pulse 85, temperature is 36.7 degrees.
+[SEG0048] person_2 (DOCTOR): okay, noted
+[SEG0049] person_2 (DOCTOR): if you're comfortable, I'll examine you now
+[SEG0050] person_4 (PATIENT): Alright.
+[SEG0051] person_2 (DOCTOR): let me press here
+[SEG0052] person_2 (DOCTOR): There's swelling and tenderness at the base of the thumb side of the wrist.
+[SEG0053] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0054] person_2 (DOCTOR): Fingers have good colour and the pulses are fine.
+[SEG0055] person_2 (DOCTOR): thanks for that okay, thinking it through, my working impression is a wrist sprain, but a small fracture is possible the reason I say that is that your story and my examination fit together another possibility is a scaphoid fracture
+[SEG0056] person_4 (PATIENT): Do you think it's serious?
+[SEG0057] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a wrist sprain, but a small fracture is possible, and we'll know more once the an X-ray of the wrist is back. Let's book an X-ray of the wrist to look into wrist injury. I'd like you to wear a splint until the X-ray result is confirmed and and keep the hand raised. Do get help quickly if the symptoms get worse.
+[SEG0058] person_4 (PATIENT): understood
+[SEG0059] person_2 (DOCTOR): is there anything you wanted to ask?
+[SEG0060] person_4 (PATIENT): nothing more from me thanks
+
+JSON:

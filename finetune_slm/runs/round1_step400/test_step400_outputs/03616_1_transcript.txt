@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03616)
+[SEG0001] person_1 (PATIENT): Yeah hi is it okay to come in now?
+[SEG0002] person_2 (DOCTOR): Yes have a seat. Tell me what's going on.
+[SEG0003] person_3 (CAREGIVER): Hello, doctor. I'm here with them in case I can help.
+[SEG0004] person_1 (PATIENT): Yeah it's not remembering the last hours. I don't know what's causing it. I didn't wanna make a fuss you know.
+[SEG0005] person_2 (DOCTOR): when was the first time you noticed it?
+[SEG0006] person_1 (PATIENT): Erm, around a week, I think.
+[SEG0007] person_3 (CAREGIVER): It was closer to two weeks, doctor.
+[SEG0008] person_2 (DOCTOR): okay, so roughly one to two weeks is that right?
+[SEG0009] person_1 (PATIENT): That That sounds about right.
+[SEG0010] person_2 (DOCTOR): how troublesome is it day to to day?
+[SEG0011] person_1 (PATIENT): Mild really.
+[SEG0012] person_1 (PATIENT): and the other thing I wanted to mention is that I can't really—
+[SEG0013] person_3 (CAREGIVER): Let me think, tell the doctor about the other thing, that's what worries me.
+[SEG0014] person_1 (PATIENT): Oh I was getting to that! I've had asking the same questions repeatedly too for three weeks.
+[SEG0015] person_2 (DOCTOR): alright, how about headache?
+[SEG0016] person_1 (PATIENT): nope no headache
+[SEG0017] person_2 (DOCTOR): A few quick ones: seizure, weakness or slurred speech?
+[SEG0018] person_1 (PATIENT): sorry, what was I saying, no, no seizure, no weakness, no slurred speech i was feeling fine otherwise at one point, but that that went away on its own
+[SEG0019] person_2 (DOCTOR): any trouble with the waterworks?
+[SEG0020] person_1 (PATIENT): That's normal as far as I know.
+[SEG0021] person_2 (DOCTOR): has your heart given you any trouble?
+[SEG0022] person_1 (PATIENT): Nothing like that.
+[SEG0023] person_2 (DOCTOR): anything you do to stay fit?
+[SEG0024] person_1 (PATIENT): I do a yoga class on Thursdays.
+[SEG0025] person_2 (DOCTOR): Tell me about your eating.
+[SEG0026] person_1 (PATIENT): I drink a lot of tea and snack through the day.
+[SEG0027] person_2 (DOCTOR): what's on your current medicine list?
+[SEG0028] person_1 (PATIENT): Spironolactone, 25 milligrams, once a day.
+[SEG0029] person_1 (PATIENT): It's a... um I can't remember what it's called. It's a round yellow one.
+[SEG0030] person_2 (DOCTOR): do you remember what it's for?
+[SEG0031] person_1 (PATIENT): For the gout, I believe. My husband sets them out for me, I just take what I'm given.
+[SEG0032] person_2 (DOCTOR): has anyone ever diagnosed you with something?
+[SEG0033] person_1 (PATIENT): I've, I've had heart failure for nearly five years now. I've, I've had gout for five years now. My neighbour said I should get it it looked at.
+[SEG0034] person_2 (DOCTOR): mm-hmm. Yes heart failure and gout are known to us good to have that clear. Are there any allergies I should be aware of?
+[SEG0035] person_1 (PATIENT): I think I reacted to some antibiotic once, you know, years ago i don't remember which one, or what happened exactly
+[SEG0036] person_2 (DOCTOR): let me take your readings now
+[SEG0037] person_2 (DOCTOR): Sit still for a moment...
+[SEG0038] person_2 (DOCTOR): Okay: pulse is 85 beats a minute temperature 36.5 BP is 110 over 76.
+[SEG0039] person_2 (DOCTOR): right, I'll examine you in a second, make yourself comfortable
+[SEG0040] person_2 (DOCTOR): Let me feel here.
+[SEG0041] person_2 (DOCTOR): You know who you are but not what happened this morning and and the examination otherwise is normal.
+[SEG0042] person_2 (DOCTOR): You can sit up now.
+[SEG0043] person_2 (DOCTOR): Okay thinking it through it points towards transient global amnesia. That's my thinking for now and it may change as we learn more. I can't rule out a seizure yet. We shouldn't forget a stroke. Let's book a CT scan of the head to look into acute memory loss.
+[SEG0044] person_1 (PATIENT): That's fine with me.
+[SEG0045] person_2 (DOCTOR): I'm going to order a blood sugar, for confusion. This usually clears in a day with no lasting effect, but we do a scan first to be safe. Come back or go to emergency straight away if the symptoms get worse.
+[SEG0046] person_1 (PATIENT): alright I follow
+[SEG0047] person_2 (DOCTOR): I'd like to see you again tomorrow
+[SEG0048] person_1 (PATIENT): I'll book it on my way out.
+[SEG0049] person_2 (DOCTOR): have I covered everything you wanted?
+[SEG0050] person_1 (PATIENT): thank you, doctor, goodbye
+[SEG0051] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

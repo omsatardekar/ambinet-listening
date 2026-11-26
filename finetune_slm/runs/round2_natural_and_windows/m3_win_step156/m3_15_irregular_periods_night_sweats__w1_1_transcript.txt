@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_15_irregular_periods_night_sweats)
+[SEG0001] person_1 (DOCTOR): Sorry, I'm so sorry for keeping you waiting, the clinic's been running about twenty minutes behind all morning. Come in, please, sit. I'm Dr Hollis, and you're Dana?
+[SEG0002] person_2 (PATIENT): Dana, yes. Oh, it's absolutely fine, I read a magazine, I learned that you can freeze avocado. Did you know that? You can freeze avocado. Cut it, squeeze lemon on it, in the freezer. I've been throwing away avocados for years.
+[SEG0003] person_1 (DOCTOR): Sure.
+[SEG0004] person_1 (DOCTOR): I did not know that. Good to know. So what can I do for you today?
+[SEG0005] person_2 (PATIENT): Okay, so, I think I'm going through the change, is the short version. Or I'm going slowly insane. One of the two. My sister says it's the change, and I said I'm forty-five, and she said, well, I started at forty-three, and I said, you did not, you started at forty-seven, because I remember it was the year of the wedding.
+[SEG0006] person_1 (DOCTOR): Whose wedding?
+[SEG0007] person_2 (PATIENT): Her second. Anyway, it doesn't matter. The thing is, my periods have gone all over the place.
+[SEG0008] person_1 (DOCTOR): Okay. Tell me what they've been doing.
+[SEG0009] person_2 (PATIENT): Before, they were like clockwork. Twenty-eight days, you could set your watch. Then, I don't know, about six months ago, I skipped one. Then I had two close together. Then nothing for ages, and then a short one. I've kind of lost track.
+[SEG0010] person_1 (DOCTOR): Six months, roughly. When was your last period?
+[SEG0011] person_2 (PATIENT): Hmm. March. Or maybe the end of February? It was around the time of the book club at my house, because I remember I had the cramps and I was carrying a lasagne. So whenever that was.
+[SEG0012] person_1 (DOCTOR): Okay, um, we'll say around March. And what's it like when you do have a period? Heavy, light, painful?
+[SEG0013] person_2 (PATIENT): Lighter, actually. Than before. Which is nice. I used to flood. No, I don't flood any more.
+[SEG0014] person_1 (DOCTOR): Any bleeding between periods, or after sex?
+[SEG0015] person_2 (PATIENT): No. Nothing like that.
+[SEG0016] person_1 (DOCTOR): Okay. And what else have you noticed?
+[SEG0017] person_2 (PATIENT): Um, the sweats. Oh my goodness, the sweats. At night. I wake up and the sheets are wet, like I've been in a pool. My husband has taken to sleeping under a separate blanket, because I steal it and then I throw it off and then I steal it again. He also snores, so we're not exactly even.
+[SEG0018] person_1 (DOCTOR): I see.
+[SEG0019] person_1 (DOCTOR): How often are the night sweats?
+[SEG0020] person_2 (PATIENT): Hm, most nights, now. At first it was once a week. Three, four times a week lately. And in the day, I have these flushes, my face goes red, I get hot all of a sudden, in meetings, I'm an office manager at a school, and the head teacher says, are you all right, Dana, and I say, perfectly, while melting.
+[SEG0021] person_1 (DOCTOR): Right.
+[SEG0022] person_1 (DOCTOR): That's very common. And what about your mood?
+[SEG0023] person_2 (PATIENT): That's the part that scares me. I'm not a snappy person. And then I snapped at my daughter on Tuesday over a hairbrush. A hairbrush! And I cried afterwards, in the car park. I felt terrible. She's fifteen, she's allowed to be difficult, I'm not.
+[SEG0024] person_1 (DOCTOR): Mood swings, then. How long has that been going on?
+[SEG0025] person_2 (PATIENT): Er, since the summer. A few months. It comes and goes. Some days I'm fine and some days I could cry at an advert for gravy.
+[SEG0026] person_1 (DOCTOR): Ha.
+[SEG0027] person_1 (DOCTOR): Have you had thoughts of harming yourself, or of not wanting to go on?
+[SEG0028] person_2 (PATIENT): Oh, no. No, nothing like that. I'm just emotional and tired.
+[SEG0029] person_1 (DOCTOR): Okay. Good. Any weight loss, without trying?
+[SEG0030] person_2 (PATIENT): No. If anything the opposite. I've put on a bit round the middle, which everyone says is also the change, which I think is very unfair.
+[SEG0031] person_1 (DOCTOR): Mm.
+[SEG0032] person_1 (DOCTOR): Any lumps in the breasts, or changes to the nipples?
+[SEG0033] person_2 (PATIENT): Er, no lumps. I check. Well, I check when I remember.
+[SEG0034] person_1 (DOCTOR): Any chest pain, palpitations?
+[SEG0035] person_2 (PATIENT): No. My heart's fine as far as I know. I get a thump sometimes in the night when a hot flush starts, but that's it.
+[SEG0036] person_1 (DOCTOR): Heavy bleeding, or passing clots?
+[SEG0037] person_2 (PATIENT): No, they've been lighter.
+[SEG0038] person_1 (DOCTOR): Okay, um, thank you. Now, a bit of history. I see in your notes you have thin bones?
+[SEG0039] person_2 (PATIENT): Yes, they found it after I broke my wrist, a silly fall off the kerb, three years ago. They did a scan and said I had thin bones, osteopenia, osteoporosis, one of the ones. And they put me on a weekly tablet.
+[SEG0040] person_1 (DOCTOR): I see.
+[SEG0041] person_1 (DOCTOR): Do you remember what the tablet is?
+[SEG0042] person_2 (PATIENT): Hm, it's a Monday one. The weekly one. White, big. You have to take it on an empty stomach with a full glass of water and stay upright for half an hour. It's alendronate, I think. Seventy.
+[SEG0043] person_1 (DOCTOR): Alendronate seventy milligrams, once a week. Good. Any other tablets, supplements, anything?
+[SEG0044] person_2 (PATIENT): Nope. I used to take a multivitamin but I forgot.
+[SEG0045] person_1 (DOCTOR): Operations?
+[SEG0046] person_2 (PATIENT): Well, um, a caesarean, with my second. Nine years ago. Everything went fine.
+[SEG0047] person_1 (DOCTOR): And is there anything in the family, like heart disease, cancers?
+[SEG0048] person_2 (PATIENT): Uh, not really. My cousin has psoriasis. My mum is eighty-one and fit as a flea. She does yoga.
+[SEG0049] person_1 (DOCTOR): Wonderful. Do you smoke?
+[SEG0050] person_2 (PATIENT): I stopped. Last spring. It was the hardest thing I've done, apart from childbirth.
+[SEG0051] person_1 (DOCTOR): Well done. Alcohol?
+[SEG0052] person_2 (PATIENT): Er, a glass of wine, perhaps two at the weekend. And I'm vegetarian, have been for years, since college, so I try to eat well. Lots of lentils.
+[SEG0053] person_1 (DOCTOR): Right.
+[SEG0054] person_1 (DOCTOR): And sleep, other than the sweats? Do you get back to sleep afterwards?

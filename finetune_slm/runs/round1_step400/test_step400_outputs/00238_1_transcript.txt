@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00238)
+[SEG0001] person_1 (PATIENT): Excuse me, doctor, should I sit here?
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_1 (PATIENT): Mainly breathlessness on the stairs. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): Roughly when did it start?
+[SEG0005] person_1 (PATIENT): Well, I've had it since last weekend.
+[SEG0006] person_2 (DOCTOR): Go on. Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): Pretty severe, if I'm being honest. Only resting, and it's not much. Yes, climbing stairs. That makes it worse.
+[SEG0008] person_2 (DOCTOR): Let me check a few things. Any weight loss, chest pain or fainting?
+[SEG0009] person_1 (PATIENT): no weight loss, chest pain or fainting, none of it
+[SEG0010] person_2 (DOCTOR): Have you had any black stools?
+[SEG0011] person_1 (PATIENT): I haven't noticed any black stools.
+[SEG0012] person_2 (DOCTOR): anything different when you pass water?
+[SEG0013] person_1 (PATIENT): No, that's all fine.
+[SEG0014] person_2 (DOCTOR): So, are you working at the moment?
+[SEG0015] person_1 (PATIENT): Yes, I'm a nurse on a busy ward
+[SEG0016] person_2 (DOCTOR): Right, how's your diet?
+[SEG0017] person_1 (PATIENT): I'm mostly vegetarian
+[SEG0018] person_2 (DOCTOR): do you live alone?
+[SEG0019] person_1 (PATIENT): Yes, I live on my own.
+[SEG0020] person_2 (DOCTOR): have you had any previous surgeries?
+[SEG0021] person_1 (PATIENT): No operations, no.
+[SEG0022] person_2 (DOCTOR): Any drug or food allergies?
+[SEG0023] person_1 (PATIENT): no allergies that I know of, no
+[SEG0024] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0025] person_1 (PATIENT): Pantoprazole. I take it 40 milligrams, before breakfast. I take hydrocortisone cream, when needed for the eczema.
+[SEG0026] person_2 (DOCTOR): So, anyone in the family with similar problems or other conditions?
+[SEG0027] person_1 (PATIENT): My mother had high blood pressure.
+[SEG0028] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0029] person_1 (PATIENT): Acid reflux, for five years. I have eczema.
+[SEG0030] person_2 (DOCTOR): Right, so acid reflux and eczema are already on your record. We'll keep that in mind today.
+[SEG0031] person_2 (DOCTOR): Right, let me check a few things physically.
+[SEG0032] person_1 (PATIENT): Yes, doctor.
+[SEG0033] person_2 (DOCTOR): let me just check something
+[SEG0034] person_2 (DOCTOR): Your eyelids are pale inside.
+[SEG0035] person_2 (DOCTOR): Let me just check something.
+[SEG0036] person_2 (DOCTOR): Heart sounds are normal, I don't hear any murmur.
+[SEG0037] person_2 (DOCTOR): Okay, finished. Taking everything into account, this is probably anaemia of some kind.
+[SEG0038] person_1 (PATIENT): Yeah, I've been thinking the worst, to be honest. Is it bad?
+[SEG0039] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like anaemia of some kind, but I'd like to confirm.
+[SEG0040] person_2 (DOCTOR): I'll request a full blood count, it'll help with pallor i'm sending you for a ferritin level because of possible iron deficiency we'll begin with ferrous sulfate, 200 milligrams, once a day, for three months that should help with possible iron deficiency iron can darken the stools and bother the stomach, so take it after food if the symptoms get worse, that's the point to come in urgently
+[SEG0041] person_1 (PATIENT): Okay, fair enough.
+[SEG0042] person_2 (DOCTOR): Please come and see me in two weeks. Okay, I think we're finished. Is everything clear?
+[SEG0043] person_1 (PATIENT): One thing: no, actually that's all. Thanks.
+
+JSON:

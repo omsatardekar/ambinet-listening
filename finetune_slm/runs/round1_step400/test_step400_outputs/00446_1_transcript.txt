@@ -1,0 +1,73 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00446)
+[SEG0001] person_1 (DOCTOR): Hi there, come on in.
+[SEG0002] person_2 (PATIENT): Good morning, doctor.
+[SEG0003] person_1 (DOCTOR): What's been bothering you?
+[SEG0004] person_2 (PATIENT): Well, I've been having fever with chills.
+[SEG0005] person_1 (DOCTOR): Since when have you had this?
+[SEG0006] person_2 (PATIENT): It's been like this since last weekend.
+[SEG0007] person_1 (DOCTOR): Have you found anything that eases it?
+[SEG0008] person_2 (PATIENT): Well, I get some relief from paracetamol.
+[SEG0009] person_1 (DOCTOR): How much is it bothering you?
+[SEG0010] person_2 (PATIENT): Maybe a four out of ten on a bad day.
+[SEG0011] person_1 (DOCTOR): Has there been nausea too?
+[SEG0012] person_2 (PATIENT): Mm, yes. With nausea, it happens on and off.
+[SEG0013] person_1 (DOCTOR): Have you been feeling very weak?
+[SEG0014] person_2 (PATIENT): Yeah, that too.
+[SEG0015] person_1 (DOCTOR): Any terrible shaking and sweating as well?
+[SEG0016] person_2 (PATIENT): Yes, actually. About terrible shaking and sweating, it's all the time.
+[SEG0017] person_1 (DOCTOR): Have you had fever with chills before, or is this the first time?
+[SEG0018] person_2 (PATIENT): A bit, about six months ago. It settled by itself back then.
+[SEG0019] person_1 (DOCTOR): Let's do your observations.
+[SEG0020] person_1 (DOCTOR): One second...
+[SEG0021] person_1 (DOCTOR): Okay: blood pressure 122 over 74, respiratory rate 22, temperature 38.7, heart rate 104.
+[SEG0022] person_1 (DOCTOR): Can I examine you now?
+[SEG0023] person_1 (DOCTOR): Bear with me a second.
+[SEG0024] person_1 (DOCTOR): No rash anywhere on your body that I can see.
+[SEG0025] person_2 (PATIENT): Sure.
+[SEG0026] person_1 (DOCTOR): I'll go gently.
+[SEG0027] person_1 (DOCTOR): Your spleen tip is just palpable under the ribs.
+[SEG0028] person_1 (DOCTOR): That's fine, sit up. Have you had any breathlessness or stiff neck?
+[SEG0029] person_2 (PATIENT): No, none of those.
+[SEG0030] person_1 (DOCTOR): Let me check a few things. Any cough or diarrhoea?
+[SEG0031] person_2 (PATIENT): Oh, no cough or diarrhoea, none of it.
+[SEG0032] person_1 (DOCTOR): Any breathing difficulties apart from this?
+[SEG0033] person_2 (PATIENT): No problems with breathing.
+[SEG0034] person_1 (DOCTOR): Anything different when you pass water?
+[SEG0035] person_2 (PATIENT): That's normal as far as I know.
+[SEG0036] person_1 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0037] person_2 (PATIENT): I've had high blood pressure for about a year now. I've, I've had thin bones, yes.
+[SEG0038] person_1 (DOCTOR): And apart from that?
+[SEG0039] person_2 (PATIENT): Gout, for about a year.
+[SEG0040] person_1 (DOCTOR): Right, so high blood pressure and gout are already on your record. We'll keep that in mind today. Let's go through your medication. What are you taking?
+[SEG0041] person_2 (PATIENT): I'm on amlodipine, 5 milligrams, once a day for my pressure. Well, I'm supposed to take it regularly, but I don't always manage. I take alendronate, 70 milligrams, once a week. It's allopurinol, once a day for the gout.
+[SEG0042] person_1 (DOCTOR): Do you know the dose?
+[SEG0043] person_2 (PATIENT): 100 milligrams, I think that's what's on the box. I take paracetamol, 500 milligrams, when needed.
+[SEG0044] person_1 (DOCTOR): Does anything run in the family?
+[SEG0045] person_2 (PATIENT): My father had a stroke.
+[SEG0046] person_1 (DOCTOR): Do you have any known allergies at all?
+[SEG0047] person_2 (PATIENT): Yes, sulfa drugs. I get a rash. Yes, I'm allergic to codeine.
+[SEG0048] person_1 (DOCTOR): Are you still working?
+[SEG0049] person_2 (PATIENT): I'm retired now, I was a clerk for years.
+[SEG0050] person_1 (DOCTOR): Are you living with family?
+[SEG0051] person_2 (PATIENT): I stay with my daughter and her family.
+[SEG0052] person_1 (DOCTOR): So where does that leave us? The most likely explanation is malaria until proven otherwise. Another possibility is dengue fever. Stop me if I've got anything wrong. You've had fever with chills, since last weekend, and no stiff neck or diarrhoea.
+[SEG0053] person_2 (PATIENT): That's it, yes.
+[SEG0054] person_1 (DOCTOR): We should do a malaria test for fever after travel. We should do a dengue test for fever. Let the lab know you travelled recently, that's important for the tests. Let's review you in two days.
+[SEG0055] person_2 (PATIENT): Okay, I'll book that.
+[SEG0056] person_1 (DOCTOR): Call the clinic if you need us.
+[SEG0057] person_2 (PATIENT): Uh, no questions. Thank you.
+[SEG0058] person_1 (DOCTOR): Goodbye.
+
+JSON:

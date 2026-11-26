@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00349)
+[SEG0001] person_1 (PATIENT): Morning, doctor, I hope I'm not interrupting.
+[SEG0002] person_2 (DOCTOR): That's alright, take a seat. Tell me why you've come.
+[SEG0003] person_1 (PATIENT): It's pain during sex, mostly.
+[SEG0004] person_2 (DOCTOR): Roughly when did it start?
+[SEG0005] person_1 (PATIENT): It's been four weeks, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): Would you call it mild or bad?
+[SEG0007] person_1 (PATIENT): About a seven out of ten.
+[SEG0008] person_2 (DOCTOR): Right, right. Does it come along with anything else?
+[SEG0009] person_1 (PATIENT): When it starts I tend to get a lot of tiredness as well. Oh, and pain around my period. That's been about the same, five days. Um, with pain around my period, moderate, I'd say.
+[SEG0010] person_2 (DOCTOR): I see.
+[SEG0011] person_1 (PATIENT): The lot of tiredness? That's been for about four days.
+[SEG0012] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0013] person_1 (PATIENT): I mean, I don't have any known medication allergies.
+[SEG0014] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0015] person_1 (PATIENT): I have heart failure, for about a year.
+[SEG0016] person_2 (DOCTOR): Uh-huh. Alright, heart failure, that matches what I have here. Tell me what you take day to day.
+[SEG0017] person_1 (PATIENT): Spironolactone, 25 milligrams, maybe, once a day.
+[SEG0018] person_2 (DOCTOR): So, is the packet here, or the prescription?
+[SEG0019] person_1 (PATIENT): No, it's at home.
+[SEG0020] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0021] person_1 (PATIENT): No operations, no.
+[SEG0022] person_2 (DOCTOR): Alright, anyone in the family with similar problems or other conditions?
+[SEG0023] person_1 (PATIENT): My father was diabetic.
+[SEG0024] person_2 (DOCTOR): So, how's your diet?
+[SEG0025] person_1 (PATIENT): I'm mostly vegetarian.
+[SEG0026] person_2 (DOCTOR): Who's at home with you?
+[SEG0027] person_1 (PATIENT): It's just me and my wife at home now.
+[SEG0028] person_2 (DOCTOR): Any fever, vaginal discharge or burning when passing urine?
+[SEG0029] person_1 (PATIENT): No, no fever, vaginal discharge or burning when passing urine.
+[SEG0030] person_2 (DOCTOR): Right, right. Have you had any vomiting?
+[SEG0031] person_1 (PATIENT): Oh, not that I've noticed, no vomiting.
+[SEG0032] person_2 (DOCTOR): So, any pins and needles or loss of strength anywhere?
+[SEG0033] person_1 (PATIENT): Nothing odd there.
+[SEG0034] person_2 (DOCTOR): Let's do your observations.
+[SEG0035] person_2 (DOCTOR): Hold still for me...
+[SEG0036] person_2 (DOCTOR): Okay: heart rate 66, temperature is 36.4 degrees, BP is 126 over 75, respiratory rate 18.
+[SEG0037] person_1 (PATIENT): So, is that alright, doctor?
+[SEG0038] person_2 (DOCTOR): I'll explain what that means shortly.
+[SEG0039] person_2 (DOCTOR): Can I examine you now?
+[SEG0040] person_1 (PATIENT): Alright.
+[SEG0041] person_2 (DOCTOR): Let me just check something.
+[SEG0042] person_2 (DOCTOR): There's tenderness in the lower tummy on the left, and no guarding.
+[SEG0043] person_2 (DOCTOR): Okay, finished. Taking everything into account, this is probably chronic pelvic pain, possibly endometriosis. Another possibility is an ovarian cyst.
+[SEG0044] person_2 (DOCTOR): Let's book a pregnancy test to look into pelvic pain.
+[SEG0045] person_3 (CLINICAL_STAFF): The earliest is Thursday, 2 pm.
+[SEG0046] person_1 (PATIENT): Thursday, that works for me.
+[SEG0047] person_2 (DOCTOR): I want a pelvic ultrasound done, that's for pelvic pain. What I'm giving you is mefenamic acid, 500 milligrams, three times a day with food, for five days. That's for period pain. A heat pad and some gentle movement help many people, and a pain diary helps me see a pattern. Cut down on salt and fried food for now, it really does make a difference.
+[SEG0048] person_2 (DOCTOR): And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Let's hold off on a swab test for now, and if there's no change in a month we can revisit it. Let's review you after the scan. Any last questions?
+[SEG0049] person_1 (PATIENT): Oh, thanks, that was helpful.
+[SEG0050] person_2 (DOCTOR): Goodbye.
+
+JSON:

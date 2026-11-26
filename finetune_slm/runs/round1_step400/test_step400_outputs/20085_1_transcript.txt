@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20085)
+[SEG0001] person_1 (PATIENT): good afternoon, doctor
+[SEG0002] person_2 (DOCTOR): no problem at all come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): I'm here cos of itching especially at night
+[SEG0004] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0005] person_1 (PATIENT): It's calamine lotion, when needed. I wasn't sure whether to come in at all, to be honest.
+[SEG0006] person_2 (DOCTOR): how long has this been bothering you?
+[SEG0007] person_1 (PATIENT): about... well, two years
+[SEG0008] person_2 (DOCTOR): how strong would you say it is?
+[SEG0009] person_1 (PATIENT): Mild, really
+[SEG0010] person_2 (DOCTOR): okay, is it accompanied by anything?
+[SEG0011] person_1 (PATIENT): When it starts I tend to get scratching sores as well. The scratching sores? That's been for six months.
+[SEG0012] person_2 (DOCTOR): Any swollen glands, rash on the face or oozing?
+[SEG0013] person_1 (PATIENT): no no swollen glands rash on the face or oozing
+[SEG0014] person_2 (DOCTOR): any change in your bowel habit or your stomach generally?
+[SEG0015] person_1 (PATIENT): bowels are regular, nothing odd
+[SEG0016] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0017] person_1 (PATIENT): Not really, no.
+[SEG0018] person_2 (DOCTOR): are there any illnesses in your family?
+[SEG0019] person_1 (PATIENT): My mother had a a stroke.
+[SEG0020] person_2 (DOCTOR): Alright do you drink alcohol?
+[SEG0021] person_1 (PATIENT): I only drink at family occasions
+[SEG0022] person_2 (DOCTOR): do you smoke?
+[SEG0023] person_1 (PATIENT): I have about eight cigarettes in a day
+[SEG0024] person_2 (DOCTOR): do you follow any particular diet?
+[SEG0025] person_1 (PATIENT): I'm vegetarian and have been for years
+[SEG0026] person_2 (DOCTOR): How active are you?
+[SEG0027] person_1 (PATIENT): I hardly move around during the day.
+[SEG0028] person_2 (DOCTOR): are you in work at the the moment?
+[SEG0029] person_1 (PATIENT): Yes, I work in a bakery, early starts.
+[SEG0030] person_2 (DOCTOR): So, has anything ever caused you a reaction? I mean any allergies.
+[SEG0031] person_1 (PATIENT): No, nothing as far as I know.
+[SEG0032] person_2 (DOCTOR): I'll note down your vital signs first.
+[SEG0033] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0034] person_2 (DOCTOR): okay: pulse is 78 beats a minute, BP is 123 over 69, saturation 97 percent
+[SEG0035] person_2 (DOCTOR): alright, over here please and I'll take a look
+[SEG0036] person_1 (PATIENT): yeah, no problem
+[SEG0037] person_2 (DOCTOR): stay as you are for a moment
+[SEG0038] person_2 (DOCTOR): there are small burrow-like tracks and red bumps between the fingers and on the wrists, with scratch marks
+[SEG0039] person_2 (DOCTOR): Good you can sit up again. Taking everything into account I'd lean towards scabies. What I'm giving you is permethrin cream 5 percent once, then again after a week for two weeks. That's for scabies. Everyone at home should be treated at the same time and wash bedding and clothes at a high temperature. Avoid taking any extra painkillers on top of what I'm prescribing without checking with us. I think we're done unless you have questions.
+[SEG0040] person_1 (PATIENT): I think I understand everything thanks
+
+JSON:

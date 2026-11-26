@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00055)
+[SEG0001] person_1 (PATIENT): Okay, so good afternoon, doctor, the receptionist said you'd see me now.
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_1 (PATIENT): Um, so... dark marks after they heal. That's why I came. My sister suggested writing things down, but I forgot.
+[SEG0004] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0005] person_1 (PATIENT): I'm on omeprazole, 20 milligrams, once a day for the reflux. It's face wash, twice a day.
+[SEG0006] person_2 (DOCTOR): How long have you been on it?
+[SEG0007] person_1 (PATIENT): For nearly five years.
+[SEG0008] person_2 (DOCTOR): When did it begin?
+[SEG0009] person_1 (PATIENT): About... well, about a month.
+[SEG0010] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0011] person_1 (PATIENT): Painful lumps on the chin goes along with it, most of the time. Flare-ups before my period was there, but it's gone away on its own.
+[SEG0012] person_2 (DOCTOR): Did you notice any fever?
+[SEG0013] person_1 (PATIENT): Definitely no fever.
+[SEG0014] person_2 (DOCTOR): Have you had any excess hair growth, new face cream, irregular periods or pregnancy?
+[SEG0015] person_1 (PATIENT): No, nothing there.
+[SEG0016] person_2 (DOCTOR): Understood. Alright, what about your tummy and bowels, anything unusual there?
+[SEG0017] person_1 (PATIENT): Well, no, that side's been fine.
+[SEG0018] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0019] person_1 (PATIENT): No, nothing there.
+[SEG0020] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0021] person_1 (PATIENT): I've had acid reflux for two years now.
+[SEG0022] person_2 (DOCTOR): Yes, acid reflux is known to us, good to have that clear. Does anything run in the family?
+[SEG0023] person_1 (PATIENT): Right, uh, my uncle had colon cancer.
+[SEG0024] person_2 (DOCTOR): Do you have any allergies to medicines, food, anything at all? It helps to be thorough at this stage.
+[SEG0025] person_1 (PATIENT): I've never been told I have allergies.
+[SEG0026] person_2 (DOCTOR): Do you have a job?
+[SEG0027] person_1 (PATIENT): I'm a self-employed electrician.
+[SEG0028] person_2 (DOCTOR): Okay, anything special about your diet?
+[SEG0029] person_1 (PATIENT): I try to avoid too much sugar.
+[SEG0030] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0031] person_2 (DOCTOR): Just relax your arm...
+[SEG0032] person_2 (DOCTOR): Okay: blood pressure 119 over 80, SpO2 98 percent on room air, pulse 64, weight 62 kilos, temperature 36.9, height 161 centimetres.
+[SEG0033] person_1 (PATIENT): Is that okay?
+[SEG0034] person_2 (DOCTOR): Don't worry, I'll go through it in a moment.
+[SEG0035] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0036] person_2 (DOCTOR): Hold that position for me.
+[SEG0037] person_2 (DOCTOR): There are red papules and a few pustules over the cheeks and chin, with some blackheads.
+[SEG0038] person_2 (DOCTOR): Thanks for that.
+[SEG0039] person_2 (DOCTOR): Having listened and examined, I think we're dealing with moderate acne at this stage. I'd also keep a hormonal cause in mind.
+[SEG0040] person_1 (PATIENT): Is this something I'll have for good?
+[SEG0041] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's moderate acne, and we'll watch how it goes. For this, adapalene gel, at night, for eight weeks. That should help with acne. It takes six to eight weeks to see the difference, so please don't give up in the first fortnight. If the symptoms get worse, or you feel really unwell, please come to the emergency department.
+[SEG0042] person_1 (PATIENT): Okay, I understand.
+[SEG0043] person_2 (DOCTOR): Any last questions?
+[SEG0044] person_1 (PATIENT): Alright, thanks. Bye for now.
+[SEG0045] person_2 (DOCTOR): Goodbye.
+
+JSON:

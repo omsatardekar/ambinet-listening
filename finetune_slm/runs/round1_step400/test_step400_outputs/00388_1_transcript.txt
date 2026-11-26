@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00388)
+[SEG0001] person_1 (PATIENT): Well, hello? Doctor? They told me to come straight in.
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): It's burning in both feet. I thought I'd wait, um, but it hasn't gone.
+[SEG0004] person_2 (DOCTOR): How far back does it go?
+[SEG0005] person_1 (PATIENT): It's, It's been going on for two years.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): I get some relief from walking around. I notice it more with bedsheets touching them. Honestly, on and off. It feels mild to me. As for feeling unsteady in the dark, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0008] person_2 (DOCTOR): And what about hand symptoms, fever, weakness in the legs or back pain?
+[SEG0009] person_1 (PATIENT): No, nothing there.
+[SEG0010] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0011] person_1 (PATIENT): Right, no, skin's been fine.
+[SEG0012] person_2 (DOCTOR): Anything unusual with passing urine?
+[SEG0013] person_1 (PATIENT): No changes there.
+[SEG0014] person_2 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0015] person_1 (PATIENT): I've got acid reflux. I've had diabetes for about a year now. I'm not great at remembering details, so bear with me.
+[SEG0016] person_2 (DOCTOR): Any others?
+[SEG0017] person_2 (DOCTOR): So, what's your diet like?
+[SEG0018] person_1 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0019] person_2 (DOCTOR): Are you working or retired?
+[SEG0020] person_1 (PATIENT): Retired. I stopped a few years back.
+[SEG0021] person_2 (DOCTOR): Okay, any drug or food allergies?
+[SEG0022] person_1 (PATIENT): None, as far as I'm aware.
+[SEG0023] person_2 (DOCTOR): What's your current medication list?
+[SEG0024] person_1 (PATIENT): I take pantoprazole, 40 milligrams, before breakfast for my acidity. Glycomet. I take it 500 milligrams, twice a day for my sugar.
+[SEG0025] person_2 (DOCTOR): Can I take your vitals now?
+[SEG0026] person_2 (DOCTOR): Almost there...
+[SEG0027] person_2 (DOCTOR): Okay: saturation 98 percent, pressure 109 over 81. And temp 37.0 degrees, respiratory rate 17, pulse 77.
+[SEG0028] person_1 (PATIENT): Is that alright, doctor?
+[SEG0029] person_2 (DOCTOR): They help build the picture, I'll tell you more soon.
+[SEG0030] person_2 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0031] person_2 (DOCTOR): Let me look at this properly.
+[SEG0032] person_2 (DOCTOR): Ankle reflexes are absent.
+[SEG0033] person_2 (DOCTOR): Let me look at this properly.
+[SEG0034] person_2 (DOCTOR): Feeling of light touch is reduced in both feet.
+[SEG0035] person_2 (DOCTOR): Thanks, please take a seat again. Right, here's what I'm thinking. The most likely explanation is peripheral neuropathy, possibly related to sugar. I'd also keep a vitamin B12 deficiency in mind. I'd like to arrange a vitamin B12 level for neuropathy. I'd like to arrange an HbA1c for neuropathy.
+[SEG0036] person_1 (PATIENT): Is that done here?
+[SEG0037] person_2 (DOCTOR): We'll begin with pregabalin, 75 milligrams, at night, for four weeks. That should help with nerve pain. It's a commonly used medicine and most people tolerate it well. Check your feet every evening for cuts or blisters, you may not feel them. If the symptoms get worse, that's the point to come in urgently.
+[SEG0038] person_1 (PATIENT): Alright, I know what to look for.
+[SEG0039] person_2 (DOCTOR): Let's plan a check in four weeks. Do you have any questions?
+[SEG0040] person_1 (PATIENT): That's everything I wanted to ask. Thank you.
+
+JSON:

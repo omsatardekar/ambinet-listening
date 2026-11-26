@@ -1,0 +1,82 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00164)
+[SEG0001] person_1 (PATIENT): Afternoon, doctor.
+[SEG0002] person_2 (DOCTOR): Yes, do sit. Tell me what's been happening.
+[SEG0003] person_3 (CAREGIVER): Good morning, doctor. I came along to help out.
+[SEG0004] person_2 (DOCTOR): Absolutely, come and sit beside them.
+[SEG0005] person_3 (CAREGIVER): We came because of a tight band-like headache.
+[SEG0006] person_2 (DOCTOR): Okay, how long has this been going on?
+[SEG0007] person_1 (PATIENT): I'd say about three months. Actually, no, closer to six months.
+[SEG0008] person_2 (DOCTOR): Right, would you call it mild or bad?
+[SEG0009] person_1 (PATIENT): Mostly mild.
+[SEG0010] person_2 (DOCTOR): Does anything bring it on or make it worse?
+[SEG0011] person_1 (PATIENT): It's worse with stress.
+[SEG0012] person_2 (DOCTOR): Does anything settle it?
+[SEG0013] person_1 (PATIENT): I, I get some relief from a head massage and rest.
+[SEG0014] person_2 (DOCTOR): Right, anything that tends to go along with it?
+[SEG0015] person_1 (PATIENT): Tired eyes goes along with it, most of the time. The tired eyes? That's been for two years. And there's trouble sleeping as well, you know, two months now.
+[SEG0016] person_2 (DOCTOR): Right. Alright, any numbness or fever?
+[SEG0017] person_1 (PATIENT): Well, nothing like that, no.
+[SEG0018] person_2 (DOCTOR): Okay, nothing like vomiting?
+[SEG0019] person_1 (PATIENT): Not at all, uh, no vomiting.
+[SEG0020] person_3 (CAREGIVER): Actually, doctor, I did notice vomiting. He doesn't always say.
+[SEG0021] person_1 (PATIENT): No, I don't think I did. Maybe a little, I'm not sure.
+[SEG0022] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. Any jaw pain when chewing, blurred vision or weakness?
+[SEG0023] person_1 (PATIENT): Nothing like that, no.
+[SEG0024] person_2 (DOCTOR): How are your bowels, any trouble?
+[SEG0025] person_1 (PATIENT): No, that side's been fine.
+[SEG0026] person_2 (DOCTOR): Is there a family history of anything significant?
+[SEG0027] person_1 (PATIENT): My sister has epilepsy.
+[SEG0028] person_2 (DOCTOR): Have you had any surgery before?
+[SEG0029] person_1 (PATIENT): I had a lump removed from my back years ago.
+[SEG0030] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0031] person_1 (PATIENT): I have anxiety, for about ten years. My sister suggested writing things down, but I forgot.
+[SEG0032] person_2 (DOCTOR): Any others?
+[SEG0033] person_1 (PATIENT): I've had high blood pressure for two years now.
+[SEG0034] person_2 (DOCTOR): Right, right. A few questions about your lifestyle now.
+[SEG0035] person_1 (PATIENT): I don't drink at all. I walk for about half an hour most days. It's just me and my wife at home now.
+[SEG0036] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0037] person_1 (PATIENT): Well, uh, I take escitalopram, 10 milligrams, once a day.
+[SEG0038] person_3 (CAREGIVER): Doctor, I think the last prescription for the escitalopram was 5 milligrams. We changed it at the last visit.
+[SEG0039] person_2 (DOCTOR): Alright. Did you bring the up-to-date prescription?
+[SEG0040] person_1 (PATIENT): So, you know, not with me. I'll bring it next time. I'm on amlodipine, 5 milligrams, once a day for my pressure. I'm, I'm on paracetamol, 500 milligrams, when needed.
+[SEG0041] person_2 (DOCTOR): And for how long?
+[SEG0042] person_1 (PATIENT): About about three months.
+[SEG0043] person_2 (DOCTOR): Okay, do you have any known allergies at all?
+[SEG0044] person_1 (PATIENT): Right, years back I got vomiting from codeine, so I stay away from it now.
+[SEG0045] person_2 (DOCTOR): A few measurements, then we'll continue.
+[SEG0046] person_2 (DOCTOR): Hold still for me...
+[SEG0047] person_2 (DOCTOR): Okay: pressure 113 over 73, oxygen saturation is 99 percent, pulse is 73 beats a minute.
+[SEG0048] person_1 (PATIENT): Is that alright, doctor?
+[SEG0049] person_2 (DOCTOR): I'll interpret it once I've examined you.
+[SEG0050] person_2 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0051] person_2 (DOCTOR): Let me just check something.
+[SEG0052] person_2 (DOCTOR): Your eye movements and reflexes are normal.
+[SEG0053] person_2 (DOCTOR): Almost done with this part.
+[SEG0054] person_2 (DOCTOR): The muscles at the back of your neck are tight and tender.
+[SEG0055] person_2 (DOCTOR): Thanks for that.
+[SEG0056] person_2 (DOCTOR): So where does that leave us? I'd lean towards a tension-type headache. It could also be migraine, so we'll keep that open.
+[SEG0057] person_1 (PATIENT): What are the chances it's something bad?
+[SEG0058] person_2 (DOCTOR): I can't promise yet, but most people with a tension-type headache do well once it's treated properly. Let's get an eye check, for headache and eye strain.
+[SEG0059] person_1 (PATIENT): That sounds sensible.
+[SEG0060] person_2 (DOCTOR): I'm prescribing amitriptyline, 10 milligrams, at night, for six weeks. You take it by mouth. That should help with headache prevention. Painkillers on most days can actually make the headaches stick around. Physiotherapy would be the right next step, I'll refer you.
+[SEG0061] person_1 (PATIENT): Alright, thank you.
+[SEG0062] person_2 (DOCTOR): And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Book a review in four weeks.
+[SEG0063] person_1 (PATIENT): I'll make the appointment on my way out.
+[SEG0064] person_2 (DOCTOR): Tell me what you've taken from all that, so I can fill in any gaps.
+[SEG0065] person_1 (PATIENT): So, I take the amitriptyline, 10 milligrams, at night and come back in four weeks. Is that right?
+[SEG0066] person_2 (DOCTOR): Yes, exactly right. That's everything from me. Any other questions?
+[SEG0067] person_1 (PATIENT): Um, uh, I think that's clear. Thank you for being so thorough.
+
+JSON:

@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00262)
+[SEG0001] person_1 (PATIENT): Morning. Nice to finally see you, doctor.
+[SEG0002] person_2 (DOCTOR): Yes, do sit. Tell me what's been happening.
+[SEG0003] person_3 (FAMILY_MEMBER): good morning, doctor. I came along to help out
+[SEG0004] person_2 (DOCTOR): Alright, yes, that's no problem at all. Please sit.
+[SEG0005] person_1 (PATIENT): I mean, I'm here because of a mole on my back that looks different.
+[SEG0006] person_2 (DOCTOR): since when have you had this?
+[SEG0007] person_1 (PATIENT): Around about a month, I think.
+[SEG0008] person_3 (FAMILY_MEMBER): I think it's been nearer about two months, actually.
+[SEG0009] person_2 (DOCTOR): Okay, so roughly one to two months. Is that right?
+[SEG0010] person_1 (PATIENT): That sounds about right.
+[SEG0011] person_2 (DOCTOR): Okay.
+[SEG0012] person_1 (PATIENT): There's it bled once as well.
+[SEG0013] person_2 (DOCTOR): Let's do your observations.
+[SEG0014] person_2 (DOCTOR): Rest your hand here...
+[SEG0015] person_2 (DOCTOR): okay: pulse is 84 beats a a minute, pressure 122 over 81.
+[SEG0016] person_2 (DOCTOR): if you're comfortable, I'll examine you now
+[SEG0017] person_2 (DOCTOR): bear with me a second
+[SEG0018] person_2 (DOCTOR): It's about eight millimetres, with an uneven border and two shades of brown.
+[SEG0019] person_2 (DOCTOR): Thanks, please take a seat again. So, a few quick ones: pain or lumps in the armpit?
+[SEG0020] person_1 (PATIENT): No, no pain or lumps in the armpit.
+[SEG0021] person_2 (DOCTOR): Let me check a few things. Any history of skin cancer or weight loss?
+[SEG0022] person_1 (PATIENT): No, nothing there.
+[SEG0023] person_2 (DOCTOR): Right, on the cardiac side, anything I should know?
+[SEG0024] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0025] person_2 (DOCTOR): any breathing difficulties apart from this?
+[SEG0026] person_1 (PATIENT): No problems with breathing.
+[SEG0027] person_2 (DOCTOR): Any procedures or operations?
+[SEG0028] person_1 (PATIENT): Just a knee arthroscopy, three years ago. Sorry, I know I'm rambling a bit.
+[SEG0029] person_2 (DOCTOR): any drug or food allergies?
+[SEG0030] person_1 (PATIENT): No allergies.
+[SEG0031] person_2 (DOCTOR): Any regular medication?
+[SEG0032] person_1 (PATIENT): No, nothing regular.
+[SEG0033] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0034] person_1 (PATIENT): I run a small shop, so I'm on my feet a lot. I try to avoid too much sugar. I share a flat with two friends.
+[SEG0035] person_2 (DOCTOR): any medical conditions, anything you've been treated for?
+[SEG0036] person_1 (PATIENT): No, none that I know of.
+[SEG0037] person_2 (DOCTOR): putting it all together, this is probably a pigmented lesion that needs to be looked at more closely
+[SEG0038] person_1 (PATIENT): Is this something I'll have for good?
+[SEG0039] person_2 (DOCTOR): I understand the worry at the moment I'd say it's a pigmented lesion that needs to be looked at more closely, and we'll watch how it goes
+[SEG0040] person_2 (DOCTOR): Please use sunscreen and cover up in the midday sun, and check your skin once a month.
+[SEG0041] person_1 (PATIENT): Could I get a dermoscopy done? A friend had it.
+[SEG0042] person_2 (DOCTOR): Not at this point, no. It isn't indicated yet. Do you have any questions?
+[SEG0043] person_1 (PATIENT): Right. Thanks again.
+[SEG0044] person_2 (DOCTOR): so, mind how you go
+
+JSON:

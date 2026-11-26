@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00151)
+[SEG0001] person_1 (PATIENT): Uh, sorry I'm a few minutes behind, doctor.
+[SEG0002] person_2 (DOCTOR): So, no trouble at all, come in. What's been bothering you?
+[SEG0003] person_1 (PATIENT): Honestly, it's a fever for days, and my family pushed me to come. I wasn't sure whether to come in at all, to be honest. I kept putting it off, which I know isn't sensible.
+[SEG0004] person_2 (DOCTOR): when did you first notice it?
+[SEG0005] person_1 (PATIENT): it's been about two weeks now i did try to ignore it for a while
+[SEG0006] person_2 (DOCTOR): Does it it happen all the time or in spells?
+[SEG0007] person_1 (PATIENT): I'd say on and off.
+[SEG0008] person_2 (DOCTOR): how much is it bothering you?
+[SEG0009] person_1 (PATIENT): mostly severe
+[SEG0010] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0011] person_1 (PATIENT): A bad headache goes along with it, most of the time. The bad headache? That's been for two days. I've also had constipation, since yesterday.
+[SEG0012] person_2 (DOCTOR): Right, any jaundice, blood in the stool, rash or burning when passing urine at all?
+[SEG0013] person_1 (PATIENT): no, nothing there
+[SEG0014] person_2 (DOCTOR): what about cough?
+[SEG0015] person_1 (PATIENT): definitely no cough
+[SEG0016] person_2 (DOCTOR): Ah. How about your heart, any problems like that?
+[SEG0017] person_1 (PATIENT): I mean, you know, no, nothing with my heart.
+[SEG0018] person_2 (DOCTOR): okay, any procedures or operations?
+[SEG0019] person_1 (PATIENT): Just my tonsils out, when I was a child.
+[SEG0020] person_2 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0021] person_1 (PATIENT): my brother has asthma
+[SEG0022] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0023] person_1 (PATIENT): Diabetes, for nearly five years.
+[SEG0024] person_2 (DOCTOR): Okay, I can see diabetes in your file as well.
+[SEG0025] person_2 (DOCTOR): What's your current medication list?
+[SEG0026] person_1 (PATIENT): Glimepiride, 2 milligrams, before breakfast for my sugar. Dolo. I take it 650 milligrams, when I get the fever.
+[SEG0027] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0028] person_1 (PATIENT): I gave up drinking about three years ago. I used to smoke but I quit five years ago. I go to the gym a couple of times a week. Mostly home-cooked food, rice and vegetables. I work in an office, mostly sitting at a desk.
+[SEG0029] person_2 (DOCTOR): Before we go on, a few quick readings.
+[SEG0030] person_2 (DOCTOR): Almost there...
+[SEG0031] person_2 (DOCTOR): Okay: pulse 90, SpO2 98 percent on room air, BP is 122 over 69. And temperature 38.7, respiratory rate 18.
+[SEG0032] person_1 (PATIENT): Is that alright, you know, doctor?
+[SEG0033] person_2 (DOCTOR): I'll explain what that means shortly.
+[SEG0034] person_2 (DOCTOR): okay, I need to examine you for this
+[SEG0035] person_1 (PATIENT): sure
+[SEG0036] person_2 (DOCTOR): Almost done with this part.
+[SEG0037] person_2 (DOCTOR): I can't feel your liver or spleen enlarged.
+[SEG0038] person_2 (DOCTOR): Okay, finished. Putting it all together, I'd lean towards typhoid fever, which we need to confirm.
+[SEG0039] person_1 (PATIENT): Is it something serious, doctor?
+[SEG0040] person_2 (DOCTOR): It's reasonable to be concerned, but right now typhoid fever, which we need to confirm is my leading thought, not anything worse. I think a full blood count makes sense here, for fever.
+[SEG0041] person_1 (PATIENT): How long does that take?
+[SEG0042] person_2 (DOCTOR): I think blood cultures makes sense here, for prolonged fever. Eat only home-cooked food and drink boiled or bottled water while this is going on. Ask me anything before you go.
+[SEG0043] person_1 (PATIENT): Thanks, um, that was helpful.
+
+JSON:

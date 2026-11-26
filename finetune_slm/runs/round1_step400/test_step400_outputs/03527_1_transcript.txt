@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03527)
+[SEG0001] person_1 (PATIENT): Hello, doctor. I think it's my turn.
+[SEG0002] person_2 (DOCTOR): Alright, no problem at all, come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): I've been feeling weak.
+[SEG0004] person_2 (DOCTOR): I'll note down your vital signs first
+[SEG0005] person_2 (DOCTOR): keep your arm relaxed for me..
+[SEG0006] person_2 (DOCTOR): Okay: height 178 centimetres, weight 61 kilos, pulse is 114 beats a minute, blood pressure 117 over 75, respiratory rate 16, temp 37.1 degrees, BMI works out to 19.3.
+[SEG0007] person_1 (PATIENT): Is that normal?
+[SEG0008] person_2 (DOCTOR): we'll go over that shortly
+[SEG0009] person_2 (DOCTOR): When was the first time you noticed it?
+[SEG0010] person_1 (PATIENT): I've had it for three weeks.
+[SEG0011] person_2 (DOCTOR): would you say mild, moderate or severe?
+[SEG0012] person_1 (PATIENT): Severe, I'd say
+[SEG0013] person_2 (DOCTOR): Does anything else come with it?
+[SEG0014] person_1 (PATIENT): It usually comes with a poor appetite. I've been losing weight too. Oh, and an irregular heartbeat. That's been about the same, six months.
+[SEG0015] person_2 (DOCTOR): Is it a lot or only a little?
+[SEG0016] person_1 (PATIENT): Maybe a six out of ten on a bad day.
+[SEG0017] person_2 (DOCTOR): I see, go ahead. Have you been feeling weak at any time before this?
+[SEG0018] person_1 (PATIENT): a bit, a couple of years ago it settled by itself back then
+[SEG0019] person_2 (DOCTOR): Did you notice any sweating?
+[SEG0020] person_1 (PATIENT): nope, no sweating
+[SEG0021] person_2 (DOCTOR): A few quick ones: heat intolerance, tremor or diarrhoea?
+[SEG0022] person_1 (PATIENT): no, no heat intolerance, tremor or diarrhoea
+[SEG0023] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0024] person_1 (PATIENT): no rashes
+[SEG0025] person_2 (DOCTOR): Any problems with your joints or muscles?
+[SEG0026] person_1 (PATIENT): No, nothing there.
+[SEG0027] person_2 (DOCTOR): So, tell me about any past illnesses or ongoing conditions.
+[SEG0028] person_1 (PATIENT): I have an underactive thyroid, for five years. It's a relief to finally sit down and talk about it. My neighbour said I should get it looked at.
+[SEG0029] person_2 (DOCTOR): sure
+[SEG0030] person_1 (PATIENT): I have gout. I didn't want to make a fuss, you know.
+[SEG0031] person_2 (DOCTOR): Ah. Right, so gout is already on your record. We'll keep that in mind today. Which medicines do you take at the moment?
+[SEG0032] person_1 (PATIENT): Okay, so it's Thyronorm, 50 micrograms, every morning for my thyroid. I do miss it now and then, to be fair. I'm, I'm on allopurinol, 100 milligrams, once a day. I had febuxostat at one point, but I'm off it now.
+[SEG0033] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0034] person_1 (PATIENT): I drink a lot of tea and snack through the day. I'm a hairdresser, on my feet all day. My husband and I live above the shop.
+[SEG0035] person_2 (DOCTOR): are you allergic to anything? Any allergies to medicines or foods?
+[SEG0036] person_1 (PATIENT): I've never had an allergy
+[SEG0037] person_2 (DOCTOR): are there any illnesses in your family?
+[SEG0038] person_1 (PATIENT): My father has Parkinson's disease. My grandfather had a stroke.
+[SEG0039] person_2 (DOCTOR): I want an ECG done, that's for irregular pulse
+[SEG0040] person_1 (PATIENT): When would that take place?
+[SEG0041] person_2 (DOCTOR): A thyroid test is what I'd like next, for weight loss and irregular pulse. It is easy to miss in older people because they seem sleepy rather than hot and shaky.
+[SEG0042] person_2 (DOCTOR): ah make sure you're drinking plenty of fluids, two to three litres a day if you can, and get proper rest let's plan a check after the results
+[SEG0043] person_1 (PATIENT): I can manage that
+[SEG0044] person_2 (DOCTOR): is there anything you'd like me to go over again?
+[SEG0045] person_1 (PATIENT): Alright, thanks, take care.
+
+JSON:

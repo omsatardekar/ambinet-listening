@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01426)
+[SEG0001] person_1 (DOCTOR): Good morning. I've just opened your notes. So what can I do for you?
+[SEG0002] person_2 (PATIENT): Mainly taking a lot of tablets. There's a couple of other things, but that's the main one.
+[SEG0003] person_1 (DOCTOR): Can you tell me when it first started?
+[SEG0004] person_2 (PATIENT): for six months, I'd say
+[SEG0005] person_1 (DOCTOR): would you say mild, moderate or severe?
+[SEG0006] person_2 (PATIENT): Mild, I'd say.
+[SEG0007] person_1 (DOCTOR): Understood. Have you been feeling sick?
+[SEG0008] person_2 (PATIENT): yeah, that too as for feeling sick, I'd give it a six, out of ten
+[SEG0009] person_1 (DOCTOR): I'll do your observations first
+[SEG0010] person_1 (DOCTOR): Okay, this won't take long...
+[SEG0011] person_1 (DOCTOR): Okay: heart rate 82, height 172 centimetres, weight 54 kilos, BMI works out to 18.3, temperature 36.4, oxygen saturation is 98 percent, blood pressure 112 over 69.
+[SEG0012] person_1 (DOCTOR): Alright, over here please and I'll take a look.
+[SEG0013] person_1 (DOCTOR): I'm just checking this side.
+[SEG0014] person_1 (DOCTOR): You are awake and alert, with some tenderness under the right ribs.
+[SEG0015] person_1 (DOCTOR): okay, that's enough for me
+[SEG0016] person_1 (DOCTOR): Let me check a few things. Any chest pain or drowsiness?
+[SEG0017] person_2 (PATIENT): No, not a single one.
+[SEG0018] person_1 (DOCTOR): any breathing difficulties apart from this?
+[SEG0019] person_2 (PATIENT): Breathing's normal.
+[SEG0020] person_1 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0021] person_2 (PATIENT): Nothing odd there.
+[SEG0022] person_1 (DOCTOR): Do you take any regular medication?
+[SEG0023] person_2 (PATIENT): Nothing regular, no.
+[SEG0024] person_1 (DOCTOR): right, are there any illnesses in your family?
+[SEG0025] person_2 (PATIENT): my aunt has rheumatoid arthritis
+[SEG0026] person_1 (DOCTOR): And alcohol, how much?
+[SEG0027] person_2 (PATIENT): Nothing, I'm teetotal
+[SEG0028] person_1 (DOCTOR): do you smoke?
+[SEG0029] person_2 (PATIENT): No, I've never smoked in my life.
+[SEG0030] person_1 (DOCTOR): Do you do any exercise?
+[SEG0031] person_2 (PATIENT): I swim twice a week.
+[SEG0032] person_1 (DOCTOR): What's your work?
+[SEG0033] person_2 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0034] person_1 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0035] person_2 (PATIENT): No, nothing as far as I know.
+[SEG0036] person_1 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0037] person_2 (PATIENT): No, nothing I can think of.
+[SEG0038] person_1 (DOCTOR): Putting it all together, I think we're dealing with a significant paracetamol overdose needing urgent treatment at this stage.
+[SEG0039] person_2 (PATIENT): do you think it's something serious?
+[SEG0040] person_1 (DOCTOR): nothing I've seen today points to an emergency it looks like a significant paracetamol overdose needing urgent treatment you need to stay in hospital for treatment, and someone will speak to you about how you are feeling that's everything on my side anything you're unsure about?
+[SEG0041] person_2 (PATIENT): Good, thanks, I'll see you then.
+
+JSON:

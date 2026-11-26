@@ -1,0 +1,50 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00031)
+[SEG0001] person_1 (NURSE): Doctor, your next patient is here. I've done the basics, I'll read them out in a moment.
+[SEG0002] person_2 (DOCTOR): Great. Hello, come in and sit down. How can I help?
+[SEG0003] person_3 (PATIENT): So, you know, I'm here because of puffiness around the eyes in the morning.
+[SEG0004] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0005] person_3 (PATIENT): I'm on diclofenac, 50 milligrams, when I get pain
+[SEG0006] person_2 (DOCTOR): since when have you had this?
+[SEG0007] person_3 (PATIENT): about... well, four weeks i looked a few things up online, and that probably didn't help
+[SEG0008] person_2 (DOCTOR): is it mild, moderate or severe?
+[SEG0009] person_3 (PATIENT): Mostly mild.
+[SEG0010] person_2 (DOCTOR): Does it it come along with anything else?
+[SEG0011] person_3 (PATIENT): When it starts I tend to get foamy urine as well. The foamy urine? That's been for two years.
+[SEG0012] person_2 (DOCTOR): has there been any blood in the urine?
+[SEG0013] person_3 (PATIENT): no no blood in the urine
+[SEG0014] person_2 (DOCTOR): Did you get fever, breathlessness or chest pain?
+[SEG0015] person_3 (PATIENT): I haven't had fever, breathlessness or chest pain, no.
+[SEG0016] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0017] person_3 (PATIENT): Breathing's normal.
+[SEG0018] person_2 (DOCTOR): So, moving on to your background, any past medical history?
+[SEG0019] person_3 (PATIENT): I have kidney disease, for about ten years. I thought it would sort itself out, but it hasn't.
+[SEG0020] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0021] person_3 (PATIENT): No, nothing like that.
+[SEG0022] person_2 (DOCTOR): tell me about your routine, work, habits, that sort of thing
+[SEG0023] person_3 (PATIENT): I try to avoid too much sugar. I go to the gym a couple of times a week. I stay with my daughter and her family.
+[SEG0024] person_1 (NURSE): doctor, I've got the readings for you pulse 83, oxygen saturation is 99 percent pressure 172 over 101, respiratory rate 15, temperature is 36.5 degrees
+[SEG0025] person_2 (DOCTOR): thanks
+[SEG0026] person_2 (DOCTOR): Right, let me check a few things physically.
+[SEG0027] person_2 (DOCTOR): Let me look at this properly.
+[SEG0028] person_2 (DOCTOR): There's pitting swelling at both ankles, and your blood pressure is on the high side.
+[SEG0029] person_2 (DOCTOR): Thanks for that.
+[SEG0030] person_2 (DOCTOR): Putting it all together, I think we're dealing with progression of the kidney problem at this stage.
+[SEG0031] person_3 (PATIENT): Well, um, doctor, is this dangerous?
+[SEG0032] person_2 (DOCTOR): it's reasonable to be concerned, but right now progression of the kidney problem is my leading thought, not anything worse. Stop me if I've got anything wrong. You've had puffiness around the eyes in the morning for four weeks, mild, and and no fever or chest pain
+[SEG0033] person_3 (PATIENT): hmm, yes, you've got it it
+[SEG0034] person_2 (DOCTOR): I want a urine protein test done, that's for chronic kidney disease. I think an ultrasound of the kidneys makes sense here, for chronic kidney disease. Stay off anti-inflammatory painkillers like diclofenac or ibuprofen, they're hard on the kidneys. Keep an eye on salt and protein portions, a dietitian can help with the specifics. I'd like to see you again in four weeks. That's everything from me. Any other questions?
+[SEG0035] person_3 (PATIENT): right thanks again
+
+JSON:

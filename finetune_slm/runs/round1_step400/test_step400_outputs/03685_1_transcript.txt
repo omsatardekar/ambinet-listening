@@ -1,0 +1,72 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03685)
+[SEG0001] person_1 (PATIENT): Erm, hello, doctor. I think it's my turn.
+[SEG0002] person_2 (DOCTOR): Yes, have a seat. Tell me what's going on.
+[SEG0003] person_3 (CAREGIVER): Good afternoon, doctor. I look after them so I thought I'd come.
+[SEG0004] person_2 (DOCTOR): Absolutely, come and sit beside them.
+[SEG0005] person_1 (PATIENT): So, I've been losing weight, doctor.
+[SEG0006] person_2 (DOCTOR): Okay, when did this begin?
+[SEG0007] person_1 (PATIENT): Hmm, hm. It was either the end of last month or earlier than that. I couldn't tell you the date.
+[SEG0008] person_2 (DOCTOR): Does anything else come with it?
+[SEG0009] person_1 (PATIENT): An irregular heartbeat goes along with it, most of the time.
+[SEG0010] person_2 (DOCTOR): Has there been a poor appetite too?
+[SEG0011] person_1 (PATIENT): Yeah. Four weeks, you know, I'd say. Ah, about irregular heartbeat, about a eight out of ten.
+[SEG0012] person_2 (DOCTOR): Yes, carry on.
+[SEG0013] person_1 (PATIENT): And I've been feeling weak as well, for six months. As for feeling weak, maybe a three out of ten on a bad day.
+[SEG0014] person_2 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0015] person_1 (PATIENT): Yeah, no, nothing as far as I know.
+[SEG0016] person_2 (DOCTOR): So, anything in your past medical history I should know?
+[SEG0017] person_1 (PATIENT): I have thin bones.
+[SEG0018] person_2 (DOCTOR): Yes, carry on.
+[SEG0019] person_1 (PATIENT): Yes, high cholesterol.
+[SEG0020] person_2 (DOCTOR): And besides that?
+[SEG0021] person_2 (DOCTOR): Right, so thin bones is already on your record. We'll keep that in mind today. Alright, are there any illnesses in your family?
+[SEG0022] person_1 (PATIENT): Uh, my son has asthma.
+[SEG0023] person_2 (DOCTOR): Right, do you take any prescribed or over-the-counter medicines?
+[SEG0024] person_1 (PATIENT): Alendronate, 70 milligrams, once a week for my bones. Rosuvastatin. I take it 10 milligrams, at night.
+[SEG0025] person_3 (CAREGIVER): Doctor, I think the last prescription for the rosuvastatin was 20 milligrams. We changed it at the last visit.
+[SEG0026] person_2 (DOCTOR): Alright. Did you bring the up-to-date prescription?
+[SEG0027] person_1 (PATIENT): Erm, not with me. I'll bring it next time. Sorry, what was I saying, I'd been on atorvastatin, not any more though, I stopped.
+[SEG0028] person_2 (DOCTOR): Do you smoke?
+[SEG0029] person_1 (PATIENT): I've never touched a cigarette.
+[SEG0030] person_2 (DOCTOR): Do you follow any particular diet?
+[SEG0031] person_1 (PATIENT): I'm vegetarian and have been for years.
+[SEG0032] person_2 (DOCTOR): Anything you do to stay fit?
+[SEG0033] person_1 (PATIENT): I do a yoga class on Thursdays.
+[SEG0034] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0035] person_1 (PATIENT): No surgery, no.
+[SEG0036] person_2 (DOCTOR): Did you get sweating or tremor?
+[SEG0037] person_1 (PATIENT): No sweating or tremor, none of it.
+[SEG0038] person_2 (DOCTOR): A few quick ones: diarrhoea or heat intolerance?
+[SEG0039] person_1 (PATIENT): No diarrhoea or heat intolerance, none of it.
+[SEG0040] person_2 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0041] person_1 (PATIENT): Nothing unusual, no.
+[SEG0042] person_2 (DOCTOR): Anything different when you pass water?
+[SEG0043] person_1 (PATIENT): That's normal as far as I know.
+[SEG0044] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0045] person_2 (DOCTOR): That's it, just a little longer...
+[SEG0046] person_2 (DOCTOR): Okay: heart rate 104, blood pressure 132 over 74, oxygen saturation is 97 percent, temp 36.6 degrees.
+[SEG0047] person_2 (DOCTOR): Okay, shall I start the examination?
+[SEG0048] person_2 (DOCTOR): Stay as you are for a moment.
+[SEG0049] person_2 (DOCTOR): Your pulse is fast and irregular and the thyroid feels slightly enlarged.
+[SEG0050] person_2 (DOCTOR): Please sit back down.
+[SEG0051] person_2 (DOCTOR): From what you've told me and what I found, I can't pin this down yet. We're looking at an overactive thyroid with atrial fibrillation, in an apathetic older patient or a cancer. Just to be sure I understood. You've been losing weight, and no diarrhoea or heat intolerance.
+[SEG0052] person_1 (PATIENT): Mm, that's right.
+[SEG0053] person_2 (DOCTOR): I think a thyroid test makes sense here, for weight loss and irregular pulse.
+[SEG0054] person_1 (PATIENT): Is that done today?
+[SEG0055] person_2 (DOCTOR): We should do an ECG for irregular pulse. It is easy to miss in older people because they seem sleepy rather than hot and shaky. I think the endocrine clinic should see you too. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Let's review you after the results. I think we're done unless you have questions.
+[SEG0056] person_1 (PATIENT): Ah, okay, that makes sense. Thanks for explaining.
+[SEG0057] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

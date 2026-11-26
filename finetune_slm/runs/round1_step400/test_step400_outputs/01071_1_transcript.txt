@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01071)
+[SEG0001] person_1 (PATIENT): Okay, so hi, is it okay to come in now?
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): Well, uh, I've been having sudden hearing loss in one ear. I wasn't sure whether to come in at all, to be honest. I thought it would sort itself out, but it hasn't.
+[SEG0004] person_2 (DOCTOR): How long has this been bothering you?
+[SEG0005] person_1 (PATIENT): So, it's been ten days, I'm fairly sure. It's a relief to finally sit down and talk about it.
+[SEG0006] person_2 (DOCTOR): Have you had any dizziness, ear pain or facial weakness?
+[SEG0007] person_1 (PATIENT): No dizziness, ear pain or facial weakness, none of it.
+[SEG0008] person_2 (DOCTOR): Have you had any discharge?
+[SEG0009] person_1 (PATIENT): No, none, no discharge.
+[SEG0010] person_2 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0011] person_1 (PATIENT): Nothing odd there.
+[SEG0012] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0013] person_1 (PATIENT): Not to my knowledge, no.
+[SEG0014] person_2 (DOCTOR): Have you had any surgical procedures?
+[SEG0015] person_1 (PATIENT): I had my tonsils removed as a teenager. A neighbour of mine said I should see someone about it. I kept putting it off, which I know isn't sensible.
+[SEG0016] person_2 (DOCTOR): Do you take any regular medication?
+[SEG0017] person_1 (PATIENT): No, none.
+[SEG0018] person_2 (DOCTOR): And alcohol, how much?
+[SEG0019] person_1 (PATIENT): I only drink at family occasions.
+[SEG0020] person_2 (DOCTOR): Any smoking?
+[SEG0021] person_1 (PATIENT): I've never touched a cigarette.
+[SEG0022] person_2 (DOCTOR): So, do you follow any particular diet?
+[SEG0023] person_1 (PATIENT): I'm vegetarian and have been for years.
+[SEG0024] person_2 (DOCTOR): Are you active?
+[SEG0025] person_1 (PATIENT): I walk the dog every morning.
+[SEG0026] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0027] person_1 (PATIENT): No, I've always been fairly healthy.
+[SEG0028] person_3 (NURSE): Okay, so the vitals from earlier. Pulse 69, respiratory rate 16, temp 36.8 degrees, SpO2 99 percent on room air, BP is 124 over 77.
+[SEG0029] person_2 (DOCTOR): Thanks.
+[SEG0030] person_2 (DOCTOR): May I examine you now?
+[SEG0031] person_2 (DOCTOR): Nearly finished here.
+[SEG0032] person_2 (DOCTOR): The ear drum looks normal and the tuning fork is heard louder in the other ear.
+[SEG0033] person_2 (DOCTOR): Okay, good, you can sit up again.
+[SEG0034] person_2 (DOCTOR): Right, here's what I'm thinking. This is probably sudden hearing loss needing urgent treatment.
+[SEG0035] person_2 (DOCTOR): I want an urgent hearing test done, that's for sudden hearing loss.
+[SEG0036] person_1 (PATIENT): Right, understood.
+[SEG0037] person_2 (DOCTOR): I'm prescribing prednisolone, 60 milligrams, once a day, seven days. That's for sudden hearing loss. I'll put all of this in writing so you don't have to remember it. This is time-critical, so I'm starting treatment today. See me again in one week.
+[SEG0038] person_1 (PATIENT): Yes, that's manageable.
+[SEG0039] person_2 (DOCTOR): That's everything on my side. Anything you're unsure about?
+[SEG0040] person_1 (PATIENT): Alright, um, thanks, take care.
+[SEG0041] person_2 (DOCTOR): See you soon.
+
+JSON:

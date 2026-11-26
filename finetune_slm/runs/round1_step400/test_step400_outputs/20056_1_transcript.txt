@@ -1,0 +1,79 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20056)
+[SEG0001] person_1 (PATIENT): Hi, doctor, I came as soon as they called me.
+[SEG0002] person_2 (DOCTOR): Right, of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): I, I wanted to get a sore on the bottom of my foot looked at.
+[SEG0004] person_2 (DOCTOR): When did this begin?
+[SEG0005] person_1 (PATIENT): I've had it for two days.
+[SEG0006] person_2 (DOCTOR): Have you tried anything for it?
+[SEG0007] person_1 (PATIENT): Hmm, I get some relief from keeping off it.
+[SEG0008] person_2 (DOCTOR): What aggravates it, if anything?
+[SEG0009] person_1 (PATIENT): Walking definitely sets it off.
+[SEG0010] person_2 (DOCTOR): Would you say mild, moderate or severe?
+[SEG0011] person_1 (PATIENT): Mostly severe.
+[SEG0012] person_2 (DOCTOR): Okay, any other symptoms with it?
+[SEG0013] person_1 (PATIENT): Numbness in my feet goes along with it, um, most of the time. The numbness in my feet? That's been for two weeks.
+[SEG0014] person_2 (DOCTOR): How strong would you say it is?
+[SEG0015] person_1 (PATIENT): Mostly severe.
+[SEG0016] person_2 (DOCTOR): Alright, have you had redness around the sore?
+[SEG0017] person_1 (PATIENT): Yes, uh, I have.
+[SEG0018] person_2 (DOCTOR): Let me check a few things. Any vomiting or pain at rest in the leg?
+[SEG0019] person_1 (PATIENT): No vomiting or pain at rest in the leg, none of it.
+[SEG0020] person_2 (DOCTOR): And what about chest pain, confusion or black toes?
+[SEG0021] person_1 (PATIENT): So, no, no chest pain, confusion or black toes.
+[SEG0022] person_2 (DOCTOR): Okay, has your heart given you any trouble?
+[SEG0023] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0024] person_2 (DOCTOR): How are your bowels, any trouble?
+[SEG0025] person_1 (PATIENT): Bowels are regular, nothing odd.
+[SEG0026] person_2 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0027] person_1 (PATIENT): Um, I take glimepiride, 2 milligrams, maybe, before breakfast.
+[SEG0028] person_2 (DOCTOR): Do you have the packet or the prescription with you?
+[SEG0029] person_1 (PATIENT): No, it's at home. It's rosuvastatin, 10 milligrams, at night for my cholesterol. Losartan, 50 milligrams, once a day. I'm, I'm on aspirin, 75 milligrams, once a day.
+[SEG0030] person_2 (DOCTOR): What about your medical history?
+[SEG0031] person_1 (PATIENT): I have diabetes. Yes, high cholesterol. Mm, I have high blood pressure. I've been putting this off for weeks. I thought it would sort itself out, but it hasn't. I have heart disease.
+[SEG0032] person_2 (DOCTOR): Okay, I can see high cholesterol in your file as well.
+[SEG0033] person_2 (DOCTOR): Any surgery in the past?
+[SEG0034] person_1 (PATIENT): I, I had a triple bypass eight years ago.
+[SEG0035] person_2 (DOCTOR): Have you got any known allergies?
+[SEG0036] person_1 (PATIENT): Yes, nickel, it gives me a rash on my skin.
+[SEG0037] person_2 (DOCTOR): Is there someone at home?
+[SEG0038] person_1 (PATIENT): My husband and I live above the shop.
+[SEG0039] person_2 (DOCTOR): How active are you?
+[SEG0040] person_1 (PATIENT): I hardly move around during the day.
+[SEG0041] person_2 (DOCTOR): Have you retired yet?
+[SEG0042] person_1 (PATIENT): I retired from the post office two years ago.
+[SEG0043] person_2 (DOCTOR): Shall I check your blood pressure and pulse?
+[SEG0044] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0045] person_2 (DOCTOR): Okay: temperature 39.3, BMI works out to 22.8, pulse is 93 beats a minute. And SpO2 97 percent on room air, height 174 centimetres, respiratory rate 18, pressure 117 over 80, weight 69 kilos.
+[SEG0046] person_1 (PATIENT): Actually, is that alright, doctor?
+[SEG0047] person_2 (DOCTOR): I'll interpret them after the examination.
+[SEG0048] person_2 (DOCTOR): Let's move on to the examination.
+[SEG0049] person_2 (DOCTOR): I'm just checking this side.
+[SEG0050] person_2 (DOCTOR): There is a two-centimetre ulcer on the ball of the right foot with redness around it.
+[SEG0051] person_2 (DOCTOR): Look straight ahead.
+[SEG0052] person_2 (DOCTOR): The pulses at the ankle are weak but I can feel them.
+[SEG0053] person_2 (DOCTOR): That's all I needed to check.
+[SEG0054] person_2 (DOCTOR): Let me tell you where I've got to. The most likely explanation is an infected diabetic foot ulcer. That's my thinking for now, and it may change as we learn more.
+[SEG0055] person_1 (PATIENT): I'm scared it's something bad. Is it?
+[SEG0056] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's an infected diabetic foot ulcer, and we'll know more once the a swab from the ulcer is back.
+[SEG0057] person_2 (DOCTOR): I think a swab from the ulcer makes sense here, for infected ulcer. I think blood tests makes sense here, for infection. That will help us see what's going on underneath and decide the next step.
+[SEG0058] person_1 (PATIENT): Where would I go for that?
+[SEG0059] person_2 (DOCTOR): We'll begin with amoxicillin/clavulanic acid, 625 milligrams, three times a day, for seven days. You take it by mouth. That's for foot infection.
+[SEG0060] person_1 (PATIENT): Should I carry on if I feel better?
+[SEG0061] person_2 (DOCTOR): Keep the weight off that foot and keep the dressing dry. We'll refer you to the foot clinic.
+[SEG0062] person_1 (PATIENT): Actually, sure, where do I go?
+[SEG0063] person_2 (DOCTOR): And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. So, anything else on your mind before you go?
+[SEG0064] person_1 (PATIENT): That's clear, thanks.
+
+JSON:

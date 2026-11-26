@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00129)
+[SEG0001] person_1 (PATIENT): Hello, um, doctor. Where would you like me?
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_3 (CAREGIVER): Thank you for fitting us in, doctor.
+[SEG0004] person_4 (FAMILY_MEMBER): She's been having occasional nausea, doctor.
+[SEG0005] person_2 (DOCTOR): How long has this been going on?
+[SEG0006] person_1 (PATIENT): Ever since... since last Tuesday, really.
+[SEG0007] person_2 (DOCTOR): On a normal day, how strong is it?
+[SEG0008] person_1 (PATIENT): A six out of ten, uh, I suppose.
+[SEG0009] person_1 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0010] person_4 (FAMILY_MEMBER): I mean, tell the doctor about the other thing, that's what worries me.
+[SEG0011] person_1 (PATIENT): Okay, so I was getting to that! And, And blurry vision at times, too.
+[SEG0012] person_2 (DOCTOR): On a normal day, how strong is it?
+[SEG0013] person_1 (PATIENT): It's moderate, honestly.
+[SEG0014] person_2 (DOCTOR): Let me check a few things. Any weakness, jaw pain on chewing or fever?
+[SEG0015] person_1 (PATIENT): No, uh, no weakness, no jaw pain on chewing, no fever. I did have pressure behind the eyes at one point, but that went away on its own.
+[SEG0016] person_2 (DOCTOR): Let me check a few things. Any confusion, seizures or head injury?
+[SEG0017] person_1 (PATIENT): None, as far as I know.
+[SEG0018] person_2 (DOCTOR): Has your skin been okay?
+[SEG0019] person_1 (PATIENT): Skin's normal.
+[SEG0020] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0021] person_1 (PATIENT): Uh, I have high blood pressure, for five years. Uh, I've had heart failure for nearly five years now. I've had low haemoglobin for two years now. Right, um, I've had anxiety, yes.
+[SEG0022] person_2 (DOCTOR): Hm, okay. Right, so anxiety is already on your record. We'll keep that in mind today.
+[SEG0023] person_2 (DOCTOR): Do you have any allergies to medicines, food, anything at all?
+[SEG0024] person_1 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0025] person_2 (DOCTOR): Do you get any exercise?
+[SEG0026] person_1 (PATIENT): I walk for about half an hour most days.
+[SEG0027] person_2 (DOCTOR): Are you living with family?
+[SEG0028] person_1 (PATIENT): I stay with my daughter and her family.
+[SEG0029] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0030] person_1 (PATIENT): It's a... um, I can't remember what it's called. It's a small white one.
+[SEG0031] person_2 (DOCTOR): Do you remember what it's for?
+[SEG0032] person_1 (PATIENT): For the fluid, I believe. My daughter sets them out for me, I just take what I'm given. I'm on iron tablets, once a day. Escitalopram, 10 milligrams, once a day. Well, it's paracetamol, 500 milligrams, when it hurts. Telmisartan I don't take anymore.
+[SEG0033] person_2 (DOCTOR): Do your parents or siblings have any long-term illnesses?
+[SEG0034] person_1 (PATIENT): My mother has migraines.
+[SEG0035] person_2 (DOCTOR): Before we go on, a few quick readings.
+[SEG0036] person_2 (DOCTOR): One second...
+[SEG0037] person_2 (DOCTOR): Okay: oxygen saturation is 98 percent, blood pressure 127 over 71, pulse 64.
+[SEG0038] person_2 (DOCTOR): Can I examine you now?
+[SEG0039] person_2 (DOCTOR): Let me look at this properly.
+[SEG0040] person_2 (DOCTOR): Power and reflexes are equal on both sides.
+[SEG0041] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0042] person_2 (DOCTOR): Visual fields are full to confrontation and the optic discs look normal.
+[SEG0043] person_1 (PATIENT): Yes, doctor.
+[SEG0044] person_2 (DOCTOR): Okay, finished. So where does that leave us? I think we're dealing with a headache disorder of uncertain type at this stage. I can't rule out a secondary headache we should exclude yet. Note down each headache with the date, time and what you were doing. See me again after the scan. Okay, we're done for today. Take care.
+[SEG0045] person_1 (PATIENT): Thanks so much, doctor.
+
+JSON:

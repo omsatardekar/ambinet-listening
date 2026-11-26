@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02321)
+[SEG0001] person_1 (DOCTOR): Right then, come on in. Have you been waiting long?
+[SEG0002] person_2 (PATIENT): Only about ten minutes, no trouble.
+[SEG0003] person_1 (DOCTOR): Tell me what's brought you in.
+[SEG0004] person_2 (PATIENT): I've been dealing with a very fast heartbeat.
+[SEG0005] person_1 (DOCTOR): Alright, how long has this been bothering you?
+[SEG0006] person_2 (PATIENT): It's been about a month, I'm fairly sure.
+[SEG0007] person_1 (DOCTOR): Rate it for me, mild, moderate or severe?
+[SEG0008] person_2 (PATIENT): Oh, about a five out of ten.
+[SEG0009] person_1 (DOCTOR): Has there been agitation too?
+[SEG0010] person_2 (PATIENT): Yes, actually.
+[SEG0011] person_1 (DOCTOR): So, I'll do your observations first.
+[SEG0012] person_1 (DOCTOR): Okay, this won't take long...
+[SEG0013] person_1 (DOCTOR): Okay: pressure 111 over 69, respiratory rate 16. And weight 62 kilos, height 169 centimetres, heart rate 95, temperature is 39.0 degrees. Any chest pain or recent infection at all?
+[SEG0014] person_2 (PATIENT): Let me think, I haven't had chest pain or recent infection, no.
+[SEG0015] person_1 (DOCTOR): Right, right. Neurologically, anything strange?
+[SEG0016] person_2 (PATIENT): No weakness or anything.
+[SEG0017] person_1 (DOCTOR): Is your mobility otherwise okay?
+[SEG0018] person_2 (PATIENT): No, nothing there.
+[SEG0019] person_1 (DOCTOR): Are you on any regular medication?
+[SEG0020] person_2 (PATIENT): No, I don't take any tablets.
+[SEG0021] person_1 (DOCTOR): Do you work outside the home?
+[SEG0022] person_2 (PATIENT): I'm a hairdresser, on my feet all day.
+[SEG0023] person_1 (DOCTOR): Are you active?
+[SEG0024] person_2 (PATIENT): I walk the dog every morning.
+[SEG0025] person_1 (DOCTOR): Do you live by yourself?
+[SEG0026] person_2 (PATIENT): No, I share a house with my brother.
+[SEG0027] person_1 (DOCTOR): Any allergies to tablets, food or anything in the environment?
+[SEG0028] person_2 (PATIENT): Oh, I'm allergic to cat fur, I get sneezing.
+[SEG0029] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0030] person_2 (PATIENT): No, never.
+[SEG0031] person_1 (DOCTOR): Alright, has anyone in your family had anything serious?
+[SEG0032] person_2 (PATIENT): My cousin has psoriasis.
+[SEG0033] person_1 (DOCTOR): So, do you have any medical conditions I should know about?
+[SEG0034] person_2 (PATIENT): Not really, no.
+[SEG0035] person_1 (DOCTOR): Listening to the whole story, it points towards a thyroid storm.
+[SEG0036] person_2 (PATIENT): I'm scared it's something bad. Is it?
+[SEG0037] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a thyroid storm, but I'd like to confirm. Stop me if I've got anything wrong. You've had a very fast heartbeat for about a month, and no recent infection or chest pain.
+[SEG0038] person_2 (PATIENT): Right, that's what happened, yes.
+[SEG0039] person_1 (DOCTOR): We should do an ECG for fast heart rhythm.
+[SEG0040] person_3 (CLINICAL_STAFF): We have a slot Tuesday at 2 pm, if that works.
+[SEG0041] person_1 (DOCTOR): We'll begin with propranolol, 1 milligrams, now, single dose. That should help with thyroid storm. This is an emergency, you will be treated in high dependency. I'll also refer you to the emergency team. Book a review straight away.
+[SEG0042] person_2 (PATIENT): Sure.
+[SEG0043] person_1 (DOCTOR): Anything else on your mind before you go?
+[SEG0044] person_2 (PATIENT): Right, uh, I'll do that. Thank you, doctor.
+
+JSON:

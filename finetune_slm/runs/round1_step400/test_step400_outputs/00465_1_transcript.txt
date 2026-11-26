@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00465)
+[SEG0001] person_1 (PATIENT): Afternoon, doctor.
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): So, you know, doctor, I've come along because I know the history, if it helps.
+[SEG0004] person_2 (DOCTOR): Yes, that's no problem at all. Please sit.
+[SEG0005] person_1 (PATIENT): Um, so... heartburn. That's why I came.
+[SEG0006] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0007] person_1 (PATIENT): It's, It's Seretide inhaler, twice a day.
+[SEG0008] person_2 (DOCTOR): How long has that been going on?
+[SEG0009] person_1 (PATIENT): For six months. It's ramipril, 5 milligrams, every morning. It's Digene, when it burns. Before this I was on amlodipine; that's been stopped.
+[SEG0010] person_2 (DOCTOR): Right, since when have you had this?
+[SEG0011] person_1 (PATIENT): Probably about a month. Yeah. I wasn't sure whether to come in at all, to be honest.
+[SEG0012] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0013] person_1 (PATIENT): It's severe, honestly. Antacids helps a bit. I notice it more with big meals. A lump feeling in the throat was there, uh, but it's gone away on its own.
+[SEG0014] person_2 (DOCTOR): And trouble swallowing, any of that?
+[SEG0015] person_1 (PATIENT): Okay, so not at all, no trouble swallowing.
+[SEG0016] person_2 (DOCTOR): Did you get anaemia, black stools or pain on exertion?
+[SEG0017] person_1 (PATIENT): I haven't had anaemia, black stools or pain on exertion, no.
+[SEG0018] person_2 (DOCTOR): I follow. Anything different when you pass water?
+[SEG0019] person_1 (PATIENT): Nothing there, no.
+[SEG0020] person_2 (DOCTOR): So, any muscle or joint problems besides this?
+[SEG0021] person_1 (PATIENT): No, uh, nothing there.
+[SEG0022] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0023] person_1 (PATIENT): Asthma, for two years. I've got high blood pressure.
+[SEG0024] person_2 (DOCTOR): Okay, I can see asthma in your file as well. Do you have any allergies to medicines, food, anything at all?
+[SEG0025] person_1 (PATIENT): Okay, so no, no allergies to anything.
+[SEG0026] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0027] person_1 (PATIENT): No, nothing like that.
+[SEG0028] person_2 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0029] person_1 (PATIENT): My mother has migraines.
+[SEG0030] person_2 (DOCTOR): Who's at home with you?
+[SEG0031] person_1 (PATIENT): It's just me and my wife at home now.
+[SEG0032] person_2 (DOCTOR): How do you eat, generally?
+[SEG0033] person_1 (PATIENT): I skip breakfast most days.
+[SEG0034] person_2 (DOCTOR): So, are you working at the moment?
+[SEG0035] person_1 (PATIENT): Yes, I'm a nurse on a busy ward.
+[SEG0036] person_2 (DOCTOR): Let me measure a few things.
+[SEG0037] person_2 (DOCTOR): Hold still for me...
+[SEG0038] person_2 (DOCTOR): Okay: heart rate 67, temp 36.4 degrees, saturation 97 percent. And pressure 122 over 72.
+[SEG0039] person_2 (DOCTOR): I'd like to examine you now.
+[SEG0040] person_2 (DOCTOR): Just relax, I'll be quick.
+[SEG0041] person_2 (DOCTOR): Tummy is soft and non-tender.
+[SEG0042] person_2 (DOCTOR): All done, you can get dressed.
+[SEG0043] person_2 (DOCTOR): We should do an ECG for chest discomfort. I'd rather check than guess, and this is the quickest way to know more.
+[SEG0044] person_1 (PATIENT): Oh, you know, how long does that take?
+[SEG0045] person_2 (DOCTOR): Let's get an upper endoscopy, for persistent reflux. I'd rather check than guess, and this is the quickest way to know more. For this, esomeprazole, 40 milligrams, before breakfast, for eight weeks. You take it by mouth. That's for reflux. Smaller dinners, earlier in the evening, and prop up the head of the bed with a couple of extra pillows. Right, that's all. Go gently.
+[SEG0046] person_1 (PATIENT): Yeah, you know, thanks, that was helpful.
+[SEG0047] person_2 (DOCTOR): Bye for now.
+
+JSON:

@@ -1,0 +1,48 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20098)
+[SEG0001] person_1 (PATIENT): hello, doctor i think it's my turn
+[SEG0002] person_2 (DOCTOR): no problem at all, come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): I wanted to get a bump on my head looked at
+[SEG0004] person_2 (DOCTOR): Let me take your readings now.
+[SEG0005] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0006] person_2 (DOCTOR): Okay: heart rate 78, oxygen saturation is 97 percent. And pressure 115 over 72, respiratory rate 15, temperature is 36.5 degrees. How long has it been like this?
+[SEG0007] person_1 (PATIENT): Mm, it's been like this since last night. I'd rather know what's going on than keep guessing. I've been putting this off for weeks.
+[SEG0008] person_2 (DOCTOR): I follow
+[SEG0009] person_1 (PATIENT): Oh, and a bit of nausea. That's been about the same, two weeks. With bit of nausea, it's severe, honestly.
+[SEG0010] person_2 (DOCTOR): Any confusion, double vision or vomiting?
+[SEG0011] person_1 (PATIENT): No confusion, double vision or vomiting, none of it.
+[SEG0012] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0013] person_1 (PATIENT): no, skin's been fine
+[SEG0014] person_2 (DOCTOR): Is there any regular medication you use?
+[SEG0015] person_1 (PATIENT): No, none.
+[SEG0016] person_2 (DOCTOR): Are you allergic to anything? Any allergies to medicines or foods?
+[SEG0017] person_1 (PATIENT): not to my knowledge, no
+[SEG0018] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0019] person_1 (PATIENT): no, um, nothing at all
+[SEG0020] person_2 (DOCTOR): How active are you?
+[SEG0021] person_1 (PATIENT): I hardly move around during the day.
+[SEG0022] person_2 (DOCTOR): Is there someone at home?
+[SEG0023] person_1 (PATIENT): My husband and I live above the shop.
+[SEG0024] person_2 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0025] person_2 (DOCTOR): alright, stay as you are for a moment
+[SEG0026] person_2 (DOCTOR): There is a small bruise on the forehead, the pupils are equal and reactive, and you are walking steadily.
+[SEG0027] person_1 (PATIENT): Yeah, no problem.
+[SEG0028] person_2 (DOCTOR): Thank you, you can get dressed. Okay, so my impression is this: The most likely explanation is a minor head injury without worrying signs.
+[SEG0029] person_2 (DOCTOR): I'm prescribing paracetamol, 1 gram, every six hours if needed, for three days. You take it by mouth. That should help with headache. Someone should stay with you tonight, and no alcohol or contact sport for now. Keep an eye out, and if you vomit repeatedly, become drowsy or confused, or have a fit, call us the same day or go to emergency.
+[SEG0030] person_1 (PATIENT): Thank you, um, that's clear.
+[SEG0031] person_2 (DOCTOR): Come back if the headache gets worse. Okay, anything else on your mind before you go?
+[SEG0032] person_1 (PATIENT): right, I'll do that thank you, doctor
+[SEG0033] person_2 (DOCTOR): goodbye for now
+
+JSON:

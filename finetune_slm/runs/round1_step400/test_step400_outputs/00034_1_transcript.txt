@@ -1,0 +1,70 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00034)
+[SEG0001] person_1 (PATIENT): Excuse me, doctor, should I sit here?
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_3 (CAREGIVER): doctor, I've come along because I know the history, if it helps
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to have you here.
+[SEG0005] person_3 (CAREGIVER): We came because of yellow eyes.
+[SEG0006] person_2 (DOCTOR): Let me measure a few things.
+[SEG0007] person_2 (DOCTOR): Hold still for me...
+[SEG0008] person_2 (DOCTOR): okay: temperature 36.9, BP is 120 over 77, pulse 76, saturation 99 percent
+[SEG0009] person_1 (PATIENT): is that normal?
+[SEG0010] person_2 (DOCTOR): That's fine, we'll come to it. And when did that start?
+[SEG0011] person_1 (PATIENT): For about a month, I'd say.
+[SEG0012] person_2 (DOCTOR): anything that tends to go along with it?
+[SEG0013] person_1 (PATIENT): It usually comes with itching all over. Oh, and pale stools. That's been about the same, about two weeks. The itching all over? That's been for five days. There was a dull ache on the right side of the tummy, yes, but that went away.
+[SEG0014] person_2 (DOCTOR): Let me check a few things. Any vomiting blood, swelling of the tummy, confusion or black stools?
+[SEG0015] person_1 (PATIENT): No vomiting blood, swelling of the tummy, confusion or black stools, none of it.
+[SEG0016] person_2 (DOCTOR): how about fever?
+[SEG0017] person_1 (PATIENT): I haven't noticed any fever.
+[SEG0018] person_2 (DOCTOR): your breathing, any trouble there?
+[SEG0019] person_1 (PATIENT): No problems with breathing.
+[SEG0020] person_2 (DOCTOR): How's your diet?
+[SEG0021] person_1 (PATIENT): I'm mostly vegetarian
+[SEG0022] person_2 (DOCTOR): are you living with family?
+[SEG0023] person_1 (PATIENT): I stay with my daughter and her family.
+[SEG0024] person_2 (DOCTOR): moving on to your background, any past medical history?
+[SEG0025] person_1 (PATIENT): I've had high cholesterol for five years now
+[SEG0026] person_2 (DOCTOR): Hm, okay.
+[SEG0027] person_1 (PATIENT): Um, I have diabetes, for two years.
+[SEG0028] person_2 (DOCTOR): Yes?
+[SEG0029] person_2 (DOCTOR): alright, diabetes, that matches what I have here
+[SEG0030] person_2 (DOCTOR): Any previous surgeries?
+[SEG0031] person_1 (PATIENT): No, nothing like that.
+[SEG0032] person_2 (DOCTOR): which tablets or creams or inhalers do you use?
+[SEG0033] person_1 (PATIENT): Atorvastatin. I take it 20 milligrams, at night.
+[SEG0034] person_3 (CAREGIVER): Doctor, I think the last prescription for the atorvastatin was 10 milligrams. We changed it at the last visit.
+[SEG0035] person_2 (DOCTOR): Okay. Have you got the newest prescription or the box with you?
+[SEG0036] person_1 (PATIENT): No, I left it at home. Metformin, 500 milligrams, twice a day.
+[SEG0037] person_2 (DOCTOR): Roughly how long on that one?
+[SEG0038] person_1 (PATIENT): About about three months.
+[SEG0039] person_2 (DOCTOR): Right, let me check a few things physically.
+[SEG0040] person_2 (DOCTOR): let me look at this properly
+[SEG0041] person_2 (DOCTOR): The whites of your eyes are yellow.
+[SEG0042] person_1 (PATIENT): yes, doctor
+[SEG0043] person_2 (DOCTOR): take your time, no rush
+[SEG0044] person_2 (DOCTOR): Liver edge is just palpable and mildly tender.
+[SEG0045] person_2 (DOCTOR): That's all I need, thank you. From what you've told me and what I found, I think we're dealing with jaundice with a cause we still need to find at this stage. It could also be a gallstone blocking the bile duct, so so we'll keep that open.
+[SEG0046] person_1 (PATIENT): What are the chances it's something bad?
+[SEG0047] person_2 (DOCTOR): I can't promise yet, but most people with jaundice with a cause we still need to find do well once it's treated properly. Let's book liver function tests to look into jaundice.
+[SEG0048] person_1 (PATIENT): Mm, okay.
+[SEG0049] person_2 (DOCTOR): I want a hepatitis screen done, that's for jaundice. I'd rather check than guess, and this is the quickest way to know more. Please avoid alcohol completely and don't take any painkillers except paracetamol, and not much of that. Let's get you seen by a liver specialist, I'll arrange the letter. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose
+[SEG0050] person_1 (PATIENT): so, um, got it, thank you
+[SEG0051] person_2 (DOCTOR): come back or go to emergency straight away if you vomit blood or become drowsy or confused
+[SEG0052] person_1 (PATIENT): understood
+[SEG0053] person_2 (DOCTOR): Alright, I'll see you out.
+[SEG0054] person_1 (PATIENT): I think that's clear. Thank you for being so thorough.
+[SEG0055] person_2 (DOCTOR): See you then.
+
+JSON:

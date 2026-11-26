@@ -1,0 +1,71 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20315)
+[SEG0001] person_1 (PATIENT): Hi, is it okay to come in now?
+[SEG0002] person_2 (DOCTOR): Yes, have a seat. Tell me what's going on.
+[SEG0003] person_3 (FAMILY_MEMBER): Thank you for fitting us in, doctor. Actually, doctor, it's pain after sitting for a while. That's what we're worried about.
+[SEG0004] person_2 (DOCTOR): Since when exactly?
+[SEG0005] person_1 (PATIENT): Around a week, I think.
+[SEG0006] person_3 (FAMILY_MEMBER): It was closer to two weeks, uh, doctor.
+[SEG0007] person_2 (DOCTOR): Okay, so roughly one to two weeks. Is that right?
+[SEG0008] person_1 (PATIENT): Oh, that sounds about right.
+[SEG0009] person_2 (DOCTOR): Is it bearing on you a lot?
+[SEG0010] person_1 (PATIENT): Mild, really. And an ache along the arch, too. Okay, so there was a tight calf, yes, but that went away.
+[SEG0011] person_2 (DOCTOR): Have you had pain after sitting for a while before, or is this the first time?
+[SEG0012] person_1 (PATIENT): I had a similar thing last winter. It went away.
+[SEG0013] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0014] person_3 (FAMILY_MEMBER): He is on propranolol, twice a day, I give it to him.
+[SEG0015] person_2 (DOCTOR): Do you know the dose?
+[SEG0016] person_3 (FAMILY_MEMBER): It's 40 milligrams.
+[SEG0017] person_2 (DOCTOR): Is that long-standing?
+[SEG0018] person_3 (FAMILY_MEMBER): About two years. Right, it's aspirin, 75 milligrams, once a day for my heart, doctor. He is on insoles, every day, I give it to him.
+[SEG0019] person_2 (DOCTOR): Is that long-standing?
+[SEG0020] person_3 (FAMILY_MEMBER): For six months.
+[SEG0021] person_2 (DOCTOR): What line of work are you in?
+[SEG0022] person_1 (PATIENT): I'm a bus driver, so I sit for long hours.
+[SEG0023] person_2 (DOCTOR): Do you live by yourself?
+[SEG0024] person_1 (PATIENT): No, I share a house with my brother.
+[SEG0025] person_2 (DOCTOR): Okay, how are your meals?
+[SEG0026] person_1 (PATIENT): I grab fast food at lunch most days.
+[SEG0027] person_2 (DOCTOR): Tell me about any past illnesses or ongoing conditions.
+[SEG0028] person_1 (PATIENT): I have migraines, for about a year. I've had heart disease, yes.
+[SEG0029] person_2 (DOCTOR): Have you ever had an operation?
+[SEG0030] person_1 (PATIENT): Just a triple bypass, eight years ago.
+[SEG0031] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0032] person_1 (PATIENT): Um, yes, grass pollen, it gives me itchy eyes.
+[SEG0033] person_2 (DOCTOR): And what about fever, injury or numbness in the foot?
+[SEG0034] person_1 (PATIENT): Sorry, what was I saying, no, none of those at all.
+[SEG0035] person_2 (DOCTOR): Any swelling or back pain at all?
+[SEG0036] person_1 (PATIENT): Um, no, nothing to report there.
+[SEG0037] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0038] person_1 (PATIENT): Right, no problems with breathing.
+[SEG0039] person_2 (DOCTOR): Let me take your readings now.
+[SEG0040] person_2 (DOCTOR): Sit still for a moment...
+[SEG0041] person_2 (DOCTOR): Okay: pulse is 68 beats a minute, saturation 98 percent. And pressure 128 over 76, temp 36.7 degrees.
+[SEG0042] person_1 (PATIENT): Is that alright, doctor?
+[SEG0043] person_2 (DOCTOR): I'll explain what these mean in a moment.
+[SEG0044] person_2 (DOCTOR): I'll examine you in a second, make yourself comfortable.
+[SEG0045] person_2 (DOCTOR): Let me feel here.
+[SEG0046] person_2 (DOCTOR): There is a sore spot at the inner front of the heel bone and pulling the toes back makes it worse.
+[SEG0047] person_2 (DOCTOR): You can sit up now.
+[SEG0048] person_2 (DOCTOR): Putting it all together, it fits best with plantar fasciitis. It could also be a stress fracture, so we'll keep that open. So, to recap quickly. You've had pain after sitting for a while, mild, and no numbness in the foot or fever.
+[SEG0049] person_1 (PATIENT): Right, that's what happened, yes.
+[SEG0050] person_2 (DOCTOR): We should do a foot X-ray for heel pain.
+[SEG0051] person_1 (PATIENT): Mm, alright.
+[SEG0052] person_2 (DOCTOR): What I'm giving you is ibuprofen gel, three times a day, for two weeks. That should help with heel pain. Stretch the calf and the sole of the foot before getting out of bed and wear cushioned shoes. The thing that would worry me is if the symptoms get worse. If that happens, go to emergency. Please come and see me in six weeks.
+[SEG0053] person_1 (PATIENT): Good, I'll return then.
+[SEG0054] person_2 (DOCTOR): I think we're done unless you have questions.
+[SEG0055] person_1 (PATIENT): That's clear, you know, thanks.
+[SEG0056] person_2 (DOCTOR): All the best.
+
+JSON:

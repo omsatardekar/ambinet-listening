@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00213)
+[SEG0001] person_1 (PATIENT): Good evening, doctor, thank you for staying late.
+[SEG0002] person_2 (DOCTOR): That's alright, take a seat. Tell me why you've come.
+[SEG0003] person_1 (PATIENT): Doctor, it's blood on the toilet paper. It's getting on my nerves now.
+[SEG0004] person_2 (DOCTOR): How far back does it go? Just so I get the full picture.
+[SEG0005] person_1 (PATIENT): About... well, six months.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): Yes, hard stools. That makes it worse. Mostly moderate.
+[SEG0008] person_2 (DOCTOR): Now some background about your lifestyle.
+[SEG0009] person_1 (PATIENT): A beer or two most evenings, to be honest. I smoke, yes, around five a day. Not really, I don't get much exercise. I share a flat with two friends. I'm a self-employed electrician.
+[SEG0010] person_2 (DOCTOR): Do you have any allergies to medicines, food, anything at all?
+[SEG0011] person_1 (PATIENT): I don't have any known medication allergies.
+[SEG0012] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0013] person_1 (PATIENT): I have low haemoglobin, for nearly five years.
+[SEG0014] person_2 (DOCTOR): Yes, low haemoglobin is known to us, good to have that clear.
+[SEG0015] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0016] person_1 (PATIENT): Iron tablets. I take it once a day for my blood count. It's Anovate cream, twice a day.
+[SEG0017] person_2 (DOCTOR): Any previous surgeries?
+[SEG0018] person_1 (PATIENT): I had a lump removed from my back years ago.
+[SEG0019] person_2 (DOCTOR): Do your parents or siblings have any long-term illnesses?
+[SEG0020] person_1 (PATIENT): My mother had high blood pressure.
+[SEG0021] person_2 (DOCTOR): Have you had any abdominal pain, change in bowel habit or fever?
+[SEG0022] person_1 (PATIENT): No. None of those.
+[SEG0023] person_2 (DOCTOR): Okay, any problems with your joints or muscles?
+[SEG0024] person_1 (PATIENT): No, nothing there.
+[SEG0025] person_2 (DOCTOR): Okay, any rashes or skin problems otherwise?
+[SEG0026] person_1 (PATIENT): No rashes.
+[SEG0027] person_2 (DOCTOR): First the numbers, if you don't mind.
+[SEG0028] person_2 (DOCTOR): One second...
+[SEG0029] person_2 (DOCTOR): Okay: respiratory rate 16, blood pressure 111 over 73, saturation 97 percent, pulse 80, temp 36.4 degrees.
+[SEG0030] person_1 (PATIENT): Is that alright, doctor?
+[SEG0031] person_2 (DOCTOR): Right, I'll come back to those numbers.
+[SEG0032] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0033] person_1 (PATIENT): Sure.
+[SEG0034] person_2 (DOCTOR): Let me look at this properly.
+[SEG0035] person_2 (DOCTOR): Tummy is soft and non-tender.
+[SEG0036] person_2 (DOCTOR): Let me look at this properly.
+[SEG0037] person_2 (DOCTOR): There's a small external pile at the edge, and I don't see any fissure.
+[SEG0038] person_2 (DOCTOR): Thanks, please take a seat again. Let me tell you where I've got to. My working impression is haemorrhoids. The reason I say that is that your story and my examination fit together. Let's get blood tests, for rectal bleeding. For this, a soothing cream, twice a day, for one week. It's for haemorrhoids. Soak in a warm bath for ten minutes after you pass stool, and don't strain. Let's review you after the results are back.
+[SEG0039] person_2 (DOCTOR): Alright, I'll see you out.
+[SEG0040] person_1 (PATIENT): Yeah, nothing more from me, thanks.
+[SEG0041] person_2 (DOCTOR): All the best.
+
+JSON:

@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00143)
+[SEG0001] person_1 (NURSE): Doctor, this one's ready for you. Everything's on the chart, but I'll go through it.
+[SEG0002] person_2 (DOCTOR): Thank you. Right, hello, what's the problem?
+[SEG0003] person_3 (PATIENT): So the thing is, I've got severe pain in my right side that comes in waves. It's the not knowing that gets to me.
+[SEG0004] person_2 (DOCTOR): Alright, roughly when did it start?
+[SEG0005] person_3 (PATIENT): Okay, so it's been two weeks now.
+[SEG0006] person_2 (DOCTOR): How would you describe it, mild, moderate, severe?
+[SEG0007] person_3 (PATIENT): It's severe, honestly. There's nausea as well.
+[SEG0008] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0009] person_3 (PATIENT): Oh, it's a couple of times a week. Pretty severe, if I'm being honest. I've also had restlessness, I can't sit still, for three days.
+[SEG0010] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0011] person_3 (PATIENT): No allergies that I know of, no.
+[SEG0012] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0013] person_3 (PATIENT): Hmm, um, I've had gout for five years now. Yes, heart disease.
+[SEG0014] person_2 (DOCTOR): Okay, I can see gout in your file as well.
+[SEG0015] person_2 (DOCTOR): Are you living with family?
+[SEG0016] person_3 (PATIENT): I stay with my daughter and her family.
+[SEG0017] person_2 (DOCTOR): Do you exercise at all?
+[SEG0018] person_3 (PATIENT): I go to the gym a couple of times a week.
+[SEG0019] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0020] person_3 (PATIENT): Allopurinol, 100 milligrams, once a day. I'm supposed to take it regularly, but I don't always manage. Clopidogrel. I take it once a day.
+[SEG0021] person_2 (DOCTOR): So, and what strength is that?
+[SEG0022] person_3 (PATIENT): 75 milligrams, I think that's what's on the box.
+[SEG0023] person_2 (DOCTOR): Okay, so. Any surgery in your history?
+[SEG0024] person_3 (PATIENT): Just a bypass operation, six years ago.
+[SEG0025] person_2 (DOCTOR): Does anything run in the family?
+[SEG0026] person_3 (PATIENT): My sister has thyroid problems.
+[SEG0027] person_2 (DOCTOR): Any previous kidney stones, testicular pain or burning when passing urine at all?
+[SEG0028] person_3 (PATIENT): No, uh, no previous kidney stones, testicular pain or burning when passing urine.
+[SEG0029] person_2 (DOCTOR): Any difficulty passing urine or vomiting at all?
+[SEG0030] person_3 (PATIENT): Hmm, I haven't had difficulty passing urine or vomiting, no.
+[SEG0031] person_2 (DOCTOR): Right, anything with your heart, like skipped beats or fainting?
+[SEG0032] person_3 (PATIENT): My heart's been fine, as far as I know.
+[SEG0033] person_2 (DOCTOR): Your breathing, any trouble there?
+[SEG0034] person_3 (PATIENT): Breathing's normal.
+[SEG0035] person_1 (NURSE): Here are the numbers, doctor. BMI works out to 30.1, temp 36.9 degrees, weight 79 kilos. Blood pressure 131 over 78, respiratory rate 20, oxygen saturation is 99 percent, height 162 centimetres, heart rate 116.
+[SEG0036] person_2 (DOCTOR): Right, good, thank you.
+[SEG0037] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0038] person_3 (PATIENT): Fine.
+[SEG0039] person_2 (DOCTOR): Bear with me a second.
+[SEG0040] person_2 (DOCTOR): There's tenderness in the right loin when I tap, and your tummy is soft.
+[SEG0041] person_2 (DOCTOR): Good, that's the examination. Having listened and examined, it fits best with a kidney stone. Another possibility is a urine infection. An ultrasound of the kidneys is what I'd like next, for flank pain. The result will help us decide whether anything more is needed. Let's use tamsulosin, 0.4 milligrams, at night, for two weeks. It's for stone passage.
+[SEG0042] person_2 (DOCTOR): Drink three litres of water a day and try to strain your urine so we can catch the stone if it passes. I'd like you to see the urology team as well, and I'll write the referral. Please don't wait if you get a fever or can't pass urine at all. That's when to be seen urgently. I'd like to see you again after the scan.
+[SEG0043] person_3 (PATIENT): Yeah, I'll make the appointment on my way out.
+[SEG0044] person_2 (DOCTOR): Okay, I think we're finished. Is everything clear?
+[SEG0045] person_3 (PATIENT): Uh, I appreciate it, doctor.
+[SEG0046] person_2 (DOCTOR): See you then.
+
+JSON:

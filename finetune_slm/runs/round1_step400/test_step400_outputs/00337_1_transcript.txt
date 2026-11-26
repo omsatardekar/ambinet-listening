@@ -1,0 +1,64 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00337)
+[SEG0001] person_1 (NURSE): Doctor, the patient's with us now. I did the usual checks at the front, so just say when you want them.
+[SEG0002] person_2 (DOCTOR): Perfect, thanks. Hello there, so what's the trouble?
+[SEG0003] person_3 (PATIENT): Yeah, it's pain in my right ear. I don't know what's causing it. A neighbour of mine said I should see someone about it.
+[SEG0004] person_2 (DOCTOR): How long are we talking about?
+[SEG0005] person_3 (PATIENT): It's been about two weeks, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_3 (PATIENT): It's worse with lying on it. Pretty moderate, if I'm being honest.
+[SEG0008] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0009] person_3 (PATIENT): Muffled hearing goes along with it, um, most of the time. The muffled hearing? That's been for ten days.
+[SEG0010] person_2 (DOCTOR): Any a blocked feeling in the ear as well?
+[SEG0011] person_3 (PATIENT): Yeah. One week, I'd say.
+[SEG0012] person_2 (DOCTOR): Right, tell me about your work.
+[SEG0013] person_3 (PATIENT): I'm a software engineer, so I'm at a screen all day.
+[SEG0014] person_2 (DOCTOR): Do you live alone?
+[SEG0015] person_3 (PATIENT): Yes, I live on my own.
+[SEG0016] person_2 (DOCTOR): And what do you usually eat?
+[SEG0017] person_3 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0018] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0019] person_3 (PATIENT): Well, I've had asthma, yes. I'm not great at remembering details, so bear with me.
+[SEG0020] person_2 (DOCTOR): Okay.
+[SEG0021] person_3 (PATIENT): Yes, arthritis in my knees.
+[SEG0022] person_2 (DOCTOR): Mm-hm.
+[SEG0023] person_3 (PATIENT): I have epilepsy.
+[SEG0024] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0025] person_3 (PATIENT): Diclofenac. I take it 50 milligrams, when needed for the joint pain.
+[SEG0026] person_1 (NURSE): Doctor, our chart from the last visit lists it as 25 milligrams.
+[SEG0027] person_2 (DOCTOR): Alright. Did you bring the up-to-date prescription?
+[SEG0028] person_3 (PATIENT): No, um, I left it at home. Sodium valproate. I take it 500 milligrams, twice a day. Oh, I'm on paracetamol, when needed.
+[SEG0029] person_2 (DOCTOR): How much do you take?
+[SEG0030] person_3 (PATIENT): 500 milligrams, I think that's what's on the box.
+[SEG0031] person_2 (DOCTOR): Since when have you been taking it?
+[SEG0032] person_3 (PATIENT): About two months. I was on levetiracetam before. I stopped taking it.
+[SEG0033] person_2 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0034] person_3 (PATIENT): My mother has diabetes.
+[SEG0035] person_2 (DOCTOR): Any recent swim or ringing?
+[SEG0036] person_3 (PATIENT): No recent swim or ringing, none of it.
+[SEG0037] person_2 (DOCTOR): Any swelling behind the ear, dizziness or discharge from the ear?
+[SEG0038] person_3 (PATIENT): No, uh, no swelling behind the ear, dizziness or discharge from the ear.
+[SEG0039] person_2 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0040] person_3 (PATIENT): No, nothing like that.
+[SEG0041] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0042] person_3 (PATIENT): No rashes.
+[SEG0043] person_1 (NURSE): Here are the numbers, doctor. Temp 39.0 degrees, heart rate 94, BP is 108 over 80. Saturation 95 percent.
+[SEG0044] person_2 (DOCTOR): Good, thank you.
+[SEG0045] person_2 (DOCTOR): So, based on your history, my working impression is a middle ear infection. It could also be a wax blockage, so we'll keep that open.
+[SEG0046] person_2 (DOCTOR): We'll begin with azithromycin, 500 milligrams, once a day, for three days. That's for ear infection. Keep the ear dry for now and don't put anything in it, including cotton buds. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0047] person_3 (PATIENT): Oh, yes, I'll watch for that.
+[SEG0048] person_2 (DOCTOR): Please come and see me in a week. Okay, that's it on my side. Anything unclear?
+[SEG0049] person_3 (PATIENT): That's everything I wanted to ask. Thank you.
+
+JSON:

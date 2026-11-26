@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00093)
+[SEG0001] person_1 (PATIENT): Right, hi, doctor. Long queue outside, but here I am.
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, I've come along because I know the history, if it helps. Doctor, uh, it's acne. That's what we're worried about.
+[SEG0004] person_2 (DOCTOR): How bad is it, would you say?
+[SEG0005] person_1 (PATIENT): Well, pretty severe, if I'm being honest.
+[SEG0006] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0007] person_1 (PATIENT): Oily skin goes along with it, you know, most of the time. The Oily skin? That's been for about three months.
+[SEG0008] person_2 (DOCTOR): Any flare-ups before your period as well?
+[SEG0009] person_1 (PATIENT): Yeah, that too.
+[SEG0010] person_2 (DOCTOR): Let me check a few things. Any new face cream or scarring?
+[SEG0011] person_1 (PATIENT): Okay, so no new face cream or scarring, none of it.
+[SEG0012] person_2 (DOCTOR): Have you had any pregnancy, excess hair growth or fever?
+[SEG0013] person_1 (PATIENT): so, no, none of those
+[SEG0014] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0015] person_1 (PATIENT): No, nothing with my heart.
+[SEG0016] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0017] person_1 (PATIENT): I'm on something called omep... omeprazole, 20 milligrams, maybe, once a day.
+[SEG0018] person_2 (DOCTOR): is the packet here, or the prescription?
+[SEG0019] person_1 (PATIENT): Not with me. I'll bring it next time. Pantoprazole I don't take anymore.
+[SEG0020] person_2 (DOCTOR): Do you have any allergies to medicines, food, anything at all?
+[SEG0021] person_1 (PATIENT): No, no allergies to anything.
+[SEG0022] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0023] person_1 (PATIENT): no, you know, nothing like that
+[SEG0024] person_2 (DOCTOR): any diagnoses you've been given before?
+[SEG0025] person_1 (PATIENT): I have acid reflux, for five years
+[SEG0026] person_2 (DOCTOR): Anything special about your diet?
+[SEG0027] person_1 (PATIENT): I try to avoid too much sugar.
+[SEG0028] person_2 (DOCTOR): Do you live alone?
+[SEG0029] person_1 (PATIENT): Yes, I live on my own.
+[SEG0030] person_2 (DOCTOR): Does anything run in the family?
+[SEG0031] person_1 (PATIENT): My uncle had colon cancer.
+[SEG0032] person_2 (DOCTOR): Before we go on, a few quick readings.
+[SEG0033] person_2 (DOCTOR): Rest your hand here...
+[SEG0034] person_2 (DOCTOR): Okay: temp 37.0 degrees, blood pressure 112 over 71, pulse is 75 beats a minute.
+[SEG0035] person_2 (DOCTOR): Let me have a look at you.
+[SEG0036] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0037] person_2 (DOCTOR): There are red papules and a few pustules over the cheeks and chin, with some blackheads.
+[SEG0038] person_2 (DOCTOR): So, all done, you can get dressed.
+[SEG0039] person_2 (DOCTOR): let me tell you where I've got to it's hard to say. Moderate acne is one possibility and rosacea another, and I'd rather not commit yet
+[SEG0040] person_1 (PATIENT): I've been thinking the worst, to be honest. Is it bad?
+[SEG0041] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's moderate acne, and we'll watch how it goes. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0042] person_1 (PATIENT): Understood.
+[SEG0043] person_2 (DOCTOR): There's nothing new for me to start or arrange today. Take care, and call us if anything changes.
+[SEG0044] person_1 (PATIENT): Thanks, that was helpful.
+[SEG0045] person_2 (DOCTOR): goodbye
+
+JSON:

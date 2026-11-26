@@ -1,0 +1,70 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00654)
+[SEG0001] person_1 (PATIENT): I'm here for the methotrexate bloods review. Hands are stiff but manageable.
+[SEG0002] person_2 (DOCTOR): Thanks for coming. Let's start with how the hands feel through the day.
+[SEG0003] person_1 (PATIENT): Stiff in the morning, about an hour. Gone by lunch.
+[SEG0004] person_2 (DOCTOR): Any swelling in the knuckles?
+[SEG0005] person_1 (PATIENT): A bit. Right hand, the middle knuckles.
+[SEG0006] person_2 (DOCTOR): How about your energy?
+[SEG0007] person_1 (PATIENT): Tired. Mostly afternoons.
+[SEG0008] person_2 (DOCTOR): Any mouth ulcers since the dose went up? That's a common side effect.
+[SEG0009] person_1 (PATIENT): A couple. They come and go.
+[SEG0010] person_2 (DOCTOR): Any cough or breathlessness, the kind that's new?
+[SEG0011] person_1 (PATIENT): No. No cough.
+[SEG0012] person_2 (DOCTOR): Fever or chills?
+[SEG0013] person_1 (PATIENT): None.
+[SEG0014] person_2 (DOCTOR): Easy bruising or bleeding gums?
+[SEG0015] person_1 (PATIENT): No. Neither.
+[SEG0016] person_2 (DOCTOR): Nausea after the weekly dose?
+[SEG0017] person_1 (PATIENT): No, not really.
+[SEG0018] person_2 (DOCTOR): Walk me through all the tablets, please.
+[SEG0019] person_1 (PATIENT): Methotrexate, maybe 20 mg? Once a week. Folic acid, 5 mg, the day after. Hydroxychloroquine, 200 mg twice a day. And omeprazole, 20 mg, in the morning.
+[SEG0020] person_2 (DOCTOR): You said maybe 20 for the methotrexate. Do you have the box with you?
+[SEG0021] person_1 (PATIENT): No. Left it on the side. ~
+[SEG0022] person_2 (DOCTOR): I'll check with the pharmacy before we change anything. Any allergies to medicines?
+[SEG0023] person_1 (PATIENT): Penicillin. Hives.
+[SEG0024] person_2 (DOCTOR): Thank you. Any other health problems?
+[SEG0025] person_1 (PATIENT): Rheumatoid arthritis, since 2019. Acid reflux. And mild asthma.
+[SEG0026] person_2 (DOCTOR): Previous surgery?
+[SEG0027] person_1 (PATIENT): Carpal tunnel release, right wrist, three years ago.
+[SEG0028] person_2 (DOCTOR): Arthritis in the family?
+[SEG0029] person_1 (PATIENT): My mother had rheumatoid arthritis too.
+[SEG0030] person_2 (DOCTOR): Do you smoke?
+[SEG0031] person_1 (PATIENT): Never smoked.
+[SEG0032] person_2 (DOCTOR): Alcohol? With methotrexate we like it to be low.
+[SEG0033] person_1 (PATIENT): A glass of wine. Saturdays.
+[SEG0034] person_2 (DOCTOR): And your work?
+[SEG0035] person_1 (PATIENT): Primary school teacher.
+[SEG0036] person_2 (DOCTOR): Any exercise?
+[SEG0037] person_1 (PATIENT): Yoga, twice a week. It helps the hands.
+[SEG0038] person_2 (DOCTOR): Good. Your pulse is 70, blood pressure 118 over 74, temperature 36.6, oxygen 98 percent, breathing 14, and your weight is 66 kilos.
+[SEG0039] person_1 (PATIENT): Same as before? ~
+[SEG0040] person_2 (DOCTOR): Very similar. Show me your hands, please.
+[SEG0041] person_1 (PATIENT): There. ~
+[SEG0042] person_2 (DOCTOR): I can see swelling over the right middle knuckles, and there's tenderness squeezing across the right hand.
+[SEG0043] person_1 (PATIENT): Yes, that hurts. ~
+[SEG0044] person_2 (DOCTOR): The left hand looks normal, no swelling. And in your mouth there are two small ulcers on the inner cheek.
+[SEG0045] person_1 (PATIENT): I told you. ~
+[SEG0046] person_2 (DOCTOR): Now your chest. Any problem with your breathing today?
+[SEG0047] person_1 (PATIENT): No. Breathing's fine.
+[SEG0048] person_2 (DOCTOR): Good. My impression is a mild flare of the arthritis, but I can't rule out the methotrexate causing those mouth ulcers.
+[SEG0049] person_1 (PATIENT): So what now? ~
+[SEG0050] person_2 (DOCTOR): I'd like to arrange blood tests for your blood count and liver, and a chest X-ray, since you've been on this a while.
+[SEG0051] person_1 (PATIENT): And the hands? ~
+[SEG0052] person_2 (DOCTOR): I'll also arrange X-rays of your hands to check the joints haven't changed.
+[SEG0053] person_1 (PATIENT): Okay. ~
+[SEG0054] person_2 (DOCTOR): I'd like to see you again in three months, sooner if the ulcers get worse.
+[SEG0055] person_1 (PATIENT): Three months. Fine. ~
+
+JSON:

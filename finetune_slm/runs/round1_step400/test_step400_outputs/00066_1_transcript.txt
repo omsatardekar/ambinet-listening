@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00066)
+[SEG0001] person_1 (PATIENT): Hello, doctor. Where would you like me?
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): Yeah, it's breathlessness on slopes. I don't know what's causing it.
+[SEG0004] person_2 (DOCTOR): right, roughly when did it start?
+[SEG0005] person_1 (PATIENT): probably two months. Yeah
+[SEG0006] person_2 (DOCTOR): Does anything bring it on or make it worse?
+[SEG0007] person_1 (PATIENT): Slopes definitely sets it off. And poor sleep, too. Uh, as for poor sleep, a four out of ten, I suppose.
+[SEG0008] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0009] person_1 (PATIENT): Heart disease, for five years
+[SEG0010] person_2 (DOCTOR): Go on. Are you on any regular medication?
+[SEG0011] person_1 (PATIENT): nothing, no
+[SEG0012] person_2 (DOCTOR): any surgery in your history?
+[SEG0013] person_1 (PATIENT): Yes, I had my gallbladder removed, in 2016.
+[SEG0014] person_2 (DOCTOR): Right, how's your diet?
+[SEG0015] person_1 (PATIENT): I'm mostly vegetarian.
+[SEG0016] person_2 (DOCTOR): And what do you do for a living?
+[SEG0017] person_1 (PATIENT): I work night shifts at a warehouse
+[SEG0018] person_2 (DOCTOR): what about pain at rest?
+[SEG0019] person_1 (PATIENT): no. No pain at rest
+[SEG0020] person_2 (DOCTOR): Did you get palpitations, coughing up blood or fainting?
+[SEG0021] person_1 (PATIENT): no, no palpitations, coughing up blood or fainting
+[SEG0022] person_2 (DOCTOR): How are your bowels, any trouble?
+[SEG0023] person_1 (PATIENT): nothing unusual, no
+[SEG0024] person_2 (DOCTOR): I'll take a few measurements first.
+[SEG0025] person_2 (DOCTOR): one second..
+[SEG0026] person_2 (DOCTOR): okay: temperature is 36.7 degrees, pulse 66, height 171 centimetres, BP is 114 over 70, weight 92 kilos, saturation 98 percent
+[SEG0027] person_1 (PATIENT): is that normal?
+[SEG0028] person_2 (DOCTOR): okay, we'll put it in context in a moment
+[SEG0029] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0030] person_1 (PATIENT): okay
+[SEG0031] person_2 (DOCTOR): let me press here
+[SEG0032] person_2 (DOCTOR): Chest is clear and heart sounds are normal.
+[SEG0033] person_2 (DOCTOR): Thanks for that.
+[SEG0034] person_2 (DOCTOR): From what you've told me and what I found, this looks most like stable recovery after the heart event. I want to be honest that this is an impression, not a final answer. I'll request a lipid profile, it'll help with cardiovascular risk.
+[SEG0035] person_1 (PATIENT): Okay, that's fine.
+[SEG0036] person_2 (DOCTOR): I'm going to put you on atorvastatin, 40 milligrams, at night, long term. You take it by mouth. That's for cardiovascular risk. Cardiac rehab is worth doing, it really helps your confidence. I'll also refer you to cardiac rehabilitation. An ECG is something we might do if this doesn't improve in a month. What are the next steps as you understand them?
+[SEG0037] person_1 (PATIENT): So, I take the atorvastatin, 40 milligrams, at night. Is that right?
+[SEG0038] person_2 (DOCTOR): Yes, exactly right. Right, that's all. Go gently.
+[SEG0039] person_1 (PATIENT): one thing: no, actually that's all thanks
+[SEG0040] person_2 (DOCTOR): Goodbye.
+
+JSON:

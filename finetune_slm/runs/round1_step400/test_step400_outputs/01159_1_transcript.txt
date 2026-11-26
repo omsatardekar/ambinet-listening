@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01159)
+[SEG0001] person_1 (PATIENT): Hello doctor, sorry, I took a wrong turn on the way here.
+[SEG0002] person_2 (DOCTOR): Right, yes, have a seat. Tell me what's going on.
+[SEG0003] person_1 (PATIENT): I mean, mainly my face drooping on one side. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): I follow. How much trouble does it give you?
+[SEG0005] person_1 (PATIENT): Uh, a eight out of ten, I suppose. I've also had a sudden headache, since yesterday. With sudden headache, I'd say once or twice a day.
+[SEG0006] person_2 (DOCTOR): I'll note down your vital signs first.
+[SEG0007] person_2 (DOCTOR): That's it, just a little longer...
+[SEG0008] person_2 (DOCTOR): Okay: saturation 98 percent, temperature 36.6. And BP is 159 over 96, pulse is 73 beats a minute.
+[SEG0009] person_2 (DOCTOR): I'll examine you in a second, make yourself comfortable.
+[SEG0010] person_1 (PATIENT): Yes, um, that's fine.
+[SEG0011] person_2 (DOCTOR): Raise your arm for me.
+[SEG0012] person_2 (DOCTOR): Your right face droops, your right arm is weak and your speech is slurred.
+[SEG0013] person_2 (DOCTOR): Okay, thank you, you can get dressed.
+[SEG0014] person_2 (DOCTOR): Any fever, loss of consciousness or seizure at all?
+[SEG0015] person_1 (PATIENT): Mm, no, I'd have said so.
+[SEG0016] person_2 (DOCTOR): Is your urine normal, no changes?
+[SEG0017] person_1 (PATIENT): Oh, that's normal as far as I know.
+[SEG0018] person_2 (DOCTOR): Is your digestion otherwise okay?
+[SEG0019] person_1 (PATIENT): No, all normal there.
+[SEG0020] person_2 (DOCTOR): Have you got any known allergies?
+[SEG0021] person_1 (PATIENT): I'm allergic to nickel, I get a rash on my skin.
+[SEG0022] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0023] person_1 (PATIENT): Apixaban, 5 milligrams, maybe, twice a day.
+[SEG0024] person_2 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0025] person_1 (PATIENT): No, it's at home.
+[SEG0026] person_2 (DOCTOR): Tell me about any past illnesses or ongoing conditions. Take your time, there's no rush.
+[SEG0027] person_1 (PATIENT): I've had high blood pressure, yes. I looked a few things up online, and that probably didn't help. Yeah, I've got an irregular heartbeat. I've been putting this off for weeks.
+[SEG0028] person_2 (DOCTOR): What does a normal day of food look like?
+[SEG0029] person_1 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0030] person_2 (DOCTOR): Is there someone at home?
+[SEG0031] person_1 (PATIENT): My husband and I live above the shop.
+[SEG0032] person_2 (DOCTOR): Did you ever have any procedures done?
+[SEG0033] person_1 (PATIENT): Yes, I had an operation for a hernia, last spring.
+[SEG0034] person_2 (DOCTOR): From what you've told me and what I found, my working impression is a possible stroke, within the treatment window. A migraine with aura is still possible.
+[SEG0035] person_1 (PATIENT): What are the odds it's serious?
+[SEG0036] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a possible stroke, within the treatment window, and we'll watch how it goes. I'm going to send a referral to the stroke team. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0037] person_1 (PATIENT): Ah, could I get an urgent CT scan of the head done? A friend had it.
+[SEG0038] person_2 (DOCTOR): Not at this point, no. It isn't indicated yet. Keep an eye out, and if the symptoms change, call us the same day or go to emergency.
+[SEG0039] person_1 (PATIENT): I, I know what to watch for.
+[SEG0040] person_2 (DOCTOR): That's all from me. Any questions?
+[SEG0041] person_1 (PATIENT): Mm, uh, great, thank you for your help.
+
+JSON:

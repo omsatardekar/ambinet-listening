@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00091)
+[SEG0001] person_1 (DOCTOR): Good evening. Sorry to keep you waiting.
+[SEG0002] person_2 (PATIENT): Good morning, doctor.
+[SEG0003] person_1 (DOCTOR): Alright, tell me what's been troubling you.
+[SEG0004] person_2 (PATIENT): So, you know, honestly, it's fever with chills, and my family pushed me to come.
+[SEG0005] person_1 (DOCTOR): so, how far back does it go?
+[SEG0006] person_2 (PATIENT): It's been five days, I'm fairly sure.
+[SEG0007] person_1 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0008] person_2 (PATIENT): Paracetamol helps a bit. Moderate, I'd say. There's nausea as well
+[SEG0009] person_1 (DOCTOR): what's the pattern, is it there all day?
+[SEG0010] person_2 (PATIENT): Honestly, once or twice a day.
+[SEG0011] person_1 (DOCTOR): Nothing like vomiting?
+[SEG0012] person_2 (PATIENT): No, no vomiting.
+[SEG0013] person_1 (DOCTOR): Did you get cough, diarrhoea, rash or stiff neck?
+[SEG0014] person_2 (PATIENT): no, no cough, diarrhoea, rash or stiff neck
+[SEG0015] person_1 (DOCTOR): How about your heart, any problems like that?
+[SEG0016] person_2 (PATIENT): Nothing like that.
+[SEG0017] person_1 (DOCTOR): Is your mobility otherwise okay?
+[SEG0018] person_2 (PATIENT): I move fine otherwise.
+[SEG0019] person_1 (DOCTOR): what about allergies, to medicines or foods or anything else? Just so I get the full picture
+[SEG0020] person_2 (PATIENT): Not that I know, no.
+[SEG0021] person_1 (DOCTOR): okay, what medicines are you taking at the moment?
+[SEG0022] person_2 (PATIENT): I'm on atorvastatin, 20 milligrams, at night.
+[SEG0023] person_1 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0024] person_2 (PATIENT): No, I don't smoke and never have. I try to avoid too much sugar. I live with my family, my husband and two kids. I work in an office, mostly sitting at a desk.
+[SEG0025] person_1 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0026] person_2 (PATIENT): my sister has thyroid problems
+[SEG0027] person_1 (DOCTOR): have you had any surgery before?
+[SEG0028] person_2 (PATIENT): I had my thyroid operated on a long time ago.
+[SEG0029] person_1 (DOCTOR): Have you got any chronic problems?
+[SEG0030] person_2 (PATIENT): I have high cholesterol, for about a year.
+[SEG0031] person_1 (DOCTOR): right, so high cholesterol is already on your record. We'll keep that in mind today. Let's get your blood pressure and the other basics
+[SEG0032] person_1 (DOCTOR): just relax your arm..
+[SEG0033] person_1 (DOCTOR): Okay: temperature 38.9, blood pressure 124 over 69, pulse 97, saturation 98 percent, respiratory rate 21.
+[SEG0034] person_2 (PATIENT): Is that alright, doctor?
+[SEG0035] person_1 (DOCTOR): So, that's fine, we'll come to it.
+[SEG0036] person_1 (DOCTOR): okay, I need to examine you for this
+[SEG0037] person_2 (PATIENT): Mm, you know, okay.
+[SEG0038] person_1 (DOCTOR): Just relax, I'll be quick.
+[SEG0039] person_1 (DOCTOR): Your spleen tip is just palpable under the ribs.
+[SEG0040] person_1 (DOCTOR): a little pressure here, tell me if it's tender
+[SEG0041] person_1 (DOCTOR): No rash anywhere on your body that I can see
+[SEG0042] person_1 (DOCTOR): Thanks, please take a seat again. Okay, thinking it through, I'd lean towards malaria until proven otherwise.
+[SEG0043] person_2 (PATIENT): Is this something I'll have for good?
+[SEG0044] person_1 (DOCTOR): I understand the worry at the moment I'd say it's malaria until proven otherwise, and we'll know more once the a dengue test is back we should do a dengue test for fever the result will help us decide whether anything more is needed
+[SEG0045] person_3 (CLINICAL_STAFF): The earliest is Friday, 10 am.
+[SEG0046] person_1 (DOCTOR): We should do a malaria test for fever after travel. I'd rather check than guess, and this is the quickest way to know more.
+[SEG0047] person_2 (PATIENT): Okay, noted.
+[SEG0048] person_1 (DOCTOR): What I'm giving you is paracetamol, 500 milligrams, every six hours if needed, for three days. You take it by mouth. That's for fever and body aches. Let the lab know you travelled recently, that's important for the tests. Let's hold off on blood tests for now, and if there's no change in a month we can revisit it.
+[SEG0049] person_1 (DOCTOR): keep an eye out, and if you get confused, very drowsy, or the shaking returns, call us the same day or go to emergency book a review after the results are back
+[SEG0050] person_2 (PATIENT): okay
+[SEG0051] person_1 (DOCTOR): That's it on my side. Anything unclear?
+[SEG0052] person_2 (PATIENT): no questions thank you
+[SEG0053] person_1 (DOCTOR): mind how you go
+
+JSON:

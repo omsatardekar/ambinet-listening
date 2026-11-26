@@ -1,0 +1,64 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02470)
+[SEG0001] person_1 (PATIENT): Hello? Doctor? I was told to come in.
+[SEG0002] person_2 (DOCTOR): No problem at all, come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): Doctor, it's a hot red swollen big toe. It's getting on my nerves now.
+[SEG0004] person_2 (DOCTOR): Alright, can I check a few measurements before we carry on?
+[SEG0005] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0006] person_2 (DOCTOR): Okay: blood pressure 125 over 76, heart rate 76, weight 64 kilos, height 157 centimetres, respiratory rate 16, SpO2 98 percent on room air. When was the first time you noticed it?
+[SEG0007] person_1 (PATIENT): I'd say two weeks. Actually, no, closer to four weeks.
+[SEG0008] person_2 (DOCTOR): Have you noticed any triggers?
+[SEG0009] person_1 (PATIENT): Touch definitely sets it off.
+[SEG0010] person_2 (DOCTOR): Is it a lot or only a little?
+[SEG0011] person_1 (PATIENT): A four out of ten, you know, I suppose.
+[SEG0012] person_2 (DOCTOR): What about not being able to wear a shoe, have you noticed that?
+[SEG0013] person_1 (PATIENT): Let me think, yes, since last Tuesday.
+[SEG0014] person_2 (DOCTOR): How troublesome is it day to day?
+[SEG0015] person_1 (PATIENT): Severe, I'd say.
+[SEG0016] person_2 (DOCTOR): Alright, has there been pain that woke you too?
+[SEG0017] person_1 (PATIENT): Yeah, that too.
+[SEG0018] person_2 (DOCTOR): How troublesome is it day to day?
+[SEG0019] person_1 (PATIENT): Maybe a six out of ten on a bad day.
+[SEG0020] person_2 (DOCTOR): A few quick ones: injury, rash or fever?
+[SEG0021] person_1 (PATIENT): No, you know, nothing to report there.
+[SEG0022] person_2 (DOCTOR): Yes. Is your urine normal, no changes?
+[SEG0023] person_1 (PATIENT): That's normal as far as I know.
+[SEG0024] person_2 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0025] person_1 (PATIENT): Nothing unusual, um, no.
+[SEG0026] person_2 (DOCTOR): Tell me about any past illnesses or ongoing conditions.
+[SEG0027] person_1 (PATIENT): I have gout.
+[SEG0028] person_2 (DOCTOR): Is that everything?
+[SEG0029] person_1 (PATIENT): Uh, I've had high blood pressure for about a year now.
+[SEG0030] person_2 (DOCTOR): Right, so gout is already on your record. We'll keep that in mind today.
+[SEG0031] person_2 (DOCTOR): How are your meals?
+[SEG0032] person_1 (PATIENT): I grab fast food at lunch most days.
+[SEG0033] person_2 (DOCTOR): Do you get out much?
+[SEG0034] person_1 (PATIENT): Not much, I mostly stay in these days.
+[SEG0035] person_2 (DOCTOR): Any surgery in the past?
+[SEG0036] person_1 (PATIENT): Oh, you know, yes, I had my tonsils removed, as a teenager. I didn't want to bother you but it keeps coming back.
+[SEG0037] person_2 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0038] person_1 (PATIENT): I'm, I'm on something called febu... febuxostat, 80 milligrams, maybe, once a day.
+[SEG0039] person_2 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0040] person_1 (PATIENT): No, uh, it's at home. Well, I'm on metoprolol, 50 milligrams, twice a day. I'm on ibuprofen, 400 milligrams, three times a day.
+[SEG0041] person_2 (DOCTOR): May I examine you now?
+[SEG0042] person_1 (PATIENT): That's alright.
+[SEG0043] person_2 (DOCTOR): Look straight ahead.
+[SEG0044] person_2 (DOCTOR): The big toe joint is red, hot, swollen and exquisitely tender.
+[SEG0045] person_2 (DOCTOR): Right, please sit back down. So, based on the history and the examination, I'd lean towards an acute gout attack.
+[SEG0046] person_1 (PATIENT): What are the odds it's serious?
+[SEG0047] person_2 (DOCTOR): It's reasonable to be concerned, but right now an acute gout attack is my leading thought, not anything worse. I'll request a uric acid blood test, it'll help with gout. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Right, that's the plan. Do you want to ask me anything?
+[SEG0048] person_1 (PATIENT): That's clear, thanks.
+[SEG0049] person_2 (DOCTOR): See you soon.
+
+JSON:

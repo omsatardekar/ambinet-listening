@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00020)
+[SEG0001] person_1 (NURSE): Okay, doctor, we're all set in here. I'll give you the numbers when you want them.
+[SEG0002] person_2 (DOCTOR): Right, thank you. Right, hello, what's the problem?
+[SEG0003] person_3 (PATIENT): Mainly pain in the lower right tummy. There's a couple of other things, you know, but that's the main one.
+[SEG0004] person_1 (NURSE): Doctor, I've got the readings for you. BP is 108 over 77, pulse is 88 beats a minute, saturation 96 percent.
+[SEG0005] person_2 (DOCTOR): Good, thank you. How far back does it go?
+[SEG0006] person_3 (PATIENT): I've had it for one week.
+[SEG0007] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0008] person_3 (PATIENT): Uh, you know, honestly, a couple of times a week. I notice it more with coughing and moving. Severe, I'd say. And no appetite, too.
+[SEG0009] person_2 (DOCTOR): And what about hernia bulge, jaundice or constipation?
+[SEG0010] person_3 (PATIENT): No, nothing there.
+[SEG0011] person_2 (DOCTOR): And what about burning when passing urine or diarrhoea?
+[SEG0012] person_3 (PATIENT): Um, none, as far as I know.
+[SEG0013] person_2 (DOCTOR): Any problems with your joints or muscles?
+[SEG0014] person_3 (PATIENT): Nothing else aches.
+[SEG0015] person_2 (DOCTOR): Any operations in the past?
+[SEG0016] person_3 (PATIENT): Just a hernia repair, about five years back.
+[SEG0017] person_2 (DOCTOR): Right, what's your job?
+[SEG0018] person_3 (PATIENT): I teach at a primary school.
+[SEG0019] person_2 (DOCTOR): Do you exercise at all?
+[SEG0020] person_3 (PATIENT): I go to the gym a couple of times a week.
+[SEG0021] person_2 (DOCTOR): Is anyone at home with you?
+[SEG0022] person_3 (PATIENT): I share a flat with two friends.
+[SEG0023] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0024] person_3 (PATIENT): I've had migraines for two years now.
+[SEG0025] person_2 (DOCTOR): Right, right.
+[SEG0026] person_3 (PATIENT): I have high blood pressure, for nearly five years. A neighbour of mine said I should see someone about it.
+[SEG0027] person_2 (DOCTOR): Okay, I can see migraines and high blood pressure in your file as well.
+[SEG0028] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0029] person_3 (PATIENT): No allergies.
+[SEG0030] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0031] person_3 (PATIENT): It's, It's losartan, 50 milligrams, once a day.
+[SEG0032] person_2 (DOCTOR): And for how long?
+[SEG0033] person_3 (PATIENT): About about three months.
+[SEG0034] person_2 (DOCTOR): Right, let me check a few things physically.
+[SEG0035] person_3 (PATIENT): Go ahead.
+[SEG0036] person_2 (DOCTOR): Bear with me a second.
+[SEG0037] person_2 (DOCTOR): There's tenderness in the right lower part and it hurts when I let go suddenly.
+[SEG0038] person_2 (DOCTOR): That's fine, sit up.
+[SEG0039] person_2 (DOCTOR): Okay, so my impression is this: I think we're dealing with possible appendicitis at this stage. I'm sending you for an ultrasound of the abdomen because of right lower abdominal pain. I want blood tests done, that's for abdominal pain. Please don't eat or drink anything until the surgeons have seen you. Avoid taking any extra painkillers on top of what I'm prescribing without checking with us.
+[SEG0040] person_2 (DOCTOR): Uh-huh. I'll also refer you to the surgical team.
+[SEG0041] person_3 (PATIENT): Sure, where do I go?
+[SEG0042] person_2 (DOCTOR): I'm not ordering a urine test today. If things carry on in two weeks, we'll consider it. If the pain gets sharper or spreads across the tummy, or you feel really unwell, please come to the emergency department. We'll catch up today after the results. Ask me anything before you go.
+[SEG0043] person_3 (PATIENT): No, I think that's everything. Thank you, doctor.
+[SEG0044] person_2 (DOCTOR): Bye for now.
+
+JSON:

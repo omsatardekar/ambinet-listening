@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01531)
+[SEG0001] person_1 (DOCTOR): Hello, come in. Mind the step.
+[SEG0002] person_2 (PATIENT): Good morning, you know, doctor, thank you.
+[SEG0003] person_1 (DOCTOR): Tell me what's brought you in.
+[SEG0004] person_2 (PATIENT): It's a fall and pain in my left hip, mostly.
+[SEG0005] person_1 (DOCTOR): Since when exactly?
+[SEG0006] person_2 (PATIENT): ever since... since last weekend, really
+[SEG0007] person_1 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0008] person_2 (PATIENT): well, it comes and goes. It's worse with moving. Lying still helps a bit. I've been reading about it online and it worried me. Actually, there was not being able to stand, yes, but that went away
+[SEG0009] person_1 (DOCTOR): let me get the readings out of the way
+[SEG0010] person_1 (DOCTOR): That's it, just a little longer...
+[SEG0011] person_1 (DOCTOR): Okay: temp 36.5 degrees, pulse is 83 beats a minute. And pressure 111 over 74, oxygen saturation is 98 percent.
+[SEG0012] person_2 (PATIENT): Is that normal?
+[SEG0013] person_1 (DOCTOR): I'll come back to the numbers.
+[SEG0014] person_1 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0015] person_1 (DOCTOR): Does that hurt?
+[SEG0016] person_1 (DOCTOR): The left leg is shortened and turned outwards, and it is very painful to move.
+[SEG0017] person_1 (DOCTOR): Okay, that's enough for me. Right, how about loss of consciousness?
+[SEG0018] person_2 (PATIENT): no loss of consciousness, thankfully
+[SEG0019] person_1 (DOCTOR): have you had any head injury, chest pain or numbness?
+[SEG0020] person_2 (PATIENT): yeah, I haven't had head injury, chest pain or numbness, no
+[SEG0021] person_1 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0022] person_2 (PATIENT): ah, no, nothing like that
+[SEG0023] person_1 (DOCTOR): a few questions about your lifestyle now
+[SEG0024] person_2 (PATIENT): I swim twice a week. My husband and I live above the shop. Lots of rice, lentils and some fruit.
+[SEG0025] person_1 (DOCTOR): Alright, are you allergic to anything? Any allergies to medicines or foods?
+[SEG0026] person_2 (PATIENT): Actually, no, I'm not allergic to anything.
+[SEG0027] person_1 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0028] person_2 (PATIENT): Erm, I've had thin bones for two years now. Work has been very busy so I kept ignoring it. It's the not knowing that gets to me. I have gout, for about ten years. I did try to ignore it for a while.
+[SEG0029] person_1 (DOCTOR): yes, thin bones is known to us, good to have that clear
+[SEG0030] person_1 (DOCTOR): any past operations I should know about?
+[SEG0031] person_2 (PATIENT): Mm, yes, I had part of my thyroid removed, years back.
+[SEG0032] person_1 (DOCTOR): Let's run through your medicines.
+[SEG0033] person_2 (PATIENT): Alendronate, 70 milligrams, once a week for my bones. I take allopurinol, 100 milligrams, once a day. Paracetamol. I take it when needed.
+[SEG0034] person_1 (DOCTOR): And what strength is that?
+[SEG0035] person_2 (PATIENT): 1 gram, I think that's what's on the box
+[SEG0036] person_1 (DOCTOR): Is there anything relevant on the family side?
+[SEG0037] person_2 (PATIENT): My uncle has high cholesterol.
+[SEG0038] person_1 (DOCTOR): Let me tell you where I've got to. It points towards a probable hip fracture. That's my thinking for now, and it may change as we learn more. I want an X-ray of the hip done, that's for hip fracture.
+[SEG0039] person_2 (PATIENT): erm, do I need blood tests? I read it might help
+[SEG0040] person_1 (DOCTOR): Not at this point, no. It isn't indicated yet. That's all from me. Any questions?
+[SEG0041] person_2 (PATIENT): okay, that makes sense thanks for explaining
+
+JSON:

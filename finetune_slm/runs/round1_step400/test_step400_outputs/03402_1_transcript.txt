@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03402)
+[SEG0001] person_1 (PATIENT): actually, um, morning, doctor is this the right room?
+[SEG0002] person_2 (DOCTOR): Not at all please sit. What seems to be wrong?
+[SEG0003] person_1 (PATIENT): It's a red sore wound after my operation. I thought I'd wait but it hasn't gone.
+[SEG0004] person_2 (DOCTOR): Did it come on recently?
+[SEG0005] person_1 (PATIENT): Probably about a week. Yeah. I've never really been one for hospitals.
+[SEG0006] person_2 (DOCTOR): What do you do to make it it better?
+[SEG0007] person_1 (PATIENT): Dressing helps a a bit
+[SEG0008] person_2 (DOCTOR): and what about calf pain, vomiting or chest pain?
+[SEG0009] person_1 (PATIENT): no, none that I've noticed
+[SEG0010] person_2 (DOCTOR): did you notice any breathlessness?
+[SEG0011] person_1 (PATIENT): I haven't noticed any breathlessness.
+[SEG0012] person_2 (DOCTOR): How are your joints any aches elsewhere?
+[SEG0013] person_1 (PATIENT): No, joints are fine.
+[SEG0014] person_2 (DOCTOR): do you react to any medicines or foods? Any allergies?
+[SEG0015] person_1 (PATIENT): I'm allergic to to wheat, I get bloating
+[SEG0016] person_2 (DOCTOR): is there someone at home?
+[SEG0017] person_1 (PATIENT): My husband and I live above the shop
+[SEG0018] person_2 (DOCTOR): What does a a normal day of food look like?
+[SEG0019] person_1 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0020] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0021] person_1 (PATIENT): Nothing uh I haven't had any operations.
+[SEG0022] person_2 (DOCTOR): which medicines do you take at the moment?
+[SEG0023] person_1 (PATIENT): Asthalin inhaler. I take it when needed for my asthma.
+[SEG0024] person_2 (DOCTOR): Do you have any long-term conditions?
+[SEG0025] person_1 (PATIENT): Yes, asthma.
+[SEG0026] person_2 (DOCTOR): mm-hmm alright asthma that matches what I have here let me get the readings out of the way
+[SEG0027] person_2 (DOCTOR): That's it, just a little longer...
+[SEG0028] person_2 (DOCTOR): Okay: height 181 centimetres temperature 39.3 respiratory rate 20 pressure 106 over 77 weight 80 kilos BMI works out to 24.4 heart rate 89.
+[SEG0029] person_1 (PATIENT): is that normal?
+[SEG0030] person_2 (DOCTOR): We'll look at it together shortly.
+[SEG0031] person_2 (DOCTOR): let me look at the area, I'll be gentle
+[SEG0032] person_2 (DOCTOR): stay as you are for a moment
+[SEG0033] person_2 (DOCTOR): the lower part of the wound is red, hot and weeping pus, and the the edges have not come together
+[SEG0034] person_2 (DOCTOR): That's the examination finished. Okay, thinking it it through, it points towards a surgical wound infection.
+[SEG0035] person_1 (PATIENT): is there something to worry about?
+[SEG0036] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's a surgical wound infection, and we'll know more once the a wound swab is back.
+[SEG0037] person_2 (DOCTOR): let's book a wound swab to look into wound infection. Let's use flucloxacillin 500 milligrams four times a day seven days. You take it by mouth. That's for wound infection. Keep it clean and dry and use fresh dressings daily. Let's plan a check in two days. Right that's all from me. Any questions?
+[SEG0038] person_1 (PATIENT): thank you, that's helpful
+[SEG0039] person_2 (DOCTOR): see you soon
+
+JSON:

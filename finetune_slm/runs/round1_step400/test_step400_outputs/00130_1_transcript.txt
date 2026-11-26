@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00130)
+[SEG0001] person_1 (PATIENT): Doctor, hello, I've got my papers here, where should I put them?
+[SEG0002] person_2 (DOCTOR): that's alright, take a seat. Tell me why you've come
+[SEG0003] person_1 (PATIENT): I mean, I've been dealing with my heart racing
+[SEG0004] person_2 (DOCTOR): How long has this been going on?
+[SEG0005] person_1 (PATIENT): It's been ten days now.
+[SEG0006] person_2 (DOCTOR): Hm, okay.
+[SEG0007] person_1 (PATIENT): And I've been feeling anxious and jittery as well.
+[SEG0008] person_2 (DOCTOR): how would you describe it, mild, moderate, severe?
+[SEG0009] person_1 (PATIENT): About a four out of ten.
+[SEG0010] person_2 (DOCTOR): Any eye bulging or lump in the neck?
+[SEG0011] person_1 (PATIENT): no eye bulging or lump in the neck, none of it
+[SEG0012] person_2 (DOCTOR): So, did you get shortness of breath or chest pain?
+[SEG0013] person_1 (PATIENT): uh, no. None of those
+[SEG0014] person_2 (DOCTOR): anything different when you pass water?
+[SEG0015] person_1 (PATIENT): No changes there.
+[SEG0016] person_2 (DOCTOR): Do you have any known allergies at all?
+[SEG0017] person_1 (PATIENT): no allergies
+[SEG0018] person_2 (DOCTOR): Are you on any regular medication?
+[SEG0019] person_1 (PATIENT): uh, no, I don't take anything regularly
+[SEG0020] person_2 (DOCTOR): Is anyone at home with you?
+[SEG0021] person_1 (PATIENT): I share a flat with two friends
+[SEG0022] person_2 (DOCTOR): do you have a job?
+[SEG0023] person_1 (PATIENT): I'm a self-employed electrician
+[SEG0024] person_2 (DOCTOR): Are you active at all?
+[SEG0025] person_1 (PATIENT): Barely, I'm mostly sedentary these days.
+[SEG0026] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0027] person_1 (PATIENT): I've got asthma.
+[SEG0028] person_2 (DOCTOR): alright, asthma, that matches what I have here. Let's do your observations
+[SEG0029] person_2 (DOCTOR): one second..
+[SEG0030] person_2 (DOCTOR): okay: temperature 37.0, pressure 122 over 85. And pulse 125, saturation 99 percent
+[SEG0031] person_1 (PATIENT): is that okay?
+[SEG0032] person_2 (DOCTOR): I'll interpret it once I've examined you.
+[SEG0033] person_2 (DOCTOR): let's do the physical part now
+[SEG0034] person_1 (PATIENT): no problem
+[SEG0035] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0036] person_2 (DOCTOR): your thyroid feels a little enlarged and and smooth
+[SEG0037] person_1 (PATIENT): Mm, okay.
+[SEG0038] person_2 (DOCTOR): All done, you can get dressed. So, based on the history and the examination, I think we're dealing with an overactive thyroid at this stage. I'd also keep a heart rhythm problem in mind.
+[SEG0039] person_2 (DOCTOR): let's book a thyroid test to look into hyperthyroid symptoms
+[SEG0040] person_3 (CLINICAL_STAFF): I can book that that for Friday at 3:30 pm.
+[SEG0041] person_2 (DOCTOR): Limit tea, coffee and anything that speeds up the heart for now.
+[SEG0042] person_2 (DOCTOR): ah i'd like you to see an endocrinologist as well, and I'll write the referral keep an eye out, and if the symptoms get worse, call us the same day or go to emergency i'd like to see you again after the results are back
+[SEG0043] person_1 (PATIENT): Fine.
+[SEG0044] person_2 (DOCTOR): Thanks for coming in.
+[SEG0045] person_1 (PATIENT): Hmm, that's everything I wanted to ask. Thank you.
+[SEG0046] person_2 (DOCTOR): mind how you go
+
+JSON:

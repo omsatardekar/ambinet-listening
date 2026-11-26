@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01606)
+[SEG0001] person_1 (PATIENT): Uh, sorry, doctor, shall I sit here?
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): It's, It's coming on in seconds. I thought I'd wait, um, but it hasn't gone.
+[SEG0004] person_2 (DOCTOR): Did it come on recently?
+[SEG0005] person_1 (PATIENT): Probably three days. Yeah.
+[SEG0006] person_2 (DOCTOR): Any a stiff neck as well?
+[SEG0007] person_1 (PATIENT): Yeah, I've had that since Friday. As for stiff neck, it happens once or twice a day. There was vomiting, yes, but that went away.
+[SEG0008] person_2 (DOCTOR): Can I check a few measurements before we carry on?
+[SEG0009] person_2 (DOCTOR): Sit still for a moment...
+[SEG0010] person_2 (DOCTOR): Okay: SpO2 96 percent on room air, pressure 150 over 100, temperature 36.9. And heart rate 90.
+[SEG0011] person_2 (DOCTOR): Let's move on to the examination.
+[SEG0012] person_1 (PATIENT): Yeah, no problem.
+[SEG0013] person_2 (DOCTOR): Does that hurt?
+[SEG0014] person_2 (DOCTOR): Your neck is stiff and you are very sensitive to light.
+[SEG0015] person_2 (DOCTOR): That's the examination finished.
+[SEG0016] person_2 (DOCTOR): Any fever?
+[SEG0017] person_1 (PATIENT): No, no fever.
+[SEG0018] person_2 (DOCTOR): Any head injury or weakness at all?
+[SEG0019] person_1 (PATIENT): Yeah, no, none that I've noticed.
+[SEG0020] person_2 (DOCTOR): Has your skin been okay?
+[SEG0021] person_1 (PATIENT): No rashes.
+[SEG0022] person_2 (DOCTOR): Is your chest okay generally?
+[SEG0023] person_1 (PATIENT): Actually, no, my breathing's been fine.
+[SEG0024] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0025] person_1 (PATIENT): I have acid reflux, for five years. Yes, migraines.
+[SEG0026] person_2 (DOCTOR): Okay, I can see acid reflux in your file as well. Let's run through your medicines.
+[SEG0027] person_1 (PATIENT): Lansoprazole. I take it 30 milligrams, before breakfast. I, I take sumatriptan, 50 milligrams, when needed.
+[SEG0028] person_2 (DOCTOR): Roughly how long on that one?
+[SEG0029] person_1 (PATIENT): Nearly five years now. I was on pantoprazole before. I stopped taking it.
+[SEG0030] person_2 (DOCTOR): Have you ever had an operation?
+[SEG0031] person_1 (PATIENT): Just part of my thyroid removed, years back.
+[SEG0032] person_2 (DOCTOR): What do you do during the day?
+[SEG0033] person_1 (PATIENT): I look after my grandchildren most days.
+[SEG0034] person_2 (DOCTOR): Anything you do to stay fit?
+[SEG0035] person_1 (PATIENT): I do a yoga class on Thursdays.
+[SEG0036] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0037] person_1 (PATIENT): I was told I'm allergic to erythromycin, but I don't remember what reaction I had.
+[SEG0038] person_2 (DOCTOR): Putting it all together, this is probably a possible bleed around the brain. I can't rule out a migraine yet.
+[SEG0039] person_1 (PATIENT): I mean, is this serious, doctor?
+[SEG0040] person_2 (DOCTOR): It's reasonable to be concerned, but right now a possible bleed around the brain is my leading thought, not anything worse. We should do an urgent CT scan of the head for thunderclap headache. I'd rather check than guess, and this is the quickest way to know more.
+[SEG0041] person_3 (CLINICAL_STAFF): I can book that for Friday at 11:30 am.
+[SEG0042] person_2 (DOCTOR): I'm going to order a lumbar puncture, for thunderclap headache. It's a routine test and it'll give us a much clearer picture. This needs an emergency scan, an ambulance is on its way. Come back straight away.
+[SEG0043] person_1 (PATIENT): Ah, that's fine with me.
+[SEG0044] person_2 (DOCTOR): Is there anything you'd like me to go over again?
+[SEG0045] person_1 (PATIENT): Right, you know, I'll do that. Thank you, doctor.
+
+JSON:

@@ -1,0 +1,71 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00037)
+[SEG0001] person_1 (DOCTOR): Morning. Just put your bag down anywhere.
+[SEG0002] person_2 (PATIENT): Hi. Thanks.
+[SEG0003] person_3 (CAREGIVER): Right, hello, doctor, I came in with them, if that's okay.
+[SEG0004] person_1 (DOCTOR): Right, what's the trouble?
+[SEG0005] person_3 (CAREGIVER): Hmm, he's been having fever and joint pains, doctor.
+[SEG0006] person_1 (DOCTOR): So, since when have you had this?
+[SEG0007] person_2 (PATIENT): probably two weeks yeah
+[SEG0008] person_1 (DOCTOR): Alright, is it constant, or does it come and go?
+[SEG0009] person_2 (PATIENT): it, It happens every other day. I've also had a blotchy rash on the trunk, for four weeks. So, about blotchy rash on the trunk, mild, really
+[SEG0010] person_1 (DOCTOR): What about swollen painful wrists and ankles, have you noticed that?
+[SEG0011] person_2 (PATIENT): Well, yes, about the same, three weeks. With swollen painful wrists and ankles, it happens all the time. Rest helps a bit.
+[SEG0012] person_1 (DOCTOR): Have you got any chronic problems?
+[SEG0013] person_2 (PATIENT): High blood pressure, for about ten years. I've had eczema for five years now. I've got heart disease
+[SEG0014] person_1 (DOCTOR): Sure. Is there a family history of anything significant?
+[SEG0015] person_2 (PATIENT): My sister has thyroid problems. Well, my mother has migraines.
+[SEG0016] person_1 (DOCTOR): Any procedures or operations?
+[SEG0017] person_2 (PATIENT): I had a stent put in my heart two years ago.
+[SEG0018] person_1 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0019] person_3 (CAREGIVER): It's telmisartan, 40 milligrams, once a day, doctor.
+[SEG0020] person_1 (DOCTOR): And And for how long?
+[SEG0021] person_3 (CAREGIVER): About about a month.
+[SEG0022] person_1 (DOCTOR): Sure.
+[SEG0023] person_3 (CAREGIVER): He takes hydrocortisone cream, when needed.
+[SEG0024] person_1 (DOCTOR): what about allergies, to medicines or foods or anything else?
+[SEG0025] person_2 (PATIENT): I think I reacted to to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0026] person_1 (DOCTOR): Any smoking?
+[SEG0027] person_2 (PATIENT): I smoke about ten cigarettes a day
+[SEG0028] person_1 (DOCTOR): And alcohol, how much?
+[SEG0029] person_2 (PATIENT): I don't drink at all.
+[SEG0030] person_1 (DOCTOR): how about exercise?
+[SEG0031] person_2 (PATIENT): Not really, I don't get much exercise.
+[SEG0032] person_1 (DOCTOR): Do you live alone?
+[SEG0033] person_2 (PATIENT): Yes, I live on my own.
+[SEG0034] person_1 (DOCTOR): have you noticed bleeding, vomiting or neck stiffness?
+[SEG0035] person_2 (PATIENT): No, none of that at all.
+[SEG0036] person_1 (DOCTOR): have you had any diarrhoea?
+[SEG0037] person_2 (PATIENT): No, no diarrhoea.
+[SEG0038] person_3 (CAREGIVER): actually, doctor, I did notice diarrhoea he doesn't always say
+[SEG0039] person_2 (PATIENT): I mean, no, I don't think I did. Maybe a little, I'm not sure.
+[SEG0040] person_1 (DOCTOR): alright, I'll note both what you've said and what you've noticed. Have you noticed red eyes or cough?
+[SEG0041] person_2 (PATIENT): No red eyes or cough, none of it.
+[SEG0042] person_1 (DOCTOR): Any trouble with the waterworks?
+[SEG0043] person_2 (PATIENT): no changes there
+[SEG0044] person_1 (DOCTOR): Okay, a quick examination now.
+[SEG0045] person_1 (DOCTOR): Let me press here.
+[SEG0046] person_1 (DOCTOR): Both wrists and several finger joints are puffy and tender.
+[SEG0047] person_1 (DOCTOR): let me look at this properly
+[SEG0048] person_1 (DOCTOR): A fine rash over the chest and back, not itchy to touch.
+[SEG0049] person_1 (DOCTOR): Okay, thanks, please take a seat again.
+[SEG0050] person_1 (DOCTOR): Right, here's what I'm thinking. This is probably a viral fever with joint involvement, possibly chikungunya. An early inflammatory arthritis is still possible.
+[SEG0051] person_2 (PATIENT): Should I be worried about this?
+[SEG0052] person_1 (DOCTOR): I can't promise yet, but most people with a viral fever with joint involvement, possibly chikungunya do well once it's treated properly.
+[SEG0053] person_1 (DOCTOR): I'll request a full blood count, it'll help with fever. I want a dengue test done, that's for fever. It's a routine test and it'll give us a much clearer picture. I'll request a chikungunya test, it'll help with fever with joint pain.
+[SEG0054] person_2 (PATIENT): okay, you know, noted
+[SEG0055] person_1 (DOCTOR): You'll be taking paracetamol, 650 milligrams, three times a day, for five days. You take it it by mouth. It's for fever and joint pain. Avoid anti-inflammatory painkillers until we know it isn't dengue. Okay, we're done for today. Take care.
+[SEG0056] person_2 (PATIENT): okay, you know, so no, you've explained it well thanks
+
+JSON:

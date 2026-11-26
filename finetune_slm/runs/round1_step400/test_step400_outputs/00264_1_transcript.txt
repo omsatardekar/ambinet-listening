@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00264)
+[SEG0001] person_1 (PATIENT): Oh, sorry, doctor, I couldn't find the door at first.
+[SEG0002] person_2 (DOCTOR): Okay, yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): Honestly, it's blood on the toilet paper, and my family pushed me to come.
+[SEG0004] person_2 (DOCTOR): Since when have you had this?
+[SEG0005] person_1 (PATIENT): Hmm, I've had it for about two weeks.
+[SEG0006] person_2 (DOCTOR): On a normal day, how strong is it?
+[SEG0007] person_1 (PATIENT): Oh, pretty severe, if I'm being honest.
+[SEG0008] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0009] person_1 (PATIENT): Um, you know, it usually comes with an itchy bottom. The itchy bottom? That's been for four weeks. Okay, so about itchy bottom, pretty severe, if I'm being honest. And pain when I pass stool as well, since Friday.
+[SEG0010] person_2 (DOCTOR): Have you had blood on the toilet paper before, or is this the first time?
+[SEG0011] person_1 (PATIENT): I had a similar thing about six months ago. It went away.
+[SEG0012] person_3 (NURSE): Doctor, I've got the readings for you. Heart rate 71, oxygen saturation is 99 percent, temperature is 36.9 degrees. Blood pressure 124 over 77.
+[SEG0013] person_2 (DOCTOR): Thanks.
+[SEG0014] person_2 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0015] person_1 (PATIENT): That's fine.
+[SEG0016] person_2 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0017] person_2 (DOCTOR): There's a small external pile at the edge, and I don't see any fissure.
+[SEG0018] person_2 (DOCTOR): Let me press here.
+[SEG0019] person_2 (DOCTOR): Tummy is soft and non-tender.
+[SEG0020] person_2 (DOCTOR): Right, all done, you can get dressed. Let me check a few things. Any fever, black stools or abdominal pain?
+[SEG0021] person_1 (PATIENT): No fever, black stools or abdominal pain, none of it.
+[SEG0022] person_2 (DOCTOR): Let me check a few things. Any weight loss or family history of bowel cancer?
+[SEG0023] person_1 (PATIENT): I haven't had weight loss or family history of bowel cancer, no.
+[SEG0024] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0025] person_1 (PATIENT): Nothing else aches.
+[SEG0026] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0027] person_1 (PATIENT): I have low haemoglobin. I have an irregular heartbeat, for nearly five years.
+[SEG0028] person_2 (DOCTOR): Have you had any surgery before?
+[SEG0029] person_1 (PATIENT): Right, yes, I had my appendix out, about eight years ago.
+[SEG0030] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0031] person_1 (PATIENT): Iron tablets, once a day.
+[SEG0032] person_2 (DOCTOR): Right.
+[SEG0033] person_1 (PATIENT): Apixaban. I take it 5 milligrams, twice a day. I take Anovate cream, twice a day.
+[SEG0034] person_2 (DOCTOR): Right, do you drink alcohol?
+[SEG0035] person_1 (PATIENT): I gave up drinking about three years ago.
+[SEG0036] person_2 (DOCTOR): Anything special about your diet?
+[SEG0037] person_1 (PATIENT): I try to avoid too much sugar.
+[SEG0038] person_2 (DOCTOR): Who's at home with you?
+[SEG0039] person_1 (PATIENT): It's just me and my wife at home now.
+[SEG0040] person_2 (DOCTOR): Taking everything into account, I think we're dealing with haemorrhoids at this stage. That's my thinking for now, and it may change as we learn more. An anal fissure is still possible.
+[SEG0041] person_2 (DOCTOR): A colonoscopy is what I'd like next, for rectal bleeding. You'll be taking a soothing cream, twice a day, for one week. That's for haemorrhoids. Soak in a warm bath for ten minutes after you pass stool, and don't strain. Do get help quickly if you pass a lot of blood or feel faint. I'd like you back after the results are back.
+[SEG0042] person_1 (PATIENT): Okay, uh, see you then.
+[SEG0043] person_2 (DOCTOR): Okay, I think we're finished. Is everything clear?
+[SEG0044] person_1 (PATIENT): Thanks so much, you know, doctor.
+[SEG0045] person_2 (DOCTOR): All the best.
+
+JSON:

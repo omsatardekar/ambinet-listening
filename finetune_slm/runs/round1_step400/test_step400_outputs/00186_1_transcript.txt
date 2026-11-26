@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00186)
+[SEG0001] person_1 (DOCTOR): hello, come through
+[SEG0002] person_2 (PATIENT): Hello, doctor. Thanks for seeing me.
+[SEG0003] person_1 (DOCTOR): Okay, busy day out there?
+[SEG0004] person_2 (PATIENT): always is. The traffic coming in was terrible
+[SEG0005] person_1 (DOCTOR): So, how have things been?
+[SEG0006] person_2 (PATIENT): Hmm, I wanted to get constipation looked at.
+[SEG0007] person_1 (DOCTOR): How far back does it go?
+[SEG0008] person_2 (PATIENT): oh, it's been two days now
+[SEG0009] person_1 (DOCTOR): Right, anything that tends to go along with it?
+[SEG0010] person_2 (PATIENT): when it starts I tend to get a fever for days as well. Uh, you know, with fever for days, I'd call it severe. It's every other day
+[SEG0011] person_1 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0012] person_2 (PATIENT): I've got diabetes i wasn't sure whether to come in at all, to be honest
+[SEG0013] person_1 (DOCTOR): Right, so diabetes is already on your record. We'll keep that that in mind today. What's your current medication list?
+[SEG0014] person_2 (PATIENT): I take something called metf... metformin, 500 milligrams, maybe, twice a day.
+[SEG0015] person_1 (DOCTOR): Is the packet here, or the prescription?
+[SEG0016] person_2 (PATIENT): Oh, not with me. I'll bring it next time. I'm on Dolo, 650 milligrams, when I get the fever.
+[SEG0017] person_1 (DOCTOR): Any procedures or operations?
+[SEG0018] person_2 (PATIENT): Just cataract surgery on my right eye, last year.
+[SEG0019] person_1 (DOCTOR): so, do you smoke?
+[SEG0020] person_2 (PATIENT): I've never smoked
+[SEG0021] person_1 (DOCTOR): so, do you drink alcohol?
+[SEG0022] person_2 (PATIENT): I don't drink at all.
+[SEG0023] person_1 (DOCTOR): are you working at the moment?
+[SEG0024] person_2 (PATIENT): Yes, I'm a nurse on a busy ward.
+[SEG0025] person_1 (DOCTOR): do you get any exercise?
+[SEG0026] person_2 (PATIENT): I walk for about half an hour most days.
+[SEG0027] person_1 (DOCTOR): Any rash, cough or vomiting at all?
+[SEG0028] person_2 (PATIENT): I mean, no, no rash, cough or vomiting
+[SEG0029] person_1 (DOCTOR): Any jaundice or blood in the stool at all?
+[SEG0030] person_2 (PATIENT): No, no jaundice or blood in the stool.
+[SEG0031] person_1 (DOCTOR): anything on the skin I should know about?
+[SEG0032] person_2 (PATIENT): no rashes
+[SEG0033] person_3 (NURSE): Here are the numbers, doctor. Pulse 100, blood pressure 126 over 67, temperature is 38.7 degrees.
+[SEG0034] person_1 (DOCTOR): Thanks.
+[SEG0035] person_1 (DOCTOR): Let me examine, it won't take long.
+[SEG0036] person_2 (PATIENT): sure
+[SEG0037] person_1 (DOCTOR): Hold that position for me.
+[SEG0038] person_1 (DOCTOR): Your tummy is a bit full and tender in the lower part.
+[SEG0039] person_1 (DOCTOR): okay, stay still while I have a look
+[SEG0040] person_1 (DOCTOR): I can't feel your liver or spleen enlarged
+[SEG0041] person_1 (DOCTOR): Thanks, please take a seat again. So where does that leave us? I'd lean towards typhoid fever, which we need to confirm. The reason I say that is that your story and my examination fit together. Let's get a full blood count, for fever. Eat only home-cooked food and drink boiled or bottled water while this is going on.
+[SEG0042] person_1 (DOCTOR): Okay, so. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. One warning sign to remember: the fever stays high or the tummy pain gets sharp. In that case don't wait.
+[SEG0043] person_2 (PATIENT): Got it, um, thank you.
+[SEG0044] person_1 (DOCTOR): I'd like to see you again after the results are back
+[SEG0045] person_2 (PATIENT): Sure, um, that's doable.
+[SEG0046] person_1 (DOCTOR): Thanks for coming in.
+[SEG0047] person_2 (PATIENT): right thanks again
+[SEG0048] person_1 (DOCTOR): All the best.
+
+JSON:

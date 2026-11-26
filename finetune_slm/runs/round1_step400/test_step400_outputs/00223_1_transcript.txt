@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00223)
+[SEG0001] person_1 (PATIENT): Hi, doctor. Long queue outside, but here I am.
+[SEG0002] person_2 (DOCTOR): Right on time. Sit, please. How can I help?
+[SEG0003] person_1 (PATIENT): Yeah, it's a rattling chest. I don't know what's causing it. A neighbour of mine said I should see someone about it.
+[SEG0004] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0005] person_1 (PATIENT): Tiotropium inhaler, once a day.
+[SEG0006] person_2 (DOCTOR): How long has this been going on?
+[SEG0007] person_1 (PATIENT): It started yesterday.
+[SEG0008] person_2 (DOCTOR): Go on. How intense does it get?
+[SEG0009] person_1 (PATIENT): A seven out of ten, I suppose. Hmm, I've also had poor sleep because of the cough, for five days.
+[SEG0010] person_2 (DOCTOR): Any weight loss, fever, coughing up blood or swollen ankles?
+[SEG0011] person_1 (PATIENT): No, not any of them.
+[SEG0012] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0013] person_1 (PATIENT): No, nothing with my heart.
+[SEG0014] person_2 (DOCTOR): Is your digestion otherwise okay?
+[SEG0015] person_1 (PATIENT): Uh, no, all normal there.
+[SEG0016] person_2 (DOCTOR): Alright, have you got any chronic problems?
+[SEG0017] person_1 (PATIENT): I have COPD, for five years. I took the morning off to come in today.
+[SEG0018] person_2 (DOCTOR): Hm, okay.
+[SEG0019] person_1 (PATIENT): Uh, yes, high blood pressure. I've never really been one for hospitals.
+[SEG0020] person_2 (DOCTOR): Okay, and what else?
+[SEG0021] person_2 (DOCTOR): Okay, I can see COPD in your file as well. Any previous surgeries?
+[SEG0022] person_1 (PATIENT): No operations, no.
+[SEG0023] person_2 (DOCTOR): Do you drink alcohol?
+[SEG0024] person_1 (PATIENT): I don't drink at all.
+[SEG0025] person_2 (DOCTOR): Are you living with family?
+[SEG0026] person_1 (PATIENT): I stay with my daughter and her family.
+[SEG0027] person_2 (DOCTOR): Tell me about your work.
+[SEG0028] person_1 (PATIENT): I'm a software engineer, so I'm at a screen all day.
+[SEG0029] person_2 (DOCTOR): Are you active at all?
+[SEG0030] person_1 (PATIENT): Barely, I'm mostly sedentary these days.
+[SEG0031] person_2 (DOCTOR): Any drug or food allergies? I ask because it helps me narrow things down.
+[SEG0032] person_1 (PATIENT): Oh, yes, ibuprofen. I get stomach pain.
+[SEG0033] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0034] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0035] person_2 (DOCTOR): Okay: temperature is 37.5 degrees, heart rate 98. And respiratory rate 20, blood pressure 119 over 75, SpO2 90 percent on room air.
+[SEG0036] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0037] person_2 (DOCTOR): Hold that position for me.
+[SEG0038] person_2 (DOCTOR): Air entry is reduced on both sides with a prolonged breathing out phase.
+[SEG0039] person_1 (PATIENT): Yes, doctor.
+[SEG0040] person_2 (DOCTOR): Thanks, please take a seat again. Let me tell you where I've got to. I don't have a clear answer today: a flare-up of COPD is possible, and so is pneumonia.
+[SEG0041] person_2 (DOCTOR): I'm going to order blood tests, for infective exacerbation. I'm going to order a chest X-ray, for breathlessness.
+[SEG0042] person_1 (PATIENT): Alright, when would that be?
+[SEG0043] person_2 (DOCTOR): Let's use doxycycline, 100 milligrams, twice a day, for five days. It's for chest infection.
+[SEG0044] person_1 (PATIENT): Should I keep taking it if I feel better?
+[SEG0045] person_2 (DOCTOR): I'll start you on prednisolone, 30 milligrams, once a day, for five days. That should help with COPD flare-up. I'll put all of this in writing so you don't have to remember it. If you become more breathless or your lips turn blue, that's the point to come in urgently.
+[SEG0046] person_1 (PATIENT): Okay, I'll remember.
+[SEG0047] person_2 (DOCTOR): I'd like to see you again in two weeks.
+[SEG0048] person_1 (PATIENT): Fine.
+[SEG0049] person_2 (DOCTOR): Any last questions?
+[SEG0050] person_1 (PATIENT): I, I appreciate it, doctor.
+
+JSON:

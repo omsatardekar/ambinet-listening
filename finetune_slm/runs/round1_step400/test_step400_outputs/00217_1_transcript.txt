@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00217)
+[SEG0001] person_1 (PATIENT): Doctor? Hi. I hope I've got the right time.
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_1 (PATIENT): Well, I've been having tingling in my fingers. I'm hoping you can tell me something definite.
+[SEG0004] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0005] person_1 (PATIENT): It happens on and off. A seven out of ten, I suppose. Oh, and a weak grip. That's been about the same, two months.
+[SEG0006] person_2 (DOCTOR): Have you had tingling in your fingers before, or is this the first time?
+[SEG0007] person_1 (PATIENT): I had a similar thing a couple of years ago. It went away.
+[SEG0008] person_2 (DOCTOR): And what about headache or neck pain?
+[SEG0009] person_1 (PATIENT): Oh, um, no, I'd have mentioned it.
+[SEG0010] person_2 (DOCTOR): And what about swelling in the joints or weakness in the legs?
+[SEG0011] person_1 (PATIENT): No, I'd have mentioned it.
+[SEG0012] person_2 (DOCTOR): Okay, keep going. And your skin, any changes there?
+[SEG0013] person_1 (PATIENT): Nothing on the skin, no.
+[SEG0014] person_2 (DOCTOR): And what do you do for a living?
+[SEG0015] person_1 (PATIENT): I work night shifts at a warehouse.
+[SEG0016] person_2 (DOCTOR): Who's at home with you?
+[SEG0017] person_1 (PATIENT): It's just me and my wife at home now.
+[SEG0018] person_2 (DOCTOR): Right, anyone in the family with similar problems or other conditions?
+[SEG0019] person_1 (PATIENT): My grandmother had breast cancer.
+[SEG0020] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0021] person_1 (PATIENT): I take paracetamol, 500 milligrams, when needed.
+[SEG0022] person_2 (DOCTOR): Have you had any surgery before?
+[SEG0023] person_1 (PATIENT): Yeah, yes, I had a hernia repair, about five years back.
+[SEG0024] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0025] person_1 (PATIENT): Diabetes, for about ten years.
+[SEG0026] person_2 (DOCTOR): Do you have any known allergies at all?
+[SEG0027] person_1 (PATIENT): I was told I'm allergic to latex, but I don't remember what reaction I had.
+[SEG0028] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0029] person_2 (DOCTOR): Rest your hand here...
+[SEG0030] person_2 (DOCTOR): Okay: BMI works out to 20.2, temp 36.9 degrees. And height 162 centimetres, blood pressure 121 over 71, respiratory rate 15, weight 53 kilos, pulse is 68 beats a minute. Listening to the whole story, I'd lean towards carpal tunnel syndrome. Diabetic neuropathy is also on my list.
+[SEG0031] person_1 (PATIENT): Is it something serious, doctor?
+[SEG0032] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's carpal tunnel syndrome, and we'll know more once the a nerve conduction study is back.
+[SEG0033] person_2 (DOCTOR): I'll request a nerve conduction study, it'll help with hand numbness. Take short breaks from typing and keep the wrist straight. I think physiotherapy should see you too. I'd like you back after the results are back. Right, tell me what you've taken from all that, so I can fill in any gaps.
+[SEG0034] person_1 (PATIENT): So, I come back after the results are back. Is that right?
+[SEG0035] person_2 (DOCTOR): Yes, exactly right. Ask me anything before you go.
+[SEG0036] person_1 (PATIENT): All good here. Thank you.
+[SEG0037] person_2 (DOCTOR): See you then.
+
+JSON:

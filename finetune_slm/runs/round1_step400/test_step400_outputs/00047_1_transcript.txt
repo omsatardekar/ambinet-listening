@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00047)
+[SEG0001] person_1 (PATIENT): Uh, good afternoon, doctor, the receptionist said you'd see me now.
+[SEG0002] person_2 (DOCTOR): That's alright, take a seat. Tell me why you've come.
+[SEG0003] person_1 (PATIENT): Mainly I've been feeling overwhelmed at work. That's why I came.
+[SEG0004] person_2 (DOCTOR): How long have you had it?
+[SEG0005] person_1 (PATIENT): It's been going on for about two weeks.
+[SEG0006] person_2 (DOCTOR): Is it worse with anything in particular?
+[SEG0007] person_1 (PATIENT): I notice it more with deadlines.
+[SEG0008] person_2 (DOCTOR): Is it mild, moderate or severe?
+[SEG0009] person_1 (PATIENT): I'd call it severe. I've also been feeling short-tempered, for three days. There's a knot in my stomach as well.
+[SEG0010] person_2 (DOCTOR): Have you had to have anything operated on?
+[SEG0011] person_1 (PATIENT): Oh, yes, I had a hernia repair, about five years back.
+[SEG0012] person_2 (DOCTOR): Okay, any smoking?
+[SEG0013] person_1 (PATIENT): No, I don't smoke and never have.
+[SEG0014] person_2 (DOCTOR): Do you drink alcohol?
+[SEG0015] person_1 (PATIENT): I don't drink at all.
+[SEG0016] person_2 (DOCTOR): Okay, are you still working?
+[SEG0017] person_1 (PATIENT): I'm retired now, I was a clerk for years.
+[SEG0018] person_2 (DOCTOR): Do you live alone?
+[SEG0019] person_1 (PATIENT): Yes, I live on my own.
+[SEG0020] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0021] person_1 (PATIENT): Yes, pollen. I get a runny nose.
+[SEG0022] person_2 (DOCTOR): Right, moving on to your background, any past medical history?
+[SEG0023] person_1 (PATIENT): I have anxiety. I have acid reflux.
+[SEG0024] person_2 (DOCTOR): Okay, anything else?
+[SEG0025] person_2 (DOCTOR): Okay, I can see acid reflux in your file as well. Which tablets or creams or inhalers do you use?
+[SEG0026] person_1 (PATIENT): I take escitalopram, 10 milligrams, once a day for the anxiety. I take pantoprazole, before breakfast for my acidity.
+[SEG0027] person_2 (DOCTOR): And what strength is that?
+[SEG0028] person_1 (PATIENT): 40 milligrams, I think that's what's on the box. I'm on paracetamol, 500 milligrams, when needed.
+[SEG0029] person_2 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0030] person_1 (PATIENT): My brother has asthma.
+[SEG0031] person_2 (DOCTOR): How about alcohol use?
+[SEG0032] person_1 (PATIENT): Definitely no alcohol use.
+[SEG0033] person_2 (DOCTOR): Did you get weight loss, fainting or panic attacks?
+[SEG0034] person_1 (PATIENT): So, um, none, as far as I know.
+[SEG0035] person_2 (DOCTOR): Ah. Anything unusual with passing urine?
+[SEG0036] person_1 (PATIENT): That's normal as far as I know.
+[SEG0037] person_2 (DOCTOR): Let me measure a few things.
+[SEG0038] person_2 (DOCTOR): One second...
+[SEG0039] person_2 (DOCTOR): Okay: temperature 36.8, pressure 119 over 76, pulse 64, SpO2 99 percent on room air.
+[SEG0040] person_2 (DOCTOR): Going by what you've described, it fits best with stress-related symptoms. I can't rule out a depressive episode yet.
+[SEG0041] person_1 (PATIENT): What are the chances it's something bad?
+[SEG0042] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like stress-related symptoms, but I'd like to confirm. I'll request blood tests, it'll help with stress-related symptoms. Talking to someone, even a counsellor, helps more than people expect. We'll refer you to a counsellor. I'd like you back in a month. So, thanks for coming in.
+[SEG0043] person_1 (PATIENT): I appreciate it, doctor.
+
+JSON:

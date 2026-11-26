@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00071)
+[SEG0001] person_1 (DOCTOR): So, morning. Just put your bag down anywhere. What made you decide to come in?
+[SEG0002] person_2 (PATIENT): Well, I've been having swollen ankles in the evening. I wasn't sure whether to come in at all, to be honest.
+[SEG0003] person_1 (DOCTOR): so, roughly when did it it start?
+[SEG0004] person_2 (PATIENT): Ten days, I think... sorry, about four days, I got that wrong. My family kept telling me to get it checked
+[SEG0005] person_1 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0006] person_2 (PATIENT): I'd say every other day. Mostly moderate. A neighbour of mine said I should see someone about it.
+[SEG0007] person_1 (DOCTOR): Any a flushed face sometimes as well?
+[SEG0008] person_2 (PATIENT): I mean, yeah. One week, I'd say
+[SEG0009] person_1 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0010] person_2 (PATIENT): it sort of comes and goes. A five out of ten, I suppose. I did try to ignore it for a while
+[SEG0011] person_1 (DOCTOR): has there been a heavy feeling in the legs too?
+[SEG0012] person_2 (PATIENT): Oh, yes, since last Tuesday.
+[SEG0013] person_1 (DOCTOR): Is it mild, moderate or severe?
+[SEG0014] person_2 (PATIENT): Severe, I'd say.
+[SEG0015] person_1 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0016] person_1 (DOCTOR): Okay, give me a moment...
+[SEG0017] person_1 (DOCTOR): Okay: temperature is 37.0 degrees, SpO2 97 percent on room air. And blood pressure 151 over 95, pulse 88.
+[SEG0018] person_1 (DOCTOR): I'd like to examine you now.
+[SEG0019] person_1 (DOCTOR): let me look at this properly
+[SEG0020] person_1 (DOCTOR): chest is clear and the neck veins aren't raised
+[SEG0021] person_2 (PATIENT): Okay, ready.
+[SEG0022] person_1 (DOCTOR): bear with me a second
+[SEG0023] person_1 (DOCTOR): mild pitting swelling around both ankles, equal on both sides
+[SEG0024] person_1 (DOCTOR): okay, finished any reduced urine, one leg more swollen than the other or chest pain at all?
+[SEG0025] person_2 (PATIENT): Nothing like that, no.
+[SEG0026] person_1 (DOCTOR): any calf pain?
+[SEG0027] person_2 (PATIENT): Not that I've noticed, no calf pain.
+[SEG0028] person_1 (DOCTOR): Is your chest okay generally?
+[SEG0029] person_2 (PATIENT): breathing's normal
+[SEG0030] person_1 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0031] person_2 (PATIENT): No, you know, nothing like that.
+[SEG0032] person_1 (DOCTOR): any surgery in your history?
+[SEG0033] person_2 (PATIENT): Uh, just a hysterectomy, about twelve years ago.
+[SEG0034] person_1 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0035] person_2 (PATIENT): I mean, I take amlodipine, once a day for my pressure
+[SEG0036] person_1 (DOCTOR): And what strength is that?
+[SEG0037] person_2 (PATIENT): It's 5 milligrams.
+[SEG0038] person_1 (DOCTOR): Hm, okay. What about allergies, to to medicines or foods or anything else?
+[SEG0039] person_2 (PATIENT): I mean, I've never been told I have allergies.
+[SEG0040] person_1 (DOCTOR): How about exercise?
+[SEG0041] person_2 (PATIENT): Not really, I don't get much exercise.
+[SEG0042] person_1 (DOCTOR): Who's at home with you?
+[SEG0043] person_2 (PATIENT): It's just me and my wife at home now.
+[SEG0044] person_1 (DOCTOR): Anything special about your diet?
+[SEG0045] person_2 (PATIENT): I try to avoid too much sugar
+[SEG0046] person_1 (DOCTOR): Is there anything medical in your background?
+[SEG0047] person_2 (PATIENT): Yes, high blood pressure.
+[SEG0048] person_1 (DOCTOR): so, based on the history and the examination, my working impression is ankle swelling possibly from a blood pressure tablet
+[SEG0049] person_2 (PATIENT): doctor, you know, is this dangerous?
+[SEG0050] person_1 (DOCTOR): I understand the worry. At the moment I'd say it's ankle swelling possibly from a blood pressure tablet, and we'll watch how it goes.
+[SEG0051] person_1 (DOCTOR): Raise your legs when you're sitting and try compression socks. We'll catch up after the results are back. Is there anything you wanted to ask?
+[SEG0052] person_2 (PATIENT): Nothing more from me, thanks.
+
+JSON:

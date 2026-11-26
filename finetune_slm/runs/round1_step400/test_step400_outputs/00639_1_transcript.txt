@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00639)
+[SEG0001] person_1 (PATIENT): Doctor, it's the shoulder. I can't lift my arm above my head any more, I was trying to reach the press and, ah, I just couldn't.
+[SEG0002] person_2 (DOCTOR): Which side, and how long?
+[SEG0003] person_1 (PATIENT): The right. Three weeks now, give or take.
+[SEG0004] person_2 (DOCTOR): Does it hurt or is it just stuck?
+[SEG0005] person_1 (PATIENT): Both, sure. There's a sort of, an ache at night, mostly, when I lie on it.
+[SEG0006] person_2 (DOCTOR): Anything when you move it?
+[SEG0007] person_1 (PATIENT): There's a clicking. Started... I'm not sure when. Before the weakness, I think? Or maybe along with it. I couldn't tell you.
+[SEG0008] person_2 (DOCTOR): Fine. Any fall or knock to it?
+[SEG0009] person_1 (PATIENT): No, no fall. I didn't hurt it.
+[SEG0010] person_2 (DOCTOR): Neck pain?
+[SEG0011] person_1 (PATIENT): Not really, no. The neck's grand.
+[SEG0012] person_2 (DOCTOR): Any numbness or pins and needles down the arm?
+[SEG0013] person_1 (PATIENT): No, nothing like that.
+[SEG0014] person_2 (DOCTOR): Fever or feeling unwell with it?
+[SEG0015] person_1 (PATIENT): No, I'm well in myself.
+[SEG0016] person_2 (DOCTOR): Medicines. What are you on?
+[SEG0017] person_1 (PATIENT): Ramipril for the pressure, 5 mg, once a day. Atorvastatin, 20 mg, at night. And paracetamol, 1 gram, up to four times a day, for the shoulder.
+[SEG0018] person_2 (DOCTOR): Good. Are you allergic to anything, any allergies?
+[SEG0019] person_1 (PATIENT): Ah. Maybe. I think I came out in a rash, years ago, after one of the antibiotics. But I couldn't tell you which one.
+[SEG0020] person_2 (DOCTOR): I'll record that as unconfirmed. Health history, apart from the shoulder?
+[SEG0021] person_1 (PATIENT): High blood pressure, high cholesterol, the gout, and the arthritis in my knees.
+[SEG0022] person_2 (DOCTOR): Any operations?
+[SEG0023] person_1 (PATIENT): A knee replacement, the left one, about six years ago.
+[SEG0024] person_2 (DOCTOR): Heart or joint problems in the family?
+[SEG0025] person_1 (PATIENT): My father had a heart attack at sixty. And my sister has rheumatoid arthritis.
+[SEG0026] person_2 (DOCTOR): Do you smoke?
+[SEG0027] person_1 (PATIENT): I gave up smoking in 2015.
+[SEG0028] person_2 (DOCTOR): Alcohol?
+[SEG0029] person_1 (PATIENT): A glass of wine at the weekend, I'd say. Sure, that's all.
+[SEG0030] person_2 (DOCTOR): Let me look at it. Pulse 74, blood pressure 142 over 86, temperature 36.5, oxygen 97 percent, breathing 16, weight 91 kilos.
+[SEG0031] person_1 (PATIENT): Is the pressure all right? ~
+[SEG0032] person_2 (DOCTOR): A touch up from the pain, I'd say. Now lift your arm out to the side for me.
+[SEG0033] person_1 (PATIENT): That's as high as it goes. ~
+[SEG0034] person_2 (DOCTOR): Yes, I can see you can only lift the arm to shoulder height. And there's tenderness at the front of the right shoulder.
+[SEG0035] person_1 (PATIENT): Oh, that's sore. ~
+[SEG0036] person_2 (DOCTOR): Any trouble with your chest, breathlessness on exertion?
+[SEG0037] person_1 (PATIENT): No, nothing like that, my chest is fine.
+[SEG0038] person_2 (DOCTOR): Right. This looks most like a rotator cuff problem, the tendons that lift the arm.
+[SEG0039] person_1 (PATIENT): Is it a tear? ~
+[SEG0040] person_2 (DOCTOR): Could be partial, which is why I'd like to arrange an X-ray of the shoulder and an ultrasound scan of the shoulder.
+[SEG0041] person_1 (PATIENT): Grand. Will that be today? ~
+[SEG0042] person_2 (DOCTOR): The ultrasound is booked by reception. I'd also like to do a blood test for inflammation.
+[SEG0043] person_1 (PATIENT): Fine so. What about the pain at night? ~
+[SEG0044] person_2 (DOCTOR): Keep taking the paracetamol, and try a pillow under the arm when you lie down.
+[SEG0045] person_1 (PATIENT): I'll do that. ~
+[SEG0046] person_2 (DOCTOR): I'd like to see you again in two weeks with the results.
+[SEG0047] person_1 (PATIENT): Two weeks, so. Thanks, doctor. ~
+
+JSON:

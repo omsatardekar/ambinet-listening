@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01963)
+[SEG0001] person_1 (PATIENT): Morning, doctor. Is this the right room?
+[SEG0002] person_2 (DOCTOR): Yes, have a seat. Tell me what's going on.
+[SEG0003] person_1 (PATIENT): Um, so... painful periods. That's why I came.
+[SEG0004] person_2 (DOCTOR): Has this been going on for long?
+[SEG0005] person_1 (PATIENT): Around about three months... no wait, it's more like six months.
+[SEG0006] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): It's every other day. About a four out of ten. First two days definitely sets it off. I've been feeling sick on the first day too, for three weeks. I've had a dull ache in my back too, for four weeks.
+[SEG0008] person_2 (DOCTOR): Is it there all the time or does it come and go?
+[SEG0009] person_1 (PATIENT): It happens all the time.
+[SEG0010] person_2 (DOCTOR): Have you noticed heavy bleeding, bleeding between periods or pain with sex?
+[SEG0011] person_1 (PATIENT): No, I haven't had any of them.
+[SEG0012] person_2 (DOCTOR): What about fever?
+[SEG0013] person_1 (PATIENT): No, I haven't had any fever.
+[SEG0014] person_2 (DOCTOR): Neurologically, anything strange?
+[SEG0015] person_1 (PATIENT): No, that's all normal.
+[SEG0016] person_2 (DOCTOR): Any health conditions I should have on record?
+[SEG0017] person_1 (PATIENT): Yes, heart disease.
+[SEG0018] person_2 (DOCTOR): Okay, I can see heart disease in your file as well. Tell me about your routine, work, habits, that sort of thing.
+[SEG0019] person_1 (PATIENT): I retired from the post office two years ago. I swim twice a week. I drink a lot of tea and snack through the day.
+[SEG0020] person_2 (DOCTOR): Any past operations I should know about?
+[SEG0021] person_1 (PATIENT): Just a cataract operation in my left eye, about a year ago.
+[SEG0022] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0023] person_1 (PATIENT): I had a reaction to naproxen when I was younger, a rash, and I've avoided it since.
+[SEG0024] person_2 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0025] person_1 (PATIENT): Metoprolol, 50 milligrams, twice a day for my heart. Ibuprofen. I take it 400 milligrams, with food when needed.
+[SEG0026] person_2 (DOCTOR): I'll do your observations first.
+[SEG0027] person_2 (DOCTOR): That's it, just a little longer...
+[SEG0028] person_2 (DOCTOR): Okay: oxygen saturation is 99 percent, BP is 117 over 73. And pulse is 78 beats a minute, temperature is 37.0 degrees.
+[SEG0029] person_1 (PATIENT): Is that okay?
+[SEG0030] person_2 (DOCTOR): We'll look at it together shortly.
+[SEG0031] person_2 (DOCTOR): Let me look at the area, I'll be gentle.
+[SEG0032] person_2 (DOCTOR): Hold that for a second.
+[SEG0033] person_2 (DOCTOR): Your tummy is soft and not tender between periods.
+[SEG0034] person_2 (DOCTOR): Okay, that's enough for me.
+[SEG0035] person_2 (DOCTOR): So where does that leave us? This looks most like primary dysmenorrhoea. I want to be honest that this is an impression, not a final answer.
+[SEG0036] person_2 (DOCTOR): Heat, gentle exercise, and start the tablet at the first sign of pain. Come back in three months.
+[SEG0037] person_3 (CLINICAL_STAFF): I can put that appointment in for you now.
+[SEG0038] person_2 (DOCTOR): Is there anything you'd like me to go over again?
+[SEG0039] person_1 (PATIENT): Good, thanks, I'll see you then.
+
+JSON:

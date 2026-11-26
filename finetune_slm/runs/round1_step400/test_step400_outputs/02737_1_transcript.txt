@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02737)
+[SEG0001] person_1 (NURSE): Doctor I've checked them in and done the preliminary measurements I'll hand them over when you ask.
+[SEG0002] person_2 (DOCTOR): thank you good morning tell me what's been going on
+[SEG0003] person_3 (CAREGIVER): Yeah, hello, doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_2 (DOCTOR): that's fine, sit down we'll go through it together
+[SEG0005] person_3 (CAREGIVER): Erm, we came because of vomiting.
+[SEG0006] person_2 (DOCTOR): Has this been going on for long?
+[SEG0007] person_4 (PATIENT): actually, it's been about a week now. And I've been feeling very unwell as well. I've also had severe tummy pain out of proportion to the examination, since yesterday. About severe tummy pain out of proportion to the examination, pretty mild, if I'm being honest. I did have bloody diarrhoea at one point, but that's gone now
+[SEG0008] person_2 (DOCTOR): is there anything relevant on the family side?
+[SEG0009] person_4 (PATIENT): my grandfather had a stroke
+[SEG0010] person_2 (DOCTOR): anything in your past medical history I should know?
+[SEG0011] person_4 (PATIENT): yes, an irregular heartbeat
+[SEG0012] person_2 (DOCTOR): right, and anything else to add?
+[SEG0013] person_4 (PATIENT): I've had acid reflux, yes.
+[SEG0014] person_2 (DOCTOR): mm okay
+[SEG0015] person_2 (DOCTOR): are there any allergies I should be aware of?
+[SEG0016] person_4 (PATIENT): Kiwi. I come out in... well, hives. Yes, diclofenac, it gives me swelling of my lips
+[SEG0017] person_2 (DOCTOR): alright anything surgical in your history?
+[SEG0018] person_4 (PATIENT): Yes you know I had keyhole surgery on my gallbladder two years back.
+[SEG0019] person_2 (DOCTOR): Alright, now some background about your lifestyle.
+[SEG0020] person_4 (PATIENT): I do a yoga class on Thursdays. Lots of rice, lentils and some fruit. I'm a plumber, lots of bending and kneeling
+[SEG0021] person_2 (DOCTOR): what do you take on a normal day?
+[SEG0022] person_4 (PATIENT): Bisoprolol, once a day for the heart rhythm.
+[SEG0023] person_2 (DOCTOR): How much do you take?
+[SEG0024] person_4 (PATIENT): it's 2.5 milligrams. Omeprazole, 20 milligrams, once a day for the reflux i'm on a blood thinner, 5 milligrams, stopped last month
+[SEG0025] person_3 (CAREGIVER): doctor I think the last prescription for the a blood thinner was 10 milligrams. We changed it at the last visit
+[SEG0026] person_2 (DOCTOR): Right. Do you happen to have the current prescription here?
+[SEG0027] person_4 (PATIENT): uh, no, I left it at home
+[SEG0028] person_2 (DOCTOR): Let me check a a few things. Any fever, chest pain or hernia?
+[SEG0029] person_4 (PATIENT): No, no fever, chest pain or hernia.
+[SEG0030] person_2 (DOCTOR): neurologically, anything strange?
+[SEG0031] person_4 (PATIENT): no weakness or anything
+[SEG0032] person_1 (NURSE): Okay, so the vitals from earlier. Pressure 115 over 76, saturation 96 percent, respiratory rate 17, pulse 124.
+[SEG0033] person_2 (DOCTOR): thanks
+[SEG0034] person_2 (DOCTOR): okay, time for me to examine you
+[SEG0035] person_2 (DOCTOR): I'll listen to your chest now.
+[SEG0036] person_2 (DOCTOR): your pulse is irregular, the tummy is soft but terribly painful, and the pain is out of proportion to what I find
+[SEG0037] person_4 (PATIENT): That's alright.
+[SEG0038] person_2 (DOCTOR): thank you, you can get dressed
+[SEG0039] person_2 (DOCTOR): Okay, so my impression is this: I'd lean towards possible bowel ischaemia. Another possibility is pancreatitis. I think an urgent CT angiogram makes sense here, for possible bowel ischaemia. I'm sending you for urgent blood tests cos of severe abdominal pain. This is an emergency, you are gonna hospital now. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0040] person_4 (PATIENT): Ah, um, thank you, that's clear.
+[SEG0041] person_2 (DOCTOR): So, is there anything you'd like me to go over again?
+[SEG0042] person_4 (PATIENT): great thank you for your help
+
+JSON:

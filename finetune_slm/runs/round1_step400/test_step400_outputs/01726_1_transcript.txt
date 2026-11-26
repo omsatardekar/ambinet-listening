@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01726)
+[SEG0001] person_1 (DOCTOR): Right then, come on in.
+[SEG0002] person_2 (PATIENT): Evening, doctor.
+[SEG0003] person_1 (DOCTOR): What's the main thing today?
+[SEG0004] person_2 (PATIENT): Doctor, it's a very fast heartbeat. It's getting on my nerves now.
+[SEG0005] person_1 (DOCTOR): How long has it been like this?
+[SEG0006] person_2 (PATIENT): Uh, ever since... since last night, really.
+[SEG0007] person_1 (DOCTOR): Hm, okay. Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0008] person_2 (PATIENT): It happens a few times a day. It feels severe to me. I took the morning off to come in today.
+[SEG0009] person_1 (DOCTOR): Is there anything else with it?
+[SEG0010] person_2 (PATIENT): Chest pressure goes along with it, most of the time. As for chest pressure, I'd call it mild.
+[SEG0011] person_1 (DOCTOR): Any previous surgeries?
+[SEG0012] person_2 (PATIENT): No surgery, no.
+[SEG0013] person_1 (DOCTOR): A few questions about your lifestyle now.
+[SEG0014] person_2 (PATIENT): I'm a bus driver, so I sit for long hours. I grab fast food at lunch most days. I live with my elderly mother.
+[SEG0015] person_1 (DOCTOR): Do you take any regular medication?
+[SEG0016] person_2 (PATIENT): Nothing regular, um, no.
+[SEG0017] person_1 (DOCTOR): Have you got any known allergies?
+[SEG0018] person_2 (PATIENT): Uh, yes, plasters, it gives me a red itchy rash.
+[SEG0019] person_1 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0020] person_2 (PATIENT): No, nothing I can think of.
+[SEG0021] person_1 (DOCTOR): What about your parents, brothers or sisters, any conditions?
+[SEG0022] person_2 (PATIENT): My uncle has high cholesterol.
+[SEG0023] person_1 (DOCTOR): Alright, any leg swelling, cough or fever at all?
+[SEG0024] person_2 (PATIENT): No leg swelling, cough or fever, none of it.
+[SEG0025] person_1 (DOCTOR): Alright, is your digestion otherwise okay?
+[SEG0026] person_2 (PATIENT): Erm, um, no, all normal there.
+[SEG0027] person_1 (DOCTOR): I'll note down your vital signs first.
+[SEG0028] person_1 (DOCTOR): Bear with me while this finishes...
+[SEG0029] person_1 (DOCTOR): Okay: pulse 95, pressure 98 over 59, saturation 98 percent, temperature is 36.5 degrees.
+[SEG0030] person_2 (PATIENT): Is that normal?
+[SEG0031] person_1 (DOCTOR): We'll go over that shortly.
+[SEG0032] person_1 (DOCTOR): Right, let's have a proper look at you.
+[SEG0033] person_1 (DOCTOR): Hold that for a second.
+[SEG0034] person_1 (DOCTOR): Your pulse is over one hundred and eighty and your blood pressure is low.
+[SEG0035] person_1 (DOCTOR): All finished, thank you. Okay, thinking it through, the most likely explanation is a dangerous fast heart rhythm.
+[SEG0036] person_1 (DOCTOR): Let's book blood tests to look into arrhythmia. We should do an urgent ECG for fast heart rhythm. Lie flat, I am calling the emergency team and preparing to shock the heart. I'll also refer you to the emergency team. That's all from me. Any questions?
+[SEG0037] person_2 (PATIENT): I think I understand everything. Thanks.
+
+JSON:

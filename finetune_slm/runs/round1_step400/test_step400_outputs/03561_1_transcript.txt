@@ -1,0 +1,71 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03561)
+[SEG0001] person_1 (NURSE): Doctor, your next patient is here. I've done the basics, I'll read them out in a moment.
+[SEG0002] person_2 (DOCTOR): Thank you. Right, hello, what's the problem?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, I'll sit in if that's okay, I know what's been happening.
+[SEG0004] person_2 (DOCTOR): Please do. Extra information is always welcome.
+[SEG0005] person_3 (FAMILY_MEMBER): She's been having been feeling muddled and unsteady, doctor.
+[SEG0006] person_2 (DOCTOR): Can you tell me when it first started?
+[SEG0007] person_4 (PATIENT): About three weeks, give or take.
+[SEG0008] person_3 (FAMILY_MEMBER): Hm, I'd say more like a month.
+[SEG0009] person_2 (DOCTOR): Okay, so roughly three to four weeks. Is that right?
+[SEG0010] person_4 (PATIENT): That sounds about right.
+[SEG0011] person_2 (DOCTOR): How much does it limit you?
+[SEG0012] person_4 (PATIENT): It's mild, honestly.
+[SEG0013] person_2 (DOCTOR): Have you had cramps?
+[SEG0014] person_4 (PATIENT): Mm, yes.
+[SEG0015] person_2 (DOCTOR): Have you been feeling sick?
+[SEG0016] person_4 (PATIENT): Yes, about the same, two months. A headache was there, but it's gone away on its own.
+[SEG0017] person_2 (DOCTOR): Before we go further, any allergies?
+[SEG0018] person_4 (PATIENT): No, not that I know of.
+[SEG0019] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0020] person_4 (PATIENT): Mirtazapine. I take it 15 milligrams, at night. I'm on valsartan, 80 milligrams, once a day.
+[SEG0021] person_3 (FAMILY_MEMBER): She is supposed to take it once a day, but I can't say she always does.
+[SEG0022] person_2 (DOCTOR): Anything in your past medical history I should know?
+[SEG0023] person_4 (PATIENT): Ah, I've had depression for nearly five years now.
+[SEG0024] person_2 (DOCTOR): Is that everything?
+[SEG0025] person_4 (PATIENT): I have high blood pressure, for about ten years.
+[SEG0026] person_2 (DOCTOR): Any smoking?
+[SEG0027] person_4 (PATIENT): I have about eight cigarettes in a day.
+[SEG0028] person_2 (DOCTOR): Do you get out much?
+[SEG0029] person_4 (PATIENT): Not much, I mostly stay in these days.
+[SEG0030] person_2 (DOCTOR): Who lives with you?
+[SEG0031] person_4 (PATIENT): My partner and our baby.
+[SEG0032] person_2 (DOCTOR): Right, are you in work at the moment?
+[SEG0033] person_4 (PATIENT): Yes, I work in a bakery, early starts.
+[SEG0034] person_2 (DOCTOR): What about your parents, brothers or sisters, any conditions?
+[SEG0035] person_4 (PATIENT): My brother has epilepsy. My mother had a stroke.
+[SEG0036] person_2 (DOCTOR): Have you been to theatre before?
+[SEG0037] person_4 (PATIENT): Yes, I had a varicose vein procedure, last year.
+[SEG0038] person_2 (DOCTOR): Okay, have you had any weakness on one side, seizure, fever or fall?
+[SEG0039] person_4 (PATIENT): I mean, no weakness on one side, seizure, fever or fall, none of it.
+[SEG0040] person_2 (DOCTOR): How about your heart, any problems like that?
+[SEG0041] person_4 (PATIENT): No, that's been fine.
+[SEG0042] person_1 (NURSE): Doctor, I've got the readings for you. Pulse 79, pressure 123 over 79. SpO2 97 percent on room air, respiratory rate 15, temp 36.4 degrees.
+[SEG0043] person_2 (DOCTOR): Good, thank you.
+[SEG0044] person_2 (DOCTOR): Now I'm going to do a short physical check.
+[SEG0045] person_2 (DOCTOR): I'll listen to your chest now.
+[SEG0046] person_2 (DOCTOR): You are a bit slow and unsteady, but there is no weakness and your blood pressure is fine.
+[SEG0047] person_2 (DOCTOR): Thank you, you can get dressed. Taking everything into account, it fits best with a low salt level, possibly from the new antidepressant. Another possibility is a urine infection.
+[SEG0048] person_4 (PATIENT): Is this permanent?
+[SEG0049] person_2 (DOCTOR): I can't promise yet, but most people with a low salt level, possibly from the new antidepressant do well once it's treated properly. I think blood tests makes sense here, for confusion. I think a urine test makes sense here, for confusion. It's a routine test and it'll give us a much clearer picture. We will stop the new tablet and not drink excess water until we have the result.
+[SEG0050] person_2 (DOCTOR): I'll also refer you to the older people's clinic.
+[SEG0051] person_4 (PATIENT): Alright, thank you.
+[SEG0052] person_2 (DOCTOR): One warning sign to remember: the symptoms get worse. In that case don't wait.
+[SEG0053] person_4 (PATIENT): Yes, will do.
+[SEG0054] person_2 (DOCTOR): Please come and see me in two days. Okay, anything else on your mind before you go?
+[SEG0055] person_4 (PATIENT): So, okay, that makes sense. Thanks for explaining.
+[SEG0056] person_2 (DOCTOR): Take care now.
+
+JSON:

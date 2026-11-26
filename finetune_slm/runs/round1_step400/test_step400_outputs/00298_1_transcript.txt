@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00298)
+[SEG0001] person_1 (PATIENT): Morning. Nice to finally see you, you know, doctor.
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_3 (FAMILY_MEMBER): I mean, um, thank you for fitting us in, doctor
+[SEG0004] person_2 (DOCTOR): That's fine, sit down. We'll go through it together.
+[SEG0005] person_1 (PATIENT): Yeah, it's a pounding headache. I don't know what's causing it.
+[SEG0006] person_2 (DOCTOR): how long are we talking about?
+[SEG0007] person_1 (PATIENT): It's been about a week now.
+[SEG0008] person_2 (DOCTOR): Is it constant, or does it come and go?
+[SEG0009] person_1 (PATIENT): It, It comes and goes.
+[SEG0010] person_2 (DOCTOR): On a normal day, how strong is it?
+[SEG0011] person_1 (PATIENT): I'd give it a four, out of ten.
+[SEG0012] person_2 (DOCTOR): Is there anything that takes the the edge off?
+[SEG0013] person_1 (PATIENT): I get some relief from sleep.
+[SEG0014] person_2 (DOCTOR): Anything you do that brings it on?
+[SEG0015] person_1 (PATIENT): I notice it more with loud noise and bright lights.
+[SEG0016] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0017] person_1 (PATIENT): When it starts I tend to get sensitivity to light as well. The, The sensitivity to light? That's been for five days.
+[SEG0018] person_2 (DOCTOR): How bad is it, would you say?
+[SEG0019] person_1 (PATIENT): about a four out of ten. Nausea was there, but it's gone away on its own
+[SEG0020] person_2 (DOCTOR): Let's get your blood pressure and the the other basics.
+[SEG0021] person_2 (DOCTOR): Just relax your arm...
+[SEG0022] person_2 (DOCTOR): okay: BP is 121 over 79, pulse 67, temp 36.6 degrees, oxygen saturation is 99 percent
+[SEG0023] person_2 (DOCTOR): Right, I'll examine you now, bear with me.
+[SEG0024] person_2 (DOCTOR): Almost done with this part.
+[SEG0025] person_2 (DOCTOR): Power in all four limbs is normal
+[SEG0026] person_2 (DOCTOR): almost done with this part
+[SEG0027] person_2 (DOCTOR): Neck is supple, no stiffness at all.
+[SEG0028] person_2 (DOCTOR): okay, finished have you noticed loss of consciousness, double vision, neck stiffness or weakness in the arms or legs?
+[SEG0029] person_1 (PATIENT): So, no, not any of them.
+[SEG0030] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0031] person_1 (PATIENT): So, no, that's been fine.
+[SEG0032] person_2 (DOCTOR): And alcohol, how much?
+[SEG0033] person_1 (PATIENT): I don't drink at all.
+[SEG0034] person_2 (DOCTOR): So, what do you do for work?
+[SEG0035] person_1 (PATIENT): I work in an office, mostly sitting at a desk.
+[SEG0036] person_2 (DOCTOR): What do you do to keep active?
+[SEG0037] person_1 (PATIENT): I cycle to work most mornings
+[SEG0038] person_2 (DOCTOR): Right, what's your diet like?
+[SEG0039] person_1 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0040] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0041] person_1 (PATIENT): No, none that I know of.
+[SEG0042] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0043] person_1 (PATIENT): Um, um, no, none that that I know of.
+[SEG0044] person_2 (DOCTOR): Any previous surgeries?
+[SEG0045] person_1 (PATIENT): Well, just my appendix out, about eight years ago.
+[SEG0046] person_2 (DOCTOR): let's go through your medication. What are you taking?
+[SEG0047] person_1 (PATIENT): It's Disprin, 325 milligrams, when it starts.
+[SEG0048] person_2 (DOCTOR): let me tell you where I've got to. This is probably migraine with aura. I want to be honest that this is an impression, not a final answer. Tension-type headache is also on my list
+[SEG0049] person_1 (PATIENT): I've been thinking the worst, to be honest. Is it bad?
+[SEG0050] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like migraine with aura. Okay, for now, no new medicines or tests are needed. Take care, and call us if anything changes.
+[SEG0051] person_1 (PATIENT): alright, thanks bye for now
+[SEG0052] person_2 (DOCTOR): Bye for now.
+
+JSON:

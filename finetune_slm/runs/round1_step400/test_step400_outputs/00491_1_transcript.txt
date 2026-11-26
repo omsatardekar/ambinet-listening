@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00491)
+[SEG0001] person_1 (DOCTOR): Hello. Right, let's get started.
+[SEG0002] person_2 (PATIENT): hello is it okay if I sit here?
+[SEG0003] person_1 (DOCTOR): Did you find the the place alright?
+[SEG0004] person_2 (PATIENT): um, yes, it was easy enough. The parking was the hard part
+[SEG0005] person_1 (DOCTOR): How can I help you today?
+[SEG0006] person_2 (PATIENT): it's a fit last month, mostly
+[SEG0007] person_1 (DOCTOR): How far back does it go?
+[SEG0008] person_2 (PATIENT): About... well, about two weeks.
+[SEG0009] person_1 (DOCTOR): right tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse i'll explain everything as we go along
+[SEG0010] person_2 (PATIENT): I'd say on and off. I notice it it more with missed sleep and missing tablets.
+[SEG0011] person_1 (DOCTOR): have you had any loss of bladder control or weakness on one side?
+[SEG0012] person_2 (PATIENT): No, no loss of bladder control or weakness on one side.
+[SEG0013] person_1 (DOCTOR): Okay, any breathing difficulties apart from this?
+[SEG0014] person_2 (PATIENT): No problems with breathing.
+[SEG0015] person_1 (DOCTOR): Any long-term health problems I should know about?
+[SEG0016] person_2 (PATIENT): Yes, epilepsy.
+[SEG0017] person_1 (DOCTOR): right, so epilepsy is already on your record. We'll keep that in mind today. Alright, tell me what you take day to day
+[SEG0018] person_2 (PATIENT): Sodium valproate. I take it 500 milligrams, twice a day.
+[SEG0019] person_1 (DOCTOR): Okay, any relatives with health problems I should be aware of?
+[SEG0020] person_2 (PATIENT): My uncle had colon cancer.
+[SEG0021] person_1 (DOCTOR): do you live alone?
+[SEG0022] person_2 (PATIENT): Yes, I live on my own
+[SEG0023] person_1 (DOCTOR): What's your diet like?
+[SEG0024] person_2 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0025] person_1 (DOCTOR): Okay, do you have any allergies to medicines, food, anything at all?
+[SEG0026] person_2 (PATIENT): Right, no, no allergies to anything.
+[SEG0027] person_1 (DOCTOR): let's get your blood pressure and the other basics
+[SEG0028] person_1 (DOCTOR): Okay, give me a moment...
+[SEG0029] person_1 (DOCTOR): okay: oxygen saturation is 98 percent, pulse is 76 beats a a minute, temperature 36.9, respiratory rate 17, pressure 117 over 69.
+[SEG0030] person_2 (PATIENT): Is that that okay?
+[SEG0031] person_1 (DOCTOR): That's fine, we'll come to to it.
+[SEG0032] person_1 (DOCTOR): I'll examine you now, bear with me.
+[SEG0033] person_2 (PATIENT): Fine.
+[SEG0034] person_1 (DOCTOR): right, a little pressure here, tell me if it's tender
+[SEG0035] person_1 (DOCTOR): Reflexes and power are symmetrical on both sides.
+[SEG0036] person_1 (DOCTOR): That's all I need, thank you. So where does that leave us? It's hard to say. Breakthrough seizure on known epilepsy is one possibility and a provoked seizure from missed medication another, and I'd rather not commit yet.
+[SEG0037] person_2 (PATIENT): I've been thinking the worst, to be honest. Is it bad?
+[SEG0038] person_1 (DOCTOR): it's reasonable to be concerned, but right now breakthrough seizure on known epilepsy is my leading thought, not anything worse
+[SEG0039] person_1 (DOCTOR): I'm sending you for an MRI of the brain cos of seizure. No driving until we've reviewed you again, I'm sorry, but that's the rule. Book a review in four weeks. Is there anything you wanted to ask?
+[SEG0040] person_2 (PATIENT): I think that's clear. Thank you for being so thorough.
+[SEG0041] person_1 (DOCTOR): bye for now
+
+JSON:

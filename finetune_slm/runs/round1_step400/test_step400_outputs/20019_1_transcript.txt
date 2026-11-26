@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20019)
+[SEG0001] person_1 (PATIENT): Doctor, hi, where would you like me to put my coat?
+[SEG0002] person_2 (DOCTOR): Of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): Honestly, it's a tight feeling in my chest when I walk uphill, and my family pushed me to come.
+[SEG0004] person_2 (DOCTOR): How many days or weeks has it been?
+[SEG0005] person_1 (PATIENT): It's been going on for two months. I've been reading about it online and it worried me.
+[SEG0006] person_2 (DOCTOR): Would you say mild, moderate or severe?
+[SEG0007] person_1 (PATIENT): Mostly mild. Uh, I was sweating with the tightness at one point, but that's gone now.
+[SEG0008] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0009] person_1 (PATIENT): I gave up cigarettes last spring. Nothing, I'm teetotal. I grab fast food at lunch most days. My partner and our baby. I'm a bus driver, so I sit for long hours.
+[SEG0010] person_2 (DOCTOR): Any health conditions I should have on record? It helps to be thorough at this stage.
+[SEG0011] person_1 (PATIENT): High blood pressure, for about ten years. I have diabetes, for about ten years.
+[SEG0012] person_2 (DOCTOR): Okay, I can see high blood pressure in your file as well.
+[SEG0013] person_2 (DOCTOR): Can you list what you take, tablets, creams or inhalers?
+[SEG0014] person_1 (PATIENT): Telmisartan. I take it 40 milligrams, once a day for my pressure. Glimepiride, 2 milligrams, before breakfast.
+[SEG0015] person_2 (DOCTOR): Did you ever have any procedures done?
+[SEG0016] person_1 (PATIENT): Yes, I had a varicose vein procedure, last year.
+[SEG0017] person_2 (DOCTOR): Did you get pain between the shoulder blades, cough, fainting or ankle swelling?
+[SEG0018] person_1 (PATIENT): I, I haven't had pain between the shoulder blades, cough, fainting or ankle swelling, no.
+[SEG0019] person_2 (DOCTOR): What about palpitations?
+[SEG0020] person_1 (PATIENT): Not at all, no palpitations.
+[SEG0021] person_2 (DOCTOR): Ah. Have you noticed any weakness, or anything odd with your balance?
+[SEG0022] person_1 (PATIENT): No weakness or anything.
+[SEG0023] person_2 (DOCTOR): Okay, is your mobility otherwise okay?
+[SEG0024] person_1 (PATIENT): No, joints are fine.
+[SEG0025] person_2 (DOCTOR): Let me quickly check your readings.
+[SEG0026] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0027] person_2 (DOCTOR): Okay: temperature 36.6, blood pressure 113 over 82, pulse 78.
+[SEG0028] person_1 (PATIENT): Is that okay?
+[SEG0029] person_2 (DOCTOR): We'll go over that shortly.
+[SEG0030] person_2 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0031] person_2 (DOCTOR): Stay as you are for a moment.
+[SEG0032] person_2 (DOCTOR): Heart sounds are normal, no murmur, and the chest is clear.
+[SEG0033] person_2 (DOCTOR): Let me feel here.
+[SEG0034] person_2 (DOCTOR): There is no swelling in your ankles.
+[SEG0035] person_1 (PATIENT): Of course.
+[SEG0036] person_2 (DOCTOR): So, thank you, you can get dressed.
+[SEG0037] person_2 (DOCTOR): So, based on the history and the examination, it's hard to say. Exertional angina until proven otherwise is one possibility and reflux-related chest pain another, and I'd rather not commit yet.
+[SEG0038] person_1 (PATIENT): Mm, what are the odds it's serious?
+[SEG0039] person_2 (DOCTOR): It's reasonable to be concerned, but right now exertional angina until proven otherwise is my leading thought, not anything worse. We should do an ECG for chest tightness. An exercise stress test is what I'd like next, for exertional chest tightness. We'll begin with GTN spray, 400 micrograms, when needed for chest pain, long term. It's for chest pain.
+[SEG0040] person_2 (DOCTOR): I'm going to put you on aspirin, 75 milligrams, once a day, long term. It's for heart protection. I'll put all of this in writing so you don't have to remember it. If the tightness comes, stop, sit down and use the spray under your tongue. I'm not ordering blood tests today. If things carry on in a month, we'll consider it. I think we're done unless you have questions.
+[SEG0041] person_1 (PATIENT): That's clear, thanks.
+[SEG0042] person_2 (DOCTOR): See you soon.
+
+JSON:

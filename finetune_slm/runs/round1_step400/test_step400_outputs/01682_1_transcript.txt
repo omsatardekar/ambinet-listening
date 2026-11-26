@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01682)
+[SEG0001] person_1 (DOCTOR): Right, welcome. Make yourself comfortable.
+[SEG0002] person_2 (PATIENT): Evening, doctor.
+[SEG0003] person_1 (DOCTOR): So, what do you need help with?
+[SEG0004] person_2 (PATIENT): Doctor, it's a very fast heartbeat. It's getting on my nerves now.
+[SEG0005] person_1 (DOCTOR): How long has this been bothering you?
+[SEG0006] person_2 (PATIENT): Probably six months. Yeah.
+[SEG0007] person_1 (DOCTOR): How much trouble does it give you?
+[SEG0008] person_2 (PATIENT): So, maybe a seven out of ten on a bad day.
+[SEG0009] person_1 (DOCTOR): Have you been feeling faint?
+[SEG0010] person_2 (PATIENT): Yeah, I've had that since Monday.
+[SEG0011] person_1 (DOCTOR): Have you been sweating?
+[SEG0012] person_2 (PATIENT): Yes, about the same, about four days.
+[SEG0013] person_1 (DOCTOR): How much trouble does it give you?
+[SEG0014] person_2 (PATIENT): Hmm, it feels mild to me. Chest pressure was there, but it's gone away on its own.
+[SEG0015] person_1 (DOCTOR): Have you had any fever, cough or leg swelling?
+[SEG0016] person_2 (PATIENT): Nope, nothing like that.
+[SEG0017] person_1 (DOCTOR): Any problems with your joints or muscles?
+[SEG0018] person_2 (PATIENT): No, joints are fine.
+[SEG0019] person_1 (DOCTOR): Right, are there any allergies I should be aware of?
+[SEG0020] person_2 (PATIENT): No, not that I know of.
+[SEG0021] person_1 (DOCTOR): Does your family have any medical conditions?
+[SEG0022] person_2 (PATIENT): My cousin has psoriasis. My son has asthma.
+[SEG0023] person_1 (DOCTOR): Tell me your medicines, please.
+[SEG0024] person_2 (PATIENT): Aspirin. I take it 75 milligrams, once a day for my heart. I take sumatriptan, 50 milligrams, when needed.
+[SEG0025] person_1 (DOCTOR): How long have you taken that?
+[SEG0026] person_2 (PATIENT): For about a year. I'm on atorvastatin, 20 milligrams, at night. I'm on alendronate, 70 milligrams, once a week. I'm supposed to take it regularly, but I don't always manage.
+[SEG0027] person_1 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0028] person_2 (PATIENT): I used to drink heavily but I stopped four years ago. Not much, I mostly stay in these days. I drink a lot of tea and snack through the day.
+[SEG0029] person_1 (DOCTOR): What about your medical history?
+[SEG0030] person_2 (PATIENT): I have heart disease, for about ten years.
+[SEG0031] person_1 (DOCTOR): Ah.
+[SEG0032] person_2 (PATIENT): Yes, migraines.
+[SEG0033] person_1 (DOCTOR): Yes, carry on.
+[SEG0034] person_2 (PATIENT): I've had high cholesterol, yes.
+[SEG0035] person_1 (DOCTOR): Mm-hmm.
+[SEG0036] person_2 (PATIENT): I've had thin bones for about ten years now.
+[SEG0037] person_1 (DOCTOR): Yes, carry on. Alright, heart disease and migraines, that matches what I have here. Okay, have you been to theatre before?
+[SEG0038] person_2 (PATIENT): Just a wisdom tooth extraction under sedation, five years ago.
+[SEG0039] person_1 (DOCTOR): Let me quickly check your readings.
+[SEG0040] person_1 (DOCTOR): Okay, that's it, just a little longer...
+[SEG0041] person_1 (DOCTOR): Okay: BP is 102 over 57, temp 36.7 degrees, pulse is 93 beats a minute, oxygen saturation is 98 percent.
+[SEG0042] person_2 (PATIENT): Is that okay?
+[SEG0043] person_1 (DOCTOR): Don't worry, we'll discuss it in a second.
+[SEG0044] person_1 (DOCTOR): Let's move on to the examination.
+[SEG0045] person_1 (DOCTOR): Breathe out slowly.
+[SEG0046] person_1 (DOCTOR): Your pulse is over one hundred and eighty and your blood pressure is low.
+[SEG0047] person_1 (DOCTOR): All finished, thank you. Taking everything into account, it fits best with a dangerous fast heart rhythm. I want to be honest that this is an impression, not a final answer. I can't rule out supraventricular tachycardia yet. We should do an urgent ECG for fast heart rhythm.
+[SEG0048] person_3 (CLINICAL_STAFF): I can book that for Monday at 10 am.
+[SEG0049] person_2 (PATIENT): That's fine.
+[SEG0050] person_1 (DOCTOR): I'm sending you for blood tests because of arrhythmia. Lie flat, I am calling the emergency team and preparing to shock the heart. Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency. Let's review you straight away. That's everything on my side. Anything you're unsure about?
+[SEG0051] person_2 (PATIENT): Thank you, that's helpful.
+
+JSON:

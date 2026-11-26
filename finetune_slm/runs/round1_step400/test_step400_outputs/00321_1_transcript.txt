@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00321)
+[SEG0001] person_1 (PATIENT): Right, morning, doctor, I hope I'm not interrupting.
+[SEG0002] person_2 (DOCTOR): So, not at all, please sit. What's the problem?
+[SEG0003] person_3 (CAREGIVER): Hello, doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to to have you here.
+[SEG0005] person_1 (PATIENT): Um, so... a sore throat a while back. That's why I came.
+[SEG0006] person_2 (DOCTOR): right, tell me what you take day to day
+[SEG0007] person_3 (CAREGIVER): She takes escitalopram, once a day.
+[SEG0008] person_2 (DOCTOR): and what strength is that?
+[SEG0009] person_3 (CAREGIVER): it's 10 milligrams
+[SEG0010] person_2 (DOCTOR): How long have you had it? Take your time, there's no rush.
+[SEG0011] person_1 (PATIENT): Around about three months... no wait, it's more like two months.
+[SEG0012] person_2 (DOCTOR): right anything that tends to go along with it?
+[SEG0013] person_1 (PATIENT): Itching all over goes along with it, most of the time. I've also been feeling feverish in the evenings
+[SEG0014] person_2 (DOCTOR): how would you describe it, mild, moderate, severe?
+[SEG0015] person_1 (PATIENT): Maybe a four out of ten on a bad day. The itching all over? That's been since yesterday.
+[SEG0016] person_2 (DOCTOR): Have you had any lumps elsewhere or cough?
+[SEG0017] person_1 (PATIENT): no, no lumps elsewhere or cough
+[SEG0018] person_2 (DOCTOR): have you had any difficulty swallowing, weight loss or pain in the lump?
+[SEG0019] person_1 (PATIENT): Nothing like that, no.
+[SEG0020] person_2 (DOCTOR): neurologically, anything strange?
+[SEG0021] person_1 (PATIENT): No weakness or anything.
+[SEG0022] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0023] person_1 (PATIENT): yes, latex i get a rash on my hands
+[SEG0024] person_2 (DOCTOR): any long-term health problems I should know about?
+[SEG0025] person_1 (PATIENT): I have depression, for nearly five years.
+[SEG0026] person_2 (DOCTOR): Yes, depression is known to us, good to have that clear.
+[SEG0027] person_2 (DOCTOR): a few questions about your lifestyle now
+[SEG0028] person_1 (PATIENT): A beer or two most evenings, to be honest. I used to smoke but I quit five years ago. Yes, I'm a nurse on a busy ward. I cycle to work most mornings.
+[SEG0029] person_2 (DOCTOR): Is there a family history of anything significant?
+[SEG0030] person_1 (PATIENT): my father had a heart attack
+[SEG0031] person_2 (DOCTOR): let me measure a few things
+[SEG0032] person_2 (DOCTOR): Almost there...
+[SEG0033] person_2 (DOCTOR): okay: respiratory rate 18, temperature 36.4. And BP is 109 over 71, pulse 65.
+[SEG0034] person_1 (PATIENT): is that normal?
+[SEG0035] person_2 (DOCTOR): let's look at it together in a minute
+[SEG0036] person_2 (DOCTOR): I'll examine you now, bear with me
+[SEG0037] person_1 (PATIENT): alright
+[SEG0038] person_2 (DOCTOR): Bear with me a second.
+[SEG0039] person_2 (DOCTOR): There's a firm, mobile lump about two centimetres under the left jaw, not tender.
+[SEG0040] person_2 (DOCTOR): bear with me a second
+[SEG0041] person_2 (DOCTOR): I can't feel other glands in the neck, armpits or groin.
+[SEG0042] person_2 (DOCTOR): Okay, you can sit up. Taking everything into account, it's hard to say. A reactive lymph node after a throat infection is one possibility and something that needs a tissue diagnosis another, and I'd rather not commit yet.
+[SEG0043] person_1 (PATIENT): I've been thinking the worst, to be honest. Is it bad?
+[SEG0044] person_2 (DOCTOR): I understand the worry at the moment I'd say it's a reactive lymph node after a throat infection, and we'll watch how it goes
+[SEG0045] person_2 (DOCTOR): alright, for now, no new medicines or tests are needed. Take care, and call us if anything changes
+[SEG0046] person_1 (PATIENT): I think that's clear. Thank you for being so thorough.
+[SEG0047] person_2 (DOCTOR): See you then.
+
+JSON:

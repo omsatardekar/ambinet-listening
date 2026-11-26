@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00294)
+[SEG0001] person_1 (DOCTOR): Come in, come in. Pull the door closed behind you, please. Tell me from the beginning, what's been happening?
+[SEG0002] person_2 (PATIENT): Mainly a little chest discomfort. There's a couple of other things, but that's the main one.
+[SEG0003] person_1 (DOCTOR): Right, when did it begin?
+[SEG0004] person_2 (PATIENT): It's been six months now.
+[SEG0005] person_1 (DOCTOR): Anything that tends to go along with it?
+[SEG0006] person_2 (PATIENT): When it starts I tend to get a bit of dizziness with the new tablets as well. The bit of dizziness with the new tablets? That's been for four weeks.
+[SEG0007] person_1 (DOCTOR): A few quick ones: coughing up blood, bruising, palpitations or pain at rest?
+[SEG0008] person_2 (PATIENT): No, I'd have mentioned it.
+[SEG0009] person_1 (DOCTOR): How are your bowels, any trouble?
+[SEG0010] person_2 (PATIENT): No, that side's been fine.
+[SEG0011] person_1 (DOCTOR): Any sport or activity?
+[SEG0012] person_2 (PATIENT): I play badminton on Sundays.
+[SEG0013] person_1 (DOCTOR): Is anyone at home with you?
+[SEG0014] person_2 (PATIENT): I share a flat with two friends.
+[SEG0015] person_1 (DOCTOR): Are you on any regular medication?
+[SEG0016] person_2 (PATIENT): No, nothing regular.
+[SEG0017] person_1 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0018] person_2 (PATIENT): I have heart disease, for about a year. I looked a few things up online, and that probably didn't help.
+[SEG0019] person_1 (DOCTOR): First the numbers, if you don't mind.
+[SEG0020] person_1 (DOCTOR): Hold still for me...
+[SEG0021] person_1 (DOCTOR): Okay: pulse 69, oxygen saturation is 99 percent, respiratory rate 16. And BP is 125 over 70.
+[SEG0022] person_2 (PATIENT): Is that alright, doctor?
+[SEG0023] person_1 (DOCTOR): We'll put it in context in a moment.
+[SEG0024] person_1 (DOCTOR): Let me examine, it won't take long.
+[SEG0025] person_1 (DOCTOR): Hold that position for me.
+[SEG0026] person_1 (DOCTOR): The scar on your chest has healed well.
+[SEG0027] person_1 (DOCTOR): Almost done with this part.
+[SEG0028] person_1 (DOCTOR): Chest is clear and heart sounds are normal.
+[SEG0029] person_1 (DOCTOR): All done, you can get dressed.
+[SEG0030] person_1 (DOCTOR): Let me tell you where I've got to. I'd lean towards stable recovery after the heart event.
+[SEG0031] person_2 (PATIENT): What are the chances it's something bad?
+[SEG0032] person_1 (DOCTOR): I can't promise yet, but most people with stable recovery after the heart event do well once it's treated properly. I'm sending you for a lipid profile because of cardiovascular risk. It's a routine test and it'll give us a much clearer picture. I'm sending you for an echocardiogram because of follow-up. It's a routine test and it'll give us a much clearer picture.
+[SEG0033] person_1 (DOCTOR): The treatment will be atorvastatin, 40 milligrams, at night, long term. You take it by mouth. That should help with cardiovascular risk.
+[SEG0034] person_2 (PATIENT): Is that safe with my other things?
+[SEG0035] person_1 (DOCTOR): Please don't stop the blood thinner on your own, even if you feel fine. Cardiac rehab is worth doing, it really helps your confidence. If the symptoms get worse, or you feel really unwell, please come to the emergency department.
+[SEG0036] person_2 (PATIENT): That's clear.
+[SEG0037] person_1 (DOCTOR): Book a review in three months.
+[SEG0038] person_2 (PATIENT): Sure, that's doable.
+[SEG0039] person_1 (DOCTOR): Look after yourself.
+[SEG0040] person_2 (PATIENT): That's everything I wanted to ask. Thank you.
+[SEG0041] person_1 (DOCTOR): See you then.
+
+JSON:

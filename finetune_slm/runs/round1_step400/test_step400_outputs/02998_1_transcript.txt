@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02998)
+[SEG0001] person_1 (PATIENT): Doctor? Hello, uh, I hope this is the right time.
+[SEG0002] person_2 (DOCTOR): you're alright, take a seat what can I do for you?
+[SEG0003] person_1 (PATIENT): Mainly a severe headache. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): Okay, how long has it been like this?
+[SEG0005] person_1 (PATIENT): It's, It's been going on for three weeks.
+[SEG0006] person_2 (DOCTOR): okay, give me more detail on it, whatever comes to mind
+[SEG0007] person_1 (PATIENT): It happens once or twice a day. Severe, really. I'm hoping you can tell me something definite. I didn't want to make a fuss, you know.
+[SEG0008] person_2 (DOCTOR): have you had pain under the right ribs?
+[SEG0009] person_1 (PATIENT): Yes, for five days.
+[SEG0010] person_2 (DOCTOR): any vaginal bleeding, leaking fluid or reduced baby movements?
+[SEG0011] person_1 (PATIENT): Nope, nothing like that.
+[SEG0012] person_2 (DOCTOR): Has your skin been okay?
+[SEG0013] person_1 (PATIENT): Yeah, nothing on the skin, no.
+[SEG0014] person_2 (DOCTOR): Before we go further, any allergies?
+[SEG0015] person_1 (PATIENT): Yeah, I'm allergic to diclofenac, I get wheezing.
+[SEG0016] person_2 (DOCTOR): What do you take on a normal day?
+[SEG0017] person_1 (PATIENT): I'm on hydrochlorothiazide, 12.5 milligrams, every morning for my pressure.
+[SEG0018] person_2 (DOCTOR): do you work outside the home?
+[SEG0019] person_1 (PATIENT): I'm a hairdresser, on my feet all day.
+[SEG0020] person_2 (DOCTOR): how are your meals?
+[SEG0021] person_1 (PATIENT): I grab fast food at lunch most days.
+[SEG0022] person_2 (DOCTOR): So, any previous surgeries?
+[SEG0023] person_1 (PATIENT): No, never.
+[SEG0024] person_2 (DOCTOR): Okay, has anyone ever diagnosed you with something?
+[SEG0025] person_1 (PATIENT): I have high blood pressure, for about a year.
+[SEG0026] person_2 (DOCTOR): Right, so high blood pressure is already on your record. We'll keep that in mind today.
+[SEG0027] person_2 (DOCTOR): time for your numbers, if that's okay
+[SEG0028] person_2 (DOCTOR): sit still for a moment..
+[SEG0029] person_2 (DOCTOR): okay: pressure 154 over 101, heart rate 86, temperature 36.9.
+[SEG0030] person_2 (DOCTOR): could you come over to the couch, please?
+[SEG0031] person_2 (DOCTOR): I'll listen to your chest now
+[SEG0032] person_2 (DOCTOR): Your blood pressure is very high and your reflexes are brisk.
+[SEG0033] person_2 (DOCTOR): Okay, thank you, you can get dressed.
+[SEG0034] person_2 (DOCTOR): Having listened and examined, my working impression is severe pre-eclampsia. The reason I say that is that your story and my examination fit together.
+[SEG0035] person_1 (PATIENT): Erm, I'm scared it's something bad. Is it?
+[SEG0036] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's severe pre-eclampsia, and we'll know more once the urgent blood tests is back. I'm going to order urgent blood tests, for pre-eclampsia. It's a routine test and it'll give us a much clearer picture. I'm going to put you on labetalol, 200 milligrams, once now, single dose. That should help with severe hypertension. You need to go to the maternity unit straight away.
+[SEG0037] person_2 (DOCTOR): Okay, go on. Let's get you seen by the obstetric team, I'll arrange the letter. The thing that would worry me is if the symptoms get worse. If that happens, go to emergency.
+[SEG0038] person_1 (PATIENT): thank you, that's clear
+[SEG0039] person_2 (DOCTOR): Alright, does all of that make sense?
+[SEG0040] person_1 (PATIENT): okay, that makes sense. Thanks for explaining
+
+JSON:

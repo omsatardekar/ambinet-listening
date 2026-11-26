@@ -1,0 +1,49 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20193)
+[SEG0001] person_1 (PATIENT): Hi, is it okay to come in now?
+[SEG0002] person_2 (DOCTOR): Come in. Please sit. How can I help you?
+[SEG0003] person_1 (PATIENT): Well, I've been having itching especially at night. I just want to get back to normal, really.
+[SEG0004] person_2 (DOCTOR): How long has this been bothering you?
+[SEG0005] person_1 (PATIENT): Erm, I'd say about a year. Actually, no, closer to nearly five years. I looked a few things up online, and that probably didn't help. I told my wife I'd come today.
+[SEG0006] person_2 (DOCTOR): Yes. Have you noticed any triggers?
+[SEG0007] person_1 (PATIENT): Warmth and night definitely sets it off.
+[SEG0008] person_2 (DOCTOR): Is it accompanied by anything?
+[SEG0009] person_1 (PATIENT): It usually comes with trouble sleeping. Actually, you know, the trouble sleeping? That's been for three weeks.
+[SEG0010] person_2 (DOCTOR): So, have you had any oozing, swollen glands or joint pain?
+[SEG0011] person_1 (PATIENT): No, none of those at all.
+[SEG0012] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0013] person_1 (PATIENT): Nothing like that.
+[SEG0014] person_2 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0015] person_1 (PATIENT): It's calamine lotion, when needed.
+[SEG0016] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0017] person_1 (PATIENT): No, I've always been fairly healthy.
+[SEG0018] person_2 (DOCTOR): Are you on your own at home?
+[SEG0019] person_1 (PATIENT): I live with my elderly mother.
+[SEG0020] person_2 (DOCTOR): What's your work?
+[SEG0021] person_1 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0022] person_2 (DOCTOR): So, has anything ever caused you a reaction? I mean any allergies.
+[SEG0023] person_1 (PATIENT): Naproxen. I come out in... well, stomach pain.
+[SEG0024] person_2 (DOCTOR): Can I check a few measurements before we carry on?
+[SEG0025] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0026] person_2 (DOCTOR): Okay: pulse is 75 beats a minute, oxygen saturation is 98 percent, pressure 125 over 79, temp 36.8 degrees.
+[SEG0027] person_2 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0028] person_1 (PATIENT): Sure thing.
+[SEG0029] person_2 (DOCTOR): I'll listen to your chest now.
+[SEG0030] person_2 (DOCTOR): There are small burrow-like tracks and red bumps between the fingers and on the wrists, with scratch marks.
+[SEG0031] person_2 (DOCTOR): Alright, that's the examination finished.
+[SEG0032] person_2 (DOCTOR): Taking everything into account, I'd lean towards scabies. I want to be honest that this is an impression, not a final answer. Today I'm not changing anything. Does all of that make sense?
+[SEG0033] person_1 (PATIENT): No, that's all. Thanks a lot.
+[SEG0034] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

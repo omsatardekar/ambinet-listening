@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00120)
+[SEG0001] person_1 (DOCTOR): Hello. Right, let's get started.
+[SEG0002] person_2 (PATIENT): hello, doctor, thank you
+[SEG0003] person_1 (DOCTOR): what's been bothering you?
+[SEG0004] person_2 (PATIENT): I wanted to get gritty tired eyes looked at.
+[SEG0005] person_1 (DOCTOR): And when did that start?
+[SEG0006] person_2 (PATIENT): I'd say about four days. Actually, no, closer to five days.
+[SEG0007] person_1 (DOCTOR): tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse
+[SEG0008] person_2 (PATIENT): it feels severe to me. Yes, air conditioning and screens. That makes it worse
+[SEG0009] person_1 (DOCTOR): Anything that tends to go along with it?
+[SEG0010] person_2 (PATIENT): Burning at the end of the day goes along with it, most of the time. The Burning at the end of the day? That's been since last weekend. With Burning at the end of the day, I'd say mild. It's every other day. I've had watery eyes in the wind too, for ten days
+[SEG0011] person_1 (DOCTOR): Can I examine you now?
+[SEG0012] person_1 (DOCTOR): a little pressure here, tell me if it's tender
+[SEG0013] person_1 (DOCTOR): the eyes look a a little pink but the corneas are clear
+[SEG0014] person_1 (DOCTOR): okay, finished
+[SEG0015] person_1 (DOCTOR): Any eye pain, loss of vision or sensitivity to light at all?
+[SEG0016] person_2 (PATIENT): No eye pain, loss of vision or sensitivity to light, none of it.
+[SEG0017] person_1 (DOCTOR): Have you noticed discharge, double vision or dry mouth?
+[SEG0018] person_2 (PATIENT): No, I'd have mentioned it.
+[SEG0019] person_1 (DOCTOR): is your mobility otherwise okay?
+[SEG0020] person_2 (PATIENT): No, nothing there.
+[SEG0021] person_1 (DOCTOR): and your skin, any changes there?
+[SEG0022] person_2 (PATIENT): Skin's normal.
+[SEG0023] person_1 (DOCTOR): What's your job?
+[SEG0024] person_2 (PATIENT): I teach at a primary school
+[SEG0025] person_1 (DOCTOR): who do you live with?
+[SEG0026] person_2 (PATIENT): I live with my family, my husband and two kids.
+[SEG0027] person_1 (DOCTOR): any operations in the past?
+[SEG0028] person_2 (PATIENT): just my thyroid operated on, a long time ago
+[SEG0029] person_1 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0030] person_2 (PATIENT): I've had migraines, yes. I've had heart disease, yes.
+[SEG0031] person_1 (DOCTOR): Ah.
+[SEG0032] person_2 (PATIENT): Yes, an irregular heartbeat.
+[SEG0033] person_1 (DOCTOR): Okay, I can see an irregular heartbeat in your file as well. What medicines are you taking at the the moment? I'll explain everything as we go along.
+[SEG0034] person_2 (PATIENT): It's sumatriptan, 50 milligrams, maybe, when needed for my migraines.
+[SEG0035] person_1 (DOCTOR): Is the packet here, or the prescription?
+[SEG0036] person_2 (PATIENT): No, it's at home. I'm on clopidogrel, 75 milligrams, once a day for the stent. Apixaban. I take it 5 milligrams, twice a day. Um, I'm supposed to take it regularly, but I don't always manage.
+[SEG0037] person_1 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0038] person_2 (PATIENT): I don't have any known medication allergies.
+[SEG0039] person_1 (DOCTOR): Okay, so my impression is this: I'm honestly not certain yet. It could be dry eye, or it might be digital eye strain.
+[SEG0040] person_2 (PATIENT): What are the chances it's something bad?
+[SEG0041] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like dry eye, but I'd like to confirm.
+[SEG0042] person_1 (DOCTOR): An eye check is what I'd like next, for gritty eyes what I'm giving you is lubricating eye drops, four times a day, for one month it's for dry eye
+[SEG0043] person_2 (PATIENT): mm, okay
+[SEG0044] person_1 (DOCTOR): Look away from the screen every twenty minutes and blink fully. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. See me again in four weeks. Okay, that's everything from me. Any other questions?
+[SEG0045] person_2 (PATIENT): I think that's clear. Thank you for being so thorough
+[SEG0046] person_1 (DOCTOR): Bye for now.
+
+JSON:

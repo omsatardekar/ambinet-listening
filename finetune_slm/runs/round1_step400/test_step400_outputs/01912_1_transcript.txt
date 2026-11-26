@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01912)
+[SEG0001] person_1 (DOCTOR): come in, have a seat by the the desk
+[SEG0002] person_2 (FAMILY_MEMBER): doctor, I'm just here to to help with the details
+[SEG0003] person_1 (DOCTOR): what would you like to start with today?
+[SEG0004] person_3 (PATIENT): doctor, it's a fall and pain in my left hip it's getting on my nerves now
+[SEG0005] person_1 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0006] person_3 (PATIENT): Moving definitely sets it off maybe a eight out of ten on a bad day there was pain in my groin, yes, but that went away
+[SEG0007] person_1 (DOCTOR): have you got any known allergies?
+[SEG0008] person_3 (PATIENT): No uh I'm not allergic to anything.
+[SEG0009] person_1 (DOCTOR): which medicines do you take at the moment?
+[SEG0010] person_2 (FAMILY_MEMBER): She is on alendronate 70 milligrams once a week I give it to her. She takes allopurinol 100 milligrams once a day for the gout. She takes Eltroxin 100 micrograms every morning for my thyroid. It's paracetamol 1 gram when needed doctor.
+[SEG0011] person_1 (DOCTOR): any health conditions I should have on record?
+[SEG0012] person_3 (PATIENT): I have thin bones, for about a year. Sorry, I know I'm rambling a bit. I told my wife I'd come today.
+[SEG0013] person_1 (DOCTOR): anything else?
+[SEG0014] person_3 (PATIENT): I've had gout, yes
+[SEG0015] person_1 (DOCTOR): Understood.
+[SEG0016] person_3 (PATIENT): I've got an underactive thyroid.
+[SEG0017] person_1 (DOCTOR): yes gout and an underactive thyroid are known to us good to have that clear
+[SEG0018] person_1 (DOCTOR): tell me about your routine, work, habits, that sort of thing
+[SEG0019] person_3 (PATIENT): I drink a lot of tea and snack through the day. I live with my elderly mother. I retired from the post office two years ago.
+[SEG0020] person_1 (DOCTOR): have you noticed numbness or loss of consciousness?
+[SEG0021] person_3 (PATIENT): no numbness or loss of consciousness, none of it
+[SEG0022] person_1 (DOCTOR): any chest pain or head injury?
+[SEG0023] person_3 (PATIENT): none of those no
+[SEG0024] person_1 (DOCTOR): How are your bowels any trouble?
+[SEG0025] person_3 (PATIENT): No, all normal there.
+[SEG0026] person_1 (DOCTOR): anything unusual with passing urine?
+[SEG0027] person_3 (PATIENT): No changes there.
+[SEG0028] person_1 (DOCTOR): Let me quickly check your readings.
+[SEG0029] person_1 (DOCTOR): sit still for a moment..
+[SEG0030] person_1 (DOCTOR): okay: blood pressure 121 over 69 oxygen saturation is 97 percent heart rate 71.
+[SEG0031] person_1 (DOCTOR): Shall I start the the examination?
+[SEG0032] person_3 (PATIENT): okay, doctor
+[SEG0033] person_1 (DOCTOR): stay as you are for a moment
+[SEG0034] person_1 (DOCTOR): the left leg is shortened and turned outwards, and it is very painful to move
+[SEG0035] person_3 (PATIENT): okay doctor
+[SEG0036] person_1 (DOCTOR): That's all I needed to check.
+[SEG0037] person_1 (DOCTOR): from what you've told me and what I found this is probably a probable hip fracture i'm sending you for blood tests because of pre-operative the treatment will be morphine 2.5 milligrams now single dose that's for hip pain lie still I am arranging an ambulance and pain relief we'll refer you to the orthopaedic team
+[SEG0038] person_3 (PATIENT): alright, thank you
+[SEG0039] person_1 (DOCTOR): see me again straight away i think we're done unless you have questions
+[SEG0040] person_3 (PATIENT): Right, I'll do that. Thank you, doctor.
+[SEG0041] person_1 (DOCTOR): Take care now.
+
+JSON:

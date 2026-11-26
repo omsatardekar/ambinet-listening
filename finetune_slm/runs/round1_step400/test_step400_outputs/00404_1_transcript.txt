@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00404)
+[SEG0001] person_1 (PATIENT): Hello? Doctor? They told me to come straight in.
+[SEG0002] person_2 (DOCTOR): Yes, do sit. Tell me what's been happening.
+[SEG0003] person_1 (PATIENT): Mainly my heart racing. There's a couple of other things, but that's the main one.
+[SEG0004] person_2 (DOCTOR): Okay, how long have you had it?
+[SEG0005] person_1 (PATIENT): I'd say about a month. Actually, no, closer to about three months.
+[SEG0006] person_2 (DOCTOR): Is it mild, moderate or severe?
+[SEG0007] person_1 (PATIENT): It's moderate, honestly. I've been feeling anxious and jittery too.
+[SEG0008] person_2 (DOCTOR): Have you noticed diarrhoea or chest pain?
+[SEG0009] person_1 (PATIENT): None, as far as I know.
+[SEG0010] person_2 (DOCTOR): And what about trouble sleeping, lump in the neck or shortness of breath?
+[SEG0011] person_1 (PATIENT): Well, no trouble sleeping, lump in the neck or shortness of breath, none of it.
+[SEG0012] person_2 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0013] person_1 (PATIENT): No, that side's been fine.
+[SEG0014] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0015] person_1 (PATIENT): I gave up drinking about three years ago. I smoke about ten cigarettes a day. I eat out quite a lot, to be honest. I share a flat with two friends. I'm a self-employed electrician.
+[SEG0016] person_2 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0017] person_1 (PATIENT): Uh, I have arthritis in my knees, for two years.
+[SEG0018] person_2 (DOCTOR): Yes?
+[SEG0019] person_2 (DOCTOR): Yes, arthritis in your knees is known to us, good to have that clear. Any operations in the past?
+[SEG0020] person_1 (PATIENT): Yes, I had cataract surgery on my right eye, last year.
+[SEG0021] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0022] person_1 (PATIENT): Paracetamol. I take it 650 milligrams, when needed for the knee pain.
+[SEG0023] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0024] person_2 (DOCTOR): One second...
+[SEG0025] person_2 (DOCTOR): Okay: respiratory rate 18, blood pressure 132 over 86, pulse 109, SpO2 97 percent on room air.
+[SEG0026] person_1 (PATIENT): Is that okay?
+[SEG0027] person_2 (DOCTOR): Okay, I'll explain what that means shortly.
+[SEG0028] person_2 (DOCTOR): Okay, so my impression from what you've said is this: The most likely explanation is an overactive thyroid. Another possibility is a heart rhythm problem.
+[SEG0029] person_2 (DOCTOR): We should do a thyroid test for hyperthyroid symptoms.
+[SEG0030] person_3 (CLINICAL_STAFF): We have a slot Thursday at 9 am, if that works.
+[SEG0031] person_2 (DOCTOR): We should do an ECG for palpitations. I'd rather check than guess, and this is the quickest way to know more. I'm sending you for a thyroid scan because of hyperthyroidism. You'll be taking propranolol, 20 milligrams, twice a day, until we review. You take it by mouth. It's for palpitations and tremor. Limit tea, coffee and anything that speeds up the heart for now. Let's get you seen by an endocrinologist, I'll arrange the letter.
+[SEG0032] person_2 (DOCTOR): I'll want another look in two weeks.
+[SEG0033] person_1 (PATIENT): I'll make the appointment on my way out.
+[SEG0034] person_2 (DOCTOR): So, can you tell me the plan back in your own words, so I know I've explained it clearly?
+[SEG0035] person_1 (PATIENT): So, I take the propranolol, 20 milligrams, twice a day and come back in two weeks. Is that right?
+[SEG0036] person_2 (DOCTOR): Yes, exactly right. Okay, we're done for today. Take care.
+[SEG0037] person_1 (PATIENT): No, I think that's everything. Thank you, doctor.
+[SEG0038] person_2 (DOCTOR): Safe journey home.
+
+JSON:

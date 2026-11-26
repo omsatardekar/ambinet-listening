@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00326)
+[SEG0001] person_1 (PATIENT): Hi, doctor, I brought my bag, is it fine to leave it here?
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): Yeah, it's numb patches on both feet. I don't know what's causing it.
+[SEG0004] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0005] person_1 (PATIENT): Glimepiride. I take it 2 milligrams, before breakfast.
+[SEG0006] person_2 (DOCTOR): How long have you taken that?
+[SEG0007] person_1 (PATIENT): About six months. I take rosuvastatin, 10 milligrams, at night. I'm supposed to take it regularly, but I don't always manage. I had losartan at one point, but I'm off it now.
+[SEG0008] person_2 (DOCTOR): And when did that start?
+[SEG0009] person_1 (PATIENT): For three days, I'd say. I looked a few things up online, and that probably didn't help.
+[SEG0010] person_2 (DOCTOR): And how severe is it?
+[SEG0011] person_1 (PATIENT): Severe, I'd say
+[SEG0012] person_2 (DOCTOR): does it come along with anything else?
+[SEG0013] person_1 (PATIENT): When it starts I tend to get cramping in the calves when I walk as well. As for cramping in the calves when I walk, I honestly can't say when that began. It might have been last month or the month before. As for cramping in the calves when I walk, maybe a five out of ten on a bad day. Honestly, a few times a day. It's worse with walking.
+[SEG0014] person_2 (DOCTOR): Alright, any cold feet as well?
+[SEG0015] person_1 (PATIENT): yes, about the same, four weeks as for cold feet, it feels severe to me
+[SEG0016] person_2 (DOCTOR): A few quick ones: redness spreading up the foot or fever?
+[SEG0017] person_1 (PATIENT): No, none of those.
+[SEG0018] person_2 (DOCTOR): have you had any black skin or smell from the foot?
+[SEG0019] person_1 (PATIENT): no none of those
+[SEG0020] person_2 (DOCTOR): Have you had any foot pain at rest or pus?
+[SEG0021] person_1 (PATIENT): no, none of those
+[SEG0022] person_2 (DOCTOR): alright, how's your breathing otherwise?
+[SEG0023] person_1 (PATIENT): No problems with breathing.
+[SEG0024] person_2 (DOCTOR): Has your skin been okay?
+[SEG0025] person_1 (PATIENT): Nothing on the skin, no.
+[SEG0026] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0027] person_1 (PATIENT): yes, diabetes. High cholesterol, for about a year i have high blood pressure
+[SEG0028] person_2 (DOCTOR): does anything run in the family?
+[SEG0029] person_1 (PATIENT): my mother had high blood pressure. My grandmother had breast cancer
+[SEG0030] person_2 (DOCTOR): Are you active at all?
+[SEG0031] person_1 (PATIENT): Barely, I'm mostly sedentary these days.
+[SEG0032] person_2 (DOCTOR): anything special about your diet?
+[SEG0033] person_1 (PATIENT): I try to avoid too much sugar
+[SEG0034] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0035] person_1 (PATIENT): I mean, yes, I'm allergic to latex.
+[SEG0036] person_2 (DOCTOR): let me check your vitals now
+[SEG0037] person_2 (DOCTOR): Just relax your arm...
+[SEG0038] person_2 (DOCTOR): Okay: temperature is 36.9 degrees, height 158 centimetres. And pressure 156 over 103, respiratory rate 18, BMI works out to 31.2, oxygen saturation is 96 percent, weight 78 kilos, heart rate 93.
+[SEG0039] person_2 (DOCTOR): Let me have a look at you.
+[SEG0040] person_2 (DOCTOR): stay still while I have a a look
+[SEG0041] person_2 (DOCTOR): Pulses at the ankle are weak.
+[SEG0042] person_1 (PATIENT): Fine.
+[SEG0043] person_2 (DOCTOR): Take your time, no rush.
+[SEG0044] person_2 (DOCTOR): There's a small shallow ulcer under the the ball of the left foot, no pus or surrounding redness.
+[SEG0045] person_1 (PATIENT): mm, okay
+[SEG0046] person_2 (DOCTOR): Okay, you can sit up. Okay, so my impression is this: It points towards a diabetic foot ulcer with some circulation concern. I can't rule out an infected wound yet.
+[SEG0047] person_2 (DOCTOR): I want a Doppler scan of the leg done, that's for poor pulses.
+[SEG0048] person_3 (CLINICAL_STAFF): We have a slot Tuesday at 2 pm, if that works.
+[SEG0049] person_2 (DOCTOR): I'm gonna to order a foot X-ray, for foot ulcer.
+[SEG0050] person_1 (PATIENT): does it need any preparation?
+[SEG0051] person_2 (DOCTOR): Look at your feet every day with a mirror and never go barefoot. The thing that would worry me is if the sore becomes red, smelly or the foot turns dusky. If that happens, go to emergency. Book a review in two weeks. That's it on my side. Anything unclear?
+[SEG0052] person_1 (PATIENT): Thanks so much, doctor.
+
+JSON:

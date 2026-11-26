@@ -1,0 +1,68 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_09_dizzy_on_standing_plumber)
+[SEG0001] person_3 (PATIENT): I am a plumber. I run a small firm with my brother. Lots of bending, kneeling, and lifting, as you can imagine.
+[SEG0002] person_2 (DOCTOR): Drinking?
+[SEG0003] person_3 (PATIENT): A glass of wine with dinner. Occasionally two.
+[SEG0004] person_2 (DOCTOR): Okay. What have you been drinking, water-wise, lately? It's been quite hot.
+[SEG0005] person_3 (PATIENT): I would say not enough. Perhaps a litre a day. I do drink coffee.
+[SEG0006] person_1 (FAMILY_MEMBER): She has about five coffees.
+[SEG0007] person_3 (PATIENT): Three.
+[SEG0008] person_2 (DOCTOR): Mm.
+[SEG0009] person_2 (DOCTOR): Karl mentioned she's off her food. Is that right, Mrs Lindqvist?
+[SEG0010] person_3 (PATIENT): I have had less appetite, yes. I do not feel hungry before lunch, and then in the evening I find I have had only toast.
+[SEG0011] person_1 (FAMILY_MEMBER): Yeah.
+[SEG0012] person_1 (FAMILY_MEMBER): Well, um, she had three bites of the lasagne on Sunday, and she loves my lasagne.
+[SEG0013] person_3 (PATIENT): It was rather rich.
+[SEG0014] person_2 (DOCTOR): Any nausea with it, or tummy pain, or a change in your bowels?
+[SEG0015] person_3 (PATIENT): Well, um, a little loose, last week. For two or three days. Nothing since.
+[SEG0016] person_2 (DOCTOR): That could matter, in the picture of the fluids. Loose stools for a few days, on top of a water tablet, in hot weather. It adds up.
+[SEG0017] person_3 (PATIENT): Right.
+[SEG0018] person_3 (PATIENT): I had not connected the two.
+[SEG0019] person_2 (DOCTOR): That's why I ask. Ah, excuse me one second, that's the surgery phone, I'd better. Hello, Abernathy. Yes. No, tell them I'll ring back after eleven. Thank you. Sorry about that, where was I. Right.
+[SEG0020] person_2 (DOCTOR): Right. Let me get the nurse in to do something specific. Nurse Dalia, would you do the lying and standing pressures, please?
+[SEG0021] person_4 (NURSE): Sure. Mrs Lindqvist, I need you to lie down flat on the couch for a few minutes, then I'll take your pressure, then you'll stand up and I'll take it again at one minute and at three. Is that all right?
+[SEG0022] person_3 (PATIENT): Perfectly.
+[SEG0023] person_4 (NURSE): Okay, lying down it's one eighteen over seventy-two, pulse seventy-six. Now can you stand up slowly for me? Take your time.
+[SEG0024] person_3 (PATIENT): One moment. Oh. Yes. That is rather unpleasant.
+[SEG0025] person_4 (NURSE): Hold on to me. Stay there. I'm putting the cuff on.
+[SEG0026] person_4 (NURSE): One minute standing: ninety-five over fifty-six. Pulse, a hundred and seven. How do you feel?
+[SEG0027] person_3 (PATIENT): Light. Very light. I should like to sit.
+[SEG0028] person_4 (NURSE): Sit down, sit down. Doctor, that's a drop of twenty-three on the top number.
+[SEG0029] person_2 (DOCTOR): Thank you. Let her recover, Dalia. That's fairly marked. Mrs Lindqvist, what the nurse found is that your pressure drops quite a lot when you stand, and your heart rate goes up to compensate. That fits with what you told me.
+[SEG0030] person_3 (PATIENT): Mm.
+[SEG0031] person_3 (PATIENT): So the problem is my blood pressure.
+[SEG0032] person_2 (DOCTOR): Your blood pressure falling on standing, yes. What I don't know is why. It could be dehydration, a water tablet and five, or three, coffees and a hot summer can do that. It could be the combination of the water tablet and the propranolol. It could be a problem with the rhythm of your heart. Or something that's bleeding quietly, which would explain the weakness and the pounding, though your stools suggest not.
+[SEG0033] person_1 (FAMILY_MEMBER): What can you do?
+[SEG0034] person_2 (DOCTOR): Today, I'd like to do a tracing of her heart, an ECG, and take some blood to check blood count, kidney function and salts. And I'd like to repeat the lying and standing pressures in a week, after you've had more fluid. In the meantime, drink a good two litres of water a day, cut down on the coffee, stand up slowly, and I'm going to ask you to hold off the water tablet until I've seen the results.
+[SEG0035] person_3 (PATIENT): Stop the diuretic?
+[SEG0036] person_2 (DOCTOR): Pause it, just for now. Keep the propranolol as you are. Don't take two.
+[SEG0037] person_3 (PATIENT): I understand.
+[SEG0038] person_2 (DOCTOR): If you faint, or have chest pain, or your stools turn black, don't wait. Call the ambulance.
+[SEG0039] person_1 (FAMILY_MEMBER): Uh, she won't do any plumbing until this is sorted, I'll see to that.
+[SEG0040] person_3 (PATIENT): Karl, you will do no such thing.
+[SEG0041] person_2 (DOCTOR): I'd rather she kept off ladders for a week, honestly.
+[SEG0042] person_3 (PATIENT): Very well. For a week.
+[SEG0043] person_1 (FAMILY_MEMBER): And driving? She's in the van all day.
+[SEG0044] person_2 (DOCTOR): I'd say no driving for now, I'm sorry, certainly not alone, until we know why the pressure drops. If it's simply dehydration, that should settle quickly. If I'm wrong, I'd rather you hadn't been at the wheel.
+[SEG0045] person_3 (PATIENT): Yeah.
+[SEG0046] person_3 (PATIENT): That will be inconvenient, but I accept it.
+[SEG0047] person_1 (FAMILY_MEMBER): I'll drive. I've got the afternoon off.
+[SEG0048] person_4 (NURSE): Mrs Lindqvist, whenever you're ready, I'll do the heart tracing now, it takes about five minutes. Could you lie back and loosen your blouse? I'll put some sticky patches on your chest and ankles. They're cold, I'm afraid, I always warm my hands but I can't warm those.
+[SEG0049] person_3 (PATIENT): I shall survive.
+[SEG0050] person_4 (NURSE): Now, lie very still, don't talk, don't clench. That's perfect, it's printing. Okay, you can breathe. I'll leave it for the doctor to read, and then the phlebotomist will take your blood in the next room.
+[SEG0051] person_2 (DOCTOR): Sure.
+[SEG0052] person_2 (DOCTOR): I've had a look at the trace, and your heart rhythm is regular, with a fast rate for the moment, and nothing that worries me on first glance. That doesn't rule out everything, but it's a good start.
+[SEG0053] person_3 (PATIENT): Thank you. That is reassuring.
+[SEG0054] person_2 (DOCTOR): When the bloods are back, we'll go through them together. I'll have the receptionist book the repeat pressures for a week from today, in the morning.
+[SEG0055] person_3 (PATIENT): Excellent.

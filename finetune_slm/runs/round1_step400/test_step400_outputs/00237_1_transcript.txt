@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00237)
+[SEG0001] person_1 (PATIENT): Hi, doctor. Long queue outside, but here I am.
+[SEG0002] person_2 (DOCTOR): That's alright, take a seat. Tell me why you've come.
+[SEG0003] person_1 (PATIENT): It's blood in my urine, mostly.
+[SEG0004] person_2 (DOCTOR): Since when have you had this?
+[SEG0005] person_1 (PATIENT): It's been three days now.
+[SEG0006] person_2 (DOCTOR): Hm, okay.
+[SEG0007] person_1 (PATIENT): Oh, and and it was red twice this week. That's been about the same, two months.
+[SEG0008] person_2 (DOCTOR): Have you had blood in your urine before, or is this the first time?
+[SEG0009] person_1 (PATIENT): I, I had a similar thing last year. It went away.
+[SEG0010] person_2 (DOCTOR): So, I'll take a few measurements first.
+[SEG0011] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0012] person_2 (DOCTOR): Okay: SpO2 98 percent on room air, pressure 122 over 80, pulse is 75 beats a minute. And temperature is 36.4 degrees.
+[SEG0013] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0014] person_2 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0015] person_2 (DOCTOR): Abdomen is soft, no masses, and and no tenderness in the loins.
+[SEG0016] person_2 (DOCTOR): Good, that's the examination.
+[SEG0017] person_2 (DOCTOR): Have you noticed recent injury, weight loss or difficulty passing urine?
+[SEG0018] person_1 (PATIENT): No, nothing there.
+[SEG0019] person_2 (DOCTOR): Have you noticed flank pain or fever?
+[SEG0020] person_1 (PATIENT): no, nothing there
+[SEG0021] person_2 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0022] person_1 (PATIENT): No, nothing like that.
+[SEG0023] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions? Take your time, there's no rush.
+[SEG0024] person_1 (PATIENT): High blood pressure, for about a year. I've got heart disease.
+[SEG0025] person_2 (DOCTOR): Okay, I can see high blood pressure in your file as well. Alright, do you exercise at all?
+[SEG0026] person_1 (PATIENT): I go to the gym a couple of times a week.
+[SEG0027] person_2 (DOCTOR): Right, is anyone at home with you?
+[SEG0028] person_1 (PATIENT): I share a flat with two friends.
+[SEG0029] person_2 (DOCTOR): Any surgery in your history?
+[SEG0030] person_1 (PATIENT): I had a bypass operation six years ago.
+[SEG0031] person_2 (DOCTOR): Does anything run in the family?
+[SEG0032] person_1 (PATIENT): my uncle had colon cancer
+[SEG0033] person_2 (DOCTOR): Any drug or food allergies? I'm asking so that we don't miss anything.
+[SEG0034] person_1 (PATIENT): Sulfa drugs. I come out in... well, itching all over.
+[SEG0035] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0036] person_1 (PATIENT): Ramipril. I take it 5 milligrams, every morning.
+[SEG0037] person_2 (DOCTOR): ah
+[SEG0038] person_1 (PATIENT): Aspirin, 75 milligrams, once a day.
+[SEG0039] person_2 (DOCTOR): From what you've told me and what I found, the most likely explanation is blood in the urine that needs full investigation. I'd also keep a kidney stone in mind.
+[SEG0040] person_1 (PATIENT): Well, doctor, is this dangerous?
+[SEG0041] person_2 (DOCTOR): nothing I've seen today points to an emergency it looks like blood in the urine that needs full investigation, but I'd like to confirm i'll request a urine culture, it'll help with haematuria i'd like to arrange a urine test for haematuria it's a routine test and it'll give us a much clearer picture keep drinking plenty of water, and let us know quickly if you pass clots or can't pass urine
+[SEG0042] person_2 (DOCTOR): Let's plan a check in two weeks.
+[SEG0043] person_1 (PATIENT): okay
+[SEG0044] person_2 (DOCTOR): Any last questions?
+[SEG0045] person_1 (PATIENT): I appreciate it, doctor.
+
+JSON:

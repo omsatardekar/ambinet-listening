@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00053)
+[SEG0001] person_1 (PATIENT): Right, um, sorry I'm a few minutes behind, doctor.
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): I've been dealing with a tight band-like headache.
+[SEG0004] person_2 (DOCTOR): How long are we talking about?
+[SEG0005] person_1 (PATIENT): It's been going on for six months. I'd rather know what's going on than keep guessing. I've never really been one for hospitals.
+[SEG0006] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): I notice it more with stress and long hours on the computer. I'd call it severe.
+[SEG0008] person_2 (DOCTOR): Any trouble sleeping as well?
+[SEG0009] person_1 (PATIENT): Mm, yes. There was irritability, yes, but that went away.
+[SEG0010] person_2 (DOCTOR): Have you had a tight band-like headache before, or is this the first time?
+[SEG0011] person_1 (PATIENT): Well, a bit, last winter. It settled by itself back then.
+[SEG0012] person_2 (DOCTOR): First the numbers, if you don't mind.
+[SEG0013] person_2 (DOCTOR): hold still for me..
+[SEG0014] person_2 (DOCTOR): Okay: weight 60 kilos, respiratory rate 18. And blood pressure 113 over 69, pulse 71, height 171 centimetres, SpO2 97 percent on room air, BMI works out to 20.5.
+[SEG0015] person_2 (DOCTOR): can I examine you now?
+[SEG0016] person_1 (PATIENT): Mm, okay.
+[SEG0017] person_2 (DOCTOR): let me press here
+[SEG0018] person_2 (DOCTOR): your eye movements and reflexes are normal
+[SEG0019] person_2 (DOCTOR): all done, you can get dressed. Have you had any fever, vomiting or weakness?
+[SEG0020] person_1 (PATIENT): Um, no, I'd have mentioned it.
+[SEG0021] person_2 (DOCTOR): right. Have you had any jaw pain when chewing or blurred vision?
+[SEG0022] person_1 (PATIENT): Well, nothing like that, no.
+[SEG0023] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0024] person_1 (PATIENT): okay, so my heart's been fine, as far as I know
+[SEG0025] person_2 (DOCTOR): have you had any previous surgeries?
+[SEG0026] person_1 (PATIENT): No, uh, never had any surgery.
+[SEG0027] person_2 (DOCTOR): how about smoking?
+[SEG0028] person_1 (PATIENT): No, I don't smoke and never have.
+[SEG0029] person_2 (DOCTOR): Tell me about your work.
+[SEG0030] person_1 (PATIENT): I'm a software engineer, so I'm at a screen all day.
+[SEG0031] person_2 (DOCTOR): do you live alone?
+[SEG0032] person_1 (PATIENT): Yes, I live on my own.
+[SEG0033] person_2 (DOCTOR): How do you eat, generally?
+[SEG0034] person_1 (PATIENT): I skip breakfast most days.
+[SEG0035] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0036] person_1 (PATIENT): I'm on amlodipine, 5 milligrams, once a day for my pressure. Oh, I take Combiflam, most days.
+[SEG0037] person_2 (DOCTOR): Are there any allergies on your record that that I should check?
+[SEG0038] person_1 (PATIENT): No, no allergies to anything.
+[SEG0039] person_2 (DOCTOR): have you got any chronic problems?
+[SEG0040] person_1 (PATIENT): High blood pressure, for about ten years.
+[SEG0041] person_2 (DOCTOR): Hm, okay.
+[SEG0042] person_2 (DOCTOR): I'll request an eye check, it'll help with headache and eye strain. We'll begin with amitriptyline, 10 milligrams, at night, for six weeks. You take it by mouth. That's for headache prevention. Take a break from the screen every hour and do a few neck stretches. Painkillers on most days can actually make the headaches stick around. If the symptoms get worse, or you feel really unwell, please come to the emergency department.
+[SEG0043] person_2 (DOCTOR): I'd like to see you again in four weeks. So, that's it on my side. Anything unclear?
+[SEG0044] person_1 (PATIENT): Thanks so much, doctor.
+[SEG0045] person_2 (DOCTOR): Bye for now.
+
+JSON:

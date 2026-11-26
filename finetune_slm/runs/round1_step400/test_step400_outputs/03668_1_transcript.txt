@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03668)
+[SEG0001] person_1 (NURSE): Okay, doctor, we're all set in here. I'll give you the numbers when you want them.
+[SEG0002] person_2 (DOCTOR): Thanks, that's helpful. Hello, please sit. What's been happening?
+[SEG0003] person_3 (PATIENT): I wanted to get an ache in my jaw looked at.
+[SEG0004] person_2 (DOCTOR): how long has it been like this?
+[SEG0005] person_3 (PATIENT): About... well, about a week. I took the morning off to come in today. I'm not great at remembering details, so bear with me.
+[SEG0006] person_2 (DOCTOR): tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse
+[SEG0007] person_3 (PATIENT): Mild, I'd say. I'd say all the time.
+[SEG0008] person_2 (DOCTOR): Is there anything else with it?
+[SEG0009] person_3 (PATIENT): It It usually comes with indigestion.
+[SEG0010] person_2 (DOCTOR): Any cough?
+[SEG0011] person_3 (PATIENT): Definitely no cough.
+[SEG0012] person_2 (DOCTOR): Have you noticed leg swelling or fever?
+[SEG0013] person_3 (PATIENT): sorry, what was I saying, nope, nothing like that
+[SEG0014] person_2 (DOCTOR): anything different when you pass water?
+[SEG0015] person_3 (PATIENT): Nothing there, no.
+[SEG0016] person_2 (DOCTOR): neurologically, anything strange?
+[SEG0017] person_3 (PATIENT): No, uh, nothing like that.
+[SEG0018] person_2 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0019] person_3 (PATIENT): No, nothing as far as I know.
+[SEG0020] person_2 (DOCTOR): have you had any previous surgeries?
+[SEG0021] person_3 (PATIENT): No, never.
+[SEG0022] person_2 (DOCTOR): Okay, tell me about your routine, work, habits, that sort of thing.
+[SEG0023] person_3 (PATIENT): I gave up cigarettes last spring. My husband and I live above the shop. I'm vegetarian and have been for years. Not much, I mostly stay in these days.
+[SEG0024] person_2 (DOCTOR): Okay, any medical conditions, anything you've been treated for?
+[SEG0025] person_3 (PATIENT): Well, no, nothing I can think of.
+[SEG0026] person_2 (DOCTOR): Any regular medication, tablets or creams?
+[SEG0027] person_3 (PATIENT): Nothing regular, no.
+[SEG0028] person_1 (NURSE): Doctor, I've got the readings for you. BP is 125 over 82, saturation 98 percent, pulse is 110 beats a minute.
+[SEG0029] person_2 (DOCTOR): Right, thanks.
+[SEG0030] person_2 (DOCTOR): I'd like to check you over now, if that's alright.
+[SEG0031] person_2 (DOCTOR): tell me if that's sore
+[SEG0032] person_2 (DOCTOR): your heart sounds are normal and your tummy is soft, but your pulse is a little fast
+[SEG0033] person_2 (DOCTOR): Good, you can sit up again.
+[SEG0034] person_2 (DOCTOR): So where does that leave us? This looks most like possible heart attack despite no classic chest pain. We should do a troponin test for possible heart attack. I'd like you to take aspirin, 300 milligrams, once now, single dose. You take it by mouth. It's for possible heart attack. Diabetes can hide the usual pain, so I am treating this as a heart problem until proven otherwise.
+[SEG0035] person_2 (DOCTOR): I'm not ordering an ECG today. If things carry on in two weeks, we'll consider it. One warning sign to remember: the symptoms get worse. In that case don't wait.
+[SEG0036] person_3 (PATIENT): I'll remember that.
+[SEG0037] person_2 (DOCTOR): see me again straight away
+[SEG0038] person_3 (PATIENT): Good, I'll return then.
+[SEG0039] person_2 (DOCTOR): That's all from me. Any questions?
+[SEG0040] person_3 (PATIENT): Great, um, thank you for your help.
+[SEG0041] person_2 (DOCTOR): Look after yourself.
+
+JSON:

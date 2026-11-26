@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00280)
+[SEG0001] person_1 (PATIENT): Hi, you know, doctor, I brought my bag, is it fine to leave it here?
+[SEG0002] person_2 (DOCTOR): Of course, put it down anywhere. So, how can I help?
+[SEG0003] person_1 (PATIENT): Hmm, I wanted to get diarrhoea looked at.
+[SEG0004] person_2 (DOCTOR): Since when have you had this?
+[SEG0005] person_1 (PATIENT): About... well, one week.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): Yes, eating and drinking milk. That makes it worse. Honestly, all the time. About a four out of ten.
+[SEG0008] person_2 (DOCTOR): Any vomiting or rash at all?
+[SEG0009] person_1 (PATIENT): So, no, no vomiting or rash.
+[SEG0010] person_2 (DOCTOR): Any black stools or recent antibiotics?
+[SEG0011] person_1 (PATIENT): No, no black stools or recent antibiotics.
+[SEG0012] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0013] person_1 (PATIENT): Nothing like that.
+[SEG0014] person_2 (DOCTOR): Right, are you living with family?
+[SEG0015] person_1 (PATIENT): I stay with my daughter and her family.
+[SEG0016] person_2 (DOCTOR): What kind of work do you do?
+[SEG0017] person_1 (PATIENT): I work on a farm, it's quite physical.
+[SEG0018] person_2 (DOCTOR): And what do you usually eat?
+[SEG0019] person_1 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0020] person_2 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0021] person_1 (PATIENT): No, nothing, I've generally been healthy.
+[SEG0022] person_2 (DOCTOR): Are you on any regular medication?
+[SEG0023] person_1 (PATIENT): Nothing, no.
+[SEG0024] person_2 (DOCTOR): Right, do you have any known allergies at all?
+[SEG0025] person_1 (PATIENT): I don't have any known medication allergies.
+[SEG0026] person_2 (DOCTOR): Let me measure a few things.
+[SEG0027] person_2 (DOCTOR): Okay, give me a moment...
+[SEG0028] person_2 (DOCTOR): Okay: temp 39.0 degrees, respiratory rate 18, pulse is 104 beats a minute, pressure 124 over 72, oxygen saturation is 95 percent.
+[SEG0029] person_2 (DOCTOR): Okay, a quick examination now.
+[SEG0030] person_1 (PATIENT): Alright.
+[SEG0031] person_2 (DOCTOR): Right, stay still while I have a look.
+[SEG0032] person_2 (DOCTOR): You're mildly dehydrated.
+[SEG0033] person_2 (DOCTOR): All done, you can get dressed. So, based on the history and the examination, I'd lean towards acute gastroenteritis.
+[SEG0034] person_1 (PATIENT): Doctor, is this dangerous?
+[SEG0035] person_2 (DOCTOR): I can't promise yet, but most people with acute gastroenteritis do well once it's treated properly.
+[SEG0036] person_2 (DOCTOR): Let's book a stool test to look into diarrhoea. We should do blood salts for dehydration. I'm going to put you on ORS, 1 sachet, after each loose stool, for three days. That's for dehydration.
+[SEG0037] person_1 (PATIENT): Fine, I'll start it.
+[SEG0038] person_2 (DOCTOR): Stick to bananas, rice, toast, curd, and avoid milk and oily food till it settles.
+[SEG0039] person_2 (DOCTOR): Right, right. One warning sign to remember: you pass blood or can't keep anything down. In that case don't wait. Come back if it's not better in three days. Thanks for coming in.
+[SEG0040] person_1 (PATIENT): Thanks, that was helpful.
+[SEG0041] person_2 (DOCTOR): Mind how you go.
+
+JSON:

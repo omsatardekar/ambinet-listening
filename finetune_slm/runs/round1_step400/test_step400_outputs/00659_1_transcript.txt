@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00659)
+[SEG0001] person_1 (PATIENT): Good morning, doctor. I've been keeping a note of this, so I can be precise. My heart pounds at night, and has done for about a month.
+[SEG0002] person_2 (DOCTOR): Thank you, that's really useful. Tell me what it feels like.
+[SEG0003] person_1 (PATIENT): A thumping, in the chest and sometimes in my throat, quite fast. It wakes me up, usually between two and four.
+[SEG0004] person_2 (DOCTOR): How long does an episode last?
+[SEG0005] person_1 (PATIENT): Anywhere from a couple of minutes to, last Tuesday, I'd say twenty minutes.
+[SEG0006] person_3 (UNKNOWN): [from the corridor] It was nearer half an hour, last Tuesday.
+[SEG0007] person_1 (PATIENT): Oh, someone's talking out there. Ignore that. It lasted a good while, anyway.
+[SEG0008] person_2 (DOCTOR): I'll go by what you tell me. Does anything come with it, dizziness, sweating?
+[SEG0009] person_1 (PATIENT): Dizzy spells, yes. Occasionally I feel light-headed when I stand up in the morning. I can't say when that began.
+[SEG0010] person_2 (DOCTOR): Roughly, before the thumping, or after?
+[SEG0011] person_1 (PATIENT): I honestly don't know. I only noticed it recently.
+[SEG0012] person_2 (DOCTOR): Fair enough. And do you sweat at night?
+[SEG0013] person_1 (PATIENT): Sometimes, after the thumping. My pyjamas get damp.
+[SEG0014] person_2 (DOCTOR): Any chest pain with it?
+[SEG0015] person_1 (PATIENT): No pain, none whatsoever.
+[SEG0016] person_2 (DOCTOR): Have you fainted, or come close to it?
+[SEG0017] person_1 (PATIENT): No, never fainted.
+[SEG0018] person_2 (DOCTOR): What about caffeine and alcohol? Tell me what you have in a typical day.
+[SEG0019] person_1 (PATIENT): About four cups of strong tea, usually the last at around eight in the evening. And I drink wine at the weekend, a glass or two.
+[SEG0020] person_2 (DOCTOR): Any allergies to anything?
+[SEG0021] person_1 (PATIENT): No allergies.
+[SEG0022] person_2 (DOCTOR): Let me check your numbers. ~
+[SEG0023] person_1 (PATIENT): Please. ~
+[SEG0024] person_2 (DOCTOR): Pulse 74 and regular, blood pressure 124 over 78, temperature 36.6, oxygen 99 percent, breathing 14 a minute, and you weigh 66 kilos.
+[SEG0025] person_1 (PATIENT): All normal? ~
+[SEG0026] person_2 (DOCTOR): All normal. Any cough or breathlessness at all?
+[SEG0027] person_1 (PATIENT): No, my breathing is fine.
+[SEG0028] person_2 (DOCTOR): Any ankle swelling or tiredness, anything with the heart?
+[SEG0029] person_1 (PATIENT): No swelling. Nothing like that.
+[SEG0030] person_2 (DOCTOR): Let me listen. Breathe normally.
+[SEG0031] person_1 (PATIENT): Is it a murmur? ~
+[SEG0032] person_2 (DOCTOR): Your heart sounds are normal, no murmurs, and your pulse is regular.
+[SEG0033] person_1 (PATIENT): That's a relief. So what's causing the thumping? ~
+[SEG0034] person_2 (DOCTOR): Weighing it all up, the most likely cause is the caffeine, especially the tea late into the evening. I'd say caffeine-related palpitations.
+[SEG0035] person_1 (PATIENT): I have been drinking more since I took on the extra project. ~
+[SEG0036] person_2 (DOCTOR): That would do it. Cut the tea down to two cups, none after noon, and see what happens over the next fortnight.
+[SEG0037] person_1 (PATIENT): Two cups. That will be a trial. ~
+[SEG0038] person_2 (DOCTOR): And alcohol late in the evening can trigger it too, so keep the wine to earlier in the day. ~
+[SEG0039] person_1 (PATIENT): I'll bear it in mind. And if it doesn't stop? ~
+[SEG0040] person_2 (DOCTOR): Keep your diary going. If it gets worse, lasts more than half an hour, or you feel faint or get chest pain, come in straight away.
+[SEG0041] person_1 (PATIENT): Understood. Thank you for being so reassuring. ~
+
+JSON:

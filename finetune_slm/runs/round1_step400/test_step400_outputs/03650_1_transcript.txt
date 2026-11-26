@@ -1,0 +1,57 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03650)
+[SEG0001] person_1 (PATIENT): Yeah, sorry I'm a little late, doctor.
+[SEG0002] person_2 (DOCTOR): Yes, have a seat. Tell me what's going on.
+[SEG0003] person_1 (PATIENT): So the thing is, I've got breathlessness during sport. I've never really been one for hospitals.
+[SEG0004] person_2 (DOCTOR): Let's run through your medicines.
+[SEG0005] person_1 (PATIENT): I take iron tablets, once a day.
+[SEG0006] person_2 (DOCTOR): When was the first time you noticed it?
+[SEG0007] person_1 (PATIENT): About... well, three days. My family kept telling me to get it checked. I'm not great at remembering details, so bear with me.
+[SEG0008] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0009] person_1 (PATIENT): It happens once or twice a day. Sport definitely sets it off.
+[SEG0010] person_2 (DOCTOR): Alright, have you had a flutter now and then?
+[SEG0011] person_1 (PATIENT): Yes, actually.
+[SEG0012] person_2 (DOCTOR): Mm, okay. Okay, any fever, fainting or cough at all?
+[SEG0013] person_1 (PATIENT): Nope, nothing like that.
+[SEG0014] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0015] person_1 (PATIENT): Nothing on the skin, no.
+[SEG0016] person_2 (DOCTOR): Any pins and needles or loss of strength anywhere?
+[SEG0017] person_1 (PATIENT): No weakness or anything.
+[SEG0018] person_2 (DOCTOR): Has anyone ever diagnosed you with something?
+[SEG0019] person_1 (PATIENT): I've had low haemoglobin for five years now. I wasn't sure whether to come in at all, to be honest.
+[SEG0020] person_2 (DOCTOR): Alright, low haemoglobin, that matches what I have here. Let's talk a little about your daily life and habits.
+[SEG0021] person_1 (PATIENT): Yes, I work in a bakery, early starts. I walk the dog every morning. No, I share a house with my brother.
+[SEG0022] person_2 (DOCTOR): So, any allergies to tablets, food or anything in the environment?
+[SEG0023] person_1 (PATIENT): Yes, grass pollen. I get sneezing.
+[SEG0024] person_2 (DOCTOR): Any previous surgeries?
+[SEG0025] person_1 (PATIENT): No, never.
+[SEG0026] person_2 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0027] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0028] person_2 (DOCTOR): Okay: temperature is 36.5 degrees, pulse 66, oxygen saturation is 97 percent, pressure 109 over 72.
+[SEG0029] person_1 (PATIENT): Is that okay?
+[SEG0030] person_2 (DOCTOR): I'll interpret them after the examination.
+[SEG0031] person_2 (DOCTOR): Let's move on to the examination.
+[SEG0032] person_2 (DOCTOR): Does that hurt?
+[SEG0033] person_2 (DOCTOR): There is a harsh murmur that gets louder when you stand up.
+[SEG0034] person_2 (DOCTOR): That's the examination finished.
+[SEG0035] person_2 (DOCTOR): So, based on the history and the examination, this is probably possible hypertrophic cardiomyopathy.
+[SEG0036] person_2 (DOCTOR): Let's book a heart monitor to look into palpitations.
+[SEG0037] person_1 (PATIENT): Is that done today?
+[SEG0038] person_2 (DOCTOR): No competitive sport until the heart scan, and we will check your close family. The thing that would worry me is if the symptoms get worse. If that happens, go to emergency. I'll want another look after the scan.
+[SEG0039] person_1 (PATIENT): I can manage that.
+[SEG0040] person_2 (DOCTOR): Have I covered everything you wanted?
+[SEG0041] person_1 (PATIENT): I mean, thank you, that's helpful.
+[SEG0042] person_2 (DOCTOR): Take care now.
+
+JSON:

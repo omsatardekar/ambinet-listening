@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00370)
+[SEG0001] person_1 (PATIENT): Okay, uh, so hello? Doctor? They told me to come straight in.
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, you know, thank you for seeing us.
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to have you here.
+[SEG0005] person_3 (FAMILY_MEMBER): He's been having swollen ankles in the evening, doctor.
+[SEG0006] person_2 (DOCTOR): Alright, how long has this been going on?
+[SEG0007] person_1 (PATIENT): I mean, it's been about a month, I'm fairly sure.
+[SEG0008] person_2 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0009] person_1 (PATIENT): Yes, standing all day. That makes it worse. It settles a little with raising the legs. Pretty mild, if I'm being honest. It comes and goes.
+[SEG0010] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0011] person_1 (PATIENT): Tight shoes by the end of the day goes along with it, most of the time. The tight shoes by the end of the day? That's been for two days. And a heavy feeling in the legs, too.
+[SEG0012] person_2 (DOCTOR): And what about one leg more swollen than the other, breathlessness lying flat or weight gain?
+[SEG0013] person_1 (PATIENT): No, none of those.
+[SEG0014] person_2 (DOCTOR): And what about calf pain or chest pain?
+[SEG0015] person_1 (PATIENT): No calf pain or chest pain, none of it.
+[SEG0016] person_2 (DOCTOR): Neurologically, anything strange?
+[SEG0017] person_1 (PATIENT): Nothing odd there.
+[SEG0018] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0019] person_1 (PATIENT): Skin's normal.
+[SEG0020] person_2 (DOCTOR): Do you have any allergies to medicines, food, anything at all?
+[SEG0021] person_1 (PATIENT): No, nothing I'm aware of.
+[SEG0022] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0023] person_1 (PATIENT): I've got high blood pressure.
+[SEG0024] person_2 (DOCTOR): Okay, keep going. A few questions about your lifestyle now.
+[SEG0025] person_1 (PATIENT): I stay with my daughter and her family. I'm mostly vegetarian. I cycle to work most mornings.
+[SEG0026] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0027] person_3 (FAMILY_MEMBER): He is on ramipril, 5 milligrams, every morning, I give it to him.
+[SEG0028] person_2 (DOCTOR): First the numbers, if you don't mind.
+[SEG0029] person_2 (DOCTOR): Rest your hand here...
+[SEG0030] person_2 (DOCTOR): Okay: temperature 36.5, blood pressure 167 over 103. And pulse 79, respiratory rate 15, oxygen saturation is 99 percent.
+[SEG0031] person_1 (PATIENT): Well, is that alright, doctor?
+[SEG0032] person_2 (DOCTOR): Don't worry, I'll go through it in a moment.
+[SEG0033] person_2 (DOCTOR): Shall we do the examination?
+[SEG0034] person_1 (PATIENT): No problem.
+[SEG0035] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0036] person_2 (DOCTOR): Chest is clear and the neck veins aren't raised.
+[SEG0037] person_2 (DOCTOR): Hold that position for me.
+[SEG0038] person_2 (DOCTOR): Mild pitting swelling around both ankles, equal on both sides.
+[SEG0039] person_2 (DOCTOR): That's fine, sit up.
+[SEG0040] person_2 (DOCTOR): Right, here's what I'm thinking. The most likely explanation is ankle swelling possibly from a blood pressure tablet.
+[SEG0041] person_2 (DOCTOR): We should do kidney function tests for leg swelling. Raise your legs when you're sitting and try compression socks. I'm not ordering an echocardiogram today. If things carry on in two weeks, we'll consider it. If the symptoms get worse, that's the point to come in urgently. Come back after the results are back. Ask me anything before you go.
+[SEG0042] person_1 (PATIENT): Alright, thanks. Bye for now.
+[SEG0043] person_2 (DOCTOR): Safe journey home.
+
+JSON:

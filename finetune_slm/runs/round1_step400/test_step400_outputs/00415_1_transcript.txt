@@ -1,0 +1,72 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00415)
+[SEG0001] person_1 (DOCTOR): Good afternoon. Take a seat, please.
+[SEG0002] person_2 (PATIENT): Morning.
+[SEG0003] person_3 (FAMILY_MEMBER): Doctor, thank you for seeing us.
+[SEG0004] person_1 (DOCTOR): right, please do extra information is always welcome did you come far?
+[SEG0005] person_2 (PATIENT): um, not too far, about half an hour by bus
+[SEG0006] person_1 (DOCTOR): In your own words, what's happened?
+[SEG0007] person_3 (FAMILY_MEMBER): So, he's been having tingling in my fingers, doctor.
+[SEG0008] person_1 (DOCTOR): Are you on any tablets or medication? I'll explain everything as we go along.
+[SEG0009] person_3 (FAMILY_MEMBER): It's glimepiride, 2 milligrams, before breakfast, doctor. He is on thyroxine, 75 micrograms, every morning, I give it to him.
+[SEG0010] person_2 (PATIENT): before this I was on metformin; that's been stopped
+[SEG0011] person_1 (DOCTOR): what's the pattern, is it there all day?
+[SEG0012] person_2 (PATIENT): It happens once or twice a day.
+[SEG0013] person_1 (DOCTOR): Does it come along with anything else?
+[SEG0014] person_2 (PATIENT): When it starts I tend to get an ache in the wrist as well. The ache in the wrist? That's been since yesterday. Uh, as for ache in the wrist, a three out of ten, I suppose.
+[SEG0015] person_1 (DOCTOR): have you been waking up at night with pins and needles?
+[SEG0016] person_2 (PATIENT): Yes, I have. About waking up at night with pins and needles, I'd call it it moderate.
+[SEG0017] person_1 (DOCTOR): Let me check a few things. Any headache or swelling in the joints?
+[SEG0018] person_2 (PATIENT): nothing like that, um, no
+[SEG0019] person_1 (DOCTOR): have you noticed neck pain, bladder problems or trouble walking?
+[SEG0020] person_2 (PATIENT): I haven't had neck pain, bladder problems or trouble walking, no.
+[SEG0021] person_1 (DOCTOR): Is your urine normal, no changes?
+[SEG0022] person_2 (PATIENT): No changes there.
+[SEG0023] person_1 (DOCTOR): Let's talk a little about your daily life and habits.
+[SEG0024] person_2 (PATIENT): I used to smoke but I quit five years ago. I have a couple of drinks on the weekend. I eat out quite a lot, to be honest. I work in an office, mostly sitting at a desk
+[SEG0025] person_1 (DOCTOR): So, does anything run in the family?
+[SEG0026] person_2 (PATIENT): My mother had high blood pressure.
+[SEG0027] person_1 (DOCTOR): Any long-term health problems I should know about?
+[SEG0028] person_2 (PATIENT): Diabetes, for five years. I've never really been one for hospitals. I've had an underactive thyroid for five years now.
+[SEG0029] person_1 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0030] person_2 (PATIENT): No, nothing I'm aware of.
+[SEG0031] person_3 (FAMILY_MEMBER): I'm not sure that's right. I seem to recall a problem with ibuprofen
+[SEG0032] person_2 (PATIENT): okay, so maybe, but I don't recall it
+[SEG0033] person_1 (DOCTOR): Okay, I'll note both of those. Any previous surgeries?
+[SEG0034] person_2 (PATIENT): No, never had any surgery.
+[SEG0035] person_1 (DOCTOR): let's get your blood pressure and the other basics
+[SEG0036] person_1 (DOCTOR): almost there..
+[SEG0037] person_1 (DOCTOR): Okay: BMI works out to 22.4, BP is 128 over 73. And height 178 centimetres, temperature is 36.4 degrees, respiratory rate 15, pulse 83, weight 71 kilos, oxygen saturation is 99 percent.
+[SEG0038] person_2 (PATIENT): So, um, is that alright, doctor?
+[SEG0039] person_1 (DOCTOR): They help build the picture, I'll tell you more soon.
+[SEG0040] person_1 (DOCTOR): let me examine, it won't take long
+[SEG0041] person_1 (DOCTOR): I'll go gently
+[SEG0042] person_1 (DOCTOR): Tapping over the wrist reproduces the tingling
+[SEG0043] person_2 (PATIENT): That's fine.
+[SEG0044] person_1 (DOCTOR): Okay, tell me if anything hurts.
+[SEG0045] person_1 (DOCTOR): Power in the thumb is slightly reduced.
+[SEG0046] person_1 (DOCTOR): Almost done with this part.
+[SEG0047] person_1 (DOCTOR): Bending the wrist for a minute brings on the numbness
+[SEG0048] person_2 (PATIENT): Alright.
+[SEG0049] person_1 (DOCTOR): okay, you can sit up okay, so my impression is this: The The most likely explanation is carpal tunnel syndrome i'd also keep a pinched nerve in the neck in mind
+[SEG0050] person_2 (PATIENT): is this going to go away?
+[SEG0051] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like carpal tunnel syndrome, but I'd like to confirm. I think a nerve conduction study makes sense here, for hand numbness.
+[SEG0052] person_2 (PATIENT): that sounds sensible
+[SEG0053] person_1 (DOCTOR): I think a blood sugar test makes sense here, for neuropathy screen. A night wrist splint, kept neutral, usually helps a lot. Please take the tablets with food so they don't upset your stomach. I'd like you to see physiotherapy as well, and I'll write the referral.
+[SEG0054] person_2 (PATIENT): sure, where do I go?
+[SEG0055] person_1 (DOCTOR): We'll catch up in four weeks. Good. Let us know how you get on.
+[SEG0056] person_2 (PATIENT): Thank you for your time.
+[SEG0057] person_1 (DOCTOR): so, all the best
+
+JSON:

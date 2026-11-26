@@ -1,0 +1,74 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00291)
+[SEG0001] person_1 (NURSE): Okay, doctor, we're all set in here. I'll give you the numbers when you want them.
+[SEG0002] person_2 (DOCTOR): Good, thank you. Welcome, tell me what's brought you in.
+[SEG0003] person_3 (CAREGIVER): Morning, doctor. I'll stay and fill in anything that's missed.
+[SEG0004] person_2 (DOCTOR): Please do. Extra information is always welcome.
+[SEG0005] person_3 (CAREGIVER): We came because of tiredness.
+[SEG0006] person_2 (DOCTOR): Roughly when did it start?
+[SEG0007] person_4 (PATIENT): About three weeks, give or take.
+[SEG0008] person_3 (CAREGIVER): It was closer to a month, doctor.
+[SEG0009] person_2 (DOCTOR): Okay, so roughly three to four weeks. Is that right?
+[SEG0010] person_4 (PATIENT): Yeah, roughly.
+[SEG0011] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0012] person_4 (PATIENT): It usually comes with dry skin. The dry skin? That's been for about three months.
+[SEG0013] person_2 (DOCTOR): Is there anything that takes the edge off?
+[SEG0014] person_4 (PATIENT): Oh, it settles a little with moisturiser. There's constipation as well.
+[SEG0015] person_2 (DOCTOR): Did you get low mood or hair loss?
+[SEG0016] person_4 (PATIENT): No low mood or hair loss, none of it.
+[SEG0017] person_2 (DOCTOR): Have you had any trouble swallowing or heavy periods?
+[SEG0018] person_4 (PATIENT): None, as far as I know.
+[SEG0019] person_2 (DOCTOR): Right, on the cardiac side, anything I should know?
+[SEG0020] person_4 (PATIENT): No, that's been fine.
+[SEG0021] person_2 (DOCTOR): Any muscle or joint problems besides this?
+[SEG0022] person_4 (PATIENT): Nothing else aches.
+[SEG0023] person_2 (DOCTOR): Any previous surgeries?
+[SEG0024] person_4 (PATIENT): I had a knee arthroscopy three years ago.
+[SEG0025] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0026] person_4 (PATIENT): Low haemoglobin, for five years.
+[SEG0027] person_2 (DOCTOR): Okay.
+[SEG0028] person_4 (PATIENT): I've had migraines, yes. I've had asthma for about a year now.
+[SEG0029] person_2 (DOCTOR): Yes, migraines and asthma are known to us, good to have that clear. What about allergies, to medicines or foods or anything else?
+[SEG0030] person_4 (PATIENT): Not that I know, no.
+[SEG0031] person_3 (CAREGIVER): I'm not sure that's right. I seem to recall a problem with aspirin.
+[SEG0032] person_4 (PATIENT): I don't remember that.
+[SEG0033] person_2 (DOCTOR): Alright, so that's unclear. I'll record what each of you said. Alright, any medication at the moment, including things from the pharmacy?
+[SEG0034] person_4 (PATIENT): It's iron tablets, once a day. Sumatriptan. I take it 50 milligrams, when needed. I'm on Asthalin inhaler, when needed.
+[SEG0035] person_2 (DOCTOR): Do you smoke?
+[SEG0036] person_4 (PATIENT): I smoke, yes, around five a day.
+[SEG0037] person_2 (DOCTOR): Do you drink alcohol?
+[SEG0038] person_4 (PATIENT): I don't drink at all.
+[SEG0039] person_2 (DOCTOR): Do you live alone?
+[SEG0040] person_4 (PATIENT): Yes, I live on my own.
+[SEG0041] person_2 (DOCTOR): Anything special about your diet?
+[SEG0042] person_4 (PATIENT): I try to avoid too much sugar.
+[SEG0043] person_2 (DOCTOR): What's your job?
+[SEG0044] person_4 (PATIENT): I teach at a primary school.
+[SEG0045] person_1 (NURSE): Doctor, I've got the readings for you. Temperature is 36.9 degrees, SpO2 97 percent on room air, respiratory rate 18. Pulse is 81 beats a minute, pressure 117 over 76.
+[SEG0046] person_2 (DOCTOR): So, thanks.
+[SEG0047] person_2 (DOCTOR): I'll examine you now, bear with me.
+[SEG0048] person_4 (PATIENT): Okay.
+[SEG0049] person_2 (DOCTOR): Let me press here.
+[SEG0050] person_2 (DOCTOR): Your pulse is slow, about fifty-six, and the thyroid isn't enlarged.
+[SEG0051] person_4 (PATIENT): Go ahead.
+[SEG0052] person_2 (DOCTOR): Almost done with this part.
+[SEG0053] person_2 (DOCTOR): Reflexes are a bit slow to relax.
+[SEG0054] person_2 (DOCTOR): Okay, finished. So where does that leave us? The most likely explanation is an underactive thyroid. It could also be anaemia, so we'll keep that open.
+[SEG0055] person_2 (DOCTOR): I'd like to arrange blood tests for fatigue. We should do a thyroid test for hypothyroid symptoms. I'll start you on levothyroxine, 50 micrograms, every morning on an empty stomach, until we review. That's for hypothyroidism. Take the thyroid tablet on an empty stomach, half an hour before breakfast, and not with calcium or iron. Don't skip meals, and try to eat smaller portions more often through the day. Book a review in six weeks.
+[SEG0056] person_4 (PATIENT): That works for me.
+[SEG0057] person_2 (DOCTOR): Alright, I'll see you out.
+[SEG0058] person_4 (PATIENT): Thank you for your time.
+[SEG0059] person_2 (DOCTOR): Mind how you go.
+
+JSON:

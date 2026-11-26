@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03618)
+[SEG0001] person_1 (PATIENT): Morning, doctor. Lovely to meet you.
+[SEG0002] person_2 (DOCTOR): Alright, yes, have a a seat. Tell me what's going on.
+[SEG0003] person_1 (PATIENT): sorry, what was I saying, so the thing is, I've got a tremor
+[SEG0004] person_2 (DOCTOR): Okay, what's the timeline, when did it begin?
+[SEG0005] person_1 (PATIENT): It's been six months, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): Is it a lot or only a little?
+[SEG0007] person_1 (PATIENT): Maybe a four out of ten on a bad day.
+[SEG0008] person_2 (DOCTOR): Alright, have you been feeling agitated?
+[SEG0009] person_1 (PATIENT): Yeah, yeah. Six months, I'd say.
+[SEG0010] person_2 (DOCTOR): Have you had a tremor before, or is this the first time?
+[SEG0011] person_1 (PATIENT): yes, something like this happened a couple of years ago, and it went away on its own
+[SEG0012] person_2 (DOCTOR): Let me get the the readings out of the way.
+[SEG0013] person_2 (DOCTOR): that's it, just a little longer..
+[SEG0014] person_2 (DOCTOR): okay: BP is 136 over 85, pulse is 109 beats a minute, BMI works out to 27.5, saturation 96 percent, height 181 centimetres, temp 37.0 degrees, weight 90 kilos
+[SEG0015] person_1 (PATIENT): Um, is that alright, doctor?
+[SEG0016] person_2 (DOCTOR): we'll look at it together shortly
+[SEG0017] person_2 (DOCTOR): Right, let's have a a proper look at you.
+[SEG0018] person_2 (DOCTOR): so, stay as you are for a moment
+[SEG0019] person_2 (DOCTOR): You have brisk reflexes and jerking of the ankles, and your pupils are large.
+[SEG0020] person_2 (DOCTOR): You can sit up now.
+[SEG0021] person_2 (DOCTOR): a few quick ones: high fever, confusion, stiffness or seizure?
+[SEG0022] person_1 (PATIENT): No high fever, confusion, stiffness or seizure, none of it.
+[SEG0023] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0024] person_1 (PATIENT): Oh, no, that's been fine.
+[SEG0025] person_2 (DOCTOR): is your urine normal, no changes?
+[SEG0026] person_1 (PATIENT): nothing there, no
+[SEG0027] person_2 (DOCTOR): have you ever had an operation?
+[SEG0028] person_1 (PATIENT): I mean, I had a cataract operation in my left eye about a year ago.
+[SEG0029] person_2 (DOCTOR): has anything ever caused you a reaction? I mean any allergies
+[SEG0030] person_1 (PATIENT): Nickel i come out in... well, a rash on my skin
+[SEG0031] person_2 (DOCTOR): do you have any long-term conditions?
+[SEG0032] person_1 (PATIENT): Yes, depression.
+[SEG0033] person_2 (DOCTOR): hm, okay
+[SEG0034] person_1 (PATIENT): I've had an enlarged prostate for two years now.
+[SEG0035] person_2 (DOCTOR): Are you taking anything regularly, including from the pharmacy? Bear with me, I'm just building up the picture.
+[SEG0036] person_1 (PATIENT): Mirtazapine, 15 milligrams, at night for my mood.
+[SEG0037] person_2 (DOCTOR): When did you start it?
+[SEG0038] person_1 (PATIENT): About two years. It's tamsulosin, 0.4 milligrams, at night.
+[SEG0039] person_2 (DOCTOR): Who lives with you?
+[SEG0040] person_1 (PATIENT): My partner and our baby.
+[SEG0041] person_2 (DOCTOR): what line of work are you in?
+[SEG0042] person_1 (PATIENT): I'm a bus driver, so I sit for long hours.
+[SEG0043] person_2 (DOCTOR): from what you've told me and what I found, I think we're dealing with mild serotonin syndrome from combining medicines at this stage. I want blood tests done, that's for agitation and clonus. We will stop the migraine tablet and watch you for several hours. Try to keep a simple diary of when it happens and what you were doing, and bring it to the next visit. Please come and see me in one day
+[SEG0044] person_2 (DOCTOR): Anything else on your mind before you go?
+[SEG0045] person_1 (PATIENT): Okay, you know, that makes sense. Thanks for explaining.
+
+JSON:

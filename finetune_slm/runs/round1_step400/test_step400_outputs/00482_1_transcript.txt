@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00482)
+[SEG0001] person_1 (PATIENT): Good evening, doctor, thank you for staying late.
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): I've, I've been losing my sense of smell, and I wanted to get it checked.
+[SEG0004] person_2 (DOCTOR): Let's go through your medication. What are you taking?
+[SEG0005] person_1 (PATIENT): Losartan, 50 milligrams, once a day. Asthalin inhaler, when needed for my asthma.
+[SEG0006] person_2 (DOCTOR): Okay, so. And when did that start?
+[SEG0007] person_1 (PATIENT): I'd say two months. Actually, no, closer to six months.
+[SEG0008] person_2 (DOCTOR): How bad is it, would you say?
+[SEG0009] person_1 (PATIENT): Severe, I'd say.
+[SEG0010] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0011] person_1 (PATIENT): When it starts I tend to get a dry cough and fever as well. The dry cough and fever? That's been for about three months.
+[SEG0012] person_2 (DOCTOR): Have you found anything that eases it?
+[SEG0013] person_1 (PATIENT): Right, only paracetamol, and it's not much. There's body aches as well. About body aches, I'd call it moderate. I did have a sore throat at one point, but that's gone now.
+[SEG0014] person_2 (DOCTOR): A few quick ones: diarrhoea or vomiting?
+[SEG0015] person_1 (PATIENT): No. None of those.
+[SEG0016] person_2 (DOCTOR): Did you get chest pain, shortness of breath or confusion?
+[SEG0017] person_1 (PATIENT): No, none of those.
+[SEG0018] person_2 (DOCTOR): Any trouble with the waterworks?
+[SEG0019] person_1 (PATIENT): Nothing there, you know, no.
+[SEG0020] person_2 (DOCTOR): Neurologically, anything strange?
+[SEG0021] person_1 (PATIENT): No, nothing like that.
+[SEG0022] person_2 (DOCTOR): Do your parents or siblings have any long-term illnesses?
+[SEG0023] person_1 (PATIENT): My mother has diabetes. My grandmother had breast cancer.
+[SEG0024] person_2 (DOCTOR): A few questions about your lifestyle now.
+[SEG0025] person_1 (PATIENT): I play badminton on Sundays. I work on a farm, it's quite physical. Yes, I live on my own.
+[SEG0026] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0027] person_1 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0028] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0029] person_1 (PATIENT): No operations, no.
+[SEG0030] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0031] person_1 (PATIENT): I've had high blood pressure for two years now. I've had asthma, yes.
+[SEG0032] person_2 (DOCTOR): Right, so high blood pressure and asthma are already on your record. We'll keep that in mind today.
+[SEG0033] person_2 (DOCTOR): Let me have a look at you.
+[SEG0034] person_1 (PATIENT): Alright.
+[SEG0035] person_2 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0036] person_2 (DOCTOR): Chest is clear, no crackles or wheeze.
+[SEG0037] person_1 (PATIENT): Alright.
+[SEG0038] person_2 (DOCTOR): Alright, just relax, I'll be quick.
+[SEG0039] person_2 (DOCTOR): Throat is mildly red.
+[SEG0040] person_2 (DOCTOR): That's all I need, thank you. Putting it all together, I'd lean towards a viral respiratory illness, possibly COVID-19. It could also be a common cold, so we'll keep that open. Let me repeat that back to make sure. You've been losing your sense of smell for six months, severe, and no chest pain or diarrhoea.
+[SEG0041] person_1 (PATIENT): Exactly.
+[SEG0042] person_2 (DOCTOR): I'd like to arrange a COVID test for viral respiratory illness. I'd like to arrange a pulse oximeter reading for respiratory symptoms. The result will help us decide whether anything more is needed.
+[SEG0043] person_1 (PATIENT): Where do I go for that?
+[SEG0044] person_2 (DOCTOR): Let's use paracetamol, 500 milligrams, every six hours if needed, for three days. You take it by mouth. That's for fever and aches.
+[SEG0045] person_1 (PATIENT): Can I get that from the usual pharmacy?
+[SEG0046] person_2 (DOCTOR): Stay home until you're fever-free and wear a mask around others for a few days. Come back or go to emergency straight away if you become short of breath.
+[SEG0047] person_1 (PATIENT): Yes, I'll watch for that.
+[SEG0048] person_2 (DOCTOR): I'd like to see you again in a week.
+[SEG0049] person_1 (PATIENT): Okay.
+[SEG0050] person_2 (DOCTOR): That's it on my side. Anything unclear?
+[SEG0051] person_1 (PATIENT): Right, thank you for your time.
+
+JSON:

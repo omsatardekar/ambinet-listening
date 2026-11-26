@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01712)
+[SEG0001] person_1 (PATIENT): Hello? Doctor? I was told to come in.
+[SEG0002] person_2 (DOCTOR): Yes, come in and sit down. What brings you here today?
+[SEG0003] person_1 (PATIENT): It's the worst headache of my life. I thought I'd wait, uh, but it hasn't gone.
+[SEG0004] person_2 (DOCTOR): Did it come on recently?
+[SEG0005] person_1 (PATIENT): Probably about a month. Yeah. I just want to get back to normal, really. Sorry, I know I'm rambling a bit.
+[SEG0006] person_2 (DOCTOR): How strong would you say it is?
+[SEG0007] person_1 (PATIENT): I'd call it moderate. I had vomiting before. That's settled now, though.
+[SEG0008] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0009] person_1 (PATIENT): Okay, so I don't think I have any, no.
+[SEG0010] person_2 (DOCTOR): What about your parents, brothers or sisters, any conditions?
+[SEG0011] person_1 (PATIENT): My grandfather had a stroke.
+[SEG0012] person_2 (DOCTOR): What about alcohol?
+[SEG0013] person_1 (PATIENT): I only drink at family occasions.
+[SEG0014] person_2 (DOCTOR): What does a normal day of food look like?
+[SEG0015] person_1 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0016] person_2 (DOCTOR): What do you do during the day?
+[SEG0017] person_1 (PATIENT): I look after my grandchildren most days.
+[SEG0018] person_2 (DOCTOR): Do you live by yourself?
+[SEG0019] person_1 (PATIENT): No, I share a house with my brother.
+[SEG0020] person_2 (DOCTOR): Do you take any prescribed or over-the-counter medicines? I ask because it helps me narrow things down.
+[SEG0021] person_1 (PATIENT): Propranolol. I take it 40 milligrams, twice a day.
+[SEG0022] person_2 (DOCTOR): Do you have any chronic illnesses?
+[SEG0023] person_1 (PATIENT): I've had migraines for five years now.
+[SEG0024] person_2 (DOCTOR): Let me check a few things. Any weakness, fever or head injury?
+[SEG0025] person_1 (PATIENT): No, none of those at all.
+[SEG0026] person_2 (DOCTOR): How about your heart, any problems like that?
+[SEG0027] person_1 (PATIENT): Actually, no, that's been fine.
+[SEG0028] person_2 (DOCTOR): Is your urine normal, no changes?
+[SEG0029] person_1 (PATIENT): Okay, so that's normal as far as I know.
+[SEG0030] person_2 (DOCTOR): Let's start with the basic checks.
+[SEG0031] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0032] person_2 (DOCTOR): Okay: temp 36.9 degrees, heart rate 91, pressure 156 over 95.
+[SEG0033] person_1 (PATIENT): Is that alright, doctor?
+[SEG0034] person_2 (DOCTOR): I'll come back to the numbers.
+[SEG0035] person_2 (DOCTOR): Alright, over here please and I'll take a look.
+[SEG0036] person_2 (DOCTOR): Hold that for a second.
+[SEG0037] person_2 (DOCTOR): Your neck is stiff and you are very sensitive to light.
+[SEG0038] person_2 (DOCTOR): Please sit back down.
+[SEG0039] person_2 (DOCTOR): So, based on the history and the examination, the most likely explanation is a possible bleed around the brain.
+[SEG0040] person_1 (PATIENT): Actually, is there something to worry about?
+[SEG0041] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a possible bleed around the brain, but I'd like to confirm. I'll request an urgent CT scan of the head, it'll help with thunderclap headache.
+[SEG0042] person_1 (PATIENT): How long will it take?
+[SEG0043] person_2 (DOCTOR): I'll request a lumbar puncture, it'll help with thunderclap headache. This needs an emergency scan, an ambulance is on its way. We'll catch up straight away. I think we're done unless you have questions.
+[SEG0044] person_1 (PATIENT): Right, I'll do that. Thank you, doctor.
+[SEG0045] person_2 (DOCTOR): See you soon.
+
+JSON:

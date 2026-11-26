@@ -1,0 +1,74 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03263)
+[SEG0001] person_1 (PATIENT): good evening, doctor, thanks for seeing me
+[SEG0002] person_2 (DOCTOR): Yes, have a seat. Tell me what's going on.
+[SEG0003] person_3 (CAREGIVER): Good morning, doctor. I came along to help out.
+[SEG0004] person_2 (DOCTOR): Yes, that's no problem at all. Please sit.
+[SEG0005] person_3 (CAREGIVER): Hmm, it's fever and shivers, doctor. He didn't want to come, but I insisted.
+[SEG0006] person_2 (DOCTOR): How long has this been bothering you?
+[SEG0007] person_1 (PATIENT): I'd say three weeks, maybe.
+[SEG0008] person_3 (CAREGIVER): I think it's been nearer a month, actually
+[SEG0009] person_2 (DOCTOR): Okay, so roughly three to four weeks. Is that right?
+[SEG0010] person_1 (PATIENT): Yeah, roughly.
+[SEG0011] person_2 (DOCTOR): rate it for me, mild, moderate or severe?
+[SEG0012] person_1 (PATIENT): Maybe a six out of ten on a bad day.
+[SEG0013] person_2 (DOCTOR): Any other symptoms with it?
+[SEG0014] person_1 (PATIENT): it usually comes with cloudy smelly urine. The cloudy smelly urine? That's been for two weeks
+[SEG0015] person_2 (DOCTOR): Do you take any prescribed or over-the-counter medicines?
+[SEG0016] person_3 (CAREGIVER): he takes tamsulosin, 0.4 milligrams, at night it's hydrocortisone cream, when needed for the eczema, doctor
+[SEG0017] person_2 (DOCTOR): Mm, okay.
+[SEG0018] person_3 (CAREGIVER): he is on a urinary catheter, in place, I give it to him
+[SEG0019] person_2 (DOCTOR): Roughly how long on that one?
+[SEG0020] person_3 (CAREGIVER): About a year now.
+[SEG0021] person_2 (DOCTOR): Okay, what about your medical history?
+[SEG0022] person_1 (PATIENT): Yes, an enlarged prostate. My neighbour said I should get it looked at. I thought it would sort itself out, but it hasn't.
+[SEG0023] person_2 (DOCTOR): Is that everything?
+[SEG0024] person_1 (PATIENT): Eczema, for about ten years
+[SEG0025] person_2 (DOCTOR): okay, I can see an enlarged prostate in your file as well
+[SEG0026] person_2 (DOCTOR): Any inherited conditions that you know of in the family?
+[SEG0027] person_1 (PATIENT): My daughter has type 1 diabetes.
+[SEG0028] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0029] person_1 (PATIENT): yes, trimethoprim. I get a rash
+[SEG0030] person_2 (DOCTOR): Do you smoke?
+[SEG0031] person_1 (PATIENT): No, I've never smoked in my life.
+[SEG0032] person_2 (DOCTOR): What do you do during the day?
+[SEG0033] person_1 (PATIENT): I look after my grandchildren most days.
+[SEG0034] person_2 (DOCTOR): do you do any exercise?
+[SEG0035] person_1 (PATIENT): I swim twice a week.
+[SEG0036] person_2 (DOCTOR): Is there someone at home?
+[SEG0037] person_1 (PATIENT): My husband and I live above the shop
+[SEG0038] person_2 (DOCTOR): Let me check a few things. Any vomiting, cough, fall or back pain?
+[SEG0039] person_1 (PATIENT): I haven't had vomiting, cough, fall or back pain, no
+[SEG0040] person_2 (DOCTOR): Any problems with your joints or muscles?
+[SEG0041] person_1 (PATIENT): no, nothing there
+[SEG0042] person_2 (DOCTOR): Let me quickly check your readings.
+[SEG0043] person_2 (DOCTOR): Okay, this won't take long...
+[SEG0044] person_2 (DOCTOR): Okay: SpO2 98 percent on room air, blood pressure 111 over 74, temperature 38.1, pulse is 108 beats a minute.
+[SEG0045] person_1 (PATIENT): Is that normal?
+[SEG0046] person_2 (DOCTOR): That's fine, I'll explain it soon.
+[SEG0047] person_2 (DOCTOR): Right, let's have a proper look at you.
+[SEG0048] person_2 (DOCTOR): Let me feel here.
+[SEG0049] person_2 (DOCTOR): The catheter bag has cloudy urine and there is tenderness above the pubic bone.
+[SEG0050] person_2 (DOCTOR): Good, you can sit up again.
+[SEG0051] person_2 (DOCTOR): Having listened and examined, this is probably a catheter-related urinary infection.
+[SEG0052] person_1 (PATIENT): I'm scared it's something bad is it?
+[SEG0053] person_2 (DOCTOR): I understand the worry at the moment I'd say it's a catheter-related urinary infection, and we'll know more once the blood tests is back
+[SEG0054] person_2 (DOCTOR): I think blood tests makes sense here, for fever.
+[SEG0055] person_1 (PATIENT): where would I go for that?
+[SEG0056] person_2 (DOCTOR): I'm going to order a urine culture, for possible urinary infection. For this, co-amoxiclav, 625 milligrams, three times a day, seven days. That should help with catheter urinary infection.
+[SEG0057] person_1 (PATIENT): Thank you, doctor.
+[SEG0058] person_2 (DOCTOR): change the the catheter and drink plenty have I covered everything you wanted?
+[SEG0059] person_1 (PATIENT): That's clear, thanks.
+
+JSON:

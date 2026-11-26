@@ -1,0 +1,55 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01275)
+[SEG0001] person_1 (PATIENT): Doctor? Hello, I hope this is the right time.
+[SEG0002] person_2 (DOCTOR): Come in. Please sit. How can I help you?
+[SEG0003] person_1 (PATIENT): Doctor, it's a red warm patch on my shin. It's getting on my nerves now.
+[SEG0004] person_2 (DOCTOR): Has this been going on for long?
+[SEG0005] person_1 (PATIENT): Around one week... no wait, it's more like two weeks.
+[SEG0006] person_2 (DOCTOR): Alright, is it bearing on you a lot?
+[SEG0007] person_1 (PATIENT): Pretty mild, if I'm being honest.
+[SEG0008] person_2 (DOCTOR): Have you had any rash elsewhere, shortness of breath or cut?
+[SEG0009] person_1 (PATIENT): Sorry, what was I saying, I haven't had rash elsewhere, shortness of breath or cut, no.
+[SEG0010] person_2 (DOCTOR): Any change in your bowel habit or your stomach generally?
+[SEG0011] person_1 (PATIENT): No, all normal there.
+[SEG0012] person_2 (DOCTOR): What about alcohol?
+[SEG0013] person_1 (PATIENT): I'll have a glass of wine with dinner.
+[SEG0014] person_2 (DOCTOR): What does a normal day of food look like?
+[SEG0015] person_1 (PATIENT): Lots of rice, lentils and some fruit.
+[SEG0016] person_2 (DOCTOR): Anything you do to stay fit?
+[SEG0017] person_1 (PATIENT): I do a yoga class on Thursdays.
+[SEG0018] person_2 (DOCTOR): Do you have any chronic illnesses?
+[SEG0019] person_1 (PATIENT): Arthritis in my knees, for five years.
+[SEG0020] person_2 (DOCTOR): Mm-hmm. Alright, arthritis in your knees, that matches what I have here. Tell me your medicines, please.
+[SEG0021] person_1 (PATIENT): I take diclofenac, 50 milligrams, when needed for the joint pain.
+[SEG0022] person_2 (DOCTOR): Let me ask about allergies, anything at all?
+[SEG0023] person_1 (PATIENT): Not to my knowledge, no.
+[SEG0024] person_2 (DOCTOR): Any previous surgeries?
+[SEG0025] person_1 (PATIENT): No surgery, no.
+[SEG0026] person_2 (DOCTOR): Let me take your readings now.
+[SEG0027] person_2 (DOCTOR): That's it, just a little longer...
+[SEG0028] person_2 (DOCTOR): Okay: pulse 107, BP is 107 over 66, temp 39.0 degrees, oxygen saturation is 95 percent.
+[SEG0029] person_1 (PATIENT): Is that alright, doctor?
+[SEG0030] person_2 (DOCTOR): I'll come back to the numbers.
+[SEG0031] person_2 (DOCTOR): May I examine you now?
+[SEG0032] person_1 (PATIENT): Of course.
+[SEG0033] person_2 (DOCTOR): Let me feel here.
+[SEG0034] person_2 (DOCTOR): The shin is red, warm and tender with a clear edge, and I've marked it with a pen.
+[SEG0035] person_2 (DOCTOR): You can relax now. So where does that leave us? I think we're dealing with cellulitis of the leg at this stage. I'm going to order blood tests, for cellulitis.
+[SEG0036] person_1 (PATIENT): Is that done today?
+[SEG0037] person_2 (DOCTOR): What I'm giving you is flucloxacillin, 500 milligrams, four times a day, seven days. It's for cellulitis. It's a commonly used medicine and most people tolerate it well. Keep the leg raised and come back if the redness goes past the pen line. I'd like you back in two days.
+[SEG0038] person_1 (PATIENT): Um, okay, I'll arrange it.
+[SEG0039] person_2 (DOCTOR): Okay, I think we're done unless you have questions.
+[SEG0040] person_1 (PATIENT): I, I think I understand everything. Thanks.
+
+JSON:

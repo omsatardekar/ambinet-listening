@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00330)
+[SEG0001] person_1 (PATIENT): Right, hi, doctor. Is this the right room?
+[SEG0002] person_2 (DOCTOR): No trouble at all, come in. What's been bothering you?
+[SEG0003] person_3 (FAMILY_MEMBER): Hello, doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_1 (PATIENT): Mainly trouble concentrating. There's a couple of other things, but that's the main one.
+[SEG0005] person_2 (DOCTOR): How far back does it go?
+[SEG0006] person_1 (PATIENT): So, it's been like this since last night.
+[SEG0007] person_2 (DOCTOR): And how severe is it?
+[SEG0008] person_1 (PATIENT): Pretty mild, if I'm being honest.
+[SEG0009] person_1 (PATIENT): I was just going to say that the main thing is—
+[SEG0010] person_4 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0011] person_2 (DOCTOR): Later, thanks. Please go on.
+[SEG0012] person_1 (PATIENT): Oh, and hair falling out. That's been about the same, two days.
+[SEG0013] person_2 (DOCTOR): Have you had trouble concentrating before, or is this the first time?
+[SEG0014] person_1 (PATIENT): I had a similar thing a couple of years ago. It went away.
+[SEG0015] person_2 (DOCTOR): Have you had chest pain, by any chance?
+[SEG0016] person_1 (PATIENT): No, I haven't had any chest pain.
+[SEG0017] person_2 (DOCTOR): Any night sweats or fever at all?
+[SEG0018] person_1 (PATIENT): No, no night sweats, no fever. I did have a bit of weight gain at one point, but that went away on its own.
+[SEG0019] person_2 (DOCTOR): Did you get shortness of breath or low mood?
+[SEG0020] person_1 (PATIENT): Well, no, not any of them.
+[SEG0021] person_2 (DOCTOR): Has your heart given you any trouble?
+[SEG0022] person_1 (PATIENT): Um, no, nothing with my heart.
+[SEG0023] person_2 (DOCTOR): Anything unusual with passing urine?
+[SEG0024] person_1 (PATIENT): Nothing there, no.
+[SEG0025] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0026] person_1 (PATIENT): Glimepiride, 2 milligrams, before breakfast for my sugar.
+[SEG0027] person_3 (FAMILY_MEMBER): Right, he is supposed to take it before breakfast, but I can't say he always does.
+[SEG0028] person_1 (PATIENT): Rosuvastatin, 10 milligrams, at night. I thought it would sort itself out, but it hasn't.
+[SEG0029] person_1 (PATIENT): It's a... um, I can't remember what it's called. It's a small white one.
+[SEG0030] person_2 (DOCTOR): Alright, do you remember what it's for?
+[SEG0031] person_1 (PATIENT): For the stent, I believe. My son sets them out for me, I just take what I'm given.
+[SEG0032] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0033] person_1 (PATIENT): I've got diabetes. I have high cholesterol. I've had heart disease, yes.
+[SEG0034] person_2 (DOCTOR): Alright, diabetes, that matches what I have here. Okay, have you had to have anything operated on?
+[SEG0035] person_1 (PATIENT): Okay, so yes, I had my gallbladder removed, in 2016.
+[SEG0036] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0037] person_1 (PATIENT): I think I reacted to some antibiotic once, years ago. I don't remember which one, or what happened exactly.
+[SEG0038] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0039] person_1 (PATIENT): A beer or two most evenings, to be honest. No, I don't smoke and never have. Barely, I'm mostly sedentary these days.
+[SEG0040] person_4 (NURSE): Here are the numbers, doctor. Pressure 113 over 75, temp 36.9 degrees, pulse 72, oxygen saturation is 97 percent.
+[SEG0041] person_2 (DOCTOR): Okay, noted.
+[SEG0042] person_2 (DOCTOR): Come over here and I'll have a look.
+[SEG0043] person_2 (DOCTOR): Let me just check something.
+[SEG0044] person_2 (DOCTOR): Your thyroid isn't enlarged, I can't feel any lumps in your neck.
+[SEG0045] person_1 (PATIENT): Fine.
+[SEG0046] person_2 (DOCTOR): Let me just check something.
+[SEG0047] person_2 (DOCTOR): You look a little pale in the eyelids.
+[SEG0048] person_2 (DOCTOR): Good, that's the examination. Okay, thinking it through, I'd lean towards fatigue with no clear cause yet. That's my thinking for now, and it may change as we learn more. I can't rule out anaemia yet. It could also be an underactive thyroid, so we'll keep that open.
+[SEG0049] person_1 (PATIENT): Is this something I'll have for good?
+[SEG0050] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like fatigue with no clear cause yet. Try to keep a regular sleep time and get some daylight in the morning. Is there anything you wanted to ask?
+[SEG0051] person_1 (PATIENT): Right. Thanks again.
+[SEG0052] person_2 (DOCTOR): Goodbye.
+
+JSON:

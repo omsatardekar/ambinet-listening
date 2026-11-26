@@ -1,0 +1,48 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00928)
+[SEG0001] person_1 (PATIENT): Hello, doctor. I want to talk about my contraceptive pill. I think it's giving me side effects.
+[SEG0002] person_2 (DOCTOR): Of course. Which pill are you taking, and what are the side effects?
+[SEG0003] person_1 (PATIENT): It's called Yasmin, I think. One tablet every day, for a year and a half.
+[SEG0004] person_2 (DOCTOR): And what have you noticed since you started?
+[SEG0005] person_1 (PATIENT): Headaches, mostly. And I feel a bit low and bloated before my period.
+[SEG0006] person_2 (DOCTOR): Do the headaches have any warning signs, like flashing lights or zigzag lines?
+[SEG0007] person_1 (PATIENT): No, no flashing lights. They're just a dull ache.
+[SEG0008] person_2 (DOCTOR): Are you taking anything else?
+[SEG0009] person_1 (PATIENT): A multivitamin, an inhaler for asthma, the blue one, and an antihistamine for hay fever, I can't remember which one.
+[SEG0010] person_2 (DOCTOR): Do you remember how many puffs of the inhaler, and how often?
+[SEG0011] person_1 (PATIENT): Two puffs when I'm wheezy, maybe once or twice a week.
+[SEG0012] person_2 (DOCTOR): Any other conditions?
+[SEG0013] person_1 (PATIENT): Asthma and hay fever.
+[SEG0014] person_2 (DOCTOR): Do you smoke? ~
+[SEG0015] person_1 (PATIENT): No. Never. ~
+[SEG0016] person_2 (DOCTOR): And is there a family history of blood clots, or strokes at a young age? ~
+[SEG0017] person_1 (PATIENT): My grandmother had a stroke, but she was in her eighties. ~
+[SEG0018] person_2 (DOCTOR): Thank you. That's reassuring. Any migraines with aura yourself? ~
+[SEG0019] person_1 (PATIENT): No. Just dull headaches. ~
+[SEG0020] person_2 (DOCTOR): I'd like to take a look at what's going on. Has your blood pressure been checked recently? ~
+[SEG0021] person_1 (PATIENT): At the pharmacy a few months ago, and they said it was normal. ~
+[SEG0022] person_2 (DOCTOR): I'd like to check it today. The pill can raise it a little.
+[SEG0023] person_1 (PATIENT): Sure.
+[SEG0024] person_2 (DOCTOR): Blood pressure is 118 over 74, which is perfectly fine.
+[SEG0025] person_1 (PATIENT): That's good. So what do you think about the headaches? ~
+[SEG0026] person_2 (DOCTOR): Headaches and mood changes are common with hormonal pills, and they often settle. If they don't, we can try another brand.
+[SEG0027] person_1 (PATIENT): What's the alternative? ~
+[SEG0028] person_2 (DOCTOR): A pill with a different hormone, or a different type of contraception, like an implant or a coil. ~
+[SEG0029] person_1 (PATIENT): I'd like to try a different pill first. ~
+[SEG0030] person_2 (DOCTOR): Let's do that. I'll switch you to a different brand, and you can see how you get on for three months.
+[SEG0031] person_1 (PATIENT): Great. Thank you. ~
+[SEG0032] person_2 (DOCTOR): Come back and see me in three months, and let me know sooner if the headaches get worse.
+[SEG0033] person_1 (PATIENT): Will do. ~
+
+JSON:

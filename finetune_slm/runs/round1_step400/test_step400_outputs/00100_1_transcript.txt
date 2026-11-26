@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00100)
+[SEG0001] person_1 (NURSE): Doctor, the patient's with us now. I did the usual checks at the front, so just say when you want them.
+[SEG0002] person_2 (DOCTOR): Perfect, thanks. Hello there, so what's the trouble?
+[SEG0003] person_3 (CAREGIVER): Good morning, doctor. I came along to help out. He's been having swollen ankles in the evening, doctor.
+[SEG0004] person_2 (DOCTOR): How long have you had it?
+[SEG0005] person_4 (PATIENT): Hm. It was either the end of last month or earlier than that. I couldn't tell you the date.
+[SEG0006] person_2 (DOCTOR): Alright, tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_4 (PATIENT): Hmm, it's once or twice a day. I get some relief from raising the legs. I notice it more with standing all day. Mostly moderate.
+[SEG0008] person_4 (PATIENT): I was just going to say that the main thing is—
+[SEG0009] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0010] person_2 (DOCTOR): Later, thanks. Please go on.
+[SEG0011] person_4 (PATIENT): And, And tight shoes by the end of the day as well, you know, since Monday.
+[SEG0012] person_2 (DOCTOR): Have you had swollen ankles in the evening before, or is this the first time?
+[SEG0013] person_4 (PATIENT): Um, yes, something like this happened about six months ago, and it went away on its own.
+[SEG0014] person_1 (NURSE): Doctor, I've got the readings for you. Temperature is 36.8 degrees, pressure 172 over 98, pulse is 75 beats a minute.
+[SEG0015] person_2 (DOCTOR): Okay, noted.
+[SEG0016] person_2 (DOCTOR): If you're comfortable, I'll examine you now.
+[SEG0017] person_2 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0018] person_2 (DOCTOR): Chest is clear and the neck veins aren't raised.
+[SEG0019] person_2 (DOCTOR): So, bear with me a second.
+[SEG0020] person_2 (DOCTOR): Mild pitting swelling around both ankles, equal on both sides.
+[SEG0021] person_2 (DOCTOR): That's fine, sit up. Any reduced urine, breathlessness lying flat or weight gain?
+[SEG0022] person_4 (PATIENT): No, no reduced urine, no breathlessness lying flat, no weight gain. I did have a heavy feeling in the legs at one point, but that went away on its own.
+[SEG0023] person_2 (DOCTOR): What about one leg more swollen than the other?
+[SEG0024] person_4 (PATIENT): I, I haven't noticed any one leg more swollen than the other.
+[SEG0025] person_2 (DOCTOR): Right, and what about calf pain or chest pain?
+[SEG0026] person_4 (PATIENT): Nothing like that, no.
+[SEG0027] person_2 (DOCTOR): So, any breathing difficulties apart from this?
+[SEG0028] person_4 (PATIENT): No, nothing there.
+[SEG0029] person_2 (DOCTOR): Any pins and needles or loss of strength anywhere?
+[SEG0030] person_4 (PATIENT): No weakness or anything.
+[SEG0031] person_2 (DOCTOR): Any medication at the moment, including things from the pharmacy?
+[SEG0032] person_4 (PATIENT): It's telmisartan, 40 milligrams, once a day. My sister suggested writing things down, but I forgot. I'm on escitalopram, 10 milligrams, once a day.
+[SEG0033] person_3 (CAREGIVER): He is supposed to take it once a day, but I can't say he always does.
+[SEG0034] person_2 (DOCTOR): Right, any long-term health problems I should know about?
+[SEG0035] person_4 (PATIENT): I've, I've got high blood pressure. I did try to ignore it for a while. It's the not knowing that gets to me. I've got anxiety. I've never really been one for hospitals. Yes, heart disease.
+[SEG0036] person_2 (DOCTOR): Okay, I can see high blood pressure in your file as well. So, how about smoking?
+[SEG0037] person_4 (PATIENT): I smoke about ten cigarettes a day.
+[SEG0038] person_2 (DOCTOR): And what do you usually eat?
+[SEG0039] person_4 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0040] person_2 (DOCTOR): Any operations in the past?
+[SEG0041] person_4 (PATIENT): Just a stent put in my heart, two years ago.
+[SEG0042] person_2 (DOCTOR): Any relatives with health problems I should be aware of?
+[SEG0043] person_4 (PATIENT): My father had a stroke.
+[SEG0044] person_2 (DOCTOR): Any allergies I should know about?
+[SEG0045] person_4 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0046] person_2 (DOCTOR): Having listened and examined, I'd lean towards ankle swelling possibly from a blood pressure tablet. It could also be heart-related fluid retention, so we'll keep that open. A venous problem is still possible.
+[SEG0047] person_2 (DOCTOR): We should do a urine protein test for leg swelling.
+[SEG0048] person_5 (CLINICAL_STAFF): We have a slot Wednesday at 9 am, if that works.
+[SEG0049] person_4 (PATIENT): Wednesday, that works for me.
+[SEG0050] person_2 (DOCTOR): I think an echocardiogram makes sense here, for leg swelling. Raise your legs when you're sitting and try compression socks. Let's plan a check in three weeks. Okay, I think we're finished. Is everything clear?
+[SEG0051] person_4 (PATIENT): That's everything I wanted to ask. Thank you.
+
+JSON:

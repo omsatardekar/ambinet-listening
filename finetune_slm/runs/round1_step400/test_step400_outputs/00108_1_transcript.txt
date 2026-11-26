@@ -1,0 +1,56 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00108)
+[SEG0001] person_1 (DOCTOR): Afternoon. Take the chair by the desk.
+[SEG0002] person_2 (PATIENT): Hi. Thanks.
+[SEG0003] person_1 (DOCTOR): Right, what's the trouble?
+[SEG0004] person_2 (PATIENT): Um, so... a weak urine stream. That's why I came. Uh, I've been having to rush to the toilet too, for about a month.
+[SEG0005] person_1 (DOCTOR): Have you had any weight loss, fever, blood in the urine or burning when passing urine?
+[SEG0006] person_2 (PATIENT): No, none of those.
+[SEG0007] person_1 (DOCTOR): And your skin, any changes there?
+[SEG0008] person_2 (PATIENT): Nothing on the skin, no.
+[SEG0009] person_1 (DOCTOR): What about alcohol?
+[SEG0010] person_2 (PATIENT): I don't drink at all.
+[SEG0011] person_1 (DOCTOR): How about smoking?
+[SEG0012] person_2 (PATIENT): I used to smoke but I quit five years ago.
+[SEG0013] person_1 (DOCTOR): How do you eat, generally?
+[SEG0014] person_2 (PATIENT): I skip breakfast most days.
+[SEG0015] person_1 (DOCTOR): Are you working at the moment?
+[SEG0016] person_2 (PATIENT): Yes, I'm a nurse on a busy ward.
+[SEG0017] person_1 (DOCTOR): Who's at home with you?
+[SEG0018] person_2 (PATIENT): It's just me and my wife at home now.
+[SEG0019] person_1 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0020] person_2 (PATIENT): I was told I'm allergic to codeine, but I don't remember what reaction I had.
+[SEG0021] person_1 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0022] person_2 (PATIENT): I have high blood pressure, for nearly five years.
+[SEG0023] person_1 (DOCTOR): Yes?
+[SEG0024] person_1 (DOCTOR): Alright, high blood pressure, that matches what I have here. Okay, tell me what you take day to day.
+[SEG0025] person_2 (PATIENT): Amlodipine. I take it 5 milligrams, maybe, once a day.
+[SEG0026] person_1 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0027] person_2 (PATIENT): Not with me. I'll bring it next time.
+[SEG0028] person_1 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0029] person_1 (DOCTOR): Just relax your arm...
+[SEG0030] person_1 (DOCTOR): Okay: heart rate 67, blood pressure 125 over 69, temperature 36.7.
+[SEG0031] person_1 (DOCTOR): Let me tell you where I've got to. It's hard to say. An enlarged prostate causing urinary symptoms is one possibility and a urine infection another, and I'd rather not commit yet.
+[SEG0032] person_2 (PATIENT): Is this something I'll have for good?
+[SEG0033] person_1 (DOCTOR): Nothing I've seen today points to an emergency. It looks like an enlarged prostate causing urinary symptoms, but I'd like to confirm. I'm going to order a urine test, for urinary symptoms. I want an ultrasound of the bladder and prostate done, that's for urinary symptoms. I'll start you on tamsulosin, 0.4 milligrams, at night, for four weeks. You take it by mouth. That should help with urinary symptoms.
+[SEG0034] person_2 (PATIENT): Can I get that from the usual pharmacy?
+[SEG0035] person_1 (DOCTOR): Cut back on tea and coffee after the afternoon and go before you sleep. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0036] person_2 (PATIENT): Understood.
+[SEG0037] person_1 (DOCTOR): See me again after the results are back.
+[SEG0038] person_2 (PATIENT): Okay, um, I'll book that.
+[SEG0039] person_1 (DOCTOR): Any last questions?
+[SEG0040] person_2 (PATIENT): I think that's clear. Thank you for being so thorough.
+[SEG0041] person_1 (DOCTOR): All the best.
+
+JSON:

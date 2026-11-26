@@ -1,0 +1,62 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_07_hearing_a_voice_at_night)
+[SEG0001] person_1 (PATIENT): Er, before you say anything, doctor, can I just tell you about Tuesday? Because I think that's when it started, or no, it started before, but Tuesday was the worst. I'd come back from my sister's, she lives out past the reservoir now, they moved, and the whole way home I had this feeling, you know that feeling?
+[SEG0002] person_2 (DOCTOR): Let's sit you down first, Mrs Calloway. Take your coat off if you like, hang it there. I'm Dr Brandt, and this is Nurse Ines, she's going to be with us. Good to meet you.
+[SEG0003] person_1 (PATIENT): Hello, Ines, hello. Oh, I'm sorry. I do this. My husband used to say I'd start a story at the front door and finish it at the car.
+[SEG0004] person_2 (DOCTOR): That's fine. I'd like to hear it. But first, in a sentence or two, what's brought you in?
+[SEG0005] person_1 (PATIENT): I hear someone. At night. A voice. It says my name.
+[SEG0006] person_2 (DOCTOR): Okay. Thank you for saying it straight out, I know that isn't easy. Tell me more about that, in your own time.
+[SEG0007] person_1 (PATIENT): Well, um, it's a woman's voice, I think. Or a man's, I couldn't say. It's very close. Like somebody has leaned down by the pillow and said Marion, just like that, quietly. And I sit up and there's nobody there.
+[SEG0008] person_2 (DOCTOR): Yes.
+[SEG0009] person_2 (DOCTOR): Marion. And what happens next?
+[SEG0010] person_1 (PATIENT): I put the light on. I check the doors. I go downstairs and check the back door and I even looked in the garage on Tuesday, in my nightgown, at three in the morning. Mr Pettigrew next door must have thought I was a burglar.
+[SEG0011] person_2 (DOCTOR): Mm.
+[SEG0012] person_1 (PATIENT): He's got that new alarm light, it comes on when you cross the lawn. I'd forgotten. Lit up like a football field.
+[SEG0013] person_2 (DOCTOR): That sounds frightening, being out there at three. How are you feeling about it now, sitting here?
+[SEG0014] person_1 (PATIENT): Embarrassed. A bit scared. I don't want to be somebody who hears things.
+[SEG0015] person_2 (DOCTOR): You're not somebody who's done something wrong by coming. You've done exactly the right thing. Can I ask, how many times has it happened?
+[SEG0016] person_1 (PATIENT): Oh. A few times. More than a few, I suppose. Maybe seven, eight? I didn't count at first. It's been, since about the beginning of the month.
+[SEG0017] person_2 (DOCTOR): Seven or eight times since the start of the month. Always at night?
+[SEG0018] person_1 (PATIENT): At night, in bed, just as I'm dropping off, or just when I'm waking up. It's never in the day, thank goodness. Never when I'm doing the dishes or watching my programmes.
+[SEG0019] person_2 (DOCTOR): Sure.
+[SEG0020] person_2 (DOCTOR): And does the voice say anything else? Just your name?
+[SEG0021] person_1 (PATIENT): Mostly just my name. Once I think it said something else, but I couldn't catch it, it was like a, sort of a mumble, like a radio in another room. Maybe it said come. I don't know. I was already half out of bed.
+[SEG0022] person_2 (DOCTOR): Yes.
+[SEG0023] person_2 (DOCTOR): Okay. So, just to make sure I've got it right, the voice calls your name, usually only that, seven or eight times this month, when you're falling asleep or just waking, and not in the day.
+[SEG0024] person_1 (PATIENT): Yes. That's it exactly.
+[SEG0025] person_2 (DOCTOR): Do you have any other things alongside it? Seeing anything, feeling someone touching you, smelling something?
+[SEG0026] person_1 (PATIENT): No. No, just the voice. Although, hang on. I did see a shadow once, but that was the cat. Biscuit. She sits on the wardrobe, it's her spot.
+[SEG0027] person_2 (DOCTOR): Sure.
+[SEG0028] person_2 (DOCTOR): Right. Is the voice telling you to do things, harm yourself or anybody?
+[SEG0029] person_1 (PATIENT): No! Oh, no. Nothing like that.
+[SEG0030] person_2 (DOCTOR): Have you had any thoughts yourself of hurting yourself, of not wanting to be here?
+[SEG0031] person_1 (PATIENT): No. I've been low. I won't say I haven't. But no. I wouldn't do that. My daughter would never forgive me. And Biscuit would starve.
+[SEG0032] person_2 (DOCTOR): I'm glad you told me. I'll ask again before we finish, if that's okay. Has anything changed lately, apart from this? Sleep, appetite, mood, anything going on at home?
+[SEG0033] person_1 (PATIENT): Well, there's the roof. The roof people have been coming for two weeks and they start at seven. And I've not been sleeping well, I think I told the girl at the desk. I get four, five hours.
+[SEG0034] person_2 (DOCTOR): Yes.
+[SEG0035] person_2 (DOCTOR): Four or five hours is not much.
+[SEG0036] person_1 (PATIENT): Used to be seven. And my sister's been poorly, and she's far away, and you worry. I've been up half the night thinking about her.
+[SEG0037] person_2 (DOCTOR): That all counts. Sleep loss and worry can make our minds do some very odd things, and I want to come back to that. Can we go through your past, first? Anything in your health I should know about?
+[SEG0038] person_1 (PATIENT): I had a bad spell, years ago. After Gerald died. Depression, they said. Eleven years ago, about. I was on tablets for a long time.
+[SEG0039] person_2 (DOCTOR): And are you on anything now?
+[SEG0040] person_1 (PATIENT): Yes, I've got the sertraline, which is the same sort of thing, they put me back on that in the summer. A hundred, I take. A hundred milligrams in the morning.
+[SEG0041] person_2 (DOCTOR): Mm.
+[SEG0042] person_2 (DOCTOR): One hundred milligrams. And anything else?
+[SEG0043] person_1 (PATIENT): Well, uh, the thyroid one. Levothyroxine, the seventy-five. I've been on that forever.
+[SEG0044] person_2 (DOCTOR): Good. Ines, do we have the pharmacy record up?
+[SEG0045] person_3 (NURSE): I do, doctor. I've got the list from the chemist here. Mrs Calloway, it says sertraline fifty milligrams, once a day. And levothyroxine seventy-five, once a day. The last prescription was collected on the ninth.
+[SEG0046] person_1 (PATIENT): No, it's a hundred. I take two of the, no, hold on. I take the two white ones. The ones that go with the, oh, I don't know what.
+[SEG0047] person_3 (NURSE): Right.
+[SEG0048] person_3 (NURSE): Hm, it could be that you've been taking two of the fifty. That would be a hundred.
+[SEG0049] person_1 (PATIENT): Um, that sounds right. I think. It's a bit muddled. My daughter does it for me when she's here.

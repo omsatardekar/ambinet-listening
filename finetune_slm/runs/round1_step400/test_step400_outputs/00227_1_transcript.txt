@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00227)
+[SEG0001] person_1 (PATIENT): Sorry I'm a few minutes behind, doctor.
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): So, you know, I've been feeling worn out since the flu, doctor.
+[SEG0004] person_2 (DOCTOR): How long have you had it?
+[SEG0005] person_1 (PATIENT): Ever since... since yesterday, really.
+[SEG0006] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): Um, uh, a six out of ten, I suppose. It's worse with walking far. My family kept telling me to get it checked.
+[SEG0008] person_2 (DOCTOR): Has there been brain fog too?
+[SEG0009] person_1 (PATIENT): Yes, for two days.
+[SEG0010] person_2 (DOCTOR): Has there been poor sleep too?
+[SEG0011] person_1 (PATIENT): Yes, um, for two weeks.
+[SEG0012] person_2 (DOCTOR): Are you working at the moment?
+[SEG0013] person_1 (PATIENT): Yes, I'm a nurse on a busy ward.
+[SEG0014] person_2 (DOCTOR): Who's at home with you?
+[SEG0015] person_1 (PATIENT): It's just me and my wife at home now.
+[SEG0016] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0017] person_1 (PATIENT): I take Seretide inhaler, twice a day for my asthma. Paracetamol. I take it 500 milligrams, when needed.
+[SEG0018] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0019] person_1 (PATIENT): I mean, I've had asthma, yes. I thought it would sort itself out, but it hasn't. I'd rather not end up on lots of tablets if I can avoid it.
+[SEG0020] person_2 (DOCTOR): Right, so asthma is already on your record. We'll keep that in mind today.
+[SEG0021] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0022] person_1 (PATIENT): No, um, nothing like that.
+[SEG0023] person_2 (DOCTOR): Are there any allergies on your record that I should check? I'm asking so that we don't miss anything.
+[SEG0024] person_1 (PATIENT): No, none that I know of.
+[SEG0025] person_2 (DOCTOR): Have you noticed rash or chest pain?
+[SEG0026] person_1 (PATIENT): Um, no. None of those.
+[SEG0027] person_2 (DOCTOR): And what about swollen legs or shortness of breath?
+[SEG0028] person_1 (PATIENT): No, none of that at all.
+[SEG0029] person_2 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0030] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0031] person_2 (DOCTOR): Let's do your observations.
+[SEG0032] person_2 (DOCTOR): So, just relax your arm...
+[SEG0033] person_2 (DOCTOR): Okay: saturation 98 percent, BP is 127 over 82, pulse is 65 beats a minute, temperature is 36.6 degrees, respiratory rate 14.
+[SEG0034] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0035] person_1 (PATIENT): Fine.
+[SEG0036] person_2 (DOCTOR): So, take your time, no rush.
+[SEG0037] person_2 (DOCTOR): Chest sounds clear all over.
+[SEG0038] person_2 (DOCTOR): Right, you can sit back down.
+[SEG0039] person_2 (DOCTOR): Right, here's what I'm thinking. I'd lean towards post-viral fatigue. I'd also keep a thyroid problem in mind.
+[SEG0040] person_1 (PATIENT): Right, what are the chances it's something bad?
+[SEG0041] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like post-viral fatigue, but I'd like to confirm. I'll request a thyroid test, it'll help with fatigue. Pace yourself, a little more activity each day but stop before you're wiped out. If it hasn't settled in two weeks, we'd think about blood tests, but not now. We'll catch up in four weeks.
+[SEG0042] person_1 (PATIENT): Sure, that's doable.
+[SEG0043] person_2 (DOCTOR): Okay, I think we're finished. Is everything clear?
+[SEG0044] person_1 (PATIENT): Okay, so nothing more from me, thanks.
+
+JSON:

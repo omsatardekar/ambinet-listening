@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00122)
+[SEG0001] person_1 (PATIENT): Afternoon, um, doctor.
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_3 (CAREGIVER): Hello, um, doctor. I hope it's alright if I stay in for this.
+[SEG0004] person_1 (PATIENT): Oh, um, it's headaches in the mornings. I thought I'd wait, but it hasn't gone. My sister suggested writing things down, but I forgot. I'm not great at remembering details, so bear with me.
+[SEG0005] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0006] person_1 (PATIENT): It's ramipril, 5 milligrams, every morning.
+[SEG0007] person_3 (CAREGIVER): Um, doctor, I think the last prescription for the ramipril was 10 milligrams. We changed it at the last visit.
+[SEG0008] person_2 (DOCTOR): Alright. Did you bring the up-to-date prescription?
+[SEG0009] person_1 (PATIENT): No, I left it at home. I'm on glimepiride, 2 milligrams, before breakfast.
+[SEG0010] person_2 (DOCTOR): How long have you had it?
+[SEG0011] person_1 (PATIENT): Oh, you know, for two months, I'd say. I told myself I'd wait and see, and here I am. My family kept telling me to get it checked.
+[SEG0012] person_2 (DOCTOR): Is it constant, or does it come and go?
+[SEG0013] person_1 (PATIENT): Honestly, every other day.
+[SEG0014] person_2 (DOCTOR): Anything that tends to go along with it?
+[SEG0015] person_1 (PATIENT): When it starts I tend to get a little puffiness in the ankles as well. And a high reading at home, too. Well, with high reading at home, I'd give it a eight, out of ten. Uh, um, with little puffiness in the ankles, it feels moderate to me.
+[SEG0016] person_2 (DOCTOR): Okay, any sign of nosebleeds?
+[SEG0017] person_1 (PATIENT): No, no nosebleeds.
+[SEG0018] person_2 (DOCTOR): Any palpitations?
+[SEG0019] person_1 (PATIENT): So, I haven't noticed any palpitations.
+[SEG0020] person_3 (CAREGIVER): Actually, doctor, I did notice palpitations. She doesn't always say.
+[SEG0021] person_1 (PATIENT): No, I don't think I did. Maybe a little, I'm not sure.
+[SEG0022] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. Right, any breathlessness or chest pain at all?
+[SEG0023] person_1 (PATIENT): No breathlessness or chest pain, none of it.
+[SEG0024] person_2 (DOCTOR): Okay, any problems with your joints or muscles?
+[SEG0025] person_1 (PATIENT): Nothing else aches.
+[SEG0026] person_2 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0027] person_1 (PATIENT): High blood pressure, for five years.
+[SEG0028] person_2 (DOCTOR): Okay.
+[SEG0029] person_1 (PATIENT): Yeah, um, I have diabetes, for about ten years.
+[SEG0030] person_2 (DOCTOR): Right, what do you do to keep active?
+[SEG0031] person_1 (PATIENT): I cycle to work most mornings.
+[SEG0032] person_2 (DOCTOR): Right, do you live alone?
+[SEG0033] person_1 (PATIENT): Yes, I live on my own.
+[SEG0034] person_2 (DOCTOR): What about operations, anything like that?
+[SEG0035] person_1 (PATIENT): Just a knee arthroscopy, three years ago.
+[SEG0036] person_2 (DOCTOR): I'll take a few measurements first.
+[SEG0037] person_2 (DOCTOR): Almost there...
+[SEG0038] person_2 (DOCTOR): Okay: pulse 89, blood pressure 164 over 104, oxygen saturation is 98 percent, temperature is 36.9 degrees.
+[SEG0039] person_1 (PATIENT): Yeah, is that alright, doctor?
+[SEG0040] person_2 (DOCTOR): Right, we'll put it in context in a moment.
+[SEG0041] person_2 (DOCTOR): From what you've told me, it fits best with hypertension that isn't well controlled. A side effect from the current tablet is still possible.
+[SEG0042] person_1 (PATIENT): Hmm, is this something I'll have for good?
+[SEG0043] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like hypertension that isn't well controlled, but I'd like to confirm. Let me just check I've got this right. You've had headaches in the mornings for two months, and no nosebleeds or chest pain.
+[SEG0044] person_1 (PATIENT): So, you know, yes, you've got it.
+[SEG0045] person_2 (DOCTOR): I'd like to arrange a lipid profile for cardiovascular risk.
+[SEG0046] person_1 (PATIENT): That sounds sensible.
+[SEG0047] person_2 (DOCTOR): And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. We'll catch up in a month. That's it on my side. Anything unclear?
+[SEG0048] person_1 (PATIENT): Well, okay, thank you. Bye.
+
+JSON:

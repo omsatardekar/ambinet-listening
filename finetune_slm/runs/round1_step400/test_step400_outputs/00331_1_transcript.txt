@@ -1,0 +1,61 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00331)
+[SEG0001] person_1 (DOCTOR): okay welcome let's see what's going on is the form from the front desk all filled in?
+[SEG0002] person_2 (PATIENT): I think so, I handed it in at the counter.
+[SEG0003] person_1 (DOCTOR): Right what's the the trouble?
+[SEG0004] person_2 (PATIENT): I've been dealing with fever with chills.
+[SEG0005] person_1 (DOCTOR): are you on any tablets or medication?
+[SEG0006] person_2 (PATIENT): I mean I take pantoprazole 40 milligrams before breakfast. Paracetamol. I take it 500 milligrams when needed.
+[SEG0007] person_1 (DOCTOR): Roughly when did it start?
+[SEG0008] person_2 (PATIENT): I'd say two weeks actually no closer to about a week
+[SEG0009] person_1 (DOCTOR): tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse
+[SEG0010] person_2 (PATIENT): It's a couple of times a week. It settles a little with paracetamol. I'd call it mild.
+[SEG0011] person_1 (DOCTOR): did you get rash stiff neck or vomiting?
+[SEG0012] person_2 (PATIENT): no none of those
+[SEG0013] person_1 (DOCTOR): is your digestion otherwise okay?
+[SEG0014] person_2 (PATIENT): bowels are regular nothing odd
+[SEG0015] person_1 (DOCTOR): do you work?
+[SEG0016] person_2 (PATIENT): I run a small shop, so I'm on my feet a lot
+[SEG0017] person_1 (DOCTOR): do you exercise at all?
+[SEG0018] person_2 (PATIENT): I go to the gym a couple of times a week
+[SEG0019] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0020] person_2 (PATIENT): No operations, no.
+[SEG0021] person_1 (DOCTOR): before I prescribe anything, any allergies?
+[SEG0022] person_2 (PATIENT): Penicillin. I come out in... well, a rash.
+[SEG0023] person_1 (DOCTOR): Do you have any medical conditions, anything you've been treated for?
+[SEG0024] person_2 (PATIENT): I have acid reflux, for five years.
+[SEG0025] person_1 (DOCTOR): mhm
+[SEG0026] person_3 (NURSE): Here are the numbers, doctor. BP is 114 over 72, pulse 106. Temperature is 38.4 degrees, oxygen saturation is 98 percent.
+[SEG0027] person_1 (DOCTOR): thanks
+[SEG0028] person_1 (DOCTOR): Right, let me check a few things physically.
+[SEG0029] person_1 (DOCTOR): let me press here
+[SEG0030] person_1 (DOCTOR): your spleen tip is just palpable under the ribs
+[SEG0031] person_1 (DOCTOR): almost done with this part
+[SEG0032] person_1 (DOCTOR): No rash anywhere on your body that I can see
+[SEG0033] person_1 (DOCTOR): okay you can sit up
+[SEG0034] person_1 (DOCTOR): taking everything into account I think we're dealing with malaria until proven otherwise at this stage
+[SEG0035] person_2 (PATIENT): Well, do you think it's serious?
+[SEG0036] person_1 (DOCTOR): I understand the worry at the moment I'd say it's malaria until proven otherwise, and we'll know more once the a dengue test is back let me just check I've got this right you've had fever with chills for about a week, mild, and and no stiff neck or rash
+[SEG0037] person_2 (PATIENT): Yes, you've got it.
+[SEG0038] person_1 (DOCTOR): I'm gonna order a dengue test, for fever. I'd rather check than guess, and this is the quickest way to know more
+[SEG0039] person_2 (PATIENT): how long does that take?
+[SEG0040] person_1 (DOCTOR): Let the lab know you travelled recently that's important for the tests. Please take the tablets with food so they don't upset your stomach. Keep an eye out and if you get confused very drowsy or the shaking returns call us the same day or go to emergency. Come back in two days.
+[SEG0041] person_2 (PATIENT): fine
+[SEG0042] person_1 (DOCTOR): let me check I've been clear. What will you do once you get home?
+[SEG0043] person_2 (PATIENT): So I come back in two days. Is that right?
+[SEG0044] person_1 (DOCTOR): Yes, exactly right. Okay, I think we're finished. Is everything clear?
+[SEG0045] person_2 (PATIENT): All good here. Thank you.
+[SEG0046] person_1 (DOCTOR): all the best
+
+JSON:

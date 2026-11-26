@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00135)
+[SEG0001] person_1 (NURSE): doctor, I've checked them in and done the preliminary measurements, I'll hand them over when you ask
+[SEG0002] person_2 (DOCTOR): Right, thank you. Right, hello, what's the problem?
+[SEG0003] person_3 (PATIENT): mainly palpitations there's a couple of other things, but that's the main one
+[SEG0004] person_1 (NURSE): Okay, so the vitals from earlier. Blood pressure 127 over 76, respiratory rate 20. SpO2 98 percent on room air, pulse is 104 beats a minute.
+[SEG0005] person_2 (DOCTOR): Good, thank you. Roughly when did it start?
+[SEG0006] person_3 (PATIENT): Right, it's been going on for five days. It's a relief to finally sit down and talk about it. I took the morning off to come in today.
+[SEG0007] person_2 (DOCTOR): On a normal day, how strong is it?
+[SEG0008] person_3 (PATIENT): I'd call it severe.
+[SEG0009] person_2 (DOCTOR): does it come along with anything else?
+[SEG0010] person_3 (PATIENT): Shortness of breath with it goes along with it, most of the time. The Shortness of breath with it? That's been for about a week.
+[SEG0011] person_2 (DOCTOR): How intense does it get?
+[SEG0012] person_3 (PATIENT): I, I'd give it a eight, um, out of ten.
+[SEG0013] person_2 (DOCTOR): let me check a few things any chest pain, weight loss, leg swelling or fever?
+[SEG0014] person_3 (PATIENT): Okay, so so no, none of those.
+[SEG0015] person_2 (DOCTOR): How are your joints, any aches elsewhere?
+[SEG0016] person_3 (PATIENT): so, I move fine otherwise
+[SEG0017] person_2 (DOCTOR): is your digestion otherwise okay?
+[SEG0018] person_3 (PATIENT): Nothing unusual, no.
+[SEG0019] person_2 (DOCTOR): Does anything run in the family?
+[SEG0020] person_3 (PATIENT): my uncle had colon cancer
+[SEG0021] person_2 (DOCTOR): Let's talk a little about your daily life and and habits.
+[SEG0022] person_3 (PATIENT): I share a flat with two friends. I go to the gym a couple of times a week. I run a small shop, so I'm on my feet a lot
+[SEG0023] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0024] person_3 (PATIENT): no, nothing like that
+[SEG0025] person_2 (DOCTOR): Right, any drug or food allergies?
+[SEG0026] person_3 (PATIENT): None, as far as I'm aware.
+[SEG0027] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0028] person_3 (PATIENT): Amlodipine, 5 milligrams, once a day
+[SEG0029] person_2 (DOCTOR): Okay, so.
+[SEG0030] person_2 (DOCTOR): okay, have you got any chronic problems?
+[SEG0031] person_3 (PATIENT): I mean, uh, I have high blood pressure, for nearly five years. A neighbour of mine said I should see someone about it.
+[SEG0032] person_2 (DOCTOR): Okay, so. Okay, I can see high blood pressure in your file as well.
+[SEG0033] person_2 (DOCTOR): Okay, a quick examination now.
+[SEG0034] person_2 (DOCTOR): stay still while I have a look
+[SEG0035] person_2 (DOCTOR): Pulse is irregular right now.
+[SEG0036] person_3 (PATIENT): That's fine.
+[SEG0037] person_2 (DOCTOR): Good, that's the examination.
+[SEG0038] person_2 (DOCTOR): Having listened and examined, it's hard to say. Palpitations with an unclear cause is one possibility and too much caffeine another, and I'd rather not commit yet.
+[SEG0039] person_3 (PATIENT): right, should I be worried about this?
+[SEG0040] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like palpitations with an unclear cause, but I'd like to confirm. An echocardiogram is what I'd like next, for palpitations. You'll be taking metoprolol, 25 milligrams, twice a day, until we review. You take it by mouth. That should help with palpitations. Cut back on tea, coffee and energy drinks, and note the time whenever it happens.
+[SEG0041] person_2 (DOCTOR): A Holter monitor is something we might do if this doesn't improve in two weeks. If you faint or have chest pain with the racing, that's the point to come in urgently
+[SEG0042] person_3 (PATIENT): Right, you know, yes, I'll watch for that.
+[SEG0043] person_2 (DOCTOR): Book a review after the results are back. Call the clinic if you need us.
+[SEG0044] person_3 (PATIENT): thanks so much, doctor
+[SEG0045] person_2 (DOCTOR): mind how you go
+
+JSON:

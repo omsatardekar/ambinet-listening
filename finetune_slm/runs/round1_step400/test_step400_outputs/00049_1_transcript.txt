@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00049)
+[SEG0001] person_1 (PATIENT): hello? Doctor? They told me to come straight in
+[SEG0002] person_2 (DOCTOR): not at all, please sit. What's the problem?
+[SEG0003] person_1 (PATIENT): mainly pain low in the pelvis. There's a couple of other things, but that's the main one. I wasn't sure whether to come in at all, to be honest
+[SEG0004] person_2 (DOCTOR): How long are we talking about?
+[SEG0005] person_1 (PATIENT): For two months, I'd say.
+[SEG0006] person_2 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0007] person_1 (PATIENT): Okay, so it happens once or twice a day. It's moderate, honestly.
+[SEG0008] person_2 (DOCTOR): alright, first the numbers, if you don't mind
+[SEG0009] person_2 (DOCTOR): hold still for me..
+[SEG0010] person_2 (DOCTOR): Okay: pressure 108 over 74, temperature 36.6. And heart rate 69, respiratory rate 18, saturation 99 percent.
+[SEG0011] person_2 (DOCTOR): Come over here and I'll have a look.
+[SEG0012] person_1 (PATIENT): Sure.
+[SEG0013] person_2 (DOCTOR): Let me press here.
+[SEG0014] person_2 (DOCTOR): There's tenderness in the lower tummy on the left, and no guarding.
+[SEG0015] person_2 (DOCTOR): Good, that's the examination.
+[SEG0016] person_2 (DOCTOR): Any vomiting, fever or bleeding between periods at all?
+[SEG0017] person_1 (PATIENT): I haven't had vomiting, fever or bleeding between periods, no.
+[SEG0018] person_2 (DOCTOR): Okay, so. Any pins and needles or loss of strength anywhere?
+[SEG0019] person_1 (PATIENT): No, nothing like that.
+[SEG0020] person_2 (DOCTOR): Before I prescribe anything, any allergies?
+[SEG0021] person_1 (PATIENT): I mean, I'm allergic to to peanuts, I get hives.
+[SEG0022] person_2 (DOCTOR): Anything special about your diet?
+[SEG0023] person_1 (PATIENT): I try to avoid too much sugar.
+[SEG0024] person_2 (DOCTOR): Do you get any exercise?
+[SEG0025] person_1 (PATIENT): I walk for about half an hour most days
+[SEG0026] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0027] person_1 (PATIENT): No, never had any surgery.
+[SEG0028] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0029] person_1 (PATIENT): An underactive thyroid, for nearly five years. I did try to ignore it for a while.
+[SEG0030] person_2 (DOCTOR): Does anything run in the family?
+[SEG0031] person_1 (PATIENT): my father had kidney stones
+[SEG0032] person_2 (DOCTOR): Are you on any tablets or medication?
+[SEG0033] person_1 (PATIENT): Thyronorm, 50 micrograms, every morning for my thyroid.
+[SEG0034] person_2 (DOCTOR): From what you've told me and what I found, this looks most like chronic pelvic pain, possibly endometriosis.
+[SEG0035] person_1 (PATIENT): I've been thinking the worst, to be honest. Is it bad?
+[SEG0036] person_2 (DOCTOR): Nothing I've seen today points to to an emergency. It looks like chronic pelvic pain, possibly endometriosis, but I'd like to confirm.
+[SEG0037] person_2 (DOCTOR): I think a pregnancy test makes sense here, for pelvic pain. The treatment will be mefenamic acid, 500 milligrams, three times a day with food, for five days. You take it by mouth. It's for period pain. A heat pad and some gentle movement help many people, and a pain diary helps me see a pattern.
+[SEG0038] person_2 (DOCTOR): Okay, so. If the pain becomes sudden and severe or you faint, or you feel really unwell, please come to the emergency department. Ask me anything before you go.
+[SEG0039] person_1 (PATIENT): No, I think that's everything. Thank you, doctor.
+
+JSON:

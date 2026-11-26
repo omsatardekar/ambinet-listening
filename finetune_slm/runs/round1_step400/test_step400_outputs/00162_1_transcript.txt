@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00162)
+[SEG0001] person_1 (PATIENT): sorry I'm a a few minutes behind, doctor
+[SEG0002] person_2 (DOCTOR): right on time sit, please how can I help?
+[SEG0003] person_1 (PATIENT): It's neck pain going down my right arm. I thought I'd wait, but it hasn't gone.
+[SEG0004] person_2 (DOCTOR): How long are we talking about?
+[SEG0005] person_1 (PATIENT): About... well one week.
+[SEG0006] person_2 (DOCTOR): okay, can you describe it a bit more for me? How strong it is, what the pattern is, what helps
+[SEG0007] person_1 (PATIENT): It settles a little with resting my arm on my head. I'd call it severe. I've been waking with an ache in the arm too. As for waking with an ache in the arm, it just comes and goes.
+[SEG0008] person_2 (DOCTOR): Any fever balance problems or weakness in the legs?
+[SEG0009] person_1 (PATIENT): I haven't had fever, balance problems or weakness in the legs, no
+[SEG0010] person_2 (DOCTOR): Is your chest okay generally?
+[SEG0011] person_1 (PATIENT): breathing's normal
+[SEG0012] person_2 (DOCTOR): Do you live alone?
+[SEG0013] person_1 (PATIENT): Yes, I live on my own
+[SEG0014] person_2 (DOCTOR): and what do you do for a living?
+[SEG0015] person_1 (PATIENT): I work night shifts at a warehouse
+[SEG0016] person_2 (DOCTOR): do you have any medical conditions I should know about?
+[SEG0017] person_1 (PATIENT): no none that I know of
+[SEG0018] person_2 (DOCTOR): What medicines are you taking at the moment?
+[SEG0019] person_1 (PATIENT): I take paracetamol, 500 milligrams, when needed. I took the morning off to come in today. It's the not knowing that gets to me
+[SEG0020] person_3 (NURSE): here are the numbers, doctor. Temp 36.7 degrees, SpO2 99 percent on room air, BP is 111 over 70. Pulse is 66 beats a minute
+[SEG0021] person_2 (DOCTOR): Okay noted.
+[SEG0022] person_2 (DOCTOR): let me have a look at you
+[SEG0023] person_2 (DOCTOR): let me look at this properly
+[SEG0024] person_2 (DOCTOR): Biceps power is a little reduced on the right.
+[SEG0025] person_2 (DOCTOR): Take your time, no rush.
+[SEG0026] person_2 (DOCTOR): Tilting the head to the right brings on the arm tingling
+[SEG0027] person_2 (DOCTOR): Thanks please take a seat again.
+[SEG0028] person_2 (DOCTOR): okay, thinking it through, it points towards a pinched nerve in the neck
+[SEG0029] person_2 (DOCTOR): I'll request an X-ray of the neck, it'll help with neck and arm pain
+[SEG0030] person_1 (PATIENT): Will it hurt?
+[SEG0031] person_2 (DOCTOR): For this, naproxen, 250 milligrams, twice a day after food, for five days. That's for nerve-related neck pain. Keep the neck moving gently and avoid long periods looking down at a phone. Make sure you're drinking plenty of fluids, two to three litres a day if you can, and get proper rest. Physiotherapy would be the right next step, I'll refer you.
+[SEG0032] person_1 (PATIENT): Okay.
+[SEG0033] person_2 (DOCTOR): Keep an eye out, and if the symptoms get worse, call us the same day or go to emergency. Please come and see me in three weeks.
+[SEG0034] person_1 (PATIENT): Sure that's doable.
+[SEG0035] person_2 (DOCTOR): Take care, and call us if anything changes.
+[SEG0036] person_1 (PATIENT): Okay, thank you. Bye.
+[SEG0037] person_2 (DOCTOR): All the best.
+
+JSON:

@@ -1,0 +1,70 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03191)
+[SEG0001] person_1 (DOCTOR): Right then, come on in.
+[SEG0002] person_2 (PATIENT): Hello. I hope I'm not late.
+[SEG0003] person_1 (DOCTOR): How are things, what's been happening?
+[SEG0004] person_2 (PATIENT): I've been dealing with a yellow discharge.
+[SEG0005] person_1 (DOCTOR): How many days or weeks has it been?
+[SEG0006] person_2 (PATIENT): Okay, so it's been about three months now.
+[SEG0007] person_1 (DOCTOR): Any a red sore wound after your operation as well?
+[SEG0008] person_2 (PATIENT): Yeah, yes, for two weeks. As for red sore wound after my operation, moderate, I'd say. As for pain around the wound, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0009] person_1 (DOCTOR): How strong would you say it is?
+[SEG0010] person_2 (PATIENT): About a five out of ten.
+[SEG0011] person_1 (DOCTOR): Any vomiting?
+[SEG0012] person_2 (PATIENT): No. No vomiting.
+[SEG0013] person_1 (DOCTOR): Did you get breathlessness, calf pain or chest pain?
+[SEG0014] person_2 (PATIENT): No, I haven't had any of them.
+[SEG0015] person_1 (DOCTOR): Any pins and needles or loss of strength anywhere?
+[SEG0016] person_2 (PATIENT): No, nothing like that.
+[SEG0017] person_1 (DOCTOR): How about your heart, any problems like that?
+[SEG0018] person_2 (PATIENT): No, nothing with my heart.
+[SEG0019] person_1 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0020] person_2 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0021] person_1 (DOCTOR): And alcohol, how much?
+[SEG0022] person_2 (PATIENT): I only drink at family occasions.
+[SEG0023] person_1 (DOCTOR): How about smoking?
+[SEG0024] person_2 (PATIENT): I quit smoking around ten years ago.
+[SEG0025] person_1 (DOCTOR): Right, do you do any exercise?
+[SEG0026] person_2 (PATIENT): I swim twice a week.
+[SEG0027] person_1 (DOCTOR): Are you on your own at home?
+[SEG0028] person_2 (PATIENT): I live with my elderly mother.
+[SEG0029] person_1 (DOCTOR): Any past operations I should know about?
+[SEG0030] person_2 (PATIENT): Erm, just a bunion operation, six years ago.
+[SEG0031] person_1 (DOCTOR): Anything in your past medical history I should know?
+[SEG0032] person_2 (PATIENT): COPD, for about ten years. I've had low haemoglobin for two years now.
+[SEG0033] person_1 (DOCTOR): Right, so low haemoglobin is already on your record. We'll keep that in mind today.
+[SEG0034] person_1 (DOCTOR): Do you take any prescribed or over-the-counter medicines?
+[SEG0035] person_2 (PATIENT): Iron tablets, once a day. Paracetamol. I take it 1 gram, maybe, when needed.
+[SEG0036] person_1 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0037] person_2 (PATIENT): Not with me. I'll bring it next time.
+[SEG0038] person_1 (DOCTOR): Let's start with the basic checks.
+[SEG0039] person_1 (DOCTOR): Sit still for a moment...
+[SEG0040] person_1 (DOCTOR): Okay: blood pressure 115 over 72, heart rate 98, temperature is 38.4 degrees. And SpO2 98 percent on room air.
+[SEG0041] person_1 (DOCTOR): I'll need to examine you for this, it won't take long.
+[SEG0042] person_1 (DOCTOR): Nearly finished here.
+[SEG0043] person_1 (DOCTOR): The lower part of the wound is red, hot and weeping pus, and the edges have not come together.
+[SEG0044] person_1 (DOCTOR): You can sit up now. Having listened and examined, I'd lean towards a surgical wound infection. Another possibility is a stitch abscess.
+[SEG0045] person_2 (PATIENT): What are the odds it's serious?
+[SEG0046] person_1 (DOCTOR): It's reasonable to be concerned, but right now a surgical wound infection is my leading thought, not anything worse. Let me just check I've got this right. You've had a yellow discharge for about three months, and no calf pain or chest pain.
+[SEG0047] person_2 (PATIENT): That's what happened, um, yes.
+[SEG0048] person_1 (DOCTOR): We should do a wound swab for wound infection.
+[SEG0049] person_3 (CLINICAL_STAFF): The earliest is Tuesday, 11:30 am.
+[SEG0050] person_1 (DOCTOR): Let's get blood tests, for wound infection. The result will help us decide whether anything more is needed. For this, flucloxacillin, 500 milligrams, four times a day, seven days. You take it by mouth. That should help with wound infection. The pharmacy will go through the details again when you pick it up.
+[SEG0051] person_2 (PATIENT): I mean, alright, I'll pick it up today.
+[SEG0052] person_1 (DOCTOR): Keep it clean and dry and use fresh dressings daily. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0053] person_2 (PATIENT): Oh, yes, I'll bear that in mind.
+[SEG0054] person_1 (DOCTOR): I'd like you back in two days. Is there anything you'd like me to go over again?
+[SEG0055] person_2 (PATIENT): So, okay, that makes sense. Thanks for explaining.
+
+JSON:

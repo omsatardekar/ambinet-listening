@@ -1,0 +1,48 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00209)
+[SEG0001] person_1 (PATIENT): hi, doctor long queue outside, but here I am
+[SEG0002] person_2 (DOCTOR): That's alright, take a seat. Tell me why you've come.
+[SEG0003] person_1 (PATIENT): Yeah, it's occasional lightheadedness. I don't know what's causing it.
+[SEG0004] person_2 (DOCTOR): How long has this been going on?
+[SEG0005] person_1 (PATIENT): Probably six months. Yeah.
+[SEG0006] person_2 (DOCTOR): I'll take a few measurements first
+[SEG0007] person_2 (DOCTOR): Hold still for me...
+[SEG0008] person_2 (DOCTOR): Okay: SpO2 98 percent on room air BMI works out to 27.5 temp 36.7 degrees weight 90 kilos height 181 centimetres pulse 73 BP is 117 over 80.
+[SEG0009] person_2 (DOCTOR): Let me examine, it won't take long.
+[SEG0010] person_2 (DOCTOR): hold that position for me
+[SEG0011] person_2 (DOCTOR): pulse is regular at the moment with a couple of early beats while I listened
+[SEG0012] person_2 (DOCTOR): Take your time, no rush.
+[SEG0013] person_2 (DOCTOR): heart sounds are normal with no murmur
+[SEG0014] person_2 (DOCTOR): okay, finished
+[SEG0015] person_2 (DOCTOR): have you noticed breathlessness chest pain or fainting?
+[SEG0016] person_1 (PATIENT): no no breathlessness chest pain or fainting
+[SEG0017] person_2 (DOCTOR): anything on the skin I should know about?
+[SEG0018] person_1 (PATIENT): skin's normal
+[SEG0019] person_2 (DOCTOR): do you have any medical conditions, anything you've been treated for?
+[SEG0020] person_1 (PATIENT): Yes an underactive thyroid.
+[SEG0021] person_2 (DOCTOR): any drug or food allergies?
+[SEG0022] person_1 (PATIENT): I'm allergic to to ibuprofen, I get a rash.
+[SEG0023] person_2 (DOCTOR): anyone in the family with similar problems or other conditions?
+[SEG0024] person_1 (PATIENT): My father had a stroke.
+[SEG0025] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0026] person_1 (PATIENT): A beer or two most evenings, to be honest. I smoke, yes, around five a day. I share a flat with two friends. I'm retired now, I was a clerk for years
+[SEG0027] person_2 (DOCTOR): Any regular medication?
+[SEG0028] person_1 (PATIENT): No, I don't take anything regularly.
+[SEG0029] person_2 (DOCTOR): So, based on the history and the examination, this looks most like benign extra heartbeats, though we should confirm. I'll request an ECG, it'll help with palpitations. Try cutting out caffeine for two weeks and see if the beats settle. Come back or go to emergency straight away if the symptoms get worse. Come back in four weeks.
+[SEG0030] person_1 (PATIENT): that that works for me
+[SEG0031] person_2 (DOCTOR): is there anything you wanted to ask?
+[SEG0032] person_1 (PATIENT): alright thanks bye for now
+[SEG0033] person_2 (DOCTOR): take care
+
+JSON:

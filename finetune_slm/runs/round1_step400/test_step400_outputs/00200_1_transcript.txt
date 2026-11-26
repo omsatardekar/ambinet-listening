@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00200)
+[SEG0001] person_1 (PATIENT): oh, hello, doctor where would you like me?
+[SEG0002] person_2 (DOCTOR): yes, do sit tell me what's been happening
+[SEG0003] person_1 (PATIENT): right, I've been dealing with swelling in the ankles
+[SEG0004] person_2 (DOCTOR): any medication at the moment, including things from the pharmacy?
+[SEG0005] person_1 (PATIENT): It's, It's ramipril, 5 milligrams, every morning.
+[SEG0006] person_2 (DOCTOR): Right, roughly when did it it start?
+[SEG0007] person_1 (PATIENT): It's been going on for about a year.
+[SEG0008] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0009] person_1 (PATIENT): I'd say severe i get some relief from raising the legs i'm not great at remembering details, so bear with me i'd rather not end up on lots of tablets if I can avoid it
+[SEG0010] person_2 (DOCTOR): Have you noticed chest pain or reduced urine output?
+[SEG0011] person_1 (PATIENT): no chest pain or reduced urine output, none of it
+[SEG0012] person_2 (DOCTOR): Okay, so. Have you had any nausea or fever?
+[SEG0013] person_1 (PATIENT): no, no nausea or fever
+[SEG0014] person_2 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0015] person_1 (PATIENT): no rashes
+[SEG0016] person_2 (DOCTOR): Okay, a few questions about your lifestyle now.
+[SEG0017] person_1 (PATIENT): Barely, I'm mostly sedentary these days. I teach at a primary school. Mostly home-cooked food, rice and vegetables.
+[SEG0018] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0019] person_1 (PATIENT): I've had kidney disease for about a year now.
+[SEG0020] person_2 (DOCTOR): Go on.
+[SEG0021] person_1 (PATIENT): I have high blood pressure, for about ten years
+[SEG0022] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0023] person_1 (PATIENT): No operations, no.
+[SEG0024] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0025] person_2 (DOCTOR): Just relax your arm...
+[SEG0026] person_2 (DOCTOR): Okay: BP is 147 over 91, saturation 99 percent, temperature 36.5, pulse is 83 beats a minute.
+[SEG0027] person_1 (PATIENT): Is that okay?
+[SEG0028] person_2 (DOCTOR): Alright, they help build the picture, I'll tell you more soon.
+[SEG0029] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0030] person_2 (DOCTOR): Bear with me a second.
+[SEG0031] person_2 (DOCTOR): There's pitting swelling at both ankles, and your blood pressure is on the high side.
+[SEG0032] person_2 (DOCTOR): thanks, please take a seat again so, based on the history and the examination, the most likely explanation is progression of the kidney problem
+[SEG0033] person_1 (PATIENT): is this something I'll have for good?
+[SEG0034] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's progression of the kidney problem, and we'll know more once the an ultrasound of the kidneys is back.
+[SEG0035] person_2 (DOCTOR): I'd like to arrange an ultrasound of the kidneys for chronic kidney disease. Keep an eye on salt and protein portions, a dietitian can help with the specifics. We'll refer you to a a kidney specialist
+[SEG0036] person_1 (PATIENT): Sure, where do I go?
+[SEG0037] person_2 (DOCTOR): I'll want another look after the results are back. Right, that's all. Go gently.
+[SEG0038] person_1 (PATIENT): one thing: no, actually that's all. Thanks
+[SEG0039] person_2 (DOCTOR): Right, take care.
+
+JSON:

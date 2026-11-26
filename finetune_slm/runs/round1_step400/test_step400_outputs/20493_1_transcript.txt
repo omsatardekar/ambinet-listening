@@ -1,0 +1,60 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20493)
+[SEG0001] person_1 (DOCTOR): morning, come on through. So, have you been here before?
+[SEG0002] person_2 (PATIENT): Erm, a couple of times, but not recently.
+[SEG0003] person_1 (DOCTOR): Tell me what's brought you in.
+[SEG0004] person_2 (PATIENT): so so the thing is, I've got sore, gritty eyes
+[SEG0005] person_1 (DOCTOR): How many days or weeks has it been?
+[SEG0006] person_2 (PATIENT): Um, for about a year, I'd say.
+[SEG0007] person_1 (DOCTOR): Yes. Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0008] person_2 (PATIENT): I'd give it a six, out of ten. Wind and screens definitely sets it off. Let me think, and there's watery eyes as well, three weeks now.
+[SEG0009] person_1 (DOCTOR): How much trouble does it give you?
+[SEG0010] person_2 (PATIENT): Okay, so I'd give it a four, out of ten.
+[SEG0011] person_1 (DOCTOR): Sure. Let's start with the basic checks.
+[SEG0012] person_1 (DOCTOR): That's it, just a little longer...
+[SEG0013] person_1 (DOCTOR): Okay: pulse 84, SpO2 98 percent on room air, pressure 113 over 76. And temperature is 36.6 degrees.
+[SEG0014] person_2 (PATIENT): Is that that alright, you know, doctor?
+[SEG0015] person_1 (DOCTOR): I'll come back to the numbers.
+[SEG0016] person_1 (DOCTOR): Let's move on to the examination.
+[SEG0017] person_2 (PATIENT): Okay, you know, doctor.
+[SEG0018] person_1 (DOCTOR): raise your arm for me
+[SEG0019] person_1 (DOCTOR): the eyes are slightly red with no discharge and the front of the the eye looks clear
+[SEG0020] person_1 (DOCTOR): all finished, thank you any discharge?
+[SEG0021] person_2 (PATIENT): Nope, no discharge.
+[SEG0022] person_1 (DOCTOR): Did you get loss of vision, sensitivity to light or double vision?
+[SEG0023] person_2 (PATIENT): I haven't had loss of vision, sensitivity to light or double vision, no.
+[SEG0024] person_1 (DOCTOR): How about your heart, any problems like that?
+[SEG0025] person_2 (PATIENT): Erm, my heart's been fine, as far as I know.
+[SEG0026] person_1 (DOCTOR): Okay, any muscle or joint problems besides this?
+[SEG0027] person_2 (PATIENT): Nothing else aches.
+[SEG0028] person_1 (DOCTOR): do you do any exercise?
+[SEG0029] person_2 (PATIENT): I swim twice a week.
+[SEG0030] person_1 (DOCTOR): how are your meals?
+[SEG0031] person_2 (PATIENT): I grab fast food at lunch most days.
+[SEG0032] person_1 (DOCTOR): what's on your current medicine list?
+[SEG0033] person_2 (PATIENT): I take hydrocortisone cream, when needed.
+[SEG0034] person_1 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0035] person_2 (PATIENT): I don't think I have any, no.
+[SEG0036] person_1 (DOCTOR): What about your medical history?
+[SEG0037] person_2 (PATIENT): Okay, so I've had eczema, yes.
+[SEG0038] person_1 (DOCTOR): Have you had any previous surgeries?
+[SEG0039] person_2 (PATIENT): No, you know, not at all.
+[SEG0040] person_1 (DOCTOR): Okay, so my impression is this: It fits best with dry eye syndrome. I'd like to arrange an eye test for blurred vision. The result will help us decide whether anything more is needed. For this, lubricant eye drops, 1 drop, four times a day, long term. That's for dry eyes. Take a screen break every twenty minutes and try to blink fully.
+[SEG0041] person_1 (DOCTOR): come back or go to emergency straight away if you lose vision or get severe eye pain
+[SEG0042] person_2 (PATIENT): Thank you, that's clear.
+[SEG0043] person_1 (DOCTOR): I'd like you back in four weeks. That's all from me. Any questions?
+[SEG0044] person_2 (PATIENT): right, I'll do that thank you, doctor
+[SEG0045] person_1 (DOCTOR): Goodbye for now.
+
+JSON:

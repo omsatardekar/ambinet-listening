@@ -1,0 +1,52 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00251)
+[SEG0001] person_1 (DOCTOR): evening. Long day, I imagine. Sit down
+[SEG0002] person_2 (PATIENT): Hi doctor.
+[SEG0003] person_3 (CAREGIVER): Good morning, doctor. I came along to help out.
+[SEG0004] person_1 (DOCTOR): that's fine sit down we'll go through it it together so what's been going on?
+[SEG0005] person_3 (CAREGIVER): it's been feeling dizzy when I stand, doctor. He didn't want to come, but I insisted
+[SEG0006] person_1 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse. I'll explain everything as we go along.
+[SEG0007] person_2 (PATIENT): I notice it more with standing up quickly. Pretty severe, if I'm being honest.
+[SEG0008] person_2 (PATIENT): I was just going to say that the main thing is—
+[SEG0009] person_4 (NURSE): Sorry to cut in doctor quick question: shall I bring the trolley in now or later?
+[SEG0010] person_1 (DOCTOR): Later thanks. Please go on.
+[SEG0011] person_2 (PATIENT): I've also had muscle cramps, for about two weeks with muscle cramps, about a seven out of ten
+[SEG0012] person_1 (DOCTOR): has there been dark urine too?
+[SEG0013] person_2 (PATIENT): Yes, since last Tuesday.
+[SEG0014] person_1 (DOCTOR): any chest pain, blood in the stool or fever at all?
+[SEG0015] person_2 (PATIENT): No uh no chest pain no blood in the stool no fever. I did have a very dry mouth at one point but that that went away on its own.
+[SEG0016] person_1 (DOCTOR): Any fainting, confusion or vomiting?
+[SEG0017] person_2 (PATIENT): No, no fainting, confusion or vomiting.
+[SEG0018] person_1 (DOCTOR): What about your tummy and bowels, anything unusual there?
+[SEG0019] person_2 (PATIENT): um, bowels are regular, nothing odd
+[SEG0020] person_1 (DOCTOR): What about allergies to medicines or foods or anything else?
+[SEG0021] person_2 (PATIENT): I think I reacted to some antibiotic once years ago. I don't remember which one or what happened exactly.
+[SEG0022] person_1 (DOCTOR): any diagnoses you've been given before?
+[SEG0023] person_2 (PATIENT): yes, diabetes i've had high blood pressure for about ten years now
+[SEG0024] person_1 (DOCTOR): yes, diabetes and high blood pressure are known to us, good to have that clear a few questions about your lifestyle now
+[SEG0025] person_2 (PATIENT): I smoke, yes, around five a day. I walk for about half an hour most days. Yes, I live on my own
+[SEG0026] person_1 (DOCTOR): let's go through your medication. What are you taking?
+[SEG0027] person_3 (CAREGIVER): Well, he is on metformin, 500 milligrams, twice a day, I give it to him. He is on ramipril, 5 milligrams, every morning, I give it to him.
+[SEG0028] person_2 (PATIENT): I used to take glimepiride, but I stopped it
+[SEG0029] person_4 (NURSE): Okay, so the vitals from earlier. Temp 36.8 degrees, pulse is 99 beats a minute, saturation 97 percent, pressure 98 over 65.
+[SEG0030] person_1 (DOCTOR): okay noted
+[SEG0031] person_1 (DOCTOR): let me examine it won't take long
+[SEG0032] person_1 (DOCTOR): let me look at this properly
+[SEG0033] person_1 (DOCTOR): Your mouth is quite dry and the skin is a little slow to spring back.
+[SEG0034] person_1 (DOCTOR): good, that's the examination so, based on the history and the examination, my working impression is dehydration from a stomach bug i can't rule out an electrolyte imbalance yet i'm gonna order blood salts, for dehydration i'm going to order a kidney function test, for dehydration for this, ORS, 1 sachet, after each loose motion, for two days that should help with dehydration
+[SEG0035] person_1 (DOCTOR): Small frequent sips are better than a big glass at once and keep going even if you don't feel thirsty. Make sure you're drinking plenty of fluids two to three litres a day if you can and get proper rest. Let's plan a check next week. Alright I'll see you out.
+[SEG0036] person_2 (PATIENT): All good here. Thank you.
+[SEG0037] person_1 (DOCTOR): Bye for now.
+
+JSON:

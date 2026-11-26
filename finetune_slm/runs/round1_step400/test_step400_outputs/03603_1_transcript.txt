@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 03603)
+[SEG0001] person_1 (PATIENT): Doctor, hi, where would you like me to put my coat?
+[SEG0002] person_2 (DOCTOR): That's fine, sit down. Tell me why you came.
+[SEG0003] person_3 (CAREGIVER): Doctor, I'm just here to help with the details. We came because of an itchy red rash on the chest.
+[SEG0004] person_2 (DOCTOR): How much does it limit you?
+[SEG0005] person_1 (PATIENT): About a eight out of ten.
+[SEG0006] person_2 (DOCTOR): So, any a mild temperature as well?
+[SEG0007] person_1 (PATIENT): Yeah. About a week, I'd say. Uh, as for spreading over a week, I honestly can't say when that began. It might have been last month or the month before.
+[SEG0008] person_2 (DOCTOR): Have you had any facial swelling?
+[SEG0009] person_1 (PATIENT): No. No facial swelling.
+[SEG0010] person_2 (DOCTOR): Any breathing difficulty, blistering or mouth sores at all?
+[SEG0011] person_1 (PATIENT): No, I'd have said so.
+[SEG0012] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0013] person_1 (PATIENT): Nothing else aches.
+[SEG0014] person_2 (DOCTOR): Alright, how active are you?
+[SEG0015] person_1 (PATIENT): I hardly move around during the day.
+[SEG0016] person_2 (DOCTOR): What's your work?
+[SEG0017] person_1 (PATIENT): I'm a plumber, lots of bending and kneeling.
+[SEG0018] person_2 (DOCTOR): Let's run through your medicines.
+[SEG0019] person_1 (PATIENT): I take spironolactone, 25 milligrams, once a day for my heart. I take paracetamol, 650 milligrams, when needed.
+[SEG0020] person_3 (CAREGIVER): Doctor, I think the last prescription for the paracetamol was 325 milligrams. We changed it at the last visit.
+[SEG0021] person_2 (DOCTOR): So, hm, that's different. Is the latest prescription anywhere near you?
+[SEG0022] person_1 (PATIENT): I don't think I have it with me. Allopurinol, 100 milligrams, started three weeks ago. I had diclofenac at one point, but I'm off it now.
+[SEG0023] person_2 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0024] person_1 (PATIENT): My sister had breast cancer. My grandmother had dementia.
+[SEG0025] person_2 (DOCTOR): Are you allergic to anything? Any allergies to medicines or foods?
+[SEG0026] person_1 (PATIENT): Not currently, but as a youngster tramadol gave me feeling very drowsy.
+[SEG0027] person_2 (DOCTOR): Do you have any long-term conditions?
+[SEG0028] person_1 (PATIENT): I have gout. I'm not great at remembering details, so bear with me.
+[SEG0029] person_2 (DOCTOR): Yes.
+[SEG0030] person_1 (PATIENT): I've, I've had heart failure for about a year now. I've had arthritis in my knees for five years now.
+[SEG0031] person_2 (DOCTOR): Yes, heart failure and arthritis in your knees are known to us, good to have that clear. Let me get the readings out of the way.
+[SEG0032] person_2 (DOCTOR): Nearly done with the readings...
+[SEG0033] person_2 (DOCTOR): Okay: pressure 112 over 82, temp 36.9 degrees. And pulse is 67 beats a minute, saturation 98 percent.
+[SEG0034] person_2 (DOCTOR): I'll examine you in a second, make yourself comfortable.
+[SEG0035] person_1 (PATIENT): Of course.
+[SEG0036] person_2 (DOCTOR): Tell me if that's sore.
+[SEG0037] person_2 (DOCTOR): There is a fine pink rash across the chest and arms, with no blistering and the mouth is clear.
+[SEG0038] person_2 (DOCTOR): You can sit up now. From what you've told me and what I found, this looks most like a drug rash probably from allopurinol. That's my thinking for now, and it may change as we learn more. A viral rash is also on my list. Stop me if I've got anything wrong. You've had an itchy red rash on the chest, and no breathing difficulty or mouth sores.
+[SEG0039] person_1 (PATIENT): Yes, that's right.
+[SEG0040] person_2 (DOCTOR): I'd like you to take cetirizine, 10 milligrams, once a day, one week. That should help with itch. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0041] person_1 (PATIENT): Yes, I'll bear that in mind.
+[SEG0042] person_2 (DOCTOR): Come back or go to emergency straight away if you develop blisters, mouth sores or facial swelling. Alright, is there anything you'd like me to go over again?
+[SEG0043] person_1 (PATIENT): Right, I'll do that. Thank you, doctor.
+
+JSON:

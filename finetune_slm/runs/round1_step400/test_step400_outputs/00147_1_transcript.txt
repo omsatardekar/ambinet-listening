@@ -1,0 +1,80 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00147)
+[SEG0001] person_1 (NURSE): Doctor, the patient's with us now. I did the usual checks at the front, so just say when you want them.
+[SEG0002] person_2 (DOCTOR): Perfect, thanks. Hello there, so what's the trouble?
+[SEG0003] person_3 (CAREGIVER): Hmm, you know, hello, doctor, I came in with them, if that's okay.
+[SEG0004] person_2 (DOCTOR): That's fine, sit down. We'll go through it together.
+[SEG0005] person_4 (PATIENT): Well, um, I've been having headaches for a while.
+[SEG0006] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0007] person_4 (PATIENT): It's a... um, um, I can't remember what it's called. It's a round yellow one.
+[SEG0008] person_2 (DOCTOR): Do you remember what it's for?
+[SEG0009] person_4 (PATIENT): For my pressure, I believe. My wife sets them out for me, I just take what I'm given. It's alendronate, 70 milligrams, maybe, once a week.
+[SEG0010] person_2 (DOCTOR): Did you happen to bring the box or the paperwork?
+[SEG0011] person_4 (PATIENT): Right, not with me. I'll bring it next time. Spironolactone, 25 milligrams, once a day for my heart. It's paracetamol, when it hurts.
+[SEG0012] person_2 (DOCTOR): Do you know the dose?
+[SEG0013] person_4 (PATIENT): 500 milligrams.
+[SEG0014] person_2 (DOCTOR): Is that long-standing?
+[SEG0015] person_4 (PATIENT): For about a year. I was on losartan before. I stopped taking it.
+[SEG0016] person_2 (DOCTOR): How far back does it go?
+[SEG0017] person_4 (PATIENT): Around two weeks, I think.
+[SEG0018] person_3 (CAREGIVER): It was closer to three weeks, you know, doctor.
+[SEG0019] person_2 (DOCTOR): Okay, so roughly two to three weeks. Is that right?
+[SEG0020] person_4 (PATIENT): Yeah, yes, somewhere around that.
+[SEG0021] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0022] person_4 (PATIENT): Uh, I'd say severe. It settles a little with painkillers. It's worse with coughing. I'd say every other day.
+[SEG0023] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0024] person_4 (PATIENT): Um, when it starts I tend to get neck tightness as well.
+[SEG0025] person_4 (PATIENT): Well, I was just going to say that the main thing is—
+[SEG0026] person_1 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0027] person_2 (DOCTOR): Later, thanks. Please go on. What about occasional nausea, have you noticed that?
+[SEG0028] person_4 (PATIENT): Yes, uh, for three weeks. As for occasional nausea, maybe a eight out of ten on a bad day. It happens a couple of times a week. I've had blurry vision at times too, you know, for one week. Okay, so the neck tightness? That's been since last Tuesday. I mean, about neck tightness, it comes and goes.
+[SEG0029] person_2 (DOCTOR): Have you had headaches for a while before, or is this the first time?
+[SEG0030] person_4 (PATIENT): Hmm, a bit, last winter. It settled by itself back then.
+[SEG0031] person_2 (DOCTOR): And what about jaw pain on chewing, head injury or fever?
+[SEG0032] person_4 (PATIENT): Well, no jaw pain on chewing, head injury or fever, none of it.
+[SEG0033] person_2 (DOCTOR): Did you get confusion, weakness or seizures?
+[SEG0034] person_4 (PATIENT): No, no confusion, weakness or seizures.
+[SEG0035] person_2 (DOCTOR): Anything unusual with passing urine?
+[SEG0036] person_4 (PATIENT): No, that's all fine.
+[SEG0037] person_2 (DOCTOR): Before I prescribe anything, any allergies? I ask because it helps me narrow things down.
+[SEG0038] person_4 (PATIENT): No allergies.
+[SEG0039] person_2 (DOCTOR): Okay, do you get any exercise?
+[SEG0040] person_4 (PATIENT): I walk for about half an hour most days.
+[SEG0041] person_2 (DOCTOR): Are you living with family?
+[SEG0042] person_4 (PATIENT): I stay with my daughter and her family.
+[SEG0043] person_2 (DOCTOR): What about family history, any illnesses that run in the family?
+[SEG0044] person_4 (PATIENT): My brother has asthma.
+[SEG0045] person_2 (DOCTOR): Right, do you have any medical conditions, anything you've been treated for?
+[SEG0046] person_4 (PATIENT): High blood pressure, for nearly five years. I've got thin bones. I've had heart failure for about ten years now.
+[SEG0047] person_2 (DOCTOR): Anything more?
+[SEG0048] person_1 (NURSE): Here are the numbers, doctor. Temperature 36.7, respiratory rate 14. Blood pressure 121 over 69, saturation 98 percent, pulse 69.
+[SEG0049] person_2 (DOCTOR): Right, good, thank you.
+[SEG0050] person_2 (DOCTOR): I'll examine you now, bear with me.
+[SEG0051] person_4 (PATIENT): Okay.
+[SEG0052] person_2 (DOCTOR): Almost done with this part.
+[SEG0053] person_2 (DOCTOR): Visual fields are full to confrontation and the optic discs look normal.
+[SEG0054] person_4 (PATIENT): Okay.
+[SEG0055] person_2 (DOCTOR): Let me just check something.
+[SEG0056] person_2 (DOCTOR): Power and reflexes are equal on both sides.
+[SEG0057] person_2 (DOCTOR): Okay, you can sit up. Putting it all together, I don't have a clear answer today: a headache disorder of uncertain type is possible, and so is a secondary headache we should exclude.
+[SEG0058] person_4 (PATIENT): Yeah, is it something serious, doctor?
+[SEG0059] person_2 (DOCTOR): It's reasonable to be concerned, but right now a headache disorder of uncertain type is my leading thought, not anything worse. I think an MRI of the brain makes sense here, for headaches with visual symptoms.
+[SEG0060] person_4 (PATIENT): That sounds sensible.
+[SEG0061] person_2 (DOCTOR): I think an eye pressure check makes sense here, for headache with blurred vision. Note down each headache with the date, time and what you were doing. Let's get you seen by a neurologist, I'll arrange the letter. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0062] person_4 (PATIENT): Understood.
+[SEG0063] person_2 (DOCTOR): I'll want another look after the scan. Call the clinic if you need us.
+[SEG0064] person_4 (PATIENT): Right, thanks so much, doctor.
+[SEG0065] person_2 (DOCTOR): Goodbye.
+
+JSON:

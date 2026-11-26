@@ -1,0 +1,75 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 20398)
+[SEG0001] person_1 (DOCTOR): hi, sit anywhere you like
+[SEG0002] person_2 (PATIENT): morning doctor sorry about the rush
+[SEG0003] person_1 (DOCTOR): how are things, what's been happening?
+[SEG0004] person_2 (PATIENT): honestly it's the room spinning and my family pushed me to come
+[SEG0005] person_1 (DOCTOR): since when exactly?
+[SEG0006] person_2 (PATIENT): Since last Tuesday, that's when it began.
+[SEG0007] person_1 (DOCTOR): alright, can you describe it a bit more for me? How strong it is, what the pattern is, what helps
+[SEG0008] person_2 (PATIENT): Only lying still and it's not much. It comes and goes. About a five out of ten. Oh and a blocked feeling in my ear. And there's a recent cold as well two days now.
+[SEG0009] person_1 (DOCTOR): Would you say mild, moderate or severe?
+[SEG0010] person_2 (PATIENT): Pretty moderate if I'm being honest.
+[SEG0011] person_1 (DOCTOR): have you had the room spinning before, or is this the first time?
+[SEG0012] person_2 (PATIENT): I had a similar thing last winter. It went away.
+[SEG0013] person_1 (DOCTOR): And what about weakness slurred speech or ringing in the ears?
+[SEG0014] person_2 (PATIENT): Nope, nothing like that.
+[SEG0015] person_1 (DOCTOR): have you had any hearing loss or headache?
+[SEG0016] person_2 (PATIENT): No hearing loss or headache, none of it.
+[SEG0017] person_1 (DOCTOR): how about double vision?
+[SEG0018] person_2 (PATIENT): No double vision thankfully.
+[SEG0019] person_1 (DOCTOR): any trouble with the waterworks?
+[SEG0020] person_2 (PATIENT): No changes there.
+[SEG0021] person_1 (DOCTOR): On the cardiac side, anything I should know?
+[SEG0022] person_2 (PATIENT): no, that's been fine
+[SEG0023] person_1 (DOCTOR): Do you smoke?
+[SEG0024] person_2 (PATIENT): I quit smoking around ten years ago
+[SEG0025] person_1 (DOCTOR): And alcohol, how much?
+[SEG0026] person_2 (PATIENT): I'll have a glass of wine with dinner
+[SEG0027] person_1 (DOCTOR): are you active?
+[SEG0028] person_2 (PATIENT): I walk the dog every morning.
+[SEG0029] person_1 (DOCTOR): What does a a normal day of food look like?
+[SEG0030] person_2 (PATIENT): Lots of rice, lentils and some fruit
+[SEG0031] person_1 (DOCTOR): do you work outside the home?
+[SEG0032] person_2 (PATIENT): I'm a hairdresser, on my feet all day
+[SEG0033] person_1 (DOCTOR): let's run through your medicines
+[SEG0034] person_2 (PATIENT): Um, I'm on metoprolol, 50 milligrams, twice a day for my pressure.
+[SEG0035] person_1 (DOCTOR): how long have you been on it?
+[SEG0036] person_2 (PATIENT): Nearly five years now. I take mirtazapine, 15 milligrams, at night. Though honestly, some days I forget to take it.
+[SEG0037] person_1 (DOCTOR): Have you got any known allergies?
+[SEG0038] person_2 (PATIENT): I don't think I have any, no.
+[SEG0039] person_1 (DOCTOR): Do you have any chronic illnesses?
+[SEG0040] person_2 (PATIENT): I've had high blood pressure for two years now i have depression i've been reading about it online and it worried me
+[SEG0041] person_1 (DOCTOR): Right, so high blood pressure is already on your record. We'll keep that in mind today.
+[SEG0042] person_1 (DOCTOR): Time for your numbers, if that's okay.
+[SEG0043] person_1 (DOCTOR): Bear with me while this finishes...
+[SEG0044] person_1 (DOCTOR): okay: heart rate 83 temperature is 37.0 degrees SpO2 98 percent on room air. And blood pressure 114 over 81 respiratory rate 16.
+[SEG0045] person_1 (DOCTOR): I'll examine you in a second make yourself comfortable
+[SEG0046] person_1 (DOCTOR): Alright breathe out slowly.
+[SEG0047] person_1 (DOCTOR): I can see a fine jerking of the eyes to the left and your walking is a little unsteady.
+[SEG0048] person_2 (PATIENT): Fine by me.
+[SEG0049] person_1 (DOCTOR): that's all I needed to check
+[SEG0050] person_1 (DOCTOR): from what you've told me and what I found, it fits best with an inner-ear balance problem such as vestibular neuritis. The reason I say that is that your story and and my examination fit together. We shouldn't forget a problem in the brain stem. Let me just check I've got this right. You've had the room spinning, since last Tuesday, and no headache or hearing loss
+[SEG0051] person_2 (PATIENT): Exactly.
+[SEG0052] person_1 (DOCTOR): I'm sending you for a positional test because of vertigo
+[SEG0053] person_3 (CLINICAL_STAFF): I can book that for Thursday at 3:30 pm
+[SEG0054] person_2 (PATIENT): Thursday that that works for me.
+[SEG0055] person_1 (DOCTOR): I'm going to order blood tests for dizziness what I'm giving you is prochlorperazine 5 milligrams three times a day for three days it's for nausea and vertigo
+[SEG0056] person_2 (PATIENT): mm alright
+[SEG0057] person_1 (DOCTOR): Start moving around gently as soon as you can, since resting too long slows recovery. One warning sign to remember: you get double vision, weakness or trouble speaking. In that case don't wait. I'd like you back in a week.
+[SEG0058] person_2 (PATIENT): Okay, I'll arrange it.
+[SEG0059] person_1 (DOCTOR): anything else on your mind before you go?
+[SEG0060] person_2 (PATIENT): that's clear, thanks
+
+JSON:

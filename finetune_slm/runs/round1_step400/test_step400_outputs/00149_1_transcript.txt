@@ -1,0 +1,63 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00149)
+[SEG0001] person_1 (PATIENT): Excuse me, doctor, should I sit here?
+[SEG0002] person_2 (DOCTOR): Not at all, please sit. What's the problem?
+[SEG0003] person_1 (PATIENT): I've been dealing with a burning pain in the upper tummy.
+[SEG0004] person_2 (DOCTOR): How long have you had it?
+[SEG0005] person_1 (PATIENT): Probably about four days. Yeah.
+[SEG0006] person_2 (DOCTOR): Okay, give me more detail on it, whatever comes to mind.
+[SEG0007] person_1 (PATIENT): It feels mild to me. It sort of comes and goes.
+[SEG0008] person_2 (DOCTOR): Does it come along with anything else?
+[SEG0009] person_1 (PATIENT): When it starts I tend to get nausea as well. The, The nausea? That's been for three days. With nausea, it comes and goes. Oh, and a sour taste in the mouth. Had that since this morning.
+[SEG0010] person_2 (DOCTOR): Did you get weight loss or vomiting blood?
+[SEG0011] person_1 (PATIENT): I haven't had weight loss or vomiting blood, no.
+[SEG0012] person_2 (DOCTOR): Did you get trouble swallowing or jaundice?
+[SEG0013] person_1 (PATIENT): No trouble swallowing or jaundice, none of it.
+[SEG0014] person_2 (DOCTOR): How about your heart, any problems like that?
+[SEG0015] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0016] person_2 (DOCTOR): Does anything run in the family?
+[SEG0017] person_1 (PATIENT): My mother has migraines.
+[SEG0018] person_2 (DOCTOR): Any previous surgeries?
+[SEG0019] person_1 (PATIENT): No operations, no.
+[SEG0020] person_2 (DOCTOR): Alright, are you on any regular medication?
+[SEG0021] person_1 (PATIENT): No, I don't take anything regularly.
+[SEG0022] person_2 (DOCTOR): How about smoking?
+[SEG0023] person_1 (PATIENT): No, I don't smoke and never have.
+[SEG0024] person_2 (DOCTOR): And alcohol, how much?
+[SEG0025] person_1 (PATIENT): I have a couple of drinks on the weekend.
+[SEG0026] person_2 (DOCTOR): Are you active at all?
+[SEG0027] person_1 (PATIENT): Barely, I'm mostly sedentary these days.
+[SEG0028] person_2 (DOCTOR): Who's at home with you?
+[SEG0029] person_1 (PATIENT): It's just me and my wife at home now.
+[SEG0030] person_2 (DOCTOR): How do you eat, generally?
+[SEG0031] person_1 (PATIENT): I skip breakfast most days.
+[SEG0032] person_2 (DOCTOR): Any long-term health problems I should know about?
+[SEG0033] person_1 (PATIENT): I have arthritis in my knees.
+[SEG0034] person_2 (DOCTOR): Do you have any allergies to medicines, food, anything at all? These questions might sound routine, but they matter.
+[SEG0035] person_1 (PATIENT): None, as far as I'm aware.
+[SEG0036] person_2 (DOCTOR): I'll take a few measurements first.
+[SEG0037] person_2 (DOCTOR): One second...
+[SEG0038] person_2 (DOCTOR): Okay: temperature is 36.7 degrees, saturation 97 percent, respiratory rate 15. And blood pressure 119 over 69, pulse is 72 beats a minute.
+[SEG0039] person_1 (PATIENT): Is that okay?
+[SEG0040] person_2 (DOCTOR): I'll interpret it once I've examined you.
+[SEG0041] person_2 (DOCTOR): Let's do the physical part now.
+[SEG0042] person_2 (DOCTOR): Let me just check something.
+[SEG0043] person_2 (DOCTOR): Your tummy is soft, with mild tenderness in the upper middle part.
+[SEG0044] person_1 (PATIENT): Okay.
+[SEG0045] person_2 (DOCTOR): Right, you can sit back down. Right, here's what I'm thinking. It fits best with gastritis. Acid reflux is still possible.
+[SEG0046] person_2 (DOCTOR): I want an H. pylori test done, that's for dyspepsia. Alright, I'll see you out.
+[SEG0047] person_1 (PATIENT): I appreciate it, uh, doctor.
+[SEG0048] person_2 (DOCTOR): See you then.
+
+JSON:

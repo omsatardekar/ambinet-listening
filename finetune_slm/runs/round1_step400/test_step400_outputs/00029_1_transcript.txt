@@ -1,0 +1,75 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00029)
+[SEG0001] person_1 (PATIENT): Afternoon, doctor.
+[SEG0002] person_2 (DOCTOR): Okay, you're fine, sit down. So, what brings you in?
+[SEG0003] person_3 (CAREGIVER): Uh, you know, good morning, doctor. I came along to help out.
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to have you here.
+[SEG0005] person_3 (CAREGIVER): It's been clearing my throat all the time, doctor. She didn't want to come, but I insisted.
+[SEG0006] person_2 (DOCTOR): Is this recent, or has it been a while?
+[SEG0007] person_1 (PATIENT): Um, uh, it's been three weeks, I'm fairly sure.
+[SEG0008] person_2 (DOCTOR): How would you describe it, mild, moderate, severe?
+[SEG0009] person_1 (PATIENT): Pretty severe, if I'm being honest.
+[SEG0010] person_2 (DOCTOR): Has there been a hoarse voice in the mornings too?
+[SEG0011] person_1 (PATIENT): Mm, yes.
+[SEG0012] person_2 (DOCTOR): Any a dry cough that won't go away as well?
+[SEG0013] person_1 (PATIENT): Yes, actually. A burning in the chest after meals was there, but it's gone away on its own.
+[SEG0014] person_2 (DOCTOR): Tell me what you take day to day.
+[SEG0015] person_3 (CAREGIVER): She is on amlodipine, 5 milligrams, once a day, I give it to her. She takes pantoprazole, before breakfast for my acidity.
+[SEG0016] person_2 (DOCTOR): Do you know the dose?
+[SEG0017] person_3 (CAREGIVER): It's 40 milligrams.
+[SEG0018] person_2 (DOCTOR): How long has that been going on?
+[SEG0019] person_3 (CAREGIVER): About two months. It's Seretide inhaler, twice a day, doctor. She takes Digene, after meals.
+[SEG0020] person_1 (PATIENT): Before this I was on Asthalin inhaler; that's been stopped.
+[SEG0021] person_2 (DOCTOR): Tell me about your health in general, any ongoing conditions?
+[SEG0022] person_1 (PATIENT): High blood pressure, for nearly five years. I just want to get back to normal, really. I told myself I'd wait and see, and here I am.
+[SEG0023] person_2 (DOCTOR): Anything more?
+[SEG0024] person_1 (PATIENT): Acid reflux, for five years. My family kept telling me to get it checked.
+[SEG0025] person_2 (DOCTOR): And then?
+[SEG0026] person_1 (PATIENT): I've had asthma for five years now.
+[SEG0027] person_2 (DOCTOR): Anything more?
+[SEG0028] person_2 (DOCTOR): Anyone in the family with similar problems or other conditions?
+[SEG0029] person_1 (PATIENT): Well, uh, my father had kidney stones. Well, my grandmother had breast cancer.
+[SEG0030] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0031] person_1 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0032] person_2 (DOCTOR): Are you working at the moment?
+[SEG0033] person_1 (PATIENT): Yes, I'm a nurse on a busy ward.
+[SEG0034] person_2 (DOCTOR): And what do you usually eat?
+[SEG0035] person_1 (PATIENT): Mostly home-cooked food, rice and vegetables.
+[SEG0036] person_2 (DOCTOR): Have you had any night sweats, wheezing or trouble swallowing?
+[SEG0037] person_1 (PATIENT): No, no night sweats, wheezing or trouble swallowing.
+[SEG0038] person_2 (DOCTOR): Have you had any weight loss or coughing up blood?
+[SEG0039] person_1 (PATIENT): No weight loss or coughing up blood, none of it.
+[SEG0040] person_2 (DOCTOR): Anything with your heart, like skipped beats or fainting?
+[SEG0041] person_1 (PATIENT): Nothing like that.
+[SEG0042] person_2 (DOCTOR): Let's get your blood pressure and the other basics.
+[SEG0043] person_2 (DOCTOR): Just relax your arm...
+[SEG0044] person_2 (DOCTOR): Okay: temp 36.7 degrees, BP is 119 over 70, respiratory rate 15. And saturation 99 percent, weight 75 kilos, height 174 centimetres, heart rate 69.
+[SEG0045] person_1 (PATIENT): Is that okay?
+[SEG0046] person_2 (DOCTOR): I'll interpret it once I've examined you.
+[SEG0047] person_2 (DOCTOR): Okay, I need to examine you for this.
+[SEG0048] person_2 (DOCTOR): Tell me if anything hurts.
+[SEG0049] person_2 (DOCTOR): Chest is clear and the throat looks a little red at the back.
+[SEG0050] person_2 (DOCTOR): All done, you can get dressed. Okay, thinking it through, it points towards a cough driven by acid reflux. I can't rule out post-nasal drip yet.
+[SEG0051] person_1 (PATIENT): Right, doctor, is this dangerous?
+[SEG0052] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like a cough driven by acid reflux, but I'd like to confirm. Let me just check I've got this right. You've been clearing your throat all the time for three weeks, severe, and no wheezing or coughing up blood.
+[SEG0053] person_1 (PATIENT): Exactly.
+[SEG0054] person_2 (DOCTOR): Let's get a chest X-ray, for chronic cough. Let's get breathing tests, for chronic cough. Don't eat for two or three hours before lying down, and raise the head of the bed a little. Book a review in a month.
+[SEG0055] person_1 (PATIENT): Okay, so okay, I'll book that.
+[SEG0056] person_2 (DOCTOR): Can you tell me the plan back in your own words, so I know I've explained it clearly?
+[SEG0057] person_1 (PATIENT): So, I come back in a month. Is that right?
+[SEG0058] person_2 (DOCTOR): Yes, exactly right. Take care, and call us if anything changes.
+[SEG0059] person_1 (PATIENT): Thanks so much, you know, doctor.
+[SEG0060] person_2 (DOCTOR): Bye for now.
+
+JSON:

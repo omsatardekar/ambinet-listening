@@ -1,0 +1,67 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02881)
+[SEG0001] person_1 (PATIENT): Morning, doctor. Is this the right room?
+[SEG0002] person_2 (DOCTOR): Alright, yes, have a seat. Tell me what's going on.
+[SEG0003] person_3 (CAREGIVER): Doctor, thank you for seeing us.
+[SEG0004] person_2 (DOCTOR): Of course, please stay. It's helpful to have you here.
+[SEG0005] person_3 (CAREGIVER): Doctor, it's a severe headache. That's what we're worried about.
+[SEG0006] person_2 (DOCTOR): Can you tell me when it first started?
+[SEG0007] person_1 (PATIENT): Around a week, I think.
+[SEG0008] person_3 (CAREGIVER): It was closer to two weeks, doctor.
+[SEG0009] person_2 (DOCTOR): Okay, so roughly one to two weeks. Is that right?
+[SEG0010] person_1 (PATIENT): That sounds about right.
+[SEG0011] person_2 (DOCTOR): Sure. Alright, tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0012] person_1 (PATIENT): I'd say on and off. It's moderate, honestly.
+[SEG0013] person_1 (PATIENT): And the other thing I wanted to mention is that I can't really—
+[SEG0014] person_3 (CAREGIVER): Tell the doctor about the other thing, that's what worries me.
+[SEG0015] person_1 (PATIENT): I was getting to that! Oh, and swollen face and hands.
+[SEG0016] person_2 (DOCTOR): How much trouble does it give you?
+[SEG0017] person_1 (PATIENT): Pretty severe, if I'm being honest.
+[SEG0018] person_2 (DOCTOR): Any vaginal bleeding, reduced baby movements or leaking fluid at all?
+[SEG0019] person_1 (PATIENT): No, no vaginal bleeding, no reduced baby movements, no leaking fluid. I did have seeing flashing lights at one point, but that went away on its own.
+[SEG0020] person_2 (DOCTOR): Is your chest okay generally?
+[SEG0021] person_1 (PATIENT): No problems with breathing.
+[SEG0022] person_2 (DOCTOR): Does your family have any medical conditions?
+[SEG0023] person_1 (PATIENT): My grandfather had a stroke. My mother has an underactive thyroid.
+[SEG0024] person_2 (DOCTOR): Is there someone at home?
+[SEG0025] person_1 (PATIENT): My husband and I live above the shop.
+[SEG0026] person_2 (DOCTOR): Are you active?
+[SEG0027] person_1 (PATIENT): I walk the dog every morning.
+[SEG0028] person_2 (DOCTOR): Tell me your medicines, please.
+[SEG0029] person_1 (PATIENT): It's a... um, I can't remember what it's called. It's a small white one.
+[SEG0030] person_2 (DOCTOR): Do you remember what it's for?
+[SEG0031] person_1 (PATIENT): For the anxiety, I believe. My wife sets them out for me, I just take what I'm given. Foracort inhaler. I take it twice a day for my asthma.
+[SEG0032] person_2 (DOCTOR): Are there any allergies I should be aware of?
+[SEG0033] person_1 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0034] person_2 (DOCTOR): Do you have any long-term conditions?
+[SEG0035] person_1 (PATIENT): Anxiety, for nearly five years.
+[SEG0036] person_2 (DOCTOR): Ah.
+[SEG0037] person_1 (PATIENT): I've had asthma for about ten years now.
+[SEG0038] person_2 (DOCTOR): Okay, I can see asthma in your file as well.
+[SEG0039] person_2 (DOCTOR): Anything surgical in your history?
+[SEG0040] person_1 (PATIENT): Just part of my thyroid removed, years back.
+[SEG0041] person_4 (NURSE): Doctor, I've got the readings for you. Blood pressure 158 over 92, respiratory rate 15, SpO2 97 percent on room air. Pulse is 90 beats a minute, temperature 36.6.
+[SEG0042] person_2 (DOCTOR): Thanks.
+[SEG0043] person_2 (DOCTOR): Could you come over to the couch, please?
+[SEG0044] person_2 (DOCTOR): Does that hurt?
+[SEG0045] person_2 (DOCTOR): Your blood pressure is very high and your reflexes are brisk.
+[SEG0046] person_2 (DOCTOR): That's the examination finished. From what you've told me and what I found, it fits best with severe pre-eclampsia. A migraine is still possible.
+[SEG0047] person_1 (PATIENT): Is there something to worry about?
+[SEG0048] person_2 (DOCTOR): I can't promise yet, but most people with severe pre-eclampsia do well once it's treated properly. Let me just check I've got this right. You've had a severe headache, moderate, and no leaking fluid or vaginal bleeding.
+[SEG0049] person_1 (PATIENT): That's it, yes.
+[SEG0050] person_2 (DOCTOR): A urine protein test is what I'd like next, for pre-eclampsia. That's everything on my side. Anything you're unsure about?
+[SEG0051] person_1 (PATIENT): No, that's all. Thanks a lot.
+[SEG0052] person_2 (DOCTOR): Goodbye for now.
+
+JSON:

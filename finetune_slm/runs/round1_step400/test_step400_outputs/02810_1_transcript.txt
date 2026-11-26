@@ -1,0 +1,69 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 02810)
+[SEG0001] person_1 (PATIENT): Hi doctor, am I too early?
+[SEG0002] person_2 (DOCTOR): of course, leave it there. How can I help?
+[SEG0003] person_1 (PATIENT): I've been dealing with severe tummy pain out of proportion to the examination. I looked a few things up online, and that probably didn't help.
+[SEG0004] person_2 (DOCTOR): Right, how long has it been like this?
+[SEG0005] person_1 (PATIENT): Probably about three months. Yeah. Work has been very busy so I kept ignoring it.
+[SEG0006] person_2 (DOCTOR): So, can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0007] person_1 (PATIENT): It's a few times a day. I'd give it a six, uh, out of ten.
+[SEG0008] person_2 (DOCTOR): Any other symptoms with it?
+[SEG0009] person_1 (PATIENT): When it starts I tend to get vomiting as well. About vomiting, severe, I'd say.
+[SEG0010] person_2 (DOCTOR): Yes, carry on. What do you take on a a normal day?
+[SEG0011] person_1 (PATIENT): It's apixaban, 5 milligrams, maybe, twice a day for the heart rhythm.
+[SEG0012] person_2 (DOCTOR): have you got the box or the prescription on you?
+[SEG0013] person_1 (PATIENT): Not with me. I'll bring it next time.
+[SEG0014] person_2 (DOCTOR): what about alcohol?
+[SEG0015] person_1 (PATIENT): I used to drink heavily but I stopped four years ago.
+[SEG0016] person_2 (DOCTOR): Any smoking?
+[SEG0017] person_1 (PATIENT): I have about eight cigarettes in a day.
+[SEG0018] person_2 (DOCTOR): right, what do you do during the day?
+[SEG0019] person_1 (PATIENT): I look after my grandchildren most days.
+[SEG0020] person_2 (DOCTOR): Do you follow any particular diet?
+[SEG0021] person_1 (PATIENT): I'm vegetarian and have been for years
+[SEG0022] person_2 (DOCTOR): Has anyone in your family had anything serious?
+[SEG0023] person_1 (PATIENT): My daughter has type 1 diabetes.
+[SEG0024] person_2 (DOCTOR): Are you allergic to anything? Any allergies to medicines or foods? These questions might sound routine, but they matter.
+[SEG0025] person_1 (PATIENT): I had a reaction to amoxicillin when I was younger, hives, and I've avoided it since.
+[SEG0026] person_2 (DOCTOR): Any past operations I should know about?
+[SEG0027] person_1 (PATIENT): I had a cataract operation in my left eye about a year ago. A neighbour of mine said I should see someone about it. My sister suggested writing things down, but I forgot.
+[SEG0028] person_2 (DOCTOR): What conditions have you been treated for in the past?
+[SEG0029] person_1 (PATIENT): I've had an irregular heartbeat for two years now. Let me think, yes, diabetes. I've been reading about it online and and it worried me. My family kept telling me to get it checked
+[SEG0030] person_2 (DOCTOR): Yes, carry on. Okay, I can see diabetes in your file as well. Have you noticed chest pain, hernia or fever?
+[SEG0031] person_1 (PATIENT): No, nothing to to report there.
+[SEG0032] person_2 (DOCTOR): Alright, how about your heart, any problems like that?
+[SEG0033] person_1 (PATIENT): no, nothing with my heart
+[SEG0034] person_2 (DOCTOR): Anything with your nerves, like weakness or numbness?
+[SEG0035] person_1 (PATIENT): No, nothing like that.
+[SEG0036] person_2 (DOCTOR): let me take your readings now
+[SEG0037] person_2 (DOCTOR): Bear with me while this finishes...
+[SEG0038] person_2 (DOCTOR): okay: temperature is 36.8 degrees, heart rate 121, oxygen saturation is 98 percent. And blood pressure 122 over 73, respiratory rate 17.
+[SEG0039] person_1 (PATIENT): Is that okay?
+[SEG0040] person_2 (DOCTOR): I'll explain what these mean in a moment.
+[SEG0041] person_2 (DOCTOR): so, I'd like to check you over now, if that's alright
+[SEG0042] person_1 (PATIENT): Fine by me.
+[SEG0043] person_2 (DOCTOR): Stay as you are for a moment.
+[SEG0044] person_2 (DOCTOR): Your pulse is irregular, the tummy is soft but terribly painful, and the pain is out of proportion to what I find.
+[SEG0045] person_2 (DOCTOR): Thank you, you can get dressed. Putting it all together, my working impression is possible bowel ischaemia.
+[SEG0046] person_2 (DOCTOR): Let's get urgent blood tests, for severe abdominal pain.
+[SEG0047] person_3 (CLINICAL_STAFF): The earliest is Monday, 11:30 am.
+[SEG0048] person_2 (DOCTOR): This is an emergency, you are gonna hospital now. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0049] person_1 (PATIENT): Yes, will do.
+[SEG0050] person_2 (DOCTOR): Come back or go to emergency straight away if the symptoms get worse.
+[SEG0051] person_1 (PATIENT): yes, I'll bear that in mind
+[SEG0052] person_2 (DOCTOR): I'll want another look straight away. I think we're done unless you have questions.
+[SEG0053] person_1 (PATIENT): Alright, thanks, take care.
+[SEG0054] person_2 (DOCTOR): all the best
+
+JSON:

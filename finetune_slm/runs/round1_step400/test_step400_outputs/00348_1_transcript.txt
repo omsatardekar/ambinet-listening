@@ -1,0 +1,54 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00348)
+[SEG0001] person_1 (PATIENT): Doctor? Hi. I hope I've got the right time.
+[SEG0002] person_2 (DOCTOR): You're fine, sit down. So, what brings you in?
+[SEG0003] person_1 (PATIENT): I've been losing things all the time, and I wanted to get it checked.
+[SEG0004] person_2 (DOCTOR): Right, and when did that start?
+[SEG0005] person_1 (PATIENT): Oh, it's been going on for six months.
+[SEG0006] person_2 (DOCTOR): Any previous surgeries?
+[SEG0007] person_1 (PATIENT): No operations, no.
+[SEG0008] person_2 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0009] person_1 (PATIENT): No allergies.
+[SEG0010] person_2 (DOCTOR): Are you on any regular medication?
+[SEG0011] person_1 (PATIENT): No, nothing regular.
+[SEG0012] person_2 (DOCTOR): Do you have any medical conditions I should know about?
+[SEG0013] person_1 (PATIENT): No, nothing, I've generally been healthy.
+[SEG0014] person_2 (DOCTOR): Any sport or activity?
+[SEG0015] person_1 (PATIENT): I play badminton on Sundays.
+[SEG0016] person_2 (DOCTOR): Do you have a job?
+[SEG0017] person_1 (PATIENT): I'm a self-employed electrician.
+[SEG0018] person_2 (DOCTOR): Have you noticed anxiety attacks, heavy caffeine or low mood?
+[SEG0019] person_1 (PATIENT): No, none of that at all.
+[SEG0020] person_2 (DOCTOR): Nothing like substance use?
+[SEG0021] person_1 (PATIENT): Yeah, um, no, none, no substance use.
+[SEG0022] person_2 (DOCTOR): Anything on the skin I should know about?
+[SEG0023] person_1 (PATIENT): No rashes.
+[SEG0024] person_2 (DOCTOR): Let me check your vitals now.
+[SEG0025] person_2 (DOCTOR): Almost there...
+[SEG0026] person_2 (DOCTOR): Okay: BMI works out to 32.2, heart rate 73, respiratory rate 14, BP is 128 over 79, weight 91 kilos, height 168 centimetres, temp 36.6 degrees. From what you've told me, it's hard to say. Difficulty with attention and organisation that needs a fuller assessment is one possibility and poor sleep another, and I'd rather not commit yet.
+[SEG0027] person_1 (PATIENT): Is this something I'll have for good?
+[SEG0028] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's difficulty with attention and organisation that needs a fuller assessment, and we'll know more once the blood tests is back.
+[SEG0029] person_2 (DOCTOR): Blood tests is what I'd like next, for poor concentration.
+[SEG0030] person_1 (PATIENT): Will it hurt?
+[SEG0031] person_2 (DOCTOR): I'm going to order a thyroid test, for poor concentration. I'd rather check than guess, and this is the quickest way to know more.
+[SEG0032] person_1 (PATIENT): Well, does it need any preparation?
+[SEG0033] person_2 (DOCTOR): Keep a regular sleep schedule and write down your tasks each morning. Let's get you seen by an adult attention clinic, I'll arrange the letter. One warning sign to remember: the symptoms get worse. In that case don't wait.
+[SEG0034] person_1 (PATIENT): Got it, you know, thank you.
+[SEG0035] person_2 (DOCTOR): I'd like to see you again after the results are back.
+[SEG0036] person_1 (PATIENT): That works for me.
+[SEG0037] person_2 (DOCTOR): Okay, we're done for today. Take care.
+[SEG0038] person_1 (PATIENT): Thanks so much, doctor.
+[SEG0039] person_2 (DOCTOR): Bye for now.
+
+JSON:

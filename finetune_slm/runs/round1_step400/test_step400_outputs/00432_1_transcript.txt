@@ -1,0 +1,66 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00432)
+[SEG0001] person_1 (PATIENT): hello, um, doctor where would you like me?
+[SEG0002] person_2 (DOCTOR): So, no trouble at all, come in. What's been bothering you?
+[SEG0003] person_1 (PATIENT): Uh, mainly I've been feeling tired. That's why I came.
+[SEG0004] person_2 (DOCTOR): roughly when did it start?
+[SEG0005] person_1 (PATIENT): Probably three weeks. Yeah.
+[SEG0006] person_2 (DOCTOR): Ah. How would you describe it, mild, moderate, severe?
+[SEG0007] person_1 (PATIENT): it's moderate, honestly and there's a racing heart sometimes as well, you know, two months now
+[SEG0008] person_2 (DOCTOR): have you had any fainting or chest pain?
+[SEG0009] person_1 (PATIENT): Yeah, you know, no, I'd have mentioned it.
+[SEG0010] person_2 (DOCTOR): have you had any blood in the stool, heavy periods or weight loss?
+[SEG0011] person_1 (PATIENT): No blood in the stool, heavy periods or weight loss, none of it.
+[SEG0012] person_2 (DOCTOR): Is your urine normal, no changes?
+[SEG0013] person_1 (PATIENT): No, that's all fine.
+[SEG0014] person_2 (DOCTOR): Any previous surgeries?
+[SEG0015] person_1 (PATIENT): No operations, no.
+[SEG0016] person_2 (DOCTOR): Right, what medicines do you take regularly?
+[SEG0017] person_1 (PATIENT): it's pantoprazole, 40 milligrams, before breakfast
+[SEG0018] person_2 (DOCTOR): What about allergies, to medicines or foods or anything else?
+[SEG0019] person_1 (PATIENT): Yeah, I don't have any known medication allergies.
+[SEG0020] person_2 (DOCTOR): And what do you do for a living?
+[SEG0021] person_1 (PATIENT): I work night shifts at a warehouse
+[SEG0022] person_2 (DOCTOR): What's your diet like?
+[SEG0023] person_1 (PATIENT): I eat out quite a lot, to be honest.
+[SEG0024] person_2 (DOCTOR): Who do you live with?
+[SEG0025] person_1 (PATIENT): I live with my family, my husband and two kids.
+[SEG0026] person_2 (DOCTOR): What about your general health, any conditions you're being treated for?
+[SEG0027] person_1 (PATIENT): I have acid reflux, for nearly five years.
+[SEG0028] person_2 (DOCTOR): Yes?
+[SEG0029] person_2 (DOCTOR): Yes, acid reflux is known to us, good to have that clear. Can I take your vitals now?
+[SEG0030] person_2 (DOCTOR): Hold still for me...
+[SEG0031] person_2 (DOCTOR): Okay: temperature 37.0, pulse 112, BP is 118 over 81, SpO2 98 percent on room air.
+[SEG0032] person_1 (PATIENT): Is that alright, doctor?
+[SEG0033] person_2 (DOCTOR): Don't worry, I'll go through it in a moment.
+[SEG0034] person_2 (DOCTOR): okay, I need to examine you for this
+[SEG0035] person_2 (DOCTOR): Stay still while I have a look.
+[SEG0036] person_2 (DOCTOR): heart sounds are normal, I don't hear any murmur
+[SEG0037] person_2 (DOCTOR): stay still while I have a look
+[SEG0038] person_2 (DOCTOR): Your eyelids are pale inside.
+[SEG0039] person_2 (DOCTOR): Okay, finished.
+[SEG0040] person_2 (DOCTOR): Let me tell you where I've got to. It's hard to say. Anaemia of some kind is one possibility and a vitamin deficiency another, and I'd rather not commit yet. We should do a full blood count for pallor.
+[SEG0041] person_1 (PATIENT): Mm, okay.
+[SEG0042] person_2 (DOCTOR): We'll begin with ferrous sulfate, 200 milligrams, once a day, for three months. You take it it by mouth. That's for possible iron deficiency.
+[SEG0043] person_1 (PATIENT): fine, I'll start it
+[SEG0044] person_2 (DOCTOR): Iron can darken the stools and bother the stomach, so take it after food. The thing that would worry me is if the symptoms get worse. If that happens, go to emergency.
+[SEG0045] person_1 (PATIENT): Yes, I'll keep that in mind.
+[SEG0046] person_2 (DOCTOR): see me again in two weeks
+[SEG0047] person_1 (PATIENT): okay, um, see you then
+[SEG0048] person_2 (DOCTOR): How would you describe the plan, so we're on the same page?
+[SEG0049] person_1 (PATIENT): So, um, I take the ferrous sulfate, 200 milligrams, once a day and come back in two weeks. Is that right?
+[SEG0050] person_2 (DOCTOR): Yes, exactly right. That's everything from me. Any other questions?
+[SEG0051] person_1 (PATIENT): thanks so much, doctor
+
+JSON:

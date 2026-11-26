@@ -1,0 +1,50 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00753)
+[SEG0001] person_3 (CAREGIVER): Morning, doctor. I'm Rosa, I'm Mr Quinn's carer, and this is his son, Danny. We're worried about his tiredness and his skin.
+[SEG0002] person_2 (DOCTOR): Hello Rosa, hello Danny, hello Mr Quinn. Tell me what you've noticed. ~
+[SEG0003] person_1 (PATIENT): I'm fine. A bit tired, that's all.
+[SEG0004] person_4 (FAMILY_MEMBER): He's more than a bit tired, Dad. He's been exhausted for months, and his skin is going dark, especially his hands, and around his elbows.
+[SEG0005] person_2 (DOCTOR): Mr Quinn, when did the tiredness start?
+[SEG0006] person_1 (PATIENT): Oh, I couldn't say, I've been slow for a while.
+[SEG0007] person_2 (DOCTOR): And the darker skin, did you notice it, when did it begin?
+[SEG0008] person_1 (PATIENT): I haven't noticed it. Danny's the one who points it out. I couldn't tell you when.
+[SEG0009] person_3 (CAREGIVER): I noticed it in the spring, in his palm creases, but I'm not sure when exactly.
+[SEG0010] person_2 (DOCTOR): I'll note that none of you can pin it down. Mr Quinn, any dizziness, especially when you stand up?
+[SEG0011] person_1 (PATIENT): No. No dizziness.
+[SEG0012] person_3 (CAREGIVER): He does get dizzy, doctor. He held the wall twice last week, getting up from the chair.
+[SEG0013] person_4 (FAMILY_MEMBER): And he nearly fell in the bathroom.
+[SEG0014] person_2 (DOCTOR): I'll record that Mr Quinn says no, and Rosa and Danny say yes. What medicines does he take?
+[SEG0015] person_3 (CAREGIVER): Just the hydrocortisone, 10 mg in the morning and 5 mg in the afternoon, but I'm not sure he's been taking the afternoon dose.
+[SEG0016] person_2 (DOCTOR): Hydrocortisone, for what condition?
+[SEG0017] person_4 (FAMILY_MEMBER): Addison's disease, diagnosed ten years ago.
+[SEG0018] person_2 (DOCTOR): And is there anything else?
+[SEG0019] person_3 (CAREGIVER): Underactive thyroid too.
+[SEG0020] person_2 (DOCTOR): Mr Quinn, are you taking your hydrocortisone? ~
+[SEG0021] person_1 (PATIENT): Mostly. I forget the afternoon ones, I'm sure. ~
+[SEG0022] person_2 (DOCTOR): I'll check. Is there any vomiting, diarrhoea, or weight loss? ~
+[SEG0023] person_1 (PATIENT): A bit of nausea. Nothing else. ~
+[SEG0024] person_2 (DOCTOR): Let me check his chest and pulse, and I'd like to check his blood pressure sitting and standing. ~
+[SEG0025] person_3 (CAREGIVER): He's quite wobbly on his feet. ~
+[SEG0026] person_2 (DOCTOR): Right. Because of the possible dizziness, the dark skin, and the missed doses, I'd say this looks like his Addison's disease is under-treated, an adrenal problem.
+[SEG0027] person_4 (FAMILY_MEMBER): Is that dangerous? ~
+[SEG0028] person_2 (DOCTOR): It can be, if it gets worse, because a low steroid level can cause a crisis. I'd like to arrange blood tests today, to check his sodium, potassium and cortisol.
+[SEG0029] person_3 (CAREGIVER): We can do it now? ~
+[SEG0030] person_2 (DOCTOR): Yes. Please make sure he takes his hydrocortisone, including the afternoon dose, and use a pill box.
+[SEG0031] person_4 (FAMILY_MEMBER): I'll set the alarms. ~
+[SEG0032] person_2 (DOCTOR): And if he's vomiting, very dizzy, confused, or collapses, take him straight to the emergency department, and tell them he has Addison's.
+[SEG0033] person_1 (PATIENT): I carry a steroid card. ~
+[SEG0034] person_2 (DOCTOR): Good. I'd like to see you again in a week.
+[SEG0035] person_3 (CAREGIVER): We'll be there. ~
+
+JSON:

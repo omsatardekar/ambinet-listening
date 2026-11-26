@@ -1,0 +1,73 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00119)
+[SEG0001] person_1 (PATIENT): hi, doctor long queue outside, but here I am
+[SEG0002] person_2 (DOCTOR): Yes, come in, take a a seat. What can I do for you today?
+[SEG0003] person_3 (CAREGIVER): doctor, thank you for seeing us
+[SEG0004] person_2 (DOCTOR): please do. Extra information is always welcome
+[SEG0005] person_1 (PATIENT): Mainly sneezing fits. There's a couple of other things, but that's the main one.
+[SEG0006] person_2 (DOCTOR): How long have you had it?
+[SEG0007] person_1 (PATIENT): it's been going on for about three months
+[SEG0008] person_2 (DOCTOR): can you describe it a bit more for me? How strong it is, what the pattern is, what helps
+[SEG0009] person_1 (PATIENT): I'd call it severe. Dust definitely sets it off. It's a relief to finally sit down and talk about it.
+[SEG0010] person_2 (DOCTOR): any a runny nose as well?
+[SEG0011] person_1 (PATIENT): Yes, uh, for three weeks. There's itchy watery eyes as well. Um, as for itchy watery eyes, it feels mild to me.
+[SEG0012] person_2 (DOCTOR): any drug or food allergies?
+[SEG0013] person_1 (PATIENT): Hmm, there was some antibiotic, I was told I was allergic. But I couldn't tell you what it was called or what it did.
+[SEG0014] person_2 (DOCTOR): right have you ever been under the knife?
+[SEG0015] person_1 (PATIENT): yes, I had a C-section, about ten years ago
+[SEG0016] person_2 (DOCTOR): Any diagnoses you've been given before?
+[SEG0017] person_1 (PATIENT): I have eczema. I've had asthma for five years now. I took the morning off to come in today. I've got acid reflux
+[SEG0018] person_2 (DOCTOR): and apart from that?
+[SEG0019] person_2 (DOCTOR): right so acid reflux is already on your record. We'll keep that in mind today. And And your work?
+[SEG0020] person_1 (PATIENT): I drive a delivery van all day
+[SEG0021] person_2 (DOCTOR): Anything special about your diet?
+[SEG0022] person_1 (PATIENT): I try to avoid too much sugar.
+[SEG0023] person_2 (DOCTOR): alright, what about family history, any illnesses that run in the family?
+[SEG0024] person_1 (PATIENT): okay, so my brother has asthma. So, my father had a heart attack
+[SEG0025] person_2 (DOCTOR): Which tablets or creams or inhalers do you use?
+[SEG0026] person_1 (PATIENT): it's hydrocortisone cream when needed. It's Asthalin inhaler when needed for my asthma
+[SEG0027] person_3 (CAREGIVER): It's meant to be when needed, though I don't see she take it every time.
+[SEG0028] person_1 (PATIENT): it's pantoprazole 40 milligrams before breakfast for my acidity. Cetirizine 10 milligrams when it flares
+[SEG0029] person_2 (DOCTOR): Okay. Any wheezing, shortness of breath, loss of smell or rash at all?
+[SEG0030] person_1 (PATIENT): oh, no wheezing, shortness of breath, loss of smell or rash, none of it
+[SEG0031] person_2 (DOCTOR): Any facial pain?
+[SEG0032] person_1 (PATIENT): nope no facial pain
+[SEG0033] person_2 (DOCTOR): How about fever?
+[SEG0034] person_1 (PATIENT): nope, you know, no fever
+[SEG0035] person_3 (CAREGIVER): Um, actually, doctor, I did notice fever. She doesn't always say.
+[SEG0036] person_1 (PATIENT): No you know I don't think I did. Maybe a little I'm not sure.
+[SEG0037] person_2 (DOCTOR): Alright, I'll note both what you've said and what you've noticed. On the cardiac side, anything I should know?
+[SEG0038] person_1 (PATIENT): My heart's been fine, as far as I know.
+[SEG0039] person_2 (DOCTOR): let me measure a few things
+[SEG0040] person_2 (DOCTOR): just relax your arm..
+[SEG0041] person_2 (DOCTOR): okay: pressure 125 over 70, respiratory rate 14. And temperature 36.8, pulse is 75 beats a minute, SpO2 98 percent on room air
+[SEG0042] person_1 (PATIENT): is that that okay?
+[SEG0043] person_2 (DOCTOR): I'll interpret it once I've examined you
+[SEG0044] person_2 (DOCTOR): let's do the the physical part now
+[SEG0045] person_1 (PATIENT): sure
+[SEG0046] person_2 (DOCTOR): Alright, tell me if anything hurts.
+[SEG0047] person_2 (DOCTOR): Chest is clear, no wheeze.
+[SEG0048] person_1 (PATIENT): alright
+[SEG0049] person_2 (DOCTOR): Let me press here.
+[SEG0050] person_2 (DOCTOR): the inside of your nose is pale and swollen
+[SEG0051] person_2 (DOCTOR): Good, that's the examination.
+[SEG0052] person_2 (DOCTOR): from what you've told me and and what I found, I think we're dealing with allergic rhinitis at this stage a viral cold is also on my list
+[SEG0053] person_1 (PATIENT): I've been thinking the worst to be honest. Is it bad?
+[SEG0054] person_2 (DOCTOR): nothing I've seen today points to an emergency it looks like allergic rhinitis stop me if I've got anything wrong you've had sneezing fits for about three months severe and no facial pain
+[SEG0055] person_1 (PATIENT): I mean yes you've got it.
+[SEG0056] person_2 (DOCTOR): I don't need to add any tests or treatment at this point. That's it on my side. Anything unclear?
+[SEG0057] person_1 (PATIENT): okay, so I appreciate it, doctor
+[SEG0058] person_2 (DOCTOR): Alright, goodbye.
+
+JSON:

@@ -1,0 +1,53 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01940)
+[SEG0001] person_1 (DOCTOR): Hi there, the chair's free, sit down.
+[SEG0002] person_2 (PATIENT): Hi, um, thanks.
+[SEG0003] person_1 (DOCTOR): What's the problem?
+[SEG0004] person_2 (PATIENT): Actually, doctor, it's a fall and pain in my left hip. It's getting on my nerves now.
+[SEG0005] person_1 (DOCTOR): Are you taking anything regularly, including from the pharmacy?
+[SEG0006] person_2 (PATIENT): It's paracetamol, 1 gram, when needed.
+[SEG0007] person_1 (DOCTOR): Has this been going on for long?
+[SEG0008] person_2 (PATIENT): About... well, about a month.
+[SEG0009] person_1 (DOCTOR): Can you describe it a bit more for me? How strong it is, what the pattern is, what helps.
+[SEG0010] person_2 (PATIENT): Lying still helps a bit. Maybe a eight out of ten on a bad day. I wasn't sure whether to come in at all, to be honest. I took the morning off to come in today.
+[SEG0011] person_1 (DOCTOR): Have you had any numbness, chest pain or loss of consciousness?
+[SEG0012] person_2 (PATIENT): No, not a single one.
+[SEG0013] person_1 (DOCTOR): Any trouble with the waterworks?
+[SEG0014] person_2 (PATIENT): No, that's all fine.
+[SEG0015] person_1 (DOCTOR): Anything you do to stay fit?
+[SEG0016] person_2 (PATIENT): I do a yoga class on Thursdays.
+[SEG0017] person_1 (DOCTOR): Do you work outside the home?
+[SEG0018] person_2 (PATIENT): I'm a hairdresser, on my feet all day.
+[SEG0019] person_1 (DOCTOR): Right, do you live by yourself?
+[SEG0020] person_2 (PATIENT): No, I share a house with my brother.
+[SEG0021] person_1 (DOCTOR): Have you got any known allergies?
+[SEG0022] person_2 (PATIENT): Uh, yes, milk, it gives me stomach cramps.
+[SEG0023] person_1 (DOCTOR): Any medical conditions, anything you've been treated for?
+[SEG0024] person_2 (PATIENT): No, nothing I can think of.
+[SEG0025] person_3 (NURSE): Doctor, I've got the readings for you. Saturation 98 percent, BP is 121 over 82, pulse 80.
+[SEG0026] person_1 (DOCTOR): Okay, noted.
+[SEG0027] person_1 (DOCTOR): May I examine you now?
+[SEG0028] person_1 (DOCTOR): Let me feel here.
+[SEG0029] person_1 (DOCTOR): The left leg is shortened and turned outwards, and it is very painful to move.
+[SEG0030] person_1 (DOCTOR): Okay, that's enough for me. So, based on the history and the examination, I think we're dealing with a probable hip fracture at this stage.
+[SEG0031] person_2 (PATIENT): Okay, so what are the odds it's serious?
+[SEG0032] person_1 (DOCTOR): I can't promise yet, but most people with a probable hip fracture do well once it's treated properly.
+[SEG0033] person_1 (DOCTOR): I'll request blood tests, it'll help with pre-operative. We'll begin with morphine, 2.5 milligrams, now, single dose. That should help with hip pain.
+[SEG0034] person_2 (PATIENT): Fine, I'll begin it.
+[SEG0035] person_1 (DOCTOR): Lie still, I am arranging an ambulance and pain relief. Avoid taking any extra painkillers on top of what I'm prescribing without checking with us. We'll refer you to the orthopaedic team. An X-ray of the hip is something we might do if this doesn't improve in two weeks. Please come and see me straight away.
+[SEG0036] person_2 (PATIENT): Hmm, good, I'll return then.
+[SEG0037] person_1 (DOCTOR): That's everything on my side. Anything you're unsure about?
+[SEG0038] person_2 (PATIENT): Thank you, uh, that's helpful.
+
+JSON:

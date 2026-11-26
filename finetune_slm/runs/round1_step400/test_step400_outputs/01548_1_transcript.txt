@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01548)
+[SEG0001] person_1 (PATIENT): Hi doctor, am I too early?
+[SEG0002] person_2 (DOCTOR): No problem at all, come in. What's troubling you?
+[SEG0003] person_1 (PATIENT): Honestly, it's neck pain after a car crash, and my family pushed me to come.
+[SEG0004] person_2 (DOCTOR): What's on your current medicine list?
+[SEG0005] person_1 (PATIENT): I take ibuprofen, 400 milligrams, with food.
+[SEG0006] person_2 (DOCTOR): So, when did this begin?
+[SEG0007] person_1 (PATIENT): Since Monday, that's when it began.
+[SEG0008] person_2 (DOCTOR): Have you had a headache?
+[SEG0009] person_1 (PATIENT): Yes, actually.
+[SEG0010] person_2 (DOCTOR): Let me check a few things. Any loss of consciousness, weakness or chest pain?
+[SEG0011] person_1 (PATIENT): Well, no, not a single one.
+[SEG0012] person_2 (DOCTOR): And your skin, any changes there?
+[SEG0013] person_1 (PATIENT): No, skin's been fine.
+[SEG0014] person_2 (DOCTOR): What operations have you had, if any?
+[SEG0015] person_1 (PATIENT): Yes, I had a varicose vein procedure, last year.
+[SEG0016] person_2 (DOCTOR): Do you react to any medicines or foods? Any allergies?
+[SEG0017] person_1 (PATIENT): No allergies at all.
+[SEG0018] person_2 (DOCTOR): Alright, any medical conditions, anything you've been treated for?
+[SEG0019] person_1 (PATIENT): No, I've always been fairly healthy.
+[SEG0020] person_2 (DOCTOR): Tell me about your routine, work, habits, that sort of thing.
+[SEG0021] person_1 (PATIENT): My husband and I live above the shop. I look after my grandchildren most days. I'm vegetarian and have been for years.
+[SEG0022] person_2 (DOCTOR): I'll just record a few vital signs.
+[SEG0023] person_2 (DOCTOR): Keep your arm relaxed for me...
+[SEG0024] person_2 (DOCTOR): Okay: BMI works out to 21.9, pulse is 78 beats a minute, saturation 99 percent. And height 184 centimetres, weight 74 kilos, temperature is 36.8 degrees, pressure 115 over 76.
+[SEG0025] person_2 (DOCTOR): May I examine you now?
+[SEG0026] person_1 (PATIENT): Of course.
+[SEG0027] person_2 (DOCTOR): Raise your arm for me.
+[SEG0028] person_2 (DOCTOR): There is muscle tenderness either side of the neck and no tenderness over the bones.
+[SEG0029] person_1 (PATIENT): Of course.
+[SEG0030] person_2 (DOCTOR): Please sit back down.
+[SEG0031] person_2 (DOCTOR): Let me tell you where I've got to. My working impression is whiplash-type neck strain.
+[SEG0032] person_1 (PATIENT): Erm, what are the odds it's serious?
+[SEG0033] person_2 (DOCTOR): Nothing I've seen today points to an emergency. It looks like whiplash-type neck strain. Keep your neck moving gently and avoid a collar. The thing that would worry me is if you get numbness or weakness in your arms. If that happens, go to emergency.
+[SEG0034] person_1 (PATIENT): Okay, I'll look out for that.
+[SEG0035] person_2 (DOCTOR): Come back if not better in two weeks. That's everything on my side. Anything you're unsure about?
+[SEG0036] person_1 (PATIENT): No, that's all. Thanks a lot.
+
+JSON:

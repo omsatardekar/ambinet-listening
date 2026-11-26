@@ -1,0 +1,79 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_02_low_mood_wife_answers)
+[SEG0001] person_1 (DOCTOR): Hm. I'm not telling you off, I'd just have liked to know. Was anyone aware?
+[SEG0002] person_2 (FAMILY_MEMBER): I only found out in the summer, when I found the box in the drawer, full.
+[SEG0003] person_3 (PATIENT): It's my body.
+[SEG0004] person_2 (FAMILY_MEMBER): I know it is, love.
+[SEG0005] person_1 (DOCTOR): It is your body, Mr Pryce, and plenty of people stop because it feels like that. What matters is that we know. Thank you for telling me.
+[SEG0006] person_4 (UNKNOWN): Right.
+[SEG0007] person_4 (UNKNOWN): Doctor, sorry to bother you, it's the lab on line two, they said it's urgent.
+[SEG0008] person_1 (DOCTOR): Not now, please. Tell them I'll ring back in ten.
+[SEG0009] person_4 (UNKNOWN): Right, okay, sorry.
+[SEG0010] person_1 (DOCTOR): Sorry about that. Where were we. Allergies. Are you allergic to anything, any medicines?
+[SEG0011] person_3 (PATIENT): No.
+[SEG0012] person_2 (FAMILY_MEMBER): The diclofenac.
+[SEG0013] person_3 (PATIENT): That wasn't an allergy.
+[SEG0014] person_2 (FAMILY_MEMBER): Hm, he came out in a rash all over his arms, doctor, after the back thing. They put him on it, the anti-inflammatory.
+[SEG0015] person_3 (PATIENT): Um, it was hot that week. It was a heat rash.
+[SEG0016] person_2 (FAMILY_MEMBER): It was not.
+[SEG0017] person_1 (DOCTOR): Okay, um, so I'll record it as a possible reaction to diclofenac, and we'll treat it as uncertain, and that way we're safe either way. Is that fine with both of you?
+[SEG0018] person_3 (PATIENT): Whatever.
+[SEG0019] person_1 (DOCTOR): Do you smoke at the moment?
+[SEG0020] person_3 (PATIENT): Gave up. Last spring, in the, around when I stopped the other tablets actually.
+[SEG0021] person_1 (DOCTOR): Well done on that, it's a hard thing to do. Drinking?
+[SEG0022] person_3 (PATIENT): A can with my tea sometimes. Not much.
+[SEG0023] person_1 (DOCTOR): And getting out and about, do you see people?
+[SEG0024] person_3 (PATIENT): Well, uh, not much. I stay in, mostly. The wife goes to her sister's and I stay in.
+[SEG0025] person_1 (DOCTOR): Right. And work?
+[SEG0026] person_3 (PATIENT): Still going in. Logistics, warehouse supervisor. Same as before. It's just the new targets. Nobody has ever said, but they look at the numbers every morning and every morning I look at them and I think, I can't do it.
+[SEG0027] person_1 (DOCTOR): Mm-hm.
+[SEG0028] person_1 (DOCTOR): What happens when you think that?
+[SEG0029] person_3 (PATIENT): I go to the toilets and sit in there for ten minutes.
+[SEG0030] person_1 (DOCTOR): Okay.
+[SEG0031] person_2 (FAMILY_MEMBER): He didn't tell me that.
+[SEG0032] person_3 (PATIENT): Didn't want to.
+[SEG0033] person_1 (DOCTOR): How are you sleeping, Mr Pryce? Do you drop off all right?
+[SEG0034] person_3 (PATIENT): I drop off. I wake up at four though, regardless. Then I just lie there.
+[SEG0035] person_2 (FAMILY_MEMBER): He's downstairs by half past four most mornings. I hear the kettle.
+[SEG0036] person_1 (DOCTOR): And is the lying there full of thoughts, or are you simply awake?
+[SEG0037] person_3 (PATIENT): Same thing every time. The numbers. What I didn't get done the day before.
+[SEG0038] person_1 (DOCTOR): And your appetite, apart from the biscuits?
+[SEG0039] person_2 (FAMILY_MEMBER): He eats. He says he can't taste it.
+[SEG0040] person_3 (PATIENT): Everything tastes of cardboard. It's not the cooking, Jan.
+[SEG0041] person_2 (FAMILY_MEMBER): I never said it was the cooking.
+[SEG0042] person_1 (DOCTOR): Do you ever have a drink on the bad nights, more than the can with the tea?
+[SEG0043] person_3 (PATIENT): Now and again. A whisky with the football highlights, if there's any on. Not every night.
+[SEG0044] person_1 (DOCTOR): Right.
+[SEG0045] person_1 (DOCTOR): Thank you for telling us, I know it's not easy. Right, I'd like to do some of the checks now. Heart rate first, give me your wrist. Then I'll do your blood pressure and put a clip on your finger for the oxygen.
+[SEG0046] person_3 (PATIENT): Go on.
+[SEG0047] person_1 (DOCTOR): Seventy-five, nice and steady. Cuff now. Rest your arm on the desk.
+[SEG0048] person_1 (DOCTOR): One twenty-four over seventy-nine, that's perfectly good. And oxygen is ninety-eight. So physically all that looks fine to me. How are you feeling just talking about it?
+[SEG0049] person_3 (PATIENT): A bit, you know.
+[SEG0050] person_1 (DOCTOR): A bit teary?
+[SEG0051] person_3 (PATIENT): Not teary. A bit.
+[SEG0052] person_2 (FAMILY_MEMBER): Love, it's all right.
+[SEG0053] person_1 (DOCTOR): I'm not going to tell you what it is today, Mr Pryce, because I honestly don't want to guess. It could be that your mood has dropped again, with the stopping of the tablet and the pressure at work. It could be something physical that's making you worn out, like your thyroid, or low iron, those are easy to miss. So let's find out. I'd like you to have some blood tests this week, and I'm going to give you a short questionnaire about mood, which takes about five minutes, to fill in now in the waiting room.
+[SEG0054] person_3 (PATIENT): Okay.
+[SEG0055] person_3 (PATIENT): Is it the kind with the smiley faces?
+[SEG0056] person_1 (DOCTOR): Not that kind. Just nine questions, mostly tick boxes.
+[SEG0057] person_3 (PATIENT): I can do that.
+[SEG0058] person_1 (DOCTOR): And then I'd like to see you again in two weeks, with the results, and we'll talk properly about whether to go back on medication or try something else, like talking therapy. There's no hurry, no pressure. I just don't want you sitting in a toilet at work for ten minutes every morning.
+[SEG0059] person_3 (PATIENT): No. Right.
+[SEG0060] person_1 (DOCTOR): One more thing, and this is the one I said I'd come back to. If you have any thoughts of harming yourself, even briefly, you ring the surgery, or you ring the crisis line, I'll give you the number on a card. You don't wait for the two weeks.
+[SEG0061] person_3 (PATIENT): I won't.
+[SEG0062] person_2 (FAMILY_MEMBER): He will, I'll make sure.
+[SEG0063] person_1 (DOCTOR): And Mrs Pryce, if you're worried, ring us. You don't need his permission to ring.
+[SEG0064] person_2 (FAMILY_MEMBER): Thank you. Thank you, doctor. I thought he'd, I thought he'd just say he was fine.
+[SEG0065] person_3 (PATIENT): I'm fine.
+[SEG0066] person_1 (DOCTOR): Mm-hm. Let's get that questionnaire and the form for the bloods. Do you want a glass of water before you go?

@@ -1,0 +1,51 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00439)
+[SEG0001] person_1 (NURSE): All set here, doctor. Chart's updated, and I'll read the readings out when you're ready.
+[SEG0002] person_2 (DOCTOR): Perfect, thanks. Hello there, so what's the trouble?
+[SEG0003] person_3 (PATIENT): I'm here because of a routine check-up i've also had mild headaches now and then i've also had occasional tiredness
+[SEG0004] person_2 (DOCTOR): Any persistent cough, low mood, weight loss or blood in the stool?
+[SEG0005] person_3 (PATIENT): Hmm, uh, no. None of those.
+[SEG0006] person_2 (DOCTOR): Is your digestion otherwise okay?
+[SEG0007] person_3 (PATIENT): Nothing unusual, um, no.
+[SEG0008] person_2 (DOCTOR): Is your mobility otherwise okay?
+[SEG0009] person_3 (PATIENT): No, joints are fine.
+[SEG0010] person_2 (DOCTOR): Have you got any chronic problems?
+[SEG0011] person_3 (PATIENT): I've, I've had high blood pressure, yes. Diabetes, for two years
+[SEG0012] person_2 (DOCTOR): Alright, now some background about your lifestyle.
+[SEG0013] person_3 (PATIENT): I used to smoke but I quit five years ago. A beer or two most evenings, to be honest. I play badminton on Sundays. I share a flat with two friends. I'm retired now, I was a clerk for years
+[SEG0014] person_2 (DOCTOR): any medication at the moment, including things from the pharmacy?
+[SEG0015] person_3 (PATIENT): I mean, it's losartan, 50 milligrams, once a day for my blood pressure. Well, I'm on metformin, 500 milligrams, twice a day for my sugar.
+[SEG0016] person_2 (DOCTOR): Okay, keep going.
+[SEG0017] person_3 (PATIENT): Right, you know, before this I was on ramipril; that's been stopped.
+[SEG0018] person_2 (DOCTOR): Have you ever been under the knife?
+[SEG0019] person_3 (PATIENT): um, yes, I had a hernia repair, about five years back
+[SEG0020] person_1 (NURSE): Doctor, I've got the readings for you. Temperature 36.9, BP is 116 over 75, pulse 82. Respiratory rate 14.
+[SEG0021] person_2 (DOCTOR): Okay, noted.
+[SEG0022] person_2 (DOCTOR): I'll examine you now, bear with me.
+[SEG0023] person_2 (DOCTOR): let me look at this properly
+[SEG0024] person_2 (DOCTOR): Your tummy is soft with no tenderness.
+[SEG0025] person_2 (DOCTOR): Let me just check something.
+[SEG0026] person_2 (DOCTOR): Heart and lung sounds are normal.
+[SEG0027] person_2 (DOCTOR): That's fine, sit up.
+[SEG0028] person_2 (DOCTOR): Having listened and examined, I can't pin this down yet. We're looking at generally well, nothing worrying today or a tendency towards high cholesterol.
+[SEG0029] person_3 (PATIENT): Hmm, you know, is it it something serious, doctor?
+[SEG0030] person_2 (DOCTOR): I understand the worry. At the moment I'd say it's generally well, nothing worrying today, and we'll know more once the blood tests is back.
+[SEG0031] person_2 (DOCTOR): Blood tests is what I'd like next, for health screening. I'd rather check than guess, and this is the quickest way to know more. An HbA1c is what I'd like next, for health screening. Keep up regular exercise, around a hundred and fifty minutes a week, and go easy on processed food. I'm not ordering a lipid profile today. If things carry on in a month, we'll consider it
+[SEG0032] person_2 (DOCTOR): The thing that would worry me is if the symptoms get worse. If that happens, go to emergency.
+[SEG0033] person_3 (PATIENT): okay, I'll remember
+[SEG0034] person_2 (DOCTOR): We'll catch up after the results are back. Alright, I'll see you out.
+[SEG0035] person_3 (PATIENT): I think that's clear. Thank you for being so thorough.
+[SEG0036] person_2 (DOCTOR): Right, all the best.
+
+JSON:

@@ -1,0 +1,75 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00113)
+[SEG0001] person_1 (DOCTOR): Evening. Long day, I imagine. Sit down.
+[SEG0002] person_2 (PATIENT): Hi, doctor.
+[SEG0003] person_1 (DOCTOR): In your own words, what's happened?
+[SEG0004] person_2 (PATIENT): Well, you know, I'm here because of swelling in my left calf.
+[SEG0005] person_1 (DOCTOR): Since when have you had this?
+[SEG0006] person_2 (PATIENT): It's been going on for about two weeks.
+[SEG0007] person_1 (DOCTOR): Tell me a bit more about it: how bad it gets, how often, and whether anything makes it better or worse.
+[SEG0008] person_2 (PATIENT): Hmm, you know, it happens a couple of times a week. It's worse with standing. My family kept telling me to get it checked.
+[SEG0009] person_1 (DOCTOR): Anything that tends to go along with it?
+[SEG0010] person_2 (PATIENT): When it starts I tend to get pain in that calf as well.
+[SEG0011] person_2 (PATIENT): Uh, I was just going to say that the main thing is—
+[SEG0012] person_3 (NURSE): Sorry to cut in, doctor, quick question: shall I bring the trolley in now or later?
+[SEG0013] person_1 (DOCTOR): Later, thanks. Please go on.
+[SEG0014] person_4 (UNKNOWN): Mm, that's what happened, yes.
+[SEG0015] person_1 (DOCTOR): Have you had any coughing up blood, breathlessness or recent injury to the leg?
+[SEG0016] person_2 (PATIENT): No, no coughing up blood, no breathlessness, no recent injury to the leg. I did have warmth in the leg at one point, but that went away on its own.
+[SEG0017] person_1 (DOCTOR): A few quick ones: chest pain or fever?
+[SEG0018] person_2 (PATIENT): I haven't had chest pain or fever, no.
+[SEG0019] person_1 (DOCTOR): Anything different when you pass water?
+[SEG0020] person_2 (PATIENT): Nothing there, you know, no.
+[SEG0021] person_1 (DOCTOR): Any rashes or skin problems otherwise?
+[SEG0022] person_2 (PATIENT): Nothing on the skin, no.
+[SEG0023] person_1 (DOCTOR): So, any operations in the past?
+[SEG0024] person_2 (PATIENT): Okay, so I had my appendix out about eight years ago.
+[SEG0025] person_1 (DOCTOR): Any diagnoses you've been given before?
+[SEG0026] person_2 (PATIENT): I have arthritis in my knees. I'd rather know what's going on than keep guessing. Uh, I've had high blood pressure for about ten years now.
+[SEG0027] person_1 (DOCTOR): Go on.
+[SEG0028] person_2 (PATIENT): Yes, low haemoglobin.
+[SEG0029] person_1 (DOCTOR): Alright, arthritis in your knees and high blood pressure, that matches what I have here. Anything special about your diet?
+[SEG0030] person_2 (PATIENT): I try to avoid too much sugar.
+[SEG0031] person_1 (DOCTOR): Have you ever reacted badly to a medicine or food? Any allergies?
+[SEG0032] person_2 (PATIENT): So, no, nothing I'm aware of.
+[SEG0033] person_1 (DOCTOR): What medicines are you taking at the moment?
+[SEG0034] person_2 (PATIENT): It's a... um, I can't remember what it's called. It's a little pink tablet.
+[SEG0035] person_1 (DOCTOR): Right, do you remember what it's for?
+[SEG0036] person_2 (PATIENT): For the joint pain, I believe. My son sets them out for me, I just take what I'm given. I, I take iron tablets, once a day for my blood count. Paracetamol, 500 milligrams, when needed.
+[SEG0037] person_3 (NURSE): Doctor, our chart from the last visit lists it as 1000 milligrams.
+[SEG0038] person_1 (DOCTOR): I see. Is the most recent prescription on you?
+[SEG0039] person_2 (PATIENT): No, I left it at home.
+[SEG0040] person_3 (NURSE): Doctor, I've got the readings for you. Weight 58 kilos, blood pressure 133 over 72. Heart rate 117, BMI works out to 22.7, temperature is 36.7 degrees, height 160 centimetres.
+[SEG0041] person_1 (DOCTOR): Good, thank you.
+[SEG0042] person_1 (DOCTOR): I'd like to examine you now.
+[SEG0043] person_1 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0044] person_1 (DOCTOR): The right leg looks normal.
+[SEG0045] person_1 (DOCTOR): A little pressure here, tell me if it's tender.
+[SEG0046] person_1 (DOCTOR): The left calf is bigger than the right, tender along the vein.
+[SEG0047] person_1 (DOCTOR): All done, you can get dressed.
+[SEG0048] person_1 (DOCTOR): Okay, thinking it through, the most likely explanation is a possible deep vein clot. Cellulitis is also on my list.
+[SEG0049] person_2 (PATIENT): Right, doctor, is this dangerous?
+[SEG0050] person_1 (DOCTOR): I can't promise yet, but most people with a possible deep vein clot do well once it's treated properly. So, to recap quickly. You've had swelling in your left calf for about two weeks, and no chest pain or breathlessness.
+[SEG0051] person_2 (PATIENT): Yes, you've got it.
+[SEG0052] person_1 (DOCTOR): We should do a D-dimer blood test for suspected DVT.
+[SEG0053] person_5 (CLINICAL_STAFF): I can book that for Wednesday at 11:30 am.
+[SEG0054] person_1 (DOCTOR): We should do a Doppler scan of the leg for suspected DVT. The result will help us decide whether anything more is needed.
+[SEG0055] person_2 (PATIENT): Okay, so does it need any preparation?
+[SEG0056] person_1 (DOCTOR): Keep walking gently, and don't massage the calf. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Come back after the scan.
+[SEG0057] person_2 (PATIENT): I mean, um, good, I'll come back then.
+[SEG0058] person_1 (DOCTOR): Thanks for coming in.
+[SEG0059] person_2 (PATIENT): Um, nothing more from me, thanks.
+[SEG0060] person_1 (DOCTOR): Mind how you go.
+
+JSON:

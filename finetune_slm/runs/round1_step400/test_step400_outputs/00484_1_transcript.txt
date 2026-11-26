@@ -1,0 +1,65 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00484)
+[SEG0001] person_1 (PATIENT): Good afternoon, doctor, the receptionist said you'd see me now.
+[SEG0002] person_2 (DOCTOR): Yes come in take a seat. What can I do for you today?
+[SEG0003] person_1 (PATIENT): it's aching bones and muscles i thought I'd wait, but it hasn't gone
+[SEG0004] person_2 (DOCTOR): what medicines are you taking at the moment?
+[SEG0005] person_1 (PATIENT): Pantoprazole. I take it 40 milligrams maybe before breakfast.
+[SEG0006] person_2 (DOCTOR): do you have the packet or the prescription with you?
+[SEG0007] person_1 (PATIENT): not with me. I'll bring it next time. Furosemide. I take it 40 milligrams every morning for the fluid. My family kept telling me to get it checked. I looked a few things up online and that probably didn't help
+[SEG0008] person_2 (DOCTOR): How far back does it go? Just so I get the full picture.
+[SEG0009] person_1 (PATIENT): probably about two weeks yeah
+[SEG0010] person_2 (DOCTOR): how bad is it would you say?
+[SEG0011] person_1 (PATIENT): Moderate really. Uh I've also had low mood. I've also had a sore tongue for two days
+[SEG0012] person_2 (DOCTOR): okay, so. Have you had aching bones and muscles before, or is this the first time?
+[SEG0013] person_1 (PATIENT): I had a similar thing last year it went away
+[SEG0014] person_2 (DOCTOR): And fractures any of that?
+[SEG0015] person_1 (PATIENT): No, no fractures.
+[SEG0016] person_2 (DOCTOR): let me check a few things any poor diet breathlessness fever or black stools?
+[SEG0017] person_1 (PATIENT): nothing like that, no
+[SEG0018] person_2 (DOCTOR): Is your urine normal, no changes?
+[SEG0019] person_1 (PATIENT): that's normal as far as I know
+[SEG0020] person_2 (DOCTOR): how are your bowels, any trouble?
+[SEG0021] person_1 (PATIENT): hmm bowels are regular nothing odd
+[SEG0022] person_2 (DOCTOR): What about operations anything like that?
+[SEG0023] person_1 (PATIENT): I had a hernia repair about five years back
+[SEG0024] person_2 (DOCTOR): any relatives with health problems I should be aware of?
+[SEG0025] person_1 (PATIENT): Uh, my father was diabetic.
+[SEG0026] person_2 (DOCTOR): do you get any exercise?
+[SEG0027] person_1 (PATIENT): I walk for about half an hour most days
+[SEG0028] person_2 (DOCTOR): What kind of work do you do?
+[SEG0029] person_1 (PATIENT): I work on a farm, it's quite physical
+[SEG0030] person_2 (DOCTOR): alright any drug or food allergies?
+[SEG0031] person_1 (PATIENT): No allergies that I know of no.
+[SEG0032] person_2 (DOCTOR): Is there anything medical in your background?
+[SEG0033] person_1 (PATIENT): I have acid reflux. My sister suggested writing things down but I forgot. It's the the not knowing that gets to me. Yes heart failure.
+[SEG0034] person_2 (DOCTOR): Alright first the numbers if you don't mind.
+[SEG0035] person_2 (DOCTOR): hold still for me..
+[SEG0036] person_2 (DOCTOR): Okay: height 157 centimetres weight 96 kilos BMI works out to 38.9. And respiratory rate 14 pressure 111 over 70 saturation 99 percent temperature 36.6 heart rate 71.
+[SEG0037] person_2 (DOCTOR): right let me check a few things physically
+[SEG0038] person_2 (DOCTOR): Let me press here.
+[SEG0039] person_2 (DOCTOR): the tongue looks smooth and a little red
+[SEG0040] person_2 (DOCTOR): hold that position for me
+[SEG0041] person_2 (DOCTOR): gentle pressure over the shin bone is tender
+[SEG0042] person_2 (DOCTOR): Right, you can sit back down.
+[SEG0043] person_2 (DOCTOR): I'm sending you for a vitamin B12 level because of tingling and tiredness i want a vitamin D level done that's for bone aches the result will help us decide whether anything more is needed
+[SEG0044] person_1 (PATIENT): Will it hurt?
+[SEG0045] person_2 (DOCTOR): I'm gonna order a full blood count for fatigue. I'd rather check than guess and this is the quickest way to know more.
+[SEG0046] person_1 (PATIENT): does it need any preparation?
+[SEG0047] person_2 (DOCTOR): I'll start you on vitamin D, 60000 units, once a week, for eight weeks. That's for possible deficiency. Some midday sunlight on the arms for fifteen minutes helps. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose.
+[SEG0048] person_1 (PATIENT): Understood.
+[SEG0049] person_2 (DOCTOR): see me again in two months okay, we're done for today take care
+[SEG0050] person_1 (PATIENT): alright, uh, thanks. Bye for now
+
+JSON:

@@ -1,0 +1,59 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 01482)
+[SEG0001] person_1 (DOCTOR): come in, have a seat by the desk. What do you need help with?
+[SEG0002] person_2 (PATIENT): doctor it's my face drooping on one side it's getting on my nerves now
+[SEG0003] person_1 (DOCTOR): Right, what's the timeline, when did it it begin?
+[SEG0004] person_2 (PATIENT): It's It's been going on for one week.
+[SEG0005] person_1 (DOCTOR): is it accompanied by anything?
+[SEG0006] person_2 (PATIENT): It It usually comes with slurred speech. Oh, and weakness in my right arm. The slurred speech? That's been for about a week.
+[SEG0007] person_1 (DOCTOR): Let me take your readings now.
+[SEG0008] person_1 (DOCTOR): nearly done with the the readings..
+[SEG0009] person_1 (DOCTOR): Okay: pulse is 75 beats a a minute BP is 163 over 103 respiratory rate 15.
+[SEG0010] person_2 (PATIENT): is that that normal?
+[SEG0011] person_1 (DOCTOR): we'll go over that shortly. A few quick ones: loss of consciousness or fever?
+[SEG0012] person_2 (PATIENT): No loss of consciousness or fever, none of it.
+[SEG0013] person_1 (DOCTOR): nothing like seizure?
+[SEG0014] person_2 (PATIENT): No seizure, thankfully.
+[SEG0015] person_1 (DOCTOR): any change in your bowel habit or your stomach generally?
+[SEG0016] person_2 (PATIENT): Hmm, no, all normal there.
+[SEG0017] person_1 (DOCTOR): What do you take on a normal day?
+[SEG0018] person_2 (PATIENT): I take lisinopril, 10 milligrams, maybe, once a day for my pressure
+[SEG0019] person_1 (DOCTOR): alright, is the packet here, or the prescription?
+[SEG0020] person_2 (PATIENT): no, it's at home
+[SEG0021] person_1 (DOCTOR): what line of work are you in?
+[SEG0022] person_2 (PATIENT): I'm a bus driver, so I sit for long hours
+[SEG0023] person_1 (DOCTOR): right how are your meals?
+[SEG0024] person_2 (PATIENT): I grab fast food at lunch most days
+[SEG0025] person_1 (DOCTOR): are you on your own at home?
+[SEG0026] person_2 (PATIENT): I live with my elderly mother
+[SEG0027] person_1 (DOCTOR): tell me about any past illnesses or ongoing conditions
+[SEG0028] person_2 (PATIENT): I've had high blood pressure, yes.
+[SEG0029] person_1 (DOCTOR): mm okay
+[SEG0030] person_2 (PATIENT): I have heart disease
+[SEG0031] person_1 (DOCTOR): right, right
+[SEG0032] person_1 (DOCTOR): let me ask about allergies, anything at all?
+[SEG0033] person_2 (PATIENT): I've never had an allergy.
+[SEG0034] person_1 (DOCTOR): Have you been to theatre before?
+[SEG0035] person_2 (PATIENT): I had a triple bypass eight years ago
+[SEG0036] person_1 (DOCTOR): So based on your history I don't have a clear answer today: a possible stroke, within the treatment window is possible and so is a migraine with aura. I'm going to order an urgent CT scan of the head for possible stroke. The result will help us decide whether anything more is needed. I'd like to arrange a blood sugar test for stroke symptoms. It's a routine test and it'll give us a much clearer picture.
+[SEG0037] person_2 (PATIENT): when would that take place?
+[SEG0038] person_1 (DOCTOR): Call an ambulance now, you need hospital immediately. I'd like you to see the stroke team as well, and I'll write the referral. And please bring the latest prescription or the medicine boxes to the next visit, so we can settle the dose. Please don't wait if the symptoms change. That's when to be seen urgently. Let's review you straight away.
+[SEG0039] person_2 (PATIENT): that's fine with me
+[SEG0040] person_1 (DOCTOR): How would you describe the the plan, so we're on the same page?
+[SEG0041] person_2 (PATIENT): so so I come back straight away. Is that right?
+[SEG0042] person_1 (DOCTOR): Yes, exactly right. Right, that's the plan. Do you want to ask me anything?
+[SEG0043] person_2 (PATIENT): Okay, that makes sense. Thanks for explaining.
+[SEG0044] person_1 (DOCTOR): Goodbye for now.
+
+JSON:

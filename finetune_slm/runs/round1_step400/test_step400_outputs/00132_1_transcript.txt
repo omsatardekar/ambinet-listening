@@ -1,0 +1,49 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter 00132)
+[SEG0001] person_1 (PATIENT): Hi, doctor, I brought my bag, is it fine to leave it here?
+[SEG0002] person_2 (DOCTOR): Yes, do sit. Tell me what's been happening.
+[SEG0003] person_1 (PATIENT): It's dark marks after they heal. I thought I'd wait, but it hasn't gone.
+[SEG0004] person_2 (DOCTOR): Roughly when did it start?
+[SEG0005] person_1 (PATIENT): It's, It's been about three months, I'm fairly sure.
+[SEG0006] person_2 (DOCTOR): Okay, how much is it bothering you?
+[SEG0007] person_1 (PATIENT): Mild, really. And there's oily skin as well, two years now.
+[SEG0008] person_2 (DOCTOR): Are there any allergies on your record that I should check?
+[SEG0009] person_1 (PATIENT): No allergies.
+[SEG0010] person_2 (DOCTOR): Moving on to your background, any past medical history?
+[SEG0011] person_1 (PATIENT): I've had gout, yes.
+[SEG0012] person_2 (DOCTOR): Mhm. Alright, gout, that matches what I have here. What's your job?
+[SEG0013] person_1 (PATIENT): I teach at a primary school.
+[SEG0014] person_2 (DOCTOR): What do you do to keep active?
+[SEG0015] person_1 (PATIENT): I cycle to work most mornings.
+[SEG0016] person_2 (DOCTOR): What medicines do you take regularly?
+[SEG0017] person_1 (PATIENT): Allopurinol. I take it 100 milligrams, once a day.
+[SEG0018] person_2 (DOCTOR): Have you had any previous surgeries?
+[SEG0019] person_1 (PATIENT): No, nothing like that.
+[SEG0020] person_2 (DOCTOR): A few quick ones: fever, excess hair growth or new face cream?
+[SEG0021] person_1 (PATIENT): No fever, excess hair growth or new face cream, none of it.
+[SEG0022] person_2 (DOCTOR): Have you noticed any weakness, or anything odd with your balance?
+[SEG0023] person_1 (PATIENT): Uh, no weakness or anything.
+[SEG0024] person_2 (DOCTOR): Is your urine normal, no changes?
+[SEG0025] person_1 (PATIENT): Nothing there, no.
+[SEG0026] person_2 (DOCTOR): First the numbers, if you don't mind.
+[SEG0027] person_2 (DOCTOR): Rest your hand here...
+[SEG0028] person_2 (DOCTOR): Okay: SpO2 97 percent on room air, pressure 112 over 68, pulse is 70 beats a minute. Going by what you've described, the most likely explanation is moderate acne. I want to be honest that this is an impression, not a final answer. Let me just check I've got this right. You've had dark marks after they heal for about three months, mild, and no excess hair growth or new face cream.
+[SEG0029] person_1 (PATIENT): Yes, that's right.
+[SEG0030] person_2 (DOCTOR): What I'm giving you is doxycycline, 100 milligrams, once a day, for six weeks. That should help with acne. It takes six to eight weeks to see the difference, so please don't give up in the first fortnight. Don't squeeze them, that's how the marks stay. If the symptoms get worse, or you feel really unwell, please come to the emergency department.
+[SEG0031] person_1 (PATIENT): Yes, I'll watch for that.
+[SEG0032] person_2 (DOCTOR): Come back in six weeks. Look after yourself.
+[SEG0033] person_1 (PATIENT): No questions. Thank you.
+[SEG0034] person_2 (DOCTOR): Alright, mind how you go.
+
+JSON:
