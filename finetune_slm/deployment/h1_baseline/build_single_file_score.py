@@ -18,7 +18,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]                                   # repository root
 OUT = HERE / "code_bundle"
-H1_PROMPT = ROOT / "finetune_slm" / "experiments" / "qwen3_0.6b_baseline" / "EXP_008_QWEN3_0.6B_HYBRID_P02_S1" / "prompts" / "H1_hybrid_prompt.txt"
+H1_PROMPT = ROOT / "finetune_slm" / "experiments" / "qwen3_0.6b" / "EXP_008_QWEN3_0.6B_HYBRID_P02_S1" / "prompts" / "H1_hybrid_prompt.txt"
 H1_SHA = "dc10ba065c9f1acaa237d106bd97b451ddfe1efcd94117b727d6585511f79cd8"
 
 

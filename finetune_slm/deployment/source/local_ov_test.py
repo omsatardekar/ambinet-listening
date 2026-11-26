@@ -9,7 +9,7 @@ sys.path.insert(0, str(ROOT / "finetune_slm" / "deployment" / "source" / os.envi
 import score
 score._state.update(model_dir=score._find_model_dir(), device=a.device, ready=True)
 assert score._sha256(score._find_model_dir() / "openvino_model.bin") == score.EXPECTED_WEIGHTS_SHA256, "weights hash"
-ids = sorted(p.stem.replace("encounter_", "") for p in (ROOT / "finetune_slm/experiments/qwen3_0.6b_baseline/EXP_008_QWEN3_0.6B_HYBRID_P02_S1/outputs/H1_main30/parsed_predictions/H1_main30").glob("encounter_*.json"))[: a.n]
+ids = sorted(p.stem.replace("encounter_", "") for p in (ROOT / "finetune_slm/experiments/qwen3_0.6b/EXP_008_QWEN3_0.6B_HYBRID_P02_S1/outputs/H1_main30/parsed_predictions/H1_main30").glob("encounter_*.json"))[: a.n]
 out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
 for eid in ids:
     if (out / f"{eid}_summary.json").exists(): continue

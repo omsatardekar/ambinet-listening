@@ -29,8 +29,8 @@ try:                                                                            
 except ImportError:
     sys.modules["dotenv"] = types.SimpleNamespace(load_dotenv=lambda *a, **k: False)
 
-EXP8 = ROOT / "finetune_slm" / "experiments" / "qwen3_0.6b_baseline" / "EXP_008_QWEN3_0.6B_HYBRID_P02_S1"
-EXP2 = ROOT / "finetune_slm" / "experiments" / "qwen3_0.6b_baseline" / "EXP_002_QWEN3_0.6B_GPU_DIRECT"
+EXP8 = ROOT / "finetune_slm" / "experiments" / "qwen3_0.6b" / "EXP_008_QWEN3_0.6B_HYBRID_P02_S1"
+EXP2 = ROOT / "finetune_slm" / "experiments" / "qwen3_0.6b" / "EXP_002_QWEN3_0.6B_GPU_DIRECT"
 PROMPT_FILE = EXP8 / "prompts" / "H1_hybrid_prompt.txt"
 FREEZE = EXP8 / "config" / "H1_FREEZE.json"
 MODEL_DIR = EXP2 / "models" / "Qwen3-0.6B-ov-fp16"

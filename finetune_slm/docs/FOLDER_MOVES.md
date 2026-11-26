@@ -130,3 +130,9 @@ Now `finetune_slm/archive/office_laptop_transfer_snapshot_2026-11-16/` and `offi
 * `_recovered_archives/` (two partial `.zip.recovered` files of the dataset and the voice models) is now `finetune_slm/archive/_recovered_archives/`.
 * `kernel.errors.txt` (an OpenVINO GPU-compiler error log) is now `finetune_slm/experiments/qwen3_1.7b_track/kernel.errors.txt`.
 * The empty folder `AppData/` was removed (it held no files).
+
+## 2026-11-26: two folder names shortened (Windows 260-character path limit)
+A clone into `C:\Users\...\Desktop\OMKAR\ambinet-listening` failed to check out the longest files (220 characters; 100 of them were over the limit once the clone prefix was added). Renamed:
+* `finetune_slm/experiments/qwen3_0.6b_baseline/` -> `finetune_slm/experiments/qwen3_0.6b/`
+* `.../earlier_experiments/` -> `.../earlier/` (so `finetune_slm/experiments/qwen3_0.6b/earlier/EXP_001, 003 to 007`)
+The longest path in the repository is now 199 characters, which fits a clone location of up to about 60 characters. Wherever this document or an older report says `qwen3_0.6b_baseline` or `earlier_experiments`, read the new names. Code, tests and live documents were updated; experiment files and the numbered report sections 1 to 36 keep their original wording.

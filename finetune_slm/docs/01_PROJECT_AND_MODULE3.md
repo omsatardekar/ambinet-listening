@@ -28,7 +28,7 @@ Module 4 reads only the Module 3 output (a decision of the project owner, 2026-1
 
 ## 3. Why a small model (Qwen3-0.6B)
 * The Module 3 model is hosted as an **Azure ML endpoint on CPU** (OpenVINO, FP16); the application only knows the endpoint URL and key, so a better model can be swapped in without changing the application.
-* The project mentor chose **Qwen3-0.6B** for the final track (recorded in `experiments/qwen3_0.6b_baseline/EXP_008.../README.md`). Measured reasons in our own logs: the 0.6B model peaks at about 3.1 GB of memory, while the 1.7B runs needed an 8 GiB memory gate and a 30-encounter run took about 8 to 9 hours on the same machine (document 03).
+* The project mentor chose **Qwen3-0.6B** for the final track (recorded in `experiments/qwen3_0.6b/EXP_008.../README.md`). Measured reasons in our own logs: the 0.6B model peaks at about 3.1 GB of memory, while the 1.7B runs needed an 8 GiB memory gate and a 30-encounter run took about 8 to 9 hours on the same machine (document 03).
 * The price of a small model is that it makes more mistakes than a large one when only prompted. Fine-tuning is how we close that gap (next section).
 
 ## 4. Why we fine-tuned: what the prompted model did wrong

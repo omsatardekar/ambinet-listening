@@ -297,14 +297,14 @@ Do this after modules 1 and 2 work on the machine (Steps 1 to 7 above).
 
 | Folder | What it holds |
 |---|---|
-| `finetune_slm/direct_inference_baseline/` | the inference, configuration and evaluation CODE of the H1 pipeline that the app uses (the experiments EXP_001 to EXP_008 themselves now live in `finetune_slm/experiments/qwen3_0.6b_baseline/`; H1 = EXP_008). Also contains: code, outputs, reports, logs. The 0.6B OpenVINO model (1.2 GB) is in Git LFS |
+| `finetune_slm/direct_inference_baseline/` | the inference, configuration and evaluation CODE of the H1 pipeline that the app uses (the experiments EXP_001 to EXP_008 themselves now live in `finetune_slm/experiments/qwen3_0.6b/`; H1 = EXP_008). Also contains: code, outputs, reports, logs. The 0.6B OpenVINO model (1.2 GB) is in Git LFS |
 | `finetune_slm/` | **everything about the Module 3 fine-tuning and its deployment** (data, scripts that go to the GPU VM, training runs and results, evaluation, the two deployable models with their scoring files, the earlier experiments including the Qwen3-1.7B track, the report). Start with `finetune_slm/README.md` |
 | `finetune_slm/evaluation/judge_eval/` | the LLM-as-judge evaluation of all runs (`METHODOLOGY.md`, `REPORT.md`, results) |
 | `finetune_slm/archive/dataset_v2_batch_001_corrected/`, `.../dataset_v2_batch_001/` (superseded by `finetune_slm/data/round1_synthetic/`) | the synthetic encounters (Batch 001 and Batch 002, 500 each) with paired transcripts and ground-truth labels, validation reports |
 | `finetune_slm/deployment/h1_baseline/` | how the 0.6B model is hosted on Azure ML (scoring script, environment, step-by-step guide) |
 | `finetune_slm/docs/MODULE3_FINETUNING_FOCUS.md` | the failure classes seen in six live runs, what the fine-tuning has to cover, and the checks to measure it |
 | `PROJECT_DOCUMENTATION_AND_PRESENTATION/` | the master experiment report, fine-tuning roadmap and the metrics comparison table (CSV) |
-| `archive/` | obsolete experiments, kept for the record |
+| `finetune_slm/archive/` | superseded datasets and obsolete experiments, kept for the record (the large copies are not in Git) |
 
 ---
 

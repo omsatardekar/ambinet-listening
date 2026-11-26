@@ -28,11 +28,11 @@ Nothing needs to be configured afterwards: the backend finds `.venv-extraction` 
 
 * **Device:** GPU if OpenVINO sees one (Intel GPU: what every EXP_008 number was measured on), otherwise CPU, which works but is slower. Force with `EXTRACTION_DEVICE=CPU|GPU`.
 * **Memory:** a job does not start below 3.5 GiB of available RAM (`EXTRACTION_H1_MIN_AVAILABLE_RAM_GIB`); the 0.6B model peaks at about 3.1 GB.
-* **Model weights:** `finetune_slm/experiments/qwen3_0.6b_baseline/EXP_002_QWEN3_0.6B_GPU_DIRECT/models/Qwen3-0.6B-ov-fp16/` (1.2 GB, Git LFS). If the folder was shared as a zip, the weights are already inside; if only pointer files arrived, run `git lfs pull`.
+* **Model weights:** `finetune_slm/experiments/qwen3_0.6b/EXP_002_QWEN3_0.6B_GPU_DIRECT/models/Qwen3-0.6B-ov-fp16/` (1.2 GB, Git LFS). If the folder was shared as a zip, the weights are already inside; if only pointer files arrived, run `git lfs pull`.
 * The first run on a device compiles the model (cached in `extraction_data/ov_cache`), so it is slower than later runs.
 
 ## What is frozen (checked by the worker before any model is loaded)
-* Prompt `finetune_slm/experiments/qwen3_0.6b_baseline/EXP_008_QWEN3_0.6B_HYBRID_P02_S1/prompts/H1_hybrid_prompt.txt`, SHA-256 `dc10ba065c9f1acaa237d106bd97b451ddfe1efcd94117b727d6585511f79cd8` (`config/H1_FREEZE.json`).
+* Prompt `finetune_slm/experiments/qwen3_0.6b/EXP_008_QWEN3_0.6B_HYBRID_P02_S1/prompts/H1_hybrid_prompt.txt`, SHA-256 `dc10ba065c9f1acaa237d106bd97b451ddfe1efcd94117b727d6585511f79cd8` (`config/H1_FREEZE.json`).
 * Model files: sizes and the SHA-256 of `openvino_model.bin` against `EXP_002_.../conversion_record.json`.
 * Generation: greedy, thinking off, `max_new_tokens` 6144, a fresh pipeline per encounter — identical to the EXP_008 run. The model output is parsed with the existing parser and checked with the existing schema validator; it is never repaired or rewritten.
 

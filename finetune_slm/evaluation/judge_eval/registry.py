@@ -9,8 +9,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
-B06 = "finetune_slm/experiments/qwen3_0.6b_baseline/earlier_experiments"
-B06H = "finetune_slm/experiments/qwen3_0.6b_baseline"      # EXP_008 (H1) and EXP_002 sit at the top level
+B06 = "finetune_slm/experiments/qwen3_0.6b/earlier"
+B06H = "finetune_slm/experiments/qwen3_0.6b"      # EXP_008 (H1) and EXP_002 sit at the top level
 B17 = "finetune_slm/experiments/qwen3_1.7b_track/experiments"
 E3 = f"{B06}/EXP_003_QWEN3_0.6B_OPENVINO_GPU_DIRECT"
 E4 = f"{B06}/EXP_004_QWEN3_0.6B_PROMPT_ENGINEERING"

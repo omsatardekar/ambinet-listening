@@ -20,7 +20,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 VENV = ROOT / ".venv-extraction"
 REQUIREMENTS = ROOT / "clinical_extraction" / "requirements-extraction.txt"
-MODEL_DIR = ROOT / "finetune_slm" / "experiments" / "qwen3_0.6b_baseline" / "EXP_002_QWEN3_0.6B_GPU_DIRECT" / "models" / "Qwen3-0.6B-ov-fp16"
+MODEL_DIR = ROOT / "finetune_slm" / "experiments" / "qwen3_0.6b" / "EXP_002_QWEN3_0.6B_GPU_DIRECT" / "models" / "Qwen3-0.6B-ov-fp16"
 WORKER = ROOT / "clinical_extraction" / "h1_worker.py"
 
 

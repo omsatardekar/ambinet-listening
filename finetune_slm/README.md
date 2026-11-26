@@ -1,6 +1,6 @@
 # finetune_slm: Module 3 fine-tuning of Qwen3-0.6B (clinical information extraction)
 
-Everything about training, evaluating and deploying the fine-tuned extraction model is in this folder. The application code (backend, frontend, `clinical_extraction/`) stays outside; it only reads the two things it needs from here (the H1 prompt and the OpenVINO runtime under `experiments/qwen3_0.6b_baseline/`).
+Everything about training, evaluating and deploying the fine-tuned extraction model is in this folder. The application code (backend, frontend, `clinical_extraction/`) stays outside; it only reads the two things it needs from here (the H1 prompt and the OpenVINO runtime under `experiments/qwen3_0.6b/`).
 
 **Start with the reading guide:** [`docs/00_INDEX.md`](docs/00_INDEX.md) (seven short reports: project and Module 3, datasets, models and earlier experiments, training rounds 1 to 3, the LLM judge and the final selection). **Chronological working report:** [`docs/FINETUNING_TRAINING_REPORT.md`](docs/FINETUNING_TRAINING_REPORT.md). **Where every file used to be:** [`docs/FOLDER_MOVES.md`](docs/FOLDER_MOVES.md).
 
@@ -41,7 +41,7 @@ finetune_slm/
     h1_baseline/             the previous (H1) hosting package, kept for rollback
   direct_inference_baseline/ the inference / configuration / evaluation code of the H1 pipeline; the app imports it (its workers add finetune_slm/ to the import path)
   experiments/
-    qwen3_0.6b_baseline/     EXP_008 (the H1 hybrid prompt used by the app) and EXP_002 (OpenVINO runtime and converted model used by the app) at the top level; earlier_experiments/ holds EXP_001, 003 to 007
+    qwen3_0.6b/     EXP_008 (the H1 hybrid prompt used by the app) and EXP_002 (OpenVINO runtime and converted model used by the app) at the top level; earlier/ holds EXP_001, 003 to 007
     qwen3_1.7b_track/        the Qwen3-1.7B track (EXP_001 direct inference, EXP_002 prompting)
   docs/                      the training report, the failure-class analysis, FOLDER_MOVES.md
   archive/                   superseded and duplicate material (nothing was deleted): the first dataset, the two batch folders, zip/tar copies, transfer tarballs

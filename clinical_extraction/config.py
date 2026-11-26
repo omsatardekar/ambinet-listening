@@ -76,7 +76,7 @@ def extraction_python() -> Path | None:
     value = os.getenv(ENV_EXTRACTION_PYTHON, "").strip()
     if value:
         return Path(value)
-    for venv in (ROOT / ".venv-extraction", ROOT / "finetune_slm" / "experiments" / "qwen3_0.6b_baseline" / "EXP_002_QWEN3_0.6B_GPU_DIRECT" / "env_openvino"):
+    for venv in (ROOT / ".venv-extraction", ROOT / "finetune_slm" / "experiments" / "qwen3_0.6b" / "EXP_002_QWEN3_0.6B_GPU_DIRECT" / "env_openvino"):
         py = _venv_python(venv)
         if py.exists():
             return py

@@ -1,6 +1,6 @@
 # 03. The two models (Qwen3-0.6B and Qwen3-1.7B) and every experiment before fine-tuning
 
-This document explains the two base models, the common setup of the experiments, each experiment (what was tried, what was frozen, what changed, what came out), and why the project moved from prompting to fine-tuning. The folders are `experiments/qwen3_0.6b_baseline/` and `experiments/qwen3_1.7b_track/`.
+This document explains the two base models, the common setup of the experiments, each experiment (what was tried, what was frozen, what changed, what came out), and why the project moved from prompting to fine-tuning. The folders are `experiments/qwen3_0.6b/` and `experiments/qwen3_1.7b_track/`.
 
 ## 1. The two models
 

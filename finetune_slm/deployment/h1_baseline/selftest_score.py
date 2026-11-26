@@ -12,7 +12,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]                                   # repository root
 req = json.loads((HERE / "sample_request.json").read_text(encoding="utf-8"))
 compact = req["compact_transcript"]
-stored = json.loads((ROOT / "finetune_slm/experiments/qwen3_0.6b_baseline/EXP_008_QWEN3_0.6B_HYBRID_P02_S1/outputs/H1_main30/raw_predictions/H1_main30/encounter_00037.json").read_text(encoding="utf-8"))
+stored = json.loads((ROOT / "finetune_slm/experiments/qwen3_0.6b/EXP_008_QWEN3_0.6B_HYBRID_P02_S1/outputs/H1_main30/raw_predictions/H1_main30/encounter_00037.json").read_text(encoding="utf-8"))
 transcript37 = json.loads((ROOT / "finetune_slm/archive/dataset_v2_batch_001_corrected/output/inputs/encounter_00037.json").read_text(encoding="utf-8"))
 
 sys.path.insert(0, str(HERE / "code_bundle"))
@@ -36,7 +36,7 @@ real = {"text": stored["response_text"], "finish_reason": stored["generation"]["
         "output_tokens": stored["generation"]["completion_tokens"], "generation_seconds": 0.1}
 res = score.run_extraction(transcript37, generate=lambda p: real)
 assert res["ok"], res["metadata"]
-expected = json.loads((ROOT / "finetune_slm/experiments/qwen3_0.6b_baseline/EXP_008_QWEN3_0.6B_HYBRID_P02_S1/outputs/H1_main30/parsed_predictions/H1_main30/encounter_00037.json").read_text(encoding="utf-8"))
+expected = json.loads((ROOT / "finetune_slm/experiments/qwen3_0.6b/EXP_008_QWEN3_0.6B_HYBRID_P02_S1/outputs/H1_main30/parsed_predictions/H1_main30/encounter_00037.json").read_text(encoding="utf-8"))
 assert res["extraction"] == expected, "the endpoint pipeline must return exactly the parser output of the experiment"
 assert res["metadata"]["prompt_sha256"] == score.EXPECTED_PROMPT_SHA256 and res["metadata"]["evidence_citations"].startswith("not requested")
 cut = score.run_extraction(compact, generate=lambda p: {**real, "text": real["text"][:40], "finish_reason": "length"})
