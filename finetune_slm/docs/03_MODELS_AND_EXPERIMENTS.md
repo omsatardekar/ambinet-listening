@@ -47,7 +47,7 @@ How H1 was built: all prompt work used 3 spare development ids that are not amon
 | **EXP_002 P01** | schema-guided prompt (stopped by the project owner after exactly 30 records) | strict F1 0.201 (precision 0.283, recall 0.156); judge-F1 0.523 (25 of 30 judged); P01's gain over P00 is mostly completion (more outputs finish) |
 | **EXP_002 P02 (frozen)** | P01 schema and structure unchanged, no model-written evidence, a strengthened extraction guide (4,645 template tokens) | 28 of 30 parsed (00060 and 00206 truncated), no out-of-memory, 9.25 hours; strict F1 0.258 (precision 0.323, recall 0.214); judge-F1 **0.536** (precision 0.666, recall 0.448, hallucination 0.231, critical 0.101) |
 
-Intermediate P02 attempts (a compact-schema "v2.2" and a "v3") were rejected or archived: the owner required that the P01 prompt, schema, field names and order stay unchanged and only the model-written evidence be removed (`archive/obsolete_experiments_after_P01/`).
+Intermediate P02 attempts (a compact-schema "v2.2" and a "v3") were rejected or archived: the owner required that the P01 prompt, schema, field names and order stay unchanged and only the model-written evidence be removed (`finetune_slm/archive/obsolete_experiments_after_P01/`).
 
 **Rules kept for the 1.7B track** (project owner): a free-memory gate of 8.0 GiB before the first model load (never lowered), no retries and stop on out-of-memory, only the 50 development ids ever read, and no fine-tuning of the 1.7B model.
 

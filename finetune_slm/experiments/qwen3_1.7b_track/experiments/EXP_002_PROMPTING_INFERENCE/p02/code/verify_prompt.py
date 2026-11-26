@@ -98,7 +98,7 @@ check("blood-pressure-like numbers in the prompt do not occur in any dev transcr
 present = {t: (t in blob) for t in terms}
 res["example_content_terms_present_in_dev_data"] = present
 check("none of the example-specific clinical terms occurs anywhere in the 50 dev transcripts or gold", not any(present.values()), str({k: v for k, v in present.items() if v}))
-prev = (EXP.parents[2] / "archive" / "obsolete_experiments_after_P01" / "_aborted_P02_run_first_prompt" / "direct_inference_1_7B" / "experiments" / "EXP_002_PROMPTING_INFERENCE" / "prompt_versions" / "P02_p01_schema_no_evidence.txt")
+prev = (EXP.parents[3] / "archive" / "obsolete_experiments_after_P01" / "_aborted_P02_run_first_prompt" / "direct_inference_1_7B" / "experiments" / "EXP_002_PROMPTING_INFERENCE" / "prompt_versions" / "P02_p01_schema_no_evidence.txt")
 if prev.exists():
     pt = prev.read_text(encoding="utf-8")
     tmpl = lambda t: t.split("Output format (")[1]

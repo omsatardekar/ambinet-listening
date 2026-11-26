@@ -120,3 +120,13 @@ Everything was moved, not copied or deleted. Old path (relative to the repositor
 
 ## 2026-11-26: the root folder `direct_inference_baseline/` moved into `finetune_slm/direct_inference_baseline/`
 It is the code package of the H1 pipeline (config, inference, evaluation, prompts, tests) and is imported by the app (`clinical_extraction/h1_worker.py`, `inference_worker.py`). The package name is unchanged; the two workers add `finetune_slm/` to the import path. `config/settings.py` now finds the project root as the folder that holds `clinical_extraction_schema.json` (the repository root, or the root of the Azure scoring bundle) and finds the frozen dataset in `finetune_slm/archive/`. The two scoring-file builders copy the package from the new place; the bundle layout is unchanged. The step-400 scoring file already deployed to Azure was not rebuilt (a rebuild differs only in `settings.py`).
+
+
+## 2026-11-26: `office_transfer_package/` (and `office_transfer_package.zip`) renamed and archived
+Now `finetune_slm/archive/office_laptop_transfer_snapshot_2026-11-16/` and `office_laptop_transfer_snapshot_2026-11-16.zip` (not in Git: 3.3 GB folder and 2.5 GB zip). It is a snapshot made on 2026-11-16 to move the Qwen3-1.7B P02 stage to another laptop (its own `README_TRANSFER.md`, `MANIFEST_SHA256.txt` and `Verify-Package.ps1` are untouched, so the old verification still works inside the folder). A comparison by name, size and SHA-256 found that almost everything in it exists elsewhere in the repository: the dataset (1,005 of 1,005 files), `direct_inference_1_7B` (262 of 262), `direct_inference_baseline` (21 of 21), the schema, the script and 10 of the 11 model files. Only its `setup/` (Windows OpenVINO setup guide), 15 files of `azure_ml/` (the 1.7B hosting yaml files and README), 9 older versions of `clinical_extraction/` files and the package's own README, manifest and verification script exist nowhere else.
+
+## 2026-11-26: more root clean-up
+* `archive/obsolete_experiments_after_P01/` (223 files, the discarded P02 attempts of the 1.7B track) is now `finetune_slm/archive/obsolete_experiments_after_P01/`. The path in `p02/code/verify_prompt.py` was adjusted (`parents[3]`).
+* `_recovered_archives/` (two partial `.zip.recovered` files of the dataset and the voice models) is now `finetune_slm/archive/_recovered_archives/`.
+* `kernel.errors.txt` (an OpenVINO GPU-compiler error log) is now `finetune_slm/experiments/qwen3_1.7b_track/kernel.errors.txt`.
+* The empty folder `AppData/` was removed (it held no files).
