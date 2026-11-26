@@ -17,7 +17,7 @@ import time
 from pathlib import Path
 from typing import Any, Callable
 
-from . import blob_sink, blob_source, evidence, remote_client
+from . import blob_sink, blob_source, evidence, postprocess, remote_client
 from .compact import CompactTranscriptError, validate_compact
 from . import config
 from .config import DRAFT_NOTICE, extraction_python
@@ -28,6 +28,26 @@ WORKER = Path(__file__).resolve().parent / "h1_worker.py"
 EVENT_TO_STATE = {"preparing": "preparing_transcript", "reading_transcript": "reading_transcript", "loading_model": "loading_model",
                   "extracting": "extracting", "validating_output": "validating_output"}
 Source = Callable[[str], "tuple[dict, dict]"]
+
+
+def _repair_mojibake(node: Any) -> int:
+    """In place: 'Â°' (UTF-8 degree sign read as Latin-1) -> '°' in every string. Returns the number of strings changed."""
+    n = 0
+    if isinstance(node, dict):
+        for k, v in node.items():
+            if isinstance(v, str) and "Â°" in v:
+                node[k] = v.replace("Â°", "°")
+                n += 1
+            else:
+                n += _repair_mojibake(v)
+    elif isinstance(node, list):
+        for i, v in enumerate(node):
+            if isinstance(v, str) and "Â°" in v:
+                node[i] = v.replace("Â°", "°")
+                n += 1
+            else:
+                n += _repair_mojibake(v)
+    return n
 
 
 class ExtractionService:
@@ -192,6 +212,16 @@ class ExtractionService:
         extraction = result.get("extraction")
         if not isinstance(extraction, dict):
             return self.store.set_state(job, "failed", "The endpoint returned no extraction.", error={"code": "endpoint_bad_response", "message": "No extraction in the endpoint result."})
+        fixed = _repair_mojibake(extraction)                                                  # the model learned "Â°C" from ~5% of its round-1 training labels
+        if fixed:
+            metadata["text_encoding_repaired"] = fixed
+            self.store.write(job_id, "metadata.json", metadata)
+        self.store.write(job_id, "extraction_model_output.json", extraction)                    # exactly what the model returned (after the encoding repair)
+        extraction, changes = postprocess.clean(extraction)
+        if changes:
+            metadata["postprocess"] = changes
+            self.store.write(job_id, "metadata.json", metadata)
+            warnings.extend(w for w in (postprocess.warning_for(c) for c in changes) if w)
         self.store.write(job_id, "extraction_raw.json", extraction)
         self._finalize(job, compact, warnings, metadata)
 
@@ -206,6 +236,14 @@ class ExtractionService:
         schema = metadata.get("schema_validation") or {}
         if schema and not schema.get("compliant"):
             warnings.append(f"schema validation reported violations: {schema.get('violation_counts')}")
+        status = metadata.get("extraction_status")                                             # set by the fine-tuned scoring file: ok | repaired | partial (absent for H1 / local)
+        if status == "partial":
+            failed = metadata.get("failed_windows") or []
+            warnings.append(f"extraction partial: {len(failed)} of {metadata.get('windows', '?')} parts of the consultation could not be read; clinician review required")
+        elif status == "repaired":
+            warnings.append("extraction repaired: the model output had to be corrected automatically; clinician review required")
+        elif metadata.get("needs_review"):
+            warnings.append("extraction flagged for clinician review")
         if metadata.get("finish_reason") == "length":
             warnings.append("generation stopped at the token limit")
         no_citations = str(metadata.get("evidence_citations") or "").startswith("not requested")       # H1 does not ask for segment ids: empty lists are expected, not a warning

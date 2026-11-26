@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]                      # repository root (portable: derived from this file)
-TRACK = ROOT / "direct_inference_1_7B"
+TRACK = ROOT / "finetune_slm/experiments/qwen3_1.7b_track"
 SCRIPTS = TRACK / "scripts"
 
 # ---- frozen P02 experiment (never edited by this module) -------------------------------------------------------------
@@ -76,7 +76,7 @@ def extraction_python() -> Path | None:
     value = os.getenv(ENV_EXTRACTION_PYTHON, "").strip()
     if value:
         return Path(value)
-    for venv in (ROOT / ".venv-extraction", ROOT / "direct_inference_baseline" / "experiments" / "EXP_002_QWEN3_0.6B_GPU_DIRECT" / "env_openvino"):
+    for venv in (ROOT / ".venv-extraction", ROOT / "finetune_slm" / "experiments" / "qwen3_0.6b_baseline" / "EXP_002_QWEN3_0.6B_GPU_DIRECT" / "env_openvino"):
         py = _venv_python(venv)
         if py.exists():
             return py

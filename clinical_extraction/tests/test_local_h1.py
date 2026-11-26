@@ -13,7 +13,7 @@ from clinical_extraction import blob_sink, config, remote_client, service as ser
 from clinical_extraction.job_store import JobStore                                              # noqa: E402
 from clinical_extraction.service import ExtractionService                                       # noqa: E402
 
-COMPACT = ROOT / "dataset_v2_batch_001_corrected" / "output" / "inputs" / "encounter_00037.json"
+COMPACT = ROOT / "finetune_slm/archive/dataset_v2_batch_001_corrected" / "output" / "inputs" / "encounter_00037.json"
 pytestmark = pytest.mark.skipif(not COMPACT.exists(), reason="fixture file missing")
 
 H1_STUB = textwrap.dedent('''

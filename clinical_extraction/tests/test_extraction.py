@@ -17,8 +17,8 @@ from clinical_extraction.compact import CompactTranscriptError, validate_compact
 from clinical_extraction.job_store import JobStore                                        # noqa: E402
 from clinical_extraction.service import ExtractionService                                 # noqa: E402
 
-COMPACT = ROOT / "dataset_v2_batch_001_corrected" / "output" / "inputs" / "encounter_00037.json"
-REFERENCE = ROOT / "direct_inference_1_7B" / "experiments" / "EXP_002_PROMPTING_INFERENCE" / "outputs" / "parsed" / "P02" / "encounter_00037.json"
+COMPACT = ROOT / "finetune_slm/archive/dataset_v2_batch_001_corrected" / "output" / "inputs" / "encounter_00037.json"
+REFERENCE = ROOT / "finetune_slm/experiments/qwen3_1.7b_track" / "experiments" / "EXP_002_PROMPTING_INFERENCE" / "outputs" / "parsed" / "P02" / "encounter_00037.json"
 pytestmark = pytest.mark.skipif(not (COMPACT.exists() and REFERENCE.exists()), reason="fixture files missing")
 
 

@@ -20,8 +20,9 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-TRACK = ROOT / "direct_inference_1_7B"
+TRACK = ROOT / "finetune_slm/experiments/qwen3_1.7b_track"
 sys.path.insert(0, str(TRACK / "scripts"))
+sys.path.insert(0, str(ROOT / "finetune_slm"))                                           # the package direct_inference_baseline lives in finetune_slm/
 
 EXPECTED_PROMPT_SHA256 = "f6d5202f26d97c2d73c9d00adbca050bc7114ad8b0272749eeff8d0757de09b0"
 PROMPT_FILE = TRACK / "experiments" / "EXP_002_PROMPTING_INFERENCE" / "prompt_versions" / "P02_p01_schema_no_evidence.txt"

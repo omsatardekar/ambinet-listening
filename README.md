@@ -1,3 +1,53 @@
+gpu connection:
+ssh -i $HOME\.ssh\qwen_vm azureuser@20.83.185.94
+source /data/finetune/venv/bin/activate
+
+
+tmux new -s train
+ detach with Ctrl+B, then D
+
+
+tmux attach -t train
+
+
+
+Yes, this is the standard way to fine-tune a small model. It is called supervised fine-tuning (SFT), with LoRA as the efficient version. Most instruction-tuned models, including Qwen's, are built this way.
+
+How it "compares" the answer
+
+It doesn't compare whole answers. It checks one token at a time, using a technique called teacher forcing.
+
+The model is shown the transcript plus the correct answer written so far.
+At each position it must predict the next token. For example, after "symptom": " it gives a probability for every possible next word.
+The loss is how little probability it gave to the token that actually appears in the label. If the correct next word got 90%, the loss is small. If it got 2%, the loss is large.
+The weights are nudged so the correct token becomes a bit more likely next time. This repeats over about 10,000 examples and many millions of tokens.
+So it never needs to decide "is this answer partially correct?". The correct label is always given, and the model is pushed toward it word by word.
+
+Your "stiffness in morning" vs "morning stiffness" question
+
+During training, nothing is judged as "also correct". The model is trained to produce exactly the label wording. If the label says morning stiffness and the model puts some probability on stiffness in morning, that probability is counted as a small error. It is not rewarded as a synonym.
+
+That sounds harsh, but it works for two reasons:
+
+Consistent labels: our 4,200 labels follow the same conventions (for example, symptoms are written in short noun-phrase form). Across thousands of examples the model learns the house style, so it rarely meets a case where two phrasings are equally likely.
+Learning the meaning too: the model also learns what to extract. When wording is uncertain, it spreads its probability across both phrasings instead of failing outright.
+So training teaches the model both what to extract and how to write it in our format.
+
+Where paraphrases are handled: evaluation
+
+The semantic matching happens after training, when we score the model:
+
+Our scorer compares items with fuzzy or semantic matching, and uses a judge for borderline cases. stiffness in morning and morning stiffness count as a match there.
+The failure-class checks (invented allergy, a vital sign not in the transcript, a stopped medicine recorded as current, and so on) look at meaning and evidence, not exact wording.
+Summary for your teammates
+
+Training: the model copies the exact wording of the label, one token at a time, and the loss measures how likely the correct next token was. This is strict.
+Evaluation: a separate step judges whether the output is correct in meaning, so paraphrases are not penalised.
+Why strict training still works: the labels all use the same style, so the model learns that style.
+The risk is real. If the labels used different wording for the same thing, the model would learn inconsistently. That is why I validated and standardised the labels across all batches before training.
+
+
+
 # Ambient Clinical Listening
 
 Talk to your patient — Ambient Clinical listens, writes the **transcript**, picks out the **clinical entities** with a small language model, and prepares the **SOAP note** with an agent.
@@ -197,7 +247,7 @@ Module 4  SOAP note: a Foundry prompt agent, from the extraction output only
 | Module | Code | Panel in the app |
 |---|---|---|
 | 1 and 2 | `backend/app/`, `scripts/`, `frontend/src/VoiceAssistant.tsx`, `prompts/agent_instructions_v2.md` | recording, upload, transcript |
-| 3 | `clinical_extraction/` (own README), `azure_ml_h1/` (hosting package), `frontend/src/ExtractionPanel.tsx` | **Clinical summary** |
+| 3 | `clinical_extraction/` (own README), `finetune_slm/deployment/h1_baseline/` (hosting package), `frontend/src/ExtractionPanel.tsx` | **Clinical summary** |
 | 4 | `soap_generation/` (own README), `prompts/soap_agent_instructions_v1.md`, `scripts/generate_soap.py`, `scripts/create_soap_agent.py`, `frontend/src/SoapPanel.tsx` | **SOAP note** |
 
 The extraction model is meant to be replaced by a fine-tuned one: only `EXTRACTION_ENDPOINT_URL` and `EXTRACTION_ENDPOINT_KEY` change. The SOAP step reads the saved extraction and nothing else, so its quality follows the extraction model's quality.
@@ -247,12 +297,12 @@ Do this after modules 1 and 2 work on the machine (Steps 1 to 7 above).
 
 | Folder | What it holds |
 |---|---|
-| `direct_inference_baseline/` | Qwen3-0.6B experiments EXP_001 to EXP_008 (CPU baseline, GPU, OpenVINO, prompt engineering, repair, simplified extraction, the hybrid prompt H1 that is deployed), code, outputs, reports, logs. The 0.6B OpenVINO model (1.2 GB) is in Git LFS |
-| `direct_inference_1_7B/` | Qwen3-1.7B track (P00, P01, P02): scripts, manifests, prompts, evaluations, reports. The 3.4 GB weights file is not in Git, see below |
-| `judge_eval/` | the LLM-as-judge evaluation of all runs (`METHODOLOGY.md`, `REPORT.md`, results) |
-| `dataset_v2_batch_001_corrected/`, `dataset_v2_batch_001/` | the synthetic encounters (Batch 001 and Batch 002, 500 each) with paired transcripts and ground-truth labels, validation reports |
-| `azure_ml_h1/` | how the 0.6B model is hosted on Azure ML (scoring script, environment, step-by-step guide) |
-| `docs/MODULE3_FINETUNING_FOCUS.md` | the failure classes seen in six live runs, what the fine-tuning has to cover, and the checks to measure it |
+| `finetune_slm/direct_inference_baseline/` | the inference, configuration and evaluation CODE of the H1 pipeline that the app uses (the experiments EXP_001 to EXP_008 themselves now live in `finetune_slm/experiments/qwen3_0.6b_baseline/`; H1 = EXP_008). Also contains: code, outputs, reports, logs. The 0.6B OpenVINO model (1.2 GB) is in Git LFS |
+| `finetune_slm/` | **everything about the Module 3 fine-tuning and its deployment** (data, scripts that go to the GPU VM, training runs and results, evaluation, the two deployable models with their scoring files, the earlier experiments including the Qwen3-1.7B track, the report). Start with `finetune_slm/README.md` |
+| `finetune_slm/evaluation/judge_eval/` | the LLM-as-judge evaluation of all runs (`METHODOLOGY.md`, `REPORT.md`, results) |
+| `finetune_slm/archive/dataset_v2_batch_001_corrected/`, `.../dataset_v2_batch_001/` (superseded by `finetune_slm/data/round1_synthetic/`) | the synthetic encounters (Batch 001 and Batch 002, 500 each) with paired transcripts and ground-truth labels, validation reports |
+| `finetune_slm/deployment/h1_baseline/` | how the 0.6B model is hosted on Azure ML (scoring script, environment, step-by-step guide) |
+| `finetune_slm/docs/MODULE3_FINETUNING_FOCUS.md` | the failure classes seen in six live runs, what the fine-tuning has to cover, and the checks to measure it |
 | `PROJECT_DOCUMENTATION_AND_PRESENTATION/` | the master experiment report, fine-tuning roadmap and the metrics comparison table (CSV) |
 | `archive/` | obsolete experiments, kept for the record |
 
@@ -264,8 +314,8 @@ Do this after modules 1 and 2 work on the machine (Steps 1 to 7 above).
 |---|---|---|
 | `.env` | secrets | copy `.env.example` and ask the project owner for the values |
 | `.venv`, `.venv-extraction`, `.../env_openvino` | virtual environments | create them (Step 4; `python -m clinical_extraction.setup_local_model` for the local extraction environment) |
-| `direct_inference_1_7B/models/Qwen3-1.7B-ov-fp16/openvino_model.bin` | 3.4 GB, over GitHub's 2 GiB Git LFS limit | recreate with `direct_inference_1_7B/scripts/convert_model.py` (see `direct_inference_1_7B/OMITTED_FROM_GIT.json` for the checksum) or copy it over from the original machine. Only needed to re-run the 1.7B experiments |
-| `**/ov_cache`, `direct_inference_1_7B/models/hf_cache` | machine-specific compile caches and a model download | regenerated automatically or by `scripts/download_model.py` |
+| `finetune_slm/experiments/qwen3_1.7b_track/models/Qwen3-1.7B-ov-fp16/openvino_model.bin` | 3.4 GB, over GitHub's 2 GiB Git LFS limit | recreate with `finetune_slm/experiments/qwen3_1.7b_track/scripts/convert_model.py` (see `finetune_slm/experiments/qwen3_1.7b_track/OMITTED_FROM_GIT.json` for the checksum) or copy it over from the original machine. Only needed to re-run the 1.7B experiments |
+| `**/ov_cache`, `finetune_slm/experiments/qwen3_1.7b_track/models/hf_cache` | machine-specific compile caches and a model download | regenerated automatically or by `scripts/download_model.py` |
 | `.tts_cache/` | cache of synthesized speech | regenerated by `scripts/ambient_tts.py` |
 | `extraction_data/`, `soap_data/`, `offline_recordings/` | local job data and your own recordings (patient-related) | created at run time |
 | `office_transfer_package/` and `*.zip` | not needed on other machines | none |
@@ -283,11 +333,11 @@ scripts/                  Transcription, reconstruction, test-speech generation 
 prompts/                  Reconstruction agent (agent_instructions_v2.md) and SOAP agent (soap_agent_instructions_v1.md) instructions
 clinical_extraction/      Module 3: extraction service, Azure/local model clients, evidence linking, tests
 soap_generation/          Module 4: SOAP service, checks, rendering, tests
-azure_ml_h1/              Hosting package for the extraction model on Azure ML
+finetune_slm/             Module 3 fine-tuning: data, GPU scripts, runs, evaluation, deployable models, experiments (see finetune_slm/README.md)
 scenarios/ and output/    20 hand-written test consultations and their generated recordings
-direct_inference_baseline/, direct_inference_1_7B/, judge_eval/, dataset_v2_batch_001*/   experiments, evaluation and datasets (see above)
+finetune_slm/direct_inference_baseline/   inference/config/evaluation code of the H1 pipeline (the app imports it; experiments are in finetune_slm/experiments/)
 tests/                    pytest suite of modules 1 and 2
-docs/                     architecture.md, output_schema.md, MODULE3_FINETUNING_FOCUS.md
+docs/                     architecture.md, output_schema.md (the fine-tuning documents are in finetune_slm/docs/)
 start_demo.ps1            One-command launcher for both services
 requirements.txt          Pinned Python runtime dependencies
 .env.example              Every setting the app reads, with no secret values

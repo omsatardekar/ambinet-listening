@@ -15,8 +15,8 @@ from clinical_extraction import blob_sink, remote_client, service as service_mod
 from clinical_extraction.job_store import JobStore                                              # noqa: E402
 from clinical_extraction.service import ExtractionService                                       # noqa: E402
 
-COMPACT = ROOT / "dataset_v2_batch_001_corrected" / "output" / "inputs" / "encounter_00037.json"
-REFERENCE = ROOT / "direct_inference_1_7B" / "experiments" / "EXP_002_PROMPTING_INFERENCE" / "outputs" / "parsed" / "P02" / "encounter_00037.json"
+COMPACT = ROOT / "finetune_slm/archive/dataset_v2_batch_001_corrected" / "output" / "inputs" / "encounter_00037.json"
+REFERENCE = ROOT / "finetune_slm/experiments/qwen3_1.7b_track" / "experiments" / "EXP_002_PROMPTING_INFERENCE" / "outputs" / "parsed" / "P02" / "encounter_00037.json"
 pytestmark = pytest.mark.skipif(not (COMPACT.exists() and REFERENCE.exists()), reason="fixture files missing")
 
 
@@ -156,6 +156,25 @@ def test_service_remote_success_saves_json_and_never_touches_local_python(tmp_pa
     ref, doc = saved[0]
     assert ref == "37" and doc["extraction"] == reference and doc["evidence"]["totals"] and doc["document_type"] == "clinical_extraction"
     assert svc.health()["inference_location"] == "azure_endpoint"
+
+
+@pytest.mark.parametrize("meta, expected", [
+    ({"extraction_status": "ok", "needs_review": False}, None),
+    ({"extraction_status": "repaired", "needs_review": True}, "extraction repaired"),
+    ({"extraction_status": "partial", "needs_review": True, "failed_windows": [2], "windows": 3}, "1 of 3 parts"),
+    ({"needs_review": True}, "flagged for clinician review"),
+])
+def test_service_remote_review_flags_become_warnings(tmp_path, monkeypatch, compact, reference, meta, expected):
+    fake = FakeEndpoint([{"job_id": "J"}, {"state": "completed"}, {"ok": True, "extraction": reference, "metadata": {"parse_status": "ok", "evidence_citations": "not requested", **meta}}])
+    svc, _ = make_service(tmp_path, compact, monkeypatch, fake)
+    job = svc.store.create("37", None)
+    svc.run_job(job["job_id"])
+    done = svc.store.load(job["job_id"])
+    text = " | ".join(done.get("warnings") or [])
+    if expected is None:
+        assert "clinician review" not in text
+    else:
+        assert expected in text and done["status"] == "completed_with_warnings"
 
 
 def test_service_remote_truncated_is_failure_and_not_saved(tmp_path, monkeypatch, compact):
