@@ -32,7 +32,7 @@ Module 4 reads only the Module 3 output (a decision of the project owner, 2026-1
 * The price of a small model is that it makes more mistakes than a large one when only prompted. Fine-tuning is how we close that gap (next section).
 
 ## 4. Why we fine-tuned: what the prompted model did wrong
-The starting point (**H1**) was Qwen3-0.6B with a long hand-engineered prompt (2,359 tokens), no training. On 30 encounters judged by an LLM judge: **judge-F1 0.352, hallucination rate 0.262, critical-error rate 0.120** (document 07).
+The starting point (**H1**) was Qwen3-0.6B with a long hand-engineered prompt (2,359 tokens), no training. On 30 encounters judged by an LLM judge: **judge-F1 0.352, hallucination rate 0.262, critical-error rate 0.120** (document 10).
 
 Six live runs on scripted consultations, checked line by line against the dialogue, gave 32 failure classes (`MODULE3_FINETUNING_FOCUS.md`, F1 to F32). The ones that matter most:
 * **Invented allergy**: a normal medicine, a supplement or an over-the-counter tablet recorded as an allergy (5 of 6 runs).
@@ -46,13 +46,14 @@ Six live runs on scripted consultations, checked line by line against the dialog
 
 Fine-tuning teaches these behaviours directly instead of asking for them in a long prompt.
 
-## 5. What we did (summary; details in documents 02 to 07)
+## 5. What we did (summary; details in documents 02 to 11)
 1. Built a **4,200-encounter synthetic dataset** with full labels, split by scenario so test scenarios never appear in training (document 02).
 2. Replaced the 2,359-token prompt with a **313-token prompt**, removed timestamps, and trained the model to write a **compact JSON** that expands losslessly to the full structure (document 02, 04).
 3. **Round 1:** LoRA fine-tuning on one NVIDIA T4, 654 steps, 18.4 hours; checkpoint chosen on validation (step 400) (document 04).
-4. Locked-test result: judge-F1 **0.933**; on natural hand-written speech it is clearly better than the baseline but lower than on the template data (document 07).
+4. Locked-test result: judge-F1 **0.933**; on natural hand-written speech it is clearly better than the baseline but lower than on the template data (document 10).
 5. **Round 2** with 529 newly written natural-style consultations, and **round 3** with a stricter subset (documents 05, 06). Neither beat round 1 on precision; round 2 raises recall.
-6. Added a **JSON repair guard** and **windowed extraction** for long consultations (documents 05, 07).
+6. **Rounds 4 and 5** (a targeted dataset from the live-test mistakes; cleaned labels trained once from the base model): neither beat step 400, which stays deployed (documents 07, 08).
+7. Added a **JSON repair guard** and **windowed extraction** for long consultations (documents 05, 09).
 7. Packaged **two deployable models** for the existing Azure ML endpoint: step 400 (round 1) and step 156 (round 2), each with its 11 model files and its own scoring file (`deployment/`).
 
 ## 6. Words used in these documents
@@ -72,13 +73,13 @@ Fine-tuning teaches these behaviours directly instead of asking for them in a lo
 | Hallucination rate | share of written facts that are unsupported or contradicted |
 | Critical-error rate | share of written facts the judge flags as dangerous (a wrong medicine, dose or allergy, or a flipped negation); the flag is noisy, so treat it as an upper estimate |
 | Valid JSON | the output can be parsed as JSON |
-| Guard | deterministic repair of invalid JSON (document 07) |
+| Guard | deterministic repair of invalid JSON (document 10) |
 | Window | one piece of a long transcript sent to the model on its own (document 05) |
 | OpenVINO FP16 | Intel's runtime and the 16-bit number format used for the deployed model; no quantisation |
 
 ## 7. Limits to state to any reviewer
 * Everything is synthetic. Labels are written by programs or by language models and checked automatically or by a second model. **No clinician reviewed any label.**
-* The judge is one model (gpt-5.4) with one rubric; it has not been calibrated against a human (document 07).
+* The judge is one model (gpt-5.4) with one rubric; it has not been calibrated against a human (document 10).
 * The very high score (0.933) is on a test set that is scenario-disjoint from training but built from the same template families. It shows the task and format are learned; it is not a measure of performance on real speech.
 * The 20 hand-written natural scenarios are the more realistic check and they use clean text, not speech-recognition output.
 

@@ -106,7 +106,7 @@ Generating is slow on this GPU: about **50 tokens per second in total, about 40 
 
 * By source batch (Test B, judge-F1 lenient / recall): batch 2 0.943 (0.935); **batch 3 (hand-written natural dialogue) 0.866 (0.826), the lowest**; batch 4 0.943; batch 5 0.940; batch 6 0.939; batch 7 0.920; batch 8 0.948; batch 9 (non-obvious cases) 0.938.
 * By section (recall / precision): vital signs 0.986 / 0.997; allergies 0.982 / 0.981; past history 0.984 / 0.985; conditions 0.982 / 1.0; follow-up 0.971 / 0.983; review of systems 0.973 / 0.981; assessment 0.964 / 0.989; negative findings 0.952 / 0.983; medications 0.945 / 0.928; social history 0.932 / 0.965; procedures and investigations 0.914 / 0.976; symptoms 0.841 / 0.872. **Weakest: clinical actions 0.836 / 0.858; physical examination 0.763 / 0.892; clinical uncertainties 0.774 / 0.752.**
-* **Six invalid outputs of 973 (0.6%)**, all stopped normally. Three broke in the same place after a `clinical_uncertainties` item (the model started a new key and closed the object without the three remaining required fields); one wrote the next object's fields inside a list. All involve a conflict or doubt between speakers. The later JSON guard repairs all six (document 07).
+* **Six invalid outputs of 973 (0.6%)**, all stopped normally. Three broke in the same place after a `clinical_uncertainties` item (the model started a new key and closed the object without the three remaining required fields); one wrote the next object's fields inside a list. All involve a conflict or doubt between speakers. The later JSON guard repairs all six (document 10).
 
 ### 9.2 Before and after on the same 30 encounters
 | | Before: H1 prompt, base model | After: fine-tuned, step 400, short prompt |

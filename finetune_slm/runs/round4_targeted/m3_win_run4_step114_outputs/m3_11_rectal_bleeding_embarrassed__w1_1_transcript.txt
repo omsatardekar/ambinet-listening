@@ -1,0 +1,84 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_11_rectal_bleeding_embarrassed)
+[SEG0001] person_1 (CAREGIVER): I'll start, Maureen, if that's all right, because you said you'd find it hard. Doctor, thanks for fitting us in. I'm Bec, I'm Maureen's support worker, I come in three mornings a week. She asked me to come because she's, well, she's got a few things she'd like to bring up but it's a bit delicate.
+[SEG0002] person_2 (PATIENT): Okay.
+[SEG0003] person_2 (PATIENT): Um. Yes. It's a bit, it's a bit embarrassing.
+[SEG0004] person_3 (DOCTOR): That's fine, Maureen, take your time, there's nothing I haven't heard before. Come in, have a seat. I'm Dr Okonkwo. And this is Jo, one of our health care assistants, she's going to sit in with us. Is that all right with you?
+[SEG0005] person_2 (PATIENT): Yes. Hello, Jo.
+[SEG0006] person_4 (CLINICAL_STAFF): Hi, Maureen. I'll just be here, I'll stay out of the way.
+[SEG0007] person_3 (DOCTOR): What would you like to tell me?
+[SEG0008] person_2 (PATIENT): It's, well. I've been, um. When I go to the toilet. There's been some, you know.
+[SEG0009] person_3 (DOCTOR): Some what?
+[SEG0010] person_2 (PATIENT): Blood.
+[SEG0011] person_3 (DOCTOR): Okay. Thank you for saying it. And where does the blood come from, do you think, is it in the toilet, or on the paper?
+[SEG0012] person_2 (PATIENT): On the paper, mostly. Bright red. A streak, or a bit more. Sometimes a few drops in the bowl.
+[SEG0013] person_3 (DOCTOR): Bright red. Not dark, not mixed in with the stool?
+[SEG0014] person_2 (PATIENT): No, it's on the outside, kind of. On top.
+[SEG0015] person_3 (DOCTOR): How long has it been happening?
+[SEG0016] person_2 (PATIENT): Oh, um. A week? Two weeks, maybe. I wasn't, I wasn't looking at first. I thought it was nothing.
+[SEG0017] person_1 (CAREGIVER): Um, she told me the Monday before last. So that'd be about ten days.
+[SEG0018] person_2 (PATIENT): Is it?
+[SEG0019] person_1 (CAREGIVER): Yeah, because that was the day you didn't want the shower chair.
+[SEG0020] person_2 (PATIENT): Oh, yes. I remember.
+[SEG0021] person_3 (DOCTOR): Okay. And is there anything else, apart from the blood?
+[SEG0022] person_2 (PATIENT): There's a lump.
+[SEG0023] person_3 (DOCTOR): Where?
+[SEG0024] person_2 (PATIENT): Down there. Just near my, um, near the back passage. It's a soft little thing. It's like a, like a grape, a small grape.
+[SEG0025] person_3 (DOCTOR): And is it painful?
+[SEG0026] person_2 (PATIENT): Well, uh, not when I touch it. But sitting. Sitting is uncomfortable. Sitting on the hard chairs. I've got a cushion now.
+[SEG0027] person_3 (DOCTOR): How long has the sitting been uncomfortable?
+[SEG0028] person_2 (PATIENT): About a week, I think. About the same time.
+[SEG0029] person_3 (DOCTOR): Okay. Would you say it's sore, burning, itchy?
+[SEG0030] person_2 (PATIENT): Hm, a bit itchy. Not so much sore. Just uncomfortable. Pressure.
+[SEG0031] person_3 (DOCTOR): And how have your bowels been? Hard stools, constipation?
+[SEG0032] person_2 (PATIENT): I was bunged up. Before. For a good few weeks, I had to strain. But that's gone, it's been all right since I started the, the prunes.
+[SEG0033] person_1 (CAREGIVER): Mm.
+[SEG0034] person_1 (CAREGIVER): Prune juice. Every morning. I buy it in the big bottles.
+[SEG0035] person_3 (DOCTOR): Good. Has anything else changed in your bowels? More often, less often, looser?
+[SEG0036] person_2 (PATIENT): No. No change. About the same as always.
+[SEG0037] person_3 (DOCTOR): Any black stools, like tar?
+[SEG0038] person_2 (PATIENT): No, not black. Well, they were a bit dark when I was taking the iron, but not, not like tar.
+[SEG0039] person_3 (DOCTOR): Fair enough. Any severe pain in the tummy, or in the bottom?
+[SEG0040] person_2 (PATIENT): No. Nothing severe. It's a nuisance, not a pain.
+[SEG0041] person_3 (DOCTOR): Dizzy, light-headed, faint?
+[SEG0042] person_2 (PATIENT): Um, a little, in the mornings, but I always have been, with my blood. It's not, not new.
+[SEG0043] person_3 (DOCTOR): Fever or chills?
+[SEG0044] person_2 (PATIENT): No.
+[SEG0045] person_3 (DOCTOR): Lost weight without meaning to?
+[SEG0046] person_2 (PATIENT): No. Well. I've maybe lost a bit, but I've been trying. So it doesn't, I wouldn't count that.
+[SEG0047] person_3 (DOCTOR): Okay. How much have you lost, roughly?
+[SEG0048] person_2 (PATIENT): Oh, I don't know. A couple of kilos?
+[SEG0049] person_3 (DOCTOR): Over what time?
+[SEG0050] person_2 (PATIENT): This year. Since the spring.
+[SEG0051] person_3 (DOCTOR): I'll note that. Now, you said your blood. Tell me about that.
+[SEG0052] person_2 (PATIENT): I've had a low blood count. I don't know, for about ten years. Anaemia. They never found out why. I take the iron, tablets, and I have the, um, the bloods every few months.
+[SEG0053] person_3 (DOCTOR): Yes.
+[SEG0054] person_3 (DOCTOR): And heart failure, I see in the notes?
+[SEG0055] person_2 (PATIENT): Yes. Nearly eight years. That's the other thing, I get breathless on the stairs.
+[SEG0056] person_3 (DOCTOR): And your tablets?
+[SEG0057] person_2 (PATIENT): Uh, the iron. And the, um. I've forgotten the name. It's a white one. For the water. For my heart. It starts with an S.
+[SEG0058] person_1 (CAREGIVER): Yeah.
+[SEG0059] person_1 (CAREGIVER): Spironolactone. Twenty-five. I've got the pharmacy list in my bag.
+[SEG0060] person_2 (PATIENT): That's it.
+[SEG0061] person_3 (DOCTOR): Thanks, Bec. Is that all, iron and spironolactone? Anything else, anything you buy?
+[SEG0062] person_2 (PATIENT): Well, um, just the iron, once a day. And the prune juice.
+[SEG0063] person_3 (DOCTOR): Fine. Have you had any operations?
+[SEG0064] person_2 (PATIENT): I had a hernia done. Last spring. At the hospital. It went well.
+[SEG0065] person_3 (DOCTOR): Any cancer in the family, bowel or anything else?
+[SEG0066] person_2 (PATIENT): Uh, my sister had breast cancer. She's all right now. That's all I can think of.
+[SEG0067] person_3 (DOCTOR): And who lives at home with you?
+[SEG0068] person_2 (PATIENT): Well, um, my partner, Pat. And the baby, our granddaughter, Ruby. She's nine months. We look after her while my daughter works.
+[SEG0069] person_3 (DOCTOR): That's lovely. A lot of lifting, though, I'd imagine, and a lot of bending.
+[SEG0070] person_2 (PATIENT): Oh yes. And she's a handful. She's started pulling up on everything.
+[SEG0071] person_3 (DOCTOR): Ha.

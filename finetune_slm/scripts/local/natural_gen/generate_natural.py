@@ -18,6 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "finetune_slm"))                     # direct_inference_baseline now lives in finetune_slm/
 sys.path.insert(0, str(ROOT / "finetune_slm/data/round1_synthetic" / "codec"))
 from compact_codec import compact, expand  # noqa: E402
 from finetune_slm.evaluation.judge_eval.client import Judge, JudgeError, parse_json_reply  # noqa: E402

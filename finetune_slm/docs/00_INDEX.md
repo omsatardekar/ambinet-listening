@@ -1,6 +1,6 @@
 # Module 3 fine-tuning: documentation index
 
-Seven short reports, written to be read in order by someone new to the project. Each one ends with the questions an external reviewer is likely to ask about that part, with answers based only on what we did and measured.
+Eleven short reports, written to be read in order by someone new to the project. Each one ends with the questions an external reviewer is likely to ask about that part, with answers based only on what we did and measured.
 
 | # | File | Read it to learn |
 |---|---|---|
@@ -10,10 +10,14 @@ Seven short reports, written to be read in order by someone new to the project. 
 | 04 | [04_TRAINING_ROUND1.md](04_TRAINING_ROUND1.md) | GPU run 1: epochs, data, every hyper-parameter, loss curve, checkpoint choice, the locked-test results |
 | 05 | [05_TRAINING_ROUND2.md](05_TRAINING_ROUND2.md) | GPU run 2: natural-speech data, the out-of-memory incident, the repetition loops, the JSON guard, windowed extraction, results |
 | 06 | [06_TRAINING_ROUND3.md](06_TRAINING_ROUND3.md) | GPU run 3: cleaner labels, the pre-set bar, why it was not used |
-| 07 | [07_LLM_JUDGE_AND_FINAL_SELECTION.md](07_LLM_JUDGE_AND_FINAL_SELECTION.md) | how every number was produced, all results of all models, limits, the final selection and what is still to do |
+| 07 | [07_TRAINING_ROUND4.md](07_TRAINING_ROUND4.md) | GPU run 4: a targeted dataset built from the live-test mistakes, plan and settings, the bar set before testing, results, why it was not used and step 400 stays |
+| 08 | [08_TRAINING_ROUND5.md](08_TRAINING_ROUND5.md) | GPU run 5: cleaned mixed data trained once from the base model, the bar, results with a bootstrap of the judge noise, why step 400 still stays |
+| 09 | [09_TRAINING_ROUND6.md](09_TRAINING_ROUND6.md) | GPU run 6: counselling lists capped at 4, 50 steps from round-5 step 220, the bar, results, why step 400 still stays |
+| 10 | [10_LLM_JUDGE_AND_FINAL_SELECTION.md](10_LLM_JUDGE_AND_FINAL_SELECTION.md) | how every number was produced, all results of all models, limits, the final selection and what is still to do |
+| 11 | [11_LIVE_TESTS_AND_DEPO_WORDING.md](11_LIVE_TESTS_AND_DEPO_WORDING.md) | three live runs, the six backend safeguards, what to say and not say at the depo |
 
 Older working documents (kept as they are):
-* [FINETUNING_TRAINING_REPORT.md](FINETUNING_TRAINING_REPORT.md): the chronological report, sections 1 to 36, written while the work happened.
+* [FINETUNING_TRAINING_REPORT.md](FINETUNING_TRAINING_REPORT.md): the chronological report, sections 1 to 42, written while the work happened.
 * [MODULE3_FINETUNING_FOCUS.md](MODULE3_FINETUNING_FOCUS.md): the 32 failure classes (F1 to F32) found in six live runs and the checks derived from them.
 * [FOLDER_MOVES.md](FOLDER_MOVES.md): where every file was before the folder reorganisation of 2026-11-25.
 
@@ -31,13 +35,16 @@ Older working documents (kept as they are):
 | Why did round 2 loop, and what is the guard? | 05 sections 6 and 7 |
 | Why windows? | 05 section 8 |
 | Why did round 3 fail? | 06 |
+| Why did round 4 (targeted data) not replace step 400? | 07 |
+| Why did round 5 (cleaned labels, from the base model) not replace step 400? How big is the judge noise? | 08 section 5 |
 | What is the temperature? | 04 section 4 (table) and 05 section 11 |
-| What is judge-F1, how reliable is it? | 07 section 1 |
-| Which model is the final choice? | 07 section 4 (step 400; revised after the live tests) |
-| What did the live tests in the application show, and what did the backend add? | 07 section 5 |
-| What is still not done? | 07 section 4 (before a final release) |
+| Did capping the counselling lists fix the loops (round 6)? | 09 |
+| What is judge-F1, how reliable is it? | 10 section 1 |
+| Which model is the final choice? | 10 section 4 (step 400; confirmed after rounds 4 and 5, see 07 to 09) |
+| What did the live tests in the application show, and what did the backend add? | 10 section 5 |
+| What is still not done? | 10 section 4 (before a final release) |
 
-## Headline numbers (all with the caveats in document 07)
+## Headline numbers (all with the caveats in document 10)
 | | Value |
 |---|---|
 | H1 baseline on 30 encounters: judge-F1 / hallucination | 0.352 / 0.262 |

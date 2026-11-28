@@ -1,0 +1,64 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_11_rectal_bleeding_embarrassed)
+[SEG0001] person_2 (PATIENT): Well, um, my partner, Pat. And the baby, our granddaughter, Ruby. She's nine months. We look after her while my daughter works.
+[SEG0002] person_3 (DOCTOR): That's lovely. A lot of lifting, though, I'd imagine, and a lot of bending.
+[SEG0003] person_2 (PATIENT): Oh yes. And she's a handful. She's started pulling up on everything.
+[SEG0004] person_3 (DOCTOR): Ha.
+[SEG0005] person_3 (DOCTOR): Right. I need to tell you what I'd like to do, and then you can tell me what you're comfortable with, Maureen. Normally, with bleeding from the back passage and a lump, I'd want to examine you. It's a quick look and a gentle feel, with a glove and some jelly, and Jo would be here the whole time. It might help us work out what's going on.
+[SEG0006] person_2 (PATIENT): Mm.
+[SEG0007] person_2 (PATIENT): I'd rather not. Not today. If that's all right. I'm, I've not been able to. I'm not ready.
+[SEG0008] person_3 (DOCTOR): That's completely fine. It's your decision, and I won't push. It doesn't mean we can't do anything today.
+[SEG0009] person_2 (PATIENT): Thank you. I'm sorry.
+[SEG0010] person_3 (DOCTOR): You don't need to apologise. Bec, is it okay if I speak freely with you here?
+[SEG0011] person_1 (CAREGIVER): Of course.
+[SEG0012] person_3 (DOCTOR): Maureen, I don't want to guess at what it is. There are quite a few possible explanations for what you've described, and some of them are common and harmless, and some need a proper look. I think it's best to find out for sure, rather than me saying what I think it might be and being wrong.
+[SEG0013] person_2 (PATIENT): Okay.
+[SEG0014] person_3 (DOCTOR): What I would like to do, firstly, is a blood test, to check your blood count and your iron, because with the heart and the anaemia, I want to see where you are. Jo can book that for you, and we can do it on Thursday morning.
+[SEG0015] person_4 (CLINICAL_STAFF): I've got Thursday at ten, if that suits.
+[SEG0016] person_2 (PATIENT): Thursday at ten. Bec, can you do Thursday?
+[SEG0017] person_1 (CAREGIVER): I've got Thursday. I'll bring you.
+[SEG0018] person_3 (DOCTOR): And secondly, I'd like you to have a camera test of the bowel. It's a thin tube with a camera, to look all the way along. It's done at the hospital, you'd have a sedative, and you wouldn't feel much. It's the proper way to look when there's bleeding.
+[SEG0019] person_2 (PATIENT): A camera. Up there.
+[SEG0020] person_3 (DOCTOR): Yes, through the back passage. I know it's not what anyone wants for their weekend. But it's the best way to get answers, and then everyone can stop wondering.
+[SEG0021] person_2 (PATIENT): Right.
+[SEG0022] person_2 (PATIENT): Do I have to have it?
+[SEG0023] person_3 (DOCTOR): No, you don't have to. It's a choice. But with the weight, the blood count and the bleeding, I'd recommend it.
+[SEG0024] person_2 (PATIENT): Can I think about it?
+[SEG0025] person_3 (DOCTOR): Of course. Think about it, talk to Pat. I'll send the referral through anyway, and you can say no when they ring. That's allowed.
+[SEG0026] person_2 (PATIENT): Mm.
+[SEG0027] person_2 (PATIENT): Okay. I'll talk to Pat.
+[SEG0028] person_1 (CAREGIVER): Doctor, can I ask the practical bit, so we can tell Pat properly. The camera test, is it a whole day? Because Ruby's with them Tuesday to Thursday.
+[SEG0029] person_3 (DOCTOR): I see.
+[SEG0030] person_3 (DOCTOR): It's most of a day, yes. The day before, you have to follow a special diet, and drink a strong laxative preparation that clears the bowel. That's the part everyone grumbles about. You'd need to be near a toilet that day, no long bus journeys. The test itself is maybe half an hour, then an hour of recovery, and someone needs to take you home, you can't go alone because of the sedative.
+[SEG0031] person_1 (CAREGIVER): Right.
+[SEG0032] person_1 (CAREGIVER): I can do that if it's not a Thursday. Or I can ask Pat's brother.
+[SEG0033] person_2 (PATIENT): Not Pat's brother.
+[SEG0034] person_1 (CAREGIVER): Okay, not Pat's brother.
+[SEG0035] person_3 (DOCTOR): The hospital will send the details and the date, and they'll phone to go through the preparation, so you don't need to remember it all now. The nurse there will answer anything.
+[SEG0036] person_2 (PATIENT): And the iron, do I stop that?
+[SEG0037] person_3 (DOCTOR): Good question. Keep taking the iron for now, but tell them on the phone, they'll tell you when to stop it, it can make the test harder to read. And it's the iron that makes the stools dark, so don't be alarmed by that. It's different from tar, which is sticky, black and smells awful.
+[SEG0038] person_2 (PATIENT): Awful. I'd know.
+[SEG0039] person_3 (DOCTOR): You would. Is there anything about the test that's worrying you most, Maureen?
+[SEG0040] person_2 (PATIENT): Being, um, being exposed. And being asleep, and not knowing. My neighbour had one and she said they found something, and she was fine afterwards, but I think of it. I keep thinking of her face.
+[SEG0041] person_3 (DOCTOR): That's an understandable thing to think about. The point of the test is that if there is something, finding it early gives you more options, and if there isn't, you get a clean bill and you can stop worrying. And you'd be covered up, with a gown and a blanket, and the nurses are very good at keeping you dignified. Jo can tell you.
+[SEG0042] person_4 (CLINICAL_STAFF): Uh, they really are. I had mine last year, and I was dreading it. I was asleep, then I woke up in a lovely warm blanket with a cup of tea and a biscuit.
+[SEG0043] person_2 (PATIENT): A biscuit?
+[SEG0044] person_4 (CLINICAL_STAFF): Two, if you ask nicely.
+[SEG0045] person_2 (PATIENT): Well, that's something.
+[SEG0046] person_3 (DOCTOR): Ha.
+[SEG0047] person_3 (DOCTOR): In the meantime, keep going with the prune juice and plenty of fluids. Try not to strain. A footstool helps, resting your feet on a little stool, so your knees are higher than your hips. Don't sit for long on the hard chairs. And if you want something for the itch, the pharmacist can suggest a cream.
+[SEG0048] person_2 (PATIENT): A footstool. I've got one for Ruby's highchair.
+[SEG0049] person_3 (DOCTOR): That'll do nicely. I'd like to see you again in four weeks, once we've got the results, and sooner if you need to.
+[SEG0050] person_1 (CAREGIVER): What should we look out for?
+[SEG0051] person_3 (DOCTOR): If the bleeding gets heavier, if you pass a lot of blood or clots, or if you feel faint or your heart is racing, you ring the ambulance or come straight in. Don't wait for the appointment.

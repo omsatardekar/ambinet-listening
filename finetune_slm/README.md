@@ -2,7 +2,7 @@
 
 Everything about training, evaluating and deploying the fine-tuned extraction model is in this folder. The application code (backend, frontend, `clinical_extraction/`) stays outside; it only reads the two things it needs from here (the H1 prompt and the OpenVINO runtime under `experiments/qwen3_0.6b/`).
 
-**Start with the reading guide:** [`docs/00_INDEX.md`](docs/00_INDEX.md) (seven short reports: project and Module 3, datasets, models and earlier experiments, training rounds 1 to 3, the LLM judge and the final selection). **Chronological working report:** [`docs/FINETUNING_TRAINING_REPORT.md`](docs/FINETUNING_TRAINING_REPORT.md). **Where every file used to be:** [`docs/FOLDER_MOVES.md`](docs/FOLDER_MOVES.md).
+**Start with the reading guide:** [`docs/00_INDEX.md`](docs/00_INDEX.md) (eleven short reports: project and Module 3, datasets, models and earlier experiments, training rounds 1 to 6, the LLM judge and the final selection, the live tests). **Chronological working report:** [`docs/FINETUNING_TRAINING_REPORT.md`](docs/FINETUNING_TRAINING_REPORT.md). **Where every file used to be:** [`docs/FOLDER_MOVES.md`](docs/FOLDER_MOVES.md).
 
 ## What was done, in one table
 
@@ -12,8 +12,11 @@ Everything about training, evaluating and deploying the fine-tuned extraction mo
 | Round 1 | LoRA on 2,856 synthetic encounters, short prompt, compact output; checkpoint step 400 | 973-encounter locked test: judge F1 0.933. 20 scenarios: precision 0.762, recall 0.558, hallucination 0.168, critical 0.048 |
 | Round 2 | continued from step 400 on 263 natural-speech encounters + 600 replayed; checkpoint step 156 | needs the guard and windows; on windows: precision 0.710, recall 0.675, hallucination 0.213, critical 0.054 |
 | Round 3 | cleaner labels (112) from step 156 | precision fell (0.683 / 0.664): **not used** |
+| Round 4 | targeted synthetic data from the live-test mistakes (250 + 350 replay) from step 400; checkpoint step 114 | on windows: precision 0.691, recall 0.651, hallucination 0.237, critical 0.070; on full text only 10 of 20 outputs finished: **not used, step 400 stays** (`docs/07_TRAINING_ROUND4.md`) |
+| Round 6 | round-5 step 220 + 50 steps with counselling lists capped at 4; on windows: precision 0.621, recall 0.614, hallucination 0.303, critical 0.078; 12 of 44 windows did not finish: **not used, step 400 stays** (`docs/09_TRAINING_ROUND6.md`) |
+| Round 5 | cleaned natural + round-1 data (2,668 lines) trained once from the base model, 220 steps; on windows: precision 0.639, recall 0.621, hallucination 0.288, critical 0.080; 16 of 44 windows did not finish: **not used, step 400 stays** (`docs/08_TRAINING_ROUND5.md`) |
 
-Honest reading: round 2 gives a more complete record (about 52 facts per consultation against 30) at the price of lower precision. Round 1 (step 400) is the more precise model. Both are packaged for deployment; **step 400 is the recommended and deployed one** (see `docs/07_LLM_JUDGE_AND_FINAL_SELECTION.md`, sections 4 and 5). Limits: 20 scenarios, one judge model, labels of the training data are model-written (not clinician reviewed), recall is measured against a short list of designed facts (a floor).
+Honest reading: round 2 gives a more complete record (about 52 facts per consultation against 30) at the price of lower precision. Round 1 (step 400) is the more precise model. Both are packaged for deployment; **step 400 is the recommended and deployed one** (see `docs/10_LLM_JUDGE_AND_FINAL_SELECTION.md`, sections 4 and 5). Limits: 20 scenarios, one judge model, labels of the training data are model-written (not clinician reviewed), recall is measured against a short list of designed facts (a floor).
 
 ## Folder map
 

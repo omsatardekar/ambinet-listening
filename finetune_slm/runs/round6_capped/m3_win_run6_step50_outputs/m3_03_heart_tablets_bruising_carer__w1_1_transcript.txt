@@ -1,0 +1,73 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_03_heart_tablets_bruising_carer)
+[SEG0001] person_1 (CAREGIVER): Mind the step, Edie, there's a little lip there. That's it. Lovely. Right, we're here, you can let go of my arm now.
+[SEG0002] person_2 (PATIENT): I'm not letting go. I'll fall.
+[SEG0003] person_1 (CAREGIVER): You won't fall, you're in a room, there's a chair behind you. Sit. Good girl.
+[SEG0004] person_3 (DOCTOR): Good morning, Mrs Wragg. Good morning, and you're, Maureen, isn't it?
+[SEG0005] person_1 (CAREGIVER): That's right, I'm Maureen, I look after her at the house. I'm here for the day, if that's all right, she gets in a state without me.
+[SEG0006] person_2 (PATIENT): Yeah.
+[SEG0007] person_2 (PATIENT): I do, I do get in a state. I was up at four. Doctor, I don't know what's wrong with me, is it my heart again? I thought it was my heart and Maureen said it's probably nothing but it's not nothing, is it?
+[SEG0008] person_3 (DOCTOR): Let's find out together. I've got your notes here so I know you have some heart trouble already, but tell me what's been worrying you most, Mrs Wragg, what made you say something?
+[SEG0009] person_2 (PATIENT): The bruises. And the tummy. And I'm so tired. I'm tired all the time, I could sleep on the bus.
+[SEG0010] person_3 (DOCTOR): Okay, um, so three things. Let's take the bruises first. Where are they?
+[SEG0011] person_2 (PATIENT): Here, on my arms. Look. I don't remember knocking them. They just come.
+[SEG0012] person_3 (DOCTOR): And when did you start seeing them?
+[SEG0013] person_2 (PATIENT): Oh, it's, Maureen, how long?
+[SEG0014] person_1 (CAREGIVER): Hm, about three weeks. I noticed when I was helping her dress. Before that nothing much.
+[SEG0015] person_2 (PATIENT): Three weeks. I thought it was the weather.
+[SEG0016] person_3 (DOCTOR): Any falls, or knocks, even small ones? The bed rail, a door handle?
+[SEG0017] person_2 (PATIENT): I don't fall. I haven't fallen since the winter. Have I?
+[SEG0018] person_1 (CAREGIVER): Er, not a proper fall, no. You did catch your arm on the bed rail on Friday, and you swore at it.
+[SEG0019] person_2 (PATIENT): I did not.
+[SEG0020] person_1 (CAREGIVER): Um, you did, love, I was standing there. But that doesn't explain the one on your shin.
+[SEG0021] person_3 (DOCTOR): No, a bump or two is normal. It's the ones that come from nowhere I want to hear about.
+[SEG0022] person_3 (DOCTOR): They're certainly there, I can see a few small ones. We'll have a proper look in a moment. And how about the tiredness, is that the same three weeks, or older?
+[SEG0023] person_2 (PATIENT): Well, I've always been a bit tired. But this is different, I get up from the chair and I have to stop.
+[SEG0024] person_3 (DOCTOR): Mm-hm.
+[SEG0025] person_3 (DOCTOR): And the tummy, is it pain, or burning, or feeling sick?
+[SEG0026] person_2 (PATIENT): Burning. Up here, behind the bone. After I've had my tablets in the morning, especially. It's like a bit of fire come up. I take a Rennie.
+[SEG0027] person_3 (DOCTOR): Mm.
+[SEG0028] person_3 (DOCTOR): How long has that been going on?
+[SEG0029] person_2 (PATIENT): Ooh. A year? A year, nearly, I'd say.
+[SEG0030] person_1 (CAREGIVER): It's been about a year, yes. She's got a packet of Rennies in every bag in the house.
+[SEG0031] person_3 (DOCTOR): Right. Now the heart, because you know your own heart better than I do. You've had that chest tightness, climbing stairs?
+[SEG0032] person_2 (PATIENT): Yes, I get that. I've always got that, doctor, that's why they gave me the tablets. When I do the stairs. It gets tight, here, and I stop and it goes. About five years now. Nearly five.
+[SEG0033] person_3 (DOCTOR): Mm-hm.
+[SEG0034] person_3 (DOCTOR): And is that any different at the moment, is it more often, or coming on when you aren't doing anything?
+[SEG0035] person_2 (PATIENT): No. It's the same. It's no worse. I thought it might be worse, but it isn't, really. Is that a good sign?
+[SEG0036] person_3 (DOCTOR): It is a good sign. Any breathlessness, when you're lying flat, or walking on the flat?
+[SEG0037] person_2 (PATIENT): No, I don't get puffed out. Not more than usual.
+[SEG0038] person_3 (DOCTOR): Any fainting, or nearly fainting?
+[SEG0039] person_2 (PATIENT): No.
+[SEG0040] person_3 (DOCTOR): Do you ever feel your heart racing or thumping, or skipping?
+[SEG0041] person_2 (PATIENT): No. No, I don't think so. Do I, Maureen?
+[SEG0042] person_1 (CAREGIVER): No, you haven't said.
+[SEG0043] person_3 (DOCTOR): Have you noticed any blood in your wee, or when you've gone to the toilet, or on the paper?
+[SEG0044] person_2 (PATIENT): Not that I've seen.
+[SEG0045] person_3 (DOCTOR): And any black stools, very dark, like tar?
+[SEG0046] person_2 (PATIENT): Oh, no, no, nothing like that. I'd have said.
+[SEG0047] person_3 (DOCTOR): Good. Thank you. Can we go through the tablets? Maureen, you do the box for her, I think?
+[SEG0048] person_1 (CAREGIVER): I do, I fill it on a Sunday. I've got the list here, I wrote it down so I wouldn't muddle it. There's the metoprolol, the fifty, twice a day. The simvastatin, twenty, that's at night. The glimepiride, that's the sugar one, in the morning with breakfast. Then there's the two little ones for the heart, the aspirin and the clopidogrel.
+[SEG0049] person_3 (DOCTOR): Mm.
+[SEG0050] person_3 (DOCTOR): Do you know the strength of the clopidogrel? Is it on the box?
+[SEG0051] person_1 (CAREGIVER): Er, it doesn't say on my list. Seventy-five, I think, but I'd have to check the packet.
+[SEG0052] person_3 (DOCTOR): That's fine. And the aspirin, does she take that every day?
+[SEG0053] person_1 (CAREGIVER): Hm, it goes in the box every day. Whether it goes in her is another question.
+[SEG0054] person_2 (PATIENT): I take them all.
+[SEG0055] person_1 (CAREGIVER): Edie. You pushed the white one to the side on Tuesday, I saw it on the saucer.
+[SEG0056] person_2 (PATIENT): That was one day. It was so big. It sticks in my throat and I get the burning.
+[SEG0057] person_3 (DOCTOR): So, um, that might be part of it. And how often does that happen, would you say?
+[SEG0058] person_2 (PATIENT): I don't know. Not often.
+[SEG0059] person_1 (CAREGIVER): Two, three times in the week, maybe. I can't say. I'm not standing over her.
+[SEG0060] person_3 (DOCTOR): Okay. I'm not cross with anybody, I'd just like to understand what's actually going in. Let me ask something else, which is the tablets you've had and not got on with. Any allergies to medicines or anything else?

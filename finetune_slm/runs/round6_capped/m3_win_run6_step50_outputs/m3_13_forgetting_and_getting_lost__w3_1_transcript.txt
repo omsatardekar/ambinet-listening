@@ -1,0 +1,21 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_13_forgetting_and_getting_lost)
+[SEG0001] person_1 (PATIENT): Just, will I know? If it gets worse. Will I know it's happening?
+[SEG0002] person_2 (DOCTOR): That's an honest question. Often people do know, in the early stages, as you do now, and it's frightening. It doesn't mean the worst. It means you noticed, and you came in, and that's what lets us help sooner. Meanwhile, some small things do help. Keep a list by the door for what you need to take out, keys, wallet, phone. Always put the keys in the same bowl. Write down what you've been told today. And keep up the dog walk, daily exercise really does help memory.
+[SEG0003] person_1 (PATIENT): Mm-hm.
+[SEG0004] person_1 (PATIENT): He'll be pleased. He thinks it's his idea.
+[SEG0005] person_2 (DOCTOR): He's the best doctor in the house.
+[SEG0006] person_1 (PATIENT): I'll tell the wife about the scan.
+[SEG0007] person_2 (DOCTOR): Please do. And bring her along in six weeks, if she's willing.
+[SEG0008] person_1 (PATIENT): She'll want to. She's been on at me for months.

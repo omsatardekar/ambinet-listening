@@ -70,7 +70,7 @@ Against step 400 on full text (precision 0.762, recall 0.558, hallucination 0.16
 
 ## 7. Outcome
 * Round 3 is **not packaged for deployment** and the adapters are kept only for the record (`models/adapters/round3_step20` and `round3_step50`).
-* The deployable candidates remain **round 1 step 400** and **round 2 step 156** (document 07).
+* The deployable candidates remain **round 1 step 400** and **round 2 step 156** (document 10).
 * Total cost of the attempt: about 104 minutes of GPU time, plus the judging of two checkpoints; the pre-set bar made the decision quick and objective.
 
 ## 8. Questions an external reviewer may ask

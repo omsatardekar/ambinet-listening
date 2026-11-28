@@ -1,0 +1,79 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_17_burning_upper_stomach_after_meals)
+[SEG0001] person_1 (DOCTOR): Right then. Mr Penhaligon, is it? Can you confirm your name and date of birth for me, please?
+[SEG0002] person_2 (PATIENT): Terence Penhaligon. Fourth of the fourth, nineteen seventy-one.
+[SEG0003] person_1 (DOCTOR): Lovely, that's you. I'm Dr Rashid. This is Nurse Sue, and Jan who's the phlebotomist will be with us in a bit, she's through the back doing the bloods from the last lot. What can we do for you today?
+[SEG0004] person_2 (PATIENT): Well, uh, it's my stomach. Well, it's not really my stomach, it's up here. In the, where the ribs come together.
+[SEG0005] person_1 (DOCTOR): Top of the tummy, under the breastbone.
+[SEG0006] person_2 (PATIENT): That's it. A burn. A sort of burning.
+[SEG0007] person_1 (DOCTOR): A burning pain.
+[SEG0008] person_2 (PATIENT): Hm, it's not a pain exactly. It's a burn. A hot, gnawing, kind of a, like a, I don't know, like I've swallowed something warm and it's stuck.
+[SEG0009] person_1 (DOCTOR): When does it come on?
+[SEG0010] person_2 (PATIENT): Um, after I've eaten. Mostly. Twenty minutes, half an hour. Bang. And if I eat something spicy, a curry, or if I have the chips from the van, it's worse.
+[SEG0011] person_1 (DOCTOR): Does it get worse lying down?
+[SEG0012] person_2 (PATIENT): Oh, yes. That's the main thing. I lie down in the cab, I've got a break at three, and I'm up like a jack-in-the-box. And at night, at home, I wake up with it, and there's a bad taste in my mouth. Sour. Like I've been sucking a battery.
+[SEG0013] person_1 (DOCTOR): Okay. How long's this been going on?
+[SEG0014] person_2 (PATIENT): Ooh. Since, hang on. Since the Jubilee? The street party. I ate a lot at that. So that would be, what, that was in the spring.
+[SEG0015] person_1 (DOCTOR): Spring, so about six months.
+[SEG0016] person_2 (PATIENT): If that's what it was. It's not constant. Comes and goes. Some weeks it's gone and then I do something daft.
+[SEG0017] person_1 (DOCTOR): Right. What do you take for it?
+[SEG0018] person_2 (PATIENT): Er, the pink stuff. From the chemist. Peppermint pink. A big bottle. I've got through four.
+[SEG0019] person_1 (DOCTOR): An antacid liquid.
+[SEG0020] person_2 (PATIENT): If you say so. It works for about an hour.
+[SEG0021] person_1 (DOCTOR): Anything else?
+[SEG0022] person_2 (PATIENT): I tried the tablets that go fizz, but they gave me gas.
+[SEG0023] person_1 (DOCTOR): Okay. And is there anything else going on? Feeling sick, vomiting?
+[SEG0024] person_2 (PATIENT): Er, a bit of nausea sometimes. I've not been sick. Not like that.
+[SEG0025] person_1 (DOCTOR): Have you ever vomited blood, or something that looked like coffee grounds?
+[SEG0026] person_2 (PATIENT): No. Never.
+[SEG0027] person_1 (DOCTOR): Black stools, like tar?
+[SEG0028] person_2 (PATIENT): No, no. Nothing like that. Ordinary.
+[SEG0029] person_1 (DOCTOR): Does the food go down all right? Any trouble swallowing, or pain when you swallow?
+[SEG0030] person_2 (PATIENT): No, it goes down fine. It's just after.
+[SEG0031] person_1 (DOCTOR): Lost any weight?
+[SEG0032] person_2 (PATIENT): Hm, a bit. I'm not sure. My belt's on a different hole, but I've been walking more. I think it's all right.
+[SEG0033] person_1 (DOCTOR): We'll weigh you. Now, tell me about your health in the past. Any conditions?
+[SEG0034] person_2 (PATIENT): Pressure. High blood pressure. About eight years. And I had an ulcer, years back. Twenty years ago, more. They gave me the, it was a course of tablets and it cleared up.
+[SEG0035] person_1 (DOCTOR): Right.
+[SEG0036] person_1 (DOCTOR): And what are you taking regularly?
+[SEG0037] person_2 (PATIENT): One for the pressure. Amlodipine. Five. In the morning. That's it. Plus the pink stuff.
+[SEG0038] person_1 (DOCTOR): Operations?
+[SEG0039] person_2 (PATIENT): Er, they took my gallbladder out. About, hmm, fifteen years back.
+[SEG0040] person_1 (DOCTOR): And your family?
+[SEG0041] person_2 (PATIENT): My dad had stomach trouble. He had an ulcer too, I think, or worse, I never really knew. And my mum had her thyroid. That's about it.
+[SEG0042] person_1 (DOCTOR): Yes.
+[SEG0043] person_1 (DOCTOR): Right. What do you do for a living?
+[SEG0044] person_2 (PATIENT): I drive. Deliveries. Nights, mostly, the depot at nine and home at six. So I'm eating at odd times. Takeaways. Sandwiches in the van.
+[SEG0045] person_1 (DOCTOR): I see.
+[SEG0046] person_1 (DOCTOR): What does a typical night's eating look like, if I followed you around?
+[SEG0047] person_2 (PATIENT): Well. I get up at six in the evening, something quick, toast. Then the van. I have a sandwich at midnight, a pasty if I'm passing the garage. Then about three I'll have a proper meal, if you can call it that, a kebab or a burger. Then home, a bowl of cereal, and bed at seven.
+[SEG0048] person_1 (DOCTOR): So, um, the burger is at three, and you lie down at seven.
+[SEG0049] person_2 (PATIENT): Four hours. Close enough.
+[SEG0050] person_1 (DOCTOR): And the cereal at six, right before bed.
+[SEG0051] person_2 (PATIENT): Yeah. I never thought of that.
+[SEG0052] person_1 (DOCTOR): Coffee?
+[SEG0053] person_2 (PATIENT): Constantly. Maybe six, seven cups a night. It keeps me awake. The energy drinks as well, if I'm tired.
+[SEG0054] person_1 (DOCTOR): How's the job otherwise? Stress, targets?
+[SEG0055] person_2 (PATIENT): Hm, it's the clock. If you're late, they dock you. And the roads are mad at night. Lorries and idiots.
+[SEG0056] person_1 (DOCTOR): Do you smoke?
+[SEG0057] person_2 (PATIENT): Ten a day. About that.
+[SEG0058] person_1 (DOCTOR): Drink?
+[SEG0059] person_2 (PATIENT): Couple of pints on the weekend. Three if there's a match.
+[SEG0060] person_1 (DOCTOR): Right.
+[SEG0061] person_1 (DOCTOR): Okay. Sue, can we take his observations and weight, please?
+[SEG0062] person_3 (NURSE): Of course. Terence, can you slip your shoes off for me and stand on the scale? Thank you. Hold still.
+[SEG0063] person_3 (NURSE): Eighty-nine and a half kilos. I'll put that in. Now, if you sit and put your arm on the table. Cuff on, don't talk.
+[SEG0064] person_3 (NURSE): One forty-two over eighty-eight, and the pulse is seventy-eight.
+[SEG0065] person_1 (DOCTOR): That's slightly up but it's after a morning's sitting. Fine. Let's feel your tummy. Lie back on the couch. Tell me when it hurts. Here?
+[SEG0066] person_2 (PATIENT): No.

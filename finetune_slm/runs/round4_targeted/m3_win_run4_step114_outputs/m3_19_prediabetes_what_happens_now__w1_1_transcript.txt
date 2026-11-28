@@ -1,0 +1,73 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_19_prediabetes_what_happens_now)
+[SEG0001] person_1 (PATIENT): Sorry. Sorry I'm late, there was an accident on the Pacific Highway, I rang the surgery but it went to the machine. Is it bad? The result? Did you see it? I've been awake since four. Am I diabetic?
+[SEG0002] person_2 (FAMILY_MEMBER): Mark. Let the woman say hello.
+[SEG0003] person_1 (PATIENT): Sorry. Hello.
+[SEG0004] person_3 (DOCTOR): Hello, Mark, it's fine, you're only a few minutes behind. Come and sit down. I'm Dr Okoro, we haven't met, I'm covering for Dr Lang this week. And this must be Mrs Kelly?
+[SEG0005] person_2 (FAMILY_MEMBER): Julie. Julie, hi. I thought I'd come, because he's, well, you can see.
+[SEG0006] person_3 (DOCTOR): I can see. Take a breath, Mark. Pop your jacket on the back of the chair. Right, I've got the result in front of me. Before I tell you what it says, what do you already know about it?
+[SEG0007] person_1 (PATIENT): Er, just that the lady on the phone said it was high. And my dad was diabetic, so I know what that means. Well, I don't, but I've seen what it did to him.
+[SEG0008] person_3 (DOCTOR): Right.
+[SEG0009] person_3 (DOCTOR): Okay. Thank you. Then let me tell you straight, and then we'll go through what it means. The blood test that looks at your average sugar over the last three months is called HbA1c. Yours was six point one. Anything under five point seven is normal, and anything over six and a half is diabetes. Yours is between the two, in what we call the pre-diabetes range.
+[SEG0010] person_1 (PATIENT): So I'm diabetic.
+[SEG0011] person_3 (DOCTOR): No. You're not diabetic, you're in the range where your sugar is above normal but under the line for diabetes. It's a warning, not a diagnosis.
+[SEG0012] person_1 (PATIENT): A warning.
+[SEG0013] person_3 (DOCTOR): Does that make sense?
+[SEG0014] person_1 (PATIENT): Not diabetic. But close.
+[SEG0015] person_3 (DOCTOR): Closer than we'd like, yes. But this is a warning you can do something about, and many people turn it right back.
+[SEG0016] person_2 (FAMILY_MEMBER): See, I told you it wasn't the end of the world.
+[SEG0017] person_1 (PATIENT): You said it was probably nothing, Julie, that's not the same.
+[SEG0018] person_3 (DOCTOR): Can I ask how you've been feeling lately? The test was a routine one, I understand, but I'd like to hear whether you've noticed anything.
+[SEG0019] person_1 (PATIENT): Okay.
+[SEG0020] person_1 (PATIENT): Tired. I've been really tired.
+[SEG0021] person_3 (DOCTOR): How long?
+[SEG0022] person_1 (PATIENT): A month. About a month. Maybe a bit more.
+[SEG0023] person_2 (FAMILY_MEMBER): Uh, since the winter. It's been since the winter, since you changed jobs. You come home and fall asleep in front of the cricket.
+[SEG0024] person_1 (PATIENT): Mm-hm.
+[SEG0025] person_1 (PATIENT): That's because it's the cricket.
+[SEG0026] person_3 (DOCTOR): Honestly, it could be either. Let's say a few months. Tell me about the new job, what do you do?
+[SEG0027] person_1 (PATIENT): I'm a site supervisor now. For a building company. Before I was on the tools, I was a carpenter, so I was on my feet all day. Now it's a ute and a laptop and meetings. I sit more.
+[SEG0028] person_2 (FAMILY_MEMBER): Right.
+[SEG0029] person_2 (FAMILY_MEMBER): And he's got the pressure of it. Phone calls at night.
+[SEG0030] person_1 (PATIENT): It's fine.
+[SEG0031] person_2 (FAMILY_MEMBER): Well, um, it's not fine, you wake up at three and write lists.
+[SEG0032] person_3 (DOCTOR): Is that right, Mark?
+[SEG0033] person_1 (PATIENT): Sometimes. I wake up and I think about the schedule. Yeah.
+[SEG0034] person_3 (DOCTOR): Sleep matters for this. When you're short of sleep and stressed, your body makes more of the hormones that push your sugar up, and you crave sugary food the next day.
+[SEG0035] person_1 (PATIENT): That's the biscuits.
+[SEG0036] person_3 (DOCTOR): That's the biscuits, and not because you're weak.
+[SEG0037] person_3 (DOCTOR): What else?
+[SEG0038] person_1 (PATIENT): Thirsty. Thirsty a lot. I have a two-litre water bottle at my desk and I've got through it by lunchtime.
+[SEG0039] person_3 (DOCTOR): Okay. Are you passing more water than usual, or getting up in the night to go to the toilet?
+[SEG0040] person_1 (PATIENT): No. No more than usual. Once, maybe.
+[SEG0041] person_3 (DOCTOR): Any blurred vision, or things looking misty?
+[SEG0042] person_1 (PATIENT): No. My eyes are fine. I had them tested in the summer, the optometrist said I was fine for another two years.
+[SEG0043] person_3 (DOCTOR): Good. Any tingling in the feet, or sores that are slow to heal?
+[SEG0044] person_1 (PATIENT): No, nothing like that.
+[SEG0045] person_3 (DOCTOR): Chest pain?
+[SEG0046] person_1 (PATIENT): Uh, no chest pain. I did think about it, at four this morning. I got up and checked my pulse.
+[SEG0047] person_3 (DOCTOR): What did it say?
+[SEG0048] person_1 (PATIENT): Seventy-something. I don't know. It was normal.
+[SEG0049] person_3 (DOCTOR): That's reassuring. Does worry keep you up often?
+[SEG0050] person_1 (PATIENT): Lately. Since the call.
+[SEG0051] person_3 (DOCTOR): Mm.
+[SEG0052] person_1 (PATIENT): Well, um, it's just, I keep thinking, it's my fault. I eat rubbish. I'm sitting all day. I've got this belly. I know it's my fault.
+[SEG0053] person_3 (DOCTOR): Yes.
+[SEG0054] person_3 (DOCTOR): I don't think it's about fault, Mark. Do you mind if I weigh you and check your blood pressure, and then we'll talk about what to do?
+[SEG0055] person_1 (PATIENT): Okay. Yes. Please.
+[SEG0056] person_3 (DOCTOR): Ninety-four kilos. Your height was one seventy-eight at your last visit, so that makes your body mass index about twenty-nine and a half, which is slightly overweight. And your blood pressure is one twenty-eight over eighty-two, which is a touch above ideal but fine.
+[SEG0057] person_1 (PATIENT): Is that bad?
+[SEG0058] person_3 (DOCTOR): It's a bit over, nothing to worry about. So, here's the picture. Your sugar is creeping up. You've got some extra weight around the middle, that's the kind that matters most for sugar, and your family history. Put those together and it's no surprise. But I want to say something about your dad. What was he like when he was your age?
+[SEG0059] person_1 (PATIENT): Um, he was already being treated for it at fifty. He lost his foot at sixty-two. He died at seventy-one. I was the one who looked after him at the end.
+[SEG0060] person_3 (DOCTOR): Mm-hm.

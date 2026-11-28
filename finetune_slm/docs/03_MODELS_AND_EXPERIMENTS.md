@@ -22,7 +22,7 @@ Both models run with **thinking off** (the Qwen3 chat template is used with `ena
 * **Data.** `dataset_v2_batch_001_corrected` (Batch 1, 500 synthetic encounters): 100 development and 400 locked-test encounters (seed 20260301). The 100 development encounters were split into 50 `prompt_dev` (used to tune prompts) and 50 `validation` (selection only), stratified by specialty and complexity (seed 20260401). The locked 400 were never opened by these experiments.
 * **The 30 shared encounters.** The later experiments (EXP_008 and the 1.7B P01 and P02 runs) use the same 30 encounters, so they can be compared directly with the same judge.
 * **Frozen things.** Every prompt version is stored with its SHA-256; model revisions are recorded (0.6B revision `c1899de2…`, 1.7B revision `70d244cc…`); the schema, the dataset and the evaluator were not modified; every run records the exact settings and a file-access audit that shows labels were opened only by the evaluator, after inference.
-* **Two scorers.** First a strict string matcher (micro F1), later an **LLM judge** (document 07). They give different numbers (the judge scores about twice as high because it credits paraphrases), so numbers from the two must never be compared with each other.
+* **Two scorers.** First a strict string matcher (micro F1), later an **LLM judge** (document 10). They give different numbers (the judge scores about twice as high because it credits paraphrases), so numbers from the two must never be compared with each other.
 
 ## 3. The 0.6B experiments, in order
 
@@ -68,7 +68,7 @@ Intermediate P02 attempts (a compact-schema "v2.2" and a "v3") were rejected or 
 | 1.7B P02 (frozen) | 28 / 30 | 0.666 | 0.448 | 0.536 [0.484, 0.573] | 0.231 | 0.101 |
 | **0.6B fine-tuned, step 400** (for comparison, same 30) | 30 / 30 | 0.956 | 0.923 | **0.939 [0.927, 0.951]** | 0.014 | 0.005 |
 
-Notes: failed or unparsed encounters count as zero predictions; the 0.6B S1 and S1.1 runs have many failed records scored as zero. The 1.7B results come from Intel-GPU runs scored as recorded. The fine-tuned row is the same 30 encounters, the same judge and the same prompts (document 07), but a different model, prompt, runtime (T4 versus Intel GPU) and decoding length.
+Notes: failed or unparsed encounters count as zero predictions; the 0.6B S1 and S1.1 runs have many failed records scored as zero. The 1.7B results come from Intel-GPU runs scored as recorded. The fine-tuned row is the same 30 encounters, the same judge and the same prompts (document 10), but a different model, prompt, runtime (T4 versus Intel GPU) and decoding length.
 
 ## 6. What the prompting experiments taught us (why we moved to fine-tuning)
 1. **1.7B is clearly better than 0.6B by prompting** (the best 1.7B run, 0.536, is above the best 0.6B run, 0.395, and the intervals do not overlap), but it is slow and memory-hungry, and its outputs often hit the 4,096-token cap.
@@ -90,6 +90,6 @@ Conclusion at that time (2026-11-15): stop prompt tuning, fine-tune Qwen3-0.6B o
 
 **Can the earlier experiments be compared with the fine-tuned model?** Only through the LLM judge on the same 30 encounters (that is the table above). The strict-matcher numbers (about 0.12 to 0.26) must never be compared with judge numbers.
 
-**Is the H1 baseline fair?** It is the best of our own prompt work with the frozen schema, run through the same judge; it is also what the application used. The baseline on the 20 hand-written scenarios was re-run on a T4 (PyTorch fp16) and not on the Intel GPU (document 07).
+**Is the H1 baseline fair?** It is the best of our own prompt work with the frozen schema, run through the same judge; it is also what the application used. The baseline on the 20 hand-written scenarios was re-run on a T4 (PyTorch fp16) and not on the Intel GPU (document 10).
 
 **Where are the details?** Each experiment folder has its own README, manifests and checksums; the judge description is `evaluation/judge_eval/METHODOLOGY.md` and `REPORT.md`.

@@ -1,0 +1,58 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_03_heart_tablets_bruising_carer)
+[SEG0001] person_3 (DOCTOR): So, um, that might be part of it. And how often does that happen, would you say?
+[SEG0002] person_2 (PATIENT): I don't know. Not often.
+[SEG0003] person_1 (CAREGIVER): Two, three times in the week, maybe. I can't say. I'm not standing over her.
+[SEG0004] person_3 (DOCTOR): Okay. I'm not cross with anybody, I'd just like to understand what's actually going in. Let me ask something else, which is the tablets you've had and not got on with. Any allergies to medicines or anything else?
+[SEG0005] person_2 (PATIENT): There's the plasters. Those sticky ones. They come up in a, I don't know, a mark. And there was another one, Maureen, that I had after my fall.
+[SEG0006] person_1 (CAREGIVER): Yeah.
+[SEG0007] person_1 (CAREGIVER): Tramadol. It's in her notes.
+[SEG0008] person_2 (PATIENT): Well, uh, that one. I don't remember what it did. It was something. Made me poorly.
+[SEG0009] person_3 (DOCTOR): Do you know if it was a rash, sickness, anything?
+[SEG0010] person_2 (PATIENT): I just know I mustn't have it.
+[SEG0011] person_3 (DOCTOR): Okay, um, that's good enough for me. I'll write both down, we'll not use them. Now, a few bits of the background. Do you smoke?
+[SEG0012] person_2 (PATIENT): Um, a few. Eight a day, about. Not more. I know I shouldn't.
+[SEG0013] person_3 (DOCTOR): We'll talk about that another day, not today, I don't want to make you more worried. Drinking?
+[SEG0014] person_2 (PATIENT): I used to. I used to drink very heavily, when Frank was alive, after he went. But I stopped, four years ago it was. Not a drop.
+[SEG0015] person_3 (DOCTOR): Mm-hm.
+[SEG0016] person_3 (DOCTOR): Well done, that is hard. Any illness in the family?
+[SEG0017] person_2 (PATIENT): Er, my grandmother had the dementia, the old kind, they just called it senile then. Nothing else I can think of.
+[SEG0018] person_3 (DOCTOR): Okay. Now let's have a look at you. I'll do your blood pressure and pulse first, and then I want a listen to your chest. Roll your sleeve for me. Maureen, would you help?
+[SEG0019] person_1 (CAREGIVER): Of course. There we are, Edie.
+[SEG0020] person_2 (PATIENT): Is it going to hurt?
+[SEG0021] person_3 (DOCTOR): It'll squeeze, that's all. Nice and still.
+[SEG0022] person_3 (DOCTOR): One nineteen over seventy-four. Very good. Pulse, sixty-six, regular. Your oxygen is ninety-eight, and your temperature is thirty-six point seven, and you're breathing eighteen times a minute, which is all just fine.
+[SEG0023] person_2 (PATIENT): Is that good?
+[SEG0024] person_3 (DOCTOR): It's very good. Can you lift your top a bit at the front, and breathe in and out through your mouth?
+[SEG0025] person_3 (DOCTOR): Heart sounds are normal, the chest is clear. Thank you. And a couple of bruises on the forearms, small ones, and the one on the shin. Not enormous, but more than I'd expect.
+[SEG0026] person_2 (PATIENT): Okay.
+[SEG0027] person_2 (PATIENT): Is it the tablets?
+[SEG0028] person_3 (DOCTOR): I think it's very likely a bit of the tablets. The aspirin and the clopidogrel both thin your blood, deliberately, to protect your heart and stop clots forming in the arteries. The cost of that is, you bruise more easily and you can get a sore stomach. So I think the story we have is a stable heart, which is good, and the side effects of the thinning tablets, which we can look after. I'd also like to rule out other reasons that you might be tired and bruised, like a low blood count.
+[SEG0029] person_2 (PATIENT): Is that serious?
+[SEG0030] person_3 (DOCTOR): It's a blood test, Mrs Wragg, one little needle. We'll check your count, and we'll do a tracing of your heart today, an ECG, since you're here and it's only five minutes. And I'm going to give you something to protect your stomach called pantoprazole, forty milligrams, one tablet in the morning before breakfast. That should settle the burning, and it'll mean you can swallow the white one without a fight.
+[SEG0031] person_2 (PATIENT): Another tablet.
+[SEG0032] person_1 (CAREGIVER): Er, it's in the box, Edie, it makes no difference, it goes in with the rest.
+[SEG0033] person_1 (CAREGIVER): Doctor, can I ask something before we go. Should she have the aspirin with food? Because she says that's when the burning starts.
+[SEG0034] person_3 (DOCTOR): Good question. Yes, with or just after breakfast, never on an empty stomach, and with a full glass of water, sitting up. The pantoprazole is the opposite, that one goes in before the food.
+[SEG0035] person_1 (CAREGIVER): Mm-hm.
+[SEG0036] person_1 (CAREGIVER): Right. Aspirin with, the new one before. I'll write that on the chart.
+[SEG0037] person_3 (DOCTOR): And I can ask the pharmacy for the coated sort of aspirin, it's smaller and easier to swallow.
+[SEG0038] person_2 (PATIENT): Smaller. Oh, that would help.
+[SEG0039] person_3 (DOCTOR): I want you to carry on with both of the heart tablets, please. Don't stop either one because of the bruises, that matters. If you have any black stools, or blood in your wee, or a nosebleed that won't stop after ten minutes, or any cut that keeps on bleeding, you ring us, or you go straight to casualty.
+[SEG0040] person_2 (PATIENT): Okay.
+[SEG0041] person_2 (PATIENT): Black stools. Black. Maureen, you'll have to watch.
+[SEG0042] person_1 (CAREGIVER): I will. I'll check, you needn't worry.
+[SEG0043] person_3 (DOCTOR): And if the chest pain changes, that's a different matter, same rule. Does that all make sense?
+[SEG0044] person_2 (PATIENT): Yes. Yes. Thank you, doctor. I thought you'd say it was my heart giving up.
+[SEG0045] person_3 (DOCTOR): Not today. Let's have the nurse do that tracing before you go, she's just along the corridor.

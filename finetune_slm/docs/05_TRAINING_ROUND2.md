@@ -80,7 +80,7 @@ Checks: all 6 invalid outputs of the 973-encounter test now parse; **987 outputs
 
 **How.** A long transcript is cut into windows of at most **7,000 characters (about 1,800 tokens)** with **4 shared segments** between neighbours. Each window is sent to the model on its own with local segment ids `SEG0001…` (the format the model was trained on). The results are merged deterministically: list items identical apart from evidence ids are united (this also removes duplicates caused by the overlap), `related_entities` pointers like `medications[0]` are renumbered, evidence ids are mapped back to the original segment ids, the first chief complaint found is kept, speakers are united, and a quality check that is true in any window stays true. A transcript that fits in one window is processed unchanged. Merging an output with a copy of itself returns it unchanged (unit-tested). The 20 scenarios give 44 windows.
 
-**Update (2026-11-26).** Windows lose context (document 07, section 5.2) and step 400 did not need them at the lengths tested, so its scoring file now uses windows of 14,000 characters with 10 shared segments; the 7,000 / 4 setting described here is the one step 156 keeps.
+**Update (2026-11-26).** Windows lose context (document 10, section 5.2) and step 400 did not need them at the lengths tested, so its scoring file now uses windows of 14,000 characters with 10 shared segments; the 7,000 / 4 setting described here is the one step 156 keeps.
 
 **Limits.** A fact stated across a window border may be split (the overlap reduces this); a window that does not see the start of the visit may not know the chief complaint; windowing costs step 400 about 0.03 precision on the 20 scenarios (below), because a window does not see the rest of the visit.
 
@@ -105,7 +105,7 @@ Without the guard, loop outputs count as empty (step 100: precision 0.722, recal
 * **Round 2 gives a more complete record**: recall on natural speech rises from 0.56 to 0.68 and the model writes 52 facts per consultation instead of 30.
 * **It costs precision**: 0.762 (step 400, full text) to 0.710 (step 156, windows) and hallucination 0.168 to 0.213; critical-error rates are similar (0.048 against 0.054).
 * A combined precision/recall figure (harmonic mean) is 0.644 for step 400 on full text and 0.692 for step 156 on windows.
-* It is a **trade-off, not a clean win**. The choice between the two models depends on whether the team values completeness or precision more (document 07).
+* It is a **trade-off, not a clean win**. The choice between the two models depends on whether the team values completeness or precision more (document 10).
 * Caveats: 20 scenarios, one judge, recall measured against a short design list (a floor), natural-data labels are model-written, one training run.
 
 ## 11. Questions an external reviewer may ask

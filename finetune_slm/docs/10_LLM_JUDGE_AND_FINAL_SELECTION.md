@@ -1,4 +1,4 @@
-# 07. The LLM judge, all findings, and the final selection
+# 10. The LLM judge, all findings, and the final selection
 
 This is the document to read before presenting numbers. It explains exactly how every number was produced, lists every result for every model in one place, states what the numbers do and do not mean, and gives the model selection with its evidence. Code and raw results: `evaluation/judge_eval/` (`METHODOLOGY.md`, `REPORT.md`, `output/*.md`).
 

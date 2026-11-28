@@ -1,0 +1,125 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_18_hoarse_voice_primary_teacher)
+[SEG0001] person_1 (PATIENT): I'm so sorry, I'm so sorry, I know I'm late. A parent grabbed me at the gate on my way out, and then the lollipop man wanted a word, and then the car park was full. I ran in. Is that all right?
+[SEG0002] person_2 (DOCTOR): It's quite all right, only five minutes. Come in, sit down, catch your breath. I'm Dr Banerjee, and this is Nurse Alison. You're Mrs Heaton?
+[SEG0003] person_1 (PATIENT): Mrs Heaton, Ruth. And this is my husband, Graham. He drove.
+[SEG0004] person_3 (NURSE): Hello, Ruth, hello, Mr Heaton. Do take a seat. There's water on the table if you'd like some, I think a glass of that would do you good before we start.
+[SEG0005] person_1 (PATIENT): Yeah.
+[SEG0006] person_1 (PATIENT): Thank you. I'll have some. I've been talking all morning.
+[SEG0007] person_4 (FAMILY_MEMBER): Hm, she wouldn't have come at all if I hadn't. She's been croaking at me since Easter.
+[SEG0008] person_1 (PATIENT): Don't exaggerate, I haven't.
+[SEG0009] person_4 (FAMILY_MEMBER): Before Easter.
+[SEG0010] person_1 (PATIENT): It's just a frog in my throat. I told the receptionist, it's nothing.
+[SEG0011] person_2 (DOCTOR): Let's have a listen. Say something for me. Anything. Count to ten.
+[SEG0012] person_1 (PATIENT): One, two, three, four, five, six, seven, eight, nine, ten.
+[SEG0013] person_2 (DOCTOR): Mm. Yes. I hear it. A bit rough and a bit breathy, and it cracks at the top. Is that how it is all the time?
+[SEG0014] person_1 (PATIENT): Mostly. It's better first thing, worse at the end of the day. And by Friday, I can hardly speak. I got through assembly on a whisper last week.
+[SEG0015] person_2 (DOCTOR): When did you first notice the change?
+[SEG0016] person_1 (PATIENT): Hm, the spring. Maybe March. There was a lot of shouting, the rugby, I was on playground duty and it was freezing, and I thought, I've overdone it. Then it didn't go away.
+[SEG0017] person_4 (FAMILY_MEMBER): Mm-hm.
+[SEG0018] person_4 (FAMILY_MEMBER): Uh, it was January. She had the cold in January and it never really cleared.
+[SEG0019] person_1 (PATIENT): It was after the cold, I suppose.
+[SEG0020] person_2 (DOCTOR): So, um, somewhere between January and March, and ongoing, say six to ten months. Has it ever got back to normal in between?
+[SEG0021] person_1 (PATIENT): In the summer holidays it got better. I could sing again. Not properly, but a bit. Then back in September it crept back.
+[SEG0022] person_2 (DOCTOR): That's a useful clue. Any pain in your throat?
+[SEG0023] person_1 (PATIENT): No. It's not sore. It's tired. That's what it is. My voice gets tired.
+[SEG0024] person_2 (DOCTOR): Any pain when you swallow, or food sticking?
+[SEG0025] person_1 (PATIENT): No, no. Swallowing is fine.
+[SEG0026] person_2 (DOCTOR): Any lumps in the neck, or weight loss, or a cough?
+[SEG0027] person_1 (PATIENT): Not that I've noticed. No lumps.
+[SEG0028] person_2 (DOCTOR): And you've been to the doctor with this before?
+[SEG0029] person_1 (PATIENT): Once. In June. She said it's probably reflux and gave me a tablet.
+[SEG0030] person_2 (DOCTOR): Do you know which one?
+[SEG0031] person_1 (PATIENT): The omeprazole. Twenty. Every morning.
+[SEG0032] person_2 (DOCTOR): And has it helped?
+[SEG0033] person_1 (PATIENT): Not massively. I'd say not at all. Though I do still get the reflux, and the burning at night. So perhaps it's not doing very much. I don't know.
+[SEG0034] person_2 (DOCTOR): How long have you had the acid reflux?
+[SEG0035] person_1 (PATIENT): Years. Ten or so. It comes and goes.
+[SEG0036] person_2 (DOCTOR): Right. And what do you do for work? You said playground duty.
+[SEG0037] person_1 (PATIENT): I'm a teacher. Year four. Twenty-seven years at the same school, primary. I teach the nine-year-olds. And I've got the choir on a Wednesday.
+[SEG0038] person_2 (DOCTOR): Sure.
+[SEG0039] person_2 (DOCTOR): Twenty-seven years. I'd be hoarse myself.
+[SEG0040] person_1 (PATIENT): It's the noise. They're lovely, but they're enormous, thirty of them, in a room that echoes. I don't have a microphone. I can't hear myself think so I shout over them, and it's a vicious circle.
+[SEG0041] person_4 (FAMILY_MEMBER): Mm.
+[SEG0042] person_4 (FAMILY_MEMBER): Um, she has a whistle in her handbag, and she won't use it.
+[SEG0043] person_1 (PATIENT): It's undignified.
+[SEG0044] person_2 (DOCTOR): What else do you do with your voice? Singing, talking on the phone?
+[SEG0045] person_1 (PATIENT): The choir, like I said. And I read to my grandson on Sundays, on the phone, an hour. We're doing the Hobbit.
+[SEG0046] person_4 (FAMILY_MEMBER): Which she does all the voices for.
+[SEG0047] person_1 (PATIENT): I do the dragon.
+[SEG0048] person_2 (DOCTOR): Ha.
+[SEG0049] person_2 (DOCTOR): Oh, I'd like to hear the dragon. Do you drink much water through the day?
+[SEG0050] person_3 (NURSE): Um, my sister's a teacher, in Leeds. She lost her voice for a whole half-term. She says it's the radiators, the dry air.
+[SEG0051] person_1 (PATIENT): Uh, it is, it's the dry air. The heating comes on in October and it's like a desert.
+[SEG0052] person_2 (DOCTOR): That's a good point, both of you. Dry air is hard on the vocal cords.
+[SEG0053] person_1 (PATIENT): Not enough. A cup of tea at breakfast, a cup at break, one at lunch, one at hometime. I don't have time to go to the loo.
+[SEG0054] person_2 (DOCTOR): And alcohol?
+[SEG0055] person_1 (PATIENT): Well, uh, a glass of wine on Friday, if I can keep my eyes open.
+[SEG0056] person_2 (DOCTOR): Have you ever smoked?
+[SEG0057] person_1 (PATIENT): Never. Not even as a teenager. My mother would have killed me.
+[SEG0058] person_2 (DOCTOR): And your husband?
+[SEG0059] person_4 (FAMILY_MEMBER): Gave up in nineteen eighty-eight. I haven't touched them since.
+[SEG0060] person_2 (DOCTOR): Good for you. Is the voice making things difficult, besides the singing?
+[SEG0061] person_1 (PATIENT): Yes. A bit. The children can't hear me at the back, and I've had to ask my teaching assistant to do the register. And I get tired at the end of the day. I just want to sit in silence.
+[SEG0062] person_2 (DOCTOR): Sure.
+[SEG0063] person_2 (DOCTOR): That sounds exhausting. Let me look at you. Nurse Alison, could you help me with the light? Mrs Heaton, I'm going to look in your mouth and throat, and then feel your neck, and feel your thyroid, and the glands.
+[SEG0064] person_1 (PATIENT): Go ahead.
+[SEG0065] person_2 (DOCTOR): Open wide and say ahh. Good. The back of your throat looks a little red, but nothing worrying. No white patches. Tongue out. Now let me feel your neck, from the jaw down. And along the sides. Swallow for me.
+[SEG0066] person_1 (PATIENT): Swallowing.
+[SEG0067] person_2 (DOCTOR): Again. There are no lumps in the neck, and the thyroid feels normal, and the glands are not enlarged. That's good.
+[SEG0068] person_4 (FAMILY_MEMBER): So is it nothing, then?
+[SEG0069] person_2 (DOCTOR): It's not nothing, Mr Heaton, but there's nothing frightening on the outside. The voice box itself is behind all that, and I can't see it without a camera. What I think is most likely, from your story, is that your voice is being strained by years of using it too hard, and aggravated by the reflux, which can irritate the voice box. That fits with it being worse by Friday and better after the holidays. But I can't be certain, and a hoarse voice that lasts more than a few weeks always deserves a proper look.
+[SEG0070] person_1 (PATIENT): Mm-hm.
+[SEG0071] person_1 (PATIENT): What sort of proper look?
+[SEG0072] person_2 (DOCTOR): A thin flexible camera, through the nose, to look at the vocal cords. It takes a minute or two, it's a bit uncomfortable, we numb the nose, and it's done in the ENT clinic. I'd like to refer you for that.
+[SEG0073] person_1 (PATIENT): Does it hurt?
+[SEG0074] person_2 (DOCTOR): It tickles and it makes you want to sneeze. People are surprised how quick it is.
+[SEG0075] person_1 (PATIENT): And what would you be looking for?
+[SEG0076] person_2 (DOCTOR): Things like nodules, the little calluses singers and teachers get, or swelling from reflux, or, rarely, anything more serious. Most likely it's one of the first two.
+[SEG0077] person_1 (PATIENT): Mm.
+[SEG0078] person_1 (PATIENT): Right. I'll do it.
+[SEG0079] person_2 (DOCTOR): And I'd also like you to see a speech and language therapist who specialises in voices. They teach you how to use your voice without damaging it, breathing, projection, which is exactly what teachers need.
+[SEG0080] person_1 (PATIENT): I've always thought I'd be good at that.
+[SEG0081] person_2 (DOCTOR): Do you wake in the night with the reflux, or a dry mouth?
+[SEG0082] person_1 (PATIENT): Hm, a bit. Not every night. The taste of it, like pennies, and I'm clearing my throat on the stairs.
+[SEG0083] person_2 (DOCTOR): That's worth knowing. Raising the head of your bed a few inches helps, and so does leaving three hours between your last meal and bed.
+[SEG0084] person_1 (PATIENT): We eat at half past seven and I'm in bed by ten, so that's all right.
+[SEG0085] person_2 (DOCTOR): Perfect.
+[SEG0086] person_3 (NURSE): I've got a leaflet I'll give you, Ruth, about looking after your voice. It has all of this, and a few simple exercises, humming, and a steam inhalation, which many teachers swear by. Just a bowl of hot water and a towel, ten minutes at night, not too hot.
+[SEG0087] person_1 (PATIENT): Yeah.
+[SEG0088] person_1 (PATIENT): Steam. I used to do that for colds.
+[SEG0089] person_2 (DOCTOR): And lozenges are fine for comfort, but avoid the menthol ones that numb the throat, because then you can't feel when you're pushing too hard. Plain honey and lemon is better.
+[SEG0090] person_1 (PATIENT): Honey and lemon. That I can manage, the staff room has a jar.
+[SEG0091] person_3 (NURSE): Hm, it moisturises the cords. It's not a cure, but it feels lovely.
+[SEG0092] person_2 (DOCTOR): In the meantime, a few things you can do now. Drink water, lots, little and often, keep a bottle on your desk. Avoid whispering, which strains the voice even more, strangely. Try not to clear your throat, take a sip instead. And do use the whistle on the yard, and ask the school about a microphone, it's a reasonable adjustment.
+[SEG0093] person_4 (FAMILY_MEMBER): Right.
+[SEG0094] person_4 (FAMILY_MEMBER): I'll tell her head. I know her head.
+[SEG0095] person_1 (PATIENT): Graham. Don't.
+[SEG0096] person_4 (FAMILY_MEMBER): I will.
+[SEG0097] person_2 (DOCTOR): And the reflux. The omeprazole should be taken thirty minutes before breakfast, not with it. Are you taking it with your tea and toast?
+[SEG0098] person_1 (PATIENT): With the tea. At the same time as the toast.
+[SEG0099] person_2 (DOCTOR): Then that's why it's not working. Half an hour before. And avoid eating late in the evening.
+[SEG0100] person_1 (PATIENT): Oh. Well, I wouldn't have known that.
+[SEG0101] person_2 (DOCTOR): Nobody tells you. Try it for a few weeks and see.
+[SEG0102] person_1 (PATIENT): I will. Thank you. I'm so sorry again about being late.
+[SEG0103] person_2 (DOCTOR): Not at all. And Mr Heaton, thank you for making her come.
+[SEG0104] person_4 (FAMILY_MEMBER): I'll take the credit.
+[SEG0105] person_3 (NURSE): I'll book your appointment at the ENT clinic now, so you don't have to wait for the letter. They've got a slot on a Tuesday afternoon. Could you do that, with the school?
+[SEG0106] person_1 (PATIENT): I could swap my last lesson. Tuesday's fine.
+[SEG0107] person_3 (NURSE): Lovely. Mr Heaton, you can come too if you'd like, there's a waiting room with a kettle.
+[SEG0108] person_4 (FAMILY_MEMBER): I will, I'll bring the crossword.
+[SEG0109] person_3 (NURSE): Here's the water bottle, we give them out to teachers, it's got our logo on it, I'm afraid.
+[SEG0110] person_1 (PATIENT): It's perfect. Everybody will want one.
+
+JSON:

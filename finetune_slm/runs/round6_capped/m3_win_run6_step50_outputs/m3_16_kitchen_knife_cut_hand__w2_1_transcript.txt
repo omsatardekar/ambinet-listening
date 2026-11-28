@@ -1,0 +1,64 @@
+You are a clinical information extraction system. Read ONE outpatient consultation transcript (lines like "[SEG0001] person_1 (DOCTOR): text") and return ONE JSON object with the clinical information it contains, in the trained clinical-extraction format. Return only the JSON.
+
+Rules
+- Use only what is said. Never invent or infer. Leave out every field and section that has no information.
+- Record who said it (doctor, patient, nurse, caregiver, family_member, clinical_staff, unknown), in lower case.
+- A denied finding goes in negative_findings, never in symptoms. A doctor's question is not a fact: use the answer.
+- A medicine the patient takes is not an allergy. A stopped medicine is not current. Dose, frequency, route and indication belong only to the medicine they were said for.
+- Doctor impressions are provisional or differential, and only if the doctor stated one. Do not add a diagnosis the doctor declined to give.
+- Use the right status for plan items (planned, completed, recommended, conditional). Do not add a follow-up that was not arranged.
+- If speakers disagree or a detail is unclear (dose, date, allergy, name), keep both statements and describe the real doubt in clinical_uncertainties.
+- Cite one or two segment ids per item in evidence_ids. clinical_evidence is []. All confidence fields are null.
+
+Transcript (encounter m3_16_kitchen_knife_cut_hand)
+[SEG0001] person_1 (DOCTOR): And temperature, pulse, can we get a quick set, just so I have them down?
+[SEG0002] person_3 (CLINICAL_STAFF): Yep. Give me your finger, Mr Ferrante, the right one, not the one with the cut.
+[SEG0003] person_2 (PATIENT): Obviously.
+[SEG0004] person_3 (CLINICAL_STAFF): Pulse eighty-four. Pressure, hold on, one thirty-two over eighty-four. Temp thirty-six point eight.
+[SEG0005] person_1 (DOCTOR): Perfect. Mr Ferrante, I'm going to close this with stitches. Five or six. You'll feel pressure, tugging, but not pain. If you feel pain, tell me and I'll give you more numbing.
+[SEG0006] person_2 (PATIENT): Fine. How long?
+[SEG0007] person_1 (DOCTOR): Fifteen minutes, give or take.
+[SEG0008] person_2 (PATIENT): Fifteen.
+[SEG0009] person_1 (DOCTOR): And you're allowed to look at your watch, I won't be offended. Dee, can you open the suture pack, the four-oh nylon?
+[SEG0010] person_3 (CLINICAL_STAFF): Four-oh nylon, here you go.
+[SEG0011] person_1 (DOCTOR): There's the first. And tie. Again, tie. That's good. Do you cook a lot?
+[SEG0012] person_2 (PATIENT): Hm, every Sunday. It's my thing. I make a big soup, a big batch, it lasts the week.
+[SEG0013] person_1 (DOCTOR): What's your secret?
+[SEG0014] person_2 (PATIENT): Roasted squash, always. Not boiled. A bit of sage. A bit of chili. I'll be honest, I've never cut it right before, I just hack at it.
+[SEG0015] person_1 (DOCTOR): Mm-hm.
+[SEG0016] person_1 (DOCTOR): Hm. You know you can cook it whole first, in the oven, stab it a few times, and then cut it, it's soft.
+[SEG0017] person_2 (PATIENT): Seriously?
+[SEG0018] person_1 (DOCTOR): Twenty minutes at two hundred, and it slices like butter.
+[SEG0019] person_2 (PATIENT): I've been doing it wrong for ten years.
+[SEG0020] person_1 (DOCTOR): Third stitch. Dee, can you hold the edge there? Thanks. You work with your hands?
+[SEG0021] person_2 (PATIENT): I work in an office. IT. I'll be typing with one hand, that's going to be fun.
+[SEG0022] person_1 (DOCTOR): How's your feeling, any pain?
+[SEG0023] person_2 (PATIENT): No. Weird, but no pain.
+[SEG0024] person_1 (DOCTOR): Last two. That's four. And five. Done. Dee, a dressing, a non-stick pad, and a light bandage, not too tight. Mr Ferrante, flex your fingers again, let me see you can still do it.
+[SEG0025] person_2 (PATIENT): Okay.
+[SEG0026] person_2 (PATIENT): Yeah. Fine. Looks like a baseball.
+[SEG0027] person_3 (CLINICAL_STAFF): I'll wrap it nicely, Mr Ferrante, and you can wriggle your fingers through the end. It should feel snug, but not tight. If it throbs, loosen it.
+[SEG0028] person_1 (DOCTOR): Now, instructions. Keep it dry for two days. Keep it raised when you can. Take paracetamol for the soreness once the numbing wears off, in about two hours. No ibuprofen on an empty stomach with your asthma.
+[SEG0029] person_2 (PATIENT): Okay.
+[SEG0030] person_1 (DOCTOR): Stitches out in ten days. Your own doctor or the practice nurse can do that. If there's any sign of infection, redness spreading, swelling, pus, a throbbing that's getting worse, or a fever, come back here or see your doctor the same day. Don't wait.
+[SEG0031] person_2 (PATIENT): Yeah.
+[SEG0032] person_2 (PATIENT): And if it's fine?
+[SEG0033] person_1 (DOCTOR): Then you don't come back at all, you just go to the practice for the stitches.
+[SEG0034] person_2 (PATIENT): Showering?
+[SEG0035] person_3 (CLINICAL_STAFF): Put a plastic bag over it, with a rubber band at the top, or wrap it in cling film. Don't soak it in the bath or the sink. And you'll be tempted to peek at it. Don't unwrap it for two days unless it's leaking through.
+[SEG0036] person_2 (PATIENT): Mm.
+[SEG0037] person_2 (PATIENT): What about work? Typing with one hand.
+[SEG0038] person_1 (DOCTOR): Honestly, you can type with the other four fingers and a thumb. The dressing is bulky, but you don't need the injured palm. I'd take a couple of days if you can, because sitting with a throbbing hand is no fun. And it'll let the swelling go down.
+[SEG0039] person_2 (PATIENT): Right.
+[SEG0040] person_2 (PATIENT): My boss will love that.
+[SEG0041] person_1 (DOCTOR): Tell him it was the squash.
+[SEG0042] person_2 (PATIENT): He'll want a photo.
+[SEG0043] person_1 (DOCTOR): And since you're diabetic, I'd keep an eye on your sugar this week, wounds can heal more slowly if it runs high. If you've got a meter at home, check it once a day.
+[SEG0044] person_2 (PATIENT): Mm-hm.
+[SEG0045] person_2 (PATIENT): I have one. I don't use it much.
+[SEG0046] person_1 (DOCTOR): This week, use it.
+[SEG0047] person_2 (PATIENT): Okay, okay.
+[SEG0048] person_2 (PATIENT): Great. Can I go?
+[SEG0049] person_1 (DOCTOR): You can go. Dee will go through the leaflet, and she'll check you can manage getting dressed.
+[SEG0050] person_2 (PATIENT): Thank you. And thanks for the squash tip.
+[SEG0051] person_1 (DOCTOR): Let me know how the soup goes.
