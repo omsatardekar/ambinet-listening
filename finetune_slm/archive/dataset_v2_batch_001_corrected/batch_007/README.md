@@ -1,0 +1,2 @@
+# Batch 007 (500 synthetic encounters, ids 02501-03000)
+Generated with the Batch 001/002 generator (scripts/generate_batch_007.py) from 26 NEW scenario profiles (scripts/b7_profiles_1.py): chronic pain, autoimmune, vascular and blood-vessel emergencies, endocrine crises, neurological and obstetric emergencies, dermatology, ENT and infection scenarios, as best / middle / worst cases. Validate with scripts/validate_b7.py. 500/500 pass; 0 near duplicates vs Batches 3-6. Not clinically reviewed; dialogue is template-based.

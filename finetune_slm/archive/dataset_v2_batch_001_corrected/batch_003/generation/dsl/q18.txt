@@ -1,0 +1,239 @@
+## 00914 PATIENT=1 DOCTOR=2
+2: Good morning, Mr Jarrah. The booking says sleep study results. Before I give you them, how have you been feeling? ~
+1: Tired, doctor. I'm always tired, I fall asleep in front of the telly by seven, and my wife says I snore like a chainsaw. Is it bad news? ~ cc s1 s2
+2: Let's go step by step. How long has the snoring been going on? ~ s1
+1: Years, I think. Maybe ten years? Mick says it's been worse lately. ~ s1
+2: And the daytime sleepiness? When did it start? ~ s2
+1: I'm not sure. A year? Two? I can't really put a date on it. ~ s2 u1
+2: Do you wake up at night gasping? ~ s3
+1: Yes, a few times a week. I sit bolt upright, my heart pounding. ~ s3
+2: Headaches in the morning? ~ s4
+1: Most mornings. Gone by ten. ~ s4
+2: Any chest pain at night? ~ n1
+1: No chest pain. ~ n1
+2: Have you ever fallen asleep while driving? ~ n2
+1: No, never. Thank God. I'd stop the cab. ~ n2
+2: Any swelling in the ankles? ~ n3
+1: No swelling. ~ n3
+2: Your medicines? ~ m1 m2 m3
+1: Amlodipine, 5 mg, once a day. Metformin, 500 mg, twice a day. And omeprazole, 20 mg, once a day. ~ m1 m2 m3
+2: Allergies? ~ a1
+1: Penicillin. A rash. ~ a1
+2: Medical history? ~ h1 h2
+1: Type 2 diabetes, and high blood pressure. ~ h1 h2
+2: Any operations? ~ sg1
+1: They straightened my nose, a deviated septum, in 2010. ~ sg1
+2: Anyone in the family with sleep trouble? ~ f1
+1: My father had sleep apnoea. ~ f1
+2: What do you do? ~ so1
+1: Taxi driver, thirty years. ~ so1
+2: Alcohol? ~ so2
+1: Two beers every night. ~ so2
+2: Let me check you. Blood pressure 148 over 92, pulse 80, temperature 36.6, oxygen 95 percent, breathing 16, and weight 118 kilos. ~ v pause=15
+1: Is that high? ~
+2: A little. Open your mouth wide for me. ~ pause=8
+1: Ahh. ~
+2: Your neck is thick, and the space at the back of the throat is narrow and crowded. ~ x1 x2
+1: Is that why I snore? ~
+2: It's part of it. And there's no swelling in your legs. ~ x3
+1: Good. ~
+2: Any heartburn at night? ~ r1
+1: No, nothing, the tablet works. ~ r1
+2: Now the study. You had the overnight sleep study last month, and it showed that you stopped breathing 28 times an hour. ~ p1
+1: Twenty-eight? Is that a lot? ~
+2: It's in the moderate range. It looks like moderate obstructive sleep apnoea, but I can't rule out an underactive thyroid adding to the tiredness. ~ d1 d2
+1: Will I lose my licence? ~
+2: Not if we treat it. I'd like to arrange a trial of a CPAP machine, a mask that keeps your airway open, and I'd like to do a thyroid blood test. ~ p2 p3
+1: A mask? Every night? ~
+2: It sounds worse than it is. Most people feel the difference within a week. Cut the beers, too. ~ c1
+1: Both are fair. ~
+2: I'd like to see you again in six weeks. ~ f2
+1: Six weeks. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"Tired, doctor. I'm always tired","normalized_value":"Sleep study results; fatigue and snoring"},
+ "symptoms":[{"k":"s1","name":"snore","normalized_name":"Snoring","category":"respiratory","duration":{"value":10,"unit":"years","normalized":"about 10 years"}},
+  {"k":"s2","name":"Tired","normalized_name":"Excessive daytime sleepiness","category":"neurological","certainty":"uncertain"},
+  {"k":"s3","name":"wake up at night gasping","normalized_name":"Nocturnal gasping","category":"respiratory","frequency":"a few times a week"},
+  {"k":"s4","name":"Headaches in the morning","normalized_name":"Morning headache","category":"neurological","frequency":"Most mornings"}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Nocturnal chest pain"},{"k":"n2","finding":"fallen asleep while driving","normalized_name":"Falling asleep while driving"},{"k":"n3","finding":"swelling in the ankles","normalized_name":"Ankle swelling"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Type 2 diabetes","normalized_condition":"Type 2 diabetes mellitus"},{"k":"h2","condition":"high blood pressure","normalized_condition":"Hypertension"}],
+  "surgical_history":[{"k":"sg1","procedure":"straightened my nose, a deviated septum","normalized_procedure":"Septoplasty","timeframe":"in 2010"}],
+  "family_history":[{"k":"f1","relation":"father","condition":"sleep apnoea"}],
+  "social_history":[{"k":"so1","category":"occupation","details":"Taxi driver, thirty years"},{"k":"so2","category":"alcohol","details":"Two beers every night"}]},
+ "medications":[{"k":"m1","name":"Amlodipine","dose":"5 mg","frequency":"once a day"},{"k":"m2","name":"Metformin","dose":"500 mg","frequency":"twice a day"},{"k":"m3","name":"omeprazole","dose":"20 mg","frequency":"once a day"}],
+ "allergies":[{"k":"a1","substance":"Penicillin","reaction":"rash"}],
+ "vitals":{"k":"v","by":"doctor","bp":"148/92","hr":80,"temp":36.6,"spo2":95,"rr":16,"wt":118},
+ "physical_examination":[{"k":"x1","finding":"neck is thick","normalized_finding":"Increased neck circumference","body_site":"neck"},{"k":"x2","finding":"space at the back of the throat is narrow and crowded","normalized_finding":"Crowded oropharynx","body_site":"throat"},{"k":"x3","finding":"no swelling in your legs","normalized_finding":"No leg swelling","status":"absent","body_site":"legs"}],
+ "review_of_systems":[{"k":"r1","system":"gastrointestinal"}],
+ "clinical_assessment":[{"k":"d1","assessment":"moderate obstructive sleep apnoea","certainty":"provisional"},{"k":"d2","assessment":"an underactive thyroid adding to the tiredness","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"overnight sleep study","normalized_name":"Overnight polysomnography","type":"other","status":"completed"},{"k":"p2","name":"trial of a CPAP machine","normalized_name":"CPAP trial","type":"other"},{"k":"p3","name":"thyroid blood test","normalized_name":"Thyroid function test","type":"laboratory"}],
+ "counsel":[["c1","Cut down on beer"]],
+ "follow_up":[{"k":"f2","time_reference":"in six weeks"}],
+ "clinical_uncertainties":[{"type":"date_uncertain","description":"The patient cannot say when the daytime sleepiness began.","related_entities":["symptoms[1]"],"k":"u1"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00921 PATIENT=1 DOCTOR=2 NURSE=3
+3: Dr Rao, this is Ms Kapoor, she's here about her periods. I've done her obs: blood pressure 110 over 70, pulse 72, weight 72 kilos. She's a bit nervous. ~ v
+2: Thank you, nurse. Come in, Ms Kapoor, sit down. You said your periods have gone strange? ~
+1: Yes, doctor, I'm so worried. Ever since I stopped the pill six months ago, my periods are irregular, sometimes forty days, sometimes sixty, and I think something is wrong. ~ cc s1
+2: So irregular cycles since stopping the pill. What's the bleeding like when it does come? ~ s1 s2
+1: Heavy. Very heavy the first two days, I'm soaking through pads. ~ s2
+2: And your skin? ~ s3
+1: Acne, along the jaw. It was never this bad before. Is it hormones? ~ s3
+2: Anything else you've noticed? ~ s4
+1: Some coarse hair on my chin, and I've started shaving it. And I'm moody, I snap at my mother. ~ s4 s5
+2: Have you noticed any milky discharge from the breasts? ~ n1
+1: No, nothing. ~ n1
+2: Any headaches or changes in your vision? ~ n2
+1: No headaches, no vision changes. ~ n2
+2: Weight loss? ~ n3
+1: No, I've put on a little. ~ n3
+2: Are you taking anything at the moment? ~ m1
+1: Just a folic acid, maybe 400 micrograms? I got it from the chemist when we were thinking of trying. ~ m1 u1
+2: Okay. Any allergies? ~ a1
+1: Aspirin. I react to it, but I don't remember what happens, I only know it's on my record. ~ a1
+2: Fine. Medical history? ~ h1 h2
+1: Anaemia a few years ago, and asthma as a child. ~ h1 h2
+2: Surgery? ~ sg1 sg2
+1: Tonsils, when I was seven. And my wisdom teeth, in 2019. ~ sg1 sg2
+2: Anyone in the family with similar problems? ~ f1
+1: My mother has diabetes. ~ f1
+2: What do you do for work? ~ so1
+1: I'm a software tester. Long hours, lots of sitting. ~ so1
+2: Do you drink? ~ so2
+1: No alcohol at all. ~ so2
+2: Exercise? ~ so3
+1: Yoga, twice a week. ~ so3
+2: Let me examine you. Is that all right? Lie back and I'll feel your tummy. ~ pause=12
+1: Okay. ~
+2: Your abdomen is soft and not tender. ~ x1
+1: Good. ~
+2: I can see acne along the jaw, and coarser hair on the chin. ~ x2 x3
+1: Is it serious? ~
+2: Any trouble passing urine? ~ r1
+1: No, nothing, it's normal. ~ r1
+2: What I'm seeing, with the long cycles, the acne and the chin hair, is probably polycystic ovary syndrome. ~ d1
+1: PCOS? Will I be able to have children? ~
+2: Very likely yes. Let me confirm first. I'd like to arrange a pelvic ultrasound, hormone blood tests, and a pregnancy test today. ~ p1 p2 p3
+3: I can do the pregnancy test now, doctor. ~
+2: Thank you. And I'd like to start norethisterone, 5 mg, twice a day for ten days, to bring on a proper period. ~ m2
+1: Is it safe? ~
+2: Yes. Expect a bleed a few days after you finish. ~
+1: Okay. ~
+2: I'd like to see you again in four weeks. ~ f2
+1: Four weeks. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"Ever since I stopped the pill six months ago, my periods are irregular","normalized_value":"Irregular periods since stopping oral contraceptive"},
+ "symptoms":[{"k":"s1","name":"periods are irregular","normalized_name":"Irregular menstrual cycles","category":"genitourinary","duration":{"value":6,"unit":"months","normalized":"6 months"}},
+  {"k":"s2","name":"Heavy","normalized_name":"Heavy menstrual bleeding","category":"genitourinary"},
+  {"k":"s3","name":"Acne","normalized_name":"Acne","category":"dermatological","body_site":"jaw"},
+  {"k":"s4","name":"coarse hair on my chin","normalized_name":"Hirsutism","category":"dermatological","body_site":"chin"},
+  {"k":"s5","name":"moody","normalized_name":"Mood changes","category":"psychiatric"}],
+ "negative_findings":[{"k":"n1","finding":"milky discharge from the breasts","normalized_name":"Galactorrhoea"},{"k":"n2","finding":"headaches","normalized_name":"Headache or visual change"},{"k":"n3","finding":"Weight loss","normalized_name":"Weight loss"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Anaemia","normalized_condition":"Anaemia"},{"k":"h2","condition":"asthma as a child","normalized_condition":"Childhood asthma"}],
+  "surgical_history":[{"k":"sg1","procedure":"Tonsils","normalized_procedure":"Tonsillectomy","timeframe":"when I was seven"},{"k":"sg2","procedure":"wisdom teeth","normalized_procedure":"Wisdom tooth extraction","timeframe":"in 2019"}],
+  "family_history":[{"k":"f1","relation":"mother","condition":"diabetes"}],
+  "social_history":[{"k":"so1","category":"occupation","details":"software tester"},{"k":"so2","category":"alcohol","details":"No alcohol at all","status":"none"},{"k":"so3","category":"exercise","details":"Yoga, twice a week"}]},
+ "medications":[{"k":"m1","name":"folic acid","dose":"400 micrograms"},{"k":"m2","name":"norethisterone","dose":"5 mg","frequency":"twice a day for ten days","status":"planned","reported_by":"doctor"}],
+ "allergies":[{"k":"a1","substance":"Aspirin"}],
+ "vital_signs":[{"k":"v","name":"Blood pressure","normalized_name":"Blood pressure","value":"110/70","unit":"mmHg","reported_by":"nurse"},{"k":"v","name":"Heart rate","normalized_name":"Heart rate","value":"72","unit":"bpm","reported_by":"nurse"},{"k":"v","name":"Weight","normalized_name":"Weight","value":"72","unit":"kg","reported_by":"nurse"}],
+ "physical_examination":[{"k":"x1","finding":"abdomen is soft and not tender","normalized_finding":"Soft non-tender abdomen","body_site":"abdomen"},{"k":"x2","finding":"acne along the jaw","normalized_finding":"Jawline acne","body_site":"jaw"},{"k":"x3","finding":"coarser hair on the chin","normalized_finding":"Coarse chin hair","body_site":"chin"}],
+ "review_of_systems":[{"k":"r1","system":"genitourinary"}],
+ "clinical_assessment":[{"k":"d1","assessment":"polycystic ovary syndrome","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"pelvic ultrasound","normalized_name":"Pelvic ultrasound","type":"imaging"},{"k":"p2","name":"hormone blood tests","normalized_name":"Reproductive hormone profile","type":"laboratory"},{"k":"p3","name":"pregnancy test","normalized_name":"Pregnancy test","type":"laboratory"}],
+ "follow_up":[{"k":"f2","time_reference":"in four weeks"}],
+ "clinical_uncertainties":[{"type":"uncertain_dose","description":"The patient is unsure of the folic acid dose ('maybe 400 micrograms').","related_entities":["medications[0]"],"k":"u1"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00932 PATIENT=1 DOCTOR=2 CAREGIVER=3
+2: Good afternoon. How would you like me to call you, Finn, or Mr Gallagher? ~
+1: Finn is fine, thank you, doctor. ~
+3: And I'm Aoife, I look after him after school. His mum's at work. ~
+2: Lovely. Finn, you're here for your follow-up after the sore throat. How's it been? ~
+1: Better, thanks. My throat's been sore for about three days. ~ cc s1 u1
+3: Five days, Finn. It was before the weekend, I'd say five at least. ~ s1 u1
+2: So between three and five days, we'll say. And is it still sore? ~ s1 u1
+1: A little bit, when I swallow. ~
+2: Any fever since the antibiotic started? ~ n1
+3: No, nothing. His temperature's been normal, I checked. ~ n1
+2: And what's he taking, Aoife? ~ m1 m2
+3: Amoxicillin, 10 ml, three times a day. And paracetamol syrup when he needs it. ~ m1 m2 u2
+1: It's 5 ml. I measure it myself. ~ m1 u2
+3: It's 10, Finn, I've the bottle here and I do it. ~ m1 u2
+2: Two different amounts, so I'll check the prescription. Finn, have you had any problems like this before? ~ h1
+3: He's had tonsillitis three times this year. ~ h1
+2: Any operations? ~ sg1
+3: Grommets in his ears when he was three. ~ sg1
+2: Right, let me have a look. Open wide and say ahh. ~ pause=10
+1: Ahh. ~
+2: The tonsils are much less red and swollen than last time. ~ x1
+3: Is that good? ~
+2: Very good. And I can't see any white patches on them now. ~ x2
+1: Can I go back to school? ~
+2: Once you're eating and drinking normally and you've finished the antibiotic, yes. I think the tonsillitis is clearing up. ~ d1
+3: Does he need anything else? ~
+2: Not at the moment. If it doesn't settle by the end of the course, I might do a throat swab. ~ p1
+3: That's fine. ~
+2: Make sure he finishes all of the amoxicillin, even when he feels well. ~ c1
+3: I will. ~
+@@
+{"chief_complaint":{"value":"My throat's been sore for about three days","normalized_value":"Sore throat follow-up after antibiotics"},
+ "symptoms":[{"k":"s1","name":"sore","normalized_name":"Sore throat","category":"ENT","body_site":"throat","duration":{"value":null,"unit":"days","normalized":"approximately 3 to 5 days"},"certainty":"uncertain"}],
+ "negative_findings":[{"k":"n1","finding":"fever","normalized_name":"Fever","reported_by":"caregiver"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"tonsillitis three times this year","normalized_condition":"Recurrent tonsillitis","reported_by":"caregiver"}],
+  "surgical_history":[{"k":"sg1","procedure":"Grommets","normalized_procedure":"Grommet insertion","timeframe":"when he was three","reported_by":"caregiver"}]},
+ "medications":[{"k":"m1","name":"Amoxicillin","frequency":"three times a day","reported_by":"caregiver"},{"k":"m2","name":"paracetamol syrup","normalized_name":"Paracetamol","generic_name":"Paracetamol","frequency":"when he needs it","reported_by":"caregiver"}],
+ "physical_examination":[{"k":"x1","finding":"tonsils are much less red and swollen","normalized_finding":"Reduced tonsillar erythema and swelling","body_site":"tonsils"},{"k":"x2","finding":"can't see any white patches","normalized_finding":"No tonsillar exudate","status":"absent","body_site":"tonsils"}],
+ "clinical_assessment":[{"k":"d1","assessment":"the tonsillitis is clearing up","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"throat swab","normalized_name":"Throat swab","type":"laboratory","status":"conditional"}],
+ "counsel":[["c1","Finish the full course of amoxicillin"]],
+ "clinical_uncertainties":[{"type":"duration_disagreement","description":"The child says his throat has been sore for about three days while his carer says five; the doctor summarised it as three to five days.","resolution_status":"partially_resolved","related_entities":["symptoms[0]"],"k":"u1"},
+  {"type":"medication_discrepancy","description":"The child says the amoxicillin dose is 5 ml while his carer says 10 ml.","related_entities":["medications[0]"],"k":"u2"}],
+ "quality_checks":{"contradictions_detected":["Patient reports a sore throat for about three days; carer reports five days (partially resolved).","Amoxicillin dose: patient states 5 ml, carer states 10 ml (unresolved)."],"ambiguous_entities":[]}}
+
+## 00933 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: G'day, doctor. It's Bruce here, Kev's wife, no, sorry, I'm Kev's brother. Kev's got joint pain since a tick bit him, and he won't say. ~
+2: Thanks, Bruce. Kev, what's been happening? ~
+1: Um. It's my knee. The right one. It's sore. ~ cc s1
+2: How long's it been sore? ~ s1
+1: About two weeks. ~ s1 u1
+3: Three, mate. It was three weeks. You went camping, remember, the long weekend, and you had the tick after. ~ s1 u1
+1: Two. It feels like two. ~ u1
+2: Two to three weeks, then. Does it swell? ~
+1: A bit. ~
+2: Have you had a fever? ~ n1 s2
+1: No. No fever. ~ n1 c1x
+3: He was burning up on Tuesday night, doctor. He had a fever, he just won't admit it. ~ s2 c1x
+2: I'll write both down. Kev, any allergies, to medicines? ~ a1
+1: Um. Penicillin. I'm allergic to it. I get a reaction, but I don't know what. Mum would know. ~ a1
+2: Okay. Anything wrong with your health in general? ~ h1
+1: Asthma. Since I was a kid. ~ h1
+2: Let me look at the knee. Roll up the trouser leg. ~ pause=10
+1: Okay. ~
+2: There's swelling of the right knee, and it's warm compared to the left. ~ x1
+1: It's been like that. ~
+2: And on your thigh, I can see a ring-shaped red patch, about the size of a coaster. ~ x2
+3: That's where the tick was, I think. ~
+2: Did you get the tick out in one piece? ~
+3: With tweezers, yes. I got the head and all. ~
+2: Good, that's the right way to do it. ~
+1: I forgot about that. ~
+2: With the knee, the tick, and the ring on the thigh, I can't rule out Lyme disease. ~ d1
+1: Lyme? ~
+2: It's an infection from ticks. I'm not going to guess today. I'd like to see you again in a week to see how it's behaving. ~ f1
+3: A week. I'll drive him. ~
+2: If you get a fever or the knee gets worse before then, ring us. ~
+1: Okay. ~
+@@
+{"chief_complaint":{"value":"It's my knee. The right one. It's sore","normalized_value":"Right knee pain after tick bite"},
+ "symptoms":[{"k":"s1","name":"knee","normalized_name":"Right knee pain","category":"musculoskeletal","body_site":"right knee","duration":{"value":null,"unit":"weeks","normalized":"approximately 2 to 3 weeks"},"certainty":"uncertain"},
+  {"k":"s2","name":"fever","normalized_name":"Fever","category":"constitutional","reported_by":"family_member","certainty":"disputed"}],
+ "negative_findings":[{"k":"n1","finding":"fever","normalized_name":"Fever"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Asthma","normalized_condition":"Asthma"}]},
+ "allergies":[{"k":"a1","substance":"Penicillin"}],
+ "physical_examination":[{"k":"x1","finding":"swelling of the right knee","normalized_finding":"Right knee swelling and warmth","body_site":"right knee"},{"k":"x2","finding":"ring-shaped red patch","normalized_finding":"Annular erythema on thigh","body_site":"thigh"}],
+ "clinical_assessment":[{"k":"d1","assessment":"Lyme disease","certainty":"differential"}],
+ "follow_up":[{"k":"f1","time_reference":"in a week"}],
+ "clinical_uncertainties":[{"type":"duration_disagreement","description":"Patient says the knee pain began two weeks ago while his brother says three weeks.","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved","k":"u1"},
+  {"type":"conflicting_statement","description":"Patient denies fever while his brother says he was burning up on Tuesday night.","related_entities":["negative_findings[0]","symptoms[1]"],"k":"c1x"}],
+ "quality_checks":{"contradictions_detected":["Patient reports knee pain for two weeks; brother reports three weeks (partially resolved).","Patient denies fever; brother reports a fever on Tuesday night (unresolved)."],"ambiguous_entities":[]}}

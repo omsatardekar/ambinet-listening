@@ -1,0 +1,99 @@
+## 00841 PATIENT=1 DOCTOR=2 NURSE=3
+3: Mr Calder? I'm Heather, the nurse. I'll put your drops in for the eye test in a moment, but first, a couple of questions for the doctor's record. ~
+1: Certainly. I'd rather like to get the details right, so do ask. ~
+2: Good morning, Mr Calder. I understand light has become uncomfortable since you were ill. ~ cc s1
+1: Yes. Three weeks ago I had a viral illness, a fever, aches, a streaming cold. Since then, bright light, sunlight, even the strip lights in the supermarket, hurts my eyes. I squint, and my eyes water. ~ s1
+2: Is it both eyes? ~ s1
+1: Both, equally. There's no redness, and no pain as such, only a discomfort in bright light, like a glare. ~ s1
+2: Any change in your vision? ~
+1: None whatsoever. ~
+3: Any allergies, Mr Calder? We need it for the drops. ~ a1 u1
+1: Well, that's an interesting one. I think I may have had a reaction to some eye drops years ago, but I can't tell you which drops, or what the reaction was. I've never been sure. ~ a1 u1
+2: I'll note that as a possible reaction, not confirmed, substance and reaction unknown. Any medicines you take? ~ a1 u1 m1
+1: Just one, lansoprazole, 15 mg, once a day. ~ m1
+2: Any family history of eye problems? ~ f1
+1: My mother had glaucoma, and my uncle had macular degeneration. ~ f1
+3: Doctor, since the allergy is uncertain, shall I use the plain dilating drops without the preservative, as we normally do? ~
+2: Please do, Heather, and watch him for ten minutes. ~
+3: Of course. ~ pause=25
+2: Now, with the drops in, I'll examine you in a while. ~
+1: Fine. ~
+3: His eyes have dilated nicely, doctor, and there's no reaction. ~
+2: Thank you. Mr Calder, chin on the rest, look straight ahead. ~ pause=20
+2: The front of both eyes is clear, with no inflammation, no redness, the pressure's normal, and the back of the eye looks healthy. ~
+1: Is that good? ~
+2: It is. Light sensitivity after a viral illness, with a normal examination, is common, and it usually settles over a few weeks. I'd say this is post-viral light sensitivity. ~ d1
+1: How long will it last? ~
+2: Weeks, occasionally a couple of months. ~
+1: Is there anything I should do? ~
+2: Wear good sunglasses outdoors, and a brimmed hat, and don't stay in a dark room, as that can make the eyes more sensitive. ~ c1
+1: I'd been staying in rather a dim room. ~
+2: Gradual exposure to normal light is better. ~
+1: Understood. ~
+2: If your vision changes, you get eye pain, redness, or a severe headache, or it's still bothering you in six weeks, come back to see me. ~ f1
+1: I will. Thank you, both. ~
+@@
+{"chief_complaint":{"value":"light has become uncomfortable since you were ill","normalized_value":"Photophobia after viral illness","reported_by":"doctor"},
+ "symptoms":[{"k":"s1","name":"bright light","normalized_name":"Photophobia with squinting and watering","category":"ophthalmological","body_site":"both eyes","onset":"Three weeks ago"}],
+ "allergies":[{"k":"a1","substance":"eye drops","normalized_substance":"Eye drops (unspecified)","allergy_type":"medication","status":"uncertain","reaction":null}],
+ "medical_history":{"family_history":[{"k":"f1","condition":"glaucoma","normalized_condition":"Glaucoma","relation":"mother"}]},
+ "medications":[{"k":"m1","name":"lansoprazole","dose":"15 mg","frequency":"once a day"}],
+ "clinical_assessment":[{"k":"d1","assessment":"post-viral light sensitivity","certainty":"provisional"}],
+ "counsel":[["c1","Wear sunglasses and a brimmed hat outdoors and avoid staying in dark rooms"]],
+ "follow_up":[{"k":"f1","time_reference":"if your vision changes, you get eye pain, redness, or a severe headache, or it's still bothering you in six weeks","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"allergy_uncertain","description":"Patient thinks he may have reacted to some eye drops years ago but cannot name the drops or the reaction.","related_entities":["allergies[0]"]}]}
+
+## 00847 PATIENT=1 DOCTOR=2
+1: Hi. I'm a runner. Skipped beats. Sometimes. It worries me. ~ cc s1
+2: How often do you notice them? ~ s1
+1: A few times a month. During recovery, after a run. Never during. ~ s1
+2: What does it feel like? ~ s1
+1: A thump. Then a pause. Then a big beat. ~ s1
+2: Any dizziness, chest pain or fainting with it? ~ n1
+1: No. None of those. ~ n1
+2: How much do you run? ~
+1: Forty miles a week. Training for a marathon. ~
+2: Any family history of heart problems or sudden death? ~
+1: No. Not that I know of. ~
+2: What do you take? ~ m1 u1 u2
+1: A tablet from the sports clinic, a small orange one, for iron, I think. I can't remember the name. I take it most days. Not every day. ~ m1 u1 u2
+2: So it's meant to be daily, you take it most days, and you can't name it. Any allergies? ~ m1 u1 u2 a1
+1: None. ~ a1
+2: Any other health history? ~ h1 h2
+1: Asthma, as a child. And an ankle fracture, years ago. ~ h1 h2
+2: Do you use caffeine, energy gels, or supplements? ~
+1: Three coffees. And gels on long runs. ~
+2: Let me check your numbers. ~
+1: Okay. ~
+2: Resting pulse 48, blood pressure 108 over 66, temperature 36.5, oxygen 99 percent. ~ v pause=12
+1: My pulse is always low. ~
+2: It's what I'd expect for a distance runner. Let me listen to your heart. ~ pause=18
+1: Sure. ~
+2: Slow and regular, with the odd extra beat, and no murmur. ~ x1
+1: What does that mean? ~
+2: The skipped beats you describe are most likely ectopic beats, extra beats that are common in athletes and usually harmless. ~ d1
+1: Should I stop running? ~
+2: No. I'd like to confirm it, so I'd like to arrange an ECG today, and a 24-hour heart monitor. ~ p1 p2
+1: Okay. ~
+2: Cut back on the coffee a bit, drink enough, and keep your salts up. Take the iron tablet with vitamin C, not with coffee. ~ c1
+1: Right. ~
+2: If you ever get chest pain, faint, or the palpitations last more than a few minutes, or happen during a run, stop and see us. ~ c2
+1: I will. ~
+2: I'd like to see you again in three weeks, with the results. ~ f1
+1: Three weeks. Thanks. ~
+@@
+{"chief_complaint":{"value":"Skipped beats. Sometimes","normalized_value":"Occasional skipped beats in a runner"},
+ "symptoms":[{"k":"s1","name":"Skipped beats","normalized_name":"Palpitations (skipped beats)","category":"cardiovascular","frequency":"A few times a month","aggravating_factors":["recovery, after a run"]}],
+ "negative_findings":[{"k":"n1","finding":"fainting","normalized_name":"Dizziness, chest pain or syncope"},{"k":"a1","finding":"allergies","normalized_name":"No known allergies"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Asthma","normalized_condition":"Childhood asthma"},{"k":"h2","condition":"an ankle fracture","normalized_condition":"Previous ankle fracture"}]},
+ "medications":[{"k":"m1","name":"small orange one, for iron","normalized_name":null,"generic_name":null,"frequency":"most days"}],
+ "vitals":{"k":"v","hr":48,"bp":"108/66","temp":36.5,"spo2":99},
+ "physical_examination":[{"k":"x1","finding":"Slow and regular, with the odd extra beat","normalized_finding":"Regular slow rhythm with occasional ectopics, no murmur","body_site":"heart"}],
+ "clinical_assessment":[{"k":"d1","assessment":"ectopic beats","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"ECG","normalized_name":"Electrocardiogram","type":"cardiac","scheduled_datetime":"today"},{"k":"p2","name":"24-hour heart monitor","normalized_name":"24-hour Holter monitor","type":"cardiac"}],
+ "counsel":[["c1","Cut back caffeine, stay hydrated and take iron with vitamin C not coffee"],["c2","Stop and see us for chest pain, fainting, prolonged palpitations or palpitations during a run"]],
+ "follow_up":[{"k":"f1","time_reference":"in three weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"incomplete_medication_name","description":"Patient cannot name the small orange iron tablet from the sports clinic.","related_entities":["medications[0]"]},
+  {"k":"u2","type":"adherence_uncertain","description":"The iron tablet is meant to be taken daily but the patient takes it most days, not every day; actual adherence unknown.","related_entities":["medications[0]"]}],
+ "quality_checks":{"ambiguous_entities":["medications[0]"]}}
+

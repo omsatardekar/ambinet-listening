@@ -1,0 +1,58 @@
+## 00846 PATIENT=1 DOCTOR=2 NURSE=3
+3: Doctor, this is Mr Ahmed, thirty-one, back from Karachi nine days ago, fever, abdominal pain, and he looks unwell. Obs done. ~ cc
+1: Doctor, I have a high fever, a terrible headache, and my tummy hurts. I think I ate some street food, chaat, in Karachi. ~ s1 s2 s3
+2: Mr Ahmed, I'm Dr Reid. Let's go through this carefully. When did the fever start? ~ s1
+1: Five days ago. It has gone up every evening, to about 39 or 40. And I feel so weak. ~ s1 s4
+2: Any diarrhoea, or constipation? ~ s5
+1: First some diarrhoea. Now constipated. ~ s5
+2: Where is the tummy pain? ~ s3
+1: Around the belly button, and on the right. ~ s3
+2: Any vomiting? ~ n1
+1: No vomiting. A little nausea. ~ n1
+2: Any rash on your chest? ~ n2
+1: No rash. ~ n2
+2: Any blood in the stool, or bleeding anywhere? ~ n3
+1: No blood. ~ n3
+3: Doctor, his observations. Temperature 39.2, pulse 84, blood pressure 108 over 66, oxygen 97 percent, respiratory rate 20. ~ v pause=15
+2: Thank you, Faith. Mr Ahmed, a slow pulse with a high fever is a clue. Did you have typhoid vaccination before the trip? ~
+1: No. I was born there, I thought I was immune. ~
+2: Any allergies to medicines? ~ a1
+1: No allergies. ~ a1
+2: Do you take any tablets? ~ m1
+1: Paracetamol, 1 gram, every six hours, for the fever. ~ m1
+2: What do you do for work? ~ so1
+1: I'm a chef. ~ so1
+2: Let me examine your tummy. ~ pause=18
+1: Ahh, it hurts. ~
+2: Your tummy is tender in the lower right, and there's a mild fullness, and I can feel your spleen tip. ~ x1 x2
+1: Is it appendicitis? ~
+2: I don't think so. A prolonged fever rising each evening, a slow pulse for the temperature, abdominal pain, after travel to South Asia, and street food, makes me think of typhoid fever. ~ d1
+1: Typhoid? Is it serious? ~
+2: It can be, but it's treatable with the right antibiotics. It needs blood cultures to confirm. I'd like to take blood cultures now, and a full set of blood tests, and a stool sample. ~ p1 p2
+3: I'll set up the cultures, doctor. ~
+2: And I'm going to send you to the infectious diseases ward today, to be admitted, so you can have intravenous antibiotics, and be monitored. ~ r1 m2
+1: Admitted? How long? ~
+2: A few days. Until the fever settles. ~
+1: Will my family be at risk? ~
+2: Typhoid can spread through contaminated food and water, so wash your hands thoroughly, don't prepare food for others, and don't share utensils. ~ c1
+1: I'll be careful. ~
+2: Faith will arrange the ward, and I'll see you there this evening. ~ f1
+1: Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"back from Karachi nine days ago, fever, abdominal pain","normalized_value":"Fever and abdominal pain after travel","reported_by":"nurse"},
+ "symptoms":[{"k":"s1","name":"high fever","normalized_name":"Fever","category":"constitutional","duration":{"value":5,"unit":"days","normalized":"5 days"},"aggravating_factors":["evening"]},
+  {"k":"s2","name":"terrible headache","normalized_name":"Headache","category":"neurological"},
+  {"k":"s3","name":"tummy hurts","normalized_name":"Periumbilical and right-sided abdominal pain","category":"gastrointestinal","body_site":"around the belly button and right abdomen"},
+  {"k":"s4","name":"weak","normalized_name":"Weakness","category":"constitutional"},
+  {"k":"s5","name":"constipated","normalized_name":"Diarrhoea then constipation","category":"gastrointestinal"}],
+ "negative_findings":[{"k":"n1","finding":"vomiting","normalized_name":"Vomiting"},{"k":"n2","finding":"rash","normalized_name":"Rash"},{"k":"n3","finding":"blood","normalized_name":"Blood in stool or bleeding"},{"k":"a1","finding":"allergies","normalized_name":"No known allergies"}],
+ "medical_history":{"social_history":[{"k":"so1","category":"occupation","description":"Chef","details":"I'm a chef"}]},
+ "medications":[{"k":"m1","name":"Paracetamol","dose":"1 gram","frequency":"every six hours"},{"k":"m2","name":"intravenous antibiotics","normalized_name":"Antibiotic (unspecified), intravenous","generic_name":null,"status":"planned","reported_by":"doctor"}],
+ "vitals":{"k":"v","by":"nurse","temp":39.2,"hr":84,"bp":"108/66","spo2":97,"rr":20},
+ "physical_examination":[{"k":"x1","finding":"tender in the lower right","normalized_finding":"Right iliac fossa tenderness","body_site":"lower right abdomen"},{"k":"x2","finding":"I can feel your spleen tip","normalized_finding":"Palpable spleen tip","body_site":"left upper abdomen"}],
+ "clinical_assessment":[{"k":"d1","assessment":"typhoid fever","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood cultures","normalized_name":"Blood cultures","type":"laboratory"},{"k":"p2","name":"stool sample","normalized_name":"Stool culture","type":"laboratory"}],
+ "clinical_actions":[{"k":"r1","action_type":"referral","description":"Admit to infectious diseases ward for IV antibiotics"}],
+ "counsel":[["c1","Wash hands thoroughly, do not prepare food for others and do not share utensils"]],
+ "follow_up":[{"k":"f1","time_reference":"this evening"}]}
+

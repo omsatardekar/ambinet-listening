@@ -1,0 +1,84 @@
+## 00717 PATIENT=1 DOCTOR=2
+1: Hello, doctor. It's my eyes, the contact lenses, they've gone uncomfortable. I forgot to say on the phone, I wear them every day. ~ cc s1
+2: What does uncomfortable mean? ~ s1
+1: Dry, and sort of scratchy by the afternoon. I have to take them out by about four, and my eyes feel tired. ~ s1
+2: How long have you worn contact lenses? ~
+1: Eight years, but it's only got bad recently. I'm forgetting how long. Since March, I think? Or April. ~
+2: That's fine. What are you putting in your eyes? ~ m1
+1: Lubricating drops, four times a day. Hypromellose, I think the packet says. Does that sound right? ~ m1
+2: That's right. And the other tablets you mentioned on the form? ~ m2 h1
+1: Cetirizine, 10 mg once a day, for my hay fever. ~ m2 h1
+2: Good. How many hours a day are you in lenses, and where, a screen, air conditioning? ~
+1: Ten, eleven hours. I'm at a computer all day, in an air-conditioned office. ~
+2: That's the classic recipe for dry eyes. How do you clean and store the lenses? ~
+1: I use the solution, and I change the case every month. Or every two months. Sometimes three. ~
+2: That's a little long, the case should be changed monthly. And do you ever sleep in them? ~
+1: Once or twice, if I'm tired. ~
+2: Please try not to, that raises the risk of infection. ~
+1: I'll try. ~
+2: Let me have a look at your eyes. Chin on the rest. ~
+1: Right. ~ pause=20
+2: Fine. There's no infection and nothing is scratched. Your eyes are a little dry on the surface. ~
+1: So it's not serious? ~
+2: Not serious. I'd say it's dry eye related to your lens wear, made worse by the screen and the air conditioning. ~ d1
+1: What do I do? ~
+2: Wear glasses on some days to give your eyes a rest, take the lenses out by the time you get home, and use preservative-free drops. ~ c1
+1: The drops I've got, are they preservative-free? ~
+2: Not the ones you've got, ask the pharmacist for single-use vials, and keep using them. ~
+1: Right, that's useful. ~
+2: Blink fully when you're at the screen, and look away every twenty minutes, twenty seconds. ~ c2
+1: I will, I'll set an alarm. ~
+2: I'd like to see you again in six weeks, to see if the lenses are more comfortable. ~ f1
+1: Six weeks. Thank you. ~
+@@
+{"chief_complaint":{"value":"the contact lenses, they've gone uncomfortable","normalized_value":"Contact lens discomfort"},
+ "symptoms":[{"k":"s1","name":"uncomfortable","normalized_name":"Dry scratchy eyes with contact lenses","category":"ophthalmological","aggravating_factors":["afternoon"]}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"hay fever","normalized_condition":"Allergic rhinitis"}]},
+ "medications":[{"k":"m1","name":"Lubricating drops","normalized_name":"Hypromellose","generic_name":"Hypromellose","frequency":"four times a day"},{"k":"m2","name":"Cetirizine","dose":"10 mg","frequency":"once a day","indication":"hay fever"}],
+ "clinical_assessment":[{"k":"d1","assessment":"dry eye related to your lens wear","normalized_assessment":"Contact lens-related dry eye","certainty":"provisional"}],
+ "counsel":[["c1","Wear glasses some days, remove lenses on getting home, use preservative-free single-use drops"],["c2","Blink fully at the screen and follow the 20-20 rule"]],
+ "follow_up":[{"k":"f1","time_reference":"in six weeks"}]}
+
+## 00718 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3 UNKNOWN=4
+3: He's been barking all night. Like a seal. I've not slept. ~ cc s1
+2: Poor you both. How old is he? ~
+3: Two. Two and a bit. ~
+2: When did the cough start? ~ s1
+3: Last night. After a runny nose. ~ s1
+4: [from the corridor] It started the night before, Tuesday night! ~ s1 u1
+2: I'll go with Mum's account unless she says otherwise. Is he breathing normally now? ~ s1 u1
+3: Yes, now. It's worse at night. ~ s1
+2: Does he make a noisy sound when he breathes in? ~
+3: Only when he's crying. ~
+2: Any allergies that you know of? ~ a1
+3: Egg. He came up in hives, once, when he had scrambled egg. Since then, none. ~ a1
+2: Thanks, that's important. Does he go to nursery? ~ so1
+3: Three days a week. ~ so1
+1: Mummy, cough. ~
+2: I know, it's yucky. Let me listen, sweetheart. ~ pause=15
+2: His breathing is calm, with no sucking in at the ribs, and he's got a loud barky cough but only when he's upset. ~ x1
+3: Is it serious? ~
+2: Not today. It's a typical picture for a viral croup, and it's normally worst on the second and third nights. ~
+3: What do I do? ~
+2: Keep him calm, since crying makes it worse. Steamy bathrooms don't actually help, but cuddles do. Plenty of fluids. ~ c1
+3: Okay. And at night? ~
+2: Prop him up a little, and sleep near him, listening. ~
+3: I will. ~
+2: Please bring him back, or call 999, if he's struggling to breathe, making a high noisy sound at rest, drooling, or turning blue around the lips. ~ f1
+3: I understand. ~
+2: And if it hasn't settled in four or five days, bring him back anyway. ~
+3: Thank you. ~
+2: Hope you both sleep tonight. ~
+3: Fingers crossed. Say bye-bye, Max. ~
+1: Bye bye, doctor. ~
+@@
+{"chief_complaint":{"value":"He's been barking all night","normalized_value":"Barking cough at night","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"barking","normalized_name":"Barking cough","category":"respiratory","reported_by":"family_member","onset":"Last night"}],
+ "allergies":[{"k":"a1","substance":"Egg","allergy_type":"food","reaction":"hives","reported_by":"family_member"}],
+ "medical_history":{"social_history":[{"k":"so1","category":"occupation","description":"Attends nursery three days a week","details":"Three days a week","reported_by":"family_member"}]},
+ "physical_examination":[{"k":"x1","finding":"breathing is calm","normalized_finding":"Calm breathing without recession, barking cough when distressed","body_site":"chest"}],
+ "counsel":[["c1","Keep him calm, give plenty of fluids, prop up slightly at night"]],
+ "follow_up":[{"k":"f1","time_reference":"if he's struggling to breathe, making a high noisy sound at rest, drooling, or turning blue around the lips","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"unknown_speaker","description":"An unidentified voice from the corridor gave a different onset for the cough; the utterance could not be attributed to a known speaker.","related_entities":["symptoms[0]"]}],
+ "quality_checks":{"ambiguous_entities":["symptoms[0]"]}}
+

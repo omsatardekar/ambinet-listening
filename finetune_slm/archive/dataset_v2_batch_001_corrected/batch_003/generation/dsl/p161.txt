@@ -1,0 +1,51 @@
+## 00924 PATIENT=1 DOCTOR=2 NURSE=3
+1: It's the swallowing, doctor. Solid food sticks in my chest, and I'm after having the stretching done, and it's still not right. ~ cc s1
+2: I see from the notes you had the dilatation. Tell me how it's been since. ~ s1
+1: Better for a week, then it came back. Bread and meat especially. ~ s1
+2: Where does it stick? ~ s1
+1: Just here, behind the breastbone. ~ s1
+2: When was the procedure, exactly? ~ s1 u1
+1: Oh, about two months ago. Or six weeks. I'm not sure now. ~ s1 u1
+3: Our record shows it was done on the twelfth, which would be nine weeks ago. ~ s1 u1
+2: Thank you, Nurse. We'll go with the record, though Mr Walsh remembers it a bit differently. Any pain on swallowing? ~ s1 u1
+1: No pain. It just stops. ~
+2: Do liquids go down all right? ~
+1: Yes. It's only solids. ~
+2: Any weight loss, or vomiting food back up? ~ n1
+1: I've lost a bit of weight, maybe two kilos. No vomiting. ~ n1
+2: What medicines are you taking? ~ m1
+1: The omeprazole, 20 mg, twice a day. ~ m1 u2
+3: The record shows once a day. ~ m1 u2
+1: No, it's twice. The consultant said double it. ~ m1 u2
+2: I'll note that you say twice, and the record says once, and we'll check with the pharmacy. ~ m1 u2
+2: Any other conditions? ~ h1
+1: Reflux, for a good few years. That's why I had the stretching. ~ h1
+3: Doctor, I've got his observations. Pulse 76, blood pressure 128 over 80, temperature 36.6, oxygen 98 percent, weight 79 kilograms. ~ v
+2: Thank you. Let me feel your neck and tummy. ~
+1: Go on. ~ pause=14
+2: Neck is normal, and the abdomen is soft and non-tender. ~ x1
+1: What's going on, doctor? ~
+2: The narrowing may be coming back, which can happen after a stretch. I'd like to repeat the camera test and see. ~ p1
+1: The endoscopy again? ~ p1
+2: Yes. I'll arrange it within the next two weeks, and we'll take a small sample at the same time. ~ p1
+1: That's fine. I'd rather know. ~
+2: Until then, eat soft foods, cut meat into small pieces, and chew slowly. ~ c1
+1: I will. ~
+2: If food gets completely stuck, you can't swallow your saliva, or you vomit blood, go straight to the emergency department. ~ c2
+1: Understood. Thank you both. ~
+2: I'll see you after the endoscopy. ~ f1
+@@
+{"chief_complaint":{"value":"Solid food sticks in my chest","normalized_value":"Dysphagia to solids after dilatation"},
+ "symptoms":[{"k":"s1","name":"Solid food sticks","normalized_name":"Dysphagia to solids","category":"gastrointestinal","body_site":"behind the breastbone","certainty":"uncertain"}],
+ "negative_findings":[{"k":"n1","finding":"vomiting","normalized_name":"Vomiting of food"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Reflux","normalized_condition":"Gastro-oesophageal reflux disease"}]},
+ "medications":[{"k":"m1","name":"omeprazole","dose":null,"frequency":null}],
+ "vitals":{"k":"v","by":"nurse","hr":76,"bp":"128/80","temp":36.6,"spo2":98,"wt":79},
+ "physical_examination":[{"k":"x1","finding":"abdomen is soft and non-tender","normalized_finding":"Normal neck; soft non-tender abdomen","body_site":"abdomen"}],
+ "procedures_and_investigations":[{"k":"p1","name":"endoscopy","normalized_name":"Repeat upper gastrointestinal endoscopy with biopsy","type":"other"}],
+ "counsel":[["c1","Eat soft foods, cut meat into small pieces and chew slowly"],["c2","Go to emergency if food completely stuck, cannot swallow saliva or vomiting blood"]],
+ "follow_up":[{"k":"f1","time_reference":"after the endoscopy"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient says the dilatation was about two months or six weeks ago; the nurse's record says nine weeks ago.","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved"},
+  {"k":"u2","type":"medication_discrepancy","description":"Patient says omeprazole twice a day; nurse's record says once a day; to be checked with the pharmacy (unresolved).","related_entities":["medications[0]"]}],
+ "quality_checks":{"contradictions_detected":["Omeprazole frequency: patient twice a day vs record once a day (unresolved)."]}}
+

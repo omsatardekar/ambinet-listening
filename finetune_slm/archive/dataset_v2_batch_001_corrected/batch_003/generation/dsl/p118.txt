@@ -1,0 +1,94 @@
+## 00873 PATIENT=1 DOCTOR=2 CAREGIVER=3
+3: Doctor, I'm Ellen, I look after Mr Doyle in the evenings. He's up passing water five or six times every night, and neither of us is sleeping. ~ cc s1
+1: It's not that many. Three, maybe. ~ s1
+3: It's five, Walter. I count them, I hear you every time. ~ s1
+2: So three, says Mr Doyle, and Ellen counts five or six. I'll note it as three to six. How long has it been going on? ~ s1 u1
+1: A few months. ~ s1
+2: Are you drinking a lot in the evening? ~
+1: A pot of tea, and a glass of water with my pills. ~
+2: Any burning, or blood in the urine? ~ n1
+1: No. None. ~ n1
+2: Do you find it hard to start, or a weak stream? ~ s2
+1: Yes, a weak stream. And I dribble afterwards. ~ s2
+2: What tablets are you on? ~ m1
+3: Tamsulosin, 400 micrograms, once a day, in the morning. ~ m1
+2: Is that helping? ~
+1: A little. ~
+2: Any other conditions? ~ h1
+3: An enlarged prostate. That's what the tamsulosin is for. ~ h1
+2: Any breathlessness, or swelling of the legs? ~ r1
+1: No. Nothing like that. ~ r1
+2: Pulse and pressure, please. ~
+1: Go on. ~
+2: Pulse 70, blood pressure 138 over 82. ~ v pause=12
+3: Is that all right? ~
+2: Yes. Mr Doyle, I'd like to examine your tummy and then do a prostate check, if you agree. ~
+1: If you must. ~ pause=25
+2: Your bladder isn't enlarged, and the prostate is smooth and enlarged, but not hard. ~ x1
+3: Is it the prostate, then? ~
+2: Most likely, together with the weak stream and the dribbling. I'd like to confirm that with a urine test and blood tests, including a kidney test and a PSA. ~ p1 p2
+1: The PSA, is that the cancer test? ~
+2: It's one marker, and it can be raised by an enlarged prostate too. I'll explain the result with you, whatever it is. ~
+1: Fine. ~
+2: Cut down on tea and fluids after six, and avoid caffeine in the evening. ~ c1
+3: I'll make his supper earlier. ~
+2: I'd like to see you again in two weeks, when the results are back. ~ f1
+3: Two weeks. We'll come. ~
+@@
+{"chief_complaint":{"value":"He's up passing water five or six times every night","normalized_value":"Nocturia","reported_by":"caregiver"},
+ "symptoms":[{"k":"s1","name":"passing water","normalized_name":"Nocturia","category":"genitourinary","frequency":"three to six","duration":null,"certainty":"uncertain"},
+  {"k":"s2","name":"weak stream","normalized_name":"Weak urinary stream and post-micturition dribbling","category":"genitourinary"}],
+ "negative_findings":[{"k":"n1","finding":"burning","normalized_name":"Dysuria or haematuria"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"An enlarged prostate","normalized_condition":"Benign prostatic hyperplasia","reported_by":"caregiver"}]},
+ "medications":[{"k":"m1","name":"Tamsulosin","dose":"400 micrograms","frequency":"once a day","reported_by":"caregiver"}],
+ "vitals":{"k":"v","hr":70,"bp":"138/82"},
+ "review_of_systems":[{"k":"r1","system":"cardiorespiratory"}],
+ "physical_examination":[{"k":"x1","finding":"prostate is smooth and enlarged","normalized_finding":"Smooth enlarged prostate; bladder not palpable","body_site":"prostate"}],
+ "procedures_and_investigations":[{"k":"p1","name":"urine test","normalized_name":"Urinalysis","type":"laboratory"},{"k":"p2","name":"blood tests","normalized_name":"Renal function and PSA","type":"laboratory"}],
+ "counsel":[["c1","Cut tea and fluids after six and avoid evening caffeine"]],
+ "follow_up":[{"k":"f1","time_reference":"in two weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"duration_disagreement","description":"Patient says three times a night; his carer says five or six; summarised as three to six, not confirmed.","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved"}],
+ "quality_checks":{"contradictions_detected":["Frequency of night-time urination: patient three vs caregiver five or six (approximate range only)."]}}
+
+## 00877 PATIENT=1 DOCTOR=2
+1: Good morning, doctor. I was told to come back, because my throat swab came back positive. The nurse phoned me yesterday. ~ cc
+2: Yes, I've got the result here. Group A strep, a bacterial throat infection. How are you feeling now? ~
+1: A bit better than at the weekend, but my throat is still very sore. And my glands are swollen. ~
+2: When did it start? ~
+1: Five days ago. Fever, headache, and a terrible throat. ~
+2: Any rash, or difficulty swallowing your saliva? ~ n1
+1: No rash. I can swallow, it just hurts. ~ n1
+2: What are you taking at the moment? ~ m1
+1: Just paracetamol, 1 gram, four times a day. ~ m1
+2: Let me look at your throat. Open wide. ~
+1: Ahh. ~ pause=15
+2: Your tonsils are red and swollen with white spots on both, and there are tender swollen glands under your jaw. ~ x1
+1: It looks bad? ~
+2: It's typical. I'd say this is strep throat, bacterial tonsillitis, as the swab confirms. ~ d1
+1: Can you give me something? ~
+2: Yes. I'll prescribe penicillin V, 500 mg, four times a day, for ten days. ~ m2
+1: Ten days? My friend had five. ~
+2: For strep throat, ten days is the full course, to clear it and prevent complications. Finish it all, even if you feel better in two. ~
+1: Okay. ~
+2: Is there anything about the antibiotic you'd like me to explain before we go on? ~
+1: No, that's clear enough. ~
+2: Pulse 82, temperature 37.6, oxygen 98 percent. ~ v
+1: Is that all right? ~
+2: Fine. A mild temperature, as expected. Rest, drink plenty, and use paracetamol for the pain. Salt-water gargles help too. ~ c1
+1: Can I go to work? ~
+2: Stay off until you've had two days of the antibiotic, and your fever has gone. ~ c2
+1: Right. ~
+2: If you can't swallow, drool, have a very stiff neck, or a one-sided swollen throat, come back at once. ~ c3
+1: I will. ~
+2: I'd like to see you again in a week, if you're not completely better. ~ f1
+1: Thanks, doctor. ~
+@@
+{"chief_complaint":{"value":"my throat swab came back positive","normalized_value":"Positive throat swab for group A strep"},
+ "negative_findings":[{"k":"n1","finding":"rash","normalized_name":"Rash"}],
+ "medications":[{"k":"m1","name":"paracetamol","dose":"1 gram","frequency":"four times a day"},{"k":"m2","name":"penicillin V","status":"planned","reported_by":"doctor","dose":"500 mg","frequency":"four times a day","duration":{"value":10,"unit":"days","normalized":"10 days"}}],
+ "vitals":{"k":"v","hr":82,"temp":37.6,"spo2":98},
+ "physical_examination":[{"k":"x1","finding":"tonsils are red and swollen with white spots on both","normalized_finding":"Exudative tonsillitis with tender submandibular lymphadenopathy","body_site":"throat and neck"}],
+ "clinical_assessment":[{"k":"d1","assessment":"strep throat","certainty":"provisional"}],
+ "counsel":[["c1","Rest, fluids, paracetamol and salt-water gargles"],["c2","Stay off work until two days of antibiotic and fever has gone"],["c3","Return at once if cannot swallow, drooling, stiff neck or one-sided swelling"]],
+ "follow_up":[{"k":"f1","time_reference":"in a week"}]}
+

@@ -1,0 +1,2 @@
+# Batch 006 (500 synthetic encounters, ids 02001-02500)
+Generated with the Batch 001/002 generator (scripts/generate_batch_006.py) from 43 NEW scenario profiles (scripts/b6_profiles_1..2.py): men's health, urology, sexual health, vascular, haematology/oncology-type, sports injury, eye and ENT emergencies, children, older adults, palliative and mental-health scenarios, as best / middle / worst cases. Validate with scripts/validate_b6.py. 500/500 pass; 0 near duplicates vs Batches 3, 4, 5. Not clinically reviewed; dialogue is template-based.

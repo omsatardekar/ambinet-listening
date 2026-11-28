@@ -1,0 +1,47 @@
+## 00876 PATIENT=1 DOCTOR=2
+1: Um, hello. It's my tonsils again, they seem to be infected. I'm sorry to bother you. ~ cc s1
+2: You're not bothering me at all. Tell me how it started. ~ s1
+1: A sore throat, about four days ago. Now it's hard to swallow. ~ s1 s2
+2: Is it on one side or both? ~ s1
+1: Both, but the left is worse. ~ s1
+2: Have you had a fever, or white spots on the tonsils? ~ s3 n1
+1: I felt hot and shivery two nights ago. I didn't look at my tonsils, I'm too nervous. ~ s3
+2: Any rash, or trouble breathing? ~ n1
+1: No rash. No trouble breathing. ~ n1
+2: How many times have you had tonsillitis this year? ~ h1
+1: This is the fourth time. Maybe the fifth. ~ h1
+2: That's a lot. What are you taking now? ~ m1 m2
+1: Paracetamol, 1 gram, four times a day. And lozenges, whenever I remember. ~ m1 m2
+2: Any other tablets? ~ m3
+1: Just the pill, the contraceptive. ~ m3
+2: Do you smoke? ~ so1
+1: No. Never. ~ so1
+2: Let me take your temperature and pulse. ~
+1: Of course. ~ pause=10
+2: Temperature 37.9, pulse 92. ~ v
+1: Is that high? ~
+2: A mild fever. Now open your mouth for me, and say ah. ~
+1: Ahh. ~ pause=15
+2: Both tonsils are red and swollen, with white patches on the left, and the glands in your neck are tender. ~ x1 x2
+1: Does that mean it's infected? ~
+2: Yes, it looks like bacterial tonsillitis. I'll prescribe penicillin V, 500 mg, four times a day for ten days. ~ d1 m4
+1: Ten days? I'd rather it was shorter. ~
+2: Ten days is needed to clear it properly. I know it's a long time. ~
+1: All right. I'll do it. ~
+2: With four or five episodes in a year, I'd also like to refer you to an ENT surgeon about taking the tonsils out. ~ f1
+1: Oh. That sounds scary. ~
+2: It's very common, and it often helps people who get infections this often. They'll explain everything. ~
+1: Okay. Thank you for explaining. ~
+@@
+{"chief_complaint":{"value":"my tonsils again, they seem to be infected","normalized_value":"Recurrent tonsillitis"},
+ "symptoms":[{"k":"s1","name":"sore throat","normalized_name":"Sore throat","category":"ENT","body_site":"both tonsils, left worse","duration":{"value":4,"unit":"days","normalized":"4 days"}},
+  {"k":"s2","name":"hard to swallow","normalized_name":"Dysphagia","category":"ENT"},
+  {"k":"s3","name":"hot and shivery","normalized_name":"Fever and chills","category":"constitutional","onset":"two nights ago"}],
+ "negative_findings":[{"k":"n1","finding":"rash","normalized_name":"Rash or breathing difficulty"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"fourth time","normalized_condition":"Recurrent tonsillitis"}]},
+ "medications":[{"k":"m1","name":"Paracetamol","dose":"1 gram","frequency":"four times a day"},{"k":"m2","name":"lozenges","normalized_name":"Throat lozenges","generic_name":null,"frequency":"whenever I remember"},{"k":"m3","name":"the pill","normalized_name":"Combined oral contraceptive (unspecified)","generic_name":null},{"k":"m4","name":"penicillin V","status":"planned","reported_by":"doctor","dose":"500 mg","frequency":"four times a day","duration":{"value":10,"unit":"days","normalized":"10 days"}}],
+ "vitals":{"k":"v","temp":37.9,"hr":92},
+ "physical_examination":[{"k":"x1","finding":"Both tonsils are red and swollen, with white patches on the left","normalized_finding":"Exudative tonsillitis","body_site":"tonsils"},{"k":"x2","finding":"glands in your neck are tender","normalized_finding":"Tender cervical lymphadenopathy","body_site":"neck"}],
+ "clinical_assessment":[{"k":"d1","assessment":"bacterial tonsillitis","certainty":"provisional"}],
+ "clinical_actions":[{"k":"f1","action_type":"referral","description":"Refer to ENT surgeon about tonsillectomy","status":"planned"}]}
+

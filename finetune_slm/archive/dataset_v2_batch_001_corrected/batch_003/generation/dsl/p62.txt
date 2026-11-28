@@ -1,0 +1,98 @@
+## 00768 PATIENT=1 DOCTOR=2
+1: Good morning, doctor. Thank you for seeing me. I was told at the kidney clinic that I'm anaemic, and I should come and discuss it. ~ cc
+2: Good morning, Mrs Fletcher. Yes, I've seen the letter. How have you been feeling lately? ~
+1: Tired, I must say. More than usual. I used to garden every day, and now I sit down after twenty minutes. ~ s1
+2: And what about your breathing? ~ s2
+1: A bit short of breath on the hills, and the stairs. Not terrible. ~ s2
+2: Have you had any chest pain, or dizzy spells, or palpitations? ~
+1: No, none of that, thank goodness. ~
+2: How long has the tiredness been going on? ~
+1: Since the new year. Gradually creeping up. ~ s1
+2: You have chronic kidney disease, I see, stage three. ~ h1
+1: Yes, they told me eighteen months ago. It's stable, they say. ~ h1
+2: That's right. Let me check your pulse and blood pressure. ~
+1: Of course. ~
+2: Pulse 80, blood pressure 132 over 76, oxygen 97 percent. ~ v pause=12
+1: Are those good? ~
+2: They're fine. I'll also look at your eyelids and your nails, which can show anaemia. ~
+1: Do I look pale? ~
+2: A little. ~
+1: Oh dear. ~
+2: Your blood test last month showed your haemoglobin was low, at 98. Normal for a woman is above 120. ~
+1: That's quite a lot lower. ~
+2: It is, and kidneys make a hormone that tells your bone marrow to make red blood cells, so when the kidneys are weaker, you can become anaemic. ~
+1: So it's the kidneys? ~
+2: I think that's the most likely cause, I'd say anaemia of chronic kidney disease. ~ d1
+1: Can it be treated? ~
+2: Yes. First, I'd like to arrange more blood tests, to check your iron, vitamin B12 and folate levels, because other causes need ruling out. ~ p1
+1: Will it need injections? ~
+2: Possibly, if your iron is normal and the anaemia is due to the kidneys. There are injections that help the bone marrow. ~
+1: I'm not keen on injections. ~
+2: They're small, and you can learn to do them yourself. We'll decide after the tests. ~
+1: Right. Anything I can do? ~
+2: Eat iron-rich foods, like red meat, spinach, and beans, and don't take iron tablets until we've checked. ~ c1
+1: I take a multivitamin. ~
+2: That's fine. ~
+1: And rest? ~
+2: Pace yourself, build up your gardening slowly. I'd like to see you again in two weeks with the results. ~ f1
+1: Two weeks. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"I'm anaemic","normalized_value":"Anaemia in chronic kidney disease"},
+ "symptoms":[{"k":"s1","name":"Tired","normalized_name":"Fatigue","category":"constitutional","onset":"Since the new year"},
+  {"k":"s2","name":"short of breath","normalized_name":"Exertional breathlessness","category":"respiratory","aggravating_factors":["hills"]}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"chronic kidney disease","normalized_condition":"Chronic kidney disease stage 3","reported_by":"doctor"}]},
+ "vitals":{"k":"v","hr":80,"bp":"132/76","spo2":97},
+ "clinical_assessment":[{"k":"d1","assessment":"anaemia of chronic kidney disease","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood tests","normalized_name":"Iron studies, vitamin B12 and folate","type":"laboratory"}],
+ "counsel":[["c1","Eat iron-rich foods and do not take iron tablets until tested"]],
+ "follow_up":[{"k":"f1","time_reference":"in two weeks"}]}
+
+## 00770 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Hello! This is Bella, she's six, and she gets tummy aches before school, every morning, and I'm at my wits' end. ~ cc s1
+2: Hello Bella. Can you tell me about your tummy? ~
+1: It hurts. Here. ~ s1
+2: When does it hurt? ~ s1
+1: Not at school. ~
+3: She means weekdays, doctor. Monday to Friday, before school, then it goes by the time we get there, and she's running about by break. ~ s1
+2: And on Saturdays and Sundays? ~
+3: Fine. Never a problem. ~
+2: Bella, do you like school? ~
+1: Yes. I love it. ~
+3: She says that, but she cries when I leave her at the gate, doctor. ~ s2 u2
+1: I don't cry. ~ n1 u2
+3: You do, sweetheart, you cry every morning. ~ s2 u2
+2: I'll write down that Bella says she doesn't cry and Mum says she does. Bella, is there anything about school that's difficult, or any person who's unkind? ~ u2
+1: No. ~
+2: Does your tummy ever hurt when you do a poo, or when you eat? ~
+1: No. ~
+3: Her bowels are regular, and she eats breakfast, if she can. ~
+2: Let me feel your tummy, Bella. Lie back, it'll tickle. ~
+1: Hee hee. ~ pause=15
+2: Her tummy is soft, and there's no tenderness anywhere, even when I press deep. ~ x1
+3: Is it something physical? ~
+2: Nothing here worries me. Children often get a real tummy ache in the morning when they're a bit anxious about separating from you, and it goes once they're distracted. ~
+3: I feel terrible. ~
+2: Please don't. It's very common at this age, and it's not your fault. ~
+3: What can I do? ~
+2: A calm, consistent goodbye routine, and a firm, kind drop-off. Don't linger. And talk to her teacher so they can greet her at the gate. ~ c1
+3: I do linger. I give her a hundred cuddles. ~
+2: One big cuddle, a quick wave, and off you go. ~
+1: Mummy, I'll be good. ~
+2: You are good, Bella. And I'd like to arrange a urine test, just to rule out a simple infection that could be causing tummy aches. ~ p1
+3: Okay. Can she do it here? ~
+2: Yes, the nurse will give you a little pot. ~
+3: Thank you. ~
+2: I'd like to see you again in three weeks, to see how the mornings are going. ~ f1
+3: Three weeks. Thanks, doctor. ~
+@@
+{"chief_complaint":{"value":"she gets tummy aches before school","normalized_value":"Morning tummy aches before school","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"tummy aches","normalized_name":"Abdominal pain on school mornings","category":"gastrointestinal","body_site":"abdomen","reported_by":"family_member","aggravating_factors":["before school"]},
+  {"k":"s2","name":"cries","normalized_name":"Crying at school drop-off","category":"psychiatric","reported_by":"family_member","certainty":"disputed"}],
+ "negative_findings":[{"k":"n1","finding":"cry","normalized_name":"Crying at school drop-off"}],
+ "physical_examination":[{"k":"x1","finding":"tummy is soft","normalized_finding":"Soft non-tender abdomen","body_site":"abdomen"}],
+ "procedures_and_investigations":[{"k":"p1","name":"urine test","normalized_name":"Urinalysis","type":"laboratory"}],
+ "counsel":[["c1","Calm consistent goodbye routine and speak to the teacher about a gate greeting"]],
+ "follow_up":[{"k":"f1","time_reference":"in three weeks"}],
+ "clinical_uncertainties":[{"k":"u2","type":"conflicting_statement","description":"Child says she does not cry at school drop-off; her mother says she cries every morning (unresolved).","related_entities":["negative_findings[0]","symptoms[1]"]}],
+ "quality_checks":{"contradictions_detected":["Child denies crying at drop-off; family member reports she cries every morning (unresolved)."]}}
+

@@ -1,0 +1,56 @@
+## 00845 PATIENT=1 DOCTOR=2
+1: Hello, doctor! I'm not sure I'm in the right place, because everyone says my blood pressure's great, but I feel light-headed, especially when I get up quickly, and I wondered if my pressure's too low. ~ cc s1
+2: That's a very reasonable question. When does the light-headedness happen? ~ s1
+1: When I stand up from a chair, or the loo, or in the shower. Everything goes sort of fuzzy, and I have to hold on. ~ s1 s2
+2: How long has it been going on? ~ s1 u1
+1: Oh, a good while. Months. Maybe since I changed my tablets, or since my holiday, I really can't say when it started. ~ s1 u1
+2: Any fainting? ~ n1
+1: No. Not once. But close. ~ n1
+2: Any chest pain, or palpitations when it happens? ~ n2
+1: No. Neither. ~ n2
+2: Any dizziness when you're lying down, or room-spinning? ~ n3
+1: No. Only when standing up. ~ n3
+2: Let's go through your tablets. ~ m1
+1: Just the one. Bisoprolol, 5 mg, maybe? For my heart rhythm. Once a day, in the morning. ~ m1 u2
+2: Is it 5 or 2.5, do you think? ~ m1 u2
+1: I think 5. I'd have to check the box. ~ m1 u2
+2: Any other health problems? ~ h1 h2
+1: Palpitations, years ago, which is why the bisoprolol. And an underactive thyroid. ~ h1 h2
+2: Any operations? ~ sg1
+1: My appendix, as a girl. ~ sg1
+2: Are you drinking enough water? ~
+1: Not really. Tea and coffee, mostly. Perhaps a litre a day. ~
+2: Let me check your numbers, first sitting, then standing. ~
+1: Right. ~
+2: Sitting, blood pressure 104 over 64, pulse 58. Standing, 92 over 58, pulse 64. ~ v pause=60
+1: Is that low? ~
+2: It's low-normal sitting, and it drops a little on standing, with your symptoms. Let me check your temperature and oxygen as well. ~
+1: Okay. ~
+2: Temperature 36.4, oxygen 99 percent. ~ v pause=10
+1: All fine? ~
+2: Fine. Your pulse is slow, which fits with the bisoprolol. So here's what I think. Your pressure is on the low side, and it drops when you stand, so I'd say this is mild postural low blood pressure, helped along by the bisoprolol and not enough fluid. ~ x1 d1
+1: What can be done? ~
+2: Drink two litres of water a day, add a little more salt to your food, and stand up slowly, sit on the edge of the bed first. ~ c1
+1: I can do that. ~
+2: I'd like to arrange a blood test for your blood count and thyroid, and a heart tracing, an ECG, and I'd like to review whether you still need the bisoprolol at that dose. ~ p1 p2
+1: Okay. ~
+2: And I'd like a 24-hour heart rhythm monitor, to see what your heart's doing during the dizzy spells. ~ p3
+1: Right. ~
+2: I'd like to see you again in three weeks, with the results. ~ f1
+1: Three weeks. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"I feel light-headed, especially when I get up quickly","normalized_value":"Light-headedness on standing"},
+ "symptoms":[{"k":"s1","name":"light-headed","normalized_name":"Postural light-headedness","category":"neurological","aggravating_factors":["get up quickly"],"certainty":"uncertain"},
+  {"k":"s2","name":"fuzzy","normalized_name":"Visual blurring on standing","category":"neurological"}],
+ "negative_findings":[{"k":"n1","finding":"fainting","normalized_name":"Syncope"},{"k":"n2","finding":"palpitations","normalized_name":"Chest pain or palpitations"},{"k":"n3","finding":"room-spinning","normalized_name":"Vertigo"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Palpitations","normalized_condition":"Palpitations"},{"k":"h2","condition":"an underactive thyroid","normalized_condition":"Hypothyroidism"}],"surgical_history":[{"k":"sg1","procedure":"appendix","normalized_procedure":"Appendicectomy","timeframe":"as a girl"}]},
+ "medications":[{"k":"m1","name":"Bisoprolol","dose":"5 mg","frequency":"Once a day"}],
+ "vital_signs":[{"k":"v","name":"Sitting blood pressure","normalized_name":"Sitting blood pressure","value":"104/64","unit":"mmHg","reported_by":"doctor"},{"k":"v","name":"Standing blood pressure","normalized_name":"Standing blood pressure","value":"92/58","unit":"mmHg","reported_by":"doctor"},{"k":"v","name":"Heart rate","normalized_name":"Heart rate","value":58,"unit":"bpm","reported_by":"doctor"},{"k":"v","name":"Temperature","normalized_name":"Body temperature","value":36.4,"unit":"°C","reported_by":"doctor"},{"k":"v","name":"Oxygen saturation","normalized_name":"Oxygen saturation","value":99,"unit":"%","reported_by":"doctor"}],
+ "physical_examination":[{"k":"x1","finding":"Your pulse is slow","normalized_finding":"Resting bradycardia on beta-blocker","body_site":"pulse"}],
+ "clinical_assessment":[{"k":"d1","assessment":"mild postural low blood pressure","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood test","normalized_name":"Full blood count and thyroid function","type":"laboratory"},{"k":"p2","name":"ECG","normalized_name":"Electrocardiogram","type":"cardiac"},{"k":"p3","name":"24-hour heart rhythm monitor","normalized_name":"24-hour Holter monitor","type":"cardiac"}],
+ "counsel":[["c1","Drink two litres of water daily, add a little salt and stand up slowly"]],
+ "follow_up":[{"k":"f1","time_reference":"in three weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient could not say when the light-headedness started (\"since I changed my tablets, or since my holiday\").","related_entities":["symptoms[0]"]},
+  {"k":"u2","type":"uncertain_dose","description":"Patient gave the bisoprolol dose tentatively (\"5 mg, maybe?... I think 5\").","related_entities":["medications[0]"]}]}
+

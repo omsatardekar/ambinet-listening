@@ -1,0 +1,50 @@
+## 00867 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Doctor, it's my mother's legs. They've swollen up again, and she sits in the wheelchair all day now. ~ cc s1
+2: Thank you, I'm glad you came together. Mrs Pillai, can you tell me about the swelling? ~ s1
+1: Both my legs are swollen, from the feet to the knees. ~ s1
+2: When did you first notice it? ~ s1 u1
+1: I don't remember. My daughter noticed it first. ~ s1 u1
+3: I think it was around the festival, but I can't be sure. It might have been earlier. ~ s1 u1
+2: Is it worse at any time of day? ~ s1
+1: In the evenings. By the morning it is a bit less. ~ s1
+2: Is there pain, redness or any warmth in the legs? ~ n1
+3: No, no redness. She says it just feels heavy. ~ n1
+2: Does she have any health problems that we should know about? ~ h1 h2
+3: She has had heart failure for years, and high blood pressure. ~ h1 h2
+2: Is she taking her water tablet regularly? ~ m1
+1: Yes, I take the water tablet. ~ m1 u2
+3: She does, mostly, but I only see her in the evenings. Her carer gives the morning ones, and she sometimes refuses. ~ m1 u2
+2: And which water tablet is that, and what dose? ~ m1
+3: Furosemide, 40 milligrams, once in the morning. ~ m1
+2: Do you have any allergies to medicines, Mrs Pillai? ~ a1
+1: Penicillin. It gave me a rash once. ~ a1
+2: Thank you. I'll note that. Is she short of breath lying flat? ~ n2
+3: No, she sleeps with two pillows as she always has. ~ n2
+2: I'd like to look at her legs and listen to her chest. Could you help me lift the footrest? ~
+3: Yes, of course. ~ pause=15
+2: There is pitting swelling of both lower legs up to the knees, and no redness. ~ x1
+1: Is it bad, doctor? ~
+2: It's a fluid build-up. With her heart condition and sitting all day, that's the usual cause. ~ d1
+3: Should we change her tablets? ~
+2: I would like to increase the furosemide to 40 milligrams twice a day, morning and early afternoon, and I'll prescribe that. ~ m2
+3: We'll make sure the carer knows. ~
+2: Please keep her legs raised when she is resting, and encourage her to take the tablets. ~ c1
+3: I will. ~
+2: I would also like a blood test to check her kidneys and salts, since we are changing the dose. ~ p1
+3: When should we do that? ~
+2: Within the week. Then I'll see her again once the results are in. ~
+1: Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"it's my mother's legs. They've swollen up again","normalized_value":"Bilateral leg swelling","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"swollen","normalized_name":"Bilateral leg swelling","category":"cardiovascular","body_site":"both legs, feet to knees","reported_by":"patient","certainty":"uncertain"}],
+ "negative_findings":[{"k":"n1","finding":"redness","normalized_name":"Redness or pain of the legs","reported_by":"family_member"},{"k":"n2","finding":"short of breath lying flat","normalized_name":"Orthopnoea","reported_by":"family_member"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"heart failure","normalized_condition":"Heart failure","reported_by":"family_member"},{"k":"h2","condition":"high blood pressure","normalized_condition":"Hypertension","reported_by":"family_member"}]},
+ "medications":[{"k":"m1","name":"Furosemide","dose":"40 milligrams","frequency":"once in the morning","reported_by":"family_member"},{"k":"m2","name":"furosemide to 40 milligrams","status":"planned","reported_by":"doctor","dose":"40 milligrams","frequency":"twice a day"}],
+ "allergies":[{"k":"a1","substance":"Penicillin","reaction":"rash"}],
+ "physical_examination":[{"k":"x1","finding":"pitting swelling of both lower legs up to the knees","normalized_finding":"Bilateral pitting oedema to the knees","body_site":"both lower legs"}],
+ "clinical_assessment":[{"k":"d1","assessment":"fluid build-up","normalized_assessment":"Fluid overload related to heart failure","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood test","normalized_name":"Renal function and electrolytes","type":"laboratory"}],
+ "counsel":[["c1","Keep legs raised when resting and encourage tablet adherence"]],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Neither patient nor daughter could say when the swelling began (\"around the festival, but I can't be sure\").","related_entities":["symptoms[0]"]},
+  {"k":"u2","type":"adherence_uncertain","description":"Patient says she takes the water tablet; daughter says mostly, and the morning dose is sometimes refused.","related_entities":["medications[0]"]}]}
+

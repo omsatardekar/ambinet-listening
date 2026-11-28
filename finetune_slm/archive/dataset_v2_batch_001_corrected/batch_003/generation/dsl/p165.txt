@@ -1,0 +1,84 @@
+## 00929 PATIENT=1 DOCTOR=2
+1: I had COVID back in the spring, and I'm still breathless. I thought I'd be back to normal by now. ~ cc s1
+2: I'm sorry to hear that, and it's more common than people think. Tell me what the breathlessness is like. ~ s1
+1: Walking up a hill, or the stairs at work. I have to stop halfway. ~ s1
+2: Before COVID, could you manage those without any trouble? ~ s1
+1: Easily. I used to run five kilometres on a Saturday. ~ s1
+2: Are you coughing, or bringing anything up? ~ s2
+1: A dry cough, now and again. Nothing much. ~ s2
+2: Any chest pain, wheeze, or swelling in your legs? ~ n1
+1: No chest pain. No wheeze. My legs are fine. ~ n1
+2: Any fever, or night sweats? ~ n2
+1: No, nothing like that. ~ n2
+2: Are you taking any medicines? ~ m1 m2
+1: A blue inhaler, salbutamol, two puffs, when I need it, and vitamin D, 1000 units a day. ~ m1 m2
+2: Does the inhaler help? ~
+1: Not really. I don't notice a difference. ~
+2: Any past medical history? ~ h1 h2
+1: High blood pressure, controlled with diet, and an appendix removal when I was twenty. ~ h1 sg1
+2: And how were you treated for COVID? Were you in hospital? ~
+1: No, I managed at home. But it was a rough fortnight. ~
+2: Thank you. I'd like to listen to your chest, and check your oxygen when you walk. ~
+1: Okay. ~ pause=16
+2: Your chest sounds clear, with good air entry on both sides. ~
+1: So nothing wrong? ~
+2: Nothing obvious on listening. I'd like to arrange a chest X-ray, and a breathing test called spirometry, to check how your lungs are working. ~ p1 p2
+1: When can I have those? ~
+2: Both within two weeks. I'll arrange them today. ~
+1: And will I get better? ~
+2: Most people do, but it can take months. Pace yourself, and build up gentle walking a little each week. ~ c1
+1: I'll try. ~
+2: I'd like to see you again in three weeks, with the results in hand. ~ f1
+1: Three weeks. Thank you. ~
+@@
+{"chief_complaint":{"value":"I had COVID back in the spring, and I'm still breathless","normalized_value":"Persistent breathlessness after COVID-19"},
+ "symptoms":[{"k":"s1","name":"breathless","normalized_name":"Exertional breathlessness","category":"respiratory"},{"k":"s2","name":"dry cough","normalized_name":"Dry cough","category":"respiratory"}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Chest pain, wheeze or leg swelling"},{"k":"n2","finding":"fever","normalized_name":"Fever or night sweats"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension"}],"surgical_history":[{"k":"sg1","procedure":"an appendix removal","normalized_procedure":"Appendicectomy","timeframe":"when I was twenty"}]},
+ "medications":[{"k":"m1","name":"salbutamol","dose":"two puffs","frequency":"when I need it"},{"k":"m2","name":"vitamin D","dose":"1000 units","frequency":"a day"}],
+ "procedures_and_investigations":[{"k":"p1","name":"chest X-ray","normalized_name":"Chest X-ray","type":"imaging"},{"k":"p2","name":"spirometry","normalized_name":"Spirometry","type":"other"}],
+ "counsel":[["c1","Pace yourself and build up gentle walking each week"]],
+ "follow_up":[{"k":"f1","time_reference":"in three weeks"}]}
+
+## 00930 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+1: Hello. I've been very tired since the doctor put me on a new heart tablet, and I get out of breath. My daughter thinks I should say something. ~ cc s1 s2
+3: I'm her daughter. She's been much slower since the tablet. She naps all afternoon now. ~ s1
+2: Thank you. Which tablet is it, Mrs Silva? ~
+1: A beta-blocker, I think. It's called bisoprolol. ~ m1
+2: Do you remember how long ago it was started? ~
+1: Two months ago, after the heart attack. ~ h1
+2: I'm sorry to hear that. When does the breathlessness happen? ~ s2
+1: Climbing stairs, and when I walk to the shops. I used to manage it fine. ~ s2
+2: Any chest pain, palpitations, or fainting? ~ n1
+1: No chest pain. No fainting. ~ n1
+2: Any wheeze, or swelling in the ankles? ~ n2
+3: No swelling. She does cough a little at night. ~ n2
+2: Does anyone smoke at home, or have you smoked? ~ so1
+1: I stopped when I had the heart attack. ~ so1
+2: Good for you. Do you have any allergies to medicines? ~ a1
+1: No, none. ~ a1
+2: Let me listen to your heart and lungs and feel your pulse. ~
+1: Go on. ~ pause=16
+2: Your heart rate is slow, around fifty, and regular. Your lungs are clear, and your ankles are not swollen. ~ x1 x2
+3: Is that too slow? ~
+2: A bit slow, which can make people feel tired. It may be the beta-blocker, and her heart condition may also play a part. ~ d1
+1: Do I have to stop it? ~
+2: Please don't stop it on your own, because it protects your heart after a heart attack. I'd like to check things first. ~
+3: What checks? ~
+2: I'll arrange a heart tracing today, and a blood test for anaemia and thyroid. ~ p1 p2
+3: And then? ~
+2: Depending on the results, I might lower the dose, or discuss it with her cardiologist. ~ d1
+1: All right. I'd rather feel less tired. ~
+2: I'll phone you with the results. If you become faint, get chest pain, or are very breathless, call an ambulance. ~ c1
+3: We will. Thank you, doctor. ~
+@@
+{"allergy_none":"a1","chief_complaint":{"value":"I've been very tired since the doctor put me on a new heart tablet, and I get out of breath","normalized_value":"Fatigue and breathlessness since starting a beta-blocker"},
+ "symptoms":[{"k":"s1","name":"tired","normalized_name":"Fatigue","category":"constitutional","reported_by":"family_member"},{"k":"s2","name":"out of breath","normalized_name":"Exertional breathlessness","category":"respiratory"}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Chest pain or syncope"},{"k":"n2","finding":"swelling","normalized_name":"Ankle swelling","reported_by":"family_member"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"the heart attack","normalized_condition":"Myocardial infarction"}],"social_history":[{"k":"so1","category":"smoking","description":"I stopped when I had the heart attack","status":"former","details":null}]},
+ "medications":[{"k":"m1","name":"bisoprolol","reported_by":"patient"}],
+ "physical_examination":[{"k":"x1","finding":"heart rate is slow, around fifty, and regular","normalized_finding":"Bradycardia, about 50 bpm, regular rhythm","body_site":"heart"},{"k":"x2","finding":"lungs are clear, and your ankles are not swollen","normalized_finding":"Clear lungs, no ankle oedema","body_site":"lungs and ankles","status":"absent"}],
+ "clinical_assessment":[{"k":"d1","assessment":"It may be the beta-blocker","normalized_assessment":"Possible beta-blocker-related bradycardia and fatigue","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"heart tracing","normalized_name":"Electrocardiogram","type":"cardiac"},{"k":"p2","name":"blood test","normalized_name":"Full blood count and thyroid function","type":"laboratory"}],
+ "counsel":[["c1","Call an ambulance if faint, chest pain or very breathless"]]}
+

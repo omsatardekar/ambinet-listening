@@ -1,0 +1,50 @@
+## 00874 PATIENT=1 DOCTOR=2
+1: Morning, doctor. My diabetes check is due, but I also get tingling in my feet now, and I wanted to ask about that. ~ cc s1
+2: Good morning. Let's start with the tingling. Which part of the feet? ~ s1
+1: The toes, mostly, on both sides. Like pins and needles. ~ s1
+2: When did you first notice it? ~ s1 u1
+1: Oh, I couldn't say. Maybe the spring? Or last winter. I really don't remember. ~ s1 u1
+2: Is it there all the time, or does it come and go? ~ s1
+1: It's worse in the evening, when I'm sitting down. ~ s1
+2: Any weakness in the legs, or falls? ~ n1
+1: No, nothing like that. My legs feel strong. ~ n1
+2: Tell me about the diabetes medicines you're on. ~ m1 m2 m3
+1: Metformin, 500 mg, twice a day. Then a small yellow one in the morning, I don't know the name. And the injection at night. ~ m1 m2 m3 u2
+2: Do you know how many units of the injection you take? ~ m3
+1: Twenty, I think. Or perhaps twenty-four. My wife does it, she writes it down. ~ m3 u3
+2: I'll ask you to bring her diary next time, then we'll be sure. Any other conditions besides the diabetes? ~ h1
+1: Diabetes, for about ten years. That's all, really. ~ h1
+2: Have you noticed any trouble with your eyes, or sores on your feet? ~ r1
+1: No. My eyes are fine, and my feet have no sores. ~ r1
+2: Good. I'll check your pulse, blood pressure and weight now. ~
+1: Go ahead. ~
+2: Pulse 74, blood pressure 134 over 80, weight 88 kilograms, temperature 36.6. ~ v pause=10
+1: Is the weight all right? ~
+2: It's about the same as last visit. I'd like to test the sensation in your feet with a thread in a moment. ~
+1: Does it hurt? ~
+2: Not at all. Just tell me when you feel it. ~
+1: Yes. Yes. Hmm, I didn't feel that one. ~
+2: Thank you. I'd like to send blood tests for your sugar control, the HbA1c, and also your kidneys and B12. ~ f2
+1: All right. ~
+2: The tingling may well be early nerve damage from the diabetes, but I'd like the tests to say so. ~ d1
+1: Is it serious? ~
+2: It's common, and it often settles when the sugars are steady. Please check your feet daily, and wear shoes that fit well. ~ c1
+1: I will. ~
+2: Come back in three weeks with your wife's diary, and I'll go through the results with you. ~ f1
+1: Three weeks. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"I also get tingling in my feet now","normalized_value":"Tingling in the feet"},
+ "symptoms":[{"k":"s1","name":"tingling","normalized_name":"Paraesthesia of the feet","category":"neurological","body_site":"toes, both feet","certainty":"uncertain","temporality":"current"}],
+ "negative_findings":[{"k":"n1","finding":"weakness","normalized_name":"Leg weakness or falls"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Diabetes","normalized_condition":"Diabetes mellitus","duration":{"value":10,"unit":"years","normalized":"10 years"}}]},
+ "medications":[{"k":"m1","name":"Metformin","dose":"500 mg","frequency":"twice a day"},{"k":"m2","name":"small yellow one","normalized_name":null,"generic_name":null,"frequency":"in the morning"},{"k":"m3","name":"injection","normalized_name":"Injection at night (insulin, unspecified)","generic_name":null,"dose":"Twenty","frequency":"at night"}],
+ "vitals":{"k":"v","hr":74,"bp":"134/80","wt":88,"temp":36.6},
+ "review_of_systems":[{"k":"r1","system":"eyes and skin"}],
+ "clinical_assessment":[{"k":"d1","assessment":"early nerve damage from the diabetes","certainty":"provisional"}],
+ "counsel":[["c1","Check feet daily and wear well-fitting shoes"]],
+ "follow_up":[{"k":"f1","time_reference":"in three weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient could not say when the tingling began (\"maybe the spring? Or last winter\").","related_entities":["symptoms[0]"]},
+  {"k":"u2","type":"incomplete_medication_name","description":"Patient cannot name the small yellow morning tablet.","related_entities":["medications[1]"]},
+  {"k":"u3","type":"uncertain_dose","description":"Patient gave the injection dose tentatively (\"twenty, I think, or perhaps twenty-four\"); wife keeps a diary.","related_entities":["medications[2]"]}],
+ "quality_checks":{"ambiguous_entities":["medications[1]","medications[2]"]}}
+

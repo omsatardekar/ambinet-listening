@@ -1,0 +1,93 @@
+## 00777 PATIENT=1 DOCTOR=2
+1: Hi, doctor. I'm really sorry, I know it's probably just a cold, but I've been feeling awful for about ten days, and my sore throat's not going. ~ cc s1
+2: Let's have a look at the whole picture. Tell me what's been happening. ~ s1
+1: Sore throat, severe. I can barely swallow. And I'm exhausted, I sleep twelve hours and still wake up flattened. ~ s1 s2
+2: When did it all start, as best you can say? ~ s1 u1
+1: Um, a week and a half ago? Or maybe two weeks, I'm not sure. I think it was just after my flatmate's birthday. ~ s1 u1
+2: That's fine. Any fever or sweats? ~ n1
+1: Fever, yes, on and off. But I haven't measured it. ~ n1
+2: Any rash? ~ n2
+1: No rash. ~ n2
+2: Any pain in your tummy, especially on the left side? ~ n3
+1: No. None. ~ n3
+2: Have you had any allergies to medicines? ~ a1
+1: Penicillin, I came out in a rash once, years ago, so I avoid it. ~ a1
+2: That's important. Do you know if anyone's had glandular fever in your house? ~
+1: My flatmate had it last month. I'm a bit worried. ~
+2: That's useful to know. Do you smoke or drink? ~ so1
+1: I vape sometimes, and drink at the weekend. ~ so1
+2: Any other conditions? ~ h1
+1: Asthma, mild. ~ h1
+2: Let me look at your throat. Open wide. ~
+1: Ahh. ~ pause=15
+2: Your tonsils are swollen with a white coating on both, and the glands at the back of your neck are enlarged and tender. ~ x1
+1: Is it tonsillitis? ~
+2: It could be, but with the exhaustion, swollen neck glands, and your flatmate's illness, I'd say glandular fever is more likely than ordinary tonsillitis. ~ d1
+1: Oh no. How long does that last? ~
+2: Often a few weeks, sometimes longer. I can't rule out a bacterial throat infection on top, so I'd like to take a throat swab. ~ d2 p1
+1: Right. ~
+2: And I'd like to arrange blood tests, to check for the virus and your blood count. ~ p2
+1: Okay. And will I get antibiotics? ~
+2: Not unless the swab shows bacteria, and with your history, I'd choose carefully. ~
+1: Fair enough. ~
+2: Rest, drink plenty, take paracetamol for the pain, and don't play contact sports, because your spleen may be enlarged. ~ c1
+1: I'll stay home. ~
+2: If you can't swallow your saliva, have severe tummy pain on the left, or get a high fever, come in right away. ~ c2
+1: I will. Thank you. ~
+@@
+{"chief_complaint":{"value":"I've been feeling awful for about ten days","normalized_value":"Prolonged sore throat and fatigue"},
+ "symptoms":[{"k":"s1","name":"sore throat","normalized_name":"Severe sore throat","category":"ENT","severity":"severe","certainty":"uncertain"},
+  {"k":"s2","name":"exhausted","normalized_name":"Fatigue","category":"constitutional"}],
+ "negative_findings":[{"k":"n2","finding":"rash","normalized_name":"Rash"},{"k":"n3","finding":"pain in your tummy","normalized_name":"Left upper abdominal pain"}],
+ "allergies":[{"k":"a1","substance":"Penicillin","reaction":"rash","status":"historical"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Asthma","normalized_condition":"Asthma"}],"social_history":[{"k":"so1","category":"alcohol","description":"Weekend drinking and occasional vaping","details":"drink at the weekend"}]},
+ "physical_examination":[{"k":"x1","finding":"tonsils are swollen with a white coating","normalized_finding":"Exudative tonsillitis with tender posterior cervical lymphadenopathy","body_site":"throat and neck"}],
+ "clinical_assessment":[{"k":"d1","assessment":"glandular fever","certainty":"provisional"},{"k":"d2","assessment":"a bacterial throat infection","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"throat swab","normalized_name":"Throat swab culture","type":"laboratory"},{"k":"p2","name":"blood tests","normalized_name":"Glandular fever serology and full blood count","type":"laboratory"}],
+ "counsel":[["c1","Rest, fluids, paracetamol and no contact sports"],["c2","Return urgently if cannot swallow saliva, severe left tummy pain or high fever"]],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient could not say exactly when the sore throat began (\"a week and a half ago? Or maybe two weeks\").","related_entities":["symptoms[0]"]}]}
+
+## 00785 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Doctor, thank you for fitting us in. It's Mum, she's getting out of breath just walking to the bathroom. ~ cc s1
+2: Hello, Mrs Brennan. Is that right, short of breath on the way to the bathroom? ~ s1
+1: Well, it's not that bad. I get a bit puffed. ~ s1
+3: Mum, you have to sit down on the landing. Every time. ~ s1
+2: When did it start? ~ s1 u1
+1: Oh, a while ago. A month? Two? I don't keep track. ~ s1 u1
+3: I'd say it's been six weeks, since the cold, but I'm not certain either, Mum was already slow before it. ~ s1 u1
+2: I'll note that neither of you is sure. Any chest pain? ~ n1
+1: No pain. No. ~ n1
+2: Any swelling of your legs, or a cough? ~ n2
+1: My ankles puff up by evening. No cough. ~ n2
+2: What tablets are you on? ~ m1 m2
+3: Bisoprolol, 5 mg once a day, and furosemide, 40 mg in the morning. ~ m1 m2
+2: And what are those for? ~ h1 h2
+3: Her heart, she has heart failure, and high blood pressure. ~ h1 h2
+2: Who is at home with you, Mrs Brennan? ~ so1
+1: I live alone. Sheila here pops in every day. ~ so1
+2: Let me listen to your chest. ~
+1: Go on. ~ pause=15
+2: The heart sounds are regular, and there are fine crackles at the bottom of both lungs. ~
+3: Is it her heart, doctor? ~
+2: With the heart failure history, and the ankle swelling, I'd say this is likely her heart failure getting worse, with fluid building up. ~ d1
+1: Oh, I see. ~
+2: It's treatable. I'd like to arrange blood tests and a heart scan, an echocardiogram, to see how the heart is pumping. ~ p1 p2
+3: Will she need to go into hospital? ~
+2: Not today, if you can both watch her closely. The blood tests today, and the scan in the next two weeks. ~ p1
+3: Okay. ~
+2: Please weigh her each morning, and ring me if her weight rises by two kilos in three days, or she's breathless at rest. ~ c1
+3: I will. ~
+2: I'd like to see you both in a week, to check how she is and look at the blood results. ~ f1
+3: A week. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"she's getting out of breath just walking to the bathroom","normalized_value":"Exertional breathlessness","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"puffed","normalized_name":"Breathlessness on minimal exertion","category":"respiratory","certainty":"uncertain"}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Chest pain"},{"k":"n2","finding":"cough","normalized_name":"Cough"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"heart failure","normalized_condition":"Heart failure","reported_by":"family_member"},{"k":"h2","condition":"high blood pressure","normalized_condition":"Hypertension","reported_by":"family_member"}],"social_history":[{"k":"so1","category":"living","description":"Lives alone with daily visits","details":"I live alone"}]},
+ "medications":[{"k":"m1","name":"Bisoprolol","dose":"5 mg","frequency":"once a day","reported_by":"family_member"},{"k":"m2","name":"furosemide","dose":"40 mg","frequency":"in the morning","reported_by":"family_member"}],
+ "clinical_assessment":[{"k":"d1","assessment":"her heart failure getting worse","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood tests","normalized_name":"Renal function, electrolytes and NT-proBNP","type":"laboratory","scheduled_datetime":"today"},{"k":"p2","name":"echocardiogram","normalized_name":"Echocardiogram","type":"cardiac"}],
+ "counsel":[["c1","Weigh daily; ring if up by two kilos in three days or breathless at rest"]],
+ "follow_up":[{"k":"f1","time_reference":"in a week"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Neither the patient nor her daughter could say precisely when the breathlessness began (\"a month? Two?\" / \"six weeks... not certain\").","related_entities":["symptoms[0]"]}]}
+

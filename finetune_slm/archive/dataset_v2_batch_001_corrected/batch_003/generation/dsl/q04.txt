@@ -1,0 +1,228 @@
+## 00675 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Morning, doctor. Sorry, we're a few minutes early. Mia won't say it, so I will, it's the trains. She had another bad one on Monday. ~
+2: Thanks, Gareth. Mia, I'd like to hear it from you, whenever you're ready. ~
+1: Well. It's... the commute. I get these panic attacks on the Northern line. Monday, no, Tuesday. Gareth says Monday. ~ cc s1
+2: Take your time. What happens in one? ~ s2
+1: My heart races, it feels like it's going to burst out of my chest. And then I can't get my breath, and I have to get off. ~ s2
+2: How often does this happen? ~ s1
+1: About twice a week at the moment. It was every day in March. ~ s1
+2: Do you feel anything else, dizzy, sweaty? ~ s3
+1: Dizzy, yes. The platform sort of tilts. ~ s3
+2: And how are you sleeping? ~ s4
+1: Badly. I wake up at three and just lie there thinking about the journey. ~ s4
+2: Have you had any chest pain during these? ~ n1
+1: No chest pain. It's the racing that frightens me, not pain. ~ n1
+2: Any thoughts of harming yourself? ~ n2
+1: No, no, nothing like that. ~ n2
+3: She'd tell you, honestly. ~
+2: Thank you, Gareth. Mia, any fainting? ~ n3
+1: I've never fainted. Never actually fallen. ~ n3
+2: What are you taking at the moment? ~ m1 m2 m3
+1: Sertraline, 100 mg, once a day. Propranolol, 40 mg, when I'm panicky, on the train mostly. And melatonin, 2 mg, at night. ~ m1 m2 m3
+2: Good. Any allergies to anything? ~ a1
+1: No, no allergies. Gareth's allergic to everything, not me. ~ a1
+3: That's true, I am. ~
+2: Anything in your past health? ~ h1 h2
+1: Depression, years ago, which is why the sertraline. And irritable bowel syndrome. ~ h1 h2
+2: Ever had surgery? ~ sg1
+1: Just my tonsils, when I was eight. ~ sg1
+2: Does anxiety run in the family? ~ f1
+1: My mother has always been a worrier, she was treated for anxiety. ~ f1
+2: What's your job? ~ so1
+1: I'm an accountant. Quarter end is hellish, which doesn't help. ~ so1
+2: Coffee? ~ so2
+1: Four cups a day. I know. ~ so2
+2: Let me check your pulse and blood pressure. Pulse 88, blood pressure 124 over 80, temperature 36.6, oxygen 99 percent, breathing 16, and weight 62 kilos. ~ v pause=15
+1: Is the pulse high? ~
+2: A bit quick but you're nervous, which is fair. I'm going to listen to your heart. ~ pause=10
+3: Shall I wait outside? ~
+2: Stay, it's fine if Mia's happy. Heart sounds are normal, regular rhythm. ~ x1
+1: Oh good. ~
+2: And I can see slightly dilated pupils, which fits with a racing heart. Any trouble with your breathing between attacks? ~ x2 r1
+1: No, nothing. I'm fine between attacks. ~ r1
+2: Headaches or vision changes, anything neurological? ~ r2
+1: No, nothing. No headaches, my vision's normal. ~ r2
+2: Here's my thinking. This looks like panic attacks, and given the coffee and the racing heart, I can't rule out an overactive thyroid. ~ d1 d2
+1: Is it my thyroid? ~
+2: Possibly not, but I'd like to arrange a thyroid blood test, a blood count, and an ECG today to be sure. ~ p1 p2 p3
+3: And the monitor thing, the one for 24 hours? ~
+2: Good thought. I'd like to arrange a 24-hour heart monitor as well. ~ p4
+1: How long does that take? ~
+2: You wear it for a day, you carry on as normal. Also try cutting the coffee down gradually. ~ c1
+1: To what? ~
+2: Two cups to start. And keep the propranolol for the train for now. ~
+1: Okay. ~
+2: If the attacks haven't eased in four weeks, come back and we'll talk about talking therapy. ~ f2
+3: We'll make an appointment. ~
+@@
+{"chief_complaint":{"value":"panic attacks on the Northern line","normalized_value":"Panic attacks during commute"},
+ "symptoms":[{"k":"s1","name":"panic attacks","normalized_name":"Panic attacks","category":"psychiatric","frequency":"about twice a week"},
+  {"k":"s2","name":"heart races","normalized_name":"Palpitations","category":"cardiovascular","body_site":"chest"},
+  {"k":"s3","name":"Dizzy","normalized_name":"Dizziness","category":"neurological"},
+  {"k":"s4","name":"wake up at three","normalized_name":"Early-morning waking","category":"neurological"}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Chest pain"},{"k":"n2","finding":"thoughts of harming yourself","normalized_name":"Thoughts of self-harm"},{"k":"n3","finding":"fainting","normalized_name":"Syncope"}],
+ "allergy_none":"a1",
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Depression","normalized_condition":"Depression"},{"k":"h2","condition":"irritable bowel syndrome","normalized_condition":"Irritable bowel syndrome"}],
+  "surgical_history":[{"k":"sg1","procedure":"tonsils","normalized_procedure":"Tonsillectomy","timeframe":"when I was eight"}],
+  "family_history":[{"k":"f1","relation":"mother","condition":"anxiety"}],
+  "social_history":[{"k":"so1","category":"occupation","details":"accountant"},{"k":"so2","category":"diet","details":"Four cups a day"}]},
+ "medications":[{"k":"m1","name":"Sertraline","dose":"100 mg","frequency":"once a day"},{"k":"m2","name":"Propranolol","dose":"40 mg","frequency":"when I'm panicky"},{"k":"m3","name":"melatonin","dose":"2 mg","frequency":"at night"}],
+ "vitals":{"k":"v","by":"doctor","bp":"124/80","hr":88,"temp":36.6,"spo2":99,"rr":16,"wt":62},
+ "physical_examination":[{"k":"x1","finding":"Heart sounds are normal, regular rhythm","normalized_finding":"Normal heart sounds, regular rhythm","body_site":"chest","observed_by":"doctor"},{"k":"x2","finding":"slightly dilated pupils","normalized_finding":"Mildly dilated pupils","body_site":"eyes"}],
+ "review_of_systems":[{"k":"r1","system":"respiratory"},{"k":"r2","system":"neurological"}],
+ "clinical_assessment":[{"k":"d1","assessment":"panic attacks","certainty":"provisional"},{"k":"d2","assessment":"an overactive thyroid","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"thyroid blood test","normalized_name":"Thyroid function test","type":"laboratory"},{"k":"p2","name":"blood count","normalized_name":"Full blood count","type":"laboratory"},{"k":"p3","name":"ECG","normalized_name":"Electrocardiogram","type":"cardiac"},{"k":"p4","name":"24-hour heart monitor","normalized_name":"24-hour Holter monitor","type":"cardiac"}],
+ "counsel":[["c1","Gradually cut down coffee to two cups a day and keep propranolol for the train"]],
+ "follow_up":[{"k":"f2","time_reference":"if the attacks haven't eased in four weeks","status":"conditional"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00685 PATIENT=1 DOCTOR=2
+2: Hi, I'm Dr Okafor. How would you like me to address you, Ms Reyes, or Dana? ~
+1: Dana's fine. I've got about twenty minutes before my next meeting, so, can we get into it? ~
+2: Of course. Tell me what's going on. ~
+1: My periods are awful. Painful periods, since I was fourteen. I've put up with it for years, but it's getting worse and I'm missing work. ~ cc s1
+2: Worse how? ~ s1
+1: It used to be a day of cramps. Now it's three, four days, and I'm on the bathroom floor on the second one. ~ s1
+2: How heavy is the bleeding? ~ s2
+1: Heavy. Soaking through a pad every hour or two on day two. ~ s2
+2: Any pain with sex? ~ s3
+1: Yes. Deep inside, it's why I stopped a while back. ~ s3
+2: Interesting. Since when, roughly, has the sex been painful? ~
+1: Maybe two years? Look, can we stick to the periods? ~
+2: Sure. Do you bleed between periods? ~ n1
+1: No. Never between. ~ n1
+2: Any unusual discharge or a smell? ~ n2
+1: No, nothing like that. ~ n2
+2: Any trouble when you pass a stool during your period? ~ n3
+1: No, my bowels are normal, that's the one thing. ~ n3
+2: Do you take anything for it? ~
+1: Just ibuprofen, but that's ancient history now. It stopped helping. ~
+2: Any allergies to medicines? ~ a1
+1: Sulfa drugs. I broke out in hives. ~ a1
+2: Good to know. What else is in your medical history? ~ h1 h2 h3
+1: Migraines with aura, anxiety, and I was anemic last year. ~ h1 h2 h3
+2: Any procedures? ~ sg1
+1: A laparoscopy, four years ago, to look for... something. They didn't find anything. ~ sg1
+2: Anyone in the family with period problems? ~ f1
+1: My mother had endometriosis. She was diagnosed in her thirties. ~ f1
+2: Tell me about work. ~ so1
+1: I'm a paralegal. Back-to-back meetings, which is why I'm checking the clock. ~ so1
+2: And exercise? ~ so2
+1: I run three times a week, except when I'm in pain. ~ so2
+2: Let me take a few numbers. Your blood pressure is 112 over 70, pulse 76, and weight 59 kilos. ~ v pause=10
+1: Fine? ~
+2: Fine. I'm going to press on your abdomen. Tell me if it hurts. ~ pause=8
+1: Ah. Lower left, there. ~
+2: There's tenderness in the lower left abdomen, but no guarding. ~ x1
+1: What's guarding? ~
+2: When the muscles tense up against my hand. They aren't. The uterus feels normal in size. ~ x2
+1: So, not big? ~
+2: Not big. And I can feel some tenderness behind the uterus too. ~ x3
+1: That's the part that hurts, yes. ~
+2: Any trouble with your bladder? ~ r1
+1: No, nothing there. It's fine. ~ r1
+2: This pattern, pain since your teens, deep pain with sex, your mother's history, it looks like endometriosis. I can't rule out fibroids until we scan. ~ d1 d2
+1: Which means? ~
+2: I'd like to arrange a pelvic ultrasound, a ferritin blood test for the iron, and a pregnancy test today. ~ p1 p2 p3
+1: Pregnancy, no, there's no chance. ~
+2: It's routine before starting medication. I'd also like to start norethindrone 5 mg once a day, no estrogen because of the migraines with aura. ~ m1
+1: Right, that makes sense. Anything for the cramps? ~
+2: Yes, let's start naproxen 500 mg twice a day with food during your period. ~ m2
+1: Okay, I'll take that. ~
+2: If the pain isn't better in three months, I'll refer you to a specialist for a closer look. ~ f2
+1: Three months. Fine, I have to run. ~
+@@
+{"chief_complaint":{"value":"Painful periods, since I was fourteen","normalized_value":"Painful periods since adolescence, worsening"},
+ "symptoms":[{"k":"s1","name":"Painful periods","normalized_name":"Dysmenorrhoea","category":"genitourinary","onset":"since I was fourteen","body_site":"pelvis"},
+  {"k":"s2","name":"Heavy","normalized_name":"Heavy menstrual bleeding","category":"genitourinary"},
+  {"k":"s3","name":"pain with sex","normalized_name":"Dyspareunia","category":"genitourinary","body_site":"pelvis"}],
+ "negative_findings":[{"k":"n1","finding":"between periods","normalized_name":"Intermenstrual bleeding"},{"k":"n2","finding":"unusual discharge","normalized_name":"Abnormal vaginal discharge"},{"k":"n3","finding":"trouble when you pass a stool during your period","normalized_name":"Painful bowel movements during menses"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Migraines with aura","normalized_condition":"Migraine with aura"},{"k":"h2","condition":"anxiety","normalized_condition":"Anxiety"},{"k":"h3","condition":"anemic","normalized_condition":"Anaemia"}],
+  "surgical_history":[{"k":"sg1","procedure":"laparoscopy","normalized_procedure":"Diagnostic laparoscopy","timeframe":"four years ago"}],
+  "family_history":[{"k":"f1","relation":"mother","condition":"endometriosis"}],
+  "social_history":[{"k":"so1","category":"occupation","details":"paralegal"},{"k":"so2","category":"exercise","details":"run three times a week"}]},
+ "medications":[{"k":"m1","name":"norethindrone","dose":"5 mg","frequency":"once a day","status":"planned","reported_by":"doctor"},{"k":"m2","name":"naproxen","dose":"500 mg","frequency":"twice a day","status":"planned","reported_by":"doctor"}],
+ "allergies":[{"k":"a1","substance":"Sulfa drugs","reaction":"hives"}],
+ "vitals":{"k":"v","by":"doctor","bp":"112/70","hr":76,"wt":59},
+ "physical_examination":[{"k":"x1","finding":"tenderness in the lower left abdomen","normalized_finding":"Left lower abdominal tenderness","body_site":"abdomen"},{"k":"x2","finding":"uterus feels normal in size","normalized_finding":"Normal uterine size","body_site":"pelvis"},{"k":"x3","finding":"tenderness behind the uterus","normalized_finding":"Retro-uterine tenderness","body_site":"pelvis"}],
+ "review_of_systems":[{"k":"r1","system":"genitourinary"}],
+ "clinical_assessment":[{"k":"d1","assessment":"endometriosis","certainty":"provisional"},{"k":"d2","assessment":"fibroids","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"pelvic ultrasound","normalized_name":"Pelvic ultrasound","type":"imaging"},{"k":"p2","name":"ferritin blood test","normalized_name":"Serum ferritin","type":"laboratory"},{"k":"p3","name":"pregnancy test","normalized_name":"Pregnancy test","type":"laboratory"}],
+ "follow_up":[{"k":"f2","time_reference":"if the pain isn't better in three months","status":"conditional"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00688 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+1: Sorry I'm late, doctor, traffic was dreadful. Marcia drove me. ~
+2: No problem. Mr Delaney, what brings you in? ~
+1: Oh, it's nothing much. I've been feeling a bit low since Dorothy passed. My daughter thinks I should come. ~ cc s1
+2: I'm sorry for your loss. How long ago? ~ s1
+1: About three months. I'm managing, you know. ~ s1
+3: He's not eating, doctor. He's lost weight, his trousers are held up with a belt now. ~ s2
+1: I eat fine. I just don't have much appetite. ~ s2
+2: Mr Delaney, is that right, you don't have much appetite? ~
+1: A bit less, maybe. That's all. ~ s2
+2: How are you sleeping? ~ n1
+1: Sleeping fine. No trouble sleeping. ~ n1 c1x
+3: Dad, you're up at three every single night. I hear the kettle. ~ s3 c1x
+1: I get a cup of tea. It's not a problem. ~
+2: Any thoughts that life isn't worth living, or of harming yourself? ~ n2
+1: No. Nothing like that. ~ n2
+3: He wouldn't say if he did, but he hasn't said anything like it to me. ~
+2: Okay. What medicines do you take? ~ m1 m2
+1: Lisinopril, 10 mg, once a day. And metformin, 500 mg, twice a day. ~ m1 m2 u1
+3: It's 20 mg, Dad. I fill the pill box. The lisinopril is 20. ~ m1 u1
+1: I'm sure it's 10, it's what Dorothy used to give me. ~ m1 u1
+2: We'll check the lisinopril dose with the pharmacy. Any allergies to medicines? ~ a1
+1: Well. In hospital once something gave me a rash, I think. I don't know what it was. Marcia may remember. ~ a1 u2
+3: I don't. They never told us. ~ a1 u2
+2: I'll record it as a possible allergy. What other health conditions do you have? ~ h1 h2 h3
+1: High blood pressure, diabetes, the type two, and arthritis in my hands. ~ h1 h2 h3
+2: Any operations? ~ sg1
+1: A hernia repair, back in 2008. ~ sg1
+2: Anyone in the family with depression? ~ f1
+1: My brother Frank had it, years ago. ~ f1
+2: How are you living at the moment? ~ so1
+1: On my own now, in the same house. I'm a widower. ~ so1
+2: And before you retired? ~ so2
+1: I was a mechanic for forty years. Retired now. ~ so2
+2: Let me check your numbers. Blood pressure 134 over 80, pulse 72, temperature 36.5, oxygen 97 percent, breathing 16, and your weight is 70 kilos. ~ v pause=15
+3: That's six kilos down from last year. ~
+2: Noted. Let me look at you. You look a little thin, and your eyes are tired. ~ x1 pause=8
+1: Everybody says I look tired. ~
+2: There's no swelling in your ankles. And your heart sounds are normal. ~ x2 x3
+1: That's good, isn't it? ~
+2: Any trouble with your breathing or chest? ~ r1
+1: No, nothing. Breathing's fine. ~ r1
+2: And your tummy, any vomiting or pain? ~ r2
+1: No, nothing there either. ~ r2
+2: This looks like a grief reaction to me, but I can't rule out depression, and I want to check your body too. ~ d1 d2
+1: There's nothing wrong with my body. ~
+2: Maybe not, but I'd like to arrange a thyroid blood test, a vitamin B12 level, an HbA1c, and kidney function. ~ p1 p2 p3 p4
+3: All today? ~
+2: Today, yes. And please eat small meals more often. ~ c1
+1: If you say so. ~
+2: If the sleep and appetite haven't improved in four weeks, come back and we'll talk about support and counselling. ~ f2
+3: I'll make sure he does. ~
+@@
+{"chief_complaint":{"value":"feeling a bit low since Dorothy passed","normalized_value":"Low mood since bereavement"},
+ "symptoms":[{"k":"s1","name":"feeling a bit low","normalized_name":"Low mood","category":"psychiatric","duration":{"value":3,"unit":"months","normalized":"about 3 months"}},
+  {"k":"s2","name":"don't have much appetite","normalized_name":"Reduced appetite","category":"constitutional"},
+  {"k":"s3","name":"up at three every single night","normalized_name":"Night-time waking","category":"neurological","reported_by":"family_member","certainty":"disputed"}],
+ "negative_findings":[{"k":"n1","finding":"trouble sleeping","normalized_name":"Sleep disturbance"},{"k":"n2","finding":"harming yourself","normalized_name":"Thoughts of self-harm"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension"},{"k":"h2","condition":"the type two","normalized_condition":"Type 2 diabetes mellitus"},{"k":"h3","condition":"arthritis in my hands","normalized_condition":"Hand osteoarthritis"}],
+  "surgical_history":[{"k":"sg1","procedure":"hernia repair","normalized_procedure":"Hernia repair","timeframe":"back in 2008"}],
+  "family_history":[{"k":"f1","relation":"brother","condition":"depression"}],
+  "social_history":[{"k":"so1","category":"living","details":"On my own now, in the same house"},{"k":"so2","category":"occupation","details":"mechanic for forty years","status":"retired"}]},
+ "medications":[{"k":"m1","name":"Lisinopril","frequency":"once a day"},{"k":"m2","name":"metformin","dose":"500 mg","frequency":"twice a day"}],
+ "allergies":[{"k":"a1","substance":"something","normalized_substance":"Unknown substance (hospital rash)","status":"uncertain"}],
+ "vitals":{"k":"v","by":"doctor","bp":"134/80","hr":72,"temp":36.5,"spo2":97,"rr":16,"wt":70},
+ "physical_examination":[{"k":"x1","finding":"look a little thin","normalized_finding":"Thin appearance","body_site":"general"},{"k":"x2","finding":"no swelling in your ankles","normalized_finding":"No ankle swelling","status":"absent","body_site":"ankles"},{"k":"x3","finding":"heart sounds are normal","normalized_finding":"Normal heart sounds","body_site":"chest"}],
+ "review_of_systems":[{"k":"r1","system":"respiratory"},{"k":"r2","system":"gastrointestinal"}],
+ "clinical_assessment":[{"k":"d1","assessment":"grief reaction","certainty":"provisional"},{"k":"d2","assessment":"depression","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"thyroid blood test","normalized_name":"Thyroid function test","type":"laboratory"},{"k":"p2","name":"vitamin B12 level","normalized_name":"Serum vitamin B12","type":"laboratory"},{"k":"p3","name":"HbA1c","normalized_name":"Glycated haemoglobin","type":"laboratory"},{"k":"p4","name":"kidney function","normalized_name":"Renal function tests","type":"laboratory"}],
+ "counsel":[["c1","Eat small meals more often"]],
+ "follow_up":[{"k":"f2","time_reference":"if the sleep and appetite haven't improved in four weeks","status":"conditional"}],
+ "clinical_uncertainties":[{"type":"allergy_uncertain","description":"A possible hospital rash was reported but the substance and reaction are unknown to both speakers.","related_entities":["allergies[0]"],"k":"u2"},
+  {"type":"conflicting_statement","description":"Patient denies trouble sleeping while his daughter reports he is up at three every night.","related_entities":["negative_findings[0]","symptoms[2]"],"k":"c1x"},
+  {"type":"medication_discrepancy","description":"Patient says lisinopril is 10 mg while his daughter says 20 mg.","related_entities":["medications[0]"],"k":"u1"}],
+ "quality_checks":{"contradictions_detected":["Patient denies trouble sleeping; daughter reports waking at three every night (unresolved).","Lisinopril dose: patient states 10 mg, daughter states 20 mg (unresolved)."],"ambiguous_entities":[]}}

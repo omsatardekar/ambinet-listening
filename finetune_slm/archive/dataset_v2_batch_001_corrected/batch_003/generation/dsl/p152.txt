@@ -1,0 +1,48 @@
+## 00913 PATIENT=1 DOCTOR=2 NURSE=3 FAMILY_MEMBER=4
+1: Hello, doctor. The surgery rang to say my calcium was high on a routine blood test, and I'm not sure what that means. ~ cc
+4: I'm her daughter, I came along because Mum gets confused with medical talk. ~
+2: Thank you both for coming. A high calcium result is something we should look into. Have you noticed any symptoms? ~ s1
+1: I've been tired lately, I suppose. And thirsty. ~ s1 s2
+4: She's been constipated too, she told me last week. ~ s3
+2: How long has the tiredness been going on? ~ s1
+1: Oh, a couple of months, I'd say. I put it down to the weather. ~ s1
+2: Any tummy pain, nausea, or bone pain? ~ n1
+1: No pain in the bones. No nausea. ~ n1
+2: Any kidney stones in the past? ~ n2
+1: No. Never. ~ n2
+2: What medicines are you taking? ~ m1
+1: Just a calcium and vitamin D tablet, one a day, for my bones. ~ m1 u1
+4: No, Mum, it's two a day. I fill the dosette box. ~ m1 u1
+1: Is it? I only take the one in the morning. ~ m1 u1
+4: You take one in the morning and one at night, I see you do it. ~ m1 u1
+2: I'll note that the two of you remember it differently, and we'll check the pharmacy record. ~ m1 u1
+3: I can ring the pharmacy while you're talking, doctor. ~
+2: Please do. Do you have any allergies to medicines? ~ a1
+1: No, none. ~ a1
+2: Any other conditions? ~ h1
+1: Osteoporosis. That's why I take the tablets. ~ h1
+2: Do you smoke or drink? ~ so1
+1: No smoking. A sherry at Christmas. ~ so1
+3: Doctor, I've checked her observations. Pulse 68, blood pressure 138 over 80. ~ v
+2: Thank you. These are fine. I'd like to feel your neck and tummy, if you don't mind. ~
+1: Go on. ~ pause=14
+2: No lumps in the neck, and your abdomen is soft. ~ x1
+4: What causes a high calcium? ~
+2: Several things, including too much calcium from tablets, or an overactive gland in the neck. Right now I can't say which it is. ~
+3: The pharmacy confirms two tablets a day, doctor. ~
+2: Thank you. Then that is the first thing to adjust. ~
+1: Should I stop them? ~
+2: Please hold them until I have the repeat blood test, and I'll phone you with the result. ~ c1
+1: All right. Thank you. ~
+@@
+{"chief_complaint":{"value":"my calcium was high on a routine blood test","normalized_value":"Incidental high calcium on blood test"},
+ "symptoms":[{"k":"s1","name":"tired","normalized_name":"Fatigue","category":"constitutional"},{"k":"s2","name":"thirsty","normalized_name":"Increased thirst","category":"endocrine"},{"k":"s3","name":"constipated","normalized_name":"Constipation","category":"gastrointestinal","reported_by":"family_member"}],
+ "negative_findings":[{"k":"n1","finding":"pain in the bones","normalized_name":"Bone pain or nausea"},{"k":"n2","finding":"kidney stones","normalized_name":"Kidney stones"},{"k":"a1","finding":"Allergies","normalized_name":"No known allergies"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Osteoporosis","normalized_condition":"Osteoporosis"}],"social_history":[{"k":"so1","category":"smoking","description":"No smoking","status":"none","details":null}]},
+ "medications":[{"k":"m1","name":"calcium and vitamin D tablet","normalized_name":"Calcium and vitamin D","generic_name":null,"frequency":"one a day"}],
+ "vitals":{"k":"v","by":"nurse","hr":68,"bp":"138/80"},
+ "physical_examination":[{"k":"x1","finding":"No lumps in the neck","normalized_finding":"No neck lumps; abdomen soft","body_site":"neck","status":"absent"}],
+ "counsel":[["c1","Hold the calcium and vitamin D tablets until the repeat blood test"]],
+ "clinical_uncertainties":[{"k":"u1","type":"medication_discrepancy","description":"Patient says one calcium and vitamin D tablet a day; her daughter says two a day; pharmacy later confirmed two a day.","related_entities":["medications[0]"],"resolution_status":"partially_resolved"}],
+ "quality_checks":{"contradictions_detected":["Calcium and vitamin D tablets: patient one a day vs daughter two a day (pharmacy later confirmed two)."]}}
+

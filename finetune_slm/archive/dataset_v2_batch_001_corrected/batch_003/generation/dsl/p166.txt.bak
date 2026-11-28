@@ -1,0 +1,50 @@
+## 00931 PATIENT=1 DOCTOR=2 CAREGIVER=3
+3: Doctor, I'm Lena's aunt, I look after her while her mum is working abroad. She's got swollen glands in her neck and she's exhausted, and it's been weeks. ~ cc s1 s2
+2: Thank you for bringing her. Lena, how are you feeling? ~
+1: Tired. All the time. I can't concentrate at school. ~ s2
+2: Where are the swollen glands? ~ s1
+1: Both sides of my neck. They're sore when I touch them. ~ s1
+2: How long have you had them? ~ s1
+1: Three weeks, I think. ~ s1 u2
+3: Longer, I think. Closer to four weeks, since her birthday. ~ s1 u2
+2: I'll note three to four weeks. Have you had a sore throat, or a fever? ~ n1
+1: The sore throat was last week, but it's gone. No fever. ~ n1
+2: Any rash, night sweats or weight loss? ~ n2
+1: No rash. No sweats. I don't think I've lost weight. ~ n2
+2: What have you been taking? ~ m1 m2
+1: Paracetamol, 500 mg, when I get a headache. And the antibiotic, penicillin, I had it for a sore throat. ~ m1 m2
+2: Did you finish the penicillin? ~ m2 u1
+1: I think so. Mostly. ~ m2 u1
+3: I'm not sure she did. I found a few tablets in her bag. ~ m2 u1
+2: Thank you for being honest. Do you have any allergies, Lena? ~ a1
+3: She had a rash on amoxicillin when she was a toddler, her mum told me. We've avoided it since. ~ a1
+2: Noted. Any other conditions? ~ h1 h2 h3
+1: Asthma. And I get eczema sometimes. ~ h1 h2
+3: She had her tonsils out at six. ~ sg1
+2: Thank you. Let me check your pulse and temperature. ~
+1: Okay. ~ pause=10
+2: Pulse 82, temperature 36.8. ~ v
+3: Is that all right? ~
+2: Normal. I'd like to feel the glands in your neck, under the arms, and your tummy. ~
+1: It tickles. ~ pause=14
+2: I'm going to arrange a blood test to look at glandular fever and a full blood count. ~ p1
+1: Needles? ~
+2: Just a small one. If it is glandular fever, rest and fluids are the main treatment. ~ c1
+3: How long will she be off school? ~
+2: Let's see the result first. And I'd like to see her again in a week to go through it. ~ f1
+3: Thank you. ~
+@@
+{"chief_complaint":{"value":"She's got swollen glands in her neck and she's exhausted, and it's been weeks","normalized_value":"Neck lymph node swelling and fatigue","reported_by":"caregiver"},
+ "symptoms":[{"k":"s1","name":"swollen glands","normalized_name":"Cervical lymphadenopathy","category":"constitutional","body_site":"both sides of the neck","duration":{"value":3,"unit":"weeks","normalized":"3 weeks"},"certainty":"uncertain"},{"k":"s2","name":"Tired","normalized_name":"Fatigue","category":"constitutional"}],
+ "negative_findings":[{"k":"n1","finding":"fever","normalized_name":"Fever"},{"k":"n2","finding":"rash","normalized_name":"Rash or night sweats"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Asthma","normalized_condition":"Asthma"},{"k":"h2","condition":"eczema","normalized_condition":"Eczema"}],"surgical_history":[{"k":"sg1","procedure":"tonsils out","normalized_procedure":"Tonsillectomy","timeframe":"at six","reported_by":"caregiver"}]},
+ "medications":[{"k":"m1","name":"Paracetamol","dose":"500 mg","frequency":"when I get a headache"},{"k":"m2","name":"penicillin","status":"discontinued"}],
+ "allergies":[{"k":"a1","substance":"amoxicillin","reaction":"rash","status":"historical","reported_by":"caregiver"}],
+ "vitals":{"k":"v","hr":82,"temp":36.8},
+ "procedures_and_investigations":[{"k":"p1","name":"blood test","normalized_name":"Glandular fever screen and full blood count","type":"laboratory"}],
+ "counsel":[["c1","Rest and fluids"]],
+ "follow_up":[{"k":"f1","time_reference":"in a week"}],
+ "clinical_uncertainties":[{"k":"u1","type":"adherence_uncertain","description":"Lena thinks she finished the penicillin; her aunt found leftover tablets in her bag and is unsure.","related_entities":["medications[1]"]},
+  {"k":"u2","type":"duration_disagreement","description":"Lena says three weeks; her aunt says closer to four weeks; recorded as three to four weeks (not confirmed).","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved"}],
+ "quality_checks":{"contradictions_detected":["Duration of neck swelling: patient three weeks vs caregiver closer to four weeks."]}}
+

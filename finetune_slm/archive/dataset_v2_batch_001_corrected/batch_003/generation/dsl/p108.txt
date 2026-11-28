@@ -1,0 +1,102 @@
+## 00862 PATIENT=1 DOCTOR=2
+1: Hello, doctor. I'm sorry, this is rather embarrassing. I've been leaking urine. Mainly when I cough or sneeze, but also when I can't get to the toilet in time. ~ cc s1
+2: Please don't be embarrassed, it's very common, and very treatable. How long has this been happening? ~ s1 u1
+1: Oh, I really couldn't say. It's crept up. A year? Two? I only noticed when I had to start wearing pads. ~ s1 u1
+2: How often do you leak? ~ s1
+1: Most days. A few drops on a cough. And if I get the urge, I have to run, and sometimes I don't make it. ~ s1 s2
+2: How often do you pass urine in a day, and at night? ~ s2
+1: Eight, nine times in the day. And twice at night. ~ s2
+2: Any burning, or blood in the urine? ~
+1: No. None of that. ~
+2: What tablets are you taking? ~ m1 m2 m3 u2
+1: Furosemide, 40 mg, in the morning, for my ankles. A blood pressure tablet, I couldn't tell you the name, it's a little pink one. And a vitamin. ~ m1 m2 m3 u2
+2: So the water tablet is 40 mg in the morning, and the pink blood-pressure tablet you can't name. What's the vitamin? ~ m1 m2 m3 u2
+1: Vitamin D, I think, 800 units, once a day. ~ m3
+2: Thank you. Any other conditions? ~ h1
+1: High blood pressure, and I've had four children. ~ h1
+2: Do you drink a lot of tea or coffee, or take any fizzy drinks? ~
+1: Four cups of tea in the morning, and I like a fizzy orange. ~
+2: That could be adding to it. Let me ask a few more questions. Do you ever feel that your bladder hasn't emptied? ~
+1: Sometimes. I'm up and down. ~
+2: And any constipation? ~
+1: Now and then. ~
+2: I'd like to check your urine today with a dipstick, to rule out infection. ~
+1: Fine. ~
+2: I'd say what you describe, leaking on coughing and sneezing, and also an urgent need to go that you sometimes can't hold, is a mixture of stress and urge incontinence. ~ d1
+1: Two kinds? ~
+2: It's very common to have both, especially after childbirth and with age. ~
+1: What can be done? ~
+2: First, pelvic floor exercises, squeezing the muscles you'd use to stop passing wind or urine, ten squeezes, three times a day. ~ c1
+1: I've heard of those. ~
+2: They work for most people if done regularly for three months. I'll also refer you to the continence physiotherapist, who will teach you properly. ~ r1
+1: Right. ~
+2: Cut down the tea, coffee and fizzy drinks, and don't drink too much in the evening. Keep a bladder diary for three days. ~ c2
+1: What do I write? ~
+2: When you drink, what, how much, and when you pass urine, and any leaks. ~
+1: I can do that. ~
+2: I'd like to see you again in six weeks, with the diary. ~ f1
+1: Six weeks. Thank you. ~
+@@
+{"chief_complaint":{"value":"I've been leaking urine","normalized_value":"Urinary incontinence"},
+ "symptoms":[{"k":"s1","name":"leaking urine","normalized_name":"Stress urinary incontinence","category":"genitourinary","frequency":"Most days","certainty":"uncertain"},
+  {"k":"s2","name":"urge","normalized_name":"Urgency and frequency with nocturia","category":"genitourinary","frequency":"Eight, nine times in the day"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension"}]},
+ "medications":[{"k":"m1","name":"Furosemide","dose":"40 mg","frequency":"in the morning"},{"k":"m2","name":"little pink one","normalized_name":null,"generic_name":null},{"k":"m3","name":"Vitamin D","dose":"800 units","frequency":"once a day"}],
+ "clinical_assessment":[{"k":"d1","assessment":"a mixture of stress and urge incontinence","normalized_assessment":"Mixed urinary incontinence","certainty":"provisional"}],
+ "clinical_actions":[{"k":"r1","action_type":"referral","description":"Refer to continence physiotherapist"}],
+ "counsel":[["c1","Pelvic floor exercises ten squeezes three times a day"],["c2","Cut tea, coffee and fizzy drinks, avoid evening fluids and keep a three-day bladder diary"]],
+ "follow_up":[{"k":"f1","time_reference":"in six weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient could not say when the leaking began (\"A year? Two?\").","related_entities":["symptoms[0]"]},
+  {"k":"u2","type":"incomplete_medication_name","description":"Patient cannot name her blood pressure tablet and describes it as a little pink one.","related_entities":["medications[1]"]}],
+ "quality_checks":{"ambiguous_entities":["medications[1]"]}}
+
+## 00858 PATIENT=1 DOCTOR=2 CAREGIVER=3
+3: Doctor, I'm Anjali, I'm Mrs Pereira's carer. She's been dizzy when she stands up, and I'm worried she'll fall. ~ cc s1
+1: Oh, it's not so bad, a little giddy sometimes. ~ s1
+2: Mrs Pereira, tell me when it happens. ~ s1
+1: When I get out of bed, or up from my chair. Everything goes grey. ~ s1
+2: How long has this been going on? ~ s1 u1
+1: A week or two, perhaps. ~ s1 u1
+3: It's been a month at least. I've seen her hold the wall since the start of last month. ~ s1 u1
+2: So a week or two from you, a month or more from Anjali. I'll put it as two weeks to a month. Any fainting? ~ s1 u1 n1
+1: No. I've not fainted. ~ n1
+2: Any chest pain or palpitations? ~ n2
+1: No. ~ n2
+2: Any falls? ~ s2
+3: She had a near fall last Tuesday. I caught her. ~ s2
+2: What tablets does she take? ~ m1 m2
+3: Amlodipine, 10 mg, once a day, and a water tablet, bendroflumethiazide, 2.5 mg, in the morning. ~ m1 m2
+2: Any allergies? ~ a1
+3: No, none. ~ a1
+2: Any other conditions? ~ h1
+3: Just high blood pressure. And her hips are bad. ~ h1
+2: Is she eating and drinking enough? ~ s3
+3: She's not drinking much, and she's eating less. Her appetite has gone. ~ s3
+1: I'm not hungry, dear. ~
+2: Let me check her pulse and blood pressure, first sitting, then standing. ~
+3: I'll help her up. ~
+2: Sitting, 142 over 80, pulse 70. Now standing, 108 over 62, pulse 82. ~ v pause=60
+3: That's a big drop. ~
+2: Yes, a drop of more than 30 points on standing. That fits her symptoms. I'd say this is postural hypotension, likely from the blood pressure tablets together with not drinking enough. ~ d1 d2
+3: Can we change the tablets? ~
+2: Yes. I'd like to stop the water tablet, bendroflumethiazide, and keep the amlodipine for now, but at 5 mg. ~ c1
+3: Okay. ~
+2: And please encourage her to drink at least six glasses of fluid a day, and to sit on the bed for a minute before standing. ~ c2
+3: I'll do that. ~
+2: I'd like to see her again in two weeks, to recheck her pressure. If she faints, falls, or has chest pain, call 999. ~ f1
+3: Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"She's been dizzy when she stands up","normalized_value":"Dizziness on standing","reported_by":"caregiver"},
+ "symptoms":[{"k":"s1","name":"dizzy","normalized_name":"Postural dizziness","category":"neurological","reported_by":"patient","duration":{"value":null,"unit":"weeks","normalized":"approximately 2 weeks to 1 month"},"certainty":"uncertain"},
+  {"k":"s2","name":"near fall","normalized_name":"Near fall","category":"musculoskeletal","reported_by":"caregiver"},
+  {"k":"s3","name":"not drinking much","normalized_name":"Reduced fluid and food intake","category":"constitutional","reported_by":"caregiver"}],
+ "negative_findings":[{"k":"n1","finding":"fainted","normalized_name":"Syncope"},{"k":"n2","finding":"chest pain","normalized_name":"Chest pain or palpitations"},{"k":"a1","finding":"allergies","normalized_name":"No known allergies","reported_by":"caregiver"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"high blood pressure","normalized_condition":"Hypertension","reported_by":"caregiver"}]},
+ "medications":[{"k":"m1","name":"Amlodipine","dose":"10 mg","frequency":"once a day","reported_by":"caregiver"},{"k":"m2","name":"bendroflumethiazide","dose":"2.5 mg","frequency":"in the morning","reported_by":"caregiver"}],
+ "vital_signs":[{"k":"v","name":"Sitting blood pressure","normalized_name":"Sitting blood pressure","value":"142/80","unit":"mmHg","reported_by":"doctor"},{"k":"v","name":"Standing blood pressure","normalized_name":"Standing blood pressure","value":"108/62","unit":"mmHg","reported_by":"doctor"}],
+ "clinical_assessment":[{"k":"d1","assessment":"postural hypotension","certainty":"provisional"},{"k":"d2","assessment":"not drinking enough","normalized_assessment":"Dehydration","certainty":"differential"}],
+ "counsel":[["c1","Stop bendroflumethiazide and reduce amlodipine to 5 mg"],["c2","Drink at least six glasses of fluid a day and sit on the bed for a minute before standing"]],
+ "follow_up":[{"k":"f1","time_reference":"in two weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"duration_disagreement","description":"Patient says a week or two; her carer says a month or more; summarised as two weeks to a month, not confirmed.","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved"}],
+ "quality_checks":{"contradictions_detected":["Duration of dizziness: patient a week or two vs caregiver a month or more (approximate range only)."]}}
+

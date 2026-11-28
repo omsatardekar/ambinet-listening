@@ -1,0 +1,157 @@
+## 00807 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+2: Good morning. How would you like to be addressed, Mr Arkwright, or Walter? ~
+1: Mr Arkwright, if you'd be so kind. This is my son, Philip, who insisted on driving me. ~
+3: Dad's been coughing up green sputum and I think it's a chest infection, so I booked it. ~ cc s1
+2: Thank you, Philip. Mr Arkwright, when did the green sputum start? ~ s1
+1: Let me think. It was before the Bank Holiday. Or just after it. I really couldn't say with any confidence. ~ s1 u1
+3: Early last month, Dad? Or was it after the anniversary? I can't pin it down either. ~ u1
+2: That's all right. Do you wheeze? ~ s2
+1: Yes, particularly at night. A sort of whistle when I breathe out. ~ s2
+2: And how is your energy? ~ s3
+1: Poor. I'm tired all day. ~ s3
+2: Do you cough up blood? ~ n1
+1: Certainly not. ~ n1
+2: Fever or shivers? ~ n2
+1: No fever. ~ n2
+2: Chest pain? ~ n3
+1: No pain, no. ~ n3
+2: Weight loss? ~ n4
+1: None that I'm aware of. ~ n4
+2: Swollen ankles? ~ n5
+1: No, my ankles are as they've always been. ~ n5
+2: What inhalers do you use? ~ m1 m2
+1: Tiotropium, maybe 18 micrograms, once a day, though I'd have to check the box. And salbutamol, when I'm wheezy. ~ m1 m2 u2
+2: We'll verify the tiotropium. Any allergies? ~ a1
+1: Septrin. I broke out in a rash. ~ a1
+2: Medical history? ~ h1 h2 h3 h4
+1: COPD, high blood pressure, osteoporosis, and reflux. ~ h1 h2 h3 h4
+2: Operations? ~ sg1 sg2
+1: A hip replacement in 2019, and cataracts in 2021. ~ sg1 sg2
+2: Lung problems in the family? ~ f1 f2
+1: My father had emphysema. My sister has asthma. ~ f1 f2
+2: You smoked, I think. ~ so1
+1: I gave up smoking twelve years ago. Forty a day for forty years, before that. ~ so1
+2: Alcohol? ~ so2
+1: A sherry at Christmas. ~ so2
+2: Who's at home? ~ so3
+1: I live with Philip now. ~ so3
+2: And your work? ~ so4
+1: I was a factory foreman. Retired for eleven years. ~ so4
+2: Let me check you. Oxygen 92 percent, pulse 88, temperature 37.6, breathing 20, blood pressure 142 over 84, weight 70 kilos. ~ v pause=15
+3: Is the oxygen low? ~
+2: A bit low for him, yes. Let me listen. Deep breaths, Mr Arkwright. ~ pause=10
+1: Is this how you want it? ~
+2: Perfect. I can hear crackles at the right base, and wheeze throughout both lungs. ~ x1 x2
+1: Is that serious? ~
+2: There's no swelling in the legs, which is good. Any trouble with your heart, palpitations, fluttering? ~ x3 r1
+1: No, nothing at all. ~ r1
+2: And your tummy, any trouble with your bowels? ~ r2
+1: No, nothing, all regular. ~ r2
+2: This looks like a chest infection on top of the COPD, but I can't rule out pneumonia. ~ d1 d2
+3: Does he need antibiotics? ~
+2: I'll decide after the X-ray. I'd like to arrange a chest X-ray today, and a sputum sample. ~ p1 p2
+3: I'll take him down now. ~
+2: And I'd like to see you again in a week. ~ f2
+1: A week. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"coughing up green sputum","normalized_value":"Productive cough with green sputum","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"green sputum","normalized_name":"Green sputum","category":"respiratory","certainty":"uncertain","reported_by":"family_member"},
+  {"k":"s2","name":"wheeze","normalized_name":"Wheeze","category":"respiratory","frequency":"particularly at night"},
+  {"k":"s3","name":"tired","normalized_name":"Fatigue","category":"constitutional"}],
+ "negative_findings":[{"k":"n1","finding":"blood","normalized_name":"Haemoptysis"},{"k":"n2","finding":"fever","normalized_name":"Fever"},{"k":"n3","finding":"Chest pain","normalized_name":"Chest pain"},{"k":"n4","finding":"Weight loss","normalized_name":"Weight loss"},{"k":"n5","finding":"Swollen ankles","normalized_name":"Ankle swelling"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"COPD","normalized_condition":"Chronic obstructive pulmonary disease"},{"k":"h2","condition":"high blood pressure","normalized_condition":"Hypertension"},{"k":"h3","condition":"osteoporosis","normalized_condition":"Osteoporosis"},{"k":"h4","condition":"reflux","normalized_condition":"Gastro-oesophageal reflux"}],
+  "surgical_history":[{"k":"sg1","procedure":"hip replacement","normalized_procedure":"Hip replacement","timeframe":"in 2019"},{"k":"sg2","procedure":"cataracts","normalized_procedure":"Cataract surgery","timeframe":"in 2021"}],
+  "family_history":[{"k":"f1","relation":"father","condition":"emphysema"},{"k":"f2","relation":"sister","condition":"asthma"}],
+  "social_history":[{"k":"so1","category":"smoking","details":"gave up smoking twelve years ago","status":"former"},{"k":"so2","category":"alcohol","details":"A sherry at Christmas"},{"k":"so3","category":"living","details":"live with Philip now"},{"k":"so4","category":"occupation","details":"factory foreman","status":"retired"}]},
+ "medications":[{"k":"m1","name":"Tiotropium","dose":"18 micrograms","frequency":"once a day"},{"k":"m2","name":"salbutamol","frequency":"when I'm wheezy"}],
+ "allergies":[{"k":"a1","substance":"Septrin","normalized_substance":"Co-trimoxazole","reaction":"rash"}],
+ "vitals":{"k":"v","by":"doctor","bp":"142/84","hr":88,"temp":37.6,"spo2":92,"rr":20,"wt":70},
+ "physical_examination":[{"k":"x1","finding":"crackles at the right base","normalized_finding":"Right basal crackles","body_site":"right lung base"},{"k":"x2","finding":"wheeze throughout both lungs","normalized_finding":"Bilateral wheeze","body_site":"chest"},{"k":"x3","finding":"no swelling in the legs","normalized_finding":"No leg swelling","status":"absent","body_site":"legs"}],
+ "review_of_systems":[{"k":"r1","system":"cardiovascular"},{"k":"r2","system":"gastrointestinal"}],
+ "clinical_assessment":[{"k":"d1","assessment":"chest infection on top of the COPD","certainty":"provisional"},{"k":"d2","assessment":"pneumonia","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"chest X-ray","normalized_name":"Chest X-ray","type":"imaging"},{"k":"p2","name":"sputum sample","normalized_name":"Sputum culture","type":"laboratory"}],
+ "follow_up":[{"k":"f2","time_reference":"in a week"}],
+ "clinical_uncertainties":[{"type":"date_uncertain","description":"Neither the patient nor his son can say when the green sputum began.","related_entities":["symptoms[0]"],"k":"u1"},
+  {"type":"uncertain_dose","description":"The patient is unsure of the tiotropium dose ('maybe 18 micrograms') and has not checked the box.","related_entities":["medications[0]"],"k":"u2"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00808 PATIENT=1 DOCTOR=2
+1: So, my left calf. It cramps up when I walk, just a couple of blocks, and I have to stop. Two blocks, no, maybe three. ~ cc s1
+2: Like a charley horse? ~ s1
+1: Kind of, but it's more of a squeeze, and it goes away if I stand still for a few minutes. ~ s1
+2: When did this start? ~ s1
+1: Oh. Last fall. Or was it the winter before? I really couldn't tell you, it kind of crept up. ~ s1 u1
+2: Anything else in the leg? ~ s2 s3
+1: My left foot gets cold. Colder than the right. And it aches at night, in the arch, and I hang it over the side of the bed and that helps. ~ s2 s3
+2: Do your legs feel tired? ~ s4
+1: Heavy, yes, by evening. ~ s4
+2: Any chest pain when you walk? ~ n1
+1: No chest pain. ~ n1
+2: Short of breath? ~ n2
+1: Not really, no. ~ n2
+2: Swelling in the legs? ~ n3
+1: No swelling. ~ n3
+2: Any back pain, shooting down the leg? ~ n4
+1: No, it's just the calf. ~ n4
+2: Numbness? ~ n5
+1: No numbness. ~ n5
+2: What do you take? ~ m1 m2
+1: Atorvastatin, maybe 40 mg, at night. And lisinopril, 10 mg, every day. Well, most days. I forget it sometimes when I'm travelling. ~ m1 m2 u2 u3
+2: So most days. Allergies? ~ a1
+1: Contrast dye, from a scan. I'm allergic, they told me, but I can't remember what happened. ~ a1
+2: History? ~ h1 h2 h3
+1: High cholesterol, high blood pressure, and pre-diabetes. ~ h1 h2 h3
+2: Surgery? ~ sg1
+1: Knee scope, in 2012. ~ sg1
+2: Family? ~ f1 f2
+1: My father lost a leg to circulation trouble. My mother had a stroke. ~ f1 f2
+2: Do you smoke? ~ so1
+1: A pack a day for thirty years. I'm trying to quit. ~ so1
+2: Drink? ~ so2
+1: A couple of beers on weekends. ~ so2
+2: Do you exercise? ~ so3
+1: I walk the dog, but I can't go far. That's how it got noticed. ~ so3
+2: Let me check you. Blood pressure 148 over 88, pulse 82, temperature 36.8, oxygen 97 percent, breathing 16, and weight 96 kilos. ~ v pause=15
+1: That's high, huh? ~
+2: A bit. Now let me feel for the pulses in your feet. Think of the artery as a garden hose. ~ pause=10
+1: A hose? ~
+2: If the hose is kinked or clogged, the water doesn't reach the end. I can feel a pulse in your right foot, but I can't feel a pulse at the left foot. ~ x1
+1: Oh. ~
+2: And the left foot is cooler than the right, and a bit shiny. ~ x2
+1: That's what I noticed. ~
+2: Any trouble with your breathing? ~ r1
+1: No, nothing like that. ~ r1
+2: What I think is happening is narrowing of the arteries in the leg. ~ d1
+1: Is that the hose? ~
+2: Exactly. I'd like to arrange a test comparing the blood pressure in your ankle and your arm, an ultrasound of the leg arteries, and blood tests for cholesterol and sugar. ~ p1 p2 p3
+1: When can that happen? ~
+2: Reception will book them. And I'd like to start clopidogrel, 75 mg, once a day, to thin the blood. ~ m3
+1: Okay. ~
+2: The biggest thing you can do is stop smoking. It's like pouring sludge in the hose. ~ c1
+1: I know. I will. ~
+2: I'd like to see you again in two weeks. ~ f3
+1: Two weeks. Thanks, doc. ~
+@@
+{"chief_complaint":{"value":"my left calf. It cramps up when I walk","normalized_value":"Left calf cramping on walking"},
+ "symptoms":[{"k":"s1","name":"cramps up when I walk","normalized_name":"Left calf claudication","category":"cardiovascular","body_site":"left calf","certainty":"uncertain","relieving_factors":["stand still"]},
+  {"k":"s2","name":"left foot gets cold","normalized_name":"Cold left foot","category":"cardiovascular","body_site":"left foot"},
+  {"k":"s3","name":"aches at night","normalized_name":"Nocturnal foot pain","category":"musculoskeletal","body_site":"left foot","relieving_factors":["hang it over the side of the bed"]},
+  {"k":"s4","name":"Heavy","normalized_name":"Leg heaviness","category":"musculoskeletal","body_site":"legs","frequency":"by evening"}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Chest pain"},{"k":"n2","finding":"Short of breath","normalized_name":"Shortness of breath"},{"k":"n3","finding":"Swelling in the legs","normalized_name":"Leg swelling"},{"k":"n4","finding":"back pain","normalized_name":"Back pain"},{"k":"n5","finding":"Numbness","normalized_name":"Numbness"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High cholesterol","normalized_condition":"Hypercholesterolaemia"},{"k":"h2","condition":"high blood pressure","normalized_condition":"Hypertension"},{"k":"h3","condition":"pre-diabetes","normalized_condition":"Prediabetes"}],
+  "surgical_history":[{"k":"sg1","procedure":"Knee scope","normalized_procedure":"Knee arthroscopy","timeframe":"in 2012"}],
+  "family_history":[{"k":"f1","relation":"father","condition":"lost a leg to circulation trouble"},{"k":"f2","relation":"mother","condition":"stroke"}],
+  "social_history":[{"k":"so1","category":"smoking","details":"A pack a day for thirty years"},{"k":"so2","category":"alcohol","details":"A couple of beers on weekends"},{"k":"so3","category":"exercise","details":"walk the dog"}]},
+ "medications":[{"k":"m1","name":"Atorvastatin","dose":"40 mg","frequency":"at night"},{"k":"m2","name":"lisinopril","dose":"10 mg","frequency":"every day"},{"k":"m3","name":"clopidogrel","dose":"75 mg","frequency":"once a day","status":"planned","reported_by":"doctor"}],
+ "allergies":[{"k":"a1","substance":"Contrast dye","normalized_substance":"Iodinated contrast media"}],
+ "vitals":{"k":"v","by":"doctor","bp":"148/88","hr":82,"temp":36.8,"spo2":97,"rr":16,"wt":96},
+ "physical_examination":[{"k":"x1","finding":"can't feel a pulse at the left foot","normalized_finding":"Absent left foot pulse","body_site":"left foot"},{"k":"x2","finding":"left foot is cooler than the right","normalized_finding":"Cool left foot","body_site":"left foot"}],
+ "review_of_systems":[{"k":"r1","system":"respiratory"}],
+ "clinical_assessment":[{"k":"d1","assessment":"narrowing of the arteries in the leg","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"test comparing the blood pressure in your ankle and your arm","normalized_name":"Ankle-brachial index","type":"cardiac"},{"k":"p2","name":"ultrasound of the leg arteries","normalized_name":"Arterial duplex ultrasound of leg","type":"imaging"},{"k":"p3","name":"blood tests for cholesterol and sugar","normalized_name":"Lipid profile and glucose","type":"laboratory"}],
+ "counsel":[["c1","Stop smoking"]],
+ "follow_up":[{"k":"f3","time_reference":"in two weeks"}],
+ "clinical_uncertainties":[{"type":"date_uncertain","description":"The patient cannot say whether the calf pain began last fall or the winter before.","related_entities":["symptoms[0]"],"k":"u1"},
+  {"type":"uncertain_dose","description":"The patient is unsure of the atorvastatin dose ('maybe 40 mg').","related_entities":["medications[0]"],"k":"u2"},
+  {"type":"adherence_uncertain","description":"Patient takes lisinopril every day but admits forgetting it sometimes when travelling.","related_entities":["medications[1]"],"k":"u3"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}

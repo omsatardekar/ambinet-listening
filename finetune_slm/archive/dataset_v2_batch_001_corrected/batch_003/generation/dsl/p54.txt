@@ -1,0 +1,49 @@
+## 00743 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+1: Morning, doctor. I'm Frank, and this is my wife Lorraine. We've come for the helicobacter retest, I hope that's the right word. ~ cc
+2: It is, Frank, nice to meet you both. You finished the treatment course, I see. Remind me what you took. ~ m1 u1
+1: Clarithromycin, 500 mg, twice a day, I think, with another antibiotic and a stomach tablet, for two weeks. I'd have to check the box. ~ m1 u1
+2: So 500 mg twice a day as you recall it. And how have you been since finishing? ~ m1 u1 s1
+1: The heartburn is much better, mostly, but still there in the evenings. A couple of weeks since I finished. ~ s1 u2
+3: It's been a month, Frank. You finished on the fourth. I wrote it on the calendar. ~ s1 u2
+2: So you say two weeks since finishing, and Lorraine says a month. I'll write two weeks to a month. Anything else? ~ s1 u2
+1: A bit of belching, after meals. And I've been going off my food. ~ s2 s3
+2: Any vomiting, or black stools? ~ n1
+1: No vomiting. No black stools. ~ n1
+2: Any trouble swallowing, or weight loss? ~ n2
+1: No weight loss, the scales say the same as always. ~ n2
+3: That's right, his weight's been steady, doctor. ~ n2
+2: Good. Any other health conditions? ~ h1
+1: High blood pressure. ~ h1
+2: Any bowel or stomach problems in the family? ~ f1
+3: His mother had a stomach ulcer, I believe. ~ f1
+2: And what do you do for a living, are you still working? ~ so1
+1: I'm a retired plumber. Thirty-five years. ~ so1
+2: Let me press your tummy. ~ pause=15
+1: Ow, careful. ~
+2: A little tender at the top, but nothing worrying. Frank, the antibiotics only work if the bacteria are gone, so I'd like to check. ~
+3: How do you check? ~
+2: I'd like to arrange a urea breath test, but you must have stopped acid-lowering tablets for two weeks and antibiotics for four weeks before it. ~ p1
+1: I stopped the antibiotics a month ago, then. And the stomach tablet is the one I take every morning. ~
+2: The stomach tablet must stop two weeks before the test, so I'd like you to stop it now, and book the breath test for two weeks from now. ~ p2
+3: Can he use anything for the heartburn meanwhile? ~
+2: Antacid liquid when needed, but avoid spicy food, coffee, and late meals. ~ c1
+1: That I can do. ~
+2: And if you vomit blood, pass black stools, or have trouble swallowing, come in at once. ~ f1
+3: We will. ~
+2: I'd like to see you again in three weeks, once the breath test is done. ~ f2
+1: Three weeks. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"the helicobacter retest","normalized_value":"Helicobacter pylori retest after treatment"},
+ "symptoms":[{"k":"s1","name":"heartburn","normalized_name":"Heartburn","category":"gastrointestinal","duration":{"value":null,"unit":"weeks","normalized":"approximately 2 weeks to 1 month"},"certainty":"uncertain"},
+  {"k":"s2","name":"belching","normalized_name":"Belching","category":"gastrointestinal"},{"k":"s3","name":"going off my food","normalized_name":"Reduced appetite","category":"constitutional"}],
+ "negative_findings":[{"k":"n1","finding":"black stools","normalized_name":"Melaena"},{"k":"n2","finding":"weight loss","normalized_name":"Weight loss","reported_by":"patient"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension"}],"family_history":[{"k":"f1","condition":"stomach ulcer","normalized_condition":"Peptic ulcer","relation":"mother","reported_by":"family_member"}],
+  "social_history":[{"k":"so1","category":"occupation","description":"Retired plumber","status":"retired","details":"retired plumber"}]},
+ "medications":[{"k":"m1","name":"Clarithromycin","dose":"500 mg","frequency":"twice a day"}],
+ "procedures_and_investigations":[{"k":"p1","name":"urea breath test","normalized_name":"Urea breath test","type":"other"}],
+ "counsel":[["c1","Use antacid liquid when needed; avoid spicy food, coffee and late meals"]],
+ "follow_up":[{"k":"f1","time_reference":"if you vomit blood, pass black stools, or have trouble swallowing","status":"conditional"},{"k":"f2","time_reference":"in three weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"uncertain_dose","description":"Patient gave the clarithromycin dose tentatively (\"twice a day, I think\") and would have to check the box.","related_entities":["medications[0]"]},
+  {"k":"u2","type":"duration_disagreement","description":"Patient says it is about two weeks since finishing treatment; his wife says a month; summarised as two weeks to a month, not confirmed.","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved"}],
+ "quality_checks":{"contradictions_detected":["Time since finishing treatment: patient two weeks vs family member a month (approximate range only)."]}}
+

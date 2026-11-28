@@ -1,0 +1,150 @@
+## 00593 PATIENT=1 DOCTOR=2
+1: Hello, doctor. I'm here for the hep C follow-up, I think? The letter wasn't very clear about it. ~ cc h1
+2: That's right. You finished your course of treatment in the spring, so today is about how you are and what we check next. How are you feeling in yourself? ~ h1
+1: Better, mostly. I mean, tired, I'd say. Still tired, if I'm honest. ~ s1
+2: How tired, and is it there all day or only at certain times? ~ s1
+1: Most afternoons I just hit a wall. Heavy, sort of, I can't explain it better than that. ~ s1
+2: Anything else you've noticed since you finished the treatment? ~ s2
+1: My joints are achy, knees and hands mostly. ~ s2
+2: When did that start? ~ s2 u1
+1: Oh, I couldn't tell you. It crept up on me, I've no idea when it began. ~ s2 u1
+2: Fair enough, that's very common. What about your tummy, any trouble there? ~ s3
+1: Now and then I feel queasy after fatty stuff, a fry-up or a takeaway. ~ s3
+2: Is your skin or the whites of your eyes looking yellow at all? ~ n1
+1: No, nothing like that. I'd have noticed, and so would the lads at work. ~ n1
+2: Good. Lie back for me and I'll have a feel of your tummy and look at your ankles. ~
+1: Okay, go on. Sorry, cold hands! I mean you, not me. ~
+2: Your tummy is soft with no tenderness, and your ankles look fine, no swelling. ~ x1 x2 pause=14
+1: Good. Is that good? ~
+2: That's good, yes. Now, you've had a bit of a history with the hep C itself, which we're still confirming has cleared. Any operations in the past? ~ h1 sg1
+1: Just my appendix out when I was a teenager. ~ sg1
+2: And do you smoke? What do you do for a living? ~ so1 so2
+1: Never smoked in my life. I drive a delivery van, so it's a lot of sitting about. ~ so1 so2
+2: That fits with the afternoon slump, partly. Tiredness after treatment is common, but I can't rule out an underactive thyroid yet. ~ d1
+1: Oh. Is that likely? ~
+2: Not especially, which is why it's only on my list rather than a diagnosis. I'd like to arrange blood tests, including the viral load to confirm the virus has cleared, and a thyroid check at the same draw. ~ p1
+1: Fine. Do I need to fast? ~
+2: No, you can eat normally. I'd also like to book an ultrasound of your liver, just to look at it properly after everything it's been through. ~ p2
+1: Right. And how long does all that take? ~
+2: The bloods come back within a week, and the scan will be booked by letter. You can do the bloods downstairs after this. ~
+1: Okay. Anything I can do about the tired afternoons? ~
+2: Plan a short walk and a proper lunch break between deliveries, and try not to rely on sugary snacks to get you through. ~ c1
+1: That I can manage. What if it doesn't improve? ~
+2: If the tiredness isn't any better in six weeks, come back and see me and we'll look again. ~ f1
+1: Right, will do. Thanks for explaining it all, the letter had me confused. ~
+2: Any time. Take care of yourself, and drive carefully. ~
+@@
+{"chief_complaint":{"value":"the hep C follow-up","normalized_value":"Hepatitis C treatment follow-up"},
+ "symptoms":[{"k":"s1","name":"tired","normalized_name":"Fatigue","category":"constitutional"},
+  {"k":"s2","name":"joints are achy","normalized_name":"Joint pain","category":"musculoskeletal","body_site":"knees and hands","certainty":"uncertain"},
+  {"k":"s3","name":"queasy","normalized_name":"Nausea","category":"gastrointestinal","aggravating_factors":["fatty stuff"]}],
+ "negative_findings":[{"k":"n1","finding":"yellow","normalized_name":"Jaundice"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"hep C","normalized_condition":"Hepatitis C"}],
+  "surgical_history":[{"k":"sg1","procedure":"appendix out","normalized_procedure":"Appendicectomy","timeframe":"when I was a teenager"}],
+  "social_history":[{"k":"so1","category":"smoking","description":"Never smoked","status":"never","details":"Never smoked"},
+   {"k":"so2","category":"occupation","description":"Delivery driver","details":"drive a delivery van"}]},
+ "physical_examination":[{"k":"x1","finding":"tummy is soft","normalized_finding":"Soft abdomen","body_site":"abdomen"},{"k":"x2","finding":"no swelling","normalized_finding":"No ankle swelling","body_site":"ankles","status":"absent"}],
+ "clinical_assessment":[{"k":"d1","assessment":"underactive thyroid","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood tests","normalized_name":"Hepatitis C viral load and thyroid function","type":"laboratory","indication":"confirm the virus has cleared"},
+  {"k":"p2","name":"ultrasound of your liver","normalized_name":"Liver ultrasound","type":"imaging"}],
+ "clinical_actions":[{"k":"p1","action_type":"investigation","description":"Arrange blood tests including viral load and thyroid function"},
+  {"k":"p2","action_type":"investigation","description":"Book liver ultrasound"},
+  {"k":"c1","action_type":"counselling","description":"Advise short walks, proper lunch break and avoiding sugary snacks","status":"recommended","responsible_person":"patient"},
+  {"k":"f1","action_type":"follow_up","description":"Follow-up consultation","status":"conditional","time_reference":{"value":"if the tiredness isn't any better in six weeks","normalized_date":null}}],
+ "follow_up":[{"k":"f1","time_reference":"if the tiredness isn't any better in six weeks","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient could not say when the joint aches began (\"no idea when it began\").","related_entities":["symptoms[1]"]}]}
+
+## 00616 PATIENT=1 DOCTOR=2
+1: Morning. I've got a meeting at ten, so can we keep this quick? ~
+2: We'll be as quick as we can. Your booking says routine check. Anything in particular on your mind? ~
+1: Just the usual health check the company pays for. Oh, and my headaches keep coming back, by the way. ~ cc s1
+2: Tell me about them. ~ s1
+1: Tight, like a band round my forehead. Mostly late afternoon at my desk. ~ s1
+2: How long has that been going on, and how bad do they get? ~ s1
+1: About three months. Mild, honestly. It's more of a nuisance than anything. ~ s1
+2: Any nausea with them, or changes in your vision? ~ n1 n2
+1: No nausea, and my vision's fine. Sleep's fine too, before you ask. ~ n1 n2
+2: Good. Any tablets you take regularly? ~ m1
+1: Candesartan, 8 mg once a day, for my high blood pressure. ~ m1 h1
+2: And are you allergic to anything, medicines especially? ~ a1
+1: Penicillin. Came up in a rash when I was a kid, so they've kept it off my list ever since. ~ a1
+2: Thanks. Any heart disease or strokes in the family? ~ f1
+1: Dad had a heart attack at sixty. That's really why I come for these checks every year. ~ f1
+2: Sensible. Let me do your numbers. Sit back for me and rest your arm on the table. ~
+1: Cuff always feels tighter than it needs to. ~
+2: Blood pressure 128 over 80, pulse 68, temperature 36.6, oxygen 98 percent, and you're 84 kilos. ~ v pause=18
+1: Is that all right? ~
+2: All right indeed. Any cough, wheeze or breathlessness when you're active? ~ r1
+1: No, nothing. I run on Saturdays and have no trouble at all. ~ r1 so1
+2: Any chest pain, palpitations or ankle swelling? ~ r2
+1: No. None of that. ~ r2
+2: Your shoulders are tight and the neck moves freely. A couple of tender knots across the top, nothing sinister. ~ x1 x2 pause=10
+1: Yeah, they do ache if I press them. So is it anything serious? ~
+2: Nothing in what you've told me or what I've found sets off any alarm bells. Since you're on candesartan, I'd like to check your cholesterol and kidney function with a blood test too. ~ p1
+1: Fine. Where do I do that? ~
+2: Reception will give you a form for the lab downstairs. It's walk-in, you don't need an appointment. ~
+1: Great. Any tips for the headaches themselves? ~
+2: Take a screen break every hour, raise your monitor a little, and drink water through the afternoon. Your shoulders will thank you. ~ c1
+1: Easy enough. Do I need to come back about them? ~
+2: Not unless they get worse or change in character. If they do, ring the surgery rather than waiting. ~ c2
+1: Perfect. I might actually make my meeting after all. ~
+2: Good luck with it. ~
+@@
+{"chief_complaint":{"value":"my headaches keep coming back","normalized_value":"Recurrent headaches"},
+ "symptoms":[{"k":"s1","name":"headaches","normalized_name":"Headache","category":"neurological","severity":"mild","duration":{"value":3,"unit":"months","normalized":"3 months"},"body_site":"forehead","aggravating_factors":["late afternoon at my desk"]}],
+ "negative_findings":[{"k":"n1","finding":"nausea","normalized_name":"Nausea"},{"k":"n2","finding":"changes in your vision","normalized_name":"Visual change"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"high blood pressure","normalized_condition":"Hypertension"}],
+  "family_history":[{"k":"f1","condition":"heart attack","normalized_condition":"Myocardial infarction","relation":"Dad"}],
+  "social_history":[{"k":"so1","category":"exercise","description":"Runs weekly","details":"run on Saturdays"}]},
+ "medications":[{"k":"m1","name":"candesartan","dose":"8 mg","frequency":"once a day","indication":"high blood pressure"}],
+ "allergies":[{"k":"a1","substance":"penicillin","reaction":"rash"}],
+ "vital_signs":[{"k":"v","name":"Blood pressure","value":"128/80","unit":"mmHg"},{"k":"v","name":"Heart rate","value":68,"unit":"bpm"},{"k":"v","name":"Temperature","normalized_name":"Body temperature","value":36.6,"unit":"°C"},{"k":"v","name":"Oxygen saturation","value":98,"unit":"%"},{"k":"v","name":"Weight","value":84,"unit":"kg"}],
+ "physical_examination":[{"k":"x1","finding":"shoulders are tight","normalized_finding":"Shoulder muscle tightness","body_site":"shoulders"},{"k":"x2","finding":"neck moves freely","normalized_finding":"Full neck movement","body_site":"neck"}],
+ "review_of_systems":[{"k":"r1","system":"respiratory"},{"k":"r2","system":"cardiovascular"}],
+ "procedures_and_investigations":[{"k":"p1","name":"cholesterol and kidney function","normalized_name":"Lipid profile and renal function","type":"laboratory"}],
+ "clinical_actions":[{"k":"p1","action_type":"investigation","description":"Arrange Lipid profile and renal function"},
+  {"k":"c1","action_type":"counselling","description":"Advise screen breaks, monitor height and hydration","status":"recommended","responsible_person":"patient"},
+  {"k":"c2","action_type":"counselling","description":"Advise ringing the surgery if headaches worsen or change","status":"recommended","responsible_person":"patient"}]}
+
+## 00617 PATIENT=1 DOCTOR=2 NURSE=3
+1: Hi, sorry, I probably shouldn't have come in, it's nothing, my heart just did a thing at work. ~ cc
+3: He's the one who got the manager to call a cab, doctor. Tell her what you told me. ~
+2: Come on in, take a seat. What did your heart do? ~ s1
+1: It started racing, thumping really, and I felt kind of light-headed. I thought I was about to go down. ~ s1 s2
+2: And how long did that last? ~ s1
+1: Maybe ten minutes? Honestly I wasn't looking at a clock, I was gripping the printer. ~ s1
+2: Has it ever happened before? ~ s1
+1: Hmm. I think so, a while back, but I can't tell you when. Might've been last spring, might've been the winter before. ~ s1 u1
+3: I took a note of how long he was sitting out there. About forty minutes, and he was fine the whole time. ~
+2: Good to know, thank you. Is it still going on now? ~ s1
+1: No, it settled while I was waiting. I just feel a bit wrung out, you know? ~ s1
+2: That's understandable. Anything else going on with you lately, big stress, not much sleep? ~
+1: Work's been crazy since the merger, and I've been living on coffee to keep up. I know, I know. ~
+2: That's probably not helping you. It's worth cutting down, and I'll tell you why in a second. ~
+1: I figured you'd say that. Is my heart okay? ~
+2: What you describe sounds like it settled by itself, and that's reassuring. I don't want to over-read a single episode, though. ~
+1: So what happens now? ~
+2: Honestly, today is mostly advice. Cut the coffee down to one or two a day, and drink water at your desk, especially when you're busy. ~ c1
+3: I can give you a leaflet on what to do if it happens again. ~
+1: That'd be great. I'm terrible at remembering things when I'm panicking. ~
+2: The leaflet will say it simply. If it comes back, sit down, breathe slowly, and time it. ~ c2
+1: Sit and time it. Okay. What if it doesn't stop? ~
+2: If it lasts more than twenty minutes, or you get chest pain, or you actually faint, call for an ambulance. Don't drive yourself. ~ c3
+1: Right. Okay. I think I've got it. ~
+3: I'll go and fetch that leaflet now, and I'll find you some water while I'm at it. ~
+1: Thank you both. Sorry again for taking up your time. ~
+2: You haven't, and you were right to come. Look after yourself. ~
+3: Back in a minute. ~
+1: Take care, doctor. ~
+2: And you. ~
+1: Right, back to the printer. ~
+2: Maybe sit down first. ~
+@@
+{"chief_complaint":{"value":"my heart just did a thing at work","normalized_value":"Episode of palpitations at work"},
+ "symptoms":[{"k":"s1","name":"racing","normalized_name":"Palpitations","category":"cardiovascular","status":"resolved","temporality":"resolved","duration":{"value":10,"unit":"minutes","normalized":"10 minutes"},"certainty":"uncertain","body_site":"chest"},
+  {"k":"s2","name":"light-headed","normalized_name":"Light-headedness","category":"neurological"}],
+ "clinical_actions":[{"k":"c1","action_type":"counselling","description":"Advise cutting caffeine and drinking water","status":"recommended","responsible_person":"patient"},
+  {"k":"c2","action_type":"counselling","description":"Advise to sit, breathe slowly and time any recurrence","status":"recommended","responsible_person":"patient"},
+  {"k":"c3","action_type":"counselling","description":"Safety-net: call ambulance if over 20 minutes, chest pain or fainting","status":"recommended","responsible_person":"patient"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient could not say when a previous similar episode occurred (\"last spring, might've been the winter before\").","related_entities":["symptoms[0]"]}]}
+

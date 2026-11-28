@@ -1,0 +1,48 @@
+## 00780 PATIENT=1 DOCTOR=2 NURSE=3
+3: Doctor, this is Mr Pryce, fifty-two, sharp chest pain since this morning, worse on breathing in. ECG's being done. ~ cc
+1: It's a stabbing pain, here on the left, and it's worse when I breathe in or cough. I'm really worried it's my heart. ~ s1 s2
+2: Mr Pryce, I'm Dr Evans. Let's look at this carefully. When did it start? ~ s1
+1: About six this morning. I woke with it. ~ s1
+2: Does it spread to your arm or jaw? ~ s2
+1: No. It stays in the one place. It's worse when I lie flat. ~ s2
+2: Any breathlessness, a cough, or a fever? ~ n1
+1: No fever. A bit of a cough, nothing coming up. ~ n1
+2: Have you had a cold or a chest infection lately? ~
+1: A heavy cold last week, yes. ~
+3: Doctor, his observations. Blood pressure 126 over 78, pulse 88, temperature 37.2, oxygen 98 percent, respiratory rate 18. ~ v pause=15
+2: Thanks, Zara. Any allergies to medicines? ~ a1
+1: No, none. ~ a1
+2: Your history? ~ h1 h2 sg1
+1: High cholesterol, and reflux. And I had my appendix out, maybe in 2005? ~ h1 h2 sg1
+2: And what do you take? ~ m1
+1: Atorvastatin, 20 mg, maybe? At night. I'd have to check. ~ m1 u1
+2: I'll check the record. Let me listen to your chest. ~ m1 u1
+1: Go on. ~ pause=18
+2: There's a scratchy sound, a friction rub, over the left lower chest when you breathe, your heart sounds are normal, and your calves are soft and not tender. ~ x1 x2
+1: Is that my heart? ~
+3: Doctor, I've already done the ECG. ~ p0
+2: Thanks, Zara. Mr Pryce, your ECG is normal, and the sound I heard is the lining of the lung and chest wall rubbing, a pleural rub. ~
+1: What causes that? ~
+2: The commonest cause, after a cold, is inflammation of the lining of the heart or lung, pericarditis or pleurisy. I'd like to rule out other causes, so I'd like to arrange a blood test for heart markers and inflammation, and a chest X-ray. ~ p1 p2
+1: Is that all? ~
+2: Yes, for now. And I'm going to start you on ibuprofen, 400 mg, three times a day, with food. ~ m2
+1: Will that sort it? ~
+2: It treats the inflammation and the pain, and most people settle within days. ~
+1: And how long should I rest? ~
+2: Take it easy for a few days, no heavy exercise. ~ c1
+1: Right. ~
+2: If the pain gets worse, you become breathless, feel faint, or the pain's like a crushing pressure, call 999. ~ c2
+1: I will. ~
+@@
+{"chief_complaint":{"value":"sharp chest pain since this morning","normalized_value":"Pleuritic chest pain","reported_by":"nurse"},
+ "symptoms":[{"k":"s1","name":"stabbing pain","normalized_name":"Left pleuritic chest pain","category":"cardiovascular","body_site":"left chest","onset":"six this morning","aggravating_factors":["breathe in"]},
+  {"k":"s2","name":"worse when I lie flat","normalized_name":"Positional worsening of chest pain","category":"cardiovascular","aggravating_factors":["lie flat"]}],
+ "negative_findings":[{"k":"n1","finding":"fever","normalized_name":"Fever"},{"k":"a1","finding":"allergies","normalized_name":"No known allergies"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High cholesterol","normalized_condition":"Hypercholesterolaemia"},{"k":"h2","condition":"reflux","normalized_condition":"Gastro-oesophageal reflux disease"}],"surgical_history":[{"k":"sg1","procedure":"appendix out","normalized_procedure":"Appendicectomy","timeframe":"maybe in 2005"}]},
+ "medications":[{"k":"m1","name":"Atorvastatin","dose":"20 mg","frequency":"At night"},{"k":"m2","name":"ibuprofen","status":"planned","reported_by":"doctor","dose":"400 mg","frequency":"three times a day"}],
+ "vitals":{"k":"v","by":"nurse","bp":"126/78","hr":88,"temp":37.2,"spo2":98,"rr":18},
+ "physical_examination":[{"k":"x1","finding":"friction rub","normalized_finding":"Pleural friction rub, left lower chest","body_site":"left lower chest"},{"k":"x2","finding":"calves are soft and not tender","normalized_finding":"Soft non-tender calves","body_site":"calves"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood test for heart markers and inflammation","normalized_name":"Troponin and inflammatory markers","type":"laboratory"},{"k":"p2","name":"chest X-ray","normalized_name":"Chest X-ray","type":"imaging"},{"k":"p0","name":"ECG","normalized_name":"Electrocardiogram","type":"cardiac","status":"completed","requested_by":null}],
+ "counsel":[["c1","Take it easy for a few days and avoid heavy exercise"],["c2","Safety-net: call 999 if worse pain, breathlessness, faintness or crushing pressure"]],
+ "clinical_uncertainties":[{"k":"u1","type":"uncertain_dose","description":"Patient gave the atorvastatin dose tentatively (\"20 mg, maybe?\").","related_entities":["medications[0]"]}]}
+

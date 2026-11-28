@@ -1,0 +1,47 @@
+## 00893 PATIENT=1 DOCTOR=2 CAREGIVER=3 NURSE=4
+3: Doctor, I'm Amrit's wife. A colleague told him his eyes look yellow, and I'm worried about it, so I made him come in. ~ cc s1
+2: You were right to come. Mr Dhillon, when did you or anyone first notice the yellow in your eyes? ~ s1 u1
+1: A colleague mentioned it on Monday, but I think it was there before. I wasn't looking. ~ s1 u1
+3: I noticed his eyes were a bit yellow about two weeks ago, but I thought it was the lighting. ~ s1 u1
+2: So somewhere between a few days and two weeks. Have you noticed dark urine or pale stools? ~ s2
+1: The urine has been dark, like tea. I didn't think about it. ~ s2
+2: Any itching, tummy pain or fever? ~ n1
+1: No itching. No pain. No fever. ~ n1
+3: He's been very tired, though. ~ s3
+2: How much alcohol do you drink, Mr Dhillon? ~ so1
+1: A couple of whiskies on a Friday night, no more. ~ so1
+2: Are you taking any regular medicines? ~ m1
+1: Just the blood pressure tablet, amlodipine, 5 mg, once a day. ~ m1
+4: Doctor, do you want me to take his observations and set up for bloods? ~
+2: Yes, please. Pulse, pressure, temperature, and we'll take blood for liver tests and a full blood count. ~ p1
+4: Of course. Mr Dhillon, if you'd roll up your sleeve. ~
+1: Fine. ~ pause=12
+4: Pulse 78, blood pressure 130 over 82, temperature 36.8. ~ v
+3: Are those normal? ~
+2: They're fine. What worries me is the yellow colour, and your dark urine, which could be a liver or bile duct problem. ~ d1
+1: Is it serious? ~
+2: It can be, and that's why I want the blood tests today, and an ultrasound scan of your liver as soon as we can. ~ p1 p2
+3: How soon? ~
+2: I'll ask for it this week. I'll phone you with the blood results as soon as they're back. ~
+1: I'd rather know quickly. ~
+2: Of course, and I'll make sure the lab marks the sample as urgent. ~
+3: Thank you, we appreciate that. ~
+2: I understand. If your skin gets more yellow, you become feverish with pain, or you can't keep fluids down, go to the emergency department. ~ f1
+3: We'll watch for that. ~
+2: Please avoid alcohol completely until we know more. ~ c1
+1: I will. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"A colleague told him his eyes look yellow","normalized_value":"Yellow discolouration of the eyes","reported_by":"caregiver"},
+ "symptoms":[{"k":"s1","name":"yellow","normalized_name":"Scleral icterus","category":"gastrointestinal","body_site":"eyes","certainty":"uncertain","reported_by":"caregiver"},
+  {"k":"s2","name":"urine has been dark","normalized_name":"Dark urine","category":"genitourinary"},
+  {"k":"s3","name":"very tired","normalized_name":"Fatigue","category":"constitutional","reported_by":"caregiver"}],
+ "negative_findings":[{"k":"n1","finding":"itching","normalized_name":"Pruritus, abdominal pain or fever"}],
+ "medical_history":{"social_history":[{"k":"so1","category":"alcohol","description":"A couple of whiskies on a Friday night","status":"current","details":null}]},
+ "medications":[{"k":"m1","name":"amlodipine","dose":"5 mg","frequency":"once a day"}],
+ "vitals":{"k":"v","by":"nurse","hr":78,"bp":"130/82","temp":36.8},
+ "clinical_assessment":[{"k":"d1","assessment":"liver or bile duct problem","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"liver tests","normalized_name":"Liver function tests and full blood count","type":"laboratory"},{"k":"p2","name":"ultrasound scan of your liver","normalized_name":"Liver ultrasound","type":"imaging"}],
+ "counsel":[["c1","Avoid alcohol completely"]],
+ "follow_up":[{"k":"f1","time_reference":"if your skin gets more yellow, you become feverish with pain, or you can't keep fluids down","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient says a colleague mentioned it Monday but it was likely there before; wife noticed about two weeks ago; onset unclear.","related_entities":["symptoms[0]"]}]}
+

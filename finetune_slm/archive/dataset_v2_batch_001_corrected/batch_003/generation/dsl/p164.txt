@@ -1,0 +1,47 @@
+## 00928 PATIENT=1 DOCTOR=2
+1: Hello, doctor. I want to talk about my contraceptive pill. I think it's giving me side effects. ~ cc s1
+2: Of course. Which pill are you taking, and what are the side effects? ~ m1
+1: It's called Yasmin, I think. One tablet every day, for a year and a half. ~ m1
+2: And what have you noticed since you started? ~ s1
+1: Headaches, mostly. And I feel a bit low and bloated before my period. ~ s1
+2: Do the headaches have any warning signs, like flashing lights or zigzag lines? ~ n1
+1: No, no flashing lights. They're just a dull ache. ~ n1
+2: Are you taking anything else? ~ m2 m3 m4
+1: A multivitamin, an inhaler for asthma, the blue one, and an antihistamine for hay fever, I can't remember which one. ~ m2 m3 m4 u1
+2: Do you remember how many puffs of the inhaler, and how often? ~ m3
+1: Two puffs when I'm wheezy, maybe once or twice a week. ~ m3
+2: Any other conditions? ~ h1 h2
+1: Asthma and hay fever. ~ h1 h2
+2: Do you smoke? ~
+1: No. Never. ~
+2: And is there a family history of blood clots, or strokes at a young age? ~
+1: My grandmother had a stroke, but she was in her eighties. ~
+2: Thank you. That's reassuring. Any migraines with aura yourself? ~
+1: No. Just dull headaches. ~
+2: I'd like to take a look at what's going on. Has your blood pressure been checked recently? ~
+1: At the pharmacy a few months ago, and they said it was normal. ~
+2: I'd like to check it today. The pill can raise it a little.
+1: Sure. ~ pause=12
+2: Blood pressure is 118 over 74, which is perfectly fine. ~ v
+1: That's good. So what do you think about the headaches? ~
+2: Headaches and mood changes are common with hormonal pills, and they often settle. If they don't, we can try another brand. ~ d1
+1: What's the alternative? ~
+2: A pill with a different hormone, or a different type of contraception, like an implant or a coil. ~
+1: I'd like to try a different pill first. ~
+2: Let's do that. I'll switch you to a different brand, and you can see how you get on for three months. ~ c1
+1: Great. Thank you. ~
+2: Come back and see me in three months, and let me know sooner if the headaches get worse. ~ f1
+1: Will do. ~
+@@
+{"chief_complaint":{"value":"my contraceptive pill. I think it's giving me side effects","normalized_value":"Suspected side effects of combined oral contraceptive"},
+ "symptoms":[{"k":"s1","name":"Headaches","normalized_name":"Dull headaches and premenstrual low mood and bloating","category":"neurological"}],
+ "negative_findings":[{"k":"n1","finding":"flashing lights","normalized_name":"Visual aura"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Asthma","normalized_condition":"Asthma"},{"k":"h2","condition":"hay fever","normalized_condition":"Allergic rhinitis"}]},
+ "medications":[{"k":"m1","name":"Yasmin","normalized_name":"Yasmin","generic_name":"Drospirenone and ethinylestradiol","frequency":"every day"},{"k":"m2","name":"multivitamin","normalized_name":"Multivitamin","generic_name":null},{"k":"m3","name":"inhaler","normalized_name":"Blue reliever inhaler (unspecified)","generic_name":null,"dose":"Two puffs","frequency":"when I'm wheezy"},{"k":"m4","name":"antihistamine","normalized_name":"Antihistamine (unspecified)","generic_name":null}],
+ "vitals":{"k":"v","bp":"118/74"},
+ "clinical_assessment":[{"k":"d1","assessment":"Headaches and mood changes are common with hormonal pills","normalized_assessment":"Likely hormonal-contraceptive side effects","certainty":"provisional"}],
+ "counsel":[["c1","Switch to a different pill brand and trial for three months"]],
+ "follow_up":[{"k":"f1","time_reference":"in three months"}],
+ "clinical_uncertainties":[{"k":"u1","type":"incomplete_medication_name","description":"Patient cannot name the hay fever antihistamine.","related_entities":["medications[3]"]}],
+ "quality_checks":{"ambiguous_entities":["medications[3]"]}}
+

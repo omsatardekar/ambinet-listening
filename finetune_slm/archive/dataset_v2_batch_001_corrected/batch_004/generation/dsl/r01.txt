@@ -1,0 +1,202 @@
+## 01001 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+2: The booking says "tummy aches, sister has coeliac disease." Hi Ellis, I'm Dr Park. Mum, you're on the line too. Who wants to go first? ~
+3: Me, if that's okay. Ellis's older sister was diagnosed with coeliac disease in March, and since then I can't stop noticing how often Ellis complains about her stomach. ~ cc
+1: It's not that often. ~
+2: Let's find out. Ellis, how long have the stomach aches been around? ~ s1
+1: Since the summer holidays. About three months. ~ s1 u1
+3: Longer than that. It was Easter, I remember because she missed the egg hunt. That's eight months. ~ s1 u1
+2: So somewhere between three and eight months. We don't need to settle it. What are they like? ~ s1 u1
+1: Like a crampy feeling, around my belly button, after lunch mostly. ~ s1
+2: Anything else going on with your tummy? ~ s2
+1: I get bloated. My jeans feel tight even when I haven't eaten much. ~ s2
+3: And she's tired, she's always asleep on the sofa by seven. ~ s3
+1: I'm not always asleep. ~
+2: What about your poos? ~ s4
+1: Loose, sometimes. Pale. Gross. ~ s4
+2: Have you lost any weight that you know of? ~ n1
+3: No, if anything she's grown out of her shoes, so no. ~ n1
+2: What do you eat on a normal day? ~ so1
+1: Toast for breakfast, a pasta pot or a sandwich at lunch, and whatever mum cooks. ~ so1
+3: Lots of bread and pasta, yes. ~
+2: Right. Do you do any sport, Ellis? ~ so2
+1: Hockey, twice a week. I'm a defender. ~ so2
+2: And who's at home? ~ so3
+3: Me, my husband, Ellis and her sister. ~ so3
+2: Anything else in her medical history? ~ h1
+3: Eczema when she was small. ~ h1
+2: Any operations? ~ sg1 sg2
+3: Her adenoids out when she was four. And her appendix, two years ago. ~ sg1 sg2
+2: In the family, who else has coeliac disease or autoimmune things? ~ f1 f2
+3: Her sister, obviously. And my mother has type 1 diabetes. ~ f1 f2
+2: Any allergies? ~ a1
+3: Possibly. After an antibiotic when she was about two she came out in a rash. I honestly don't know which one. ~ a1 u2
+1: I don't remember. ~ a1
+2: I'll note a possible allergy, unconfirmed. Now, here's what I think. With a sister diagnosed, loose pale stools, bloating and tiredness, this could well be coeliac disease. ~ d1
+3: So she should stop eating gluten? ~
+2: Please don't, yet. If she stops, the blood test can come back falsely normal. Keep eating bread and pasta normally until the tests are done. ~ c1
+3: Good to know, I'd have started tomorrow. ~
+2: I'd like to arrange a coeliac antibody blood test, a total IgA level, a full blood count, and a ferritin level. ~ p1 p2 p3 p4
+1: Do I need to fast? ~
+2: No, eat normally. And I'd like to start ferrous sulfate, 200 mg, once a day, and vitamin D, 1000 units, once a day, in the meantime. ~ m1 m2
+3: Will the iron upset her tummy? ~
+2: It can. Take it with food. ~
+3: Okay. ~
+@@
+{"chief_complaint":{"value":"I can't stop noticing how often Ellis complains about her stomach","normalized_value":"Recurrent stomach aches; sister has coeliac disease","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"stomach aches","normalized_name":"Recurrent abdominal cramps","category":"gastrointestinal","body_site":"around the belly button","duration":{"value":null,"unit":"months","normalized":"approximately 3 to 8 months"},"certainty":"uncertain"},
+  {"k":"s2","name":"bloated","normalized_name":"Bloating","category":"gastrointestinal"},
+  {"k":"s3","name":"tired","normalized_name":"Fatigue","category":"constitutional","reported_by":"family_member"},
+  {"k":"s4","name":"Loose","normalized_name":"Loose pale stools","category":"gastrointestinal"}],
+ "negative_findings":[{"k":"n1","finding":"lost any weight","normalized_name":"Weight loss","reported_by":"family_member"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Eczema","normalized_condition":"Childhood eczema","reported_by":"family_member"}],
+  "surgical_history":[{"k":"sg1","procedure":"adenoids out","normalized_procedure":"Adenoidectomy","timeframe":"when she was four","reported_by":"family_member"},{"k":"sg2","procedure":"appendix","normalized_procedure":"Appendicectomy","timeframe":"two years ago","reported_by":"family_member"}],
+  "family_history":[{"k":"f1","relation":"sister","condition":"coeliac disease","reported_by":"family_member"},{"k":"f2","relation":"mother","condition":"type 1 diabetes","reported_by":"family_member"}],
+  "social_history":[{"k":"so1","category":"diet","details":"Toast for breakfast, a pasta pot or a sandwich at lunch"},{"k":"so2","category":"exercise","details":"Hockey, twice a week"},{"k":"so3","category":"living","details":"Me, my husband, Ellis and her sister","reported_by":"family_member"}]},
+ "medications":[{"k":"m1","name":"ferrous sulfate","dose":"200 mg","frequency":"once a day","status":"planned","reported_by":"doctor"},{"k":"m2","name":"vitamin D","dose":"1000 units","frequency":"once a day","status":"planned","reported_by":"doctor"}],
+ "allergies":[{"k":"a1","substance":"an antibiotic","normalized_substance":"Antibiotic (unspecified)","status":"uncertain","reported_by":"family_member"}],
+ "clinical_assessment":[{"k":"d1","assessment":"coeliac disease","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"coeliac antibody blood test","normalized_name":"Tissue transglutaminase antibodies","type":"laboratory"},{"k":"p2","name":"total IgA level","normalized_name":"Total serum IgA","type":"laboratory"},{"k":"p3","name":"full blood count","normalized_name":"Full blood count","type":"laboratory"},{"k":"p4","name":"ferritin level","normalized_name":"Serum ferritin","type":"laboratory"}],
+ "counsel":[["c1","Keep eating gluten normally until the tests are done"]],
+ "clinical_uncertainties":[{"type":"duration_disagreement","description":"Ellis says the stomach aches began about three months ago while her mother says eight months; the doctor summarised it as three to eight months.","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved","k":"u1"},
+  {"type":"allergy_uncertain","description":"A possible rash after an unnamed antibiotic at about age two was reported but the drug is unknown.","related_entities":["allergies[0]"],"k":"u2"}],
+ "quality_checks":{"contradictions_detected":["Patient reports stomach aches for about three months; mother reports eight months (partially resolved)."],"ambiguous_entities":[]}}
+
+## 01002 PATIENT=1 DOCTOR=2
+2: Mr Nair, I have your GP's letter here, it mentions you've been unwell on and off since the summer. Where would you like to begin? ~
+1: Yes, yes, doctor. It is nothing very much, only that I am a bit shaky, you know, in the mornings. ~ cc s1
+2: A bit shaky in the mornings. Which part of you shakes? ~ s1
+1: The hands. Mostly when I hold the tea cup, a little spilling. It settles by afternoon. ~ s1
+2: And at night, how are you sleeping? ~ s2
+1: Not well. I wake at three, four o'clock, and then no sleep. ~ s2
+2: What's your stomach like? ~ s3
+1: Upset. Sometimes burning, sometimes nausea, in the morning also. ~ s3
+2: And your mood? ~ s4
+1: Low, a little. Work is stressful. ~ s4
+2: How about your memory and concentration? ~ s5
+1: Forgetting small things. Where I kept the car keys. My wife says it is old age, but I am forty-five. ~ s5
+2: You mentioned the tea cup. Could you tell me how much alcohol you drink, in a usual week? ~ so1
+1: Oh, very little. A few drinks, with friends. Two, three beers after work, maybe. ~ so1
+2: Two or three beers after work, how many days is that? ~
+1: Some days. Maybe four or five. And at the weekends, a little more. ~
+2: A little more, can you put a number on it? ~
+1: Perhaps eight, ten. But it's beer, not whisky. ~
+2: Thank you, I'll write that down as you've said it. Any blackouts, where you can't remember a night? ~ n1
+1: No, no blackouts. ~ n1
+2: Any fits? ~ n2
+1: No fits. ~ n2
+2: Have you vomited any blood? ~ n3
+1: No blood. ~ n3
+2: Any black stools? ~ n4
+1: No, they are normal. ~ n4
+2: Have you had thoughts of harming yourself? ~ n5
+1: No, never. I am a family man. ~ n5
+2: What medicines do you take? ~ m1
+1: One tablet for the acidity, omeprazole, 20 mg, in the morning. ~ m1
+2: Any allergies? ~ a1
+1: Perhaps. At the dentist, something made me swell up, but I don't know what it was. ~ a1 u1
+2: I'll note it as possible. Any operations? ~ sg1
+1: Appendix, in 2005. ~ sg1
+2: Liver trouble in the family? ~ f1
+1: My father had liver problems. He passed at sixty-two. ~ f1
+2: Let me look at your hands. Hold them out in front of you, fingers spread. ~ pause=8
+1: Like this? ~
+2: I can see a fine tremor in both hands. ~ x1
+1: It is the tea, I think. ~
+2: Now I'm going to press on your tummy. ~ pause=10
+1: Ah, yes, there it is tender a little. ~
+2: The abdomen is soft, with mild tenderness under the right ribs. ~ x2
+1: Is it serious? ~
+2: Any palpitations, any racing of the heart? ~ r1
+1: No, nothing like that. ~ r1
+2: Any cough or trouble with breathing? ~ r2
+1: No, nothing, I am fine there. ~ r2
+2: I'd like to look into the shakiness, the stomach and the sleep together. I'd like to arrange liver blood tests, a full blood count, and an ultrasound scan of the liver. ~ p1 p2 p3
+1: Is it about the beer? ~
+2: I'm not going to jump to conclusions. These tests help us see what's happening inside, and then we'll talk. ~
+1: Okay, doctor. I will do it. ~
+2: Let me repeat back what you've told me. Shaky hands in the mornings, poor sleep, an upset stomach, low mood, forgetting things, and about eight to ten beers at the weekend plus most weeknights. Is that fair? ~
+1: Yes. That is fair. ~
+2: I'd like to see you again in two weeks with the results. ~ f1
+1: Two weeks. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"I am a bit shaky, you know, in the mornings","normalized_value":"Morning shakiness, poor sleep and upset stomach"},
+ "symptoms":[{"k":"s1","name":"shaky","normalized_name":"Hand tremor","category":"neurological","body_site":"hands","frequency":"in the mornings"},
+  {"k":"s2","name":"Not well","normalized_name":"Early-morning waking","category":"neurological","onset":"wake at three, four o'clock"},
+  {"k":"s3","name":"Upset","normalized_name":"Stomach upset with burning and nausea","category":"gastrointestinal","frequency":"in the morning"},
+  {"k":"s4","name":"Low","normalized_name":"Low mood","category":"psychiatric"},
+  {"k":"s5","name":"Forgetting small things","normalized_name":"Forgetfulness","category":"neurological"}],
+ "negative_findings":[{"k":"n1","finding":"blackouts","normalized_name":"Alcohol-related blackouts"},{"k":"n2","finding":"fits","normalized_name":"Seizures"},{"k":"n3","finding":"vomited any blood","normalized_name":"Haematemesis"},{"k":"n4","finding":"black stools","normalized_name":"Melaena"},{"k":"n5","finding":"harming yourself","normalized_name":"Self-harm thoughts"}],
+ "medical_history":{"surgical_history":[{"k":"sg1","procedure":"Appendix","normalized_procedure":"Appendicectomy","timeframe":"in 2005"}],
+  "family_history":[{"k":"f1","relation":"father","condition":"liver problems"}],
+  "social_history":[{"k":"so1","category":"alcohol","details":"Two, three beers after work"}]},
+ "medications":[{"k":"m1","name":"omeprazole","dose":"20 mg","frequency":"in the morning","indication":"the acidity"}],
+ "allergies":[{"k":"a1","substance":"something","normalized_substance":"Unknown substance (dental swelling)","status":"uncertain"}],
+ "physical_examination":[{"k":"x1","finding":"fine tremor in both hands","normalized_finding":"Bilateral fine hand tremor","body_site":"hands"},{"k":"x2","finding":"abdomen is soft, with mild tenderness under the right ribs","normalized_finding":"Mild right upper quadrant tenderness","body_site":"abdomen"}],
+ "review_of_systems":[{"k":"r1","system":"cardiovascular"},{"k":"r2","system":"respiratory"}],
+ "procedures_and_investigations":[{"k":"p1","name":"liver blood tests","normalized_name":"Liver function tests","type":"laboratory"},{"k":"p2","name":"full blood count","normalized_name":"Full blood count","type":"laboratory"},{"k":"p3","name":"ultrasound scan of the liver","normalized_name":"Liver ultrasound","type":"imaging"}],
+ "follow_up":[{"k":"f1","time_reference":"in two weeks"}],
+ "clinical_uncertainties":[{"type":"allergy_uncertain","description":"A possible swelling reaction at the dentist was reported but the substance is unknown.","related_entities":["allergies[0]"],"k":"u1"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 01003 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Doctor, my father, he is Polish, his English is good but when he is nervous he goes to Polish, so I will start. He sees two of everything in the evenings. Dwoje, he says. ~ cc s1
+1: Dwoje. Two. Double, double. In the evening, the television, two. ~ s1
+2: Thank you both. Mr Kowalczyk, how long has this been happening? ~ s1 u1
+1: Two months. Since the, the autumn. ~ s1 u1
+3: Papa, it is longer. It was before the wedding in June. That is four months at least. ~ s1 u1
+2: Two to four months, then. Is it one eye or both? ~ s1 u1
+1: When I close one eye, one picture. So both eyes. ~ s1
+2: What else do you notice? ~ s2
+3: His right eyelid, it droops by the end of the day. Like he is sleepy. ~ s2
+1: My eyes are tired. Heavy, by evening. ~ s3
+2: Any other muscles that get tired? ~ s4
+1: Chewing. A steak, I must stop and rest. ~ s4
+3: And his voice goes quiet at night, I can't hear him on the phone. ~ s5
+2: Understood. Which tablets do you take? ~ m1 m2
+1: Bisoprolol, 5 mg, in the morning. And a small white pill for the thyroid, I do not know the name, in Polish I know it, here no. ~ m1 m2 u2
+3: I can bring the box on Monday. ~
+2: That would help. Any allergies, Mr Kowalczyk? ~ a1
+1: In the hospital, a long time ago, some injection, I had a rash, I think. Which injection, no. ~ a1 u3
+2: I'll note a possible allergy, unconfirmed. Medical history? ~ h1 h2 h3
+1: High blood pressure. The thyroid, underactive. And cataracts. ~ h1 h2 h3
+2: Any operations? ~ sg1 sg2
+1: Right eye, cataract, in 2019. And the hernia, 2011. ~ sg1 sg2
+2: What did you do for work? ~ so1
+1: Electrician, forty years. Retired. ~ so1
+2: Who do you live with? ~ so2
+3: With me, and my family, since mama died. ~ so2
+2: Let me check you. Blood pressure 138 over 80, pulse 62, temperature 36.6, oxygen 98 percent, breathing 14, weight 79 kilos. ~ v pause=15
+3: Is the pulse low? ~
+2: It's on the slow side because of the bisoprolol. Now, Mr Kowalczyk, look up at my finger and keep looking, don't look away. ~ pause=10
+1: Up. Up. ~
+2: After about a minute, the right upper eyelid droops. ~ x1
+3: Yes! That is it! ~
+2: And when I ask you to look to the side, you start with one picture, then a second one appears after a while. ~ x2
+1: Yes, it comes. ~
+2: Here is my thinking. Droopy eyelid, double vision and weakness that all get worse with tiredness is a pattern I take seriously. I can't rule out a condition where nerves and muscles don't communicate properly, called myasthenia. ~ d1
+3: Is it serious? ~
+2: It's treatable, but I'd like to be careful. I'd like to arrange a blood test for the antibodies linked to it. ~ p1
+1: When do I know? ~
+2: A week or so. I'd like to see you again in two weeks. ~ f1
+3: Two weeks. I will bring him and the box. ~
+@@
+{"chief_complaint":{"value":"He sees two of everything in the evenings","normalized_value":"Double vision in the evenings","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"two of everything","normalized_name":"Binocular double vision","category":"ophthalmological","reported_by":"family_member","duration":{"value":null,"unit":"months","normalized":"approximately 2 to 4 months"},"certainty":"uncertain","frequency":"in the evenings"},
+  {"k":"s2","name":"right eyelid, it droops","normalized_name":"Right ptosis","category":"ophthalmological","reported_by":"family_member","body_site":"right eyelid"},
+  {"k":"s3","name":"eyes are tired","normalized_name":"Eye fatigue","category":"ophthalmological","frequency":"by evening"},
+  {"k":"s4","name":"Chewing","normalized_name":"Fatiguable chewing","category":"musculoskeletal"},
+  {"k":"s5","name":"voice goes quiet","normalized_name":"Fatiguable voice","category":"ENT","reported_by":"family_member","frequency":"at night"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension"},{"k":"h2","condition":"underactive","normalized_condition":"Hypothyroidism"},{"k":"h3","condition":"cataracts","normalized_condition":"Cataracts"}],
+  "surgical_history":[{"k":"sg1","procedure":"cataract","normalized_procedure":"Right cataract surgery","timeframe":"in 2019"},{"k":"sg2","procedure":"hernia","normalized_procedure":"Hernia repair","timeframe":"2011"}],
+  "social_history":[{"k":"so1","category":"occupation","details":"Electrician, forty years","status":"retired"},{"k":"so2","category":"living","details":"With me, and my family","reported_by":"family_member"}]},
+ "medications":[{"k":"m1","name":"Bisoprolol","dose":"5 mg","frequency":"in the morning"},{"k":"m2","name":"small white pill for the thyroid","normalized_name":null,"generic_name":null}],
+ "allergies":[{"k":"a1","substance":"some injection","normalized_substance":"Injection (unspecified)","allergy_type":"medication","status":"uncertain"}],
+ "vitals":{"k":"v","by":"doctor","bp":"138/80","hr":62,"temp":36.6,"spo2":98,"rr":14,"wt":79},
+ "physical_examination":[{"k":"x1","finding":"right upper eyelid droops","normalized_finding":"Fatiguable right ptosis on sustained upgaze","body_site":"right eyelid"},{"k":"x2","finding":"a second one appears after a while","normalized_finding":"Diplopia developing on sustained lateral gaze","body_site":"eyes"}],
+ "clinical_assessment":[{"k":"d1","assessment":"myasthenia","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood test for the antibodies linked to it","normalized_name":"Acetylcholine receptor antibody test","type":"laboratory"}],
+ "follow_up":[{"k":"f1","time_reference":"in two weeks"}],
+ "clinical_uncertainties":[{"type":"duration_disagreement","description":"The patient says the double vision began two months ago while his daughter says at least four months; the doctor summarised it as two to four months.","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved","k":"u1"},
+  {"type":"incomplete_medication_name","description":"The patient cannot name his small white thyroid pill in English.","related_entities":["medications[1]"],"k":"u2"},
+  {"type":"allergy_uncertain","description":"A possible rash after an unnamed hospital injection was reported but the drug is unknown.","related_entities":["allergies[0]"],"k":"u3"}],
+ "quality_checks":{"contradictions_detected":["Patient reports double vision for two months; daughter reports at least four months (partially resolved)."],"ambiguous_entities":["medications[1]"]}}

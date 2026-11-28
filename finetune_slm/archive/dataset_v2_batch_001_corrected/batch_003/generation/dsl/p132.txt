@@ -1,0 +1,48 @@
+## 00879 PATIENT=1 DOCTOR=2 CLINICAL_STAFF=3
+1: I'm so thirsty all the time and I'm passing a huge amount of urine. I wondered if it might be diabetes. ~ cc s1 s2
+2: That's a sensible thing to ask. How long has this been going on? ~ s1 s2
+1: About one month. I get up three times a night just to drink water. ~ s1 s2
+3: I'll take your blood pressure and weight while you talk to the doctor. ~
+2: Thank you. Do you have any family history of diabetes? ~ h1
+1: My father had it. He was on tablets. ~ h1
+2: Have you lost weight, or have blurred vision? ~ n1
+1: I haven't lost weight. My vision's fine. ~ n1
+2: What medicines do you take at the moment? ~ m1 m2 m3
+1: Ramipril, 10 mg, once a day. A cholesterol tablet, I think it's simvastatin. And a water tablet, which I can't name. ~ m1 m2 m3 u1
+2: Do you remember the dose of the simvastatin? ~ m2
+1: Forty, I think. Or twenty. I'd have to check the box. ~ m2 u2
+2: Don't worry, you can bring it next time. Any other conditions? ~ h2 h3
+1: High blood pressure and high cholesterol. ~ h2 h3
+3: Blood pressure 142 over 88, weight 94 kilograms. ~ v
+2: Thank you. A bit up on the pressure. I'll check your blood sugar with a finger prick now. ~ p1
+1: Oh, of course. ~ pause=18
+2: The finger-prick sugar is 14.2, which is high. ~ x1
+1: Is that diabetes? ~
+2: It strongly suggests it, but I need a proper blood test to confirm. ~ d1
+1: Will it need insulin? ~
+2: Not necessarily. Many people start with tablets, diet and exercise. Let's get the tests first. ~
+1: What tests? ~
+2: I will arrange a blood test for HbA1c, kidney function and cholesterol, and a urine test. ~ p2
+1: When? ~
+2: The nurse can take the blood today, and I'd like to see you again in a week with the results. ~ f1
+1: That's fine. ~
+2: Until then, drink water rather than sugary drinks, and try to cut back on sweet foods. ~ c1
+1: I will. ~
+2: If you start vomiting, feel very drowsy, or become short of breath, go to the emergency department. ~ c2
+1: Understood. Thanks, doctor. ~
+@@
+{"chief_complaint":{"value":"I'm so thirsty all the time and I'm passing a huge amount of urine","normalized_value":"Polydipsia and polyuria"},
+ "symptoms":[{"k":"s1","name":"thirsty","normalized_name":"Polydipsia","category":"endocrine","duration":{"value":1,"unit":"month","normalized":"1 month"}},
+  {"k":"s2","name":"passing a huge amount of urine","normalized_name":"Polyuria","category":"genitourinary","frequency":"three times a night"}],
+ "negative_findings":[{"k":"n1","finding":"lost weight","normalized_name":"Weight loss or blurred vision"}],
+ "medical_history":{"past_medical_history":[{"k":"h2","condition":"High blood pressure","normalized_condition":"Hypertension"},{"k":"h3","condition":"high cholesterol","normalized_condition":"Hypercholesterolaemia"}],"family_history":[{"k":"h1","condition":"diabetes","normalized_condition":"Diabetes mellitus","relation":"father"}]},
+ "medications":[{"k":"m1","name":"Ramipril","dose":"10 mg","frequency":"once a day"},{"k":"m2","name":"simvastatin","dose":"Forty","reported_by":"patient"},{"k":"m3","name":"water tablet","normalized_name":"Diuretic (unspecified)","generic_name":null}],
+ "vitals":{"k":"v","by":"clinical_staff","bp":"142/88","wt":94},
+ "physical_examination":[{"k":"x1","finding":"finger-prick sugar is 14.2","normalized_finding":"Capillary glucose 14.2, elevated","body_site":"finger"}],
+ "clinical_assessment":[{"k":"d1","assessment":"strongly suggests it","normalized_assessment":"Probable diabetes mellitus, pending confirmation","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"finger prick","normalized_name":"Capillary blood glucose","type":"laboratory"},{"k":"p2","name":"blood test","normalized_name":"HbA1c, renal function, lipids and urinalysis","type":"laboratory"}],
+ "counsel":[["c1","Drink water rather than sugary drinks and cut back on sweet foods"],["c2","Go to emergency if vomiting, very drowsy or breathless"]],
+ "follow_up":[{"k":"f1","time_reference":"in a week"}],
+ "clinical_uncertainties":[{"k":"u1","type":"incomplete_medication_name","description":"Patient cannot name the water tablet.","related_entities":["medications[2]"]},{"k":"u2","type":"uncertain_dose","description":"Patient unsure of the simvastatin dose (\"forty, I think, or twenty\").","related_entities":["medications[1]"]}],
+ "quality_checks":{"ambiguous_entities":["medications[1]","medications[2]"]}}
+

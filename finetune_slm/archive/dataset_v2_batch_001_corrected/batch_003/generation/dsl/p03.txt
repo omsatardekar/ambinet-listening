@@ -1,0 +1,102 @@
+## 00620 PATIENT=1 DOCTOR=2
+1: Hiya. I'm not really poorly or owt, it's just that the lady at the hospital said I should ask about my jabs. ~ cc
+2: Right, that's a sensible thing to ask. Which jabs did she have in mind, do you know? ~
+1: She said something about pneumonia and the flu one. And something for shingles, but I wasn't listening properly, to be honest. ~
+2: No bother, that's what I'm here for. Tell me first, how have you been lately, in yourself? ~
+1: Champion, really. Better than I've been for a year or so. ~
+2: Lovely. Have you had a temperature, or any cough, over the last few weeks? ~ n1 n2
+1: No, nothing like that. No cough, no temperature. ~ n1 n2
+2: And any infections that took a long time to shift, chest, water works, anything? ~ n3
+1: No, not since last winter. Nothing lately, thankfully. ~ n3
+2: Good. I've got your notes here, so remind me about your long-term health. ~ h1 h2
+1: I've got lupus, they found it a few years back, and my kidneys aren't brilliant, chronic kidney disease they call it. ~ h1 h2
+2: That's what I've got written, thank you. Do you smoke or drink at all? ~ so1
+1: I don't drink, not for years now. Never been a smoker, either. ~ so1
+2: Do you have any allergies, to medicines, foods, anything that's ever given you trouble? ~ a1
+1: No. Not that I know of, anyway. ~ a1
+2: Grand. Let me get your numbers, then I'll have a listen to your chest. ~
+1: Go on then. ~
+2: Pulse 74, blood pressure 126 over 78, temperature 36.5, oxygen 99 percent, and breathing 15 times a minute. ~ v pause=15
+1: Is that all fine? You've gone quiet. ~
+2: Sorry, I was writing. All fine, yes. Take a deep breath in for me, and out. ~
+1: In and out. Do I need to take my top off? ~
+2: No, over the vest is fine. Chest is clear both sides, and I can't feel any swollen glands in your neck. ~ x1 x2 pause=12
+1: Is that good? ~
+2: It's what I'd hoped for. Because lupus and your kidneys can make your immune system weaker, the vaccines matter more for you than for most. ~
+1: So can I have them today? ~
+2: I'll give you the pneumonia jab today, in your arm. The flu one, we'll do when the new batch comes in next month. ~ p0
+1: And the shingles one? ~
+2: I'd like to check your blood first, to see how your immune system is doing, before we decide on that one. I'll send a blood test for your antibody levels. ~ p1
+1: Will I get a letter? ~
+2: You'll get the result by text within a week. And I'd like you to come back in four weeks, so we can decide on the shingles jab together. ~ f1
+1: Four weeks. I'll put it in my phone. Will the jab today make me poorly? ~
+2: A sore arm, maybe a bit tired tomorrow. If you get a high temperature or feel really unwell, ring us. ~ c1
+1: Right you are. Thanks ever so much. ~
+2: You're welcome. Mind how you go. ~
+@@
+{"chief_complaint":{"value":"ask about my jabs","normalized_value":"Vaccination advice"},
+ "negative_findings":[{"k":"n1","finding":"temperature","normalized_name":"Fever"},{"k":"n2","finding":"cough","normalized_name":"Cough"},{"k":"n3","finding":"infections","normalized_name":"Recent infections"}],
+ "allergy_none":"a1",
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"lupus","normalized_condition":"Systemic lupus erythematosus"},{"k":"h2","condition":"chronic kidney disease","normalized_condition":"Chronic kidney disease"}],
+  "social_history":[{"k":"so1","category":"alcohol","description":"Does not drink","status":"none","details":"don't drink"}]},
+ "vitals":{"k":"v","bp":"126/78","hr":74,"temp":36.5,"spo2":99,"rr":15},
+ "physical_examination":[{"k":"x1","finding":"Chest is clear","normalized_finding":"Clear chest on auscultation","body_site":"chest"},{"k":"x2","finding":"swollen glands in your neck","normalized_finding":"No cervical lymphadenopathy","body_site":"neck","status":"absent"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood test for your antibody levels","normalized_name":"Antibody levels","type":"laboratory"}],
+ "clinical_actions":[{"k":"p0","action_type":"other","description":"Give pneumococcal vaccine today"},
+  {"k":"p1","action_type":"investigation","description":"Arrange Antibody levels"},
+  {"k":"c1","action_type":"counselling","description":"Advise ringing if high temperature or feeling unwell after vaccine","status":"recommended","responsible_person":"patient"},
+  {"k":"f1","action_type":"follow_up","description":"Follow-up consultation","time_reference":{"value":"in four weeks","normalized_date":null}}],
+ "follow_up":[{"k":"f1","time_reference":"in four weeks"}]}
+
+## 00622 PATIENT=1 DOCTOR=2
+1: Um, hello. I think I might have broken my ankle? I came down the stairs wrong about an hour ago. ~ cc
+2: Oh dear, let's have a look at it in a second. Tell me what happened. ~
+1: I missed the last two steps, I think, and I landed on the side of my foot. It sort of folded under me. ~ s1
+2: Did you hear or feel anything crack when it happened? ~ s1
+1: I felt something, a sort of pop. I'm not sure if I heard it. Is that bad? ~ s1
+2: It can mean different things, so don't read too much into it. Can you put weight on it at all? ~ s2
+1: Not really. I tried to hobble and it hurt too much. I'd say it's severe when I stand. ~ s2
+2: Where exactly is the pain? ~ s2
+1: Outside of the ankle, down towards the little toe side. And it's swollen, it's gone puffy already. ~ s2 s3
+2: Anything else? Numbness, tingling, anything odd in the foot? ~ s4 u1
+1: My toes have been tingling a bit, but I can't say when that started. Maybe in the car, maybe before. ~ s4 u1
+2: Okay, I'll test that properly in a moment. Any pain in your knee? ~ n1
+1: No, my knee's fine. Foot's just a bit stiff. ~ n1
+2: Did you bang your head or hurt anywhere else when you fell? ~ n2
+1: No, I only fell the last bit. Just the ankle. ~ n2
+2: Good. Have you hurt this ankle before? ~ h1
+1: A few years ago I twisted it playing netball, but nothing like this. ~ h1
+2: Okay. Let me check your pulse and so on first. ~
+1: Okay. ~
+2: Pulse 84, blood pressure 124 over 76, temperature 36.7. ~ v pause=10
+1: Is that all right? I feel a bit shaky. ~
+2: Perfectly fine, the shakiness is just the shock. Now I'm going to press along the bone gently, and tell me when it hurts. ~
+1: Ow, right there! ~
+2: That's tender over the outer ankle bone and there's swelling around it. Your toes are warm and pink and you can feel me touching them. ~ x1 x2 pause=15
+1: So is it broken? ~
+2: It could be a fracture, or a bad sprain, and I can't tell which by looking. That's why I'd like an X-ray of the ankle now. ~ d1
+1: Oh. Right. How long will that take? ~
+2: We'll take you straight there. Meanwhile keep the foot raised on this stool. ~ c1
+1: Raised. Okay. Can I walk on it to the toilet? ~
+2: Please don't put any weight through it at all. Ask a nurse for a wheelchair if you need to go. ~ c2
+1: No weight. Right. And what happens after the X-ray? ~
+2: I'll come and tell you what it shows, and we'll plan from there. ~
+1: Thank you. Sorry, I'm very nervous. ~
+2: Perfectly understandable. You've done the right thing coming in. ~
+@@
+{"chief_complaint":{"value":"I might have broken my ankle","normalized_value":"Possible ankle fracture"},
+ "symptoms":[{"k":"s1","name":"pop","normalized_name":"Pop felt at injury","category":"musculoskeletal","body_site":"ankle"},
+  {"k":"s2","name":"hurt too much","normalized_name":"Pain on weight bearing","category":"musculoskeletal","severity":"severe","body_site":"outer ankle"},
+  {"k":"s3","name":"swollen","normalized_name":"Ankle swelling","category":"musculoskeletal","body_site":"outer ankle"},
+  {"k":"s4","name":"tingling","normalized_name":"Toe tingling","category":"neurological","body_site":"toes","certainty":"uncertain"}],
+ "negative_findings":[{"k":"n1","finding":"knee","normalized_name":"Knee pain"},{"k":"n2","finding":"bang your head","normalized_name":"Head injury"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"twisted it playing netball","normalized_condition":"Previous ankle sprain","status":"ongoing"}]},
+ "vitals":{"k":"v","hr":84,"bp":"124/76","temp":36.7},
+ "physical_examination":[{"k":"x1","finding":"tender over the outer ankle bone","normalized_finding":"Lateral malleolar tenderness","body_site":"outer ankle"},{"k":"x2","finding":"toes are warm and pink","normalized_finding":"Intact distal perfusion","body_site":"toes"}],
+ "clinical_assessment":[{"k":"d1","assessment":"fracture","certainty":"differential"},{"k":"d1","assessment":"a bad sprain","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"d1","name":"X-ray of the ankle","normalized_name":"X-ray ankle","type":"imaging","scheduled_datetime":"now"}],
+ "clinical_actions":[{"k":"d1","action_type":"investigation","description":"Arrange X-ray ankle"},
+  {"k":"c1","action_type":"counselling","description":"Keep foot raised","status":"recommended","responsible_person":"patient"},
+  {"k":"c2","action_type":"counselling","description":"No weight bearing","status":"recommended","responsible_person":"patient"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient could not say when the toe tingling began (\"maybe in the car, maybe before\").","related_entities":["symptoms[3]"]}]}
+

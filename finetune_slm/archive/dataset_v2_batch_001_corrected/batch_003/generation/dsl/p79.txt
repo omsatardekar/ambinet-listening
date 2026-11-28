@@ -1,0 +1,54 @@
+## 00781 PATIENT=1 DOCTOR=2 CAREGIVER=3
+3: Doctor, I'm Marcus, Mr Delaney's carer. I'll be precise. Yesterday evening, around six, his face drooped on the right side, and his speech was slurred for about ten minutes. It's cleared now. ~ cc s1
+2: Thank you, Marcus, that's very helpful. Mr Delaney, how are you now? ~ s1
+1: I'm fine now. Just a bit tired. ~ s1
+2: Can you describe what happened, as you remember it? ~ s2
+1: I was watching the news. My mouth felt strange, like it was numb. And I couldn't find my words. ~ s2
+3: His right cheek sagged, and his words came out garbled. His arm was fine, I tested it. ~ s1 s3
+2: Is the droop completely gone now, Marcus? ~ s1
+3: Completely gone, the droop and the slurring. By seven it was normal. ~ s1 s2 s3
+2: Any weakness in your arm or leg, or loss of vision, even for a moment? ~ s3
+1: No. Nothing. ~ s3
+2: What medicines is he taking? ~ m1 m2 u1
+3: Amlodipine, 5 mg once a day, and a little blue tablet for his cholesterol, I can't name it, it's in a dosette box, and the pharmacist fills it. ~ m1 m2 u1
+2: I'll check the record for the blue one. Any allergies? ~ m2 u1 a1
+3: No, none. ~ a1
+2: And his history? ~ h1
+3: High blood pressure, for years. ~ h1
+2: Does he smoke, or drink? ~ so1 so2
+1: I gave up smoking years ago. I take a small whisky in the evenings. ~ so1 so2
+2: Let me check his face and arms. Mr Delaney, smile for me, raise your eyebrows. ~
+1: Like this? ~ pause=18
+2: Your face is symmetrical, your speech is clear, your arm strength and grip are normal, and your walking is steady. ~ x1
+3: So he's all right? ~
+2: Today he looks normal, but what you describe sounds like a mini-stroke, a transient ischaemic attack, where the blood supply to part of the brain is briefly interrupted. ~ d1
+1: A stroke? ~
+2: A warning, not a stroke. These attacks, and their risk of a full stroke over the next days, need urgent attention. ~
+3: What do we do? ~
+2: I'd like to refer him today to the stroke clinic, where they'll see him within 24 hours. ~ r1
+1: Today? ~
+2: Yes. I want you seen urgently, with a brain scan and heart tests. ~
+3: I'll take him. ~
+2: Until then, if the symptoms return, even for a moment, call 999 straight away, don't wait. ~ c1
+3: Understood. ~
+2: And please don't let him drive. ~ c2
+1: I don't drive any more, doctor. ~
+2: Good. I'd like to see him again after the stroke clinic, next week. ~ f1
+3: We'll book it. ~
+@@
+{"chief_complaint":{"value":"his face drooped on the right side, and his speech was slurred","normalized_value":"Transient facial droop and slurred speech","reported_by":"caregiver"},
+ "symptoms":[{"k":"s1","name":"face drooped","normalized_name":"Transient right facial droop","category":"neurological","status":"resolved","temporality":"resolved","reported_by":"caregiver","body_site":"right face","duration":{"value":10,"unit":"minutes","normalized":"10 minutes"}},
+  {"k":"s2","name":"mouth felt strange","normalized_name":"Perioral numbness and word-finding difficulty","category":"neurological","status":"resolved","temporality":"resolved"},
+  {"k":"s3","name":"words came out garbled","normalized_name":"Dysarthria","category":"neurological","status":"resolved","temporality":"resolved","reported_by":"caregiver"}],
+ "negative_findings":[{"k":"a1","finding":"allergies","normalized_name":"No known allergies","reported_by":"caregiver"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension","reported_by":"caregiver"}],
+  "social_history":[{"k":"so1","category":"smoking","description":"Former smoker","status":"former","details":"gave up smoking years ago"},{"k":"so2","category":"alcohol","description":"Small evening whisky","details":"a small whisky in the evenings"}]},
+ "medications":[{"k":"m1","name":"Amlodipine","dose":"5 mg","frequency":"once a day","reported_by":"caregiver"},{"k":"m2","name":"little blue tablet for his cholesterol","normalized_name":null,"generic_name":null,"reported_by":"caregiver"}],
+ "physical_examination":[{"k":"x1","finding":"face is symmetrical","normalized_finding":"Symmetrical face, clear speech, normal power and gait","body_site":"face and neurological"}],
+ "clinical_assessment":[{"k":"d1","assessment":"a mini-stroke","normalized_assessment":"Transient ischaemic attack","certainty":"provisional"}],
+ "clinical_actions":[{"k":"r1","action_type":"referral","description":"Urgent same-day referral to stroke clinic"}],
+ "counsel":[["c1","Call 999 immediately if symptoms return"],["c2","Do not drive"]],
+ "follow_up":[{"k":"f1","time_reference":"next week"}],
+ "clinical_uncertainties":[{"k":"u1","type":"incomplete_medication_name","description":"Carer cannot name the blue cholesterol tablet in the dosette box.","related_entities":["medications[1]"]}],
+ "quality_checks":{"ambiguous_entities":["medications[1]"]}}
+

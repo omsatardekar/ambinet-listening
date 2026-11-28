@@ -1,0 +1,2 @@
+# Batch 005 (500 synthetic encounters, ids 01501-02000)
+Generated with the Batch 001/002 generator (scripts/generate_batch_005.py) from 48 NEW scenario profiles (scripts/b5_profiles_1..2.py): paediatric, older-adult, mental-health, medicine-related, chronic-disease, pregnancy/postnatal and emergency scenarios, as best / middle / worst cases. Validate with scripts/validate_b5.py. 500/500 pass, evidence grounding 21971/21971, 0 duplicates vs Batches 1, 3, 4 (see reports/). Not clinically reviewed; dialogue is template-based.

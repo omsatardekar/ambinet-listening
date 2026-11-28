@@ -1,0 +1,45 @@
+## 00911 PATIENT=1 DOCTOR=2
+1: My leg is swollen and painful, and I'm terrified it's a blood clot. I read about it last night and I haven't slept. ~ cc s1
+2: I can hear how worried you are. Let's go through it carefully. Which leg is it? ~ s1
+1: The right calf. It's tight and sore when I walk. ~ s1
+2: When did you first notice it? ~ s1 u1
+1: Two days ago? Or three. I'm honestly not sure, I was away for work. ~ s1 u1
+2: Have you been travelling or sitting for long periods? ~
+1: A long drive on Monday, about six hours. ~
+2: Any chest pain or breathlessness? ~ n1
+1: No chest pain. A bit worried, but no breathlessness. ~ n1
+2: Any redness, warmth or a recent injury to the leg? ~ n2
+1: No injury. It's not red. A bit warm, maybe. ~ n2
+2: Have you or anyone in your family had a clot before? ~ n3
+1: No, not that I know of. ~ n3
+2: Are you taking any medicines? ~ m1
+1: Just the blood thinner, rivaroxaban, 20 mg, once a day, with dinner. ~ m1
+2: Why were you prescribed that? ~ h1
+1: I had a clot in my leg three years ago. I was told to take it for a year, and I just carried on. ~ h1
+2: Are you taking it every day, including this week? ~ m1 u2
+1: I think so. I missed two doses on the trip, maybe three. I'm not certain. ~ m1 u2
+2: Thank you for being honest. That matters. I'd like to look at your leg. ~
+1: Of course. ~ pause=16
+2: The right calf is swollen, about two centimetres bigger than the left, and tender along the vein. ~ x1
+1: Is it a clot? ~
+2: It could be, and it could be a muscle strain. I can't tell which by feel alone. ~ d1
+1: What do we do? ~
+2: I'd like you to have an ultrasound scan of the leg veins today, and a blood test for clotting. ~ p1 p2
+1: Today? Okay. ~
+2: I'll phone the department now. Please keep taking the rivaroxaban every day. ~ c1
+1: I will. I won't miss any. ~
+2: If you get chest pain, breathlessness, or cough up blood, call an ambulance. ~ f1
+1: I understand. Thank you. ~
+@@
+{"chief_complaint":{"value":"My leg is swollen and painful, and I'm terrified it's a blood clot","normalized_value":"Swollen painful leg, concern for DVT"},
+ "symptoms":[{"k":"s1","name":"swollen","normalized_name":"Right calf swelling and pain","category":"cardiovascular","body_site":"right calf","certainty":"uncertain"}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Chest pain or breathlessness"},{"k":"n2","finding":"injury","normalized_name":"Leg injury or redness"},{"k":"n3","finding":"clot","normalized_name":"Family history of clot","assertion":"negative"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"a clot in my leg","normalized_condition":"Previous deep vein thrombosis","duration":{"value":3,"unit":"years","normalized":"3 years ago"}}]},
+ "medications":[{"k":"m1","name":"rivaroxaban","dose":"20 mg","frequency":"once a day"}],
+ "physical_examination":[{"k":"x1","finding":"right calf is swollen, about two centimetres bigger than the left, and tender along the vein","normalized_finding":"Right calf swelling 2 cm larger than left, tender along vein","body_site":"right calf"}],
+ "clinical_assessment":[{"k":"d1","assessment":"It could be, and it could be a muscle strain","normalized_assessment":"Deep vein thrombosis versus muscle strain","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"ultrasound scan of the leg veins","normalized_name":"Venous duplex ultrasound","type":"imaging"},{"k":"p2","name":"blood test for clotting","normalized_name":"D-dimer / coagulation","type":"laboratory"}],
+ "counsel":[["c1","Keep taking rivaroxaban every day"]],
+ "follow_up":[{"k":"f1","time_reference":"if you get chest pain, breathlessness, or cough up blood","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient unsure when the swelling began (\"two days ago? Or three\").","related_entities":["symptoms[0]"]},{"k":"u2","type":"adherence_uncertain","description":"Patient thinks he is taking rivaroxaban daily but may have missed two or three doses while travelling.","related_entities":["medications[0]"]}]}
+

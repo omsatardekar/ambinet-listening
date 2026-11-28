@@ -1,0 +1,214 @@
+## 00977 PATIENT=1 DOCTOR=2 NURSE=3 CAREGIVER=4
+3: Dr Mehta, Mrs Iyer's obs are done. Blood pressure 138 over 84, pulse 76, weight 64 kilos. Her companion is with her. ~ v
+2: Thank you, nurse. Mrs Iyer, welcome. What brings you in today? ~
+1: Good morning, doctor. I am here for my diabetes screening. I read in the newspaper that every person above sixty should be screened, and I did not want to miss it. ~ cc
+2: A very sensible reason. This is Shanti, your companion? ~
+4: Yes, doctor, I stay with her five days a week. ~
+2: Mrs Iyer, any symptoms that made you think of diabetes? ~ s1
+1: I am thirsty more than before. I carry a bottle with me everywhere now. ~ s1
+2: Anything else? ~ s2
+1: I get tired by the afternoon, but I am sixty-eight. ~ s2
+2: Have you lost any weight without trying? ~ n1
+1: No. My weight is the same as last year. ~ n1
+2: What medicines do you take? ~ m1 m2 m3
+1: Amlodipine, 5 mg, in the morning. Atorvastatin, 20 mg, at night. And aspirin, 75 mg, after breakfast. ~ m1 m2 m3
+2: Any allergies to medicines? ~ a1
+1: Perhaps. After an injection at the hospital, I came out in a rash, but I do not know what the injection was. ~ a1 u1
+4: She was very itchy that night, I remember she told me. ~ u1
+2: I'll record a possible allergy, unconfirmed. Any medical history? ~ h1
+1: High blood pressure, for many years. ~ h1
+2: Any operations? ~ sg1
+1: Cataract surgery in my left eye, in 2020. ~ sg1
+2: What did you do before retiring? ~ so1
+1: I was a schoolteacher, thirty-two years. ~ so1
+2: Nurse, did you check her feet? ~
+3: Yes, doctor, I looked. ~
+2: Let me see them. Take off your shoes, Mrs Iyer. ~ pause=12
+1: Of course. ~
+2: There are no sores or cracks on either foot. ~ x1
+1: Good. ~
+2: And the pulses at both ankles are present. ~ x2
+4: She looks after her feet very well. ~
+2: Mrs Iyer, nothing in what I find today suggests diabetes. I think you're not showing signs of diabetes at the moment. ~ d1
+1: That is a relief. ~
+2: But a blood test is the only way to be sure, so I'd like to arrange an HbA1c blood test. ~ p1
+1: When? ~
+2: Today, the nurse will take it before you go. ~
+3: I'll do it now. ~
+2: Keep drinking water, and walk a little every day. ~ c1
+4: We walk to the park. ~
+2: I'd like to see you again in a week to go through the result. ~ f1
+1: A week. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"my diabetes screening","normalized_value":"Diabetes screening"},
+ "symptoms":[{"k":"s1","name":"thirsty more than before","normalized_name":"Increased thirst","category":"endocrine"},
+  {"k":"s2","name":"tired by the afternoon","normalized_name":"Afternoon fatigue","category":"constitutional"}],
+ "negative_findings":[{"k":"n1","finding":"lost any weight","normalized_name":"Weight loss"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension"}],
+  "surgical_history":[{"k":"sg1","procedure":"Cataract surgery in my left eye","normalized_procedure":"Left cataract surgery","timeframe":"in 2020"}],
+  "social_history":[{"k":"so1","category":"occupation","details":"schoolteacher, thirty-two years","status":"retired"}]},
+ "medications":[{"k":"m1","name":"Amlodipine","dose":"5 mg","frequency":"in the morning"},{"k":"m2","name":"Atorvastatin","dose":"20 mg","frequency":"at night"},{"k":"m3","name":"aspirin","dose":"75 mg","frequency":"after breakfast"}],
+ "allergies":[{"k":"a1","substance":"an injection at the hospital","normalized_substance":"Hospital injection (unspecified)","allergy_type":"medication","status":"uncertain"}],
+ "vital_signs":[{"k":"v","name":"Blood pressure","normalized_name":"Blood pressure","value":"138/84","unit":"mmHg","reported_by":"nurse"},{"k":"v","name":"Heart rate","normalized_name":"Heart rate","value":"76","unit":"bpm","reported_by":"nurse"},{"k":"v","name":"Weight","normalized_name":"Weight","value":"64","unit":"kg","reported_by":"nurse"}],
+ "physical_examination":[{"k":"x1","finding":"no sores or cracks on either foot","normalized_finding":"No foot sores or cracks","status":"absent","body_site":"feet"},{"k":"x2","finding":"pulses at both ankles are present","normalized_finding":"Ankle pulses present bilaterally","body_site":"ankles"}],
+ "clinical_assessment":[{"k":"d1","assessment":"you're not showing signs of diabetes at the moment","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"HbA1c blood test","normalized_name":"Glycated haemoglobin","type":"laboratory"}],
+ "counsel":[["c1","Keep drinking water and walk a little every day"]],
+ "follow_up":[{"k":"f1","time_reference":"in a week"}],
+ "clinical_uncertainties":[{"type":"allergy_uncertain","description":"A possible rash after an unidentified hospital injection was reported but the injection and reaction are unknown.","related_entities":["allergies[0]"],"k":"u1"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00978 PATIENT=1 DOCTOR=2
+2: Mr Gilligan, thanks for coming. The booking says a review of your tablets, because of the nosebleeds. ~ cc
+1: That's right. My wife says I'm to ask. ~
+2: Let's go through your tablets, one by one. ~ m1 m2 m3 m4 m5
+1: Apixaban, 5 mg, twice a day. Bisoprolol, 5 mg, once a day. Ramipril, 5 mg, once a day. Atorvastatin, 40 mg, at night. And omeprazole, 20 mg, in the morning. ~ m1 m2 m3 m4 m5
+2: Good, you know them well. Do you ever miss the apixaban? ~
+1: Never. It's on the kitchen table, in front of the kettle. ~
+2: That's an excellent system. Any health conditions that go with them? ~ h1 h2
+1: The heart rhythm thing, atrial fibrillation. And high blood pressure. ~ h1 h2
+2: Let me check you. Pulse 64, blood pressure 130 over 76, temperature 36.6, oxygen 98 percent, breathing 14, weight 85 kilos. ~ v pause=15
+1: Good numbers? ~
+2: Very good. Pulse is a nice slow one on the bisoprolol. ~
+1: That's the idea. ~
+2: Any dizzy spells, Mr Gilligan? ~ n1
+1: No, no dizziness at all. ~ n1
+2: Now, here's how I think about it. The apixaban thins the blood, which protects you from a stroke from the heart rhythm, but it makes bleeding from the nose more likely. ~
+1: So it's the tablet? ~
+2: It's a contributor. But the benefit of the apixaban is large. I wouldn't want to stop it for nosebleeds alone. ~
+1: That's what the other doctor said. ~
+2: Good, we agree. The better approach is to make the nose less likely to bleed. ~
+1: How do I do that? ~
+2: Keep the inside of the nose moist. A small amount of petroleum jelly, just inside each nostril, twice a day. ~ c1
+1: Vaseline. I have that. ~
+2: A saline spray works as well. And avoid picking and forceful nose blowing. ~ c2
+1: My wife says I'm a picker. ~
+2: She's observant. ~
+1: She is. ~
+2: When a nosebleed does come, sit up, lean forward, pinch the soft part of your nose for ten minutes, and breathe through your mouth. ~ c3
+1: Ten minutes, by the clock. ~
+2: And don't lean back, because the blood runs down your throat. ~
+1: Right. ~
+2: Humidity helps too. A bowl of water by the radiator at night. ~
+1: Good idea. ~
+2: If a nosebleed lasts more than twenty minutes, go straight to the emergency department. ~ f1
+1: Will do. ~
+2: And ring us if they're happening more than twice a week. ~
+1: Understood. Thank you. ~
+@@
+{"chief_complaint":{"value":"a review of your tablets, because of the nosebleeds","normalized_value":"Medication review because of nosebleeds","reported_by":"doctor"},
+ "negative_findings":[{"k":"n1","finding":"dizzy spells","normalized_name":"Dizziness"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"atrial fibrillation","normalized_condition":"Atrial fibrillation"},{"k":"h2","condition":"high blood pressure","normalized_condition":"Hypertension"}]},
+ "medications":[{"k":"m1","name":"Apixaban","dose":"5 mg","frequency":"twice a day"},{"k":"m2","name":"Bisoprolol","dose":"5 mg","frequency":"once a day"},{"k":"m3","name":"Ramipril","dose":"5 mg","frequency":"once a day"},{"k":"m4","name":"Atorvastatin","dose":"40 mg","frequency":"at night"},{"k":"m5","name":"omeprazole","dose":"20 mg","frequency":"in the morning"}],
+ "vitals":{"k":"v","by":"doctor","bp":"130/76","hr":64,"temp":36.6,"spo2":98,"rr":14,"wt":85},
+ "counsel":[["c1","Apply petroleum jelly just inside each nostril twice a day"],["c2","Use a saline spray and avoid picking or forceful nose blowing"],["c3","During a nosebleed sit up, lean forward and pinch the soft part of the nose for ten minutes"]],
+ "follow_up":[{"k":"f1","time_reference":"if a nosebleed lasts more than twenty minutes","status":"conditional"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00979 PATIENT=1 DOCTOR=2
+1: G'day, doctor. It's my right elbow. Hurts on the outside. I've been painting the house, and I think I've done it. Um, what was I saying. ~ cc s1
+2: The outside of the right elbow. When did it start? ~ s1
+1: Last month? No, the month before. I painted the fence, then the shed. Not sure. ~
+2: Is it there all the time, or only with certain things? ~
+1: When I grip the brush. Or lift the kettle. Or shake hands, which is embarrassing. ~ s1
+2: Have you noticed any numbness or tingling in the fingers? ~ n1
+1: No numbness. No tingling. ~ n1
+2: Any neck pain? ~ n2
+1: No, the neck's fine. ~ n2
+2: What do you do for work? ~ so1
+1: I'm a painter. Which is the irony. ~ so1
+2: Any conditions I should know about? ~ h1
+1: Psoriasis. On my knees. ~ h1
+2: Let me feel the elbow. Tell me when you feel it. ~ pause=10
+1: There. Ow. ~
+2: There's tenderness right over the bony bump on the outside of the elbow. ~ x1
+1: That's the spot. ~
+2: Now hold your wrist up straight, and I'll push down on the back of your hand. ~ pause=8
+1: Like this? ~
+2: Ah, yes. That reproduces the pain on the outside of the elbow when you resist. ~ x2
+1: That's the one. ~
+2: Let me explain what's going on, without putting a name on it today. A tendon on the outside of the elbow takes the strain of gripping, and when it's overused, it gets sore and irritated. ~
+1: So I've overdone it. ~
+2: That's the picture. The tendon needs rest to recover. ~
+1: I've got a job to finish. ~
+2: I understand. Try to use the other hand for painting where you can, and take regular breaks. ~ c1
+1: I'm right-handed. ~
+2: Switch for the heavy parts, or use a roller on an extension pole. ~
+1: That's a good idea. ~
+2: A tennis elbow strap, a band just below the elbow, can take the strain. You can buy one at the pharmacy. ~ c2
+1: Does it work? ~
+2: It helps many people. Wear it when you're gripping. ~
+1: Right. ~
+2: Avoid lifting with your palm facing down. Lift with your palm facing up, it's gentler. ~ c3
+1: That's the opposite of what I do. ~
+2: Try it. ~
+1: I will. ~
+2: If it's not better in six weeks, come back and we'll look at other options. ~ f1
+1: Six weeks. I'll write it on the fence. ~
+2: Ha. Take care. ~
+@@
+{"chief_complaint":{"value":"my right elbow. Hurts on the outside","normalized_value":"Right lateral elbow pain after painting"},
+ "symptoms":[{"k":"s1","name":"Hurts on the outside","normalized_name":"Lateral elbow pain","category":"musculoskeletal","body_site":"right elbow","aggravating_factors":["grip the brush"]}],
+ "negative_findings":[{"k":"n1","finding":"numbness","normalized_name":"Finger numbness or tingling"},{"k":"n2","finding":"neck pain","normalized_name":"Neck pain"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Psoriasis","normalized_condition":"Psoriasis"}],
+  "social_history":[{"k":"so1","category":"occupation","details":"painter"}]},
+ "physical_examination":[{"k":"x1","finding":"tenderness right over the bony bump on the outside of the elbow","normalized_finding":"Lateral epicondyle tenderness","body_site":"right elbow"},{"k":"x2","finding":"reproduces the pain on the outside of the elbow when you resist","normalized_finding":"Pain on resisted wrist extension","body_site":"right elbow"}],
+ "counsel":[["c1","Use the other hand where possible, take breaks, or use a roller on an extension pole"],["c2","Wear a tennis elbow strap just below the elbow when gripping"],["c3","Lift with the palm facing up"]],
+ "follow_up":[{"k":"f1","time_reference":"if it's not better in six weeks","status":"conditional"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00980 PATIENT=1 DOCTOR=2
+1: Good morning, doctor. I have no complaints at all, I'm here for my annual health check, and I'd like blood tests, as I've read it's sensible after forty. ~ cc
+2: It is sensible. Let me start with some questions. How are you in yourself? ~
+1: Very well, honestly. A few small things. I sometimes get mild heartburn after spicy food. ~ s1
+2: How often? ~ s1
+1: Perhaps once a week. ~ s1
+2: Anything else? ~ s2
+1: My lower back is a little stiff when I wake up. It goes after a shower. ~ s2
+2: Energy levels? ~ s3
+1: Fine. A bit tired by the evening, but I work long hours. ~ s3
+2: Any chest pain? ~ n1
+1: No chest pain. ~ n1
+2: What do you take at the moment? ~ m1 m2
+1: A multivitamin, a little yellow capsule, from the pharmacy. I forget its name. And vitamin C, maybe 500 mg, once a day. ~ m1 m2 u1 u2
+2: Fine. And what do you do for a living? ~ so1
+1: I'm a software architect. Desk-bound, I'm afraid. ~ so1
+2: Let me take your numbers. Blood pressure 126 over 78, pulse 68, weight 72 kilos. ~ v pause=10
+1: That's good, isn't it? ~
+2: Very good. I'm going to feel your tummy. ~ pause=8
+1: Go ahead. ~
+2: Your abdomen is soft and not tender. ~ x1
+1: Good. ~
+2: And the muscles of your lower back are a bit tight on both sides. ~ x2
+1: That's the stiffness. ~
+2: Overall you're in good shape. I think you're healthy for your age, with only minor, easily managed complaints. ~ d1
+1: That's what I hoped. ~
+2: For the heartburn, I'd like to start omeprazole, 20 mg, once a day, before breakfast. ~ m3
+1: For how long? ~
+2: A month, and we'll see. And for the back, I'd suggest paracetamol, 1 gram, when it's stiff. ~ m4
+1: I rarely take anything. ~
+2: Only when you need it. Now the tests. I'd like to arrange a full blood count with liver and kidney function, and a cholesterol and HbA1c test. ~ p1 p2
+1: Do I need to fast? ~
+2: For the cholesterol, yes, from midnight. Water is fine. ~
+1: Okay. ~
+2: And stretch your back for a few minutes each morning. ~ c1
+1: I'll do that. ~
+2: If the heartburn isn't better in four weeks, come back and see me. ~ f1
+1: Four weeks. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"my annual health check","normalized_value":"Annual health check with request for blood tests"},
+ "symptoms":[{"k":"s1","name":"mild heartburn after spicy food","normalized_name":"Heartburn after spicy food","category":"gastrointestinal","frequency":"once a week"},
+  {"k":"s2","name":"lower back is a little stiff when I wake up","normalized_name":"Morning lower back stiffness","category":"musculoskeletal","body_site":"lower back"},
+  {"k":"s3","name":"tired by the evening","normalized_name":"Evening fatigue","category":"constitutional"}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Chest pain"}],
+ "medical_history":{"social_history":[{"k":"so1","category":"occupation","details":"software architect"}]},
+ "medications":[{"k":"m1","name":"little yellow capsule","normalized_name":null,"generic_name":null,"indication":"multivitamin"},{"k":"m2","name":"vitamin C","dose":"500 mg","frequency":"once a day"},{"k":"m3","name":"omeprazole","dose":"20 mg","frequency":"once a day","status":"planned","reported_by":"doctor"},{"k":"m4","name":"paracetamol","dose":"1 gram","frequency":"when it's stiff","status":"planned","reported_by":"doctor"}],
+ "vitals":{"k":"v","by":"doctor","bp":"126/78","hr":68,"wt":72},
+ "physical_examination":[{"k":"x1","finding":"abdomen is soft and not tender","normalized_finding":"Soft non-tender abdomen","body_site":"abdomen"},{"k":"x2","finding":"muscles of your lower back are a bit tight on both sides","normalized_finding":"Bilateral lumbar muscle tightness","body_site":"lower back"}],
+ "clinical_assessment":[{"k":"d1","assessment":"healthy for your age, with only minor, easily managed complaints","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"full blood count with liver and kidney function","normalized_name":"Full blood count, liver and renal function","type":"laboratory"},{"k":"p2","name":"cholesterol and HbA1c test","normalized_name":"Lipid profile and HbA1c","type":"laboratory"}],
+ "counsel":[["c1","Stretch the back for a few minutes each morning"]],
+ "follow_up":[{"k":"f1","time_reference":"if the heartburn isn't better in four weeks","status":"conditional"}],
+ "clinical_uncertainties":[{"type":"incomplete_medication_name","description":"The patient cannot name his little yellow multivitamin capsule.","related_entities":["medications[0]"],"k":"u1"},
+  {"type":"uncertain_dose","description":"The patient is unsure of the vitamin C dose ('maybe 500 mg').","related_entities":["medications[1]"],"k":"u2"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":["medications[0]"]}}

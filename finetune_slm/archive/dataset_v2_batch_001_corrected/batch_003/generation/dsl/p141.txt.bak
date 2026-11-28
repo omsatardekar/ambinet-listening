@@ -1,0 +1,54 @@
+## 00887 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Doctor, he fell off his bike outside the house, and cut his lip, and one of his front teeth is loose. ~ cc s1 s2
+2: Thank you. Is that right, Dev? You came off your bike? ~
+1: Yeah. I hit the kerb. ~
+2: When did it happen? ~ s1
+3: About an hour ago. I brought him straight here. ~ s1
+2: Did you hit your head, Dev, or black out at all? ~ n1
+1: No. I put my hands out and my mouth hit the ground. ~ n1
+3: He was awake the whole time, he was crying straight away. ~ n1
+2: Good. Any neck pain, or pain anywhere else? ~ s3
+1: My wrist hurts a bit. The left one. ~ s3
+2: Any vomiting or dizziness since? ~ r1
+1: No, nothing like that. I feel okay, just my mouth hurts. ~ r1
+2: Has he taken anything for the pain? ~ m1
+3: I gave him a spoonful of that pink medicine for children, I don't know the name. ~ m1 u1
+2: Do you know how much? ~ m1
+3: Just a teaspoon, I think. ~ m1 u1
+2: Thank you. Does he have any medical conditions? ~ h1
+3: Asthma, mild. Nothing else. ~ h1
+2: Let me check his pulse, oxygen and temperature. ~
+1: Okay. ~ pause=10
+2: Pulse 96, oxygen 99 percent, temperature 36.8. ~ v
+3: Is it all right? ~
+2: All normal. Dev, can you open your mouth wide for me? ~
+1: Ahh. ~ pause=14
+2: There's a cut on the inside of the upper lip, about a centimetre long, and it's stopped bleeding. ~ x1
+3: What about the tooth? ~
+2: The upper left front tooth is loose, and slightly pushed back. It looks like a baby tooth, so we need to be careful. ~ x2
+1: Will it fall out? ~
+2: Possibly. I'd like you to see a dentist today, and they may want an X-ray of the tooth. ~ p1 p2
+3: I'll take him straight there. ~
+2: The cut doesn't need stitches. Rinse with salt water, and give soft foods for a few days. ~ c1
+1: Okay. ~
+2: And his wrist is tender but he can move it. If the pain gets worse, or it swells, we should X-ray it. ~ x3 p3
+3: We'll watch it. ~
+2: If he vomits, becomes sleepy, or the bleeding starts again, come back to us immediately. ~ f1
+3: Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"he fell off his bike outside the house, and cut his lip, and one of his front teeth is loose","normalized_value":"Fall from bicycle with lip laceration and loose tooth","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"cut his lip","normalized_name":"Lip laceration","category":"musculoskeletal","body_site":"upper lip","reported_by":"family_member"},
+  {"k":"s2","name":"loose","normalized_name":"Loose front tooth","category":"musculoskeletal","body_site":"front tooth","reported_by":"family_member"},
+  {"k":"s3","name":"wrist hurts","normalized_name":"Left wrist pain","category":"musculoskeletal","body_site":"left wrist"}],
+ "negative_findings":[{"k":"n1","finding":"hit your head","normalized_name":"Head injury or loss of consciousness"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Asthma","normalized_condition":"Asthma","reported_by":"family_member"}]},
+ "medications":[{"k":"m1","name":"pink medicine for children","normalized_name":"Paediatric analgesic (unspecified)","generic_name":null,"dose":"teaspoon","reported_by":"family_member"}],
+ "review_of_systems":[{"k":"r1","system":"neurological"}],
+ "vitals":{"k":"v","hr":96,"spo2":99,"temp":36.8},
+ "physical_examination":[{"k":"x1","finding":"cut on the inside of the upper lip, about a centimetre long","normalized_finding":"1 cm intraoral upper lip laceration, no active bleeding","body_site":"upper lip"},{"k":"x2","finding":"upper left front tooth is loose, and slightly pushed back","normalized_finding":"Loose, slightly displaced upper left incisor","body_site":"upper left front tooth"},{"k":"x3","finding":"wrist is tender but he can move it","normalized_finding":"Tender left wrist with preserved movement","body_site":"wrist"}],
+ "clinical_assessment":[{"k":"d1","assessment":"It looks like a baby tooth","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"dentist","normalized_name":"Dental assessment","type":"other"},{"k":"p2","name":"X-ray of the tooth","normalized_name":"Dental X-ray","type":"imaging","status":"conditional"}],
+ "counsel":[["c1","Rinse with salt water and give soft foods for a few days"]],
+ "follow_up":[{"k":"f1","time_reference":"if he vomits, becomes sleepy, or the bleeding starts again","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"incomplete_medication_name","description":"Father cannot name the pink children's medicine or the amount beyond about a teaspoon.","related_entities":["medications[0]"]}]}
+

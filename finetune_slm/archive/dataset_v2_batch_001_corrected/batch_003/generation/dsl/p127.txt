@@ -1,0 +1,48 @@
+## 00908 PATIENT=1 DOCTOR=2
+1: Morning. I want to stop smoking, and I need help, because I can't do it on my own. ~ cc so1
+2: That's a great decision, and I'm glad you came. How much do you smoke at the moment? ~ so1
+1: About twenty a day. Sometimes more when I'm stressed. ~ so1
+2: How long have you been smoking? ~ so1
+1: Since I was seventeen. So, twenty-two years. ~ so1
+2: Have you tried to quit before? ~
+1: Twice. Once with patches, and once cold turkey. I lasted a week each time. ~
+2: What made you go back? ~
+1: Stress at work, and my partner smokes too. ~
+2: Do you cough in the mornings, or get breathless on the stairs? ~ s1
+1: A bit breathless on the stairs, yes. And a smoker's cough in the morning. ~ s1
+2: Any chest pain, or coughing up blood? ~ n1
+1: No, nothing like that. ~ n1
+2: Are you on any medication at the moment? ~ m1
+1: Just an inhaler, the blue one, when I'm wheezy. ~ m1
+2: Let me check your pulse, pressure and oxygen level. ~
+1: Sure. ~ pause=10
+2: Pulse 80, blood pressure 130 over 84, oxygen saturation 97 percent, temperature 36.6. ~ v
+1: Is that all right? ~
+2: Reasonable. I'd like to listen to your chest. Take a few deep breaths for me. ~
+1: In and out? ~ pause=16
+2: There is a mild wheeze at the bottom of both lungs, and the breath sounds are otherwise normal. ~ x1
+1: That's the smoking, isn't it? ~
+2: It is likely to be contributing. Stopping will help it settle. ~ d1
+1: What are my options, doctor? ~
+2: There are nicotine patches and gum together, or a tablet called varenicline. I'd suggest we start with varenicline and combine it with support. ~ p1
+1: Does it have side effects? ~
+2: Some people get nausea or strange dreams. Take it after food with a full glass of water. ~
+1: I can manage that. ~
+2: I'll prescribe varenicline, 0.5 mg once a day for three days, then it goes up. ~ m2
+1: And when do I stop smoking? ~
+2: Pick a quit date in the second week, and take the tablets for the first week before that. ~ c1
+1: Okay. I'm going to say the fifteenth. ~
+2: That's good. I'd also like to see you again in two weeks, to see how it is going. ~ f1
+1: Two weeks, then. Thanks, doctor. ~
+@@
+{"chief_complaint":{"value":"I want to stop smoking","normalized_value":"Request for smoking cessation help"},
+ "symptoms":[{"k":"s1","name":"breathless","normalized_name":"Exertional breathlessness","category":"respiratory","body_site":"chest","certainty":"certain"}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Chest pain or haemoptysis"}],
+ "medical_history":{"social_history":[{"k":"so1","category":"smoking","description":"About twenty a day","status":"current","details":"About twenty a day"}]},
+ "medications":[{"k":"m1","name":"inhaler","normalized_name":"Blue inhaler (reliever, unspecified)","generic_name":null,"frequency":"when I'm wheezy"},{"k":"m2","name":"varenicline","status":"planned","reported_by":"doctor","dose":"0.5 mg","frequency":"once a day","duration":{"value":3,"unit":"days","normalized":"3 days"}}],
+ "vitals":{"k":"v","hr":80,"bp":"130/84","spo2":97,"temp":36.6},
+ "physical_examination":[{"k":"x1","finding":"mild wheeze at the bottom of both lungs","normalized_finding":"Bibasal wheeze","body_site":"both lungs"}],
+ "clinical_assessment":[{"k":"d1","assessment":"likely to be contributing","normalized_assessment":"Respiratory symptoms likely smoking-related","certainty":"provisional"}],
+ "counsel":[["c1","Pick a quit date in the second week and start the tablets a week before"]],
+ "follow_up":[{"k":"f1","time_reference":"in two weeks"}]}
+

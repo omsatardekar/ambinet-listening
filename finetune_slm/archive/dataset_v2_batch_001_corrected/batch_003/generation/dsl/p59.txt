@@ -1,0 +1,93 @@
+## 00755 PATIENT=1 DOCTOR=2
+1: It's this cough. Dry. Since I started the new blood pressure tablet. ~ cc s1
+2: Which tablet is that? ~ m1
+1: Ramipril. 5 mg. Once a day. ~ m1
+2: When did you start it? ~
+1: Three months ago. ~ s1
+2: Describe the cough. ~ s1
+1: Tickly. Dry. Worse at night. Nothing comes up. ~ s1 s2
+2: Any fever, or breathlessness, or wheeze? ~
+1: No. Just the tickle. ~
+2: Do you smoke? ~ so1
+1: Never have. ~ so1
+2: Any allergies to medicines? ~ a1
+1: Aspirin. I wheeze. ~ a1
+2: Anything else in your medical history? ~ h1
+1: High blood pressure. That's it. ~ h1
+2: Let me check your pulse and oxygen. ~
+1: Go on. ~
+2: Pulse 70, oxygen 98 percent, blood pressure 130 over 80. ~ v pause=10
+1: Fine? ~
+2: All fine. I'll listen to your chest. ~ pause=15
+1: Clear? ~
+2: Clear as a bell. No wheeze, no crackles. ~
+1: So it's the tablet? ~
+2: A dry, tickly cough that started a few weeks after ramipril, with a clear chest, is the classic pattern, so I can't rule out a cough caused by the ramipril. ~ d1
+1: Can you change it? ~
+2: Yes, there's an almost identical type of tablet, called losartan, that doesn't cause the cough. ~
+1: Same effect? ~
+2: Same blood pressure control. I'd like you to stop the ramipril and start losartan 50 mg once a day. ~ m2
+1: Right. Today? ~
+2: Today. Take the first one tomorrow morning, and don't take both. ~ c1
+1: Okay. ~
+2: The cough can take a few weeks to fade after stopping, so don't expect it to vanish overnight. ~
+1: How long? ~
+2: Up to four weeks. If it hasn't gone after four weeks, come back and I'll think again. ~ f1
+1: Fair. Thanks. ~
+2: Take care. ~
+1: Bye. ~
+@@
+{"chief_complaint":{"value":"this cough. Dry","normalized_value":"Dry cough on ramipril"},
+ "symptoms":[{"k":"s1","name":"cough","normalized_name":"Dry cough","category":"respiratory","duration":{"value":3,"unit":"months","normalized":"3 months"}},
+  {"k":"s2","name":"Worse at night","normalized_name":"Nocturnal worsening of cough","category":"respiratory","aggravating_factors":["night"]}],
+ "allergies":[{"k":"a1","substance":"Aspirin","reaction":"wheeze"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension"}],"social_history":[{"k":"so1","category":"smoking","description":"Never smoked","status":"never","details":"Never have"}]},
+ "medications":[{"k":"m1","name":"Ramipril","dose":"5 mg","frequency":"Once a day"},{"k":"m2","name":"losartan","status":"planned","reported_by":"doctor","dose":"50 mg","frequency":"once a day"}],
+ "vitals":{"k":"v","hr":70,"spo2":98,"bp":"130/80"},
+ "clinical_assessment":[{"k":"d1","assessment":"a cough caused by the ramipril","certainty":"differential"}],
+ "counsel":[["c1","Stop ramipril; start losartan tomorrow; do not take both"]],
+ "follow_up":[{"k":"f1","time_reference":"If it hasn't gone after four weeks","status":"conditional"}]}
+
+## 00756 PATIENT=1 DOCTOR=2
+1: Um, hi doctor. I've been checking my blood pressure at home, because my mum said I should, and it's been high. Is that something? ~ cc s1
+2: It certainly could be. What have you been seeing? ~
+1: Consistently high, in the morning and evening, for two weeks. Higher than the machine says is normal, anyway. ~ s1
+2: And how are you feeling? ~ s1
+1: Well, sometimes a bit of a headache. Otherwise fine. ~ s1
+2: Do you have any family history of blood pressure or heart problems? ~ f1
+1: Mum has high blood pressure. And my granddad had a heart attack. ~ f1 f2
+2: Any allergies I should know about before we go on? ~ a1
+1: Latex. I get a rash when I wear the gloves at work, on my hands. ~ a1
+2: Noted. Any operations? ~ sg1
+1: I had my appendix out, when I was fifteen. ~ sg1
+2: Do you drink alcohol, or have a lot of caffeine or salt in your diet? ~ so1
+1: A few drinks at weekends, I suppose. I like crisps, though. ~ so1
+2: Any other medical conditions? ~ h1
+1: No, only the occasional migraine. ~ h1
+2: Is the home machine one that goes on your upper arm, and is it validated? ~
+1: Upper arm, yes. I bought it from a pharmacy. It was recommended. ~
+2: Good. I'd like to check it, can you bring it along sometime? ~
+1: I can bring it Monday. ~
+2: Right. High readings at home are often higher than in the clinic or lower, depending, so I won't diagnose from them alone. ~
+1: That makes sense. I'm a bit worried though. ~
+2: It's good that you checked. I'd say this is probably high blood pressure, but I want it confirmed properly. ~ d1
+1: How? ~
+2: I'd like to arrange a 24-hour blood pressure monitor, which you wear on your arm for a day, and it takes readings every half hour. ~ p1
+1: Like a cuff that squeezes by itself? ~
+2: Exactly. It's the gold standard. ~
+1: Okay. Do I need tablets? ~
+2: Not until we have the results. Many people with mildly raised readings start with lifestyle changes, so cut down on salt, crisps, and alcohol, and be active. ~ c1
+1: I can do the crisps. ~
+2: And if you ever get severe headache with blurred vision, chest pain, or breathlessness, come in straight away. ~ f1
+1: I will. Thank you. ~
+@@
+{"chief_complaint":{"value":"I've been checking my blood pressure at home","normalized_value":"Raised home blood pressure readings"},
+ "symptoms":[{"k":"s1","name":"headache","normalized_name":"Headache","category":"neurological","frequency":"sometimes"}],
+ "allergies":[{"k":"a1","substance":"Latex","allergy_type":"environmental","reaction":"rash"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"migraine","normalized_condition":"Migraine"}],"surgical_history":[{"k":"sg1","procedure":"appendix out","normalized_procedure":"Appendicectomy","timeframe":"when I was fifteen"}],
+  "family_history":[{"k":"f2","condition":"high blood pressure","normalized_condition":"Hypertension","relation":"Mum"},{"k":"f1","condition":"heart attack","normalized_condition":"Myocardial infarction","relation":"granddad"}],"social_history":[{"k":"so1","category":"alcohol","description":"Weekend drinking and salty snacks","details":"A few drinks at weekends"}]},
+ "clinical_assessment":[{"k":"d1","assessment":"high blood pressure","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"24-hour blood pressure monitor","normalized_name":"Ambulatory blood pressure monitoring","type":"other"}],
+ "counsel":[["c1","Cut down on salt, crisps and alcohol and be active"]],
+ "follow_up":[{"k":"f1","time_reference":"if you ever get severe headache with blurred vision, chest pain, or breathlessness","status":"conditional"}]}
+

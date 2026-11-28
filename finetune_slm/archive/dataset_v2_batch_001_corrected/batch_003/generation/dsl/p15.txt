@@ -1,0 +1,102 @@
+## 00651 PATIENT=1 DOCTOR=2 CAREGIVER=3 CLINICAL_STAFF=4
+4: Good morning, Mr Ellis. I'm Priya, one of the healthcare assistants. I've brought a sample pot with me for later, if the doctor wants one. ~
+1: Good morning. That's most kind. I do hope I'm not taking up too much of anyone's time. ~
+2: Not at all, Mr Ellis. I'm Dr Morgan. Who have you brought with you? ~
+3: Hello, doctor, I'm Colette, I'm his carer. I come in morning and evening. ~
+2: Lovely. Mr Ellis, what would you say is troubling you most at the moment? ~
+1: It's my sleep, I'm afraid. I'm up and down all night, to the lavatory, and I can't seem to get properly back to sleep. ~ cc s1 s2
+2: How many times would you say you get up? ~ s1
+1: Four times, perhaps five, most nights. It's been going on for some weeks now. ~ s1
+3: It's four, I hear him every time. And he's exhausted in the day. ~ s1 s2
+2: Thank you. Any burning or stinging when you pass water? ~ n1
+1: No, there's no burning. ~ n1
+2: And any blood in the urine? ~ n2
+1: No blood, I've looked. ~ n2
+2: Let's go through your medicines. Colette, you manage them, don't you? ~ m1 m2 u1
+3: I do. Amlodipine, 10 mg once a day, and tamsulosin, 400 micrograms once a day. ~ m1 m2 u1
+1: Forgive me, but I'm quite certain the amlodipine is 5 mg. ~ m1 u1
+3: It's 10, Mr Ellis. I put it in the box every morning, it's on the label. ~ m1 u1
+2: I can't settle that from here, and I'll note both of your views. We'll check the box and the record. Do you have any allergies? ~ u1 a1
+1: Penicillin. I came out in a rash, many years ago. ~ a1
+2: Thank you. And your wider health? ~ h1 h2 h3
+1: High blood pressure, an enlarged prostate, and type 2 diabetes, which is diet-controlled. ~ h1 h2 h3
+2: Any prostate problems in the family? ~ f1
+1: My brother had prostate cancer, in his sixties. ~ f1
+2: And who's at home with you? ~ so1
+1: I live alone, with Colette's help. My wife passed away four years ago. ~ so1
+2: I'm sorry to hear that. Let me examine you. First, no chest pain or breathlessness at all? ~ r1
+1: No, nothing of the sort. ~ r1
+4: Shall I do the blood pressure, doctor? ~
+2: Please, Priya. ~
+4: 142 over 86, pulse 72. ~ v pause=18
+2: Thank you. Mr Ellis, I'm going to press on your tummy, and then do a gentle rectal exam if you're comfortable. ~
+1: Certainly. ~ pause=15
+2: Your bladder isn't enlarged, and the prostate feels smooth and enlarged but not hard. ~ x1 x2
+1: Is that good? ~
+2: It fits with what we know. I'd like to send a urine sample today and some blood tests to check your kidneys and sugar. ~ p1
+4: I'll take that sample now, if you could come with me, Mr Ellis. ~
+1: Of course. ~
+2: Before you go, try to have less to drink after six in the evening, and avoid tea and coffee in the afternoon. ~ c1
+3: I'll make sure of it. ~
+2: I'd like to see you in four weeks, with the results. ~ f1
+1: Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"It's my sleep, I'm afraid","normalized_value":"Poor sleep with night-time urination"},
+ "symptoms":[{"k":"s1","name":"up and down all night","normalized_name":"Nocturia","category":"genitourinary","frequency":"Four times"},
+  {"k":"s2","name":"can't seem to get properly back to sleep","normalized_name":"Disturbed sleep","category":"neurological"}],
+ "negative_findings":[{"k":"n1","finding":"burning","normalized_name":"Dysuria"},{"k":"n2","finding":"blood","normalized_name":"Haematuria"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension"},{"k":"h2","condition":"enlarged prostate","normalized_condition":"Benign prostatic hyperplasia"},{"k":"h3","condition":"type 2 diabetes","normalized_condition":"Type 2 diabetes mellitus"}],
+  "family_history":[{"k":"f1","condition":"prostate cancer","normalized_condition":"Prostate cancer","relation":"brother"}],
+  "social_history":[{"k":"so1","category":"living","description":"Lives alone with carer visits","details":"I live alone"}]},
+ "medications":[{"k":"m1","name":"Amlodipine","dose":null,"frequency":"once a day","reported_by":"caregiver"},{"k":"m2","name":"tamsulosin","dose":"400 micrograms","frequency":"once a day","reported_by":"caregiver"}],
+ "allergies":[{"k":"a1","substance":"Penicillin","reaction":"rash"}],
+ "vitals":{"k":"v","by":"clinical_staff","bp":"142/86","hr":72},
+ "physical_examination":[{"k":"x1","finding":"bladder isn't enlarged","normalized_finding":"Non-palpable bladder","body_site":"bladder","status":"absent"},{"k":"x2","finding":"prostate feels smooth and enlarged","normalized_finding":"Smooth enlarged prostate","body_site":"prostate"}],
+ "review_of_systems":[{"k":"r1","system":"cardiorespiratory"}],
+ "procedures_and_investigations":[{"k":"p1","name":"urine sample","normalized_name":"Urinalysis and blood tests for kidney function and glucose","type":"laboratory"}],
+ "counsel":[["c1","Advise less fluid after six in the evening and avoiding tea and coffee in the afternoon"]],
+ "follow_up":[{"k":"f1","time_reference":"in four weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"medication_discrepancy","description":"Patient says amlodipine is 5 mg; carer says it is 10 mg; doctor will check the box and record (unresolved).","related_entities":["medications[0]"]}],
+ "quality_checks":{"contradictions_detected":["Amlodipine dose: patient 5 mg vs caregiver 10 mg (unresolved)."]}}
+
+## 00652 PATIENT=1 DOCTOR=2
+1: Good afternoon, doctor. I do apologise for troubling you, but my voice has gone. It's been a little over a week now. ~ cc
+2: Good afternoon. Not at all. Let me hear you. Can you say your name and where you live? ~
+1: Margaret Ashworth, number twelve, Birch Road. You can see it's quite croaky. ~
+2: I can hear it, a bit husky. When did it come on, exactly? ~ s1
+1: Ten days ago, rather suddenly. I woke up and it simply wasn't there, I could only whisper. ~ s1
+2: Had you been ill, a cold or a cough, beforehand? ~
+1: Nothing at all. I'd been to my choir the night before, mind you, and we did the whole of the Messiah. ~
+2: Ah. Enthusiastic singing could do that. And how has it been since? Is it improving or staying the same? ~
+1: A little better in the mornings, but by the evening it's worse again. ~
+2: Do you have any pain in your throat, or difficulty swallowing? ~
+1: No pain to speak of, and I can swallow perfectly well. It's just the voice. ~
+2: Right. You're not on any regular treatment I should know about? ~
+1: No, I'm very fortunate. I take nothing at all, except a vitamin on Sundays. ~
+2: Good. Any other health conditions? ~ h1
+1: I have a touch of acid reflux, nothing major. ~ h1
+2: That's useful. Open wide and say ahh for me. ~
+1: Ahh. ~ pause=10
+2: Throat looks fine. The vocal cords are inside, so I can't see them from here. ~
+1: Quite so. What do you think it is? ~
+2: A sudden husky voice after heavy use, with some reflux in the background, looks most like laryngitis. ~ d1
+1: Laryngitis. Is that serious? ~
+2: Not usually. The cords are inflamed, like a sprained ankle, and they need to rest. ~
+1: I see. Then I shall be silent on the subject of Handel. ~
+2: Exactly, no singing, and avoid whispering too, which strains the cords just as much. ~ c1
+1: Whispering is bad? ~
+2: Yes, a gentle, easy speaking voice is better. Drink plenty of water, and avoid shouting or clearing your throat. ~
+1: I do clear my throat a great deal. ~
+2: Try sipping water instead. ~
+1: How long until it improves? ~
+2: Often a couple of weeks. If it's not back to normal in three weeks, I'd like you seen by a specialist who can look at the cords directly. ~ f1
+1: Three weeks, understood. Thank you, doctor. ~
+2: Rest that voice. ~
+@@
+{"chief_complaint":{"value":"my voice has gone","normalized_value":"Hoarse voice"},
+ "symptoms":[{"k":"s1","name":"it simply wasn't there","normalized_name":"Hoarseness","category":"ENT","duration":{"value":10,"unit":"days","normalized":"10 days"},"onset":"Ten days ago"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"acid reflux","normalized_condition":"Gastro-oesophageal reflux disease"}]},
+ "clinical_assessment":[{"k":"d1","assessment":"laryngitis","certainty":"provisional"}],
+ "counsel":[["c1","Advise voice rest: no singing or whispering, fluids and avoid throat clearing"]],
+ "follow_up":[{"k":"f1","time_reference":"if it's not back to normal in three weeks","status":"conditional"}]}
+

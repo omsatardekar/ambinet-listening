@@ -1,0 +1,99 @@
+## 00702 PATIENT=1 DOCTOR=2
+1: Hello. It's probably nothing. I had COVID last month, and I feel run down, that's all. ~ cc s1
+2: How long ago did you test positive? ~
+1: Five weeks ago. I was in bed for a week, and since then I've just been flat. I used to go to the gym twice a week and I can't face it. ~ s1 so1
+2: Is it tiredness, or low energy, or something else? ~ s1
+1: Tired by mid-afternoon, mostly. Not sleepy exactly, just heavy. ~ s1
+2: Any fever, cough or breathlessness left over? ~ n1 r1
+1: No fever, no cough, and my breathing's fine. ~ n1 r1
+2: What are you taking at the moment? ~ m1 m2
+1: Ferrous sulphate, 200 mg once a day, since my iron was low last year. And vitamin D, 1000 units, every day. ~ m1 m2
+2: Good. Any allergies? ~ a1
+1: None, no. ~ a1
+2: What conditions do you have? ~ h1 h2
+1: Iron deficiency anaemia, last year. And migraines. ~ h1 h2
+2: Any operations? ~ sg1
+1: Just my tonsils out, when I was seven. ~ sg1
+2: Gentle exercise has been part of your routine, so I understand why you feel the loss. ~
+1: It's the thing that keeps me sane. ~
+2: Given your history, I wonder if your iron has dropped again after being ill. Heavy periods? ~
+1: Not unusual for me, yes. A bit heavy lately. ~
+2: That would make sense. I think this is most likely low iron again, on top of the after-effects of the virus. ~ d1
+1: Can that be checked? ~
+2: Yes, I'd like to arrange a blood test, to check your iron stores, your blood count and your thyroid. ~ p1
+1: When? ~
+2: Today, if you can pop in to the nurse after this. ~ p1
+1: I can. ~
+2: Meanwhile, get gentle exercise back slowly, a walk, not the gym, and eat iron-rich foods, with something with vitamin C. ~ c1
+1: Like spinach and orange juice? ~
+2: Spot on. Don't take your iron tablet with tea or coffee, it blocks absorption. ~ c2
+1: Ah, I do that. ~
+2: I'd like to see you again in two weeks, when the results are back. ~ f1
+1: Two weeks. Fine. ~
+@@
+{"chief_complaint":{"value":"I feel run down","normalized_value":"Feeling run down after COVID-19"},
+ "symptoms":[{"k":"s1","name":"flat","normalized_name":"Post-COVID fatigue","category":"constitutional","onset":"Five weeks ago","aggravating_factors":["mid-afternoon"]}],
+ "negative_findings":[{"k":"n1","finding":"fever","normalized_name":"Fever"},{"k":"a1","finding":"allergies","normalized_name":"No known allergies"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Iron deficiency anaemia","normalized_condition":"Iron deficiency anaemia"},{"k":"h2","condition":"migraines","normalized_condition":"Migraine"}],
+  "surgical_history":[{"k":"sg1","procedure":"tonsils out","normalized_procedure":"Tonsillectomy","timeframe":"when I was seven"}],
+  "social_history":[{"k":"so1","category":"exercise","description":"Previously gym twice a week","details":"gym twice a week"}]},
+ "medications":[{"k":"m1","name":"Ferrous sulphate","dose":"200 mg","frequency":"once a day"},{"k":"m2","name":"vitamin D","dose":"1000 units","frequency":"every day"}],
+ "review_of_systems":[{"k":"r1","system":"respiratory"}],
+ "clinical_assessment":[{"k":"d1","assessment":"low iron again","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood test","normalized_name":"Ferritin, full blood count and thyroid function","type":"laboratory","scheduled_datetime":"today"}],
+ "counsel":[["c1","Return to exercise gradually and eat iron-rich foods with vitamin C"],["c2","Do not take iron with tea or coffee"]],
+ "follow_up":[{"k":"f1","time_reference":"in two weeks"}]}
+
+## 00704 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Doctor, quick, he got cleaning fluid in his eye, from the bottle, a spray! ~ cc
+2: Right, sit him here. What's your name? ~
+1: Ravi. It burns. ~ s1
+2: Ravi, did you wash the eye out at home? ~
+3: A bit, with the tap, a minute or two. Then we drove here. ~
+2: How long ago did it happen? ~ s1 u1
+1: Ten minutes. About 10 minutes. ~ s1 u1
+3: No, it was half an hour, at least, 30 minutes, I looked at the clock when we left the house. ~ s1 u1
+2: I'll write it down as 10 to 30 minutes. It doesn't change what I do, we're washing it out now. Do you know which cleaner it was? ~ s1 u1
+3: Yes, I've got the bottle in my bag. It's a bathroom spray with bleach. ~
+2: Please give it to the nurse. Ravi, can you open your eye for me? ~
+1: It hurts. ~
+2: I know. I'm putting numbing drops in first. ~ pause=20
+2: Now I'm going to wash it with lots of fluid. Look up, look down, it'll feel wet. ~
+1: It's cold. ~ pause=40
+2: That's it. Keep going, we need to do this for a good ten to fifteen minutes. ~
+3: Is he going to be blind? ~
+2: I don't think so, but I need to examine the eye properly once it's washed. ~
+1: Better now. ~
+2: Good. Is your vision blurred? ~ s2
+1: A little. Not too much. ~ s2
+2: Any swelling of the eyelids? ~ n2
+1: No. Eyelids are fine. ~ n2
+2: Do you take any tablets? ~ m1 h1
+3: He takes cetirizine, 10 mg, I think, maybe? For his asthma and hay fever. ~ m1 h1 u2
+2: Right. I'll note what you tell me. Pulse and oxygen for me. ~
+1: Okay. ~
+2: Pulse 86, oxygen 99 percent. ~ v pause=10
+2: I've checked the surface with a dye and a blue light. There's a patch on the surface of the eye where the cells have been damaged, mostly in the lower half. ~ x1
+3: Will it heal? ~
+2: I can't be certain yet. This could be a chemical burn of the surface, and I can't rule out deeper damage until the eye specialist has seen him. ~ d1
+3: Do we go to another hospital? ~
+2: No, the eye team is here, and I'd like them to see him now. I'll also check the acidity of the eye, the pH, to make sure it's been washed clean. ~ p1
+1: Will I be able to go home? ~
+2: Possibly after the specialist sees you. Don't rub the eye, and keep the bottle with the nurse. ~ c1
+3: Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"he got cleaning fluid in his eye","normalized_value":"Chemical splash to eye","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"burns","normalized_name":"Eye burning pain","category":"ophthalmological","duration":{"value":null,"unit":"minutes","normalized":"approximately 10 to 30 minutes"},"certainty":"uncertain","body_site":"eye"},
+  {"k":"s2","name":"blurred","normalized_name":"Mildly blurred vision","category":"ophthalmological"}],
+ "negative_findings":[{"k":"n2","finding":"swelling of the eyelids","normalized_name":"Eyelid swelling"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"asthma and hay fever","normalized_condition":"Asthma and allergic rhinitis","reported_by":"family_member"}]},
+ "medications":[{"k":"m1","name":"cetirizine","dose":"10 mg","reported_by":"family_member"}],
+ "vitals":{"k":"v","hr":86,"spo2":99},
+ "physical_examination":[{"k":"x1","finding":"a patch on the surface of the eye where the cells have been damaged","normalized_finding":"Corneal epithelial defect, inferior","body_site":"eye"}],
+ "clinical_assessment":[{"k":"d1","assessment":"chemical burn of the surface","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"check the acidity of the eye","normalized_name":"Conjunctival pH","type":"other"}],
+ "counsel":[["c1","Do not rub the eye; keep the cleaner bottle with the nurse"]],
+ "clinical_uncertainties":[{"k":"u1","type":"duration_disagreement","description":"Patient says the splash was about ten minutes ago; his relative says at least thirty minutes; summarised as 10 to 30 minutes, not confirmed.","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved"},
+  {"k":"u2","type":"uncertain_dose","description":"Relative gave the cetirizine dose tentatively (\"10 mg, I think, maybe?\").","related_entities":["medications[0]"]}],
+ "quality_checks":{"contradictions_detected":["Time since splash: patient 10 minutes vs family member 30 minutes (approximate range only)."]}}
+

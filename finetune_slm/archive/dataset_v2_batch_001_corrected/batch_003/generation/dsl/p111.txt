@@ -1,0 +1,56 @@
+## 00835 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Doctor, I'm worried. Mum's been on steroid tablets for a long time, and I've read they can thin the bones. ~ cc
+1: It's only a small dose. I've been on them for ages. ~
+2: Good questions, both of you. Mrs Rafferty, how long have you been on the prednisolone? ~ m1
+1: About five years, since the polymyalgia. ~ m1
+3: That's right, Mum, it was the year we moved. ~ m1
+2: Five years, thank you. What dose are you on? ~ m1
+1: Five milligrams, once a day. ~ m1
+2: Thank you. Any aches or pain in your back, any fractures, or loss of height? ~ s1 n1 n3
+1: No fractures. A little backache, now and then, for about two months. ~ s1 n1 u1
+3: It's six months, Mum. You were holding your back at Christmas. ~ s1 u1
+2: So two months from you and six months from your daughter. I'll record it as two to six months. ~ s1 u1
+3: She's lost height, Mum. You used to be taller than me. ~ s2
+1: I haven't. ~ n3 u2
+2: I'll record that you say no, and your daughter says yes. I'll measure you today. Any other symptoms, bruising easily, or thin skin? ~ s2 u2
+1: Bruises, yes, on my arms. ~ s3
+2: Any stomach upset, or black stools? ~ n2
+1: No. ~ n2
+2: What other conditions do you have? ~ h1 h2 h3
+3: She had polymyalgia rheumatica, which is why the steroids, high blood pressure, and an underactive thyroid. ~ h1 h2 h3
+2: Is there any family history of osteoporosis? ~ f1
+3: Her mother broke her hip at eighty. ~ f1
+2: And does she exercise, or smoke? ~ so1
+1: I walk a mile a day. I've never smoked. ~ so1
+2: Let me weigh and measure you, Mrs Rafferty. ~
+1: Go on. ~ pause=25
+2: Weight 58 kilos, and your height is 154 centimetres. In your notes it was 160, six years ago. ~ x1
+3: I told you. ~
+1: Oh. Well. ~
+2: That's a loss of six centimetres, and it's a clue that the bones in your spine may be thinning. ~ d1
+3: Can you do something? ~
+2: Yes. Long-term steroids do thin bones, and the earlier we protect them, the better. I'm going to prescribe a bone-protecting tablet, alendronic acid, 70 mg, once a week, with calcium and vitamin D. ~ m2
+1: Do I have to take more tablets? ~
+2: Yes, but only one a week for the bone one. Take it first thing, with a full glass of water, and stay upright for thirty minutes. ~ c1
+3: I'll remind her. ~
+2: I'd also like to arrange a bone density scan, and a blood test for your vitamin D and calcium. ~ p1 p2
+1: Fine. ~
+2: And walking is excellent. Keep it up. If you get sudden severe back pain, or you fall, come in the same day. ~ f1
+3: Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"Mum's been on steroid tablets for a long time, and I've read they can thin the bones","normalized_value":"Long-term steroid use and bone protection","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"backache","normalized_name":"Intermittent back ache","category":"musculoskeletal","duration":{"value":null,"unit":"months","normalized":"approximately 2 to 6 months"},"certainty":"uncertain"},
+  {"k":"s2","name":"lost height","normalized_name":"Height loss","category":"musculoskeletal","reported_by":"family_member","certainty":"disputed"},
+  {"k":"s3","name":"Bruises","normalized_name":"Easy bruising on arms","category":"dermatological","body_site":"arms"}],
+ "negative_findings":[{"k":"n1","finding":"fractures","normalized_name":"Fractures"},{"k":"n2","finding":"black stools","normalized_name":"Melaena or stomach upset"},{"k":"n3","finding":"loss of height","normalized_name":"Height loss"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"polymyalgia rheumatica","normalized_condition":"Polymyalgia rheumatica","reported_by":"family_member"},{"k":"h2","condition":"high blood pressure","normalized_condition":"Hypertension","reported_by":"family_member"},{"k":"h3","condition":"an underactive thyroid","normalized_condition":"Hypothyroidism","reported_by":"family_member"}],"family_history":[{"k":"f1","condition":"broke her hip","normalized_condition":"Hip fracture","relation":"mother","reported_by":"family_member"}],"social_history":[{"k":"so1","category":"exercise","description":"Walks a mile a day, never smoked","details":"I walk a mile a day"}]},
+ "medications":[{"k":"m1","name":"prednisolone","dose":"5 milligrams","frequency":"once a day"},{"k":"m2","name":"alendronic acid","status":"planned","reported_by":"doctor","dose":"70 mg","frequency":"once a week"}],
+ "physical_examination":[{"k":"x1","finding":"your height is 154 centimetres","normalized_finding":"Height 154 cm; 6 cm loss from 160 cm six years ago","body_site":"height"}],
+ "clinical_assessment":[{"k":"d1","assessment":"the bones in your spine may be thinning","normalized_assessment":"Possible glucocorticoid-induced osteoporosis","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"bone density scan","normalized_name":"DEXA bone density scan","type":"imaging"},{"k":"p2","name":"blood test for your vitamin D and calcium","normalized_name":"Vitamin D and calcium","type":"laboratory"}],
+ "counsel":[["c1","Take alendronic acid first thing with a full glass of water and stay upright for thirty minutes"]],
+ "follow_up":[{"k":"f1","time_reference":"If you get sudden severe back pain, or you fall","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"duration_disagreement","description":"Patient says the back ache has lasted about two months; her daughter says six months; summarised as two to six months, not confirmed.","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved"},
+  {"k":"u2","type":"conflicting_statement","description":"Patient says she has not lost height; her daughter says she has (unresolved).","related_entities":["negative_findings[2]","symptoms[1]"]}],
+ "quality_checks":{"contradictions_detected":["Duration of back ache: patient two months vs family member six months (approximate range only).","Patient denies height loss; family member reports she has lost height (unresolved)."]}}
+

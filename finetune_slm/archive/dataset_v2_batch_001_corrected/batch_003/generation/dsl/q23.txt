@@ -1,0 +1,225 @@
+## 00947 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3 CLINICAL_STAFF=4
+2: Good afternoon, Mr Doyle, Mrs Doyle. The booking says inhaler technique review. What's been happening? ~
+1: Well, the breathing, you know. Not good. A bit all over the place. ~ cc s1
+2: Can you say more? When are you breathless? ~ s1
+1: Going up the hill to the shops. Or, I don't know, sometimes sitting. ~ s1
+3: Not sitting, Tom. When you hurry. And he coughs all the time, doctor, morning mostly. ~ s2
+2: And does he wheeze? ~ s3
+3: At night, yes. I can hear it from my side of the bed. ~ s3
+2: Any chest pain? ~ n1
+1: No pain, no. ~ n1
+2: Fever? ~ n2
+1: No fever. ~ n2
+2: Coughing up blood? ~ n3
+1: No blood. ~ n3
+2: Swollen ankles? ~ n4
+3: No, his ankles are fine. ~ n4
+2: Weight loss? ~ n5
+3: No, if anything he's put on a bit. ~ n5
+2: And which inhalers do you use at the moment, Tom? ~ m1
+1: The blue one. The puffer. I can't remember what it's called. The blue one, for when I'm wheezy. ~ m1 u1
+4: It's in his bag, doctor, I can read it for you later, but I think the label's worn off. ~ u1
+2: That's fine, we'll find it on the record. Any allergies to medicines? ~ a1
+1: No allergies. ~ a1
+2: What conditions have you got? ~ h1 h2
+1: Asthma, since I was a boy. And hay fever. ~ h1 h2
+2: Any operations? ~ sg1 sg2
+1: Tonsils, as a lad. And a hernia in 2012. ~ sg1 sg2
+2: Asthma in the family? ~ f1
+1: My mother had it. ~ f1
+2: Do you smoke? ~ so1
+1: I stopped smoking ten years ago. ~ so1
+2: And what did you do for work? ~ so2
+3: He was a postman, thirty years. Retired. ~ so2
+2: Do you get out walking? ~ so3
+1: When I can. The dog needs it more than me. ~ so3
+2: Let me check you. Pulse 84, blood pressure 140 over 86, temperature 36.7, oxygen 94 percent, breathing 18, weight 80 kilos. ~ v pause=15
+3: Is the oxygen all right? ~
+2: A bit lower than I'd like, but not alarming. Let me listen. Big breaths, Tom. ~ pause=10
+1: Like this? ~
+2: I can hear wheeze on both sides, mostly when you breathe out. ~ x1
+1: That's the whistle. ~
+2: And your chest is moving well, with no signs of struggling. Your heart sounds are normal. ~ x2 x3
+3: That's good. ~
+2: Any palpitations, any trouble with your heart? ~ r1
+1: No, nothing at all. ~ r1
+2: Any heartburn or trouble swallowing? ~ r2
+1: No, nothing. I eat like a horse. ~ r2
+2: Now I'd like to see how you use the blue puffer. Priya, would you hand him the demonstration one? ~
+4: Of course. Here you are, Mr Doyle. Breathe out first, then press, and breathe in slowly. ~
+1: Like that? ~
+4: You pressed, and then you breathed in too fast, and held it for just a second. ~
+2: That's the common problem. The medicine is hitting the back of your throat instead of the lungs. ~
+3: So it's not working? ~
+2: Not as well as it could. I think the poor technique is limiting the benefit of the inhaler. ~ d1
+1: Oh dear. I've been doing it wrong for years. ~
+2: It's very common, you're not alone. I'd like to start tiotropium, 18 micrograms, once a day, from a different type of inhaler, and a budesonide inhaler, 200 micrograms, twice a day. ~ m2 m3
+3: Will he need a spacer? ~
+4: I'll show you both devices and a spacer, Mrs Doyle. They make it much easier. ~
+2: Thank you, Priya. I'd also like to arrange spirometry, to measure your breathing properly, and a chest X-ray. ~ p1 p2
+1: When? ~
+2: This month. And I'd like to see you again in four weeks to see how the new inhalers are doing. ~ f1
+3: Four weeks. We'll write it on the calendar. ~
+@@
+{"chief_complaint":{"value":"the breathing, you know. Not good","normalized_value":"Breathlessness; inhaler technique review"},
+ "symptoms":[{"k":"s1","name":"breathless","normalized_name":"Exertional breathlessness","category":"respiratory"},
+  {"k":"s2","name":"coughs all the time","normalized_name":"Chronic cough","category":"respiratory","reported_by":"family_member","frequency":"morning mostly"},
+  {"k":"s3","name":"wheeze","normalized_name":"Nocturnal wheeze","category":"respiratory","reported_by":"family_member","frequency":"At night"}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Chest pain"},{"k":"n2","finding":"Fever","normalized_name":"Fever"},{"k":"n3","finding":"Coughing up blood","normalized_name":"Haemoptysis"},{"k":"n4","finding":"Swollen ankles","normalized_name":"Ankle swelling","reported_by":"family_member"},{"k":"n5","finding":"Weight loss","normalized_name":"Weight loss","reported_by":"family_member"}],
+ "allergy_none":"a1",
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Asthma","normalized_condition":"Asthma"},{"k":"h2","condition":"hay fever","normalized_condition":"Allergic rhinitis"}],
+  "surgical_history":[{"k":"sg1","procedure":"Tonsils","normalized_procedure":"Tonsillectomy","timeframe":"as a lad"},{"k":"sg2","procedure":"hernia","normalized_procedure":"Hernia repair","timeframe":"in 2012"}],
+  "family_history":[{"k":"f1","relation":"mother","condition":"asthma"}],
+  "social_history":[{"k":"so1","category":"smoking","details":"stopped smoking ten years ago","status":"former"},{"k":"so2","category":"occupation","details":"postman, thirty years","status":"retired","reported_by":"family_member"},{"k":"so3","category":"exercise","details":"Do you get out walking"}]},
+ "medications":[{"k":"m1","name":"The blue one","normalized_name":null,"generic_name":null,"indication":"for when I'm wheezy"},{"k":"m2","name":"tiotropium","dose":"18 micrograms","frequency":"once a day","status":"planned","reported_by":"doctor"},{"k":"m3","name":"budesonide","dose":"200 micrograms","frequency":"twice a day","status":"planned","reported_by":"doctor"}],
+ "vitals":{"k":"v","by":"doctor","bp":"140/86","hr":84,"temp":36.7,"spo2":94,"rr":18,"wt":80},
+ "physical_examination":[{"k":"x1","finding":"wheeze on both sides, mostly when you breathe out","normalized_finding":"Bilateral expiratory wheeze","body_site":"chest"},{"k":"x2","finding":"chest is moving well","normalized_finding":"Good chest expansion without respiratory distress","body_site":"chest"},{"k":"x3","finding":"heart sounds are normal","normalized_finding":"Normal heart sounds","body_site":"chest"}],
+ "review_of_systems":[{"k":"r1","system":"cardiovascular"},{"k":"r2","system":"gastrointestinal"}],
+ "clinical_assessment":[{"k":"d1","assessment":"the poor technique is limiting the benefit of the inhaler","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"spirometry","normalized_name":"Spirometry","type":"other"},{"k":"p2","name":"chest X-ray","normalized_name":"Chest X-ray","type":"imaging"}],
+ "follow_up":[{"k":"f1","time_reference":"in four weeks"}],
+ "clinical_uncertainties":[{"type":"incomplete_medication_name","description":"The patient cannot name his blue inhaler and the label is worn off.","related_entities":["medications[0]"],"k":"u1"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":["medications[0]"]}}
+
+## 00948 PATIENT=1 DOCTOR=2
+1: G'day. Both my wrists are swollen and sore, and I can't say I've got much of an idea why. ~ cc s1
+2: Thanks for coming. When did the swelling begin? ~ s1
+1: Hard to say, mate. A while back. Couldn't tell you if it was the footy season or after. ~ s1 u1
+2: What's it like day to day? ~
+1: Sore in the morning, a bit better by lunch. I can still work. ~
+2: Has anything made it better or worse? ~
+1: Hot showers help. Typing on the laptop makes it worse. ~
+2: Tell me about your general health. Anything long-term? ~ h1
+1: Psoriasis, on my elbows. Had it since I was a teenager. ~ h1
+2: Interesting. That matters here. Does it flare when the joints are bad? ~
+1: Hard to say. Maybe a bit. ~
+2: Let me explain what I think is going on. Joints are lined with a thin membrane. When it gets inflamed, it swells and hurts, and it's often worse in the morning. ~
+1: Right. And that's what I've got? ~
+2: It's what the pattern suggests, particularly with your psoriasis. I think this could be an inflammatory arthritis. ~ d1
+1: Arthritis. At my age. ~
+2: It can happen at any age, and it responds well to treatment. ~
+1: What do I do in the meantime? ~
+2: Wear a wrist splint at night, to rest the joints. You can buy one from the pharmacy. ~ c1
+1: Will that help? ~
+2: It usually does. Also take regular breaks from typing, and stretch your wrists every hour. ~ c2
+1: I can do that. ~
+2: Heat, like your hot showers, is a good idea. Keep doing that. ~
+1: Good. ~
+2: Is there anything you're worried about? ~
+1: Just whether I'll still be able to work. ~
+2: Most people carry on working, with some adjustments. ~
+1: That's a relief. ~
+2: Let me repeat the plan. Splints at night, breaks from typing, heat in the morning. ~
+1: Got it. ~
+2: If the swelling isn't gone in two weeks, come back and see me. ~ f1
+1: Two weeks. Righto. ~
+2: Good. Take care. ~
+1: Thanks, doctor. ~
+@@
+{"chief_complaint":{"value":"Both my wrists are swollen and sore","normalized_value":"Bilateral wrist swelling and pain"},
+ "symptoms":[{"k":"s1","name":"wrists are swollen and sore","normalized_name":"Bilateral wrist swelling and pain","category":"musculoskeletal","body_site":"both wrists","certainty":"uncertain"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Psoriasis","normalized_condition":"Psoriasis"}]},
+ "clinical_assessment":[{"k":"d1","assessment":"an inflammatory arthritis","certainty":"provisional"}],
+ "counsel":[["c1","Wear a wrist splint at night"],["c2","Take regular breaks from typing and stretch the wrists every hour"]],
+ "follow_up":[{"k":"f1","time_reference":"if the swelling isn't gone in two weeks","status":"conditional"}],
+ "clinical_uncertainties":[{"type":"date_uncertain","description":"The patient cannot say when the wrist swelling began.","related_entities":["symptoms[0]"],"k":"u1"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00949 PATIENT=1 DOCTOR=2
+1: Doctor, I'm having a hernia repair next month, and the surgeon wants a heart check first, and I'm a bit nervous about it, honestly. ~ cc
+2: That's perfectly normal before an operation. Tell me about your heart. Any problems that you've noticed? ~
+1: I get a bit puffed on the stairs. Two flights and I'm blowing. ~ s1
+2: How long has that been the case? ~
+1: A while now. Since I put on weight, I'd say. ~
+2: Any chest pain on exertion? ~ n1
+1: No chest pain. Not at all. ~ n1
+2: Palpitations? ~ n2
+1: No palpitations. ~ n2
+2: Have you fainted, or nearly fainted? ~ n3
+1: Never fainted, no. ~ n3
+2: What tablets are you taking? ~ m1 m2 m3
+1: Ramipril, 5 mg, once a day. Atorvastatin, 20 mg, at night. And aspirin, 75 mg, in the morning. ~ m1 m2 m3
+2: Good. Any heart history? ~ h1
+1: High blood pressure. For ten years. ~ h1
+2: Any procedures on your heart? ~ sg1
+1: They put in a stent, in 2020. ~ sg1
+2: Right. Let me take your numbers. Pulse 66, blood pressure 132 over 80, temperature 36.5, oxygen 97 percent, breathing 14, and weight 97 kilos. ~ v pause=15
+1: Is that all right? ~
+2: All fine. Let me listen to your heart. ~ pause=10
+1: Take your time. ~
+2: Heart sounds are normal, regular rhythm. ~ x1
+1: Does that mean I'm okay for the surgery? ~
+2: I can't promise that yet. The breathlessness on the stairs could simply be weight and fitness, but I can't rule out that it's coming from the heart. ~ d1
+1: Oh. That's not what I wanted to hear. ~
+2: I know. But it's better to know before the operation than after. ~
+1: True. What happens now? ~
+2: I'll write to the surgeon with what I've found today and ask them to hold the date until I've seen you again. ~
+1: Will it delay the surgery? ~
+2: Possibly by a short time. It's much safer than rushing. ~
+1: I suppose so. ~
+2: In the meantime, keep taking all your tablets, including the aspirin, and keep walking each day. ~ c1
+1: Okay. ~
+2: I'd like to see you again in two weeks, before the date. ~ f1
+1: Two weeks. Thanks, doctor. ~
+2: Don't worry. You're in good hands. ~
+1: I hope so. ~
+@@
+{"chief_complaint":{"value":"a hernia repair next month, and the surgeon wants a heart check first","normalized_value":"Pre-operative cardiac assessment for hernia repair"},
+ "symptoms":[{"k":"s1","name":"puffed on the stairs","normalized_name":"Exertional breathlessness","category":"respiratory"}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Chest pain"},{"k":"n2","finding":"palpitations","normalized_name":"Palpitations"},{"k":"n3","finding":"fainted","normalized_name":"Syncope"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension"}],
+  "surgical_history":[{"k":"sg1","procedure":"stent","normalized_procedure":"Coronary stent","timeframe":"in 2020"}]},
+ "medications":[{"k":"m1","name":"Ramipril","dose":"5 mg","frequency":"once a day"},{"k":"m2","name":"Atorvastatin","dose":"20 mg","frequency":"at night"},{"k":"m3","name":"aspirin","dose":"75 mg","frequency":"in the morning"}],
+ "vitals":{"k":"v","by":"doctor","bp":"132/80","hr":66,"temp":36.5,"spo2":97,"rr":14,"wt":97},
+ "physical_examination":[{"k":"x1","finding":"Heart sounds are normal, regular rhythm","normalized_finding":"Normal heart sounds, regular rhythm","body_site":"chest"}],
+ "clinical_assessment":[{"k":"d1","assessment":"it's coming from the heart","certainty":"differential"}],
+ "counsel":[["c1","Keep taking all tablets including aspirin and keep walking each day"]],
+ "follow_up":[{"k":"f1","time_reference":"in two weeks"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00950 PATIENT=1 DOCTOR=2 CAREGIVER=3
+3: Morning, doctor. This is Ellie, she's three. I'm her childminder, Becca, her mum asked me to bring her in, and I've written everything down. She's had a fever for two days. ~ cc s1
+2: Thank you, Becca. A fever for two days. How high has it been? ~ s1
+3: Thirty-eight point five at its highest, last night. This morning thirty-eight point two. ~
+2: Ellie, hello. Can you tell me if your tummy hurts? ~ n1
+1: No tummy! ~ n1 c1x
+3: She was clutching her tummy at lunch yesterday, doctor. She curled up on the sofa and held it. ~ s2 c1x
+2: I'll write down what you both say. Ellie, you say no tummy, Becca says tummy yesterday. Any rash, Becca? ~ n2
+3: No rash. I checked her all over at bath time. ~ n2
+2: What have you been giving her for the fever? ~ m1 m2
+3: Paracetamol syrup, 5 ml, every six hours. And ibuprofen syrup, 5 ml, in between, as her mum said. ~ m1 m2
+2: That's fine. Any history I should know about? ~ h1
+3: She's got eczema, mild. ~ h1
+2: Let me take her numbers. Ellie, can I put this little clip on your finger? ~ pause=10
+1: Finger! ~
+2: Temperature 38.4, pulse 130, and weight 13 kilos. ~ v pause=10
+3: Is that high? ~
+2: The pulse is quick, which is expected with a fever. Becca, any cough or runny nose? ~ r1
+3: No, nothing like that, her chest has been clear. ~ r1
+2: Is she drinking? ~
+3: Yes, she's had milk and juice, she's weeing normally. ~
+2: Is she playing? ~
+3: In bursts. Then she flops. ~
+2: That's a good sign that she's perking up in between. Ellie, you're being very brave. ~
+1: Bye-bye, doctor. ~
+2: Not yet, sweetheart. Becca, I don't want to label this today. I'd like to watch her. ~
+3: What should I watch for? ~
+2: Keep giving the fluids and keep the paracetamol and ibuprofen going as you have been. ~ c1
+3: Okay. ~
+2: If she stops drinking, has a rash, or seems very sleepy, ring us or go to the emergency department right away. ~ c2
+3: I will. ~
+2: I'd like to see her again tomorrow. ~ f1
+3: Tomorrow, yes. I'll let her mum know. ~
+@@
+{"chief_complaint":{"value":"She's had a fever for two days","normalized_value":"Fever for two days in a toddler","reported_by":"caregiver"},
+ "symptoms":[{"k":"s1","name":"fever","normalized_name":"Fever","category":"constitutional","reported_by":"caregiver","duration":{"value":2,"unit":"days","normalized":"2 days"}},
+  {"k":"s2","name":"clutching her tummy","normalized_name":"Abdominal pain","category":"gastrointestinal","reported_by":"caregiver","certainty":"disputed"}],
+ "negative_findings":[{"k":"n1","finding":"tummy hurts","normalized_name":"Abdominal pain"},{"k":"n2","finding":"rash","normalized_name":"Rash","reported_by":"caregiver"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"eczema","normalized_condition":"Eczema","reported_by":"caregiver"}]},
+ "medications":[{"k":"m1","name":"Paracetamol syrup","normalized_name":"Paracetamol","generic_name":"Paracetamol","dose":"5 ml","frequency":"every six hours","reported_by":"caregiver"},{"k":"m2","name":"ibuprofen syrup","normalized_name":"Ibuprofen","generic_name":"Ibuprofen","dose":"5 ml","frequency":"in between","reported_by":"caregiver"}],
+ "vitals":{"k":"v","by":"doctor","temp":38.4,"hr":130,"wt":13},
+ "review_of_systems":[{"k":"r1","system":"respiratory","reported_by":"caregiver"}],
+ "counsel":[["c1","Keep giving fluids and continue paracetamol and ibuprofen"],["c2","Ring or go to the emergency department if she stops drinking, has a rash or is very sleepy"]],
+ "follow_up":[{"k":"f1","time_reference":"tomorrow"}],
+ "clinical_uncertainties":[{"type":"conflicting_statement","description":"The child says her tummy does not hurt while her childminder says she was clutching it yesterday.","related_entities":["negative_findings[0]","symptoms[1]"],"k":"c1x"}],
+ "quality_checks":{"contradictions_detected":["Patient denies tummy pain; childminder reports she clutched her tummy yesterday (unresolved)."],"ambiguous_entities":[]}}

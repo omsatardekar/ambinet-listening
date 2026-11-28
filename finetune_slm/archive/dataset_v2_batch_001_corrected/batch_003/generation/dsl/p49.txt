@@ -1,0 +1,96 @@
+## 00721 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3 CLINICAL_STAFF=4
+4: Mr Webb? Come this way, I'll take your blood pressure and pulse before the doctor. ~
+1: Right. Quick as you can, I've left my car on a meter. ~
+4: 138 over 84, pulse 78. ~ v pause=15
+2: Hello, Mr Webb, and I see you've brought your daughter. Tell me what's going on. ~
+3: Dad won't make a fuss, so I'm going to. His bowels have changed, doctor. He's sixty, and he's been going more often. ~ cc s1
+1: It's nothing, I've had a funny tummy, that's all. ~
+2: Mr Webb, how long has this been? ~ s1
+1: Two months. Perhaps three. ~ s1
+2: How has it changed? ~ s1
+1: Looser. More often, three or four times a day instead of once. And I get this urgency, I have to run. ~ s1 s2
+2: Any blood in the stool? ~ n1
+1: No. No blood. ~ n1
+2: Any weight loss? ~ n2
+1: Not that I've noticed. ~ n2
+3: He's lost weight, doctor, his trousers are loose. ~ n2
+2: I'll weigh him, and I'll note that you each said different things. What tablets are you on? ~ m1 m2 u1
+1: Ramipril, 5 mg once a day. And a statin, simvastatin, 20 mg, at night. ~ m1 m2 u1
+3: He forgets the statin most nights, doctor. ~ m2 u1
+1: I don't forget it, I choose not to. ~ m2 u1
+2: Okay, noted that. Any allergies? ~ a1
+1: No allergies. ~ a1
+2: Medical history? ~ h1 h2 h3
+1: High blood pressure, high cholesterol, and I had a bit of gout once. ~ h1 h2 h3
+2: Do you smoke or drink? ~ so1 so2
+1: Smoked until the nineties. And a pint with my tea on Fridays. ~ so1 so2
+2: Right. A change in bowel habit over sixty, with possible weight loss, needs checking properly, even if it turns out to be nothing. ~
+1: I knew you'd say that. ~
+2: I'd like to arrange a stool test, called a FIT test, to look for hidden blood. ~ p1
+3: And a scan? ~
+2: And I'd like to refer him for a colonoscopy, a camera test of the bowel, which is the best way to look. ~ p2
+1: A camera up there? ~
+2: Under sedation. It's the best test, and it's very common. ~
+4: I'll book the stool kit for you, Mr Webb, and give you the leaflet. ~
+2: Please drink plenty, and note your toilet habits for me in a little diary. ~ c1
+1: A diary of my bowels. Lovely. ~
+3: I'll help you, Dad. ~
+@@
+{"chief_complaint":{"value":"His bowels have changed","normalized_value":"Change in bowel habit","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"going more often","normalized_name":"Increased bowel frequency with loose stools","category":"gastrointestinal","reported_by":"family_member","duration":{"value":2,"unit":"months","normalized":"2 months"}},
+  {"k":"s2","name":"urgency","normalized_name":"Bowel urgency","category":"gastrointestinal"}],
+ "negative_findings":[{"k":"n1","finding":"blood","normalized_name":"Blood in stool"},{"k":"n2","finding":"weight loss","normalized_name":"Weight loss"},{"k":"a1","finding":"allergies","normalized_name":"No known allergies"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension"},{"k":"h2","condition":"high cholesterol","normalized_condition":"Hypercholesterolaemia"},{"k":"h3","condition":"gout","normalized_condition":"Gout"}],
+  "social_history":[{"k":"so1","category":"smoking","description":"Former smoker","status":"former","details":"Smoked until the nineties"},{"k":"so2","category":"alcohol","description":"Weekly pint","details":"a pint with my tea on Fridays"}]},
+ "medications":[{"k":"m1","name":"Ramipril","dose":"5 mg","frequency":"once a day"},{"k":"m2","name":"simvastatin","dose":"20 mg","frequency":"at night"}],
+ "vitals":{"k":"v","by":"clinical_staff","bp":"138/84","hr":78},
+ "procedures_and_investigations":[{"k":"p1","name":"stool test","normalized_name":"Faecal immunochemical test","type":"laboratory"},{"k":"p2","name":"colonoscopy","normalized_name":"Colonoscopy","type":"other"}],
+ "counsel":[["c1","Drink plenty and keep a bowel diary"]],
+ "clinical_uncertainties":[{"k":"u1","type":"adherence_uncertain","description":"Simvastatin is prescribed at night; his daughter says he forgets it most nights, the patient says he chooses not to take it; actual adherence unknown.","related_entities":["medications[1]"]}]}
+
+## 00723 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+1: Hello, doctor! I've brought my son Rohan with me because he keeps me right on dates. I'm Mr Kapoor. ~
+3: Hi, doctor. Dad's been constipated since the iron tablets. ~ cc s1
+2: Pleased to meet you both. Mr Kapoor, when did the constipation start? ~ s1 u1
+1: Oh, a month ago, six weeks, I really can't say, it crept up. ~ s1 u1
+3: It's been two months, Dad, since they started the iron. ~ s1 u1
+2: So between one and two months, we'll say. How often do you go to the toilet now? ~ s1 u1
+1: Every three or four days. And it's hard. Pellets, like a rabbit. ~ s1
+2: Tell me about your medicines. ~ m1 m2 h1 h2
+1: Ferrous sulphate, 200 mg, twice a day, for my anaemia. And metformin, 500 mg, twice a day, for my diabetes. ~ m1 m2 h1 h2
+2: That fits. Iron is a very common cause of constipation. Do you have any family history of bowel problems? ~ f1
+3: His brother had bowel polyps, doctor. Removed, about ten years ago. ~ f1
+2: Thank you. And what do you eat, any fibre in your diet? ~ so1
+1: Rice, dal, a bit of chapatti. Not much fruit. I don't like it. ~ so1
+2: Let me feel your tummy. ~ pause=15
+2: Your tummy is soft, and I can feel some firm stool in the left lower side. Pulse is 72, blood pressure 130 over 82. ~ x1 v
+3: Is it serious? ~
+2: Not usually, but because you're anaemic, and your brother had polyps, I'd like to look into why you needed the iron in the first place. ~
+1: The iron was for tiredness. They found my blood low. ~
+2: Yes, but not why it was low. I'd like to arrange a blood test, to see how the iron is responding, and I'll check on a bowel referral. ~ p1
+3: Can the iron be changed, so he's not blocked up? ~
+2: Yes, we can try one tablet a day, or every other day, which is gentler. Take it with orange juice for absorption. ~ c1
+1: Every other day. All right. ~
+2: And a stool softener, plus more fibre, prunes, brown bread, and plenty of water. ~ c2
+1: Prunes! My wife will be thrilled. ~
+3: Will a lower dose of iron still work? ~
+2: Yes, it replaces your stores more slowly, but it works, and you'll tolerate it better. ~
+1: And how long until I'm not tired? ~
+2: A few weeks, and the blood count will tell us how it's going. ~
+2: I'd like to see you again in four weeks, with the blood results. ~ f2
+3: We'll be there. ~
+@@
+{"chief_complaint":{"value":"Dad's been constipated since the iron tablets","normalized_value":"Constipation after starting iron tablets","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"constipated","normalized_name":"Constipation","category":"gastrointestinal","duration":{"value":null,"unit":"months","normalized":"approximately 1 to 2 months"},"certainty":"uncertain","frequency":"Every three or four days"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"anaemia","normalized_condition":"Anaemia"},{"k":"h2","condition":"diabetes","normalized_condition":"Diabetes mellitus"}],
+  "family_history":[{"k":"f1","condition":"bowel polyps","normalized_condition":"Colonic polyps","relation":"brother","reported_by":"family_member"}],
+  "social_history":[{"k":"so1","category":"diet","description":"Low fibre, little fruit","details":"Not much fruit"}]},
+ "medications":[{"k":"m1","name":"Ferrous sulphate","dose":"200 mg","frequency":"twice a day","indication":"anaemia"},{"k":"m2","name":"metformin","dose":"500 mg","frequency":"twice a day","indication":"diabetes"}],
+ "vitals":{"k":"v","hr":72,"bp":"130/82"},
+ "physical_examination":[{"k":"x1","finding":"firm stool in the left lower side","normalized_finding":"Palpable faecal loading in left iliac fossa","body_site":"left lower abdomen"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood test","normalized_name":"Full blood count and iron studies","type":"laboratory"}],
+ "counsel":[["c1","Take iron once daily or on alternate days with orange juice"],["c2","Increase fibre and fluids"]],
+ "follow_up":[{"k":"f2","time_reference":"in four weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"duration_disagreement","description":"Patient says the constipation began a month or six weeks ago and cannot be sure; his son says two months; summarised as one to two months, not confirmed.","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved"}],
+ "quality_checks":{"contradictions_detected":["Duration of constipation: patient a month to six weeks vs family member two months (approximate range only)."]}}
+

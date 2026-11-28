@@ -1,0 +1,54 @@
+## 00922 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3 CAREGIVER=4
+3: Doctor, it's our son Rohan, he's three months old. He spits up after every single feed, and I'm worried he isn't keeping enough down. ~ cc s1
+1: Waaah. ~
+2: Hello, little man. Thank you both for bringing him. Let me hear it from you first, Mum. How often does he spit up? ~ s1
+3: After every feed, doctor. Every single one. ~ s1 u1
+4: That's not right. It's not every feed. Maybe one or two a day, and it's only a little. ~ n1 u1
+3: It is every feed, I do the night ones, you're asleep. ~ s1 u1
+2: I'll note that you remember it differently, and we'll see how he looks. Is he feeding well otherwise? ~ s1 u1
+3: He's hungry all the time. He takes about ninety millilitres, or maybe a hundred and twenty, I'm not sure. I don't measure carefully. ~
+2: That's helpful. Is he bottle-fed or breast-fed? ~
+3: Formula only. We changed formula last month. ~
+2: Why did you change it? ~ a1
+3: My sister says he's allergic to cow's milk formula, but I don't know what the reaction was. ~ a1
+2: Thank you. I'll note that. Is he vomiting forcefully, or is it just milk coming up? ~
+3: Just milk dribbling out, mostly. ~
+2: Is there any green or bloody vomit, or a swollen tummy? ~ n2
+3: No. None of that. ~ n2
+2: Has he had any fever, or diarrhoea? ~
+4: No, nothing like that. ~
+2: What have you been giving him, if anything? ~ m1
+3: Colic drops, five drops with each feed, I think. ~ m1 u2
+4: She gives them, but I forget half the time when I do the evening feed. ~ m1 u3
+2: Thank you for being honest. I'll weigh him and check his temperature. ~
+3: He's been gaining, the health visitor said so. ~
+2: Weight 6.2 kilograms, temperature 36.7. ~ v pause=15
+3: Is that good? ~
+2: That's a healthy weight for three months. Let me feel his tummy and look at him. ~
+3: Of course. ~ pause=14
+2: His tummy is soft, no lumps, and he looks well. ~ x1
+4: So he's fine? ~
+2: He seems well, and growing well. This sounds like reflux, which is very common at this age, and he's not showing any warning signs. ~ d1
+3: What can we do? ~
+2: I'd like to start a sachet of infant Gaviscon, one sachet with each feed, mixed in the milk. ~ m2
+3: And the drops? ~
+2: We can stop those for now. Keep him upright for twenty minutes after each feed, and try smaller, more frequent feeds. ~ c1
+4: I'll do the evening ones properly. ~
+2: Come back in three weeks, or sooner if he vomits forcefully, goes green, or stops feeding. ~ f1
+3: We will. Thank you. ~
+@@
+{"chief_complaint":{"value":"He spits up after every single feed","normalized_value":"Infant regurgitation after feeds","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"spits up","normalized_name":"Regurgitation after feeds","category":"gastrointestinal","reported_by":"family_member","certainty":"disputed"}],
+ "negative_findings":[{"k":"n1","finding":"not every feed","normalized_name":"Regurgitation after every feed","reported_by":"caregiver"},{"k":"n2","finding":"None of that","normalized_name":"Green or bloody vomit or abdominal distension","reported_by":"family_member"}],
+ "medications":[{"k":"m1","name":"Colic drops","normalized_name":"Colic drops (unspecified)","generic_name":null,"dose":"five drops","frequency":"with each feed","reported_by":"family_member"},{"k":"m2","name":"Gaviscon","status":"planned","reported_by":"doctor","dose":"one sachet","frequency":"with each feed"}],
+ "allergies":[{"k":"a1","substance":"cow's milk formula","allergy_type":"food","reaction":null,"status":"reported","reported_by":"family_member"}],
+ "vitals":{"k":"v","temp":36.7,"wt":6.2},
+ "physical_examination":[{"k":"x1","finding":"tummy is soft, no lumps","normalized_finding":"Soft abdomen, no mass","body_site":"abdomen"}],
+ "clinical_assessment":[{"k":"d1","assessment":"reflux","certainty":"provisional"}],
+ "counsel":[["c1","Keep upright for twenty minutes after each feed and give smaller, more frequent feeds"]],
+ "follow_up":[{"k":"f1","time_reference":"in three weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"conflicting_statement","description":"Mother says he spits up after every feed; father says only once or twice a day (unresolved).","related_entities":["negative_findings[0]","symptoms[0]"]},
+  {"k":"u2","type":"uncertain_dose","description":"Mother gave the colic drop dose tentatively (\"five drops with each feed, I think\").","related_entities":["medications[0]"]},
+  {"k":"u3","type":"adherence_uncertain","description":"Mother reports giving colic drops with each feed; father says he forgets half the time at evening feeds.","related_entities":["medications[0]"]}],
+ "quality_checks":{"contradictions_detected":["Frequency of spitting up: mother after every feed vs father one or two a day (unresolved)."]}}
+

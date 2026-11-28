@@ -1,0 +1,97 @@
+## 00680 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Doctor, hello. Sorry, it is my son Arjun, he is limping, I think, since a few days. ~ cc s1
+2: Hello Arjun, hello Mrs Menon. Arjun, you're seven, is that right? ~
+1: Seven and a half. ~
+2: Seven and a half. Arjun, when did your leg start to hurt? ~ s1 u1
+1: Yesterday. One day. ~ s1 u1
+3: No, no, beta. It is three days, since Saturday. You told me on Saturday evening. ~ s1 u1
+2: So Arjun says one day, and Mum says three days. I'll write down one to three days for now. Arjun, where does it hurt? ~ s1 u1 s2
+1: Here. My knee. And this side. ~ s2
+2: Does it hurt when you stand on it, or all the time? ~ s2
+1: When I walk. Not when I sit. ~ s2
+2: Did you fall, or hurt it playing football or at school? ~ n1
+3: No, he didn't say anything about a fall. The teacher didn't tell us either. ~ n1
+2: Has he had any fever, been feeling hot or unwell? ~ n2
+3: No fever, no. He's eating, he's playing, only he walks funny. ~ n2
+2: Does Arjun take any medicines? ~ m1 m2
+3: The montelukast for his asthma, 5 mg at night, every day. And I gave ibuprofen, 5 ml, only last night when he was crying. ~ m1 m2
+2: Right. And what other health problems has he had? ~ h1 h2
+3: Asthma since he was three, and eczema, on the elbows. ~ h1 h2
+2: Does he have any allergies? ~ a1
+3: Peanuts. He gets hives and his lips swell. ~ a1
+2: Thank you, that's very important. Arjun, I'm going to look at how you walk. Can you walk to the door and back? ~
+1: Okay. ~ pause=20
+2: He's limping on the right side, he spends less time on the right leg, and the hip moves fully in all directions, with no pain when I move it. ~ x1
+3: Is it his hip? ~
+2: The hip moves well, which is reassuring. The knee isn't swollen and isn't hot. I can't see a clear cause today, and I don't want to put a name on it yet. ~
+3: What should we do? ~
+2: Rest from sports for a few days, and let him walk as he feels able. You can give the ibuprofen if he's sore, with food. ~ c1
+3: He loves football, he will complain. ~
+2: A few days off won't hurt him. Is he sleeping well, is the pain waking him? ~
+3: No, he sleeps through. ~
+2: Good. I'd like to see him again in three days, to check how he's walking. ~ f1
+3: Three days, fine. And if it gets worse? ~
+2: If he gets a fever, can't put weight on the leg at all, or the knee swells up, bring him straight in. ~ c2
+3: I will. Thank you, doctor. ~
+1: Bye, doctor. ~
+@@
+{"chief_complaint":{"value":"he is limping","normalized_value":"Limp","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"limping","normalized_name":"Limp","category":"musculoskeletal","reported_by":"family_member","duration":{"value":null,"unit":"days","normalized":"approximately 1 to 3 days"},"certainty":"uncertain"},
+  {"k":"s2","name":"My knee","normalized_name":"Right knee pain on walking","category":"musculoskeletal","body_site":"right knee","aggravating_factors":["When I walk"]}],
+ "negative_findings":[{"k":"n1","finding":"fall","normalized_name":"Recent fall or injury","reported_by":"family_member"},{"k":"n2","finding":"fever","normalized_name":"Fever","reported_by":"family_member"}],
+ "allergies":[{"k":"a1","substance":"Peanuts","allergy_type":"food","reaction":"hives","reported_by":"family_member"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Asthma","normalized_condition":"Asthma","reported_by":"family_member"},{"k":"h2","condition":"eczema","normalized_condition":"Eczema","reported_by":"family_member"}]},
+ "medications":[{"k":"m1","name":"montelukast","dose":"5 mg","frequency":"at night","indication":"asthma","reported_by":"family_member"},{"k":"m2","name":"ibuprofen","dose":"5 ml","reported_by":"family_member"}],
+ "physical_examination":[{"k":"x1","finding":"limping on the right side","normalized_finding":"Right-sided antalgic gait with full hip movement","body_site":"right leg"}],
+ "counsel":[["c1","Rest from sports for a few days; ibuprofen with food if sore"],["c2","Safety-net: bring back if fever, cannot weight bear or knee swells"]],
+ "follow_up":[{"k":"f1","time_reference":"in three days"}],
+ "clinical_uncertainties":[{"k":"u1","type":"duration_disagreement","description":"Child says the limp began one day ago; his mother says three days; summarised as one to three days, not confirmed.","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved"}],
+ "quality_checks":{"contradictions_detected":["Duration of limp: patient one day vs family member three days (approximate range only)."]}}
+
+## 00681 PATIENT=1 DOCTOR=2 NURSE=3 CLINICAL_STAFF=4
+4: Mr Okonkwo, is it? I've got your discharge letter from the hospital here, and I've updated your phone number. ~
+1: That's right, though I've told you lot three times, I'm Christopher, not Chris, but never mind. Oh, and the hospital lost my glasses, did they tell you? ~
+3: I'm Nurse Ruth, Mr Okonkwo. I'll bring you through. The doctor's got your letter. ~
+2: Take a seat, Christopher. I'm Dr Banerjee. You were in for pneumonia, I see. How are you feeling now? ~ cc
+1: Better, much better, thank you. The food in there, though, honestly, a week of chicken that tasted of nothing. ~
+2: Hospital food, yes. Any cough left? ~ s1
+1: A little, yes, in the morning. A dry one. It's much better than it was. ~ s1
+2: And your energy? ~ s2
+1: Tired, I still get tired by three o'clock. I was at the gym four times a week and now I can barely make the shops. ~ s2
+2: Understandable, that takes weeks. Any fever since you came home? ~ n1
+1: No, no temperature, I've been checking. ~ n1
+2: Any breathlessness, even on the stairs? ~ n2
+1: Not really. A bit on the hill, but not on the stairs. ~ n2
+2: Any chest pain? ~ n3
+1: No, none whatsoever. ~ n3
+2: Are you still on antibiotics? ~ m1 u1
+1: Yes, the last few days. Clarithromycin, maybe 500 mg? Twice a day. Honestly I'd have to look at the box, my daughter sorts them out. ~ m1 u1
+3: Your letter says the course ends on Friday, Mr Okonkwo. ~ m1
+2: Good, finish it. And do you smoke? ~ so1
+1: I gave it up when I went into hospital. Twenty a day, for thirty years, and I haven't touched one since. ~ so1
+2: That's a big change, well done. How are you managing the cravings? ~
+1: Terrible, honestly, but my daughter hid my lighter. ~
+2: Keep that up. Smoking is the main thing that will help your lungs now. ~
+1: I know. She says that every day. ~
+4: Doctor, shall I book his follow-up appointment? ~
+2: Yes please, Joy. Christopher, I'd like to arrange a repeat chest X-ray in six weeks, to be sure the pneumonia has cleared completely. ~ p1
+1: Six weeks. Is that normal, to repeat it? ~
+2: Yes, in people over fifty who smoked, we always check, to make sure nothing else is hiding behind the infection. ~
+1: I see. Right. ~
+2: Keep drinking plenty, build up walking gradually, and rest when you need to. ~ c1
+1: I'll try, though the stairs at home are a trial. ~
+2: And I'd like to see you again in six weeks with the X-ray. ~ f1
+4: I'll put it in for you, Mr Okonkwo, after you've seen the nurse. ~
+1: Thank you all. And if you find my glasses, tell the hospital they're brown. ~
+@@
+{"chief_complaint":{"value":"You were in for pneumonia","normalized_value":"Post-pneumonia check after hospital discharge","reported_by":"doctor"},
+ "symptoms":[{"k":"s1","name":"cough","normalized_name":"Dry cough","category":"respiratory","onset":"in the morning"},
+  {"k":"s2","name":"Tired","normalized_name":"Fatigue","category":"constitutional","aggravating_factors":["three o'clock"]}],
+ "negative_findings":[{"k":"n1","finding":"temperature","normalized_name":"Fever"},{"k":"n2","finding":"breathlessness","normalized_name":"Breathlessness at rest or on stairs"},{"k":"n3","finding":"chest pain","normalized_name":"Chest pain"}],
+ "medical_history":{"social_history":[{"k":"so1","category":"smoking","description":"Former smoker, stopped on admission","status":"former","details":"gave it up when I went into hospital"}]},
+ "medications":[{"k":"m1","name":"Clarithromycin","dose":"500 mg","frequency":"twice a day"}],
+ "procedures_and_investigations":[{"k":"p1","name":"repeat chest X-ray","normalized_name":"Chest X-ray","type":"imaging"}],
+ "counsel":[["c1","Drink plenty, build up walking gradually and rest when needed"]],
+ "follow_up":[{"k":"f1","time_reference":"in six weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"uncertain_dose","description":"Patient gave the clarithromycin dose tentatively (\"maybe 500 mg\") and would need to check the box.","related_entities":["medications[0]"]}]}
+

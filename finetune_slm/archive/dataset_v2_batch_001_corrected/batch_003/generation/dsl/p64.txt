@@ -1,0 +1,53 @@
+## 00774 PATIENT=1 DOCTOR=2
+1: Hello, doctor. It's the whiplash, from the car crash in the summer. I'm better but not right, if you know what I mean. ~ cc s1
+2: Tell me how it is now. ~ s1
+1: My neck's stiff, especially in the mornings, and I get a pain across my shoulders by the afternoon. Worse after driving. ~ s1 s2
+2: How long is it since the accident? ~
+1: Four months. It was better at two months, then it plateaued. ~
+2: Is the pain going down your arms, any numbness or tingling? ~ n1
+1: No, nothing in my arms. No tingling. ~ n1
+2: What are you using for the pain? ~ m1 m2 u1 u2
+1: Naproxen, 250 mg, twice a day, maybe? And paracetamol, 1 gram, but I only take that when it's bad, so not every day. ~ m1 m2 u1 u2
+2: Right. So 250 mg twice a day, as you recall it, and the paracetamol only when it's bad. Remind me of your history. ~ m1 m2 u1 u2 h1 h2 h3
+1: High blood pressure, a stomach ulcer, years ago, and my back's not great. Slipped disc. ~ h1 h2 h3
+2: Have you had any operations? ~ sg1
+1: An operation on my lower back, a discectomy, in 2014. ~ sg1
+2: Are you working? ~ so1
+1: Yes, I'm a delivery driver. Hours in the van. ~ so1
+2: Let me look at your neck. Sit on the couch. ~
+1: Okay. ~ pause=18
+2: Tender over the muscles on both sides of the neck, tight and knotted in the upper shoulder muscles, and the movement is limited when you look over your shoulder. ~ x1 x2
+1: Is that normal for four months on? ~
+2: It's common. Whiplash can take months to settle, and the muscles tighten and guard. I'd say this is a persisting whiplash strain. ~ d1
+1: Will it ever clear? ~
+2: Most people recover, usually by six months, but you need to keep the neck moving. ~
+1: I've been scared to. ~
+2: I understand. Gentle exercises and physiotherapy help most. I'd like to arrange a referral for physio. ~ r1
+1: When? ~
+2: A few weeks. Meanwhile, I'd like to arrange an X-ray of the neck, to be thorough, given the time that's passed. ~ p1
+1: Fine. ~
+2: Also, naproxen and your old stomach ulcer don't mix well, so please always take it with food. ~ c1
+1: I've been taking it on an empty stomach, I'll stop. ~
+2: Take it only with food, and if you get stomach pain, or black stools, stop it and ring us. ~
+1: Right. Thank you. ~
+2: Use a warm pack, and break up your driving with stops to stretch. ~ c2
+1: I will. ~
+2: If the pain spreads into your arm, or you get weakness or numbness in your hands, come back that day. ~ f1
+1: I will. Thanks, doctor. ~
+@@
+{"chief_complaint":{"value":"It's the whiplash, from the car crash in the summer","normalized_value":"Persisting whiplash symptoms"},
+ "symptoms":[{"k":"s1","name":"neck's stiff","normalized_name":"Neck stiffness","category":"musculoskeletal","body_site":"neck","onset":"in the mornings"},
+  {"k":"s2","name":"pain across my shoulders","normalized_name":"Shoulder pain","category":"musculoskeletal","body_site":"shoulders","aggravating_factors":["driving"]}],
+ "negative_findings":[{"k":"n1","finding":"tingling","normalized_name":"Arm numbness or tingling"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension"},{"k":"h2","condition":"a stomach ulcer","normalized_condition":"Peptic ulcer"},{"k":"h3","condition":"Slipped disc","normalized_condition":"Lumbar disc prolapse"}],
+  "surgical_history":[{"k":"sg1","procedure":"discectomy","normalized_procedure":"Lumbar discectomy","timeframe":"in 2014"}],"social_history":[{"k":"so1","category":"occupation","description":"Delivery driver","details":"delivery driver"}]},
+ "medications":[{"k":"m1","name":"Naproxen","dose":"250 mg","frequency":"twice a day"},{"k":"m2","name":"paracetamol","dose":"1 gram","frequency":"when it's bad"}],
+ "physical_examination":[{"k":"x1","finding":"Tender over the muscles on both sides of the neck","normalized_finding":"Bilateral cervical paraspinal tenderness","body_site":"neck"},{"k":"x2","finding":"movement is limited","normalized_finding":"Reduced cervical rotation","body_site":"neck"}],
+ "clinical_assessment":[{"k":"d1","assessment":"persisting whiplash strain","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"X-ray of the neck","normalized_name":"Cervical spine X-ray","type":"imaging"}],
+ "clinical_actions":[{"k":"r1","action_type":"referral","description":"Refer to physiotherapy"}],
+ "counsel":[["c1","Take naproxen only with food and stop and ring if stomach pain or black stools"],["c2","Warm pack and regular stretch stops while driving"]],
+ "follow_up":[{"k":"f1","time_reference":"If the pain spreads into your arm, or you get weakness or numbness in your hands","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"uncertain_dose","description":"Patient gave the naproxen dose tentatively (\"250 mg, twice a day, maybe?\").","related_entities":["medications[0]"]},
+  {"k":"u2","type":"adherence_uncertain","description":"Paracetamol is prescribed for regular use but the patient takes it only when the pain is bad; actual adherence unknown.","related_entities":["medications[1]"]}]}
+

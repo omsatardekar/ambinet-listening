@@ -1,0 +1,107 @@
+## 00628 PATIENT=1 DOCTOR=2 NURSE=3
+3: Doctor, this is Ananya, seventeen, brought in by ambulance. Her mother is parking and will be here shortly. She took paracetamol at lunchtime. ~
+2: Thanks, Priya. Hello Ananya, I'm Dr Rao. Can you tell me what happened? ~
+1: I, um. I took some tablets. Paracetamol. Too many. I don't know exactly how many. ~ cc
+2: Thank you for telling me. Roughly how many, and when? ~
+1: Maybe ten, or twelve? The 500 mg ones. At about one o'clock. I was in the school toilets. ~
+2: That's about three hours ago. Did you take anything else along with them? ~
+1: No. Just those. ~
+2: Okay. How are you feeling right now? ~ s1 s2
+1: A bit sick. And my stomach hurts, on the top, here. ~ s1 s2
+3: She was sick once in the ambulance, doctor. ~ s1
+2: Have you been sick any more than that, or seen any blood when you were sick? ~ n1
+1: No, only the once. No blood. ~ n1
+2: Do you feel drowsy or confused at all? ~ n2
+1: No. I'm awake. I'm just really scared. ~ n2
+2: That's completely understandable, and you've done the right thing being honest. Do you have any allergies to medicines? ~ a1
+1: No. None. ~ a1
+2: What medicines or health problems do you normally have? ~ m1 m2 h1 h2
+1: I take sertraline, 50 mg, once a day. And I have a blue inhaler, salbutamol, when I wheeze. ~ m1 m2
+3: It says on her record that she has anxiety and asthma, doctor. ~ h1 h2
+2: Thanks. And is something going on at school or at home that's got you this stressed? ~ so1
+1: It's my mocks. I'm in Year 12 and I just couldn't, I couldn't cope. ~ so1
+2: Thank you for telling me. Priya, can we get her observations? ~
+3: Of course, doctor. ~
+3: Heart rate 96, blood pressure 112 over 70, temperature 36.9, oxygen 99 percent, breathing 18 a minute. ~ v pause=20
+2: Thank you. Ananya, I'm going to press your tummy, tell me if it hurts. ~
+1: It's sore at the top. ~
+2: Mild tenderness in the upper abdomen, and you're alert, talking in full sentences. ~ x1 x2 pause=12
+1: Am I going to be okay? ~
+2: With paracetamol, the important thing is to act early, and you've come in early. The blood level we take at four hours tells us how much treatment you need, so I'd like to arrange a paracetamol level when it's four hours since you took them. ~ p1
+3: That'll be about five o'clock, doctor. ~ p1
+2: Yes, five. And I'd like to check your liver with blood tests now as well. ~ p2
+1: Will it damage my liver? ~
+2: It can, which is why we check. I can't rule out liver injury yet, but your numbers at the moment are reassuring. ~ d1
+1: Okay. Can my mum come in? ~
+3: She's just coming through the doors, I'll bring her to you. ~
+2: Ananya, I'll also ask our mental health team to see you before you go home, because I want to make sure you get proper support with the stress. Is that okay? ~ r1
+1: Yes. I want to talk to somebody. ~
+2: Good. You won't be on your own. Priya will stay with you. ~
+@@
+{"chief_complaint":{"value":"I took some tablets. Paracetamol. Too many","normalized_value":"Paracetamol overdose"},
+ "symptoms":[{"k":"s1","name":"sick","normalized_name":"Nausea","category":"gastrointestinal","frequency":"once"},
+  {"k":"s2","name":"my stomach hurts","normalized_name":"Upper abdominal pain","category":"gastrointestinal","body_site":"upper abdomen"}],
+ "negative_findings":[{"k":"n1","finding":"blood","normalized_name":"Haematemesis"},{"k":"n2","finding":"drowsy or confused","normalized_name":"Drowsiness or confusion"},{"k":"a1","finding":"Allergies","normalized_name":"No known allergies"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"anxiety","normalized_condition":"Anxiety disorder","reported_by":"nurse"},{"k":"h2","condition":"asthma","normalized_condition":"Asthma","reported_by":"nurse"}],
+  "social_history":[{"k":"so1","category":"occupation","description":"Year 12 student under exam stress","details":"I'm in Year 12"}]},
+ "medications":[{"k":"m1","name":"sertraline","dose":"50 mg","frequency":"once a day"},{"k":"m2","name":"salbutamol","dose":null,"frequency":"when I wheeze"}],
+ "vitals":{"k":"v","by":"nurse","hr":96,"bp":"112/70","temp":36.9,"spo2":99,"rr":18},
+ "physical_examination":[{"k":"x1","finding":"Mild tenderness in the upper abdomen","normalized_finding":"Upper abdominal tenderness","body_site":"upper abdomen"},{"k":"x2","finding":"alert, talking in full sentences","normalized_finding":"Alert, speaking in full sentences","body_site":"general"}],
+ "clinical_assessment":[{"k":"d1","assessment":"liver injury","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"paracetamol level","normalized_name":"Serum paracetamol level","type":"laboratory","scheduled_datetime":"five o'clock"},{"k":"p2","name":"liver","normalized_name":"Liver function tests","type":"laboratory"}],
+ "clinical_actions":[{"k":"p1","action_type":"investigation","description":"Arrange Serum paracetamol level at four hours"},{"k":"p2","action_type":"investigation","description":"Arrange Liver function tests"},
+  {"k":"r1","action_type":"referral","description":"Refer to mental health team before discharge"}]}
+
+## 00630 PATIENT=1 DOCTOR=2
+1: Hello there, doctor. Lovely to meet you. I'm only here because my daughter nagged me, she says I get puffed out. ~ cc
+2: Well, I'm glad she nagged. What does she mean by puffed out? ~
+1: It's only when I carry my shopping, you see. Up the hill from the Co-op, two bags, and by the top I've got to stop and catch my breath. ~ s1
+2: How long has that been happening, would you say? ~ s1
+1: Oh, a few months, maybe since the spring. I thought I was just getting old. I'm sixty-eight, you know. ~ s1
+2: That's not old. Does it ever happen when you're walking without the bags? ~ s1
+1: Not really, no. Only when I'm laden. I did the Pennine Way in my forties, you know, so I like to think I've got a bit of stamina. ~
+2: I'm sure you have. Any chest pain, or tightness, when you're puffed out? ~ n1
+1: No pain, no. Just short of breath. ~ n1
+2: And any swelling in your ankles, or waking up at night breathless? ~ n2
+1: No, I sleep like a log. My ankles are the same as ever. ~ n2
+2: Good. What tablets are you taking at the moment? ~ m1 m2
+1: Bisoprolol, 2.5 mg once a day, and ramipril, 5 mg once a day. They're for my blood pressure, I think. Or my heart? One of the two. ~ m1 m2
+2: Both are good for the heart and the blood pressure, so you're right either way. ~
+1: Ha! Good, I wasn't sure. ~
+2: Do you smoke? ~ so1
+1: I gave up in 1998, thank goodness. Twenty a day I was smoking, if you can believe it. ~ so1
+2: Well done. Let me check your pulse and oxygen first. ~
+1: Do you want my wrist or my finger? ~
+2: Just the finger, thanks. Pulse 66 and oxygen 98 percent. ~ v pause=10
+1: Is that good for a man of my age? ~
+2: It's excellent. Now I'll listen to your heart and lungs. Breathe normally. ~
+1: Does it matter if I talk? ~
+2: Yes, so don't. Take a deep breath in. ~ pause=18
+1: Sorry. ~
+2: Your lungs are clear, and your heart sounds are normal, no murmur that I can hear. ~ x1
+1: Marvellous. So what do you think it is? ~
+2: Breathlessness when you're carrying a heavy load can come from several things, and from what we have so far, I can't rule out early heart failure yet, though it is only a possibility at this stage. ~ d1
+1: Is that serious? ~
+2: It might not be anything much, and I don't want to put a label on it before the tests. I'd like to arrange an echocardiogram, an ultrasound of your heart. ~ p1
+1: Like they do for pregnant women? ~
+2: Exactly the same machine, yes. And I'd like to take a blood test to check a heart strain marker and your kidney function, since you're on ramipril. ~ p2
+1: Do I need to fast? ~
+2: No fasting needed. The surgery will text you when the scan is booked. ~
+1: Right. Should I stop carrying the shopping in the meantime? ~
+2: Not stop, but take it in smaller loads, and rest at the postbox if you need to. ~ c1
+1: Postbox it is. Do I come back after the tests? ~
+2: Someone from the practice will ring you with the results and we'll agree what to do next. ~
+1: Splendid. Thank you, doctor, you've been very kind. ~
+@@
+{"chief_complaint":{"value":"she says I get puffed out","normalized_value":"Exertional breathlessness","reported_by":"patient"},
+ "symptoms":[{"k":"s1","name":"carry my shopping","normalized_name":"Breathlessness carrying shopping","category":"respiratory","duration":null,"onset":"since the spring","aggravating_factors":["carry my shopping"]}],
+ "negative_findings":[{"k":"n1","finding":"pain","normalized_name":"Chest pain"},{"k":"n2","finding":"ankles","normalized_name":"Ankle swelling"}],
+ "medical_history":{"social_history":[{"k":"so1","category":"smoking","description":"Former smoker","status":"former","details":"gave up in 1998"}]},
+ "medications":[{"k":"m1","name":"Bisoprolol","dose":"2.5 mg","frequency":"once a day"},{"k":"m2","name":"ramipril","dose":"5 mg","frequency":"once a day"}],
+ "vitals":{"k":"v","hr":66,"spo2":98},
+ "physical_examination":[{"k":"x1","finding":"lungs are clear","normalized_finding":"Clear lungs and normal heart sounds","body_site":"chest"}],
+ "clinical_assessment":[{"k":"d1","assessment":"early heart failure","normalized_assessment":"Early heart failure","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"echocardiogram","normalized_name":"Echocardiogram","type":"cardiac"},{"k":"p2","name":"blood test","normalized_name":"NT-proBNP and renal function","type":"laboratory"}],
+ "clinical_actions":[{"k":"p1","action_type":"investigation","description":"Arrange Echocardiogram"},{"k":"p2","action_type":"investigation","description":"Arrange NT-proBNP and renal function"},
+  {"k":"c1","action_type":"counselling","description":"Carry smaller loads and rest if breathless","status":"recommended","responsible_person":"patient"}]}
+

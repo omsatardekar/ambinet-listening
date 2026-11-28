@@ -1,0 +1,237 @@
+## 00968 PATIENT=1 DOCTOR=2 NURSE=3
+3: Dr Whitaker, here's Mr Lindqvist. Obs done: blood pressure 152 over 94, pulse 72. He's here about his results. ~ v
+2: Thank you, nurse. Mr Lindqvist, come in. Tell me what you understand about why you're here. ~
+1: Er, the letter said something about protein in my water, and that my pressure was up. That's about all I've got, I'm afraid. ~ cc
+2: That's fine, that's what I wanted to explain. Have you noticed anything yourself in the toilet? ~ s1
+1: It's, er, a bit frothy. Foamy. I noticed it a while back, I don't know, a few months? Maybe more. I can't pin it down. ~ s1 u1
+2: Foamy urine, a few months or more. Thank you. ~
+1: Is that important? ~
+2: It can be, because foam sometimes means protein is leaking through the kidneys. ~
+1: Leaking? ~
+2: Think of the kidneys as a very fine sieve. Normally it keeps protein in the blood. When the sieve is under strain, some gets through. ~
+1: And the blood pressure causes that? ~
+2: High blood pressure can strain the sieve, and kidney trouble can also push the blood pressure up. They feed each other. ~
+1: A vicious circle. ~
+2: Exactly. Any operations in the past that I should know about? ~ sg1
+1: My appendix, in 1999. That's all. ~ sg1
+2: Right. Nurse, can you pop him on the couch? ~
+3: Of course. ~ pause=10
+2: Your ankles, Mr Lindqvist, let me press. There's no swelling in either ankle. ~ x1
+1: Good. ~
+2: Let me explain what I'd like to do. The first thing is to repeat the urine test, with a proper measurement of the protein. ~ p1
+1: Okay. ~
+2: I'd also like to arrange blood tests to check how well your kidneys are working. ~ p2
+1: Is it serious? ~
+2: It's too early to say. That's why we need the tests. ~
+1: I understand. How long will it take? ~
+2: A week or so for the results. The nurse will give you a pot for the urine sample. ~
+3: I've got it here, Mr Lindqvist. First thing in the morning, please. ~
+1: First thing in the morning, got it. ~
+2: Keep your salt low, and don't take anti-inflammatory painkillers like ibuprofen for now. ~ c1
+1: Right, I'll remember. ~
+2: If the protein is still there on the repeat, I'd like to see you again and talk about a referral to a kidney specialist. ~ f1
+1: Understood. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"protein in my water, and that my pressure was up","normalized_value":"Protein in urine and raised blood pressure on results"},
+ "symptoms":[{"k":"s1","name":"frothy","normalized_name":"Foamy urine","category":"genitourinary","certainty":"uncertain"}],
+ "medical_history":{"surgical_history":[{"k":"sg1","procedure":"appendix","normalized_procedure":"Appendicectomy","timeframe":"in 1999"}]},
+ "vital_signs":[{"k":"v","name":"Blood pressure","normalized_name":"Blood pressure","value":"152/94","unit":"mmHg","reported_by":"nurse"},{"k":"v","name":"Heart rate","normalized_name":"Heart rate","value":"72","unit":"bpm","reported_by":"nurse"}],
+ "physical_examination":[{"k":"x1","finding":"no swelling in either ankle","normalized_finding":"No ankle swelling","status":"absent","body_site":"ankles"}],
+ "procedures_and_investigations":[{"k":"p1","name":"repeat the urine test, with a proper measurement of the protein","normalized_name":"Repeat urine protein quantification","type":"laboratory"},{"k":"p2","name":"blood tests to check how well your kidneys are working","normalized_name":"Renal function tests","type":"laboratory"}],
+ "counsel":[["c1","Keep salt low and avoid anti-inflammatory painkillers like ibuprofen for now"]],
+ "follow_up":[{"k":"f1","time_reference":"if the protein is still there on the repeat","status":"conditional"}],
+ "clinical_uncertainties":[{"type":"date_uncertain","description":"The patient cannot say exactly when the foamy urine began.","related_entities":["symptoms[0]"],"k":"u1"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00969 PATIENT=1 DOCTOR=2
+1: Quick one, doctor, I've another appointment at the optician. It's my hearing aids. I can't hear the television, even with them in, and my wife says I've got it up so loud the neighbours complain. ~ cc s1
+2: I'll be quick, but let's get this right. Which ear is worse? ~ s1
+1: Both, really. The left a bit more. I've had the aids for about four years. ~
+2: When did you last have them checked? ~
+1: Two years ago, at the hospital. They said the hearing was a bit worse, and adjusted the settings. ~
+2: Are they working, do you think, or has something changed? ~
+1: They whistle sometimes, and the batteries, I've been changing them every four days. ~
+2: That's worth checking. Four days is short. ~
+1: That's what I thought. ~
+2: Tell me about your general health. Anything long-term? ~ h1
+1: Only the hearing loss. I'm seventy-three, you know. ~ h1
+2: Let me check your pulse and blood pressure quickly. Pulse 72, blood pressure 130 over 80. ~ v pause=10
+1: Normal for my age? ~
+2: Very good. Now, I'd like to explain how I'd approach this. First, the hearing aids themselves. They can get clogged with wax, and the tubes can go stiff. ~
+1: Right. ~
+2: Second, wax in the ear canal can block sound, and make the aids whistle. ~
+1: I haven't had my ears cleaned in years. ~
+2: Third, the batteries. If they run out that quickly, there may be a problem with the aid itself. ~
+1: Can you fix it? ~
+2: Not here, but the audiology department can. I'll write to them with what you've told me. ~
+1: How long will that take? ~
+2: A couple of weeks for the appointment. In the meantime, keep the aids dry, and wipe them each night. ~ c1
+1: I do that already. ~
+2: Good. Don't use cotton buds in your ears, either, it pushes the wax deeper. ~ c2
+1: I've never used them. ~
+2: Good. Keep the television at a level your wife can tolerate. ~
+1: Ha. That's a tall order. ~
+2: Use subtitles, they help enormously. ~
+1: My daughter said the same. ~
+2: Sensible daughter. Anything else? ~
+1: No, I must dash. Thanks, doctor. ~
+2: Bye. ~
+1: Bye. ~
+@@
+{"chief_complaint":{"value":"my hearing aids. I can't hear the television, even with them in","normalized_value":"Hearing aid review; reduced hearing despite aids"},
+ "symptoms":[{"k":"s1","name":"can't hear the television","normalized_name":"Reduced hearing","category":"ENT","body_site":"both ears"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"hearing loss","normalized_condition":"Sensorineural hearing loss"}]},
+ "vitals":{"k":"v","by":"doctor","bp":"130/80","hr":72},
+ "counsel":[["c1","Keep the aids dry and wipe them each night"],["c2","Avoid cotton buds in the ears"]],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00970 PATIENT=1 DOCTOR=2
+1: I want to lose weight. ~ cc
+2: Okay. Tell me what's prompted that. ~
+1: Pants don't fit. Put on about twenty pounds this year. ~ s1
+2: That's a fair amount in a year. What do you think changed? ~ s1
+1: Desk job. New. ~ so1
+2: What did you do before? ~ so1
+1: Warehouse. On my feet. Now I'm at a desk, ten hours. ~ so1
+2: That's quite a change. And how's your eating been? ~
+1: Takeout. Lunch at my desk. ~
+2: What about drinks, soda, juice? ~
+1: Soda, two cans a day. ~
+2: Okay. Let me ask about how you feel in yourself. Any shortness of breath when you climb stairs? ~ n1
+1: No. Fine. ~ n1
+2: Any chest pain? ~ n2
+1: No chest pain. ~ n2
+2: Any other health conditions? ~ h1
+1: High cholesterol. They told me last year. ~ h1
+2: Right. I'm not going to give you a diet sheet. Let's start with two small changes. ~
+1: Like what? ~
+2: First, swap your two cans of soda for water, or sparkling water with lemon. That alone cuts over three hundred calories a day. ~ c1
+1: Okay. Hard, but okay. ~
+2: Second, take a ten-minute walk after lunch. Away from the desk. ~ c2
+1: I can do that. ~
+2: Every day, even in the rain. ~
+1: Fine. ~
+2: Third, pack your lunch two days a week instead of buying it. ~ c3
+1: Costs less, too. ~
+2: Exactly. Does that sound doable? ~
+1: Yeah. ~
+2: Weigh yourself once a week, same day, same time, same scale. ~
+1: I've got a scale. ~
+2: Good. A pound a week is a healthy target. ~
+1: Okay. ~
+2: Do you want me to explain anything else? ~
+1: No. ~
+2: If you haven't lost any weight in two months, come back and we'll talk about what else we can do. ~ f1
+1: Okay. Two months. ~
+2: Good luck. ~
+1: Thanks. ~
+@@
+{"chief_complaint":{"value":"I want to lose weight","normalized_value":"Wants to lose weight"},
+ "symptoms":[{"k":"s1","name":"put on about twenty pounds this year","normalized_name":"Weight gain","category":"constitutional","duration":{"value":1,"unit":"years","normalized":"this year"}}],
+ "negative_findings":[{"k":"n1","finding":"shortness of breath","normalized_name":"Exertional breathlessness"},{"k":"n2","finding":"chest pain","normalized_name":"Chest pain"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High cholesterol","normalized_condition":"Hypercholesterolaemia"}],
+  "social_history":[{"k":"so1","category":"occupation","details":"Desk job. New"}]},
+ "counsel":[["c1","Swap two cans of soda a day for water"],["c2","Take a ten-minute walk after lunch each day"],["c3","Pack lunch two days a week"]],
+ "follow_up":[{"k":"f1","time_reference":"if you haven't lost any weight in two months","status":"conditional"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00971 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Hi, doctor. I'm Jordan, Casey's partner. Casey gets this pain every month, and I've been telling them to come in. ~
+1: It's nothing, Jordan. ~
+2: Let's hear it from you, Casey. Where's the pain? ~
+1: Low down. On the left side, sometimes the right. Sharp. It comes and goes. ~ cc s1
+2: When in your cycle does it happen? ~ s1
+1: Um, about halfway. Like two weeks after my period starts. ~ s1
+3: It's the same every month. I can predict it. ~
+2: How long does it last? ~
+1: A day. Maybe two. ~
+2: Is it a sharp stab, or a dull ache? ~
+1: Sharp at first, then dull. ~
+2: Does it get in the way of what you do? ~
+1: It makes me curl up on the sofa. But then it's gone. ~
+2: Any heavy bleeding with it? ~ n1
+1: No, my periods are normal. ~ n1
+2: Any fever? ~ n2
+1: No fever. ~ n2
+2: Do you have a history of cysts or gynaecological problems? ~ h1
+1: I had an ovarian cyst, a small one, a few years ago. It went away by itself. ~ h1
+3: She also gets a bit of spotting in the middle sometimes. ~
+2: Is that right? ~
+1: Sometimes, a tiny bit, brown. ~
+2: Let me explain what I think is going on. Around the middle of the cycle, an egg is released from the ovary, and that can cause a sharp twinge on one side. ~
+3: Ovulation? ~
+2: Yes. Some women feel it every month, and it's harmless. Given the timing and the pattern, I think this is ovulation pain. ~ d1
+1: That's it? ~
+2: That's what it sounds like. ~
+1: Well, that's a relief. ~
+2: Use a heat pack or a hot water bottle on your tummy, and a warm bath helps. ~ c1
+3: I'll make her a hot water bottle. ~
+1: You'd better. ~
+2: Pay attention to how it changes. If the pain becomes much stronger, or comes with a fever or a very heavy bleed, come back to us. ~ c2
+1: Okay. ~
+2: Anything else you'd like to ask? ~
+1: No. Thanks. ~
+3: Thanks, doctor. ~
+@@
+{"chief_complaint":{"value":"Low down. On the left side, sometimes the right. Sharp","normalized_value":"Recurrent mid-cycle lower abdominal pain"},
+ "symptoms":[{"k":"s1","name":"Sharp","normalized_name":"Mid-cycle pelvic pain","category":"genitourinary","body_site":"lower abdomen","frequency":"about halfway"}],
+ "negative_findings":[{"k":"n1","finding":"heavy bleeding","normalized_name":"Heavy menstrual bleeding"},{"k":"n2","finding":"fever","normalized_name":"Fever"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"ovarian cyst","normalized_condition":"Ovarian cyst"}]},
+ "clinical_assessment":[{"k":"d1","assessment":"ovulation pain","certainty":"provisional"}],
+ "counsel":[["c1","Use a heat pack or hot water bottle on the tummy and have a warm bath"],["c2","Return if the pain becomes much stronger, or comes with fever or very heavy bleeding"]],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00972 PATIENT=1 DOCTOR=2
+1: I'm in a lot of pain. Gut pain, and I've had the runs for five days. I've been on azathioprine, but this is bad. ~ cc s1
+2: I'm sorry. Let me ask quickly, then we'll do the examination. How many times a day are you going to the toilet? ~ s1
+1: Eight, nine times. Even at night. ~ s1
+2: Is there blood? ~ s2
+1: Yeah. Bright red, mixed in. ~ s2
+2: Where's the pain? ~ s3
+1: Lower right. Cramping, comes in waves. ~ s3
+2: And how do you feel in yourself? ~ s4
+1: Weak. Wiped out. ~ s4
+2: What medication are you on? ~ m1
+1: Azathioprine, 100 mg, once a day. ~ m1
+2: Do you work? ~ so1
+1: Electrician. I haven't been in for three days. ~ so1
+2: Smoke? ~ so2
+1: About ten a day. ~ so2
+2: Let me check you. Pulse 108, blood pressure 108 over 66, temperature 37.9, oxygen 98 percent, breathing 18, weight 68 kilos. ~ v pause=15
+1: Is the pulse bad? ~
+2: It's fast, which fits with you being dehydrated. Lie back, I'll press your tummy. ~ pause=10
+1: Ow! That one. ~
+2: There's tenderness in the lower right abdomen, with some guarding. ~ x1
+1: Yeah. ~
+2: Your bowel sounds are very active. ~ x2
+1: Noisy, I know. ~
+2: And your mouth is dry. ~ x3
+1: I've not been drinking much. It goes straight through. ~
+2: Any palpitations? ~ r1
+1: No, nothing like that, no palpitations. ~ r1
+2: Right, here's what I think. This looks like a flare of your Crohn's disease. ~ d1
+1: Yeah, that's what I thought. ~
+2: I'd like to arrange a stool test to rule out an infection, blood tests including an inflammation marker, and an X-ray of the abdomen. ~ p1 p2 p3
+1: Today? ~
+2: Right now. I'll get a nurse to start fluids through a drip. ~
+1: Thank God. ~
+2: Don't take anything for the diarrhoea until we've ruled out infection. ~ c1
+1: Okay. ~
+2: If the bleeding or pain gets worse, press the call button straight away. ~ f1
+1: Will do. ~
+@@
+{"chief_complaint":{"value":"Gut pain, and I've had the runs for five days","normalized_value":"Abdominal pain and diarrhoea for five days on azathioprine"},
+ "symptoms":[{"k":"s1","name":"the runs for five days","normalized_name":"Diarrhoea","category":"gastrointestinal","duration":{"value":5,"unit":"days","normalized":"5 days"},"frequency":"Eight, nine times"},
+  {"k":"s2","name":"Bright red, mixed in","normalized_name":"Rectal bleeding","category":"gastrointestinal"},
+  {"k":"s3","name":"Cramping","normalized_name":"Abdominal cramping","category":"gastrointestinal","body_site":"lower right abdomen"},
+  {"k":"s4","name":"Weak","normalized_name":"Weakness","category":"constitutional"}],
+ "medical_history":{"social_history":[{"k":"so1","category":"occupation","details":"Electrician"},{"k":"so2","category":"smoking","details":"About ten a day"}]},
+ "medications":[{"k":"m1","name":"Azathioprine","dose":"100 mg","frequency":"once a day"}],
+ "vitals":{"k":"v","by":"doctor","bp":"108/66","hr":108,"temp":37.9,"spo2":98,"rr":18,"wt":68},
+ "physical_examination":[{"k":"x1","finding":"tenderness in the lower right abdomen, with some guarding","normalized_finding":"Right lower quadrant tenderness with guarding","body_site":"abdomen"},{"k":"x2","finding":"bowel sounds are very active","normalized_finding":"Hyperactive bowel sounds","body_site":"abdomen"},{"k":"x3","finding":"mouth is dry","normalized_finding":"Dry mucous membranes","body_site":"mouth"}],
+ "review_of_systems":[{"k":"r1","system":"cardiovascular","status":"negative"}],
+ "clinical_assessment":[{"k":"d1","assessment":"a flare of your Crohn's disease","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"stool test","normalized_name":"Stool culture","type":"laboratory"},{"k":"p2","name":"blood tests including an inflammation marker","normalized_name":"Blood tests with inflammatory markers","type":"laboratory"},{"k":"p3","name":"X-ray of the abdomen","normalized_name":"Abdominal X-ray","type":"imaging"}],
+ "counsel":[["c1","Do not take anything for the diarrhoea until infection is ruled out"]],
+ "follow_up":[{"k":"f1","time_reference":"if the bleeding or pain gets worse","status":"conditional"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}

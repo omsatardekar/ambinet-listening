@@ -1,0 +1,44 @@
+## 00909 PATIENT=1 DOCTOR=2 CLINICAL_STAFF=3
+1: The water tablet is making me pass urine all the time, and I get cramps in my legs at night. I'm not sure it's worth it. ~ cc n1
+2: I understand. Let me look at your records. Which tablet is it, and what dose? ~ m1
+1: Furosemide, 40 mg, once a day, in the morning. ~ m1
+3: Doctor, I've pulled up his last blood results, the potassium was low-normal last time. ~ m1
+2: Thank you. Do you take it every day, as prescribed? ~ m1 u1
+1: Most days. Some days I skip it if I'm going out, to avoid the toilet. ~ m1 u1
+2: I see. Are there any other medicines? ~ m2 m3
+1: Ramipril, 5 mg, once a day. And a baby aspirin, 75 mg. ~ m2 m3
+2: Why were you started on the furosemide? ~ h1
+1: I have a weak heart. Heart failure, they called it. ~ h1
+2: And do you have any other conditions? ~ h2
+1: High blood pressure. And I've had my gallbladder out. ~ h2 sg1
+2: When was that? ~ sg1
+1: About ten years ago. ~ sg1
+2: Any chest pain, breathlessness or ankle swelling at the moment? ~ n2
+1: No. My breathing is fine, and my ankles are normal. ~ n2
+3: Doctor, I need to say that when I weighed him today, he's lost two kilos since last month. ~ x1
+2: That's useful. It could be from the water tablet, or him skipping meals. I'd like to examine him. ~
+1: Go on. ~ pause=14
+2: Your legs are soft and there is no swelling, and your chest is clear. ~ x2
+1: So I'm not retaining fluid? ~
+2: Correct. At the moment you seem to be drying out a little, which fits with the cramps. ~ d1
+1: What can we do? ~
+2: I'd like to check your kidneys and your salts with a blood test, including potassium and magnesium. ~ p1
+1: When? ~
+2: Today. And I'd like an ECG and a review of the dose. ~ p2 p3
+1: Can I stop it if it's bothersome? ~
+2: Please don't stop it yourself, with your heart condition. We'll adjust the dose after the results. ~ c1
+1: All right. I'll take it every day, then. ~
+2: Take it in the morning, and call us if your ankles swell or you get breathless. ~ f1
+1: I will. Thank you. ~
+@@
+{"chief_complaint":{"value":"The water tablet is making me pass urine all the time, and I get cramps in my legs at night","normalized_value":"Frequent urination and leg cramps on diuretic"},
+ "negative_findings":[{"k":"n2","finding":"chest pain","normalized_name":"Chest pain, breathlessness or ankle swelling"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"weak heart","normalized_condition":"Heart failure"},{"k":"h2","condition":"High blood pressure","normalized_condition":"Hypertension"}],"surgical_history":[{"k":"sg1","procedure":"gallbladder out","normalized_procedure":"Cholecystectomy","timeframe":"About ten years ago"}]},
+ "medications":[{"k":"m1","name":"Furosemide","dose":"40 mg","frequency":"once a day"},{"k":"m2","name":"Ramipril","dose":"5 mg","frequency":"once a day"},{"k":"m3","name":"baby aspirin","normalized_name":"Aspirin","generic_name":"Aspirin","dose":"75 mg"}],
+ "physical_examination":[{"k":"x1","finding":"he's lost two kilos since last month","normalized_finding":"Weight loss of 2 kg over one month","body_site":"whole body","observed_by":"clinical_staff"},{"k":"x2","finding":"legs are soft and there is no swelling","normalized_finding":"No peripheral oedema; chest clear","body_site":"legs","status":"absent"}],
+ "clinical_assessment":[{"k":"d1","assessment":"drying out a little","normalized_assessment":"Mild volume depletion, possible diuretic effect","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood test","normalized_name":"Renal function and electrolytes","type":"laboratory"},{"k":"p3","name":"ECG","normalized_name":"Electrocardiogram","type":"cardiac"}],
+ "counsel":[["c1","Do not stop the furosemide without advice; take in the morning"]],
+ "follow_up":[{"k":"f1","time_reference":"if your ankles swell or you get breathless","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"adherence_uncertain","description":"Patient takes the furosemide most days and skips it on some days when going out.","related_entities":["medications[0]"]}]}
+

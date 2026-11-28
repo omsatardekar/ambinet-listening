@@ -1,0 +1,84 @@
+## 00727 PATIENT=1 DOCTOR=2
+1: Cold sore. Again. Third this year. ~ cc s1
+2: Sorry to hear that. Where is it? ~ s1
+1: Top lip. Left side. Tingled yesterday, now it's blistered. ~ s1
+2: When did the first one come, this year? ~ s1 u1
+1: January? Or February. I'm not sure. ~ s1 u1
+2: That's fine. What sets them off, do you notice? ~
+1: Sun. Stress. Colds. ~
+2: What are you using on it now? ~ m1
+1: Aciclovir cream, five times a day, from the chemist. ~ m1
+2: Does it help? ~
+1: A bit. Not much. If I start it early. ~
+2: Anything else you use? ~ m2
+1: Lip balm with sun cream in it, every morning. ~ m2
+2: Good habit. Do you have any other conditions? ~ h1
+1: Eczema, hands. That's all. ~ h1
+2: Let me look at it. ~
+1: Go on. ~ pause=10
+2: It's a typical blister. Don't touch it, and wash your hands after you put the cream on. ~
+1: Right. ~
+2: The key with the cream is to start it at the very first tingle, and to keep it up for five days. ~ c1
+1: I start late. I forget. ~
+2: Keep the tube in your bag and in your bathroom. ~
+1: Okay. ~
+2: If they keep happening, there are tablets you can take for a few days at the first tingle, or even every day to prevent them. ~
+1: Prevent them? That'd be good. ~
+2: I'd like to see you again in four weeks to talk about it, if it's still bothering you, and I'll start you on that. ~ f1
+1: Okay. Thanks. ~
+2: Avoid kissing or sharing towels while it's blistered. ~ c2
+1: Right. ~
+2: Take care. ~
+1: See you. ~
+@@
+{"chief_complaint":{"value":"Cold sore. Again","normalized_value":"Recurrent cold sore"},
+ "symptoms":[{"k":"s1","name":"Cold sore","normalized_name":"Recurrent herpes labialis","category":"dermatological","body_site":"left upper lip","certainty":"uncertain"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Eczema","normalized_condition":"Eczema"}]},
+ "medications":[{"k":"m1","name":"Aciclovir cream","normalized_name":"Aciclovir","generic_name":"Aciclovir","frequency":"five times a day"},{"k":"m2","name":"Lip balm with sun cream","normalized_name":"Sunscreen lip balm","generic_name":null,"frequency":"every morning"}],
+ "counsel":[["c1","Start the cream at the first tingle and continue for five days"],["c2","Avoid kissing or sharing towels while blistered"]],
+ "follow_up":[{"k":"f1","time_reference":"in four weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient could not say when the first cold sore this year occurred (\"January? Or February. I'm not sure.\").","related_entities":["symptoms[0]"]}]}
+
+## 00728 PATIENT=1 DOCTOR=2 CAREGIVER=3 NURSE=4
+4: Mrs Haddad, come through. The doctor's ready for you, and your carer can come in too. ~
+3: Thank you, nurse. Doctor, we've come about the night sweats. They're soaking her bedding. ~ cc s1
+1: It's not that bad. A couple of weeks, perhaps. ~ s1 u1
+3: It's a month at least, Mrs Haddad. I do your washing. ~ s1 u1
+2: So two weeks from you, a month from Mrs Haddad's side. I'll put it down as two weeks to a month. What are they like? ~ s1 u1
+1: I wake up drenched. Nightdress wet through, and I have to change. Three or four times a week. ~ s1
+2: Any fever with it? ~ n1
+1: No fever. I'd have felt it. ~ n1
+2: Have you lost weight, without trying? ~ n2
+1: No. If anything, I've put on a bit. ~ n2
+2: Any cough, or breathlessness? ~ n3
+1: No cough. ~ n3
+2: What medicines do you take? ~ m1 h1
+3: Just the omeprazole, 20 mg once a day, for her stomach. She has reflux. ~ m1 h1
+2: And the room, is it warm at night? ~
+3: I put the heating on low for her. She feels the cold. ~
+2: How old are you, Mrs Haddad, if you don't mind? ~
+1: Seventy-two. Why, is it my age? ~
+2: Possibly part of it. I'm not going to guess, I'll do some simple tests first. ~
+1: What kind? ~
+2: A blood test, to check your blood count, thyroid, and inflammation, to rule out any underlying cause. ~ p1
+4: I can do that for you before you leave, Mrs Haddad. ~
+1: Fine. ~
+2: Meanwhile, keep the bedroom cool, use cotton nightwear and a lighter duvet, and avoid hot drinks and spicy food in the evening. ~ c1
+3: I'll turn the heating off at night. ~
+2: And keep a diary, how often it happens, and whether you also feel hot in the daytime. ~ c2
+1: A diary! Well, I can do that, if Aisha helps me. ~
+2: I'd like to see you in two weeks, when the results are back. ~ f1
+3: We'll be there. Thank you, doctor. ~
+4: This way, Mrs Haddad. ~
+@@
+{"chief_complaint":{"value":"the night sweats","normalized_value":"Night sweats","reported_by":"caregiver"},
+ "symptoms":[{"k":"s1","name":"night sweats","normalized_name":"Night sweats","category":"constitutional","duration":{"value":null,"unit":"weeks","normalized":"approximately 2 weeks to 1 month"},"certainty":"uncertain","frequency":"Three or four times a week"}],
+ "negative_findings":[{"k":"n1","finding":"fever","normalized_name":"Fever"},{"k":"n2","finding":"weight","normalized_name":"Weight loss"},{"k":"n3","finding":"cough","normalized_name":"Cough"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"reflux","normalized_condition":"Gastro-oesophageal reflux disease","reported_by":"caregiver"}]},
+ "medications":[{"k":"m1","name":"omeprazole","dose":"20 mg","frequency":"once a day","reported_by":"caregiver"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood test","normalized_name":"Full blood count, thyroid function and inflammatory markers","type":"laboratory"}],
+ "counsel":[["c1","Keep bedroom cool, cotton nightwear, lighter duvet; avoid hot drinks and spicy food in the evening"],["c2","Keep a symptom diary"]],
+ "follow_up":[{"k":"f1","time_reference":"in two weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"duration_disagreement","description":"Patient says the night sweats began about two weeks ago; her carer says at least a month; summarised as two weeks to a month, not confirmed.","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved"}],
+ "quality_checks":{"contradictions_detected":["Duration of night sweats: patient two weeks vs caregiver a month (approximate range only)."]}}
+

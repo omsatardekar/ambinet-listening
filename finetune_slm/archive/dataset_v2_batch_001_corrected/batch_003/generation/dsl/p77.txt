@@ -1,0 +1,101 @@
+## 00793 PATIENT=1 DOCTOR=2
+1: Hello. Er, it's my migraines. The preventers, the tablets, they don't seem to be doing much. ~ cc s1
+2: How often are you getting migraines now? ~ s1
+1: Maybe, ooh, six or seven a month? It was eight before, so not much of a change. ~ s1
+2: How long do they last, and what are they like? ~ s1 s2
+1: One side, throbbing, with light bothering me, and I feel sick. Eight hours, sometimes a day. ~ s1 s2
+2: When did they get worse, can you say? ~ u1
+1: Um. A year ago? Or since the new job? I really couldn't say when they changed. ~ u1
+2: That's fine. Any aura, flashing lights, or zigzags, before them? ~ n1
+1: No. None of that. ~ n1
+2: What are you taking to prevent them? ~ m1 m2 m3 u2
+1: Propranolol, 80 mg twice a day. I think. And topiramate, 50 mg once a day, at night, but I forget it a lot. And sumatriptan, 50 mg, when I get one. ~ m1 m2 m3 u2
+2: So the topiramate is prescribed daily, but you often miss it. It's difficult to judge if it's working then. Any allergies? ~ m2 u2 a1
+1: No, none. ~ a1
+2: And your medical history? ~ h1 h2
+1: Migraines since I was a teenager, and I get anxious sometimes. ~ h1 h2
+2: Do you drink coffee, how's your sleep? ~ so1
+1: Four coffees a day. And I sleep terribly, five or six hours. ~ so1
+2: Let me check your pulse and blood pressure. ~
+1: Okay. ~
+2: Pulse 62, blood pressure 112 over 70, temperature 36.6. ~ v pause=12
+1: All right? ~
+2: All fine. The propranolol slows the pulse, as expected. Any breathlessness, wheeze, or cold hands? ~ r1
+1: No, nothing like that. ~ r1
+2: So here's what I think. You've got migraines about six or seven a month, and you're missing the topiramate often, so I'd say these migraines are not well controlled, partly because the preventer isn't being taken regularly. ~ d1
+1: I know. I'm rubbish at tablets. ~
+2: A lot of people are. The best step is to make the routine easier, so take it in the evening, with your teeth-cleaning, and set a phone reminder. ~ c1
+1: That's a good idea. ~
+2: Keep a migraine diary for a month, noting triggers, such as coffee, sleep and skipped meals. ~ c2
+1: I'll download an app. ~
+2: And cut your coffee to two cups, and get regular sleep. ~
+1: Right. ~
+2: I'd like to see you in six weeks, to review the diary and decide whether to change the treatment. ~ f1
+1: Six weeks. Thank you. ~
+@@
+{"chief_complaint":{"value":"it's my migraines","normalized_value":"Migraines not controlled on preventers"},
+ "symptoms":[{"k":"s1","name":"migraines","normalized_name":"Migraine","category":"neurological","frequency":"six or seven a month","certainty":"uncertain"},
+  {"k":"s2","name":"throbbing","normalized_name":"Unilateral throbbing headache with photophobia and nausea","category":"neurological","body_site":"one side of head"}],
+ "negative_findings":[{"k":"n1","finding":"aura","normalized_name":"Aura"},{"k":"a1","finding":"allergies","normalized_name":"No known allergies"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Migraines","normalized_condition":"Migraine"},{"k":"h2","condition":"anxious","normalized_condition":"Anxiety"}],"social_history":[{"k":"so1","category":"diet","description":"High caffeine and short sleep","details":"Four coffees a day"}]},
+ "medications":[{"k":"m1","name":"Propranolol","dose":"80 mg","frequency":"twice a day"},{"k":"m2","name":"topiramate","dose":"50 mg","frequency":"once a day"},{"k":"m3","name":"sumatriptan","dose":"50 mg","frequency":"when I get one"}],
+ "vitals":{"k":"v","hr":62,"bp":"112/70","temp":36.6},
+ "review_of_systems":[{"k":"r1","system":"respiratory"}],
+ "clinical_assessment":[{"k":"d1","assessment":"these migraines are not well controlled","normalized_assessment":"Poorly controlled migraine with inconsistent preventive adherence","certainty":"provisional"}],
+ "counsel":[["c1","Take topiramate in the evening with teeth-cleaning and set a phone reminder"],["c2","Keep a one-month migraine diary and cut coffee to two cups"]],
+ "follow_up":[{"k":"f1","time_reference":"in six weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient could not say when the migraines got worse (\"a year ago? Or since the new job?\").","related_entities":["symptoms[0]"]},
+  {"k":"u2","type":"adherence_uncertain","description":"Topiramate is prescribed once daily but the patient says she forgets it a lot; actual adherence unknown.","related_entities":["medications[1]"]}]}
+
+## 00794 PATIENT=1 DOCTOR=2
+1: Hi, hi. I'm worried about my hands, they're awful, they're cracked and bleeding, and I'm scared it's going to get infected. I work in a care home, and we wash our hands constantly. ~ cc s1
+2: That sounds sore. When did it start? ~ s1 u1
+1: Oh, a few months, I think, or since the winter, I can't remember when it began, maybe before. I keep meaning to come. ~ s1 u1
+2: Which parts of the hands? ~ s1
+1: Between the fingers, and the backs, and my knuckles are split. And the skin's red, and itchy. ~ s1 s2
+2: Any weeping or crusting, any yellow, any signs of infection? ~ n1
+1: A bit of crusting on one knuckle. No pus. ~ n1
+2: Do you wear gloves at work? ~
+1: When I'm told to, but they make my hands sweat, and then it's worse. ~
+2: What have you tried? ~
+1: A hand cream from the supermarket, I use it when I remember. Which is not often, to be fair. ~
+2: Is there any eczema in the past, or asthma, hay fever? ~ h1
+1: I had eczema as a child. ~ h1
+2: How many times a day do you wash your hands? ~ so1
+1: Thirty, forty times a shift. And sanitiser, the gel, it stings. ~ so1
+2: Do you have any other work involving chemicals, like cleaning products? ~ so2
+1: Yes, the cleaning products, bleach and disinfectant. ~ so2
+2: Pulse and temperature first, please. ~
+1: Okay. ~
+2: Pulse 78, temperature 36.7. ~ v pause=10
+1: Good. ~
+2: Now let me see the hands. ~ pause=18
+1: They're embarrassing. ~
+2: There are dry, red, scaly patches with deep cracks across the knuckles, and in the finger webs, and one knuckle has a crust, but there's no spreading redness or pus. ~ x1 x2 x3
+1: Is it eczema, then? ~
+2: It looks like irritant contact dermatitis, caused by the constant washing and cleaning products. ~ d1
+1: Can it be cured? ~
+2: It can be controlled. I'm going to start you on a steroid ointment, betamethasone, apply it once a day to the red areas, for two weeks, and a thick emollient. ~ m1 m2
+1: Do I have to use them all the time? ~
+2: Steroid once a day, thin layer, only on the red cracked areas, and the emollient, as often as you can, particularly after washing. ~ m1 m2
+1: Okay. I'll try, I promise. ~
+2: Wear cotton gloves under waterproof ones, use a soap substitute, and dry your hands carefully. ~ c1
+1: I'll try. Sorry. ~
+2: And I'd like to take a swab from the crusted knuckle, and a skin patch test referral, because I'd like to rule out a reaction to something at work. ~ p1 p2
+1: Okay. ~
+2: Please let your manager know, occupational health may help with a different glove. ~ c2
+1: Good idea. ~
+@@
+{"chief_complaint":{"value":"my hands, they're awful, they're cracked and bleeding","normalized_value":"Cracked bleeding hands from hand-washing"},
+ "symptoms":[{"k":"s1","name":"cracked and bleeding","normalized_name":"Cracked fissured hands","category":"dermatological","body_site":"finger webs, backs of hands and knuckles","certainty":"uncertain"},
+  {"k":"s2","name":"itchy","normalized_name":"Itchy red skin","category":"dermatological"}],
+ "negative_findings":[{"k":"n1","finding":"pus","normalized_name":"Pus or weeping"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"eczema as a child","normalized_condition":"Childhood eczema"}],"social_history":[{"k":"so1","category":"occupation","description":"Care home worker, thirty to forty hand-washes per shift","details":"Thirty, forty times a shift"},{"k":"so2","category":"occupation","description":"Exposure to bleach and disinfectant","details":"bleach and disinfectant"}]},
+ "vitals":{"k":"v","temp":36.7,"hr":78},
+ "physical_examination":[{"k":"x1","finding":"dry, red, scaly patches with deep cracks across the knuckles","normalized_finding":"Dry red scaly hand dermatitis with fissures","body_site":"knuckles and finger webs"},{"k":"x2","finding":"one knuckle has a crust","normalized_finding":"Crusting of one knuckle","body_site":"knuckle"},{"k":"x3","finding":"no spreading redness or pus","normalized_finding":"No cellulitis or pus","body_site":"hands","status":"absent"}],
+ "clinical_assessment":[{"k":"d1","assessment":"irritant contact dermatitis","certainty":"provisional"}],
+ "medications":[{"k":"m1","name":"betamethasone","status":"planned","reported_by":"doctor","frequency":"once a day","duration":{"value":2,"unit":"weeks","normalized":"2 weeks"}},{"k":"m2","name":"emollient","status":"planned","reported_by":"doctor","dose":null,"frequency":"as often as you can","normalized_name":"Emollient","generic_name":null}],
+ "procedures_and_investigations":[{"k":"p1","name":"take a swab from the crusted knuckle","normalized_name":"Skin swab","type":"laboratory"},{"k":"p2","name":"skin patch test referral","normalized_name":"Patch testing","type":"other"}],
+ "counsel":[["c1","Cotton gloves under waterproof ones, soap substitute and dry hands carefully"],["c2","Tell manager and consider occupational health for alternative gloves"]],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient could not say when the hand symptoms began (\"a few months... maybe before\").","related_entities":["symptoms[0]"]}]}
+

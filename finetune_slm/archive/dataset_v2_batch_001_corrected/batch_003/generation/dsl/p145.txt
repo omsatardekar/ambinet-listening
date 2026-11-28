@@ -1,0 +1,42 @@
+## 00894 PATIENT=1 DOCTOR=2
+1: I'm here for my injection review. I haven't got long, I've a meeting at eleven. ~ cc
+2: Understood, we'll be quick but thorough. Which injection do you have at the moment? ~ m1
+1: Adalimumab. Forty milligrams, every two weeks. ~ m1
+2: How long have you been on it? ~ m1
+1: Just over a year. ~ m1
+2: And how are your joints? ~ s1
+1: Much better than before. My hands are stiff when I wake up, but it passes in half an hour or so. ~ s1
+2: When did the stiffness last get really bad? ~ s1 u1
+1: Not sure. Some time in the autumn? Maybe winter. ~ s1 u1
+2: Any infections since the last visit, coughs, fevers or night sweats? ~ n1
+1: No. None of that. ~ n1
+2: Have you had any injection-site reactions? ~
+1: A little redness sometimes, but it goes. ~
+2: Any problems with the pen, or have you missed doses? ~
+1: No, I'm quite regimented about it. ~
+2: Good. And are you happy with how you manage the injections yourself? ~
+1: Yes. It takes a minute. ~
+2: That's useful. Have you had your blood tests done recently? ~
+1: A month ago. The nurse said they were fine. ~
+2: Great. I've seen the results. Your inflammatory markers are low. ~
+1: That's good, isn't it? ~
+2: It is. It suggests the drug is working well. ~
+1: So we carry on as we are? ~
+2: Yes, I'd continue the same dose and the same interval. ~
+1: Good. I don't want to change a winning team. ~
+2: I'll also remind you to tell us before any live vaccine or planned surgery. ~
+1: I will. ~
+2: Please keep to the schedule. If you develop a fever or a new infection, hold the next injection and call us. ~ f1
+1: Understood. ~
+2: Otherwise we'll review you in six months. ~
+1: Six months. Right. Thank you. ~
+2: Have a good meeting. ~
+1: Thanks, I'll try. ~
+@@
+{"chief_complaint":{"value":"I'm here for my injection review","normalized_value":"Review of biologic injection therapy"},
+ "symptoms":[{"k":"s1","name":"stiff","normalized_name":"Morning hand stiffness","category":"musculoskeletal","body_site":"hands","certainty":"certain"}],
+ "negative_findings":[{"k":"n1","finding":"infections","normalized_name":"Infection, fever or night sweats"}],
+ "medications":[{"k":"m1","name":"Adalimumab","dose":"Forty milligrams","frequency":"every two weeks","duration":{"value":1,"unit":"year","normalized":"just over a year"}}],
+ "follow_up":[{"k":"f1","time_reference":"if you develop a fever or a new infection","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient could not say when the stiffness was last at its worst (\"some time in the autumn? Maybe winter\").","related_entities":["symptoms[0]"]}]}
+

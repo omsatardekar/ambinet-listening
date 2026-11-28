@@ -1,0 +1,47 @@
+## 00888 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Hello doctor. This is my son Arjun, he's seven. He starts wheezing whenever he runs around, and it worries me. ~ cc s1
+2: Thank you for bringing him. Hello Arjun, how are you feeling today? ~
+1: I'm okay. ~
+2: Good lad. Mum, can you tell me what the wheezing is like? ~ s1
+3: It's a whistling sound from his chest, after he's been running for a few minutes at school. ~ s1
+2: How long does it last once he stops? ~ s1
+3: Ten minutes or so, then it settles. ~ s1
+2: Has it happened at night, or when he has a cold? ~ s2
+3: When he has a cold, yes, he gets a cough with it. But not usually at night. ~ s2
+2: Arjun, does it hurt when you wheeze? ~
+1: No, it just feels tight. ~
+2: Does he take anything for it? ~ m1
+3: A blue inhaler, salbutamol, two puffs when he needs it, with a spacer. He has used it a few times. ~ m1
+2: Does the inhaler help? ~
+3: Yes, within a few minutes. ~
+2: Does anyone in the family have asthma or eczema? ~ h1 h2
+3: His mother, that's me, had asthma as a child, and his father has hay fever. ~ h1 h2
+2: Does Arjun have any allergies, to medicines or food? ~ a1
+3: A rash after eating peanuts when he was three. We've avoided them since. ~ a1
+2: Thank you. That's important. Does he have any other conditions? ~
+3: Eczema, when he was a baby. It's gone now. ~
+2: I'd like to listen to his chest and check his oxygen. Arjun, can you take big breaths for me? ~
+1: Okay. ~ pause=14
+2: Oxygen 98 percent, pulse 90, breathing 22 a minute. His chest is clear now, no wheeze. ~ v x1
+3: So it's gone? ~
+2: Between episodes it often is. From what you describe, this sounds like exercise-induced asthma. ~ d1
+3: Is it dangerous? ~
+2: It's common and very treatable. He should take two puffs of the salbutamol with the spacer ten minutes before sport. ~ c1
+3: The school should know about that. ~
+2: I'll write a letter for the school. And I'd like to see him again in four weeks, to see how he's getting on. ~ f1
+3: Thank you, doctor. ~
+2: If he's struggling to speak, or the inhaler isn't helping, call an ambulance. ~ c2
+3: I understand. ~
+@@
+{"chief_complaint":{"value":"He starts wheezing whenever he runs around","normalized_value":"Exercise-related wheeze in a child","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"wheezing","normalized_name":"Exertional wheeze","category":"respiratory","body_site":"chest","duration":{"value":10,"unit":"minutes","normalized":"10 minutes per episode"},"reported_by":"family_member"},
+  {"k":"s2","name":"cough","normalized_name":"Cough with colds","category":"respiratory","reported_by":"family_member"}],
+ "medical_history":{"family_history":[{"k":"h1","condition":"asthma","normalized_condition":"Asthma","relation":"mother","reported_by":"family_member"},{"k":"h2","condition":"hay fever","normalized_condition":"Allergic rhinitis","relation":"father","reported_by":"family_member"}]},
+ "medications":[{"k":"m1","name":"salbutamol","dose":"two puffs","frequency":"when he needs it","reported_by":"family_member"}],
+ "allergies":[{"k":"a1","substance":"peanuts","allergy_type":"food","reaction":"rash","status":"historical","reported_by":"family_member"}],
+ "vitals":{"k":"v","spo2":98,"hr":90,"rr":22},
+ "physical_examination":[{"k":"x1","finding":"chest is clear now, no wheeze","normalized_finding":"Clear chest, no wheeze","body_site":"chest","status":"absent"}],
+ "clinical_assessment":[{"k":"d1","assessment":"exercise-induced asthma","certainty":"provisional"}],
+ "counsel":[["c1","Two puffs of salbutamol with spacer ten minutes before sport"],["c2","Call an ambulance if struggling to speak or inhaler not helping"]],
+ "follow_up":[{"k":"f1","time_reference":"in four weeks"}]}
+

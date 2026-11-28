@@ -1,0 +1,47 @@
+## 00910 PATIENT=1 DOCTOR=2
+1: Doctor, I'm still getting this pressure in my face. The spray you gave me isn't doing much. ~ cc s1
+2: Thanks for coming back. Where do you feel the pressure? ~ s1
+1: Around my cheeks and across my forehead. It's worse when I bend over. ~ s1
+2: And how long has it been going on now? ~ s1
+1: Nearly three weeks. ~ s1
+2: Is there discharge from the nose, and what colour? ~ s2
+1: Thick and yellowish, mostly in the morning. ~ s2
+2: Any fever, or swelling around the eyes? ~ n1
+1: No fever. And my eyes look normal. ~ n1
+2: Let's go through what you're taking. Which spray is it? ~ m1
+1: The steroid nasal spray, fluticasone, two sprays in each nostril, once a day. ~ m1
+2: Are you using it every day? ~ m1 u1
+1: Most days. I forget some mornings, to be honest. ~ m1 u1
+2: Anything else? ~ m2
+1: Paracetamol, 1 gram, when the face is sore. And a saline rinse, twice a day. ~ m2 m3
+2: Good, the rinse helps. Do you have any other conditions, like hay fever or asthma? ~ h1
+1: Hay fever, every summer. ~ h1
+2: Let me check your pulse, blood pressure and temperature. ~
+1: Okay. ~ pause=10
+2: Pulse 74, blood pressure 124 over 80, temperature 36.8, oxygen 99 percent, breathing 14. ~ v
+1: All normal? ~
+2: All normal. I'd like to look in your nose and press over the sinuses. ~
+1: Go on. ~ pause=14
+2: I would say this is sinusitis, probably still viral, though the thick discharge makes me think of a bacterial cause. ~ d1
+1: Do I need antibiotics? ~
+2: Not yet. Three weeks is long enough that I'd consider it, but let's do the basics properly first. ~
+1: What are the basics? ~
+2: Use the spray every single day, keep up the saline rinse, and take steam inhalations at night. ~ c1
+1: I will. ~
+2: If it hasn't improved in a week, or you get a fever or swelling around the eyes, I'll prescribe an antibiotic. ~ f1
+1: That sounds fair. ~
+2: Come back and see me then, and we'll decide together. ~
+1: Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"I'm still getting this pressure in my face","normalized_value":"Facial pressure"},
+ "symptoms":[{"k":"s1","name":"pressure","normalized_name":"Facial pressure","category":"respiratory","body_site":"cheeks and forehead","duration":{"value":3,"unit":"weeks","normalized":"3 weeks"}},
+  {"k":"s2","name":"Thick and yellowish","normalized_name":"Purulent nasal discharge","category":"respiratory","body_site":"nose"}],
+ "negative_findings":[{"k":"n1","finding":"fever","normalized_name":"Fever or periorbital swelling"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Hay fever","normalized_condition":"Allergic rhinitis"}]},
+ "medications":[{"k":"m1","name":"fluticasone","dose":"two sprays in each nostril","frequency":"once a day"},{"k":"m2","name":"Paracetamol","dose":"1 gram","frequency":"when the face is sore"},{"k":"m3","name":"saline rinse","normalized_name":"Saline nasal rinse","generic_name":null,"frequency":"twice a day"}],
+ "vitals":{"k":"v","hr":74,"bp":"124/80","temp":36.8,"spo2":99,"rr":14},
+ "clinical_assessment":[{"k":"d1","assessment":"sinusitis, probably still viral","normalized_assessment":"Sinusitis, viral versus bacterial","certainty":"provisional"}],
+ "counsel":[["c1","Use the spray daily, continue saline rinse and steam inhalations"]],
+ "follow_up":[{"k":"f1","time_reference":"if it hasn't improved in a week","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"adherence_uncertain","description":"Patient uses the nasal spray most days but forgets some mornings.","related_entities":["medications[0]"]}]}
+

@@ -1,0 +1,125 @@
+## 00987 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+2: Mr Gallagher, Paul, thanks for coming in. I understand you'd like to talk about planning ahead. Is that right? ~
+1: That's right. My son, Declan, thinks it's time, and I agree. I've been breathless lately, and it's made me think. ~ cc s1
+3: He's been getting puffed just crossing the room, doctor. ~ s1
+2: Let's talk about how you've been, first. How long has the breathlessness been bothering you? ~ s1
+1: Since the winter. A few months now. ~ s1
+2: Are you tired as well? ~ s2
+1: Wiped out by the afternoon. ~ s2
+2: Any swelling in your legs? ~ s3
+3: His ankles blow up by the evening. ~ s3
+2: Any chest pain? ~ n1
+1: No chest pain, no. ~ n1
+2: Any falls? ~ n2
+1: No falls. ~ n2
+2: Any confusion? ~ n3
+3: No, sharp as ever. ~ n3
+2: What tablets are you on? ~ m1 m2 m3
+1: Furosemide, 40 mg, in the morning. Ramipril, 2.5 mg, once a day. And bisoprolol, 1.25 mg, once a day. ~ m1 m2 m3
+2: Any allergies? ~ a1
+1: Morphine. It made me very sick. ~ a1
+2: Your health history? ~ h1 h2 h3 h4
+1: Heart failure, high blood pressure, arthritis in my knees, and the prostate. ~ h1 h2 h3 h4
+2: Operations? ~ sg1 sg2
+1: A pacemaker, in 2019. And a hernia, in 2005. ~ sg1 sg2
+2: Heart problems in the family? ~ f1 f2
+1: My father had heart disease. My mother had a stroke. ~ f1 f2
+2: Where do you live? ~ so1
+3: He lives alone, since Mum died. I'm ten minutes down the road. ~ so1
+2: And what did you do for work? ~ so2
+1: Farmer, forty years. Retired. ~ so2
+2: Smoking? ~ so3
+1: I gave up smoking in 1995. ~ so3
+2: Let me check you. Pulse 70, blood pressure 128 over 72, temperature 36.5, oxygen 94 percent, breathing 20, and weight 82 kilos. ~ v pause=15
+3: Is the oxygen all right? ~
+2: A touch lower than I'd like, but it's his normal. Let me listen. ~ pause=10
+1: Take your time. ~
+2: There's a little crackle at both lung bases. ~ x1
+1: That's the fluid. ~
+2: And I can see swelling at both ankles, pitting. ~ x2
+3: It was worse last week. ~
+2: Heart sounds are regular, and I can feel the pacemaker under the skin. ~ x3
+1: Yes, it's been good to me. ~
+2: Any palpitations or fluttering? ~ r1
+1: No, nothing like that. ~ r1
+2: What I see is heart failure that's stable but not perfect. ~ d1
+3: Is it getting worse? ~
+2: Slowly, over time, which is why this conversation matters. I'd like to arrange blood tests, including kidney function, an ECG, and an echocardiogram, to see how the heart is doing. ~ p1 p2 p3
+1: All right. ~
+2: And I'd like to sit down with you, Paul, and complete an advance care plan, so your wishes are written down. ~ p4
+1: That's what I came for. ~
+2: Let's talk about what matters most to you. ~
+1: Staying at home. And not being a burden to Declan. ~
+3: Dad, you're not a burden. ~
+2: Thank you for saying so, both of you. I'll write down that your priority is to stay at home, and we'll talk about hospital treatment another day, when we have the results. ~ c1
+1: That sounds sensible. ~
+2: If you become more breathless, or you're admitted to hospital, I'd like to see you again straight away. ~ f1
+3: We'll ring the surgery. ~
+@@
+{"chief_complaint":{"value":"I've been breathless lately","normalized_value":"Advance care planning; worsening breathlessness"},
+ "symptoms":[{"k":"s1","name":"breathless","normalized_name":"Exertional breathlessness","category":"respiratory","duration":{"value":null,"unit":"months","normalized":"a few months"},"onset":"Since the winter"},
+  {"k":"s2","name":"Wiped out by the afternoon","normalized_name":"Afternoon fatigue","category":"constitutional"},
+  {"k":"s3","name":"ankles blow up","normalized_name":"Ankle swelling","category":"cardiovascular","body_site":"ankles","reported_by":"family_member","frequency":"by the evening"}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Chest pain"},{"k":"n2","finding":"falls","normalized_name":"Falls"},{"k":"n3","finding":"confusion","normalized_name":"Confusion","reported_by":"family_member"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Heart failure","normalized_condition":"Heart failure"},{"k":"h2","condition":"high blood pressure","normalized_condition":"Hypertension"},{"k":"h3","condition":"arthritis in my knees","normalized_condition":"Knee osteoarthritis"},{"k":"h4","condition":"the prostate","normalized_condition":"Prostate disease"}],
+  "surgical_history":[{"k":"sg1","procedure":"A pacemaker","normalized_procedure":"Pacemaker insertion","timeframe":"in 2019"},{"k":"sg2","procedure":"a hernia","normalized_procedure":"Hernia repair","timeframe":"in 2005"}],
+  "family_history":[{"k":"f1","relation":"father","condition":"heart disease"},{"k":"f2","relation":"mother","condition":"stroke"}],
+  "social_history":[{"k":"so1","category":"living","details":"lives alone, since Mum died","reported_by":"family_member"},{"k":"so2","category":"occupation","details":"Farmer, forty years","status":"retired"},{"k":"so3","category":"smoking","details":"gave up smoking in 1995","status":"former"}]},
+ "medications":[{"k":"m1","name":"Furosemide","dose":"40 mg","frequency":"in the morning"},{"k":"m2","name":"Ramipril","dose":"2.5 mg","frequency":"once a day"},{"k":"m3","name":"bisoprolol","dose":"1.25 mg","frequency":"once a day"}],
+ "allergies":[{"k":"a1","substance":"Morphine","reaction":"very sick"}],
+ "vitals":{"k":"v","by":"doctor","bp":"128/72","hr":70,"temp":36.5,"spo2":94,"rr":20,"wt":82},
+ "physical_examination":[{"k":"x1","finding":"a little crackle at both lung bases","normalized_finding":"Bibasal crackles","body_site":"lung bases"},{"k":"x2","finding":"swelling at both ankles, pitting","normalized_finding":"Bilateral pitting ankle oedema","body_site":"ankles"},{"k":"x3","finding":"Heart sounds are regular","normalized_finding":"Regular heart sounds; pacemaker palpable","body_site":"chest"}],
+ "review_of_systems":[{"k":"r1","system":"cardiovascular"}],
+ "clinical_assessment":[{"k":"d1","assessment":"heart failure that's stable but not perfect","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood tests, including kidney function","normalized_name":"Blood tests with renal function","type":"laboratory"},{"k":"p2","name":"ECG","normalized_name":"Electrocardiogram","type":"cardiac"},{"k":"p3","name":"echocardiogram","normalized_name":"Echocardiogram","type":"imaging"},{"k":"p4","name":"complete an advance care plan","normalized_name":"Advance care plan","type":"other"}],
+ "counsel":[["c1","Record that the priority is to stay at home and revisit hospital treatment preferences when results are back"]],
+ "follow_up":[{"k":"f1","time_reference":"if you become more breathless, or you're admitted to hospital","status":"conditional"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00988 PATIENT=1 DOCTOR=2
+1: Hi, doctor. Great to see you. I wanted to ask if I can cut down on my tablets, because my sugar numbers at home have been so much better, and I've been exercising, and my wife says I'm a new man, and, well, I thought it was worth asking. ~ cc
+2: Congratulations. That's a lot of hard work. How are you feeling in yourself? ~
+1: Good. A bit dizzy now and then, when I stand up quick. ~ s1
+2: Anything else? ~ s2
+1: Hungry between meals. Like clockwork, at eleven. ~ s2
+2: Have you had any low blood sugar episodes, shakes, sweats? ~ n1
+1: No, nothing like that. ~ n1
+2: What are you taking at the moment? ~ m1
+1: Metformin, 1000 mg, twice a day. ~ m1
+2: Any allergies? ~ a1
+1: Hm. I think I had a reaction to some medicine once, a rash, but I can't remember what it was, or when. ~ a1 u1
+2: I'll record it as a possible, unconfirmed allergy. Any other conditions? ~ h1
+1: Just the diabetes. Type 2. ~ h1
+2: Let me take your numbers. Blood pressure 124 over 76, weight 82 kilos. ~ v pause=10
+1: I've lost seven kilos. ~
+2: That's a huge achievement. Any trouble with your heart, palpitations, when you're dizzy? ~ r1
+1: No, nothing like that. ~ r1
+2: Here's how I'd think about it. Weight loss and exercise make the body more sensitive to insulin, so you need less medicine. That's the goal. ~
+1: So I can cut down? ~
+2: A small step. I'd like to reduce your metformin to 500 mg, twice a day. ~ m2
+1: Half the dose. Is that safe? ~
+2: Yes, as long as we check. I'd like to arrange an HbA1c in three months, to make sure your sugar stays well controlled. ~ p1
+1: That makes sense. ~
+2: If your home readings start climbing before then, ring us. ~
+1: I will. ~
+2: And the dizziness when you stand, drink a glass of water first thing, and stand up slowly. ~ c1
+1: I'll do that. ~
+2: I'd like to see you again in three months, with the result. ~ f1
+1: Three months. And can I tell my wife? ~
+2: Absolutely. She's earned it too. ~
+1: She'll be delighted. Thank you. ~
+@@
+{"chief_complaint":{"value":"cut down on my tablets","normalized_value":"Wants to reduce diabetes tablets after improved control"},
+ "symptoms":[{"k":"s1","name":"dizzy now and then","normalized_name":"Postural dizziness","category":"neurological","aggravating_factors":["stand up quick"]},
+  {"k":"s2","name":"Hungry between meals","normalized_name":"Hunger between meals","category":"endocrine","frequency":"at eleven"}],
+ "negative_findings":[{"k":"n1","finding":"low blood sugar episodes","normalized_name":"Hypoglycaemic episodes"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"the diabetes. Type 2","normalized_condition":"Type 2 diabetes mellitus"}]},
+ "medications":[{"k":"m2","name":"metformin","dose":"500 mg","frequency":"twice a day","status":"planned","reported_by":"doctor"}],
+ "allergies":[{"k":"a1","substance":"some medicine","normalized_substance":"Unknown medicine","allergy_type":"medication","status":"uncertain"}],
+ "vitals":{"k":"v","by":"doctor","bp":"124/76","wt":82},
+ "review_of_systems":[{"k":"r1","system":"cardiovascular"}],
+ "procedures_and_investigations":[{"k":"p1","name":"HbA1c in three months","normalized_name":"Glycated haemoglobin","type":"laboratory"}],
+ "counsel":[["c1","Drink a glass of water first thing and stand up slowly"]],
+ "follow_up":[{"k":"f1","time_reference":"in three months"}],
+ "clinical_uncertainties":[{"type":"allergy_uncertain","description":"A possible rash from an unremembered medicine was reported but the substance and timing are unknown.","related_entities":["allergies[0]"],"k":"u1"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}

@@ -1,0 +1,151 @@
+## 00955 PATIENT=1 DOCTOR=2
+2: Mr Reilly, I wanted to talk about your vitamin D. It came back low. Do you know why you were tested? ~
+1: My wife made me. I'm tired, I guess. For about four months. ~ cc s1
+2: Tired how? All day, or at certain times? ~ s1
+1: All day. I wake up tired. ~ s1
+2: That's what low vitamin D can do. How's your mood? ~
+1: Fine. Just flat. ~
+2: Are you outdoors much? ~
+1: Not really. I'm at a desk. I leave in the dark, I come home in the dark. ~
+2: That's most of the winter, then. And what do you eat, any fish, eggs? ~
+1: Some eggs. Not much fish. ~
+2: Let me take two quick numbers. Blood pressure 122 over 76, pulse 70. ~ v pause=10
+1: That's fine? ~
+2: That's fine. Let me press on a few places. ~ pause=8
+1: Go ahead. ~
+2: I'm pressing over the shin bone. Any tenderness? ~
+1: A little. Mm. ~
+2: There's mild tenderness over the shin bones, and the muscles of the thighs are slightly sore when I squeeze them. ~ x1 x2
+1: Yes, my legs ache sometimes. ~
+2: Any numbness or tingling in your hands or feet? ~ r1
+1: No, nothing like that. ~ r1
+2: What I think is happening is that low vitamin D could be behind your tiredness, but I can't rule out other causes, so I won't say it's the whole story. ~ d1
+1: What else could it be? ~
+2: Lots of things cause tiredness, sleep, stress, the winter. But we'll start with the simple fix. ~
+1: What's the fix? ~
+2: More daylight, even in winter. A walk at lunch, for twenty minutes. ~ c1
+1: I can do that. ~
+2: And eat oily fish, like salmon or mackerel, twice a week, and eggs. ~ c2
+1: Mackerel. Okay. ~
+2: Keep a note of how your energy is over the next few weeks. ~ c3
+1: Sure. ~
+2: Any questions for me? ~
+1: Is it serious? ~
+2: Not at all. It's very common, and fixable. ~
+1: Good. I'll tell my wife she was right. ~
+2: She sounds sensible. ~
+1: She is. ~
+2: Anything else on your mind today? ~
+1: No, that's it. Thanks, doctor. ~
+@@
+{"chief_complaint":{"value":"I'm tired, I guess. For about four months","normalized_value":"Fatigue for four months with low vitamin D"},
+ "symptoms":[{"k":"s1","name":"tired","normalized_name":"Fatigue","category":"constitutional","duration":{"value":4,"unit":"months","normalized":"about 4 months"}}],
+ "vitals":{"k":"v","by":"doctor","bp":"122/76","hr":70},
+ "physical_examination":[{"k":"x1","finding":"mild tenderness over the shin bones","normalized_finding":"Mild tibial bone tenderness","body_site":"shins"},{"k":"x2","finding":"muscles of the thighs are slightly sore","normalized_finding":"Mild thigh muscle tenderness","body_site":"thighs"}],
+ "review_of_systems":[{"k":"r1","system":"neurological"}],
+ "clinical_assessment":[{"k":"d1","assessment":"low vitamin D could be behind your tiredness","certainty":"differential"}],
+ "counsel":[["c1","Get daylight outdoors, such as a twenty-minute lunchtime walk"],["c2","Eat oily fish twice a week and eggs"],["c3","Keep a note of energy levels over the next few weeks"]],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00956 PATIENT=1 DOCTOR=2 CAREGIVER=3
+3: Doctor, I'm Meena, I look after Mrs Rao in the daytime. Her fingers go white, very white, in the cold. She wanted me here. ~ cc s1
+1: Yes. White. ~ s1
+2: When does it happen, Mrs Rao? ~ s1
+1: Cold. Fridge. Winter. ~ s1
+3: Even when she takes the milk out of the fridge, doctor. And the tips of the fingers go blue after, and then red. ~ s1
+2: Is it painful? ~ s2
+1: When warm. Tingling. Pain. ~ s2
+3: It's worse in the evening, she rubs her hands together and she cries a little. ~ s2
+2: Any sores on the fingertips? ~ n1
+1: No sores. ~ n1
+2: What do you take at the moment? ~ m1
+1: Nifedipine. Ten. Two times. ~ m1
+3: Nifedipine, 10 mg, twice a day, doctor, that's what it says on the box. ~ m1
+2: Good. Is it helping? ~
+1: Little. ~
+3: A little, yes. She's not been wearing the gloves. ~
+2: Let me check you. Blood pressure 118 over 72, pulse 78. ~ v pause=10
+1: Fine? ~
+2: Fine. Let me see your hands. Hold them out. ~ pause=8
+3: Show the doctor. ~
+1: Here. ~
+2: Your fingertips are pale and cool compared to the rest of your hand. ~ x1
+3: That's how they look in the clinic, too. ~
+2: Now I'll explain. Raynaud's is when the small blood vessels in the fingers squeeze too tightly in the cold. ~
+1: Squeeze. Yes. ~
+2: It can be on its own, but sometimes it's linked to another condition, like an autoimmune one, and I can't rule that out yet. ~ d1
+3: Is it dangerous? ~
+2: Not on its own. But I'd like to keep an eye on it. Keep her hands warm, wear gloves, and avoid smoking and caffeine. ~ c1
+3: She doesn't smoke. She drinks a lot of tea. ~
+2: Maybe cut it to a few cups. ~
+1: Okay. ~
+3: Should she wear the gloves at night, too? ~
+2: Thin cotton ones can help, yes. ~
+3: I'll make sure. ~
+2: Mrs Rao, do you understand what I've said? ~
+1: Yes. Gloves. Warm. ~
+2: Exactly. I'd like to see you again in six weeks. ~ f1
+3: Six weeks. I'll bring her. ~
+@@
+{"chief_complaint":{"value":"Her fingers go white, very white, in the cold","normalized_value":"Fingers turning white in the cold","reported_by":"caregiver"},
+ "symptoms":[{"k":"s1","name":"fingers go white","normalized_name":"Digital pallor in the cold","category":"cardiovascular","body_site":"fingers","reported_by":"caregiver","aggravating_factors":["Cold"]},
+  {"k":"s2","name":"Tingling","normalized_name":"Tingling and pain on rewarming","category":"neurological","body_site":"fingers"}],
+ "negative_findings":[{"k":"n1","finding":"sores","normalized_name":"Fingertip ulcers"}],
+ "medications":[{"k":"m1","name":"Nifedipine","dose":"10 mg","frequency":"twice a day","reported_by":"caregiver"}],
+ "vitals":{"k":"v","by":"doctor","bp":"118/72","hr":78},
+ "physical_examination":[{"k":"x1","finding":"fingertips are pale and cool compared to the rest of your hand","normalized_finding":"Pale cool fingertips","body_site":"fingers"}],
+ "clinical_assessment":[{"k":"d1","assessment":"linked to another condition, like an autoimmune one","certainty":"differential"}],
+ "counsel":[["c1","Keep the hands warm, wear gloves and avoid smoking and caffeine"]],
+ "follow_up":[{"k":"f1","time_reference":"in six weeks"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00957 PATIENT=1 DOCTOR=2 NURSE=3
+3: Morning, Dr Pritchard. I've done Mr Ashworth's obs: blood pressure 128 over 82, pulse 74, weight 92 kilos. He's a bit worried about his liver test. ~ v
+2: Thank you, nurse. Come in, Mr Ashworth. I understand there's an abnormal liver test from your insurance check? ~ cc
+1: Yes. They sent a letter. The, er, the thing, the numbers, were high. I can't remember which. The liver ones, anyway. ~
+2: That's what we'll look at. Tell me, any symptoms at the moment? ~
+1: I get tired, but I'm fifty-eight, and I work too much. ~ s1
+2: Any pain, anywhere in the tummy? ~ s2
+1: A dull ache on the right side, under the ribs, mostly after a fatty meal. I had a fish and chip supper last week and it was there all night. ~ s2
+2: Any bloating? ~ s3
+1: Yes, a bit, after big meals. ~ s3
+2: Any yellowing of the skin or eyes? ~ n1
+1: No. My wife would've said. ~ n1
+2: What medicines do you take? ~ m1
+1: One tablet for cholesterol. A little blue one. I couldn't tell you the name, I'm sorry. My wife usually knows. ~ m1 u1
+2: We'll find it on your record. How's your general health? ~ h1 h2
+1: High cholesterol, as I said, and I'm overweight, I know. ~ h1 h2
+2: Let me press on your tummy. Take a deep breath in. ~ pause=10
+1: Okay. ~
+2: There's no tenderness over the liver, and I can't feel it enlarged. ~ x1
+1: That's good? ~
+2: Any problem with your bowels, anything different? ~ r1
+1: No, nothing, they're normal. ~ r1
+2: Here's what I think. Mild liver test abnormalities with high cholesterol and extra weight is most often a fatty liver. That's my provisional thinking. ~ d1
+1: Fatty liver. From drink? ~
+2: Not necessarily. It's more often from weight, sugar and fat in the diet. ~
+1: I don't drink much. ~
+2: Good. The main treatment is gradual weight loss, about five to ten percent of your weight, and cutting down on fatty and sugary foods. ~ c1
+1: That's about nine kilos. ~
+2: Roughly. Slowly, over the next six months. Walk for half an hour every day. ~ c2
+1: I'll do it. ~
+2: And I'd like you to bring the box for the cholesterol tablet next time, so we can note the name properly. ~
+1: I'll ask my wife. ~
+2: I'd like to see you again in six weeks. ~ f1
+1: Six weeks. Thank you. ~
+@@
+{"chief_complaint":{"value":"there's an abnormal liver test from your insurance check","normalized_value":"Abnormal liver blood test at insurance check","reported_by":"doctor"},
+ "symptoms":[{"k":"s1","name":"tired","normalized_name":"Fatigue","category":"constitutional"},
+  {"k":"s2","name":"dull ache on the right side","normalized_name":"Right upper quadrant ache after fatty meals","category":"gastrointestinal","body_site":"right upper abdomen"},
+  {"k":"s3","name":"bloating","normalized_name":"Bloating","category":"gastrointestinal"}],
+ "negative_findings":[{"k":"n1","finding":"yellowing of the skin or eyes","normalized_name":"Jaundice"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High cholesterol","normalized_condition":"Hypercholesterolaemia"},{"k":"h2","condition":"overweight","normalized_condition":"Overweight"}]},
+ "medications":[{"k":"m1","name":"little blue one","normalized_name":null,"generic_name":null,"indication":"cholesterol"}],
+ "vital_signs":[{"k":"v","name":"Blood pressure","normalized_name":"Blood pressure","value":"128/82","unit":"mmHg","reported_by":"nurse"},{"k":"v","name":"Heart rate","normalized_name":"Heart rate","value":"74","unit":"bpm","reported_by":"nurse"},{"k":"v","name":"Weight","normalized_name":"Weight","value":"92","unit":"kg","reported_by":"nurse"}],
+ "physical_examination":[{"k":"x1","finding":"no tenderness over the liver","normalized_finding":"No hepatic tenderness or enlargement","status":"absent","body_site":"abdomen"}],
+ "review_of_systems":[{"k":"r1","system":"gastrointestinal"}],
+ "clinical_assessment":[{"k":"d1","assessment":"a fatty liver","certainty":"provisional"}],
+ "counsel":[["c1","Lose weight gradually and cut down on fatty and sugary foods"],["c2","Walk for half an hour every day"]],
+ "follow_up":[{"k":"f1","time_reference":"in six weeks"}],
+ "clinical_uncertainties":[{"type":"incomplete_medication_name","description":"The patient cannot name his little blue cholesterol tablet.","related_entities":["medications[0]"],"k":"u1"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":["medications[0]"]}}

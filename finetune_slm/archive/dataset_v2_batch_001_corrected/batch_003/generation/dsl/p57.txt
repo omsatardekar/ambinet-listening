@@ -1,0 +1,100 @@
+## 00750 PATIENT=1 DOCTOR=2
+1: Hello, doctor. I'm not sure what I've come about, to be honest. The hospital said to come back and see you after I was in. ~ cc
+2: Yes, you were in for a chest infection three weeks ago. How have you been since you came home? ~
+1: Grand, grand. Only I've no appetite. None at all. I push the food around the plate. ~ s1
+2: How long has that been going on? ~ s1 u1
+1: Since the hospital? Or before it? Honestly, I couldn't say. I've been off my food a while. ~ s1 u1
+2: Have you lost weight? ~ s1
+1: My trousers are loose, so I must have. A couple of stone, maybe? I don't weigh myself. ~ s1
+2: Do you feel sick, or does food stick, or does it hurt to eat? ~
+1: No, none of that. I'm just not hungry. ~
+2: What tablets are you on? ~ m1 m2
+1: Mirtazapine, 15 mg, maybe? At bedtime, the little white one. And omeprazole, 20 mg in the morning. ~ m1 m2 u2
+2: Is the mirtazapine 15 mg, do you think? You said maybe. ~ m1 u2
+1: It could be 30. The chemist knows. I only take what they give me. ~ m1 u2
+2: I'll check with the record. What's it for? ~
+1: For my mood, after my wife died. Two years ago. ~ h1
+2: I'm very sorry. Any operations? ~ sg1
+1: Gallbladder, in the nineties. ~ sg1
+2: Let me weigh you, and check your numbers. ~
+1: Go on then. ~
+2: Pulse 82, blood pressure 118 over 72, temperature 36.6, oxygen 96 percent, and you weigh 64 kilos. ~ v pause=20
+1: Is that a lot? ~
+2: Your record says 74 kilos a year ago, so you've lost about ten kilos, which is significant. Any cough or breathlessness left from the chest infection? ~ r1
+1: A little cough in the morning. No breathlessness. ~ r1
+2: I'd say the main thing is poor appetite after your recent illness, in the setting of low mood, so I'd call it reduced appetite following illness. ~ d1
+1: Do you think it's my mood? ~
+2: It's likely part of it, but with that much weight loss, I don't want to assume. I'd like to arrange blood tests, to look for anaemia, thyroid, and other causes. ~ p1
+1: Right. ~
+2: Meanwhile, small meals and snacks, six times a day, and a build-up drink between meals, rather than big plates. ~ c1
+1: I could manage a milky drink. ~
+2: That's the idea. And try to eat with someone, if you can, a neighbour or a friend. ~ c2
+1: My daughter comes on Sundays. ~
+2: Good. I'd like to see you again in two weeks, and weigh you again. ~ f1
+1: Two weeks. Fine. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"The hospital said to come back and see you after I was in","normalized_value":"Post-discharge review"},
+ "symptoms":[{"k":"s1","name":"no appetite","normalized_name":"Poor appetite with weight loss","category":"constitutional","certainty":"uncertain"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"my mood","normalized_condition":"Low mood"}],"surgical_history":[{"k":"sg1","procedure":"Gallbladder","normalized_procedure":"Cholecystectomy","timeframe":"in the nineties"}]},
+ "medications":[{"k":"m1","name":"Mirtazapine","dose":"15 mg","frequency":"at bedtime"},{"k":"m2","name":"omeprazole","dose":"20 mg","frequency":"in the morning"}],
+ "vitals":{"k":"v","hr":82,"bp":"118/72","temp":36.6,"spo2":96,"wt":64},
+ "review_of_systems":[{"k":"r1","system":"respiratory","status":"negative","details":"no breathlessness, mild morning cough"}],
+ "clinical_assessment":[{"k":"d1","assessment":"reduced appetite following illness","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood tests","normalized_name":"Full blood count, thyroid and other causes of weight loss","type":"laboratory"}],
+ "counsel":[["c1","Small meals and snacks six times a day with build-up drinks between meals"],["c2","Try to eat with company"]],
+ "follow_up":[{"k":"f1","time_reference":"in two weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient could not say whether the poor appetite began before or after the hospital stay (\"I couldn't say\").","related_entities":["symptoms[0]"]},
+  {"k":"u2","type":"uncertain_dose","description":"Patient gave the mirtazapine dose tentatively (\"15 mg, maybe?... it could be 30\").","related_entities":["medications[0]"]}]}
+
+## 00751 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Doctor, quick, it's my husband, he can't breathe, his inhaler's not working! ~ cc
+2: Bring him straight in, sit him up. Sir, can you tell me your name? ~
+1: Declan. Can't. Breathe. ~ s1
+2: Okay Declan, I'm going to help you. Short answers. When did it start? ~ s1 u1
+1: Yesterday. One day. ~ s1 u1
+3: It's been three days, Declan. He's been coughing since Monday. ~ s1 u1 s4
+2: Three days says your wife, one day says you. I'll put it as one to three days. Wheezy? ~ s1 s2 u1
+1: Yes. Chest tight. ~ s2
+3: He's used his blue inhaler every hour since this morning, and it only works for a few minutes. ~ s3
+2: Any chest pain, or any blue lips? ~ n1
+1: No pain. Just tight. ~ n1
+2: Fever, or coughing up coloured phlegm? ~ n2
+1: No. Dry cough. ~ n2
+2: I'm putting oxygen on you now, and I'm checking your numbers. ~
+3: Is he going to be all right? ~
+2: Pulse 118, breathing 28 a minute, oxygen 91 percent without oxygen, blood pressure 138 over 86, temperature 36.9. ~ v pause=15
+3: That's bad, isn't it? ~
+2: The oxygen is lower than I want and his breathing is fast, so this is a significant asthma attack, but we can treat it. Declan, I'm listening to your chest. ~
+1: Okay. ~ pause=15
+2: Widespread wheeze all over both lungs, and the air isn't moving as well as I'd like at the bases. ~ x1
+2: What conditions does he have, and what does he take? ~ h1 h2
+3: Asthma since he was a boy, and high blood pressure. He takes his blue inhaler and a brown one twice a day, but he's run out of the brown one. ~ h1 h2
+2: When did he run out? ~
+3: Last week. I meant to get a repeat. ~
+2: Anyone else in the family with asthma? ~ f1
+3: His father, and his sister. ~ f1
+2: Thank you. Declan, I'm going to give you salbutamol through a nebuliser mask, and steroid tablets, prednisolone, 40 mg once a day, for five days. ~ m1 m2
+1: Thank you. ~
+2: I'd like to measure your peak flow once you've had the first treatment, and I'd like to arrange a chest X-ray, to make sure there's nothing else going on, like a collapsed lung. ~ p1 p2
+3: Will he need to stay in? ~
+2: Probably a few hours of treatment first, and then we'll decide. If he's not improving within an hour, he'll go to the ward. ~ f2
+3: I'll stay with him. ~
+2: Declan, breathe slowly in the mask, and tell the nurse if you feel worse. ~ c1
+1: Okay. ~
+@@
+{"chief_complaint":{"value":"he can't breathe, his inhaler's not working","normalized_value":"Acute asthma attack","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"Can't. Breathe","normalized_name":"Shortness of breath","category":"respiratory","duration":{"value":null,"unit":"days","normalized":"approximately 1 to 3 days"},"certainty":"uncertain"},
+  {"k":"s2","name":"Chest tight","normalized_name":"Chest tightness and wheeze","category":"respiratory"},
+  {"k":"s3","name":"his blue inhaler every hour","normalized_name":"Frequent reliever use with brief relief","category":"respiratory","reported_by":"family_member"},
+  {"k":"s4","name":"coughing since Monday","normalized_name":"Dry cough","category":"respiratory","reported_by":"family_member","onset":"since Monday"}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Chest pain"},{"k":"n2","finding":"Fever","normalized_name":"Fever"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Asthma","normalized_condition":"Asthma","reported_by":"family_member"},{"k":"h2","condition":"high blood pressure","normalized_condition":"Hypertension","reported_by":"family_member"}],"family_history":[{"k":"f1","condition":"asthma","normalized_condition":"Asthma","relation":"father","reported_by":"family_member"}]},
+ "vitals":{"k":"v","hr":118,"rr":28,"spo2":91,"bp":"138/86","temp":36.9},
+ "physical_examination":[{"k":"x1","finding":"Widespread wheeze all over both lungs","normalized_finding":"Diffuse bilateral wheeze with reduced air entry at bases","body_site":"both lungs"}],
+ "medications":[{"k":"m2","name":"salbutamol","status":"planned","reported_by":"doctor","dose":null,"frequency":null},{"k":"m1","name":"prednisolone","status":"planned","reported_by":"doctor","dose":"40 mg","frequency":"once a day","duration":{"value":5,"unit":"days","normalized":"5 days"}}],
+ "procedures_and_investigations":[{"k":"p1","name":"peak flow","normalized_name":"Peak expiratory flow","type":"other"},{"k":"p2","name":"chest X-ray","normalized_name":"Chest X-ray","type":"imaging"}],
+ "counsel":[["c1","Breathe slowly in the mask and tell the nurse if worse"]],
+ "follow_up":[{"k":"f2","time_reference":"If he's not improving within an hour","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"duration_disagreement","description":"Patient says one day; his wife says three days; summarised as one to three days, not confirmed.","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved"}],
+ "quality_checks":{"contradictions_detected":["Duration of breathlessness: patient one day vs family member three days (approximate range only)."]}}
+

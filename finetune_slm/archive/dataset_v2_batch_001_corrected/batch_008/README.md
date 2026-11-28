@@ -1,0 +1,2 @@
+# Batch 008 (500 synthetic encounters, ids 03001-03500)
+Generated with the Batch 001/002 generator (scripts/generate_batch_008.py) from 27 NEW scenario profiles (scripts/b8_profiles_1.py): post-operative, oncology and chemotherapy, toxicology and environmental, occupational, endocrine, obstetric, eye, infection and elderly-care scenarios, as best / middle / worst cases. Validate with scripts/validate_b8.py. Not clinically reviewed; dialogue is template-based.

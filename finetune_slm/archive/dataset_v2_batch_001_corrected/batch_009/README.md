@@ -1,0 +1,2 @@
+# Batch 009 (200 synthetic encounters, ids 03501-03700)
+Generated with the Batch 001/002 generator (scripts/generate_batch_009.py --n 200) from 28 NEW non-obvious scenario profiles (scripts/b9_profiles_1.py): atypical presentations, mimics, medicine-induced problems, incidental findings and quiet red flags. Validate with scripts/validate_b9.py. Not clinically reviewed; dialogue is template-based.

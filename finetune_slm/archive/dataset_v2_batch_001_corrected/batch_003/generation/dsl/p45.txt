@@ -1,0 +1,83 @@
+## 00729 PATIENT=1 DOCTOR=2
+1: Er, hi. I've got a lump on my neck, at the back, and it's gone sore. It's a cyst, I think. I've had them before. ~ cc s1
+2: Let me hear about it. How long has it been there? ~ s1
+1: Ages. A year? It was small and didn't bother me. Then last week it got big and sore. ~ s1 s2
+2: Painful how? ~ s2
+1: Tender. Throbs a bit. It hurts if my collar rubs it. ~ s2
+2: Any discharge, or has it burst? ~ n1
+1: No. Nothing came out. No. ~ n1
+2: What are you using on it? ~ m1 m2 u1
+1: Doxycycline, 100 mg, the dentist gave me some, maybe once a day? And the antiseptic wash, I don't know the name, from the pharmacy. ~ m1 m2 u1
+2: Thanks. So doxycycline, 100 mg, once a day as you recall it. And the wash, you can't name it. Have you had cysts before? ~ m1 u1 h1 sg1 f1
+1: One on my back, they cut it out, five years ago. ~ h1 sg1
+2: Does it run in the family? ~ f1
+1: My dad gets them. On his scalp. ~ f1
+2: Let me look. Which side? ~
+1: Back of the neck, a bit to the right. ~ pause=15
+2: It's a round, firm lump about two centimetres across, tender, with a tiny dark dot in the middle. The skin around is slightly red. ~
+1: Is that a cyst, then? ~
+2: It looks like an epidermoid cyst, which is a sac under the skin, and it's a little inflamed. ~ d1
+1: Will it go away? ~
+2: Inflamed ones often settle for a while, but the sac stays, and it usually flares again. Taking the whole sac out is the proper cure. ~
+1: Operation? ~
+2: A small one, under local anaesthetic. First, I'd like to arrange an ultrasound, to check the size and make sure it's what I think. ~ p1
+1: Okay. ~
+2: Keep the area clean, don't squeeze it, and put a warm flannel on it for ten minutes a few times a day. ~ c1
+1: Squeeze is what I want to do. ~
+2: I know, but squeezing pushes the contents deeper and can cause an infection. ~
+1: Right. ~
+2: If it turns very red and hot, gets much more painful, starts to ooze pus, or you get a fever, come back that day. ~ f1
+1: I will. Thanks. ~
+2: And if the ultrasound confirms it, we'll talk about getting it removed once it's calm. ~
+@@
+{"chief_complaint":{"value":"I've got a lump on my neck","normalized_value":"Tender lump on back of neck"},
+ "symptoms":[{"k":"s1","name":"lump on my neck","normalized_name":"Neck lump","category":"constitutional","body_site":"back of neck","duration":{"value":1,"unit":"year","normalized":"1 year"}},
+  {"k":"s2","name":"Tender","normalized_name":"Tenderness of lump","category":"dermatological","aggravating_factors":["collar rubs"]}],
+ "negative_findings":[{"k":"n1","finding":"discharge","normalized_name":"Discharge"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"one on my back","normalized_condition":"Previous epidermoid cyst"}],"surgical_history":[{"k":"sg1","procedure":"they cut it out","normalized_procedure":"Excision of cyst","timeframe":"five years ago"}],
+  "family_history":[{"k":"f1","condition":"cysts","normalized_condition":"Epidermoid cysts","relation":"dad"}]},
+ "medications":[{"k":"m1","name":"Doxycycline","dose":"100 mg","frequency":"once a day"},{"k":"m2","name":"antiseptic wash","normalized_name":null,"generic_name":null}],
+ "clinical_assessment":[{"k":"d1","assessment":"epidermoid cyst","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"ultrasound","normalized_name":"Soft tissue ultrasound of neck","type":"imaging"}],
+ "counsel":[["c1","Keep clean, do not squeeze, warm flannel ten minutes a few times a day"]],
+ "follow_up":[{"k":"f1","time_reference":"If it turns very red and hot, gets much more painful, starts to ooze pus, or you get a fever","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"uncertain_dose","description":"Patient gave the doxycycline frequency tentatively (\"maybe once a day?\") and could not name the antiseptic wash.","related_entities":["medications[0]"]}]}
+
+## 00733 PATIENT=1 DOCTOR=2 NURSE=3
+3: Hello, Mr Stone, I'm Kate, the nurse. The doctor asked me to do your psoriasis review with her. How are your skin and joints? ~ cc
+1: Um, hi. I'm not sure there's much to say. It's a bit better. Sorry, I get nervous. ~
+3: No need to be. Where is it at the moment? ~ s1
+1: Elbows mainly, and a bit on the scalp. Scaly patches. They've shrunk since the summer. ~ s1
+3: That's good. Are you getting any joint pain or stiffness? ~ n1
+1: No. No, my joints are fine. ~ n1
+2: Hello, Mr Stone. Kate's updated me. Can I just look at the elbows? ~
+1: Of course. ~ pause=15
+2: They've improved a lot since I last saw them, and I'm pleased. ~
+1: That's good, isn't it? ~
+2: Yes, very. What are you doing for them these days? ~
+1: Nothing, really. Just moisturising. ~
+2: That's fine, that's what I'd hoped you'd manage. The sunshine over the summer probably helped. ~
+1: We went to Spain. ~
+2: There you are. And how is your mood, are you coping all right? Psoriasis can get you down. ~
+1: A bit nervous, but fine. ~
+3: It's very common to feel self-conscious. Do you want some information on a support group? ~
+1: Maybe. Yes, please. ~
+3: I'll print it for you. ~
+2: Mr Stone, the key thing is to keep moisturising every day, especially after a bath. ~ c1
+1: Right. I do it every night. ~
+2: Good. Avoid scratching, and keep your nails short. Try not to pick at the scalp. ~ c2
+1: Okay. ~
+3: And remember sunscreen, on the bits that aren't affected. ~
+1: I'll remember. ~
+2: Right, I'm happy with you today. If it flares up again, or you get any joint pain or swelling, or your nails start changing, come back and we'll treat it. ~ f1
+1: I will. Thank you. ~
+3: Here's the leaflet, Mr Stone. ~
+1: Thanks, Kate. Bye, doctor. ~
+2: Take care. ~
+@@
+{"chief_complaint":{"value":"your psoriasis review","normalized_value":"Psoriasis review","reported_by":"nurse"},
+ "symptoms":[{"k":"s1","name":"Scaly patches","normalized_name":"Psoriasis plaques","category":"dermatological","body_site":"elbows and scalp"}],
+ "negative_findings":[{"k":"n1","finding":"joint pain or stiffness","normalized_name":"Joint pain or stiffness"}],
+ "counsel":[["c1","Moisturise daily, especially after a bath"],["c2","Avoid scratching, keep nails short and do not pick the scalp"]],
+ "follow_up":[{"k":"f1","time_reference":"If it flares up again, or you get any joint pain or swelling, or your nails start changing","status":"conditional"}]}
+

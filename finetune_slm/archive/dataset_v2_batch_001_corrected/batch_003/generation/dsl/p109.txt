@@ -1,0 +1,56 @@
+## 00852 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Doctor, thank you. It's Rory, he's fifteen, he did his knee playing rugby six weeks ago, and he's still limping. ~ cc s1
+2: Hello Rory. Which knee, and what happened? ~ s1
+1: The left. I got tackled from the side, and my knee twisted, and I felt a pop. ~ s1
+2: Was there swelling, immediately? ~ s2
+1: Yeah. Within an hour. It was huge. ~ s2
+3: It was like a balloon. We took him to the emergency department, they said sprain, gave him a brace. ~ s2
+2: How is it now? ~ s1
+1: It's better, but it gives way on stairs, and it clicks, and I can't straighten it fully. ~ s1 s3
+2: Is there any locking, where it gets stuck? ~ s3
+1: Once or twice. It catches. ~ s3
+2: Any numbness, or any pain at night? ~ n1
+1: No. Nothing like that. ~ n1
+2: Any fever, or redness on the knee? ~ n2
+1: No. ~ n2
+2: What have you been taking for the pain? ~ m1 m2 u1
+1: Ibuprofen, 200 mg, three times a day, with food. ~ m1 u1
+3: No, it's 400 mg, Rory. I gave him two tablets. And paracetamol, 500 mg, when he needs it. ~ m1 m2 u1
+2: I'll note that you and Mum gave different doses of ibuprofen, and I'll check which. Any other conditions? ~ u1 h1 h2 h3
+3: He has mild asthma, hay fever, and eczema. ~ h1 h2 h3
+2: Let me check pulse and the rest. ~
+1: Okay. ~
+2: Pulse 72, blood pressure 118 over 70, temperature 36.6, weight 62 kilos. ~ v pause=15
+3: Fine? ~
+2: Fine. Rory, lie down on the couch, and I'll examine the knee. Tell me when it hurts. ~
+1: Okay. ~ pause=20
+2: There's a little fluid in the left knee, and tenderness over the inner side of the joint line, and when I twist it, I get a click and pain. The ligaments feel stable. ~ x1
+3: What does that mean? ~
+2: It suggests a tear in the cartilage, the meniscus, rather than a ligament. Considering the twist and the locking, I'd say this is a probable meniscal tear. ~ d1
+3: Will he need surgery? ~
+2: Possibly. I'd like to arrange an MRI scan of the left knee, to see exactly what's torn. ~ p1
+1: Can I play? ~
+2: No rugby for now. Keep the knee moving, gentle exercises, and no twisting or running. ~ c1
+3: He won't like that. ~
+1: No. ~
+2: I know, Rory, and I'm sorry. But playing on a torn meniscus can make it worse. I'll refer you to the physio as well. ~ c2
+3: Okay. ~
+2: I'd like to see you again in three weeks, with the MRI result. ~ f1
+3: Three weeks. Thanks, doctor. ~
+@@
+{"chief_complaint":{"value":"he did his knee playing rugby six weeks ago, and he's still limping","normalized_value":"Persistent knee symptoms after rugby injury","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"gives way","normalized_name":"Left knee instability and clicking","category":"musculoskeletal","body_site":"left knee","duration":{"value":6,"unit":"weeks","normalized":"6 weeks"},"aggravating_factors":["stairs"]},
+  {"k":"s2","name":"huge","normalized_name":"Immediate knee swelling after injury","category":"musculoskeletal","status":"resolved","temporality":"past","body_site":"left knee"},
+  {"k":"s3","name":"catches","normalized_name":"Knee catching","category":"musculoskeletal","body_site":"left knee"}],
+ "negative_findings":[{"k":"n1","finding":"numbness","normalized_name":"Numbness or night pain"},{"k":"n2","finding":"fever","normalized_name":"Fever or redness"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"asthma","normalized_condition":"Asthma","reported_by":"family_member"},{"k":"h2","condition":"hay fever","normalized_condition":"Allergic rhinitis","reported_by":"family_member"},{"k":"h3","condition":"eczema","normalized_condition":"Eczema","reported_by":"family_member"}]},
+ "medications":[{"k":"m1","name":"Ibuprofen","dose":null,"frequency":"three times a day"},{"k":"m2","name":"paracetamol","dose":"500 mg","frequency":"when he needs it","reported_by":"family_member"}],
+ "vitals":{"k":"v","hr":72,"bp":"118/70","temp":36.6,"wt":62},
+ "physical_examination":[{"k":"x1","finding":"little fluid in the left knee","normalized_finding":"Small effusion, medial joint line tenderness and click on rotation, stable ligaments","body_site":"left knee"}],
+ "clinical_assessment":[{"k":"d1","assessment":"probable meniscal tear","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"MRI scan of the left knee","normalized_name":"MRI left knee","type":"imaging"}],
+ "counsel":[["c1","No rugby; keep knee moving gently; no twisting or running"],["c2","Physiotherapy referral"]],
+ "follow_up":[{"k":"f1","time_reference":"in three weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"medication_discrepancy","description":"Patient says ibuprofen 200 mg; his mother says 400 mg (two tablets); dose not established (unresolved).","related_entities":["medications[0]"]}],
+ "quality_checks":{"contradictions_detected":["Ibuprofen dose: patient 200 mg vs family member 400 mg (unresolved)."]}}
+

@@ -1,0 +1,52 @@
+## 00753 PATIENT=1 DOCTOR=2 CAREGIVER=3 FAMILY_MEMBER=4
+3: Morning, doctor. I'm Rosa, I'm Mr Quinn's carer, and this is his son, Danny. We're worried about his tiredness and his skin. ~ cc
+2: Hello Rosa, hello Danny, hello Mr Quinn. Tell me what you've noticed. ~
+1: I'm fine. A bit tired, that's all. ~ s1
+4: He's more than a bit tired, Dad. He's been exhausted for months, and his skin is going dark, especially his hands, and around his elbows. ~ s1 s2
+2: Mr Quinn, when did the tiredness start? ~ s1
+1: Oh, I couldn't say, I've been slow for a while. ~ s1 u1
+2: And the darker skin, did you notice it, when did it begin? ~ s2 u1
+1: I haven't noticed it. Danny's the one who points it out. I couldn't tell you when. ~ s2 u1
+3: I noticed it in the spring, in his palm creases, but I'm not sure when exactly. ~ s2 u1
+2: I'll note that none of you can pin it down. Mr Quinn, any dizziness, especially when you stand up? ~ n1 s3 u2
+1: No. No dizziness. ~ n1 u2
+3: He does get dizzy, doctor. He held the wall twice last week, getting up from the chair. ~ s3 u2
+4: And he nearly fell in the bathroom. ~ s3 u2
+2: I'll record that Mr Quinn says no, and Rosa and Danny say yes. What medicines does he take? ~ u2 m1
+3: Just the hydrocortisone, 10 mg in the morning and 5 mg in the afternoon, but I'm not sure he's been taking the afternoon dose. ~ m1
+2: Hydrocortisone, for what condition? ~ h1
+4: Addison's disease, diagnosed ten years ago. ~ h1 h2
+2: And is there anything else? ~ h2
+3: Underactive thyroid too. ~ h2
+2: Mr Quinn, are you taking your hydrocortisone? ~
+1: Mostly. I forget the afternoon ones, I'm sure. ~
+2: I'll check. Is there any vomiting, diarrhoea, or weight loss? ~
+1: A bit of nausea. Nothing else. ~
+2: Let me check his chest and pulse, and I'd like to check his blood pressure sitting and standing. ~
+3: He's quite wobbly on his feet. ~
+2: Right. Because of the possible dizziness, the dark skin, and the missed doses, I'd say this looks like his Addison's disease is under-treated, an adrenal problem. ~ d1
+4: Is that dangerous? ~
+2: It can be, if it gets worse, because a low steroid level can cause a crisis. I'd like to arrange blood tests today, to check his sodium, potassium and cortisol. ~ p1
+3: We can do it now? ~
+2: Yes. Please make sure he takes his hydrocortisone, including the afternoon dose, and use a pill box. ~ c1
+4: I'll set the alarms. ~
+2: And if he's vomiting, very dizzy, confused, or collapses, take him straight to the emergency department, and tell them he has Addison's. ~ c2
+1: I carry a steroid card. ~
+2: Good. I'd like to see you again in a week. ~ f1
+3: We'll be there. ~
+@@
+{"chief_complaint":{"value":"his tiredness and his skin","normalized_value":"Tiredness and skin darkening","reported_by":"caregiver"},
+ "symptoms":[{"k":"s1","name":"exhausted","normalized_name":"Fatigue","category":"constitutional","reported_by":"family_member","certainty":"uncertain"},
+  {"k":"s2","name":"skin is going dark","normalized_name":"Skin hyperpigmentation","category":"dermatological","reported_by":"family_member","body_site":"hands and elbows","certainty":"uncertain"},
+  {"k":"s3","name":"dizzy","normalized_name":"Dizziness on standing","category":"neurological","reported_by":"caregiver","certainty":"disputed"}],
+ "negative_findings":[{"k":"n1","finding":"dizziness","normalized_name":"Dizziness"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Addison's disease","normalized_condition":"Addison's disease","reported_by":"family_member","duration":{"value":10,"unit":"years","normalized":"10 years"}},{"k":"h2","condition":"underactive thyroid","normalized_condition":"Hypothyroidism","reported_by":"caregiver"}]},
+ "medications":[{"k":"m1","name":"hydrocortisone","dose":"10 mg","frequency":"in the morning","reported_by":"caregiver"}],
+ "clinical_assessment":[{"k":"d1","assessment":"his Addison's disease is under-treated","normalized_assessment":"Under-treated Addison's disease","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood tests","normalized_name":"Sodium, potassium and cortisol","type":"laboratory","scheduled_datetime":"today"}],
+ "counsel":[["c1","Take all hydrocortisone doses including the afternoon dose; use a pill box and alarms"],["c2","Emergency department immediately if vomiting, very dizzy, confused or collapse; tell them he has Addison's"]],
+ "follow_up":[{"k":"f1","time_reference":"in a week"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Neither the patient nor his carer could say when the tiredness and skin darkening began.","related_entities":["symptoms[0]","symptoms[1]"]},
+  {"k":"u2","type":"conflicting_statement","description":"Patient says he has no dizziness; his carer and son say he gets dizzy and nearly fell (unresolved).","related_entities":["negative_findings[0]","symptoms[2]"]}],
+ "quality_checks":{"contradictions_detected":["Patient denies dizziness; caregiver and family member report he gets dizzy on standing (unresolved)."]}}
+

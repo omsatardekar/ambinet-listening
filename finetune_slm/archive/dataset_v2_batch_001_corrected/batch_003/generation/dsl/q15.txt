@@ -1,0 +1,176 @@
+## 00878 PATIENT=1 DOCTOR=2
+1: Oh, I'm terribly sorry I'm late, doctor, I got the wrong day on the calendar, I thought it was Thursday. I mean, it's Thursday, but, oh, never mind. ~
+2: Not at all, Mr Alderton. We have time. How have you been since I last saw you? ~
+1: Not great, I'm afraid. The stiffness is worse in the mornings, it takes me an hour to get going, and my right hand shakes. ~ cc s1 s2
+2: So the stiffness is worse first thing, and the right hand has a tremor. Which hand, again? ~ s1 s2
+1: The right. Sorry, did I say left? The right. ~ s2
+2: And how's your walking? ~ s3
+1: Slow. I shuffle. My wife says I'm like a penguin. ~ s3
+2: Have you had any falls? ~ n1
+1: No falls, no. Wobbles, but I've caught myself. ~ n1
+2: Any hallucinations, seeing things that aren't there? ~ n2
+1: No, nothing like that. ~ n2
+2: What are you on at the moment? ~ m1
+1: Levodopa, 100 mg, four times a day. The last one's at six, and by seven in the morning I'm worn out. ~ m1
+2: Right. Any allergies? ~ a1
+1: No allergies, none. ~ a1
+2: And your Parkinson's, remind me when you were diagnosed? ~ h1
+1: Three years ago. Though I think it started a year before. ~ h1
+2: And you worked as? ~ so1
+1: I was a bus driver. Retired now. ~ so1
+2: Let me check you. Pulse 72, blood pressure 138 over 80, temperature 36.5, oxygen 98 percent, breathing 14, weight 74 kilos. ~ v pause=15
+1: All right? ~
+2: All fine. Hold your arms out in front. ~ pause=8
+1: Like this? ~
+2: I can see a tremor in the right hand at rest. ~ x1
+1: Yes, it's a pill-rolling thing. ~
+2: And when I move your right arm, there's stiffness, a cogwheel catch, but the left is normal. ~ x2
+1: Is that bad? ~
+2: It's what we expect. I think the stiffness in the mornings is the levodopa wearing off between doses. ~ d1
+1: What can we do? ~
+2: I'd like to start rasagiline, 1 mg, once a day, to smooth things out. ~ m2
+1: Will it help the shaking? ~
+2: A little. I'd also like to arrange a physiotherapy assessment, and blood tests for your kidney and liver function. ~ p1 p2
+1: Fine. ~
+2: If the stiffness isn't better in a month, come back and we'll look at the timing again. ~ f1
+1: A month. I'll write it down. ~
+@@
+{"chief_complaint":{"value":"The stiffness is worse in the mornings","normalized_value":"Worsening morning stiffness in Parkinson's disease"},
+ "symptoms":[{"k":"s1","name":"stiffness","normalized_name":"Morning stiffness","category":"musculoskeletal","frequency":"worse in the mornings"},
+  {"k":"s2","name":"my right hand shakes","normalized_name":"Right hand tremor","category":"neurological","body_site":"right hand"},
+  {"k":"s3","name":"shuffle","normalized_name":"Shuffling gait","category":"neurological"}],
+ "negative_findings":[{"k":"n1","finding":"falls","normalized_name":"Falls"},{"k":"n2","finding":"hallucinations","normalized_name":"Hallucinations"}],
+ "allergy_none":"a1",
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Parkinson's","normalized_condition":"Parkinson's disease"}],
+  "social_history":[{"k":"so1","category":"occupation","details":"bus driver","status":"retired"}]},
+ "medications":[{"k":"m1","name":"Levodopa","dose":"100 mg","frequency":"four times a day"},{"k":"m2","name":"rasagiline","dose":"1 mg","frequency":"once a day","status":"planned","reported_by":"doctor"}],
+ "vitals":{"k":"v","by":"doctor","bp":"138/80","hr":72,"temp":36.5,"spo2":98,"rr":14,"wt":74},
+ "physical_examination":[{"k":"x1","finding":"tremor in the right hand at rest","normalized_finding":"Right hand rest tremor","body_site":"right hand"},{"k":"x2","finding":"stiffness, a cogwheel catch","normalized_finding":"Cogwheel rigidity, right arm","body_site":"right arm"}],
+ "clinical_assessment":[{"k":"d1","assessment":"the levodopa wearing off between doses","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"physiotherapy assessment","normalized_name":"Physiotherapy assessment","type":"other"},{"k":"p2","name":"blood tests for your kidney and liver function","normalized_name":"Renal and liver function tests","type":"laboratory"}],
+ "follow_up":[{"k":"f1","time_reference":"if the stiffness isn't better in a month","status":"conditional"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00891 PATIENT=1 DOCTOR=2 NURSE=3 CAREGIVER=4
+2: Hello, I'm Dr Reyes. What would you like me to call you, Mr Tran, or Henry? ~
+1: Henry's fine. My legs are a bit puffy, that's all, but Marisol made me come. ~ cc
+4: I'm his carer, Marisol, I live in. His ankles have been swollen for three weeks, and last night he couldn't lie down, he slept in the chair. ~ s1 s2 u1
+1: Three weeks, no. One week. It's been one week. ~ s1 u1
+2: One week or three weeks. We'll record that as somewhere between one and three weeks. And last night, Henry? ~ s1 u1
+1: Couldn't breathe lying flat. I had to prop up on three pillows, then the chair. ~ s2
+2: Any chest pain? ~ n1
+1: No chest pain. ~ n1
+2: Nurse, can we get his obs? ~ v
+3: Sure. Oxygen 92 percent, blood pressure 156 over 92, pulse 96, breathing 22, temperature 36.8, and weight 88 kilos. ~ v pause=15
+2: Thank you. Henry, what medications do you take? ~ m1 m2
+1: Metoprolol, 50 mg, twice a day. And a little white water pill, I take it every morning. I couldn't tell you the name. ~ m1 m2 u2
+4: I'll bring the box tomorrow, doctor. It's small and white, but I've not got the name written down. ~ m2 u2
+2: That's fine, we'll find it on the pharmacy record. Any heart history? ~ h1
+1: High blood pressure, for thirty years. ~ h1
+2: Operations? ~ sg1
+1: Bypass surgery, in 2016. ~ sg1
+2: Who looks after you at home? ~ so1
+4: I do, I live in with him. ~ so1
+2: Let me look at your legs. Press here. ~ pause=10
+1: Cold hands, doc. ~
+2: There's pitting swelling in both legs, up to the knees. ~ x1
+4: It wasn't that high yesterday. ~
+2: Any palpitations, fluttering in the chest? ~ r1
+1: No, nothing. ~ r1
+2: What I'm seeing looks like fluid backing up, probably from the heart, but let's confirm. ~ d1
+4: Is it serious? ~
+2: It needs treatment today. I'd like to arrange a chest X-ray, an ECG, and blood tests including a heart-strain marker. ~ p1 p2 p3
+3: I'll take him for the ECG now. ~
+2: Thank you, nurse. If the swelling isn't coming down after three days of the treatment, come straight back. ~ f1
+4: I'll watch his legs. ~
+@@
+{"chief_complaint":{"value":"My legs are a bit puffy","normalized_value":"Leg swelling and breathlessness on lying flat"},
+ "symptoms":[{"k":"s1","name":"ankles have been swollen","normalized_name":"Ankle swelling","category":"cardiovascular","body_site":"ankles","duration":{"value":null,"unit":"weeks","normalized":"approximately 1 to 3 weeks"},"certainty":"uncertain","reported_by":"caregiver"},
+  {"k":"s2","name":"Couldn't breathe lying flat","normalized_name":"Orthopnoea","category":"respiratory"}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Chest pain"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension"}],
+  "surgical_history":[{"k":"sg1","procedure":"Bypass surgery","normalized_procedure":"Coronary artery bypass grafting","timeframe":"in 2016"}],
+  "social_history":[{"k":"so1","category":"living","details":"I live in with him","reported_by":"caregiver"}]},
+ "medications":[{"k":"m1","name":"Metoprolol","dose":"50 mg","frequency":"twice a day"},{"k":"m2","name":"little white water pill","normalized_name":null,"generic_name":null,"frequency":"every morning"}],
+ "vital_signs":[{"k":"v","name":"Oxygen saturation","normalized_name":"Oxygen saturation","value":"92","unit":"%","reported_by":"nurse"},{"k":"v","name":"Blood pressure","normalized_name":"Blood pressure","value":"156/92","unit":"mmHg","reported_by":"nurse"},{"k":"v","name":"Heart rate","normalized_name":"Heart rate","value":"96","unit":"bpm","reported_by":"nurse"},{"k":"v","name":"Respiratory rate","normalized_name":"Respiratory rate","value":"22","unit":"breaths/min","reported_by":"nurse"},{"k":"v","name":"Temperature","normalized_name":"Body temperature","value":"36.8","unit":"°C","reported_by":"nurse"},{"k":"v","name":"Weight","normalized_name":"Weight","value":"88","unit":"kg","reported_by":"nurse"}],
+ "physical_examination":[{"k":"x1","finding":"pitting swelling in both legs, up to the knees","normalized_finding":"Bilateral pitting oedema to the knees","body_site":"legs"}],
+ "review_of_systems":[{"k":"r1","system":"cardiovascular"}],
+ "clinical_assessment":[{"k":"d1","assessment":"fluid backing up, probably from the heart","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"chest X-ray","normalized_name":"Chest X-ray","type":"imaging"},{"k":"p2","name":"ECG","normalized_name":"Electrocardiogram","type":"cardiac"},{"k":"p3","name":"blood tests including a heart-strain marker","normalized_name":"Blood tests with natriuretic peptide","type":"laboratory"}],
+ "follow_up":[{"k":"f1","time_reference":"if the swelling isn't coming down after three days of the treatment","status":"conditional"}],
+ "clinical_uncertainties":[{"type":"duration_disagreement","description":"Caregiver says the ankles have been swollen for three weeks while the patient says one week; the doctor summarised it as one to three weeks.","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved","k":"u1"},
+  {"type":"incomplete_medication_name","description":"Neither the patient nor his carer can name the little white water pill.","related_entities":["medications[1]"],"k":"u2"}],
+ "quality_checks":{"contradictions_detected":["Patient reports ankle swelling for one week; carer reports three weeks (partially resolved)."],"ambiguous_entities":["medications[1]"]}}
+
+## 00897 PATIENT=1 DOCTOR=2
+2: Morning, Mrs Calloway. Is it still raining out there? I've been in since seven and haven't looked. ~
+1: Pouring. And the car park is a lottery. Never mind that. ~
+2: Right, what brings you in today? ~
+1: It's probably nothing. I'm fifty and I get these hot flushes. I wouldn't be here, but my daughter said it's silly to put up with it. ~ cc s1
+2: How often? ~ s1
+1: Five or six times a day. Started about eight months ago. ~ s1
+2: And at night? ~ s2
+1: Night sweats, yes. I have to change the T-shirt, once or twice a night. ~ s2
+2: How's your mood? ~ s3
+1: A bit short-tempered. The staff would tell you. I'm the head teacher, I'm not supposed to snap. ~ s3
+2: Any weight loss? ~ n1
+1: No, if anything I've put it on. ~ n1
+2: Any lumps in the breasts? ~ n2
+1: No lumps. I check. ~ n2
+2: What do you take at the moment? ~ m1 m2 m3 m4
+1: Levothyroxine, 100 micrograms, once a day. Atorvastatin, 20 mg, at night. Vitamin D, 1000 units, once a day. And ibuprofen, 200 mg, when my knees are bad. ~ m1 m2 m3 m4
+2: Good. Any allergies? ~ a1
+1: No allergies. ~ a1
+2: Medical history? ~ h1 h2 h3
+1: Underactive thyroid, high cholesterol, and migraines. ~ h1 h2 h3
+2: Operations? ~ sg1
+1: Appendix out, in 2002. ~ sg1
+2: When did your mother go through the menopause? ~ f1
+1: Early, at forty-five. ~ f1
+2: Do you smoke? ~ so1
+1: Never. ~ so1
+2: Drink? ~ so2
+1: Two glasses of wine, most evenings. ~ so2
+2: Exercise? ~ so3
+1: I walk the dog, forty minutes. ~ so3
+2: And work, you said head teacher? ~ so4
+1: Yes, a primary school. ~ so4
+2: Let me take your numbers. Pulse 74, blood pressure 128 over 80, temperature 36.7, oxygen 99 percent, breathing 14, and weight 72 kilos. ~ v pause=15
+1: That's more than last year. ~
+2: A couple of kilos. Let me listen to your heart. ~ pause=10
+2: Heart sounds are normal, and your thyroid feels normal in size, no lumps. ~ x1 x2
+1: Good. ~
+2: Any trouble with your heart, palpitations? ~ r1
+1: No, nothing like that. ~ r1
+2: Any trouble with your waterworks? ~ r2
+1: No, nothing. It's all normal. ~ r2
+2: Your symptoms sound like the perimenopause, I'd say, but I can't rule out your thyroid dose being off. ~ d1 d2
+1: Is it the thyroid? ~
+2: Possibly. I'd like to arrange blood tests for your thyroid and hormone levels, and a blood count. ~ p1 p2
+1: Fine. ~
+2: And since your mother had an early menopause, I'd like to arrange a bone density scan. ~ p3
+1: Right. And what about treatment? ~
+2: We'll talk about the options once the results are back. Until then, keep cool at night, and cut the wine. ~ c1
+1: I'll try, though the wine is the hard part. ~
+2: I'd like to see you again in six weeks. ~ f2
+1: Six weeks. Thank you. ~
+@@
+{"chief_complaint":{"value":"I'm fifty and I get these hot flushes","normalized_value":"Hot flushes at age fifty"},
+ "symptoms":[{"k":"s1","name":"hot flushes","normalized_name":"Hot flushes","category":"genitourinary","duration":{"value":8,"unit":"months","normalized":"8 months"},"frequency":"Five or six times a day"},
+  {"k":"s2","name":"Night sweats","normalized_name":"Night sweats","category":"constitutional"},
+  {"k":"s3","name":"short-tempered","normalized_name":"Irritability","category":"psychiatric"}],
+ "negative_findings":[{"k":"n1","finding":"weight loss","normalized_name":"Weight loss"},{"k":"n2","finding":"lumps in the breasts","normalized_name":"Breast lumps"}],
+ "allergy_none":"a1",
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Underactive thyroid","normalized_condition":"Hypothyroidism"},{"k":"h2","condition":"high cholesterol","normalized_condition":"Hypercholesterolaemia"},{"k":"h3","condition":"migraines","normalized_condition":"Migraine"}],
+  "surgical_history":[{"k":"sg1","procedure":"Appendix out","normalized_procedure":"Appendicectomy","timeframe":"in 2002"}],
+  "family_history":[{"k":"f1","relation":"mother","condition":"Early, at forty-five"}],
+  "social_history":[{"k":"so1","category":"smoking","details":"Never","status":"never"},{"k":"so2","category":"alcohol","details":"Two glasses of wine, most evenings"},{"k":"so3","category":"exercise","details":"walk the dog, forty minutes"},{"k":"so4","category":"occupation","details":"head teacher"}]},
+ "medications":[{"k":"m1","name":"Levothyroxine","dose":"100 micrograms","frequency":"once a day"},{"k":"m2","name":"Atorvastatin","dose":"20 mg","frequency":"at night"},{"k":"m3","name":"Vitamin D","dose":"1000 units","frequency":"once a day"},{"k":"m4","name":"ibuprofen","dose":"200 mg","frequency":"when my knees are bad"}],
+ "vitals":{"k":"v","by":"doctor","bp":"128/80","hr":74,"temp":36.7,"spo2":99,"rr":14,"wt":72},
+ "physical_examination":[{"k":"x1","finding":"Heart sounds are normal","normalized_finding":"Normal heart sounds","body_site":"chest"},{"k":"x2","finding":"thyroid feels normal in size, no lumps","normalized_finding":"Normal-sized thyroid without nodules","body_site":"neck"}],
+ "review_of_systems":[{"k":"r1","system":"cardiovascular"},{"k":"r2","system":"genitourinary"}],
+ "clinical_assessment":[{"k":"d1","assessment":"the perimenopause","certainty":"provisional"},{"k":"d2","assessment":"your thyroid dose being off","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood tests for your thyroid and hormone levels","normalized_name":"Thyroid function and hormone levels","type":"laboratory"},{"k":"p2","name":"blood count","normalized_name":"Full blood count","type":"laboratory"},{"k":"p3","name":"bone density scan","normalized_name":"Bone density scan","type":"imaging"}],
+ "counsel":[["c1","Keep cool at night and cut down on wine"]],
+ "follow_up":[{"k":"f2","time_reference":"in six weeks"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}

@@ -1,0 +1,103 @@
+## 00661 PATIENT=1 DOCTOR=2
+1: Hello again, doctor. I know it's only a cough, but it's been going on for three weeks now and it's driving me round the bend. ~ cc s1
+2: Not just a cough if it's driven you in. Tell me what it's like. ~ s1
+1: Dry, tickly, mostly. It starts as soon as I lie down at night, and I'm getting no sleep. Oh, and sometimes I cough so hard I feel sick. ~ s1 s2
+2: And it began with a cold? ~ s1
+1: A bad cold, yes, three weeks ago. The cold went, but the cough stayed. ~ s1
+2: Any fever, or coughing up blood? ~ n1 n2
+1: No fever, no blood. Nothing like that. ~ n1 n2
+2: Weight loss, sweats at night, anything of that kind? ~ n3
+1: No, I've actually put on a bit of weight, sadly. ~ n3
+2: Good. Let's check what you take regularly. ~ m1 m2
+1: The ramipril, 5 mg once a day, for my blood pressure, and metformin, 500 mg twice a day. That's it. ~ m1 m2 h1
+2: And remind me of your other conditions, apart from the blood pressure. ~ h1 h2 h3
+1: I've got type 2 diabetes, and I had asthma as a child, but I grew out of it. ~ h2 h3
+2: I see. Let me check your temperature, pulse and oxygen. ~
+1: Right. ~
+2: Temperature 36.7, pulse 76, oxygen 98 percent. ~ v pause=12
+1: All fine, I suppose. ~
+2: All fine. Breathe in and out for me, normally. I'm listening to your chest. ~ pause=18
+1: Is it clear? ~
+2: Your chest is clear, no crackles and no wheeze. Open wide. Your throat is a bit red at the back. ~ x1 x2 pause=10
+1: So what's wrong with me? ~
+2: After a cold, it's common for the airways to stay twitchy for weeks, so I think this is most likely a post-viral cough. ~ d1
+1: Right. How long will it go on? ~
+2: It can last up to eight weeks. But there's one other thing. Ramipril, your blood pressure tablet, can itself cause a dry, tickly cough in some people, so I can't rule out a side effect of the ramipril. ~ d2
+1: Oh! I never thought of that. I've been on it for years. ~
+2: Sometimes it starts late. I wouldn't stop it yet, but let's keep it in mind. ~
+1: What do we do now? ~
+2: Because it's been three weeks, I'd like to do a chest X-ray, to be sure there's nothing in the lungs. And a spirometry test to check your airways. ~ p1 p2
+1: And bloods? ~
+2: Yes, a blood test as well, to check your blood count and sugar control while we're at it. ~ p3
+1: Fine. And what do I do about the cough? ~
+2: Honey and warm water at night can soothe the throat, and propping up on an extra pillow helps with lying down. ~ c1
+1: I'll try the honey. ~
+2: I'd like to see you again in three weeks, with the results, and we'll decide about the ramipril then. ~ f1
+1: Three weeks. Thanks, doctor. ~
+@@
+{"chief_complaint":{"value":"it's been going on for three weeks now","normalized_value":"Persistent cough"},
+ "symptoms":[{"k":"s1","name":"cough","normalized_name":"Dry cough","category":"respiratory","duration":{"value":3,"unit":"weeks","normalized":"3 weeks"},"aggravating_factors":["lie down"]},
+  {"k":"s2","name":"I feel sick","normalized_name":"Cough-induced nausea","category":"gastrointestinal"}],
+ "negative_findings":[{"k":"n1","finding":"fever","normalized_name":"Fever"},{"k":"n2","finding":"blood","normalized_name":"Haemoptysis"},{"k":"n3","finding":"Weight loss","normalized_name":"Weight loss"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"blood pressure","normalized_condition":"Hypertension"},{"k":"h2","condition":"type 2 diabetes","normalized_condition":"Type 2 diabetes mellitus"},{"k":"h3","condition":"asthma as a child","normalized_condition":"Childhood asthma"}]},
+ "medications":[{"k":"m1","name":"ramipril","dose":"5 mg","frequency":"once a day","indication":"blood pressure"},{"k":"m2","name":"metformin","dose":"500 mg","frequency":"twice a day"}],
+ "vitals":{"k":"v","temp":36.7,"hr":76,"spo2":98},
+ "physical_examination":[{"k":"x1","finding":"chest is clear","normalized_finding":"Clear chest","body_site":"chest"},{"k":"x2","finding":"throat is a bit red","normalized_finding":"Mild pharyngeal erythema","body_site":"throat"}],
+ "clinical_assessment":[{"k":"d1","assessment":"post-viral cough","certainty":"provisional"},{"k":"d2","assessment":"a side effect of the ramipril","normalized_assessment":"ACE inhibitor cough","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"chest X-ray","normalized_name":"Chest X-ray","type":"imaging"},{"k":"p2","name":"spirometry","normalized_name":"Spirometry","type":"other"},{"k":"p3","name":"blood test","normalized_name":"Full blood count and HbA1c","type":"laboratory"}],
+ "counsel":[["c1","Advise honey in warm water and an extra pillow"]],
+ "follow_up":[{"k":"f1","time_reference":"in three weeks"}]}
+
+## 00662 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3 CLINICAL_STAFF=4
+3: We were told to come back today. The midwife said the baby was a bit yellow on Tuesday. ~ cc
+2: Yes, I've got the note. Come in, sit down. I'm Dr Shah. And you are? ~
+3: Elena, I'm Sofia's mum. She's five days old now. ~
+4: Hello, I'm Marsha, the healthcare assistant. I did her bilirubin reading just before you came in. ~ p1
+2: Thank you, Marsha. Elena, tell me how she's been since the midwife saw her. ~
+3: She's been sleepy, very sleepy, I have to wake her for feeds. And she's not finishing them, she falls asleep on the breast. ~ s1 s2
+2: How many feeds is she taking in a day, roughly? ~ s2
+3: Six or seven, but short ones. I'm not sure it's enough. ~ s2
+1: Waaah. ~
+2: She's telling us she's hungry. When did you first notice the yellow colour? ~ s3 u1
+3: I couldn't tell you exactly. Maybe Monday, maybe Tuesday morning, I honestly don't know. I'm not good at remembering with so little sleep. ~ s3 u1
+2: That's absolutely fine. Are her nappies wet and what colour are her poos? ~ n1
+3: Wet, plenty. The poos are yellow-green, not pale. I looked at them in the light, like they said. ~ n1
+2: Good. Has she had any fevers or felt hot? ~ n2
+3: No, nothing hot. She's actually a bit cool, with her little hands. ~ n2
+2: How was the birth? Was she born on time? ~ h1
+3: Thirty-seven weeks, so a bit early, but she was a good weight. ~ h1
+4: Doctor, the reading I got was 210. I did it twice. ~ p1
+2: Thanks, Marsha. Let me weigh and measure her. ~ pause=15
+2: Heart rate 142, temperature 36.9, breathing rate 38, oxygen 98 percent, weight 3.1 kilos. ~ v
+3: Is she losing weight? ~
+2: She's a little under her birth weight, which is common at this stage, but I'd like to keep a close eye. ~
+1: Waaah. ~
+2: I'll examine her. Marsha, would you hold her head? ~
+4: Yes, doctor. ~ pause=20
+2: She's yellow down to her chest, her soft spot is flat and normal, and she's alert when she's awake, with good tone. ~ x1 x2 x3
+3: Is that bad, the yellow? ~
+2: Many newborns get jaundice, and it's usually harmless. But at five days, with the sleepiness and the reading Marsha took, I want to check it with a blood test. ~
+3: A blood test on a baby? ~
+2: It's a heel prick, just a few drops. I'd like to send a bilirubin blood test today, and I'd like her feed volumes checked with the midwife. ~ p2
+4: I'll book the heel prick now. ~
+3: What do I do for her, meantime? ~
+2: Feed her at least eight times a day, wake her if she sleeps more than three hours, and keep her in daylight, near a window, not in direct sun. ~ c1
+3: Okay. And if she gets more yellow? ~
+2: If she's very sleepy, won't feed, or her poos go pale, ring us straight away, any hour. ~ c2
+3: I will. ~
+2: And I'd like to see you both tomorrow, to review the result and her weight. ~ f1
+3: Tomorrow. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"the baby was a bit yellow on Tuesday","normalized_value":"Neonatal jaundice follow-up","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"sleepy","normalized_name":"Drowsiness","category":"neurological","reported_by":"family_member"},
+  {"k":"s2","name":"not finishing them","normalized_name":"Poor feeding","category":"gastrointestinal","reported_by":"family_member"},
+  {"k":"s3","name":"yellow colour","normalized_name":"Jaundice","category":"gastrointestinal","reported_by":"family_member","certainty":"uncertain"}],
+ "negative_findings":[{"k":"n1","finding":"pale","normalized_name":"Pale stools","reported_by":"family_member"},{"k":"n2","finding":"hot","normalized_name":"Fever","reported_by":"family_member"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Thirty-seven weeks","normalized_condition":"Born at 37 weeks","reported_by":"family_member"}]},
+ "vitals":{"k":"v","hr":142,"temp":36.9,"rr":38,"spo2":98,"wt":3.1},
+ "physical_examination":[{"k":"x1","finding":"yellow down to her chest","normalized_finding":"Jaundice to the chest","body_site":"skin"},{"k":"x2","finding":"soft spot is flat and normal","normalized_finding":"Normal anterior fontanelle","body_site":"head"},{"k":"x3","finding":"alert when she's awake","normalized_finding":"Alert with good tone","body_site":"general"}],
+ "procedures_and_investigations":[{"k":"p1","name":"bilirubin reading","normalized_name":"Transcutaneous bilirubin","type":"other","status":"completed","requested_by":null},{"k":"p2","name":"bilirubin blood test","normalized_name":"Serum bilirubin","type":"laboratory","scheduled_datetime":"today"}],
+ "counsel":[["c1","Feed at least eight times a day, wake after three hours, keep near daylight"],["c2","Safety-net: ring if very sleepy, not feeding or pale stools"]],
+ "follow_up":[{"k":"f1","time_reference":"tomorrow"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Mother could not say when the yellow colour first appeared (\"maybe Monday, maybe Tuesday morning\").","related_entities":["symptoms[2]"]}]}
+

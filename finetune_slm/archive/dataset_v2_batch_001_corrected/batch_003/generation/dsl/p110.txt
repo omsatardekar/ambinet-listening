@@ -1,0 +1,52 @@
+## 00857 PATIENT=1 DOCTOR=2 CAREGIVER=3
+3: Good morning, doctor. I'm Bimla, I look after Mrs Mehta every day, and she's got this cough and she keeps clearing her throat. It's driving us both mad. ~ cc s1
+1: Namaste, doctor. Yes, doctor. This cough. ~ s1
+2: How long has it been, Mrs Mehta? ~ s1
+1: Since the pneumonia, doctor. After the hospital. Three months. ~ s1
+3: She had a chest infection in July, and ever since, she's been clearing her throat, all day, and coughing. ~ s1 s2
+2: Is it a dry cough, or does it bring up phlegm? ~ s1
+1: Dry, mostly. A tickle in the throat. And the throat clearing. ~ s1 s2
+2: When is it worst? ~ s2
+1: After meals. And lying down. ~ s2
+2: What are you taking? ~ m1 m2
+3: Omeprazole, 20 mg, once a day, and a blood pressure tablet, amlodipine, 5 mg. ~ m1 m2
+2: Any other health conditions? ~ h1 h2
+3: She had pneumonia, as I said. And high blood pressure. And her thyroid, she had an operation on it, in 2005. ~ h1 h2 sg1
+2: Let me ask about the operation. What was it? ~ sg1
+3: Half her thyroid taken out, in 2005. ~ sg1 h2
+2: Does she smoke or drink? ~ so1
+3: No. Never. ~ so1
+2: Pulse, pressure, and so on. ~
+3: I've taken them, doctor. Pulse 78, blood pressure 138 over 82, oxygen 97 percent, temperature 36.6, weight 58 kilos. ~ v
+2: Thank you. Mrs Mehta, I'll listen to your chest and look in your throat. ~
+1: Yes, doctor. ~ pause=20
+2: Your chest is clear, and your throat is slightly red at the back, with some cobblestoning, but nothing worrying. ~ x1
+3: Is it the lungs? ~
+2: The chest X-ray they did in hospital after pneumonia was clear, and so is my examination today. The pattern, a dry tickly cough, throat clearing, worse after meals and lying down, makes me think of reflux, silent reflux, or a post-infection cough. ~ d1 d2
+1: Reflux, doctor? I have no heartburn. ~
+2: It can happen without heartburn. We call it laryngopharyngeal reflux. ~
+3: Can she take something? ~
+2: She's already on omeprazole once a day. I'd like to increase it to twice a day, and see if that helps. ~ c2
+1: Okay. ~
+2: And I'd like to arrange a blood test, to check your thyroid and blood count, because of the operation, and a repeat chest X-ray, and a breathing test, to be thorough. ~ p1 p2 p3
+3: When? ~
+2: Over the next two weeks. ~
+1: Okay, doctor. ~
+2: Avoid eating late, raise the head of the bed, and avoid spicy food, tea and coffee after lunch. ~ c1
+3: I'll do that. ~
+2: I'd like to see her again in four weeks. If she coughs up blood, loses weight, or gets breathless, come back sooner. ~ f1
+3: Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"she's got this cough and she keeps clearing her throat","normalized_value":"Persistent cough and throat clearing","reported_by":"caregiver"},
+ "symptoms":[{"k":"s1","name":"cough","normalized_name":"Dry cough","category":"respiratory","duration":{"value":3,"unit":"months","normalized":"3 months"}},
+  {"k":"s2","name":"clearing her throat","normalized_name":"Throat clearing","category":"ENT","aggravating_factors":["After meals"]}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"pneumonia","normalized_condition":"Recent pneumonia","reported_by":"caregiver"},{"k":"h2","condition":"high blood pressure","normalized_condition":"Hypertension","reported_by":"caregiver"}],"surgical_history":[{"k":"sg1","procedure":"Half her thyroid taken out","normalized_procedure":"Hemithyroidectomy","timeframe":"in 2005","reported_by":"caregiver"}],
+  "social_history":[{"k":"so1","category":"smoking","description":"Never smoked","status":"never","details":"No. Never","reported_by":"caregiver"}]},
+ "medications":[{"k":"m1","name":"Omeprazole","dose":"20 mg","frequency":"once a day","reported_by":"caregiver"},{"k":"m2","name":"amlodipine","dose":"5 mg","reported_by":"caregiver"}],
+ "vitals":{"k":"v","by":"caregiver","hr":78,"bp":"138/82","spo2":97,"temp":36.6,"wt":58},
+ "physical_examination":[{"k":"x1","finding":"throat is slightly red at the back","normalized_finding":"Clear chest; mild posterior pharyngeal erythema with cobblestoning","body_site":"throat and chest"}],
+ "clinical_assessment":[{"k":"d1","assessment":"reflux","certainty":"provisional"},{"k":"d2","assessment":"a post-infection cough","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood test","normalized_name":"Thyroid function and full blood count","type":"laboratory"},{"k":"p2","name":"repeat chest X-ray","normalized_name":"Chest X-ray","type":"imaging"},{"k":"p3","name":"breathing test","normalized_name":"Spirometry","type":"other"}],
+ "counsel":[["c2","Increase omeprazole to twice a day"],["c1","Avoid late eating, raise head of bed and avoid spicy food, tea and coffee after lunch"]],
+ "follow_up":[{"k":"f1","time_reference":"in four weeks"}]}
+

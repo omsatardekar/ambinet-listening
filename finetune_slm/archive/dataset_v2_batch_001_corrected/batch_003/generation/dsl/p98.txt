@@ -1,0 +1,63 @@
+## 00833 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Doctor, I'm Hannah, Greg's wife. He won't say it, so I will: I'm worried about how much he's drinking. ~ cc
+1: Hannah, I'm fine. It's a glass of wine in the evenings. ~
+2: Greg, I'd like to hear from you first. How much do you drink in a typical day? ~ so1
+1: A bottle of wine, give or take. Maybe a bit more at weekends. ~ so1
+3: It's more than that. There's a bottle every night, and he's started before lunch on his days off. ~ so1
+2: Thank you both. When did the drinking go up, would you say? ~ u1
+1: I don't know. Gradually. Since I changed jobs, I think. Or maybe before. ~ u1
+3: It's the last year, I think, but I honestly couldn't say when it tipped over. ~ u1
+2: How are your mornings? ~ s1
+1: Shaky. My hands tremble. I settle down after a coffee. ~ s1
+3: And he's sweaty and irritable until he has a drink at lunchtime. ~ s1
+2: How's your sleep? ~ s2
+1: Poor. I fall asleep fine, and wake at three, and lie there. ~ s2
+2: And how's your mood? ~ s3
+1: A bit flat. And anxious, that's the word. ~ s3
+2: Any thoughts of harming yourself? ~ n1
+1: No. No, not at all. ~ n1
+2: Any tablets at the moment? ~ m1
+1: Just a vitamin B tablet, thiamine, 100 mg, once a day, that Hannah makes me take. ~ m1
+2: Good. Any allergies to medicines or anything else? ~ a1
+1: No. I'm not allergic to anything. ~ a1 u2
+3: He reacted to codeine once, Greg, you came out in hives, and your face swelled. It was years ago, before we married. ~ a1 u2
+2: I'll note that you say no allergies and Hannah recalls a reaction to codeine, and I'll record both. Any health conditions? ~ a1 u2 h1 h2 h3
+1: High blood pressure, an ulcer a few years ago, and I had some depression, a while back. ~ h1 h2 h3
+2: Let me check you. Pulse, pressure, temperature. ~
+1: Go on. ~
+2: Pulse 92, blood pressure 150 over 94, temperature 36.8, oxygen 98 percent, weight 94 kilos. ~ v pause=15
+3: That's high, isn't it? ~
+2: The pressure and pulse are up, which fits with the alcohol and the morning shakes. Any breathlessness, chest pain? ~ r1
+1: No. Nothing. ~ r1
+2: Greg, from what you and Hannah describe, drinking a bottle of wine or more daily, shakes in the morning and drinking to settle them, this looks like harmful alcohol use with early dependence. ~ d1
+1: Dependence. That's a strong word. ~
+2: It's a medical description, and it's treatable. And it's good that you've come. ~
+3: Can he stop on his own? ~
+2: Please don't stop suddenly, because with this level of drinking, withdrawal can be dangerous. We'll plan it safely. ~ c1
+1: What does that involve? ~
+2: I'd like to refer you to the community alcohol service, and I'd like to arrange blood tests, for your liver and blood count, today. ~ r2 p1
+1: Right. ~
+2: Keep taking the thiamine, eat regular meals, and don't drive after drinking. ~ c2
+3: I'll keep an eye on him. ~
+2: I'd like to see you again in a week. If you get severe shakes, confusion, hallucinations, or a fit, go to the emergency department. ~ f1
+1: Okay. Thank you. ~
+@@
+{"chief_complaint":{"value":"I'm worried about how much he's drinking","normalized_value":"Alcohol intake concerns","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"Shaky","normalized_name":"Morning tremor and sweating","category":"neurological","body_site":"hands","aggravating_factors":["mornings"]},
+  {"k":"s2","name":"Poor","normalized_name":"Early morning waking","category":"neurological"},
+  {"k":"s3","name":"flat","normalized_name":"Low mood and anxiety","category":"psychiatric"}],
+ "negative_findings":[{"k":"n1","finding":"harming yourself","normalized_name":"Thoughts of self-harm"},{"k":"a1","finding":"allergies","normalized_name":"No known allergies"}],
+ "allergies":[{"k":"a1","substance":"codeine","reaction":null,"status":"disputed","reported_by":"family_member"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension"},{"k":"h2","condition":"an ulcer","normalized_condition":"Peptic ulcer"},{"k":"h3","condition":"depression","normalized_condition":"Depression"}],"social_history":[{"k":"so1","category":"alcohol","description":"Heavy daily drinking, about a bottle of wine","details":"A bottle of wine"}]},
+ "medications":[{"k":"m1","name":"thiamine","dose":"100 mg","frequency":"once a day"}],
+ "vitals":{"k":"v","hr":92,"bp":"150/94","temp":36.8,"spo2":98,"wt":94},
+ "review_of_systems":[{"k":"r1","system":"cardiorespiratory"}],
+ "clinical_assessment":[{"k":"d1","assessment":"harmful alcohol use with early dependence","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood tests","normalized_name":"Liver function and full blood count","type":"laboratory","scheduled_datetime":"today"}],
+ "clinical_actions":[{"k":"r2","action_type":"referral","description":"Refer to community alcohol service"}],
+ "counsel":[["c1","Do not stop drinking suddenly; withdrawal to be planned safely"],["c2","Keep taking thiamine, eat regular meals and do not drive after drinking"]],
+ "follow_up":[{"k":"f1","time_reference":"in a week"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Neither the patient nor his wife could say when the heavier drinking, and with it the morning shakiness, began (\"since I changed jobs, I think. Or maybe before\" / \"the last year, I think\").","related_entities":["symptoms[0]"]},
+  {"k":"u2","type":"allergy_disputed","description":"Patient says he is not allergic to anything; his wife recalls a reaction to codeine with hives and facial swelling; both statements kept, reaction not established.","related_entities":["negative_findings[1]","allergies[0]"]}],
+ "quality_checks":{"contradictions_detected":["Allergy to codeine: patient reports no allergies; family member recalls a possible reaction (unresolved)."]}}
+

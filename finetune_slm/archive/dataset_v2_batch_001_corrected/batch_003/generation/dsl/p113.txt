@@ -1,0 +1,53 @@
+## 00864 PATIENT=1 DOCTOR=2
+1: Athlete's foot. Between the toes. It's back. ~ cc s1
+2: How long has it been there this time? ~ s1 u1
+1: Dunno. A while. Weeks. ~ s1 u1
+2: Which foot? ~ s1
+1: Both. Worse on the left. Itchy. Skin's peeling. ~ s1
+2: Have you tried anything? ~ m1 m2
+1: Clotrimazole cream. Twice a day. And a powder in my shoes. ~ m1 m2
+2: How long did you use the cream for? ~
+1: A week. It went. Then it came back. ~
+2: How long should you use it for? ~
+1: Dunno. ~
+2: Usually another week or two after it looks better. That's why it comes back. Any health conditions? ~ h1
+1: Diabetes. Type 2. ~ h1
+2: Anyone in the family get fungal infections? ~ f1
+1: My dad had it on his nails. ~ f1
+2: Any fever, or redness spreading up the foot? ~ r1
+1: No. Nothing like that. ~ r1
+2: Any pain, or numbness in your feet? ~ r2
+1: No. Normal. ~ r2
+2: Pulse and temperature, please. ~
+1: Okay. ~
+2: Pulse 74, temperature 36.7. ~ v pause=10
+1: Fine? ~
+2: Fine. Take your socks off and let me see. ~ pause=18
+1: Here. ~
+2: There's white, peeling, soggy skin between the little toes on both feet, and a small crack on the left, but no redness spreading, and no sign of infection. ~
+1: What is it? ~
+2: It's the same fungal infection, athlete's foot, tinea pedis, and I'd say it's recurrent because the treatment was stopped too soon, or the shoes are keeping the feet damp. ~ d1 d2
+1: What do I do? ~
+2: Continue the clotrimazole cream for two weeks after it looks clear, and dry between your toes thoroughly after washing. ~ c1
+1: Right. ~
+2: Wear cotton socks, change them daily, and alternate your shoes. Don't go barefoot in communal showers. ~ c2
+1: Okay. ~
+2: And I'd like to take a skin scraping, to confirm the diagnosis, because it's come back. ~ p1
+1: Fine. ~ pause=10
+2: Done. Because you have diabetes, check your feet daily and see me if there's a blister, a crack that won't heal, or redness. ~ c3
+1: Okay. ~
+2: I'd like to see you again in three weeks, with the result. ~ f2
+1: Three weeks. Thanks. ~
+@@
+{"chief_complaint":{"value":"Athlete's foot. Between the toes. It's back","normalized_value":"Recurrent athlete's foot"},
+ "symptoms":[{"k":"s1","name":"Itchy","normalized_name":"Interdigital itching and peeling","category":"dermatological","body_site":"between the toes of both feet","certainty":"uncertain"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Diabetes","normalized_condition":"Type 2 diabetes mellitus"}],"family_history":[{"k":"f1","condition":"fungal infections","normalized_condition":"Fungal nail infection","relation":"dad"}]},
+ "medications":[{"k":"m1","name":"Clotrimazole cream","normalized_name":"Clotrimazole","generic_name":"Clotrimazole","frequency":"Twice a day"},{"k":"m2","name":"powder in my shoes","normalized_name":"Antifungal foot powder","generic_name":null}],
+ "vitals":{"k":"v","hr":74,"temp":36.7},
+ "review_of_systems":[{"k":"r1","system":"dermatological"},{"k":"r2","system":"neurological"}],
+ "clinical_assessment":[{"k":"d1","assessment":"athlete's foot","certainty":"provisional"},{"k":"d2","assessment":"recurrent because the treatment was stopped too soon","normalized_assessment":"Recurrent tinea pedis from incomplete treatment","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"skin scraping","normalized_name":"Skin scraping for mycology","type":"laboratory"}],
+ "counsel":[["c1","Continue clotrimazole for two weeks after it looks clear and dry between toes thoroughly"],["c2","Cotton socks changed daily, alternate shoes, no barefoot communal showers"],["c3","Check feet daily; see us for blister, non-healing crack or redness"]],
+ "follow_up":[{"k":"f2","time_reference":"in three weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient could not say how long the athlete's foot has been present this time (\"Dunno. A while. Weeks.\").","related_entities":["symptoms[0]"]}]}
+

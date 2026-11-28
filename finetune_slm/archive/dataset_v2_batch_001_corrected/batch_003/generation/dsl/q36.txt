@@ -1,0 +1,187 @@
+## 00993 PATIENT=1 DOCTOR=2 CAREGIVER=3
+3: Morning, doctor. I'm Joy, I look after Mrs Hartnell. She's not sleeping, she's drenched at night, and I think it's her age. ~ cc s1
+2: Thank you, Joy. Mrs Hartnell, how are your nights? ~ s1
+1: Oh, not too bad, dear. A bit warm. ~ s1
+3: She changes her nightdress twice a night. ~ s1
+2: When did the sweats start? ~ s1 u1
+1: Oh, I couldn't say. A while ago. Spring? ~ s1 u1
+3: Before Easter, I thought. Or after. We've both lost track. ~ u1
+2: Fair enough. And during the day, any hot flushes? ~ n1 s2
+1: No, none in the day. ~ n1 c1x
+3: She goes bright red in the afternoons, doctor, and fans herself with the paper. ~ s2 c1x
+2: I'll write both. Let me check two numbers. Blood pressure 128 over 80, pulse 72. ~ v pause=10
+1: Is it normal? ~
+2: Fine. Your skin feels warm and a little damp. ~ x1
+3: That's how she is at night, too. ~
+2: Here's what I'd suggest. Keep the bedroom cool, light cotton nightwear, and a fan. ~ c1
+3: We've got a fan. ~
+2: Avoid hot drinks and spicy food in the evening. ~ c2
+1: I do like my tea. ~
+2: Decaf in the evening, then. ~
+1: Very well. ~
+2: Keep a note of when it happens. ~ c3
+3: I'll write it in her diary. ~
+1: Thank you, dear. ~
+2: You're welcome. ~
+3: Thanks, doctor. ~
+1: Goodbye. ~
+2: Take care, both. ~
+3: Bye. ~
+1: Bye. ~
+2: Safe home. ~
+3: We will. ~
+@@
+{"chief_complaint":{"value":"she's not sleeping, she's drenched at night","normalized_value":"Night sweats disturbing sleep","reported_by":"caregiver"},
+ "symptoms":[{"k":"s1","name":"drenched at night","normalized_name":"Night sweats","category":"constitutional","reported_by":"caregiver","certainty":"uncertain"},
+  {"k":"s2","name":"bright red in the afternoons","normalized_name":"Daytime hot flushes","category":"constitutional","reported_by":"caregiver","certainty":"disputed"}],
+ "negative_findings":[{"k":"n1","finding":"hot flushes","normalized_name":"Daytime hot flushes"}],
+ "vitals":{"k":"v","by":"doctor","bp":"128/80","hr":72},
+ "physical_examination":[{"k":"x1","finding":"skin feels warm and a little damp","normalized_finding":"Warm, slightly damp skin","body_site":"skin"}],
+ "counsel":[["c1","Keep the bedroom cool, wear light cotton nightwear and use a fan"],["c2","Avoid hot drinks and spicy food in the evening"],["c3","Keep a note of when the sweats happen"]],
+ "clinical_uncertainties":[{"type":"date_uncertain","description":"Neither the patient nor her carer can say when the night sweats began.","related_entities":["symptoms[0]"],"k":"u1"},
+  {"type":"conflicting_statement","description":"Patient denies daytime hot flushes while her carer says she goes bright red in the afternoons.","related_entities":["negative_findings[0]","symptoms[1]"],"k":"c1x"}],
+ "quality_checks":{"contradictions_detected":["Patient denies daytime hot flushes; carer reports she goes bright red in the afternoons (unresolved)."],"ambiguous_entities":[]}}
+
+## 00994 PATIENT=1 DOCTOR=2
+1: I need a sick note. I had the flu. ~ cc
+2: Okay. When did it start? ~
+1: Last Monday. I'm better now, mostly. ~
+2: What's left? ~ s1
+1: A cough. ~ s1
+2: Anything else? ~ s2
+1: Tired. ~ s2
+2: Headache? ~ s3
+1: Mild. Comes and goes. ~ s3
+2: Fever now? ~ n1
+1: No. Gone since Thursday. ~ n1
+2: Breathless? ~ n2
+1: No. ~ n2
+2: What have you been taking? ~ m1 m2 m3
+1: Oseltamivir, 75 mg, twice a day, I finish it tomorrow. Paracetamol, 1 gram, when needed. And ibuprofen, 400 mg, with food. ~ m1 m2 m3
+2: Good. Any chest problems in the past? ~ h1
+1: Asthma, as a kid. ~ h1
+2: Anything surgical? ~ sg1
+1: Appendix, in 2010. ~ sg1
+2: Family history of anything relevant? ~ f1
+1: My mother has diabetes. ~ f1
+2: Let me listen. Deep breaths. ~ pause=10
+1: Okay. ~
+2: Your chest is clear on both sides. ~ x1
+1: Good. ~
+2: And the throat is slightly red. ~ x2
+1: It's sore in the mornings. ~
+2: That all fits with flu on the mend. Rest a few more days. ~ c1
+1: I can't, work needs a note. ~
+2: I'll write it for the full week you were off, and three more days. ~ c2
+1: Okay. ~
+2: Drink plenty and don't push exercise this week. ~ c3
+1: Understood. ~
+2: I'd like to see you again in a week if the cough lingers. ~ f2
+1: Okay. ~
+@@
+{"chief_complaint":{"value":"a sick note","normalized_value":"Sick note request after influenza"},
+ "symptoms":[{"k":"s1","name":"cough","normalized_name":"Cough","category":"respiratory"},{"k":"s2","name":"Tired","normalized_name":"Fatigue","category":"constitutional"},{"k":"s3","name":"Mild","normalized_name":"Headache","category":"neurological","severity":"mild"}],
+ "negative_findings":[{"k":"n1","finding":"Fever","normalized_name":"Fever"},{"k":"n2","finding":"Breathless","normalized_name":"Breathlessness"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Asthma","normalized_condition":"Childhood asthma"}],
+  "surgical_history":[{"k":"sg1","procedure":"Appendix","normalized_procedure":"Appendicectomy","timeframe":"in 2010"}],
+  "family_history":[{"k":"f1","relation":"mother","condition":"diabetes"}]},
+ "medications":[{"k":"m1","name":"Oseltamivir","dose":"75 mg","frequency":"twice a day"},{"k":"m2","name":"Paracetamol","dose":"1 gram","frequency":"when needed"},{"k":"m3","name":"ibuprofen","dose":"400 mg","frequency":"with food"}],
+ "physical_examination":[{"k":"x1","finding":"chest is clear on both sides","normalized_finding":"Clear chest","body_site":"chest"},{"k":"x2","finding":"throat is slightly red","normalized_finding":"Mild pharyngeal erythema","body_site":"throat"}],
+ "counsel":[["c1","Rest a few more days"],["c2","Sick note for the week off plus three more days"],["c3","Drink plenty and avoid hard exercise this week"]],
+ "follow_up":[{"k":"f2","time_reference":"in a week"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00995 PATIENT=1 DOCTOR=2
+1: Hello. Um. I want to catch up on my vaccinations. I moved here for university and my records are missing. ~ cc
+2: That's common. Before we plan anything, how are you today? ~
+1: A bit of a cold. Mild. ~ s1
+2: Tell me more. ~ s1
+1: A dry cough, since two days. ~ s2
+2: Runny nose? ~ s3
+1: Yes, a bit. ~ s3
+2: Sore throat? ~ s4
+1: A little, in the mornings. ~ s4
+2: Fever? ~ n1
+1: No fever. ~ n1
+2: Any operations or procedures? ~ sg1
+1: A hernia repair, in 2018. ~ sg1
+2: Any illnesses in the family? ~ f1
+1: My father has diabetes. ~ f1
+2: And you're a student? ~ so1
+1: Yes. Engineering. ~ so1
+2: Let me take your numbers. Pulse 76, blood pressure 118 over 72, temperature 36.7, oxygen 99 percent, breathing 14, weight 70 kilos. ~ v pause=15
+1: Is it okay to get vaccines with a cold? ~
+2: A mild cold, no fever, is no reason to delay. Any problem with your breathing? ~ r1
+1: No, nothing, just the cough. ~ r1
+2: I think this looks like a mild cold, but I can't rule out early flu. ~ d1 d2
+1: Flu? ~
+2: Unlikely without fever. If a fever develops, we'll postpone. ~
+1: Okay. ~
+2: For the records, I'll request your old vaccination history from your home country's clinic. ~
+1: My mother can send photos. ~
+2: Even better. Send them to the surgery. ~ c1
+1: Today. ~
+2: Once we have them, we'll work out what's missing and book it. ~
+1: When? ~
+2: Next week. ~
+1: Good. ~
+2: If your arm becomes very red, hot, or swollen after any jab, come back and see me. ~ f1
+1: Okay. ~
+2: Rest, fluids, and wash your hands often. ~ c2
+1: Yes. ~
+@@
+{"chief_complaint":{"value":"catch up on my vaccinations","normalized_value":"Vaccination catch-up; records missing"},
+ "symptoms":[{"k":"s1","name":"cold","normalized_name":"Mild cold","category":"respiratory","severity":"mild"},{"k":"s2","name":"dry cough","normalized_name":"Dry cough","category":"respiratory","duration":{"value":2,"unit":"days","normalized":"2 days"}},{"k":"s3","name":"Runny nose","normalized_name":"Rhinorrhoea","category":"ENT"},{"k":"s4","name":"sore throat","normalized_name":"Sore throat","category":"ENT","frequency":"in the mornings"}],
+ "negative_findings":[{"k":"n1","finding":"fever","normalized_name":"Fever"}],
+ "medical_history":{"surgical_history":[{"k":"sg1","procedure":"hernia repair","normalized_procedure":"Hernia repair","timeframe":"in 2018"}],
+  "family_history":[{"k":"f1","relation":"father","condition":"diabetes"}],
+  "social_history":[{"k":"so1","category":"occupation","details":"Engineering"}]},
+ "vitals":{"k":"v","by":"doctor","hr":76,"bp":"118/72","temp":36.7,"spo2":99,"rr":14,"wt":70},
+ "review_of_systems":[{"k":"r1","system":"respiratory"}],
+ "clinical_assessment":[{"k":"d1","assessment":"a mild cold","certainty":"provisional"},{"k":"d2","assessment":"early flu","certainty":"differential"}],
+ "counsel":[["c1","Send photos of the old vaccination records to the surgery"],["c2","Rest, drink fluids and wash hands often"]],
+ "follow_up":[{"k":"f1","time_reference":"if your arm becomes very red, hot, or swollen after any jab","status":"conditional"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00996 PATIENT=1 DOCTOR=2
+1: I've been sick all night. Nausea since about ten, and I've vomited four times. ~ cc s1 s2
+2: Sorry to hear that. Let me ask a few things. Is it only vomiting, or diarrhoea as well? ~ s2
+1: Just vomiting. Four times, between midnight and five. ~ s2
+2: Any blood in it? ~ n1
+1: No blood. ~ n1
+2: Any fever? ~ n2
+1: No fever. ~ n2
+2: What did you eat yesterday? ~
+1: Takeaway curry, about eight in the evening. ~
+2: Did anyone else have it? ~
+1: My partner, but she's fine. ~
+2: Any previous conditions? ~ h1
+1: Migraines. They also make me sick. ~ h1
+2: Any tummy problems in the family? ~ f1
+1: My father had gallstones. ~ f1
+2: Let me press your tummy. Tell me if it hurts. ~ pause=10
+1: Slightly, in the middle, up top. ~
+2: Your abdomen is soft, with mild tenderness in the upper middle. ~ x1
+1: That fits. ~
+2: Here's what I'd suggest, without making a big thing of it. Sip fluids little and often. Oral rehydration drinks are best. ~ c1
+1: How much? ~
+2: A few sips every five minutes, increasing as you tolerate. ~
+1: Okay. ~
+2: Avoid solid food for several hours, then try plain things, toast, rice. ~ c2
+1: And painkillers? ~
+2: Avoid anti-inflammatories for now, as they irritate the stomach. ~
+1: Right. ~
+2: Rest, and wash your hands carefully so nobody else catches it. ~ c3
+1: Will do. ~
+2: If you can't keep fluids down for 24 hours, come back and see me. ~ f2
+1: I will. Thanks. ~
+@@
+{"chief_complaint":{"value":"been sick all night","normalized_value":"Overnight nausea and vomiting"},
+ "symptoms":[{"k":"s1","name":"Nausea","normalized_name":"Nausea","category":"gastrointestinal","onset":"since about ten"},{"k":"s2","name":"vomited four times","normalized_name":"Vomiting","category":"gastrointestinal","frequency":"four times"}],
+ "negative_findings":[{"k":"n1","finding":"blood","normalized_name":"Haematemesis"},{"k":"n2","finding":"fever","normalized_name":"Fever"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Migraines","normalized_condition":"Migraine"}],
+  "family_history":[{"k":"f1","relation":"father","condition":"gallstones"}]},
+ "physical_examination":[{"k":"x1","finding":"abdomen is soft, with mild tenderness in the upper middle","normalized_finding":"Soft abdomen with mild epigastric tenderness","body_site":"abdomen"}],
+ "counsel":[["c1","Sip oral rehydration fluids little and often"],["c2","Avoid solid food for several hours then try plain foods"],["c3","Rest and wash hands carefully"]],
+ "follow_up":[{"k":"f2","time_reference":"if you can't keep fluids down for 24 hours","status":"conditional"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}

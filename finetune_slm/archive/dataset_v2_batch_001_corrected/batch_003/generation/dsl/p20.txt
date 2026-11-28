@@ -1,0 +1,110 @@
+## 00663 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Doctor, thank you for seeing us. It's my father, he doesn't complain, so I'm going to do the talking. He has fallen twice in the last month. ~ cc s1
+2: I'm sorry to hear that. Mr Nair, tell me in your own words, what happened? ~ s1
+1: It is nothing. I stood up from the chair, and my legs went. That's all. ~ s1
+3: The second time he was getting out of bed at night, to go to the toilet. I found him on the floor in the morning. ~ s1
+2: Mr Nair, do you remember feeling anything before you fell? ~ s2
+1: A bit dizzy. When I stand up fast, the room goes grey for a moment. ~ s2
+2: Did you hit your head on either fall? ~ n1
+1: No. My arm only, a bruise. ~ n1
+2: Any chest pain, or palpitations with it? ~ n2
+1: No pain. Nothing in the chest. ~ n2
+2: Did you black out, lose consciousness at all, or is it more that your legs gave way? ~ n3
+1: No blackout. I was awake the whole time. ~ n3
+2: Thank you. What medicines does he take, Anita? ~ m1 m2
+3: Amlodipine, 5 mg once a day, and atenolol, 50 mg once a day. He takes them in the morning. ~ m1 m2
+2: Okay. And any allergies to medicines? ~ a1
+3: No, none. He has never had any problem. ~ a1
+2: Let me ask about his health background. ~ h1 h2
+3: High blood pressure for twenty years, and diabetes, but it's diet-controlled. ~ h1 h2
+1: I take care with sweets. ~
+2: Good for you. Any operations? ~ sg1
+3: Cataract operation on the right eye, last year. ~ sg1
+2: Any strokes or heart disease in the family? ~ f1
+1: My father had a stroke, at seventy. ~ f1
+2: Thank you. I'm going to check your blood pressure lying and then standing, Mr Nair. ~
+1: As you wish. ~
+2: Lying down, 148 over 82. Now stand up for me slowly, and wait a minute. Standing, 118 over 70. ~ v pause=60
+1: I feel a bit dizzy now. ~
+2: That's what I thought. Sit back down, please. ~
+2: I also watched you walk in. You walk slowly with a stoop, and your feet have good feeling when I test them. ~ x1 x2 pause=15
+3: What does it mean, the blood pressure dropping? ~
+2: When his pressure drops by 30 points on standing, that's what makes him dizzy and unsteady. It looks like postural hypotension, and I'd say it's the most likely cause of the falls. ~ d1
+3: Is it his tablets? ~
+2: They may be contributing, so I'll review them, but I don't want to change anything without looking at his heart tracing first. I'd like to arrange an ECG today. ~ p1
+3: Can we do it now? ~
+2: Yes, the nurse will take you through after this. ~
+1: What can I do about the falling? ~
+2: Get up slowly, sit on the edge of the bed for a minute before standing, and drink enough water during the day. Keep a light on at night. ~ c1
+3: I'll put a night light in the corridor. ~
+2: Good idea. And I'd like to see you both in two weeks, to go over the ECG and decide about the tablets. ~ f1
+1: Thank you, doctor. ~
+3: Thank you. ~
+@@
+{"chief_complaint":{"value":"He has fallen twice in the last month","normalized_value":"Recurrent falls","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"fallen twice","normalized_name":"Recurrent falls","category":"musculoskeletal","reported_by":"family_member","onset":"in the last month"},
+  {"k":"s2","name":"dizzy","normalized_name":"Dizziness on standing","category":"neurological","aggravating_factors":["stand up fast"]}],
+ "negative_findings":[{"k":"n1","finding":"hit your head","normalized_name":"Head injury"},{"k":"n2","finding":"chest pain","normalized_name":"Chest pain"},{"k":"n3","finding":"black out","normalized_name":"Loss of consciousness"},{"k":"a1","finding":"allergies","normalized_name":"No known allergies","reported_by":"family_member"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension","reported_by":"family_member"},{"k":"h2","condition":"diabetes","normalized_condition":"Diabetes mellitus","reported_by":"family_member"}],
+  "surgical_history":[{"k":"sg1","procedure":"Cataract operation","normalized_procedure":"Cataract surgery","timeframe":"last year","reported_by":"family_member"}],
+  "family_history":[{"k":"f1","condition":"stroke","normalized_condition":"Stroke","relation":"father"}]},
+ "medications":[{"k":"m1","name":"Amlodipine","dose":"5 mg","frequency":"once a day","reported_by":"family_member"},{"k":"m2","name":"atenolol","dose":"50 mg","frequency":"once a day","reported_by":"family_member"}],
+ "vital_signs":[{"k":"v","name":"Lying blood pressure","normalized_name":"Lying blood pressure","value":"148/82","unit":"mmHg","reported_by":"doctor"},{"k":"v","name":"Standing blood pressure","normalized_name":"Standing blood pressure","value":"118/70","unit":"mmHg","reported_by":"doctor"}],
+ "physical_examination":[{"k":"x1","finding":"walk slowly with a stoop","normalized_finding":"Slow stooped gait","body_site":"gait"},{"k":"x2","finding":"feet have good feeling","normalized_finding":"Intact foot sensation","body_site":"feet"}],
+ "clinical_assessment":[{"k":"d1","assessment":"postural hypotension","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"ECG","normalized_name":"Electrocardiogram","type":"cardiac","scheduled_datetime":"today"}],
+ "counsel":[["c1","Advise rising slowly, sitting before standing, drinking water and a night light"]],
+ "follow_up":[{"k":"f1","time_reference":"in two weeks"}]}
+
+## 00665 PATIENT=1 DOCTOR=2 CAREGIVER=3
+3: Doctor, I am Meena, I look after Mr Rao in the daytime. We are here for the check after the eye operation. ~ cc
+2: Good morning, both of you. Mr Rao, which eye was it? ~
+1: Left. ~
+2: Right, and when was your surgery? ~
+3: Eleven days ago, doctor. He was happy, but now he says vision is a little blurry. ~ s1
+1: Blurry sometimes. ~ s1
+2: Is it all the time, or does it come and go? ~ s1
+1: Morning mostly. Later it is better. ~ s1
+2: When did the blurriness start, after the operation, or was it there before? ~ s1 u1
+1: I don't know. Maybe after. Maybe before. I cannot say. ~ s1 u1
+3: He didn't tell me earlier, doctor. I noticed it only this week. ~ u1
+2: That's all right, we'll look carefully today. Any pain in the eye? ~ n1
+1: No pain. ~ n1
+3: There is no pain, he never complained. ~
+2: Any history I should know about, other medical conditions? ~ h1
+3: Diabetes, for ten years. ~ h1
+2: And anyone in the family with eye problems? ~ f1
+1: My father. Glaucoma. He lost the sight in the end. ~ f1
+2: Thank you. And how are you managing at home, Mr Rao? Who do you live with? ~ so1 so2
+1: My son and daughter-in-law. Meena comes in the day. I like to watch cricket on the television. ~ so1 so2
+2: Good. I'd like to check your vision with the chart now, please read the lowest line you can. ~ p1
+1: E. F. P. ~ pause=15
+2: Good, that's the sixth line, which is good for a recovering eye. ~
+3: Is it normal? ~
+2: Very normal for this stage. Now, I'll use the light microscope to look at the eye. Chin on the rest, Mr Rao, and look straight at me. ~ pause=18
+1: Okay. ~
+2: The eye is calm, the cornea is clear, and the new lens is sitting in a good position. ~ x1
+3: Doctor, then why is it blurry? ~
+2: It's common to have some blur at this stage, as the eye settles. Another possibility is a slight film behind the lens, but that usually comes later. For now, I'm not worried. ~
+1: Good. ~
+2: Any headaches, or eye strain with the television? ~ r1
+1: No, no headache. TV is fine. ~ r1
+2: Good. Keep your eye clean, avoid rubbing it, and wear your sunglasses outdoors. ~ c1
+3: I will make sure he doesn't rub it. ~
+2: If the blurriness gets worse, or the eye becomes painful or red, or you see flashing lights, please come in the same day. ~ c2
+3: Same day, understood. ~
+2: Otherwise, I'm happy. Thank you both. ~
+1: Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"We are here for the check after the eye operation","normalized_value":"Post-cataract surgery review","reported_by":"caregiver"},
+ "symptoms":[{"k":"s1","name":"blurry","normalized_name":"Blurred vision","category":"ophthalmological","body_site":"left eye","certainty":"uncertain","frequency":"Morning mostly"}],
+ "negative_findings":[{"k":"n1","finding":"pain","normalized_name":"Eye pain"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Diabetes","normalized_condition":"Diabetes mellitus","reported_by":"caregiver","duration":{"value":10,"unit":"years","normalized":"10 years"}}],
+  "family_history":[{"k":"f1","condition":"Glaucoma","normalized_condition":"Glaucoma","relation":"father"}],
+  "social_history":[{"k":"so1","category":"living","description":"Lives with son and daughter-in-law","details":"my son and daughter-in-law"},{"k":"so2","category":"exercise","description":"Watches cricket on television","details":"watch cricket on the television"}]},
+ "physical_examination":[{"k":"x1","finding":"cornea is clear","normalized_finding":"Calm eye, clear cornea, well-positioned lens","body_site":"left eye"}],
+ "review_of_systems":[{"k":"r1","system":"neurological"}],
+ "procedures_and_investigations":[{"k":"p1","name":"check your vision with the chart","normalized_name":"Visual acuity test","type":"other"}],
+ "counsel":[["c1","Keep eye clean, avoid rubbing and wear sunglasses outdoors"],["c2","Safety-net: come same day if worse blur, pain, redness or flashes"]],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient could not say whether the blurriness began before or after the operation; the carer noticed it only this week.","related_entities":["symptoms[0]"]}]}
+

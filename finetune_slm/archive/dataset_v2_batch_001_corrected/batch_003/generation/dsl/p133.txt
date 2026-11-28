@@ -1,0 +1,47 @@
+## 00880 PATIENT=1 DOCTOR=2
+1: Well, doctor, you know how it is, I came in last month about my back and now there's a new thing, a numb patch on my thigh. ~ cc s1
+2: Right, let's look at the new thing first. Which thigh, and where exactly? ~ s1
+1: The left one, on the outside. About the size of my palm. It feels like it's been to the dentist. ~ s1
+2: When did you first notice it? ~ s1 u1
+1: Oh, a few weeks ago? Maybe longer, my daughter thinks it was when we went on holiday. I honestly couldn't say. ~ s1 u1
+2: Is it getting bigger, or staying the same? ~ s1
+1: Staying the same, I think. ~ s1
+2: Any weakness in the leg, or pain going down from your back? ~ n1
+1: No weakness. No pain in the leg at all. ~ n1
+2: Any problems passing water or opening your bowels? ~ n2
+1: No, nothing at all in that department. ~ n2
+2: How has your back been since the last visit? ~
+1: Much better, thank you. The physio helped. ~
+2: Good. What medicines are you taking now? ~ m1 m2
+1: Naproxen, 500 mg, twice a day, with food. And a tablet for the nerves, amitriptyline, 10 mg, at night. Or was it 25? My wife has the box. ~ m1 m2 u2
+2: We'll check the dose on the box next time. Any other medical conditions? ~ h1 h2 h3
+1: Diabetes, for six years. High blood pressure. And I had a slipped disc some years ago. ~ h1 h2 h3
+2: Thank you. Do you smoke? ~ so1
+1: Used to. I gave up fifteen years ago. ~ so1
+2: Let me check your pulse and pressure first. ~
+1: Go on. ~ pause=10
+2: Pulse 76, blood pressure 138 over 84. ~ v
+1: Is that fine? ~
+2: Reasonable. Now I'd like to touch the patch on your thigh with a cotton wool and a pin. Tell me what you feel. ~
+1: All right. ~ pause=16
+2: There is reduced sensation to light touch and pinprick over the outer left thigh, and the rest of the leg is normal. ~ x1
+1: What does that mean? ~
+2: It's a pattern we see when a small skin nerve is squeezed, often called meralgia paraesthetica. Diabetes can make it more likely. ~ d1
+1: Is it serious? ~
+2: It isn't dangerous, and it often settles. I'd like to check your blood sugar and your B12 with a blood test. ~ p1
+1: Fine. ~
+2: Avoid tight belts and trousers, and I'll ask the physio to look at it too. ~ c1 p2
+1: Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"a numb patch on my thigh","normalized_value":"Numb patch on the left thigh"},
+ "symptoms":[{"k":"s1","name":"numb patch","normalized_name":"Numbness of the lateral left thigh","category":"neurological","body_site":"outer left thigh","certainty":"uncertain"}],
+ "negative_findings":[{"k":"n1","finding":"weakness","normalized_name":"Leg weakness or leg pain"},{"k":"n2","finding":"problems passing water","normalized_name":"Bladder or bowel dysfunction"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Diabetes","normalized_condition":"Diabetes mellitus","duration":{"value":6,"unit":"years","normalized":"6 years"}},{"k":"h2","condition":"High blood pressure","normalized_condition":"Hypertension"},{"k":"h3","condition":"a slipped disc","normalized_condition":"Previous lumbar disc prolapse"}],"social_history":[{"k":"so1","category":"smoking","description":"I gave up fifteen years ago","status":"former","details":null}]},
+ "medications":[{"k":"m1","name":"Naproxen","dose":"500 mg","frequency":"twice a day"},{"k":"m2","name":"amitriptyline","dose":"10 mg","frequency":"at night"}],
+ "vitals":{"k":"v","hr":76,"bp":"138/84"},
+ "physical_examination":[{"k":"x1","finding":"reduced sensation to light touch and pinprick over the outer left thigh","normalized_finding":"Reduced sensation over the lateral cutaneous nerve distribution of left thigh","body_site":"outer left thigh"}],
+ "clinical_assessment":[{"k":"d1","assessment":"meralgia paraesthetica","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood test","normalized_name":"Blood glucose and vitamin B12","type":"laboratory"}],
+ "counsel":[["c1","Avoid tight belts and trousers"]],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient and daughter unsure when the numbness began (\"a few weeks ago? Maybe longer\").","related_entities":["symptoms[0]"]},{"k":"u2","type":"uncertain_dose","description":"Patient unsure whether the amitriptyline is 10 mg or 25 mg.","related_entities":["medications[1]"]}]}
+

@@ -1,0 +1,52 @@
+## 00761 PATIENT=1 DOCTOR=2 NURSE=3
+3: Doctor, this is Callum, nineteen, rugby, collision with another player, can't move his right arm. I've put a sling on. ~ cc
+2: Thanks, Imogen. Callum, I'm Dr Shaw. Tell me what happened. ~
+1: I got tackled. I went down on the shoulder, hard, and I felt it pop out. ~ s1
+2: When did it happen? ~ s1
+1: 40 minutes ago. Maybe an hour. ~ s1
+2: Where's the pain, and how bad? ~ s1
+1: Right shoulder, it's severe, ten out of ten, when I move it, and it feels like it's hanging off. ~ s1 s2
+2: Any numbness or tingling in your arm or hand? ~ s3 n1
+1: Pins and needles in my hand, a bit. And my fingers feel weird. ~ s3
+2: Any head or neck injury, or pain in your neck? ~ n2
+1: No, no neck pain. My head's fine, I didn't bang it. ~ n2
+2: Have you had a shoulder dislocation before? ~ h1
+1: Once, in school, the same shoulder. They put it back. ~ h1
+2: Are you taking anything at the moment? ~ m1 m2 u1
+1: Some tablets from the club doctor, a little white one for the muscles, I don't know its name, and creatine, I think, twice a day, but I forget some days. ~ m1 m2 u1 u2
+2: Right. The white tablet you can't name, and the creatine twice a day but sometimes forgotten. Do you smoke or drink? ~ m1 m2 u1 u2 so1
+1: I drink at weekends. A few pints after the match. ~ so1
+3: Doctor, his obs. Pulse 92, blood pressure 130 over 80, oxygen 99 percent. ~ v pause=12
+2: Thank you, Imogen. Callum, I'm going to look at the shoulder, and check pulses and feeling in your hand. ~
+1: Go on. ~ pause=20
+2: The right shoulder looks squared off, the round contour is lost, and the head of the bone feels out of place at the front. Your radial pulse is present, and you have reduced feeling over the outer part of your upper arm. ~ x1 x2
+1: Is it dislocated? ~
+2: Yes, I think the shoulder is dislocated, but I can't rule out an associated fracture until I've seen an X-ray. ~ d1
+1: Can you put it back? ~
+2: Yes, but I want an X-ray first, so we don't make anything worse. I'd like an X-ray of the shoulder now. ~ p1
+3: I'll call radiology. ~
+1: When can it go back in? ~
+2: After the X-ray, we'll give you strong pain relief and sedation, and I'll put it back gently. I'd like Imogen to stay with you. ~ p2
+3: Of course. ~
+2: Don't eat or drink anything until we've done it, and keep the sling on, with the arm resting against you. ~ c1
+1: Fine. ~
+2: If your fingers go white, cold or completely numb, shout for the nurse straight away. ~ f1
+1: I will. ~
+@@
+{"chief_complaint":{"value":"collision with another player, can't move his right arm","normalized_value":"Shoulder injury after rugby tackle","reported_by":"nurse"},
+ "symptoms":[{"k":"s1","name":"pop out","normalized_name":"Right shoulder dislocation","category":"musculoskeletal","body_site":"right shoulder","duration":{"value":40,"unit":"minutes","normalized":"40 minutes"}},
+  {"k":"s2","name":"severe","normalized_name":"Severe shoulder pain","category":"musculoskeletal","severity":"severe","body_site":"right shoulder"},
+  {"k":"s3","name":"Pins and needles in my hand","normalized_name":"Paraesthesia of right hand","category":"neurological","body_site":"right hand"}],
+ "negative_findings":[{"k":"n2","finding":"neck injury","normalized_name":"Neck injury"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"shoulder dislocation","normalized_condition":"Previous right shoulder dislocation"}],"social_history":[{"k":"so1","category":"alcohol","description":"Weekend alcohol","details":"A few pints after the match"}]},
+ "medications":[{"k":"m1","name":"little white one for the muscles","normalized_name":null,"generic_name":null},{"k":"m2","name":"creatine","frequency":"twice a day"}],
+ "vitals":{"k":"v","by":"nurse","hr":92,"bp":"130/80","spo2":99},
+ "physical_examination":[{"k":"x1","finding":"squared off","normalized_finding":"Loss of deltoid contour with anterior humeral head","body_site":"right shoulder"},{"k":"x2","finding":"radial pulse is present","normalized_finding":"Radial pulse present with reduced sensation over lateral upper arm","body_site":"right arm"}],
+ "clinical_assessment":[{"k":"d1","assessment":"the shoulder is dislocated","normalized_assessment":"Anterior shoulder dislocation","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"X-ray of the shoulder","normalized_name":"X-ray of right shoulder","type":"imaging","scheduled_datetime":"now"},{"k":"p2","name":"sedation","normalized_name":"Procedural sedation and shoulder reduction","type":"other"}],
+ "counsel":[["c1","Nil by mouth and keep the sling on with the arm resting against the body"]],
+ "follow_up":[{"k":"f1","time_reference":"If your fingers go white, cold or completely numb","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"incomplete_medication_name","description":"Patient cannot name one tablet from the club doctor and describes it as a little white one for the muscles.","related_entities":["medications[0]"]},
+  {"k":"u2","type":"adherence_uncertain","description":"Creatine is taken twice a day but the patient says he forgets some days; actual adherence unknown.","related_entities":["medications[1]"]}],
+ "quality_checks":{"ambiguous_entities":["medications[0]"]}}
+

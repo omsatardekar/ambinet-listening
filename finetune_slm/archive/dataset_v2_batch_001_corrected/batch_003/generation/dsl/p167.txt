@@ -1,0 +1,97 @@
+## 00934 PATIENT=1 DOCTOR=2
+1: Hello, doctor! I've had psoriasis for years, but now my joints are hurting, and my nails look terrible. I thought it was time to come in. ~ cc s1 s2
+2: Good to meet you. Tell me about the joints first. Which ones? ~ s1
+1: Mainly my fingers, and my right knee. They're stiff and swollen. ~ s1
+2: When are they worst? ~ s1
+1: In the morning. It takes me a good hour to get going. ~ s1
+2: How long has this been happening? ~ s1
+1: About four months. It started slowly. ~ s1
+2: And the nails? ~ s2
+1: They're pitted, little dents, and a couple of them have come away from the nail bed. ~ s2
+2: Any eye redness or pain, or back pain at night? ~ n1
+1: No. Not that I've noticed. ~ n1
+2: What do you use for the psoriasis? ~ m1
+1: A steroid cream on my elbows, calcipotriol, once a day. ~ m1
+2: Do you take anything for the joint pain? ~
+1: Just ibuprofen, 400 mg, when it's bad. ~ m2
+2: Any other conditions? ~ h1
+1: Psoriasis since I was twenty. That's all. ~ h1
+2: Does psoriasis or arthritis run in the family? ~
+1: My father had psoriasis. ~
+2: Do you smoke, or drink alcohol? ~ so1
+1: I smoke ten a day. I'd like to cut down. ~ so1
+2: Let me check your blood pressure and pulse. ~
+1: Go on. ~ pause=10
+2: Blood pressure 126 over 80, pulse 72, temperature 36.6. ~ v
+1: Normal? ~
+2: Normal. Now let me look at your hands and your knee. ~
+1: Of course. ~ pause=18
+2: There's swelling and tenderness in several finger joints, and the nails are pitted with lifting. The right knee has a small effusion. ~ x1
+1: What does that mean? ~
+2: It strongly suggests psoriatic arthritis, and the nail changes support it. I'd also like blood tests and X-rays of your hands. ~ d1 p1
+1: Is it serious? ~
+2: It can damage joints if it is not treated, so early treatment is important. ~
+1: What treatment? ~
+2: There are several options, and I'd like a rheumatologist to guide it. I'll refer you urgently, and in the meantime take naproxen, 500 mg, twice a day with food. ~ m3 f1
+1: All right. ~
+2: And it would help your joints and skin to stop smoking. I can help you with that. ~ c1
+1: I'd like that. ~
+2: I'll see you in four weeks, once the tests are back. ~ f2
+1: Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"I've had psoriasis for years, but now my joints are hurting, and my nails look terrible","normalized_value":"Joint pain and nail changes with psoriasis"},
+ "symptoms":[{"k":"s1","name":"stiff and swollen","normalized_name":"Inflammatory pain and swelling of the finger joints and right knee","category":"musculoskeletal","body_site":"fingers and right knee","duration":{"value":4,"unit":"months","normalized":"4 months"}},{"k":"s2","name":"pitted","normalized_name":"Nail pitting and onycholysis","category":"dermatological","body_site":"nails"}],
+ "negative_findings":[{"k":"n1","finding":"eye redness","normalized_name":"Eye inflammation or night back pain"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Psoriasis","normalized_condition":"Psoriasis"}],"social_history":[{"k":"so1","category":"smoking","description":"I smoke ten a day","status":"current","details":null}]},
+ "medications":[{"k":"m1","name":"calcipotriol","frequency":"once a day"},{"k":"m2","name":"ibuprofen","dose":"400 mg","frequency":"when it's bad"},{"k":"m3","name":"naproxen","status":"planned","reported_by":"doctor","dose":"500 mg","frequency":"twice a day"}],
+ "vitals":{"k":"v","bp":"126/80","hr":72,"temp":36.6},
+ "physical_examination":[{"k":"x1","finding":"swelling and tenderness in several finger joints, and the nails are pitted with lifting","normalized_finding":"Dactylitis-type finger joint swelling, nail pitting and a small right knee effusion","body_site":"hands and right knee"}],
+ "clinical_assessment":[{"k":"d1","assessment":"psoriatic arthritis","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"X-rays of your hands","normalized_name":"Blood tests and hand X-rays","type":"imaging"}],
+ "clinical_actions":[{"k":"f1","action_type":"referral","description":"Urgent referral to rheumatology","status":"planned"}],
+ "counsel":[["c1","Stop smoking, with support offered"]],
+ "follow_up":[{"k":"f2","time_reference":"in four weeks"}]}
+
+## 00938 PATIENT=1 DOCTOR=2 NURSE=3
+1: Um, sorry, I've got these blisters on my chest, and they're very painful. I think it might be shingles, but I'm not sure. ~ cc s1
+2: Let's have a look at the story. Where are they, exactly? ~ s1
+1: On the right side of my chest, in a band, round to my back. ~ s1
+2: When did you first notice them? ~ s1 u1
+1: Four days ago? Maybe five? I think it started with a tingling. ~ s1 u1
+3: In the triage notes you said Tuesday, so that's four days. ~ s1 u1
+1: Yes, Tuesday, I suppose. ~ s1 u1
+2: Is it painful or itchy? ~ s2
+1: Burning, mostly. It's worse at night. ~ s2
+2: Any fever, or feeling unwell? ~ n1
+1: A bit achy, but no fever. ~ n1
+2: Any blisters near your eyes, or your face? ~ n2
+1: No. Only on the chest. ~ n2
+2: Have you had chickenpox in the past? ~ h1
+1: As a child, yes. ~ h1
+2: Do you have any allergies to medicines? ~ a1
+1: No, I don't have any allergies. ~ a1
+3: Doctor, I've done his observations. Pulse 78, blood pressure 130 over 82, temperature 36.9, oxygen 98 percent, breathing 16. ~ v
+2: Thank you. Let me look at the rash. Please lift your shirt. ~
+1: Of course. ~ pause=16
+2: Clusters of blisters on a red base, in a band on the right chest wall, not crossing the middle. That is classic for shingles. ~ d1
+1: So it is shingles? ~
+2: Yes. Because you're within the first few days, I'd like to start an antiviral, aciclovir, 800 mg, five times a day for seven days. ~ m1
+1: Five times a day? ~
+2: Yes, about every four hours while you're awake. And simple painkillers for the pain. ~
+1: Is it contagious? ~
+2: To anyone who hasn't had chickenpox, yes, until the blisters crust over. Please avoid pregnant women, babies and anyone with a weak immune system. ~ c1
+3: I'll give you a leaflet on that. ~
+2: I'd like to see you again in a week, to check how it's healing. ~ f1
+1: Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"I've got these blisters on my chest, and they're very painful","normalized_value":"Painful chest blisters, possible shingles"},
+ "symptoms":[{"k":"s1","name":"blisters","normalized_name":"Vesicular rash in a right chest dermatomal band","category":"dermatological","body_site":"right chest wall","certainty":"certain"},{"k":"s2","name":"Burning","normalized_name":"Burning pain","category":"dermatological","body_site":"right chest wall"}],
+ "negative_findings":[{"k":"n1","finding":"fever","normalized_name":"Fever"},{"k":"n2","finding":"blisters near your eyes","normalized_name":"Facial or ophthalmic involvement"},{"k":"a1","finding":"Allergies","normalized_name":"No known allergies"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"chickenpox","normalized_condition":"Previous chickenpox","status":"ongoing"}]},
+ "medications":[{"k":"m1","name":"aciclovir","status":"planned","reported_by":"doctor","dose":"800 mg","frequency":"five times a day","duration":{"value":7,"unit":"days","normalized":"7 days"}}],
+ "vitals":{"k":"v","by":"nurse","hr":78,"bp":"130/82","temp":36.9,"spo2":98,"rr":16},
+ "clinical_assessment":[{"k":"d1","assessment":"classic for shingles","normalized_assessment":"Herpes zoster","certainty":"provisional"}],
+ "counsel":[["c1","Avoid pregnant women, babies and the immunosuppressed until blisters crust"]],
+ "follow_up":[{"k":"f1","time_reference":"in a week"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient unsure whether the blisters began four or five days ago; triage notes say Tuesday.","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved"}]}
+

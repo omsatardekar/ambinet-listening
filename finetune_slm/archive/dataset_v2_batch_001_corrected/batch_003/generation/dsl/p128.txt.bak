@@ -1,0 +1,45 @@
+## 00896 PATIENT=1 DOCTOR=2
+1: Doctor, I've got that awful pain again in my right side, like the kidney stone I had before. ~ cc s1
+2: I'm sorry to hear that. When did it start this time? ~ s1 u1
+1: Yesterday evening, I think. Or maybe the night before, honestly I lost track. ~ s1 u1
+2: Where do you feel it? ~ s1
+1: Right side of my back, going round to the front. ~ s1
+2: Is it constant, or does it come in waves? ~ s1
+1: Waves. It builds, then eases off. ~ s1
+2: Have you passed any blood in your urine? ~ n1
+1: No blood that I've seen, but it's dark. ~ n1
+2: Any fever or shivering? ~
+1: No fever. ~
+2: What medicines are you on at the moment? ~ m1 m2
+1: Tamsulosin, 400 micrograms, once a day, from the last time. And diclofenac, 50 mg, three times a day, when the pain is bad. ~ m1 m2
+2: Is the tamsulosin helping? ~
+1: I think so. It's not as bad as last time. ~
+2: Do you have any history of kidney stones, or other kidney problems? ~ h1
+1: One stone, two years ago. It passed by itself. ~ h1
+2: Let me check your numbers. Pulse, pressure, temperature. ~
+1: Okay. ~ pause=10
+2: Pulse 84, blood pressure 136 over 86, temperature 36.9, oxygen 98 percent, breathing 16. ~ v
+1: All right? ~
+2: Nothing alarming, given you're in pain. I'd like to send a urine sample and do a blood test for your kidney function. ~ p1 p2
+1: Okay. Can I give the urine sample here? ~
+2: The nurse will show you the toilet. ~
+1: And what happens after? ~
+2: Depending on the results, a scan might be needed, but I'd rather wait for the tests first. ~
+1: Should I keep taking the diclofenac? ~
+2: Yes, with food, and not for more than a few days. Drink plenty of water through the day. ~ c1
+1: How much? ~
+2: Aim for two to three litres. ~ c2
+1: I'll try. ~
+2: If you get a fever, vomiting, or the pain gets suddenly worse, come to the emergency department. ~ c3
+1: Right. Thank you. ~
+@@
+{"chief_complaint":{"value":"that awful pain again in my right side, like the kidney stone I had before","normalized_value":"Right flank pain, recurrent"},
+ "symptoms":[{"k":"s1","name":"pain","normalized_name":"Right flank pain","category":"genitourinary","body_site":"right side of back, radiating to front","frequency":"waves","temporality":"recurrent"}],
+ "negative_findings":[{"k":"n1","finding":"blood","normalized_name":"Visible haematuria"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"One stone","normalized_condition":"Previous kidney stone","duration":{"value":2,"unit":"years","normalized":"2 years ago"}}]},
+ "medications":[{"k":"m1","name":"Tamsulosin","dose":"400 micrograms","frequency":"once a day"},{"k":"m2","name":"diclofenac","dose":"50 mg","frequency":"three times a day"}],
+ "vitals":{"k":"v","hr":84,"bp":"136/86","temp":36.9,"spo2":98,"rr":16},
+ "procedures_and_investigations":[{"k":"p1","name":"urine sample","normalized_name":"Urinalysis","type":"laboratory"},{"k":"p2","name":"blood test","normalized_name":"Renal function","type":"laboratory"}],
+ "counsel":[["c1","Continue diclofenac with food for no more than a few days"],["c2","Drink two to three litres of water"],["c3","Return to emergency for fever, vomiting or sudden worse pain"]],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient unsure when the pain began (\"yesterday evening, or maybe the night before\").","related_entities":["symptoms[0]"]}]}
+

@@ -1,0 +1,164 @@
+## 00719 PATIENT=1 DOCTOR=2 CAREGIVER=3
+1: Sorry we're late, doctor. Rosa got lost in the parking lot, and I wouldn't have come at all, it's just a foot check. ~
+2: No problem, Mr Dale. How are you feeling about the feet, from your side? ~
+1: They're fine. I have a little blister on the left heel, that's all, it came up last week from my work boots. ~ cc s1
+3: It's been a week, doctor, and it's not healing. And his heels are cracked, they've been cracked all winter. ~ s1 s2
+2: Rosa, thank you. Any numbness or tingling in the feet, Mr Dale? ~ n1 s3
+1: No, no numbness. My feet feel fine. ~ n1 c2x
+3: Frank, you couldn't feel the bathwater yesterday, I had to tell you it was too hot. You never feel it on your feet. ~ s3 c2x
+1: I felt it. It was a bit warm, that's all. ~
+2: I'll write both down. Any fever or chills? ~ n2
+1: No fever. ~ n2
+2: What about the legs, cramps? ~ s5
+1: Cramps in the calves at night, on and off. ~ s5
+2: And your energy? ~ s4
+1: Tired. But I'm old. ~ s4
+2: Let's go through your medications. ~ m1 m2 m3 m4
+1: Insulin glargine, 20 units, at bedtime. Metformin, 1000 mg, twice a day, I never miss it. Atorvastatin, 40 mg, at night. And lisinopril, 10 mg, once a day. ~ m1 m2 m3 m4 u1 u3
+3: The insulin is 24 units, Frank, I draw it up myself. And you skip the evening metformin, at least three times a week. ~ m1 m2 u1 u3
+1: It's 20. And I take the metformin. Mostly. ~ m1 m2 u1 u3
+2: So the insulin dose is 20 or 24 units, and I'll check with the pharmacy. Any allergies, Mr Dale? ~ a1
+1: Sulfa. I got hives from it. ~ a1
+2: What conditions do you have? ~ h1 h2 h3
+1: Type 2 diabetes, fifteen years. High blood pressure. And high cholesterol. ~ h1 h2 h3
+2: Any operations? ~ sg1
+1: My right second toe was amputated, in 2021. ~ sg1
+2: Diabetes in the family? ~ f1
+1: My mother had it. ~ f1
+2: Do you smoke? ~ so1
+1: I quit smoking six years ago. ~ so1
+2: Alcohol? ~ so2
+1: A beer on Fridays. ~ so2
+2: What did you do for work? ~ so3
+1: Trucker, thirty years. Retired. ~ so3
+2: And at home? ~ so4
+1: I live with Rosa, she's my daughter-in-law, she looks after me. ~ so4
+2: Let me check you. Blood pressure 138 over 82, pulse 78, temperature 36.9, oxygen 97 percent, breathing 16, and weight 98 kilos. ~ v pause=15
+1: All good. ~
+2: Take your socks off, please. Rosa, can you help? ~ pause=12
+3: Of course. ~
+2: There's a blister on the left heel, about two centimetres, with no redness around it. ~ x1 x2
+3: Is it infected? ~
+2: Not that I can see. The skin on both heels is dry and cracked. ~ x3
+1: Told you, nothing serious. ~
+2: Now I'll touch your soles with a thin plastic fibre. Tell me when you feel it. ~ pause=15
+1: Yes. Yes. Hm. ~
+2: You couldn't feel it on the left sole at all, and only some of the right. So the sensation in the feet is reduced. ~ x4
+1: Is it? ~
+3: That's what I said. ~
+2: Any trouble breathing? ~ r1
+1: No, nothing at all. ~ r1
+2: This blister looks like a pressure blister from the boots, but because of your diabetes I want to be careful. ~ d1
+3: What do we do? ~
+2: I'd like to arrange an HbA1c, and an X-ray of the left foot. ~ p1 p2
+1: Fine. ~
+2: Wear soft shoes, check your feet every day, Rosa too. I'd like to see you again in two weeks. ~ c1 f2
+3: Two weeks. I'll keep an eye on it. ~
+@@
+{"chief_complaint":{"value":"a little blister on the left heel","normalized_value":"Blister on the left heel at diabetic foot check"},
+ "symptoms":[{"k":"s1","name":"blister on the left heel","normalized_name":"Left heel blister","category":"dermatological","body_site":"left heel","duration":{"value":1,"unit":"weeks","normalized":"1 week"}},
+  {"k":"s2","name":"heels are cracked","normalized_name":"Cracked heels","category":"dermatological","body_site":"heels","reported_by":"caregiver"},
+  {"k":"s3","name":"couldn't feel the bathwater","normalized_name":"Reduced sensation in the feet","category":"neurological","body_site":"feet","reported_by":"caregiver","certainty":"disputed"},
+  {"k":"s4","name":"Tired","normalized_name":"Fatigue","category":"constitutional"},
+  {"k":"s5","name":"Cramps in the calves","normalized_name":"Nocturnal calf cramps","category":"musculoskeletal","body_site":"calves","frequency":"at night, on and off"}],
+ "negative_findings":[{"k":"n1","finding":"numbness","normalized_name":"Foot numbness"},{"k":"n2","finding":"fever","normalized_name":"Fever"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Type 2 diabetes","normalized_condition":"Type 2 diabetes mellitus"},{"k":"h2","condition":"High blood pressure","normalized_condition":"Hypertension"},{"k":"h3","condition":"high cholesterol","normalized_condition":"Hypercholesterolaemia"}],
+  "surgical_history":[{"k":"sg1","procedure":"right second toe was amputated","normalized_procedure":"Right second toe amputation","timeframe":"in 2021"}],
+  "family_history":[{"k":"f1","relation":"mother","condition":"diabetes"}],
+  "social_history":[{"k":"so1","category":"smoking","details":"quit smoking six years ago","status":"former"},{"k":"so2","category":"alcohol","details":"A beer on Fridays"},{"k":"so3","category":"occupation","details":"Trucker, thirty years","status":"retired"},{"k":"so4","category":"living","details":"live with Rosa"}]},
+ "medications":[{"k":"m1","name":"Insulin glargine","frequency":"at bedtime"},{"k":"m2","name":"Metformin","dose":"1000 mg","frequency":"twice a day"},{"k":"m3","name":"Atorvastatin","dose":"40 mg","frequency":"at night"},{"k":"m4","name":"lisinopril","dose":"10 mg","frequency":"once a day"}],
+ "allergies":[{"k":"a1","substance":"Sulfa","reaction":"hives"}],
+ "vitals":{"k":"v","by":"doctor","bp":"138/82","hr":78,"temp":36.9,"spo2":97,"rr":16,"wt":98},
+ "physical_examination":[{"k":"x1","finding":"blister on the left heel, about two centimetres","normalized_finding":"2 cm blister on left heel","body_site":"left heel"},{"k":"x2","finding":"no redness around it","normalized_finding":"No surrounding erythema","status":"absent","body_site":"left heel"},{"k":"x3","finding":"skin on both heels is dry and cracked","normalized_finding":"Dry cracked heels bilaterally","body_site":"heels"},{"k":"x4","finding":"sensation in the feet is reduced","normalized_finding":"Reduced monofilament sensation, left more than right","body_site":"feet"}],
+ "review_of_systems":[{"k":"r1","system":"respiratory"}],
+ "clinical_assessment":[{"k":"d1","assessment":"a pressure blister from the boots","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"HbA1c","normalized_name":"Glycated haemoglobin","type":"laboratory"},{"k":"p2","name":"X-ray of the left foot","normalized_name":"Left foot X-ray","type":"imaging"}],
+ "counsel":[["c1","Wear soft shoes and check the feet every day"]],
+ "follow_up":[{"k":"f2","time_reference":"in two weeks"}],
+ "clinical_uncertainties":[{"type":"conflicting_statement","description":"Patient denies foot numbness while his carer says he could not feel the bathwater temperature.","related_entities":["negative_findings[0]","symptoms[2]"],"k":"c2x"},
+  {"type":"medication_discrepancy","description":"Patient says his insulin glargine is 20 units while his carer says 24 units.","related_entities":["medications[0]"],"k":"u1"},
+  {"type":"adherence_uncertain","description":"Patient says he takes metformin twice a day and never misses it, while his carer says he skips the evening dose several times a week.","related_entities":["medications[1]"],"k":"u3"}],
+ "quality_checks":{"contradictions_detected":["Patient denies numbness; carer reports he cannot feel bathwater temperature (unresolved).","Insulin glargine dose: patient states 20 units, carer states 24 units (unresolved)."],"ambiguous_entities":[]}}
+
+## 00905 PATIENT=1 DOCTOR=2 CAREGIVER=3
+3: Sorry, sorry, we're late, I took the wrong turn, the sat nav sent us the long way round. This is Chloe, she fell off the trampoline about two hours ago. ~ cc s1
+2: No worries. Hi Chloe, I'm Dr Nguyen. How are you feeling? ~
+1: My arm hurts. ~ s1
+2: Which arm? ~ s1
+1: This one. The left. Near my wrist. It's sore. ~ s1
+3: She landed on it, I saw it. It was her left hand, flat out, and she screamed. ~ s1
+2: Was anyone else on the trampoline? ~
+3: Her cousin, Jack, but he'd got off. He's the one who ran in to get me, he's six. ~
+2: That's a good cousin. Chloe, does it look different? ~ s2
+1: It's puffy. ~ s2
+2: Can you turn your hand over for me, like you're holding soup? ~ s3
+1: Ow. No. It hurts. ~ s3
+3: She can't turn it over, no. She tried in the car. ~ s3
+2: Did you hit your head, Chloe? ~ n1
+1: No. Just my arm. ~ n1
+3: She didn't hit her head. She was awake and crying straight away. ~
+2: Did you feel dizzy, or pass out? ~ n2
+1: No. ~ n2
+2: Any tingling in your fingers? ~ n3
+1: A bit funny. No, not funny. Just sore. ~ n3
+2: So no tingling? ~
+1: No tingling. ~ n3
+2: Does your elbow or shoulder hurt? ~ n4
+1: No, just by the wrist. ~ n4
+2: Any medicines, Chloe's carer? ~ m1 m2
+3: She had ibuprofen, 200 mg, in the car, I keep it in my bag. And montelukast, 5 mg, every night for her asthma. ~ m1 m2
+2: Thank you. Any allergies, Chloe? ~ a1
+3: Egg. She's allergic to egg. But I couldn't tell you what happens, her mum would know. ~ a1
+2: That's fine. Any medical history? ~ h1 h2 h3
+3: Asthma, eczema, and hay fever. ~ h1 h2 h3
+2: Any operations? ~ sg1
+3: She had grommets when she was four. ~ sg1
+2: Anything in the family? ~ f1 f2
+3: Her mum has migraines, and her dad has asthma too. ~ f1 f2
+2: Which grade are you in, Chloe? ~ so1
+1: Year four. ~ so1
+2: Do you play sport? ~ so2
+1: Netball. And the trampoline. ~ so2
+2: And who's at home? ~ so3
+3: Her mum, dad, and her little brother. I just look after her after school. ~ so3
+2: Okay. Let me check your vitals, Chloe. Pulse 104, blood pressure 100 over 62, temperature 36.9, oxygen 99 percent, breathing 20, and weight 29 kilos. ~ v pause=15
+3: All normal? ~
+2: All normal for her size. Chloe, I'm going to gently feel your arm, you tell me when it hurts. ~ pause=10
+1: There. ~
+2: There's swelling around the left wrist, and it's very tender over the end of the forearm bone. ~ x1 x2
+1: Ow! ~
+2: Sorry, Chloe. I can feel her pulse at the wrist, and her fingers are pink and warm. ~ x3
+3: Good, that's good. ~
+2: Any problem with your breathing today, Chloe, with your asthma? ~ r1
+1: No, it's okay. ~ r1
+2: And any tummy ache or throwing up? ~ r2
+1: No. I'm fine. ~ r2
+2: I think this looks like a broken wrist. A fracture of the forearm bone, near the wrist. ~ d1
+3: Oh no. ~
+2: It's very common in children, it heals well. I'd like to arrange an X-ray of the wrist and forearm, and an X-ray of the elbow too, to be safe. ~ p1 p2
+1: Will it hurt? ~
+2: Not at all, you just hold still. And I'd like to put her arm in a splint until then. ~ p3
+3: Okay. ~
+2: And I'd like to arrange a fracture clinic appointment for the cast. ~ p4
+3: When would that be? ~
+2: The nurse will book it before you leave. If her fingers turn blue or numb, or the pain gets much worse, come back straight away. ~ f1
+3: I will. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"she fell off the trampoline about two hours ago","normalized_value":"Left wrist pain after fall from trampoline","reported_by":"caregiver"},
+ "symptoms":[{"k":"s1","name":"arm hurts","normalized_name":"Left wrist pain","category":"musculoskeletal","body_site":"left wrist","duration":{"value":2,"unit":"hours","normalized":"2 hours"}},
+  {"k":"s2","name":"puffy","normalized_name":"Wrist swelling","category":"musculoskeletal","body_site":"left wrist"},
+  {"k":"s3","name":"can't turn it over","normalized_name":"Unable to supinate forearm","category":"musculoskeletal","body_site":"left forearm","reported_by":"caregiver"}],
+ "negative_findings":[{"k":"n1","finding":"hit your head","normalized_name":"Head injury"},{"k":"n2","finding":"dizzy, or pass out","normalized_name":"Dizziness or loss of consciousness"},{"k":"n3","finding":"tingling","normalized_name":"Finger tingling"},{"k":"n4","finding":"elbow or shoulder hurt","normalized_name":"Elbow or shoulder pain"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Asthma","normalized_condition":"Asthma","reported_by":"caregiver"},{"k":"h2","condition":"eczema","normalized_condition":"Eczema","reported_by":"caregiver"},{"k":"h3","condition":"hay fever","normalized_condition":"Allergic rhinitis","reported_by":"caregiver"}],
+  "surgical_history":[{"k":"sg1","procedure":"grommets","normalized_procedure":"Grommet insertion","timeframe":"when she was four","reported_by":"caregiver"}],
+  "family_history":[{"k":"f1","relation":"mum","condition":"migraines","reported_by":"caregiver"},{"k":"f2","relation":"dad","condition":"asthma","reported_by":"caregiver"}],
+  "social_history":[{"k":"so1","category":"occupation","details":"Year four"},{"k":"so2","category":"exercise","details":"Netball. And the trampoline"},{"k":"so3","category":"living","details":"Her mum, dad, and her little brother","reported_by":"caregiver"}]},
+ "medications":[{"k":"m1","name":"ibuprofen","dose":"200 mg","frequency":"in the car","reported_by":"caregiver"},{"k":"m2","name":"montelukast","dose":"5 mg","frequency":"every night","indication":"her asthma","reported_by":"caregiver"}],
+ "allergies":[{"k":"a1","substance":"Egg","allergy_type":"food","reported_by":"caregiver"}],
+ "vitals":{"k":"v","by":"doctor","bp":"100/62","hr":104,"temp":36.9,"spo2":99,"rr":20,"wt":29},
+ "physical_examination":[{"k":"x1","finding":"swelling around the left wrist","normalized_finding":"Left wrist swelling","body_site":"left wrist"},{"k":"x2","finding":"very tender over the end of the forearm bone","normalized_finding":"Distal radius tenderness","body_site":"left wrist"},{"k":"x3","finding":"fingers are pink and warm","normalized_finding":"Intact distal perfusion","body_site":"left hand"}],
+ "review_of_systems":[{"k":"r1","system":"respiratory"},{"k":"r2","system":"gastrointestinal"}],
+ "clinical_assessment":[{"k":"d1","assessment":"a broken wrist","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"X-ray of the wrist and forearm","normalized_name":"Wrist and forearm X-ray","type":"imaging"},{"k":"p2","name":"X-ray of the elbow","normalized_name":"Elbow X-ray","type":"imaging"},{"k":"p3","name":"splint","normalized_name":"Splint application","type":"other"},{"k":"p4","name":"fracture clinic appointment","normalized_name":"Fracture clinic referral for cast","type":"other"}],
+ "follow_up":[{"k":"f1","time_reference":"if her fingers turn blue or numb, or the pain gets much worse","status":"conditional"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}

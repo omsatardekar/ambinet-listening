@@ -1,0 +1,116 @@
+## 00659 PATIENT=1 DOCTOR=2 UNKNOWN=3
+1: Good morning, doctor. I've been keeping a note of this, so I can be precise. My heart pounds at night, and has done for about a month. ~ cc s1
+2: Thank you, that's really useful. Tell me what it feels like. ~ s1
+1: A thumping, in the chest and sometimes in my throat, quite fast. It wakes me up, usually between two and four. ~ s1
+2: How long does an episode last? ~ s1
+1: Anywhere from a couple of minutes to, last Tuesday, I'd say twenty minutes. ~ s1
+3: [from the corridor] It was nearer half an hour, last Tuesday. ~ s1 u1
+1: Oh, someone's talking out there. Ignore that. It lasted a good while, anyway. ~ s1 u1
+2: I'll go by what you tell me. Does anything come with it, dizziness, sweating? ~ s2
+1: Dizzy spells, yes. Occasionally I feel light-headed when I stand up in the morning. I can't say when that began. ~ s2 u2
+2: Roughly, before the thumping, or after? ~ s2 u2
+1: I honestly don't know. I only noticed it recently. ~ s2 u2
+2: Fair enough. And do you sweat at night? ~ s3
+1: Sometimes, after the thumping. My pyjamas get damp. ~ s3
+2: Any chest pain with it? ~ n1
+1: No pain, none whatsoever. ~ n1
+2: Have you fainted, or come close to it? ~ n2
+1: No, never fainted. ~ n2
+2: What about caffeine and alcohol? Tell me what you have in a typical day. ~ so1 so2
+1: About four cups of strong tea, usually the last at around eight in the evening. And I drink wine at the weekend, a glass or two. ~ so1 so2
+2: Any allergies to anything? ~ a1
+1: No allergies. ~ a1
+2: Let me check your numbers. ~
+1: Please. ~
+2: Pulse 74 and regular, blood pressure 124 over 78, temperature 36.6, oxygen 99 percent, breathing 14 a minute, and you weigh 66 kilos. ~ v pause=18
+1: All normal? ~
+2: All normal. Any cough or breathlessness at all? ~ r1
+1: No, my breathing is fine. ~ r1
+2: Any ankle swelling or tiredness, anything with the heart? ~ r2
+1: No swelling. Nothing like that. ~ r2
+2: Let me listen. Breathe normally. ~ pause=18
+1: Is it a murmur? ~
+2: Your heart sounds are normal, no murmurs, and your pulse is regular. ~ x1 x2
+1: That's a relief. So what's causing the thumping? ~
+2: Weighing it all up, the most likely cause is the caffeine, especially the tea late into the evening. I'd say caffeine-related palpitations. ~ d1
+1: I have been drinking more since I took on the extra project. ~
+2: That would do it. Cut the tea down to two cups, none after noon, and see what happens over the next fortnight. ~ c1
+1: Two cups. That will be a trial. ~
+2: And alcohol late in the evening can trigger it too, so keep the wine to earlier in the day. ~
+1: I'll bear it in mind. And if it doesn't stop? ~
+2: Keep your diary going. If it gets worse, lasts more than half an hour, or you feel faint or get chest pain, come in straight away. ~ c2
+1: Understood. Thank you for being so reassuring. ~
+@@
+{"chief_complaint":{"value":"My heart pounds at night","normalized_value":"Nocturnal palpitations"},
+ "symptoms":[{"k":"s1","name":"thumping","normalized_name":"Palpitations","category":"cardiovascular","body_site":"chest and throat","duration":{"value":1,"unit":"month","normalized":"1 month"},"frequency":"between two and four"},
+  {"k":"s2","name":"Dizzy spells","normalized_name":"Dizziness","category":"neurological","certainty":"uncertain"},
+  {"k":"s3","name":"sweat at night","normalized_name":"Night sweats","category":"constitutional"}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Chest pain"},{"k":"n2","finding":"fainted","normalized_name":"Fainting"},{"k":"a1","finding":"allergies","normalized_name":"No known allergies"}],
+ "medical_history":{"social_history":[{"k":"so1","category":"diet","description":"High caffeine intake","details":"four cups of strong tea"},{"k":"so2","category":"alcohol","description":"Weekend wine","details":"wine at the weekend"}]},
+ "vitals":{"k":"v","hr":74,"bp":"124/78","temp":36.6,"spo2":99,"rr":14,"wt":66},
+ "physical_examination":[{"k":"x1","finding":"heart sounds are normal","normalized_finding":"Normal heart sounds","body_site":"chest"},{"k":"x2","finding":"pulse is regular","normalized_finding":"Regular pulse","body_site":"pulse"}],
+ "review_of_systems":[{"k":"r1","system":"respiratory"},{"k":"r2","system":"cardiovascular"}],
+ "clinical_assessment":[{"k":"d1","assessment":"caffeine-related palpitations","certainty":"provisional"}],
+ "counsel":[["c1","Cut tea to two cups with none after noon and keep wine earlier in the day"],["c2","Safety-net: keep a diary; come in if over half an hour, faint or chest pain"]],
+ "clinical_uncertainties":[{"k":"u1","type":"unknown_speaker","description":"An utterance from an unidentified voice about the length of last Tuesday's episode could not be attributed to a known speaker.","related_entities":["symptoms[0]"]},
+  {"k":"u2","type":"date_uncertain","description":"Patient could not say when the dizzy spells began relative to the palpitations (\"I honestly don't know\").","related_entities":["symptoms[1]"]}],
+ "quality_checks":{"ambiguous_entities":["symptoms[0]"]}}
+
+## 00660 PATIENT=1 DOCTOR=2 NURSE=3
+3: Doctor, Mr Kowalski, forty-one, vomiting since last night, can't keep anything down, even water. ~ cc
+2: Thank you. Mr Kowalski, I'm Dr Hughes. How many times have you been sick? ~ s1
+1: I've lost count. Ten, twelve? All night, and this morning, even when it's just water. I want a drip, honestly. ~ s1
+2: I'll get to that. When did it start? ~ s1
+1: About eight last night, after dinner. A kebab. I'm blaming the kebab. ~ s1
+3: His wife rang ahead, she said he looked grey. ~
+2: Any pain in your tummy? ~ s2
+1: Yeah, cramps. Across the middle, they come and go, and they're bad. ~ s2
+2: Dizzy when you stand? ~ s3
+1: Yeah, a bit. I nearly fell getting out of the car. ~ s3
+2: Any blood in what you've brought up, or black, coffee-ground stuff? ~ n1
+1: No, just yellow stuff at the end. No blood. ~ n1
+2: Any fever or shivers? ~ n2
+1: Not that I know of. No. ~ n2
+2: What tablets do you take? ~ m1 m2
+1: Metformin, 500 mg, twice a day, and omeprazole, 20 mg once a day. Haven't taken them today, obviously. ~ m1 m2
+2: Sensible not to. Any previous operations? ~ sg1
+1: Gallbladder out, in 2015. ~ sg1
+3: I'll do your observations, Mr Kowalski. ~
+1: Hurry up, please. ~
+3: Blood pressure 100 over 62, pulse 112, temperature 37.4, oxygen 97 percent, respiratory rate 20. ~ v pause=15
+2: Thanks, Jenny. Your pressure's on the low side and your pulse is fast, which is the dehydration. Any breathing trouble? ~ r1
+1: No, breathing's fine. ~ r1
+2: Let me feel your tummy. ~
+1: Ow. ~
+2: Your mouth is very dry, and your tummy is tender in the upper middle but soft, with no guarding. ~ x1 pause=15
+1: Is it appendicitis? ~
+2: No, that's not where it is. I think this is most likely gastroenteritis from something you ate, but I can't rule out a gallstone problem in the bile duct yet. ~ d1 d2
+1: Right. What are you going to do? ~
+2: First, we'll start intravenous fluids right now, so you stop drying out. Jenny, a cannula please. ~ p0
+3: On it. ~
+2: I'd also like to send blood tests, including your kidney function and electrolytes, and a liver profile. ~ p1
+1: Fine. ~
+2: And I'd like to arrange an abdominal ultrasound, given the pain and your history. ~ p2
+1: Will that be today? ~
+2: If your bloods look suspicious, today. If not, tomorrow. We'll let you know. ~
+1: Okay. And can I have something for the sickness? ~
+2: The nurse will bring you something once the line is in. ~
+1: Thank you. ~
+2: When you're home, small sips of fluid, nothing greasy, and I'd like to see you again tomorrow morning to check how you're doing. ~ f1
+1: Tomorrow. Fine. ~
+@@
+{"chief_complaint":{"value":"vomiting since last night","normalized_value":"Persistent vomiting","reported_by":"nurse"},
+ "symptoms":[{"k":"s1","name":"sick","normalized_name":"Vomiting","category":"gastrointestinal","onset":"About eight last night","frequency":"Ten, twelve"},
+  {"k":"s2","name":"cramps","normalized_name":"Abdominal cramps","category":"gastrointestinal","body_site":"central abdomen"},
+  {"k":"s3","name":"Dizzy","normalized_name":"Dizziness on standing","category":"neurological"}],
+ "negative_findings":[{"k":"n1","finding":"blood","normalized_name":"Haematemesis"},{"k":"n2","finding":"fever","normalized_name":"Fever"}],
+ "medical_history":{"surgical_history":[{"k":"sg1","procedure":"Gallbladder out","normalized_procedure":"Cholecystectomy","timeframe":"in 2015"}]},
+ "medications":[{"k":"m1","name":"Metformin","dose":"500 mg","frequency":"twice a day"},{"k":"m2","name":"omeprazole","dose":"20 mg","frequency":"once a day"}],
+ "vitals":{"k":"v","by":"nurse","bp":"100/62","hr":112,"temp":37.4,"spo2":97,"rr":20},
+ "review_of_systems":[{"k":"r1","system":"respiratory"}],
+ "physical_examination":[{"k":"x1","finding":"tender in the upper middle","normalized_finding":"Epigastric tenderness without guarding","body_site":"upper abdomen"}],
+ "clinical_assessment":[{"k":"d1","assessment":"gastroenteritis","certainty":"provisional"},{"k":"d2","assessment":"a gallstone problem in the bile duct","normalized_assessment":"Bile duct stones","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood tests","normalized_name":"U&E, electrolytes and liver profile","type":"laboratory"},{"k":"p2","name":"abdominal ultrasound","normalized_name":"Abdominal ultrasound","type":"imaging"}],
+ "clinical_actions":[{"k":"p0","action_type":"other","description":"Start intravenous fluids"}],
+ "follow_up":[{"k":"f1","time_reference":"tomorrow morning"}]}
+

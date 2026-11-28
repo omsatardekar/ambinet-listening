@@ -1,0 +1,50 @@
+## 00939 PATIENT=1 DOCTOR=2
+1: Good morning, doctor. I've had a headache at my temple for a couple of weeks, and now my jaw hurts when I chew. ~ cc s1 s2
+2: Thank you for coming promptly. That combination is something I want to take seriously. Which temple is it? ~ s1
+1: The right one. It's a throbbing pain, and the scalp is tender when I brush my hair. ~ s1 s3
+2: How long has it been going on? ~ s1
+1: Two weeks. It's getting worse. ~ s1
+2: And the jaw pain, when exactly does it happen? ~ s2
+1: When I chew. Even a sandwich. I have to stop and rest. ~ s2
+2: Any changes in your vision, double vision, or a curtain coming across? ~ n1
+1: No, not yet. My vision is the same. ~ n1
+2: Any fever, night sweats, or weight loss? ~ n2
+1: I've felt a bit feverish, but no sweats, no weight loss. ~ n2
+2: Any stiffness in the shoulders or hips in the mornings? ~ s4
+1: Yes. I thought that was just my age. ~ s4
+2: What medicines are you taking? ~ m1
+1: Just paracetamol, 1 gram, now and then. It's not touching the headache. ~ m1
+2: Any allergies to medicines? ~ a1
+1: No, none. ~ a1
+2: Any other medical conditions? ~ h1
+1: High blood pressure, but I take nothing for it. I'm trying diet. ~ h1
+2: Do you smoke? ~ so1
+1: I gave up thirty years ago. ~ so1
+2: Let me take your pulse, blood pressure and temperature. ~
+1: Go on. ~ pause=10
+2: Pulse 82, blood pressure 148 over 88, temperature 37.4. ~ v
+1: A bit high? ~
+2: A little, yes. Now let me feel your temples. ~
+1: Ouch. ~ pause=14
+2: The right temporal artery is tender and thickened, and the pulse in it is weak. ~ x1
+1: What does that mean? ~
+2: It makes me worried about giant cell arteritis, which can threaten the vision if untreated. ~
+1: Do I need treatment now? ~
+2: Yes. I'd like you to take prednisolone, 60 mg, today, and I'm arranging an urgent blood test and a referral to the eye and rheumatology team. ~ m2 p1 f1
+1: Steroids? What about the side effects? ~
+2: They're a concern, but protecting your sight comes first, and we'll manage the risks. ~
+1: All right, if you think that's best. ~
+2: If you get any change in vision, call 999 or go to the emergency department at once. ~ c1
+1: I will. Thank you. ~
+@@
+{"chief_complaint":{"value":"a headache at my temple for a couple of weeks, and now my jaw hurts when I chew","normalized_value":"Temporal headache and jaw pain on chewing"},
+ "symptoms":[{"k":"s1","name":"headache","normalized_name":"Right temporal headache","category":"neurological","body_site":"right temple","duration":{"value":2,"unit":"weeks","normalized":"2 weeks"}},{"k":"s2","name":"jaw","normalized_name":"Jaw claudication","category":"musculoskeletal","body_site":"jaw"},{"k":"s3","name":"scalp is tender","normalized_name":"Scalp tenderness","category":"neurological","body_site":"scalp"},{"k":"s4","name":"stiffness","normalized_name":"Morning shoulder and hip stiffness","category":"musculoskeletal"}],
+ "negative_findings":[{"k":"n1","finding":"changes in your vision","normalized_name":"Visual disturbance"},{"k":"n2","finding":"sweats","normalized_name":"Night sweats or weight loss"},{"k":"a1","finding":"Allergies","normalized_name":"No known allergies"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension"}],"social_history":[{"k":"so1","category":"smoking","description":"I gave up thirty years ago","status":"former","details":null}]},
+ "medications":[{"k":"m1","name":"paracetamol","dose":"1 gram","frequency":"now and then"},{"k":"m2","name":"prednisolone","status":"planned","reported_by":"doctor","dose":"60 mg"}],
+ "vitals":{"k":"v","hr":82,"bp":"148/88","temp":37.4},
+ "physical_examination":[{"k":"x1","finding":"right temporal artery is tender and thickened","normalized_finding":"Tender thickened right temporal artery with weak pulse","body_site":"right temple"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood test","normalized_name":"Urgent inflammatory markers","type":"laboratory"}],
+ "clinical_actions":[{"k":"f1","action_type":"referral","description":"Urgent referral to eye and rheumatology teams","status":"planned"}],
+ "counsel":[["c1","Call 999 or go to emergency if vision changes"]]}
+

@@ -1,0 +1,53 @@
+## 00804 PATIENT=1 DOCTOR=2 NURSE=3 UNKNOWN=4
+3: Mr Brennan? I'm Aileen, the nurse. You said your home pulse oximeter was reading low. ~ cc
+1: That's right. I've a wee gadget at home, and it said 88, on Monday, and I nearly dropped dead. ~
+2: Good morning. Come in. Which number is low, and when? ~ s1
+1: 88 percent, then 90, 89. It was the same morning and evening, for three days. ~ s1
+3: His oxygen today is 93 on our machine. ~ s1
+4: [from the corridor] It said 87 on Tuesday, I saw it! ~ s1 u1
+2: I'll go by what you tell me, Mr Brennan. How have you been feeling? ~ s1 u1
+1: A bit breathless on the hill, and a cough. A dry one. ~ s2 s3
+2: Since when? ~ s2
+1: Since the cold, three weeks ago. ~ s2
+2: Any chest pain? ~ n1
+1: No. None at all. ~ n1
+2: Any fever, or sweats? ~ n2
+1: No. ~ n2
+2: Any swelling in your legs, or waking at night breathless? ~ n3
+1: No, no. ~ n3
+2: What are you taking at the moment? ~ m1 m2 u2 u3
+1: A small white tablet for the water, I couldn't tell you the name, from the heart clinic. And a blood-thinner, 5 mg, maybe? Twice a day. ~ m1 m2 u2 u3
+2: I'll check with the record, the white one and the dose of the blood-thinner. Any operations? ~ m1 m2 u2 u3 sg1
+1: A hernia repair, in 2010. ~ sg1
+2: And your family history? ~ f1
+1: My father died of emphysema. He smoked like a chimney. ~ f1
+2: Aileen, can we do his observations on our machine, and walk him down the corridor with it on? ~
+3: Of course. ~ pause=30
+2: Right. His oxygen was fine at rest, and it dropped a little with walking, then came back up. ~ x1
+1: Is it dangerous? ~
+2: Those home devices can be inaccurate, especially with cold hands or nail varnish, but your breathlessness and cough deserve checking. ~
+1: Right. ~
+2: I'd say this might be a lingering chest infection, and I'm going to start you on an antibiotic, doxycycline, 100 mg twice a day, for a week. ~ d1 m3
+1: Okay. ~
+2: And I'd like you to have an inhaler, salbutamol, two puffs when you're short of breath. ~ m4
+1: Right. ~
+2: Please come back in a week, and I'll check your chest again. ~ f1
+1: A week. Thank you. ~
+3: I'll give you the leaflets. ~
+@@
+{"chief_complaint":{"value":"your home pulse oximeter was reading low","normalized_value":"Low readings on home pulse oximeter","reported_by":"nurse"},
+ "symptoms":[{"k":"s1","name":"88 percent","normalized_name":"Low home oxygen saturation readings","category":"respiratory"},
+  {"k":"s2","name":"cough","normalized_name":"Dry cough","category":"respiratory","onset":"Since the cold, three weeks ago"},
+  {"k":"s3","name":"breathless on the hill","normalized_name":"Exertional breathlessness","category":"respiratory","aggravating_factors":["hill"]}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Chest pain"},{"k":"n2","finding":"fever","normalized_name":"Fever or sweats"},{"k":"n3","finding":"swelling in your legs","normalized_name":"Leg swelling or orthopnoea"}],
+ "medical_history":{"surgical_history":[{"k":"sg1","procedure":"hernia repair","normalized_procedure":"Hernia repair","timeframe":"in 2010"}],"family_history":[{"k":"f1","condition":"emphysema","normalized_condition":"Emphysema","relation":"father"}]},
+ "medications":[{"k":"m1","name":"small white tablet for the water","normalized_name":null,"generic_name":null},{"k":"m2","name":"blood-thinner","normalized_name":"Anticoagulant (unspecified)","generic_name":null,"dose":"5 mg","frequency":"Twice a day"},
+  {"k":"m3","name":"doxycycline","status":"planned","reported_by":"doctor","dose":"100 mg","frequency":"twice a day","duration":{"value":1,"unit":"week","normalized":"1 week"}},{"k":"m4","name":"salbutamol","status":"planned","reported_by":"doctor","frequency":"when you're short of breath"}],
+ "physical_examination":[{"k":"x1","finding":"oxygen was fine at rest","normalized_finding":"Normal resting oxygen saturation with mild exertional dip","body_site":"general"}],
+ "clinical_assessment":[{"k":"d1","assessment":"a lingering chest infection","certainty":"provisional"}],
+ "follow_up":[{"k":"f1","time_reference":"in a week"}],
+ "clinical_uncertainties":[{"k":"u1","type":"unknown_speaker","description":"An unidentified voice from the corridor gave a different low oximeter reading; the utterance could not be attributed to a known speaker.","related_entities":["symptoms[0]"]},
+  {"k":"u2","type":"incomplete_medication_name","description":"Patient cannot name the small white water tablet from the heart clinic.","related_entities":["medications[0]"]},
+  {"k":"u3","type":"uncertain_dose","description":"Patient gave the blood-thinner dose tentatively (\"5 mg, maybe?\") and could not name the medicine.","related_entities":["medications[1]"]}],
+ "quality_checks":{"ambiguous_entities":["symptoms[0]","medications[0]"]}}
+

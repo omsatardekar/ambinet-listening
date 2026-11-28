@@ -1,0 +1,229 @@
+## 00964 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3 CAREGIVER=4
+2: Good afternoon. Before we start, how would you prefer to be addressed, Mr Simmons, or Arthur? ~
+1: Mr Simmons will do nicely, thank you, doctor. I've brought my daughter and my carer. ~
+3: I'm Diane, his daughter. And this is Rosa, who's with him in the daytime. He's been having terrible headaches since he started the new spray. ~ cc s1
+2: Thank you both. Mr Simmons, tell me about the headaches. ~ s1
+1: They come within minutes of using it. A pounding across my forehead. It's been about two weeks, since the spray was started. ~ s1
+4: He grips his head, doctor, and has to sit down for twenty minutes. ~ s1
+2: Do you feel anything else when you use it? ~ s2
+1: A flushed face. Very warm. I go quite red. ~ s2
+4: I've seen it, he looks like a lobster. ~
+2: And dizziness? ~ s3
+1: A touch, when I stand after the spray. ~ s3
+2: Which spray is it, Diane? ~ m1
+3: The nitroglycerin spray, 0.4 mg, under the tongue, when he gets chest tightness. ~ m1
+2: And what else does he take? ~ m2
+3: An aspirin, 81 mg, every morning. ~ m2
+2: Any allergies, Mr Simmons? ~ a1
+1: Sulfa drugs. I came out in a rash. ~ a1
+2: Thank you. And your medical history? ~ h1 h2 h3
+1: Angina, high blood pressure, and gout. ~ h1 h2 h3
+2: Who do you live with? ~ so1
+1: I live with Diane and her husband. ~ so1
+2: Let me check you. Blood pressure 132 over 78, pulse 70. ~ v pause=10
+3: Is that normal? ~
+2: Good for his age. Mr Simmons, can you bend your chin to your chest? ~ pause=8
+1: Like this? ~
+2: Your neck moves freely, with no stiffness. ~ x1
+1: I'm quite supple, you know. ~
+2: And follow my finger. Your pupils are equal and react normally. ~ x2
+1: Good. ~
+2: Any weakness, numbness or trouble speaking? ~ r1
+1: Not at all, my speech is fine, and my arms and legs are normal. ~ r1
+2: Here is my thinking. Headaches and flushing within minutes of a nitrate spray is a well-known side effect. I think the headache is a side effect of the spray. ~ d1
+3: Does he have to stop it? ~
+2: Not without a plan. Chest tightness needs a medicine to treat it. I'd like to arrange an ECG to look at your heart today. ~ p1
+1: Today? ~
+2: Yes, it takes five minutes. And I'd like to fit a 24-hour blood pressure monitor, to see what happens to your pressure around the spray. ~ p2
+4: I'll bring him to the nurse. ~
+2: In the meantime, sit down before you use the spray, and have a sip of water. ~ c1
+1: Very sensible. ~
+2: If the headaches don't settle in two weeks, come back and we'll look at the options. ~ f1
+3: Two weeks. We'll book it. ~
+@@
+{"chief_complaint":{"value":"terrible headaches since he started the new spray","normalized_value":"Headaches since starting nitrate spray","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"headaches","normalized_name":"Headache after nitrate spray","category":"neurological","duration":{"value":2,"unit":"weeks","normalized":"about 2 weeks"},"body_site":"forehead"},
+  {"k":"s2","name":"flushed face","normalized_name":"Facial flushing","category":"cardiovascular"},
+  {"k":"s3","name":"dizziness","normalized_name":"Dizziness after spray","category":"neurological"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Angina","normalized_condition":"Angina pectoris"},{"k":"h2","condition":"high blood pressure","normalized_condition":"Hypertension"},{"k":"h3","condition":"gout","normalized_condition":"Gout"}],
+  "social_history":[{"k":"so1","category":"living","details":"I live with Diane and her husband"}]},
+ "medications":[{"k":"m1","name":"nitroglycerin spray","normalized_name":"Nitroglycerin","generic_name":"Glyceryl trinitrate","dose":"0.4 mg","frequency":"when he gets chest tightness","reported_by":"family_member"},{"k":"m2","name":"aspirin","dose":"81 mg","frequency":"every morning","reported_by":"family_member"}],
+ "allergies":[{"k":"a1","substance":"Sulfa drugs","reaction":"rash"}],
+ "vitals":{"k":"v","by":"doctor","bp":"132/78","hr":70},
+ "physical_examination":[{"k":"x1","finding":"neck moves freely, with no stiffness","normalized_finding":"Full neck movement without stiffness","body_site":"neck"},{"k":"x2","finding":"pupils are equal and react normally","normalized_finding":"Equal reactive pupils","body_site":"eyes"}],
+ "review_of_systems":[{"k":"r1","system":"neurological"}],
+ "clinical_assessment":[{"k":"d1","assessment":"the headache is a side effect of the spray","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"ECG","normalized_name":"Electrocardiogram","type":"cardiac"},{"k":"p2","name":"24-hour blood pressure monitor","normalized_name":"Ambulatory blood pressure monitoring","type":"cardiac"}],
+ "counsel":[["c1","Sit down before using the spray and sip water"]],
+ "follow_up":[{"k":"f1","time_reference":"if the headaches don't settle in two weeks","status":"conditional"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00965 PATIENT=1 DOCTOR=2
+1: Doctor, I had a funny turn on Saturday night, chest discomfort after a very big meal, and my wife insisted I come, although I'm sure it's nothing. ~ cc s1
+2: I'm glad she did. Tell me exactly what happened. ~
+1: We had a large roast, with a great deal of crackling, and about an hour after, I felt a pressure behind my breastbone. It lasted about twenty minutes, and it's not happened since. ~ s1
+2: So once, only on Saturday. How would you describe it? ~
+1: A burning, a sort of heat, rising up behind the bone. ~ s2
+2: Did it spread anywhere? ~ n1
+1: No, not to my arm or my jaw. It stayed where it was. ~ n1
+2: And do you get it when you walk, or climb stairs? ~ n2
+1: No, I walk to the farm gate and back every day. Nothing like that. ~ n2
+2: Did you feel bloated? ~ s3
+1: Yes, very. Full to the neck. ~ s3
+2: Any breathlessness at the time? ~ s4
+1: A little short of breath. Just for the first few minutes. ~ s4
+2: Do you have any allergies? ~ a1
+1: No allergies. ~ a1
+2: And your medical history? ~ h1 h2 h3
+1: Reflux, years ago. High cholesterol. And gallstones, they found them by accident. ~ h1 h2 h3
+2: Any operations? ~ sg1
+1: My appendix, in 1990. ~ sg1
+2: Heart problems in the family? ~ f1
+1: My father had a heart attack at fifty-eight. ~ f1
+2: Do you smoke? ~ so1
+1: I gave up smoking twenty years ago. ~ so1
+2: Alcohol? ~ so2
+1: Three beers a night, I'm afraid. ~ so2
+2: What do you do? ~ so3
+1: I'm a farmer. Dairy. ~ so3
+2: And what do you eat usually? ~ so4
+1: Very good, except Sundays, when my wife does a roast and a pudding. ~ so4
+2: Let me take your numbers. Pulse 78, blood pressure 138 over 84, temperature 36.6, oxygen 98 percent, breathing 16, weight 96 kilos. ~ v pause=15
+1: Is the pressure all right? ~
+2: A little up, but nothing to worry about. Let me listen to your heart. ~ pause=10
+1: Go ahead. ~
+2: Heart sounds are normal, regular rhythm. ~ x1
+1: Good. ~
+2: Your chest is clear. ~ x2
+1: Good. ~
+2: And I'm pressing your tummy. Tell me if it's tender. ~ pause=8
+1: Slightly, there. Under the ribs, in the middle. ~
+2: There's mild tenderness in the upper middle of your abdomen. ~ x3
+1: That's where it was. ~
+2: Any palpitations, any sweating? ~ r1
+1: No, nothing like that. ~ r1
+2: Any vomiting? ~ r2
+1: No, I didn't vomit. ~ r2
+2: Let me repeat. One episode, an hour after a heavy meal, burning, bloating, settled by itself, none since, and nothing on exertion. This sounds most likely like reflux after a heavy meal. ~ d1
+1: Not my heart? ~
+2: It's unlikely, but because of your father and your cholesterol, I'd like to arrange an ECG today, and a blood test to check your heart muscle, called a troponin. ~ p1 p2
+1: Right. ~
+2: Meanwhile, I'd like to start omeprazole, 20 mg, once a day, before breakfast. ~ m1
+1: Fine. ~
+2: And an antacid liquid, 10 ml, after meals when needed. ~ m2
+1: I can do that. ~
+2: If it happens again, especially if it comes on when you're walking, go straight to the emergency department. ~ f1
+1: I understand. ~
+@@
+{"chief_complaint":{"value":"chest discomfort after a very big meal","normalized_value":"Single episode of chest discomfort after a large meal"},
+ "symptoms":[{"k":"s1","name":"pressure behind my breastbone","normalized_name":"Retrosternal pressure","category":"cardiovascular","body_site":"behind the breastbone","duration":{"value":20,"unit":"minutes","normalized":"about 20 minutes"}},
+  {"k":"s2","name":"burning","normalized_name":"Retrosternal burning","category":"gastrointestinal","body_site":"behind the breastbone"},
+  {"k":"s3","name":"bloated","normalized_name":"Bloating","category":"gastrointestinal"},
+  {"k":"s4","name":"short of breath","normalized_name":"Transient shortness of breath","category":"respiratory"}],
+ "negative_findings":[{"k":"n1","finding":"to my arm or my jaw","normalized_name":"Radiation to arm or jaw"},{"k":"n2","finding":"when you walk, or climb stairs","normalized_name":"Exertional chest symptoms"}],
+ "allergy_none":"a1",
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Reflux","normalized_condition":"Gastro-oesophageal reflux"},{"k":"h2","condition":"High cholesterol","normalized_condition":"Hypercholesterolaemia"},{"k":"h3","condition":"gallstones","normalized_condition":"Gallstones"}],
+  "surgical_history":[{"k":"sg1","procedure":"appendix","normalized_procedure":"Appendicectomy","timeframe":"in 1990"}],
+  "family_history":[{"k":"f1","relation":"father","condition":"heart attack"}],
+  "social_history":[{"k":"so1","category":"smoking","details":"gave up smoking twenty years ago","status":"former"},{"k":"so2","category":"alcohol","details":"Three beers a night"},{"k":"so3","category":"occupation","details":"farmer"},{"k":"so4","category":"diet","details":"Very good, except Sundays"}]},
+ "medications":[{"k":"m1","name":"omeprazole","dose":"20 mg","frequency":"once a day","status":"planned","reported_by":"doctor"},{"k":"m2","name":"antacid liquid","normalized_name":"Antacid liquid","generic_name":null,"dose":"10 ml","frequency":"after meals when needed","status":"planned","reported_by":"doctor"}],
+ "vitals":{"k":"v","by":"doctor","bp":"138/84","hr":78,"temp":36.6,"spo2":98,"rr":16,"wt":96},
+ "physical_examination":[{"k":"x1","finding":"Heart sounds are normal, regular rhythm","normalized_finding":"Normal heart sounds, regular rhythm","body_site":"chest"},{"k":"x2","finding":"chest is clear","normalized_finding":"Clear chest","body_site":"chest"},{"k":"x3","finding":"mild tenderness in the upper middle of your abdomen","normalized_finding":"Mild epigastric tenderness","body_site":"abdomen"}],
+ "review_of_systems":[{"k":"r1","system":"cardiovascular"},{"k":"r2","system":"gastrointestinal"}],
+ "clinical_assessment":[{"k":"d1","assessment":"reflux after a heavy meal","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"ECG","normalized_name":"Electrocardiogram","type":"cardiac"},{"k":"p2","name":"blood test to check your heart muscle, called a troponin","normalized_name":"Troponin","type":"laboratory"}],
+ "follow_up":[{"k":"f1","time_reference":"if it happens again, especially if it comes on when you're walking","status":"conditional"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00966 PATIENT=1 DOCTOR=2
+1: Hello. Um. I've come for a review, and, um, I wanted to ask what I was supposed to bring. ~
+2: Just yourself, that's fine. So what's been going on? ~
+1: I've been getting wheezy, a lot more lately. Maybe three or four times a week, mostly when I go up the stairs at work. ~ cc s1
+2: Three or four times a week. How long has it been like that? ~
+1: A while. A month? I can't remember. I wrote it somewhere. ~
+2: That's fine. Does anything bring it on? ~
+1: Stairs, cold air, the dog next door. I don't know. ~
+2: How do you feel afterwards? ~
+1: Out of puff, and then I'm okay. ~
+2: And how's your sleep, does it wake you? ~
+1: Not really. Sometimes. ~
+2: I'd like you to do something for me. Keep a short diary for two weeks. ~ c1
+1: A diary? What do I put in it? ~
+2: Each time you wheeze, write the time, what you were doing, and how long it lasted. ~ c1
+1: I'll try. I'll probably lose it. ~
+2: Put it on your phone, in your notes. ~
+1: Oh. That's easier. ~
+2: Also, I'd like you to bring everything you use for it when you come back, so we can go through each item together. ~ c2
+1: Everything. Okay. ~
+2: And think about whether anything at work could be setting it off, dust or cleaning products. ~
+1: There's a new cleaner on the stairs, actually. ~
+2: That's worth noting down. ~
+1: I'll put it in the diary. ~
+2: Do you have any questions about it? ~
+1: I wanted to ask about running. Can I still? ~
+2: Gentle exercise is good for you. Warm up slowly, and don't run in very cold air. ~
+1: That's helpful. ~
+2: Right. I'd like to see you again in four weeks, with the diary and all of your things. ~ f1
+1: Four weeks. Where do I write that? ~
+2: The receptionist will give you a card. ~
+1: Okay. I'll ask her. ~
+2: Anything else for today? ~
+1: No. I think that's all. ~
+2: Good. Take care. ~
+1: Thanks, doctor. Bye. ~
+@@
+{"chief_complaint":{"value":"getting wheezy, a lot more lately","normalized_value":"Increasingly frequent wheezing"},
+ "symptoms":[{"k":"s1","name":"wheezy","normalized_name":"Wheeze","category":"respiratory","frequency":"three or four times a week","aggravating_factors":[]}],
+ "counsel":[["c1","Keep a two-week diary of wheezing episodes with time, activity and duration"],["c2","Bring everything used for the condition to the next visit"]],
+ "follow_up":[{"k":"f1","time_reference":"in four weeks"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00967 PATIENT=1 DOCTOR=2
+1: Doctor, please, I have a terrible headache. It came on suddenly, about thirty minutes ago, while I was lifting weights at the gym. It's the worst headache of my life. ~ cc s1
+2: I'm taking this very seriously. Where is it? ~ s1
+1: At the back of my head, like a blow. It reached the worst in seconds, I have never had anything like it. ~ s1
+2: Do you have any neck pain or stiffness? ~ s2
+1: Yes, my neck is stiff and sore. I can't put my chin down. ~ s2
+2: Do you feel sick? ~ s3
+1: Very nauseous. I vomited once in the car park. ~ s3
+2: Did you hit your head, or have an injury? ~ n1
+1: No, no injury. I did not hit my head. ~ n1
+2: Do you have any allergies? ~ a1
+1: Penicillin, I developed a rash. ~ a1
+2: I'll note that. What do you do for work? ~ so1
+1: I am a software developer. ~ so1
+2: Let me check your numbers quickly. Blood pressure 168 over 98, pulse 92, temperature 36.9, oxygen 98 percent, breathing 18. ~ v pause=10
+1: Is that serious? ~
+2: It's raised, from the pain. Now, please touch your chin to your chest. ~ pause=8
+1: I cannot. It's very painful. ~
+2: Your neck is stiff when I bend it forward. ~ x1
+1: Yes, that is exactly it. ~
+2: And your pupils are equal and react to light. ~ x2
+1: That is a relief. ~
+2: Let me tell you what I'm thinking. A sudden, severe headache like this can be a bleed around the brain, called a subarachnoid haemorrhage. I can't rule that out, and I won't take any risks. ~ d1 s1
+1: Oh my God. Is that likely? ~
+2: It's not the most likely cause, but it's the one we must exclude. I'd like to arrange a CT scan of your head, right now. ~ p1
+1: Of course. Anything. ~
+2: If the CT scan is normal, I might do a lumbar puncture, a test of the fluid around the spine, because the scan can miss small bleeds. ~ p2
+1: Is that painful? ~
+2: Uncomfortable, but quick. I'd also like to do blood tests, including a clotting profile. ~ p3
+1: I will do whatever you need. ~
+2: Please lie flat, and don't eat or drink anything until we have the scan. ~ c1
+1: Yes, doctor. ~
+2: If the headache gets worse, or you become drowsy or confused, tell the nurse immediately. ~ f1
+1: I will. Thank you for taking this seriously. ~
+@@
+{"chief_complaint":{"value":"a terrible headache","normalized_value":"Sudden severe headache, worst of life"},
+ "symptoms":[{"k":"s1","name":"headache","normalized_name":"Thunderclap headache","category":"neurological","body_site":"back of head","onset":"suddenly","duration":{"value":30,"unit":"minutes","normalized":"30 minutes"},"severity":"severe"},
+  {"k":"s2","name":"neck is stiff and sore","normalized_name":"Neck stiffness and pain","category":"musculoskeletal","body_site":"neck"},
+  {"k":"s3","name":"nauseous","normalized_name":"Nausea and vomiting","category":"gastrointestinal"}],
+ "negative_findings":[{"k":"n1","finding":"hit your head","normalized_name":"Head injury"}],
+ "medical_history":{"social_history":[{"k":"so1","category":"occupation","details":"software developer"}]},
+ "allergies":[{"k":"a1","substance":"Penicillin","reaction":"rash"}],
+ "vitals":{"k":"v","by":"doctor","bp":"168/98","hr":92,"temp":36.9,"spo2":98,"rr":18},
+ "physical_examination":[{"k":"x1","finding":"neck is stiff when I bend it forward","normalized_finding":"Nuchal rigidity","body_site":"neck"},{"k":"x2","finding":"pupils are equal and react to light","normalized_finding":"Equal reactive pupils","body_site":"eyes"}],
+ "clinical_assessment":[{"k":"d1","assessment":"a bleed around the brain, called a subarachnoid haemorrhage","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"CT scan of your head","normalized_name":"CT head","type":"imaging"},{"k":"p2","name":"lumbar puncture","normalized_name":"Lumbar puncture","type":"other","status":"conditional"},{"k":"p3","name":"blood tests, including a clotting profile","normalized_name":"Blood tests including coagulation profile","type":"laboratory"}],
+ "counsel":[["c1","Lie flat and do not eat or drink until the scan"]],
+ "follow_up":[{"k":"f1","time_reference":"if the headache gets worse, or you become drowsy or confused","status":"conditional"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}

@@ -1,0 +1,54 @@
+## 00863 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Doctor, thank you for seeing us so quickly. It's my father, he has a sore on his heel, and today it looks terrible. ~ cc
+1: It's only a small thing. I told her. ~
+2: Mr Kearney, can I have a look? Which heel? ~ s1
+1: The left. It's been sore a few weeks. ~ s1
+3: A pressure sore. The district nurse noticed it, and it's got worse this week, it's black in the middle, and it smells. ~ s1 s2
+2: Are you able to walk, Mr Kearney? ~
+1: Not much. I'm in the chair most of the day. ~
+2: Any fever, or have you felt unwell? ~ s3
+3: He's been shivery since yesterday. ~ s3
+1: I'm fine. ~
+2: Any pain in the heel? ~ n2
+1: Not really. I can't feel it much. ~ n2
+2: What are you taking? ~ m1 m2 u1
+3: Clopidogrel, 75 mg, once a day, and metformin, 500 mg, twice a day. He takes the clopidogrel every day, I give it. The metformin, I'm not sure he takes. ~ m1 m2 u1
+1: I take it. ~ m2 u1
+2: I'll note that you take it, Mr Kearney, and your daughter isn't sure. Any allergies? ~ m2 u1 a1
+3: Penicillin. He gets a rash. ~ a1
+2: Thank you. Do you smoke? ~ so1
+1: Gave it up after my stroke. ~ so1
+2: Pulse and temperature, please. ~
+3: Go ahead. ~
+2: Temperature 37.9, pulse 98, blood pressure 138 over 80, oxygen 97 percent. ~ v pause=15
+3: Is that bad? ~
+2: A raised temperature and a fast pulse, which worries me alongside the heel. Let me see it. ~ pause=20
+2: There's a black area of dead tissue, about three centimetres across, on the back of the left heel, with a red margin around it, some pus under the edge, and a foul smell, and the foot is warm. ~ x1 x2
+3: Is it infected? ~
+2: Yes, I think it is, and I can't rule out the infection reaching the bone. This is a grade three pressure ulcer with infection, an infected pressure ulcer. ~ d1 d2
+3: What do we do? ~
+2: He needs to come into hospital today. I'd like to arrange blood tests and an X-ray of the heel, and intravenous antibiotics, given your penicillin allergy, a different type. ~ p1 p2
+1: Hospital? I'd rather not. ~
+2: Mr Kearney, I understand, but the infection could spread to your blood or the bone, and that's dangerous. ~
+1: All right. ~
+2: I'll arrange an ambulance now, and I'll ring the ward. Please keep the heel off the bed and don't let anything press on it. ~ c1
+3: I'll pack a bag. ~
+2: Bring his tablets and a list. If he becomes drowsy, confused, or very hot, tell the ambulance crew. ~ f1
+3: Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"he has a sore on his heel, and today it looks terrible","normalized_value":"Infected heel pressure sore","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"sore","normalized_name":"Left heel pressure sore","category":"dermatological","body_site":"left heel","onset":"a few weeks"},
+  {"k":"s2","name":"black in the middle","normalized_name":"Necrosis with offensive smell","category":"dermatological","reported_by":"family_member"},
+  {"k":"s3","name":"shivery","normalized_name":"Shivering since yesterday","category":"constitutional","reported_by":"family_member"}],
+ "negative_findings":[{"k":"n2","finding":"pain in the heel","normalized_name":"Heel pain"}],
+ "allergies":[{"k":"a1","substance":"Penicillin","reaction":"rash","reported_by":"family_member"}],
+ "medical_history":{"social_history":[{"k":"so1","category":"smoking","description":"Former smoker","status":"former","details":"Gave it up after my stroke"}]},
+ "medications":[{"k":"m1","name":"Clopidogrel","dose":"75 mg","frequency":"once a day","reported_by":"family_member"},{"k":"m2","name":"metformin","dose":"500 mg","frequency":"twice a day","reported_by":"family_member"}],
+ "vitals":{"k":"v","temp":37.9,"hr":98,"bp":"138/80","spo2":97},
+ "physical_examination":[{"k":"x1","finding":"black area of dead tissue, about three centimetres across","normalized_finding":"3 cm black necrotic area of left heel with erythema, pus and odour","body_site":"left heel"},{"k":"x2","finding":"the foot is warm","normalized_finding":"Warm foot","body_site":"left foot"}],
+ "clinical_assessment":[{"k":"d1","assessment":"an infected pressure ulcer","certainty":"provisional"},{"k":"d2","assessment":"the infection reaching the bone","normalized_assessment":"Osteomyelitis","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood tests","normalized_name":"Blood tests including inflammatory markers and cultures","type":"laboratory"},{"k":"p2","name":"X-ray of the heel","normalized_name":"X-ray of left heel","type":"imaging"}],
+ "counsel":[["c1","Keep the heel off the bed and avoid any pressure on it"]],
+ "follow_up":[{"k":"f1","time_reference":"If he becomes drowsy, confused, or very hot","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"adherence_uncertain","description":"Metformin is prescribed twice a day; the patient says he takes it, his daughter is not sure; actual adherence unknown.","related_entities":["medications[1]"]}]}
+

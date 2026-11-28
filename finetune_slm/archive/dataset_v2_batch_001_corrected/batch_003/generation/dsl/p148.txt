@@ -1,0 +1,45 @@
+## 00901 PATIENT=1 DOCTOR=2 NURSE=3
+1: I'm here for the follow-up after my kidney stone procedure. I don't have long, so can we get on with it? ~ cc
+2: Of course. Can you remind me when the procedure was?
+1: A few weeks ago. Maybe three, maybe four. I've lost track since the stent came out.
+2: How have you been since then? Any pain in the side? ~ n1
+1: No pain in the side. Not like before. ~ n1
+2: Any blood in the urine? ~ n2
+1: Pink the first few days, but it's gone now. ~ s2
+2: Any burning when passing urine, or fever? ~ n3
+1: No burning. No fever. ~ n3
+2: How often are you passing urine? ~ s3
+1: More often than usual, and urgent. It's irritating. ~ s3
+2: That can happen after a stent. What medicines are you taking? ~ m1
+1: Just tamsulosin, 400 micrograms, once a day. ~ m1
+2: Do you have any allergies to medicines? ~ a1
+1: No, I don't have any. ~ a1
+2: Any other conditions? ~ h1 h2
+1: Gout, and high blood pressure. ~ h1 h2
+3: Doctor, I've taken his pulse and pressure, 74 and 132 over 80. ~ v
+2: Thank you. That's fine. Have you been drinking plenty of water? ~
+1: I try to, about two litres. ~
+2: That's good. The stone went to the lab. The result came back as a calcium oxalate stone. ~ p1
+1: What does that mean for me? ~
+2: It's the most common type. Drinking enough water, less salt, and moderate animal protein all help. ~ c1
+1: Fine. I can do that. ~
+2: I'd like to examine your tummy and loin now. ~
+1: Go on. ~ pause=14
+2: No tenderness in either loin, and your abdomen is soft. ~ x1 x2
+1: Good. Are we done? ~
+2: Nearly. I'd like to arrange a scan in three months, to check for any new stones. ~ f1 p2
+1: Three months. All right. ~
+2: If you get severe pain, fever, or can't pass urine, come in straight away. ~ c2
+1: I will. Thank you. ~
+@@
+{"chief_complaint":{"value":"the follow-up after my kidney stone procedure","normalized_value":"Follow-up after kidney stone procedure"},
+ "symptoms":[{"k":"s2","name":"Pink","normalized_name":"Haematuria, resolved","category":"genitourinary","status":"resolved","temporality":"resolved"},{"k":"s3","name":"urgent","normalized_name":"Urinary frequency and urgency","category":"genitourinary"}],
+ "negative_findings":[{"k":"n1","finding":"pain in the side","normalized_name":"Flank pain"},{"k":"n3","finding":"burning","normalized_name":"Dysuria or fever"},{"k":"a1","finding":"Allergies","normalized_name":"No known allergies"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Gout","normalized_condition":"Gout"},{"k":"h2","condition":"high blood pressure","normalized_condition":"Hypertension"}]},
+ "medications":[{"k":"m1","name":"tamsulosin","dose":"400 micrograms","frequency":"once a day"}],
+ "vitals":{"k":"v","by":"nurse","hr":74,"bp":"132/80"},
+ "physical_examination":[{"k":"x1","finding":"No tenderness in either loin","normalized_finding":"No loin tenderness","body_site":"loins","status":"absent"},{"k":"x2","finding":"abdomen is soft","normalized_finding":"Soft abdomen","body_site":"abdomen"}],
+ "procedures_and_investigations":[{"k":"p2","name":"scan","normalized_name":"Renal imaging for recurrent stones","type":"imaging"}],
+ "counsel":[["c1","Drink enough water, eat less salt and moderate animal protein"],["c2","Come in straight away for severe pain, fever or inability to pass urine"]],
+ "follow_up":[{"k":"f1","time_reference":"in three months"}]}
+

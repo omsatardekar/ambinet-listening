@@ -1,0 +1,99 @@
+## 00765 PATIENT=1 DOCTOR=2 CAREGIVER=3
+3: Morning, doctor. I'm Ellie, Mr Rowe's carer. He's had the runs since the camping trip, and I can't get him to eat. ~ cc s1
+2: Thanks, Ellie. Mr Rowe, how long have you had the diarrhoea? ~ s1 u1
+1: Four days. Since Saturday. ~ s1 u1
+3: It's ten days, Mr Rowe. You told me the day after we got back from the lakes. ~ s1 u1
+2: So four days from you and ten from Ellie. I'll put it down as four to ten days. How often are you going? ~ s1 u1
+1: Five, six times a day. Watery. ~ s1
+2: Have you been sick? Any vomiting? ~ n1 s2 u2
+1: No. Not sick. ~ n1 u2
+3: He was sick on the Sunday, twice, in the tent. I held the bucket. ~ s2 u2
+2: I'll note that you each said different things about that. Any blood in the stool, or black stools? ~ u2
+1: No. ~
+2: Any fever? ~
+1: Hot and cold, a bit. ~
+2: Where did you get your drinking water, on the trip? ~
+1: From the stream, boiled. Most of the time. ~
+3: Not always boiled, I think. ~
+2: Okay. Any health conditions? ~ h1
+1: Type 2 diabetes. ~ h1
+2: Anyone in the family with bowel problems? ~ f1
+1: My brother has colitis. ~ f1
+2: Let me check your numbers. ~
+1: Go on. ~
+2: Pulse 92, blood pressure 118 over 70, temperature 37.8, oxygen 97 percent, weight 74 kilos. ~ v pause=15
+3: Is he dry? ~
+2: A little. Mr Rowe, I'll press your tummy. ~ pause=15
+1: Ow. ~
+2: Soft, with some tenderness around the belly button, no guarding, and your mouth is a little dry. ~ x1
+3: Does he need to go to hospital? ~
+2: Not at this stage. Persistent diarrhoea after drinking stream water makes me think of a parasite, giardia, but I'm not going to put a name on it until we test. ~ d1
+1: Right. ~
+2: I'd like you to bring a stool sample, in the pot I'll give you, so we can test for infections. ~ p1
+3: I'll make sure he does it tomorrow. ~
+2: Drink lots of water with a pinch of salt and sugar, little and often, and eat plain food. ~ c1
+1: Right. ~
+2: As you have diabetes, check your sugars more often while you're unwell. ~ c2
+3: I'll remind him. ~
+2: I'd like to see you again in a week, with the results. ~ f1
+1: A week. Aye. ~
+@@
+{"chief_complaint":{"value":"He's had the runs since the camping trip","normalized_value":"Persistent diarrhoea after camping","reported_by":"caregiver"},
+ "symptoms":[{"k":"s1","name":"the runs","normalized_name":"Diarrhoea","category":"gastrointestinal","duration":{"value":null,"unit":"days","normalized":"approximately 4 to 10 days"},"certainty":"uncertain","frequency":"Five, six times a day"},
+  {"k":"s2","name":"sick","normalized_name":"Vomiting","category":"gastrointestinal","reported_by":"caregiver","certainty":"disputed","onset":"on the Sunday"}],
+ "negative_findings":[{"k":"n1","finding":"Not sick","normalized_name":"Vomiting"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Type 2 diabetes","normalized_condition":"Type 2 diabetes mellitus"}],"family_history":[{"k":"f1","condition":"colitis","normalized_condition":"Colitis","relation":"brother"}]},
+ "vitals":{"k":"v","hr":92,"bp":"118/70","temp":37.8,"spo2":97,"wt":74},
+ "physical_examination":[{"k":"x1","finding":"some tenderness around the belly button","normalized_finding":"Periumbilical tenderness without guarding; dry mouth","body_site":"abdomen"}],
+ "clinical_assessment":[{"k":"d1","assessment":"a parasite, giardia","normalized_assessment":"Giardiasis","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"stool sample","normalized_name":"Stool microscopy and culture","type":"laboratory"}],
+ "counsel":[["c1","Oral rehydration with water, salt and sugar, little and often, plain food"],["c2","Check blood sugars more often while unwell"]],
+ "follow_up":[{"k":"f1","time_reference":"in a week"}],
+ "clinical_uncertainties":[{"k":"u1","type":"duration_disagreement","description":"Patient says four days; his carer says ten days; summarised as four to ten days, not confirmed.","related_entities":["symptoms[0]"],"resolution_status":"partially_resolved"},
+  {"k":"u2","type":"conflicting_statement","description":"Patient says he has not been sick; his carer says he vomited twice on the Sunday (unresolved).","related_entities":["negative_findings[0]","symptoms[1]"]}],
+ "quality_checks":{"contradictions_detected":["Duration of diarrhoea: patient four days vs caregiver ten days (approximate range only).","Patient denies vomiting; caregiver reports he vomited twice (unresolved)."]}}
+
+## 00767 PATIENT=1 DOCTOR=2 NURSE=3
+3: Hi Jess, I'm Dana, the nurse. I did your urine dip when you came in, and I'll pass that to the doctor. ~ p1
+1: Lovely. It's my fourth in six months, so I probably know what it'll say. ~
+2: Hello Jess. It's the urine infections again. Tell me what's different this time. ~ cc
+1: The usual, burning when I pee, going all the time, and a dull ache low down. It started on Monday. ~ s1
+3: The dip showed leucocytes and nitrites, doctor, both positive. ~ p1
+2: Thanks, Dana. Jess, any fever, back pain, or blood in the urine? ~ n1
+1: No fever. No back pain. A tiny bit of blood, I think, yesterday. ~ n1
+2: Any discharge or new partner? ~
+1: No, nothing like that. ~
+2: What do you drink, how much fluid in a day? ~ so1
+1: About a litre, I think. Mostly coffee, to be honest. ~ so1
+2: That's not a lot. And do you hold on when you need to go? ~
+1: At work, yes. I'm a teacher, and it's hard to get away. ~
+2: Let me press on your tummy. ~
+1: Okay. ~ pause=15
+2: A little tender over the bladder, and no tenderness over the kidneys. ~ x1
+1: What does that mean? ~
+2: It fits with a bladder infection again. But with four in six months, I can't rule out something that makes you prone to them, like a stone, or a problem with emptying the bladder. ~ d1
+1: Oh. Right. ~
+2: I'd like to send a urine sample off to the lab, to grow the germ and see which antibiotic works. ~ p2
+3: I can send that off now, doctor. ~
+2: And I'd like to arrange a kidney and bladder ultrasound, to look for a cause. ~ p3
+1: Will that tell you something? ~
+2: It will show whether the bladder empties fully, and whether there are stones. ~
+1: Right. And treatment? ~
+2: I'll write that up when the lab has answered, because I want to choose the right drug, so drink plenty of water now, and a glass every hour. ~ c1
+1: I can try. ~
+2: Empty your bladder fully, wipe front to back, and go as soon as you need to, even at work. ~ c2
+1: I'll tell my head. ~
+2: If you get a fever, shaking, or back pain, come in the same day, because that could mean the kidneys. ~ f1
+1: I will. Thanks, both. ~
+@@
+{"chief_complaint":{"value":"It's the urine infections again","normalized_value":"Recurrent urinary tract infection","reported_by":"doctor"},
+ "symptoms":[{"k":"s1","name":"burning when I pee","normalized_name":"Dysuria with frequency and suprapubic ache","category":"genitourinary","onset":"on Monday"}],
+ "negative_findings":[{"k":"n1","finding":"fever","normalized_name":"Fever or flank pain"}],
+ "medical_history":{"social_history":[{"k":"so1","category":"diet","description":"Low fluid intake, mostly coffee","details":"About a litre"}]},
+ "physical_examination":[{"k":"x1","finding":"A little tender over the bladder","normalized_finding":"Suprapubic tenderness without renal angle tenderness","body_site":"suprapubic area"}],
+ "clinical_assessment":[{"k":"d1","assessment":"a stone","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"urine dip","normalized_name":"Urine dipstick","type":"laboratory","status":"completed","requested_by":null},{"k":"p2","name":"urine sample","normalized_name":"Urine culture and sensitivity","type":"laboratory"},{"k":"p3","name":"kidney and bladder ultrasound","normalized_name":"Renal tract ultrasound","type":"imaging"}],
+ "clinical_actions":[{"k":"p1","action_type":"investigation","description":"Urine dipstick performed on arrival","status":"completed","responsible_person":"nurse"}],
+ "counsel":[["c1","Drink plenty of water, a glass every hour"],["c2","Empty bladder fully, wipe front to back and go promptly"]],
+ "follow_up":[{"k":"f1","time_reference":"If you get a fever, shaking, or back pain","status":"conditional"}]}
+

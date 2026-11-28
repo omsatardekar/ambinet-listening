@@ -1,0 +1,78 @@
+## 00731 PATIENT=1 DOCTOR=2
+1: Morning. Spring's started and my eyes are streaming, itching, the lot. I want my usual sorted before it gets bad, so can we go through it quickly? ~ cc
+2: Of course. Tell me what you're using at the moment. ~ m1 m2 m3 m4
+1: Olopatadine eye drops, twice a day. Cetirizine, 10 mg, once a day. Fluticasone nasal spray, two sprays once a day. And montelukast, 10 mg, maybe? At night? I take it for the asthma. ~ m1 m2 m3 m4 u1
+2: And is the montelukast 10 mg? You said maybe. ~ m4 u1
+1: It's 10, I'm fairly sure. It might be 5. I'd have to check the box. ~ m4 u1
+2: I'll check the record, that's fine. Which of those is working best? ~
+1: The cetirizine, and the eye drops. The nasal spray I use when I remember. ~
+2: How have your eyes been this week? ~
+1: Itchy and watery, but not red. I can cope. I'd just like to be ahead of it. ~
+2: Sensible. And your wider health, what do you have on the record? ~ h1 h2 h3
+1: Hay fever, obviously, asthma, since I was a child, and eczema. Classic trio. ~ h1 h2 h3
+2: Any operations? ~ sg1
+1: A squint operation, when I was four. ~ sg1
+2: Thank you. How's your asthma at the moment? ~
+1: Quiet. Spring and summer tend to be when it kicks in, but it's fine now. ~
+2: Good. Here's what I suggest, given the season. Start the nasal spray now, every day, rather than occasionally, because it works by building up. ~ c1
+1: Right. I've been inconsistent. ~
+2: And start the cetirizine and the eye drops a week before your worst weeks, if you can predict them. ~ c2
+1: Mid-May usually. ~
+2: Then start in early May. Keep windows closed in the morning, shower when you get in, and wipe your eyes with a cool damp cloth. ~ c3
+1: I do all that, mostly. ~
+2: Wear wraparound sunglasses, it keeps pollen off your eyes. ~
+1: I've got some, in the car. ~
+2: I'd like to see you again in six weeks, to see how the season's going and check your asthma. ~ f1
+1: Six weeks. Right, thank you. ~
+2: You're welcome. Do you want the reminder in writing? ~
+1: Yes, please, on the prescription slip. ~
+2: I'll print it with the repeat prescriptions. ~
+1: Marvellous. Same drugs, nothing new? ~
+2: Nothing new, just using them in a smarter order. ~
+@@
+{"chief_complaint":{"value":"my eyes are streaming, itching","normalized_value":"Seasonal itchy watery eyes"},
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Hay fever","normalized_condition":"Allergic rhinitis"},{"k":"h2","condition":"asthma","normalized_condition":"Asthma"},{"k":"h3","condition":"eczema","normalized_condition":"Eczema"}],"surgical_history":[{"k":"sg1","procedure":"squint operation","normalized_procedure":"Strabismus surgery","timeframe":"when I was four"}]},
+ "medications":[{"k":"m1","name":"Olopatadine eye drops","normalized_name":"Olopatadine","generic_name":"Olopatadine","frequency":"twice a day"},{"k":"m2","name":"Cetirizine","dose":"10 mg","frequency":"once a day"},{"k":"m3","name":"Fluticasone nasal spray","normalized_name":"Fluticasone","generic_name":"Fluticasone","frequency":"once a day"},{"k":"m4","name":"montelukast","dose":"10 mg","indication":"asthma"}],
+ "counsel":[["c1","Use the nasal spray daily to build up effect"],["c2","Start cetirizine and eye drops a week before the worst weeks"],["c3","Close bedroom windows in the morning, shower on getting in, use cool damp cloths and wraparound sunglasses"]],
+ "follow_up":[{"k":"f1","time_reference":"in six weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"uncertain_dose","description":"Patient gave the montelukast dose tentatively (\"10 mg, maybe? ... it might be 5\").","related_entities":["medications[3]"]}]}
+
+## 00736 PATIENT=1 DOCTOR=2
+1: Good morning. Let me be precise: I have a painful bump on the side of my right big toe, which is worse in shoes. ~ cc s1
+2: Thank you. How long has it been there? ~ s1
+1: The bump, about three years. The pain, the last four months, since I started a job on my feet. ~ s1
+2: What sort of pain? ~ s1
+1: Sharp, rubbing, and a throb by the end of the day. And the skin over it is red and sore. ~ s1 s2
+2: What shoes make it worse? ~ s1
+1: Anything narrow. Work shoes, and heels. In trainers, it's bearable. ~ s1
+2: Any numbness, tingling, or burning in the toe? ~ n1
+1: No numbness. No tingling. ~ n1
+2: Any swelling of the whole toe, or heat, or discharge from the skin? ~ n2
+1: No, nothing like that. Just the bump, and the redness around it. ~ n2
+2: Let me ask you to take your shoe and sock off, and I'll have a look. ~
+1: Of course. ~ pause=18
+2: There's a bony prominence at the base of the toe, and the toe is angled inwards, which is a bunion, and the skin over it is pink where the shoe rubs. ~
+1: I thought so. Is it genetic? ~
+2: Partly, yes. Narrow shoes make it worse, but they're not the cause. ~
+1: Will I need surgery? ~
+2: Not necessarily. Surgery is only for pain that doesn't respond to other measures, and it takes months to recover from. ~
+1: I'd rather avoid that. ~
+2: Most people do. First, wider shoes with a deeper toe box, soft insoles, and a gel pad over the bump. ~ c1
+1: Where do I get those? ~
+2: Any pharmacy, and a good shoe shop will fit them for you. ~
+1: And the heels? ~
+2: Keep them for special occasions only. ~ c2
+1: That's fair. ~
+2: Ice it for ten minutes after a long day, and keep your toes moving. ~
+1: Right. ~
+2: If it's still bothering you after two months of that, or the toe gets red and hot, or the skin breaks, come back and I'll refer you to the foot specialist. ~ f1
+1: I'll do that. Thank you, doctor. ~
+2: Good luck with the new shoes. ~
+@@
+{"chief_complaint":{"value":"a painful bump on the side of my right big toe","normalized_value":"Painful right bunion"},
+ "symptoms":[{"k":"s1","name":"painful bump","normalized_name":"Bunion pain","category":"musculoskeletal","body_site":"right big toe","duration":{"value":3,"unit":"years","normalized":"3 years"},"aggravating_factors":["narrow"]},
+  {"k":"s2","name":"red and sore","normalized_name":"Redness over bunion","category":"dermatological","body_site":"right big toe"}],
+ "negative_findings":[{"k":"n1","finding":"numbness","normalized_name":"Numbness or tingling"},{"k":"n2","finding":"discharge","normalized_name":"Toe discharge or heat"}],
+ "counsel":[["c1","Wider deep-toe-box shoes, soft insoles and a gel pad over the bump"],["c2","Keep heels for special occasions; ice for ten minutes after a long day"]],
+ "follow_up":[{"k":"f1","time_reference":"If it's still bothering you after two months of that, or the toe gets red and hot, or the skin breaks","status":"conditional"}]}
+

@@ -1,0 +1,95 @@
+## 00778 PATIENT=1 DOCTOR=2
+1: Follow-up. The bowel thing. ~ cc
+2: Right, you've been on the fibre treatment for six weeks. How are things? ~ m1
+1: Bit better. Still up and down. ~ s1
+2: Describe up and down. ~ s1
+1: Constipated for three days, then loose. Then fine. Then again. ~ s1
+2: Any pain? ~ s2
+1: Cramping. Lower left. Eases when I go. ~ s2
+2: Any blood in the stool? ~ n1
+1: No. ~ n1
+2: Weight loss? ~ n2
+1: No. Same. ~ n2
+2: Any waking at night to open your bowels? ~ n3
+1: No. Sleep through. ~ n3
+2: Allergies? ~ a1
+1: None. ~ a1
+2: Remind me, what are you taking? ~ m1
+1: Ispaghula husk. One sachet. Once a day. ~ m1
+2: And your history? ~ h1 h2
+1: Irritable bowel. Diagnosed last year. And hay fever. ~ h1 h2
+2: Do you drink coffee, or alcohol? ~ so1
+1: Four coffees. Couple of beers weekends. ~ so1
+2: Let me check your tummy. ~ pause=15
+1: Fine. ~
+2: Soft, a bit of tenderness on the lower left, no masses, nothing worrying. ~ x1
+1: So? ~
+2: Alternating bowels with cramps that ease on opening them, normal tests so far, fits with irritable bowel. I'd call it irritable bowel syndrome with mixed bowel habit. ~ d1
+1: What now? ~
+2: Keep the husk going, with plenty of water. It takes at least twelve weeks to judge. ~
+1: Right. ~
+2: Cut the coffee to two a day, eat regularly, and try peppermint tea. ~ c1
+1: Peppermint. Fine. ~
+2: And there's one blood test I'd like to check, a coeliac screen, as it can mimic this. ~ p1
+1: Okay. ~
+2: If you notice blood, weight loss, or night-time diarrhoea, come back at once. ~ c2
+1: Will do. ~
+2: Otherwise, I'll see you if it's not settling. ~
+1: Thanks. ~
+@@
+{"chief_complaint":{"value":"The bowel thing","normalized_value":"Irritable bowel follow-up"},
+ "symptoms":[{"k":"s1","name":"Constipated","normalized_name":"Alternating constipation and loose stools","category":"gastrointestinal","frequency":"three days"},
+  {"k":"s2","name":"Cramping","normalized_name":"Left lower abdominal cramping","category":"gastrointestinal","body_site":"lower left abdomen"}],
+ "negative_findings":[{"k":"n1","finding":"blood","normalized_name":"Blood in stool"},{"k":"n2","finding":"Weight loss","normalized_name":"Weight loss"},{"k":"n3","finding":"waking at night","normalized_name":"Nocturnal bowel opening"},{"k":"a1","finding":"allergies","normalized_name":"No known allergies"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Irritable bowel","normalized_condition":"Irritable bowel syndrome"},{"k":"h2","condition":"hay fever","normalized_condition":"Allergic rhinitis"}],"social_history":[{"k":"so1","category":"diet","description":"High coffee intake and weekend beer","details":"Four coffees"}]},
+ "medications":[{"k":"m1","name":"Ispaghula husk","dose":"One sachet","frequency":"Once a day"}],
+ "physical_examination":[{"k":"x1","finding":"a bit of tenderness on the lower left","normalized_finding":"Mild left iliac fossa tenderness without masses","body_site":"lower left abdomen"}],
+ "clinical_assessment":[{"k":"d1","assessment":"irritable bowel syndrome with mixed bowel habit","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"coeliac screen","normalized_name":"Coeliac serology","type":"laboratory"}],
+ "counsel":[["c1","Cut coffee to two a day, eat regularly and try peppermint tea"],["c2","Come back at once if blood, weight loss or night-time diarrhoea"]]}
+
+## 00782 PATIENT=1 DOCTOR=2
+1: Morning. My hands are stiff in the morning. Both. About an hour. ~ cc s1
+2: How long has that been happening? ~ s1 u1
+1: A while. I can't say exactly. A few months. Or longer. ~ s1 u1
+2: Which joints? ~ s1
+1: Knuckles. Fingers. Wrists a bit. ~ s1
+2: Does it get better as the day goes on? ~
+1: Yes. By lunchtime I'm fine. ~
+2: Any swelling in the joints? ~ n1
+1: Maybe a little in the knuckles. No redness. ~ n1
+2: Any other joint pain, like your feet, knees, or back? ~ n2
+1: No. Just hands. ~ n2
+2: Does anyone in the family have arthritis? ~ f1
+1: My mother had rheumatoid arthritis. ~ f1
+2: Any psoriasis, or rashes? ~
+1: No. Skin's fine. ~
+2: Do you have any other conditions? ~ h1
+1: High blood pressure. That's all. ~ h1
+2: Let me look at your hands. Put them out in front of you. ~
+1: Like this? ~ pause=15
+2: There's slight swelling over several knuckles in both hands, and they're tender when I squeeze across them. ~ x1
+1: Is that arthritis? ~
+2: With an hour of morning stiffness, swollen knuckles, and your mother's history, this fits with an inflammatory arthritis, I'd say probable early rheumatoid arthritis. ~ d1
+1: Rheumatoid. Like my mother. ~
+2: It's treatable, and treating it early prevents damage. I'd like to arrange blood tests and X-rays of both hands, and refer you to the rheumatology team. ~ p1 p2 r1
+1: When? ~
+2: The specialist will see you within a few weeks. I'll mark it urgent. ~ r1
+1: And in the meantime? ~
+2: Keep your hands warm and moving, and do gentle exercises, like making a fist and opening it, every morning. ~ c1
+1: Right. ~
+2: If your joints become very swollen, you get a fever, or you can't use your hands, ring us. ~ f1
+1: I will. Thank you. ~
+@@
+{"chief_complaint":{"value":"My hands are stiff in the morning","normalized_value":"Morning hand stiffness"},
+ "symptoms":[{"k":"s1","name":"stiff in the morning","normalized_name":"Morning stiffness of hands","category":"musculoskeletal","body_site":"knuckles, fingers and wrists","certainty":"uncertain","duration":{"value":1,"unit":"hour","normalized":"1 hour per morning"}}],
+ "negative_findings":[{"k":"n1","finding":"redness","normalized_name":"Joint redness"},{"k":"n2","finding":"other joint","normalized_name":"Pain in feet, knees or back"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"High blood pressure","normalized_condition":"Hypertension"}],"family_history":[{"k":"f1","condition":"rheumatoid arthritis","normalized_condition":"Rheumatoid arthritis","relation":"mother"}]},
+ "physical_examination":[{"k":"x1","finding":"slight swelling over several knuckles in both hands","normalized_finding":"Bilateral MCP swelling and tenderness","body_site":"both hands"}],
+ "clinical_assessment":[{"k":"d1","assessment":"early rheumatoid arthritis","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood tests","normalized_name":"Inflammatory markers, rheumatoid factor and anti-CCP","type":"laboratory"},{"k":"p2","name":"X-rays of both hands","normalized_name":"X-rays of both hands","type":"imaging"}],
+ "clinical_actions":[{"k":"r1","action_type":"referral","description":"Urgent referral to rheumatology"}],
+ "counsel":[["c1","Keep hands warm and do gentle morning hand exercises"]],
+ "follow_up":[{"k":"f1","time_reference":"If your joints become very swollen, you get a fever, or you can't use your hands","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient could not say when the morning stiffness began (\"a few months. Or longer\").","related_entities":["symptoms[0]"]}]}
+

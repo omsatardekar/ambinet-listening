@@ -1,0 +1,87 @@
+## 00670 PATIENT=1 DOCTOR=2 NURSE=3
+1: Hi, hello, sorry, I'm Bruce, I'm here for the cataract thing, the pre-op, my wife said I should bring my tablet list but I've left it in the ute, so I'll just tell you. ~ cc
+3: That's all right, Bruce, I'm Linda, the pre-op nurse. We've got your list on the system, and we'll check it against what you tell us. ~
+2: I'm Dr Wallace. We've got you down for the left eye. Let's look at your medicines first. What are you taking? ~ m1 m2 u1
+1: The blood thinner, warfarin, I think it's 3 mg. And the sugar one, metformin, maybe 500 mg, twice a day, or is it once? ~ m1 m2 u1 u2
+3: Our list says warfarin 5 mg, Bruce. ~ m1 u1
+1: No, mate, it's 3. It's definitely 3. Well, it might have gone up. ~ m1 u1
+3: I'll write down 3 from you and 5 from our records, and we'll check with the pharmacy. ~ m1 u1
+2: Good. For metformin, we'll check that as well. Any allergies to anything, medicines, latex, eye drops? ~ a1
+1: Nope. No allergies at all. ~ a1
+2: Any cough or cold lately, anything that would stop you lying flat for the operation? ~ n1
+1: No, nothing like that. No cough. ~ n1
+2: Do you drink alcohol? ~ so1
+1: Couple of tinnies on Saturday. Not more. ~ so1
+2: That's fine. Now the eye. I'll have a look at the lens. Chin on the rest, Bruce. ~ pause=20
+1: This the one with the light? ~
+2: That's it. Look straight ahead. ~
+2: Yes, the lens in the left eye is clouded, which fits with a cataract, and it's why your vision has been misty. ~ d1
+1: How much longer before I can drive at night again? ~
+2: After the operation, it's usually a few weeks. The surgery's about twenty minutes, under local anaesthetic, you go home the same day. ~
+1: My wife says I'll be a lot more pleasant. ~
+2: Bruce, since you're on warfarin, I'd like to arrange a blood test before surgery, to check how thin your blood is. ~ p1
+1: Is that the INR? ~
+3: That's it. We'll book it two days before the operation. ~
+2: And if the INR is too high, we'll ring you, and we may have to move the date. ~ f1
+1: Fair enough. Should I stop the warfarin? ~
+2: Don't stop anything yet, unless we tell you. We'll give you clear written instructions. ~ c1
+3: I'll print them for you now, Bruce. ~
+1: Beauty. And where do I park? ~
+3: Round the back, there's free spaces. ~
+1: You've been brilliant. Thanks, both. ~
+@@
+{"chief_complaint":{"value":"I'm here for the cataract thing","normalized_value":"Pre-operative assessment for cataract surgery"},
+ "negative_findings":[{"k":"n1","finding":"cough","normalized_name":"Cough"},{"k":"a1","finding":"allergies","normalized_name":"No known allergies"}],
+ "medical_history":{"social_history":[{"k":"so1","category":"alcohol","description":"Occasional alcohol","details":"Couple of tinnies on Saturday"}]},
+ "medications":[{"k":"m1","name":"warfarin","dose":null,"indication":null},{"k":"m2","name":"metformin","dose":"500 mg","frequency":"twice a day"}],
+ "clinical_assessment":[{"k":"d1","assessment":"cataract","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood test","normalized_name":"INR","type":"laboratory"}],
+ "counsel":[["c1","Do not stop any medicines until given written instructions"]],
+ "follow_up":[{"k":"f1","time_reference":"if the INR is too high","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"medication_discrepancy","description":"Patient says warfarin 3 mg; the nurse's record says 5 mg; to be checked with the pharmacy (unresolved).","related_entities":["medications[0]"]},
+  {"k":"u2","type":"uncertain_dose","description":"Patient gave the metformin dose and frequency tentatively (\"maybe 500 mg, twice a day, or is it once?\").","related_entities":["medications[1]"]}],
+ "quality_checks":{"contradictions_detected":["Warfarin dose: patient 3 mg vs nurse 5 mg (unresolved)."]}}
+
+## 00671 PATIENT=1 DOCTOR=2
+1: Morning. It's these patches. Itchy ones, on my elbows and knees. I've had them a few months. ~ cc s1
+2: Tell me more about them. What do they look like? ~ s1
+1: Red, with a silvery flaky bit on top. They look daft. ~ s2
+2: Do they flake a lot? ~ s2
+1: Aye, I find bits in the bed. And they itch like mad, mainly at night. ~ s1 s2
+2: Have you ever had anything like it before? ~
+1: No. First time. ~
+2: Any changes to your nails, pitting, ridges, anything? ~ n1
+1: No, nails are fine. ~ n1
+2: And are your joints okay, any pain or stiffness, especially in the morning? ~ r1
+1: No, nothing. Joints are fine. ~ r1
+2: What work do you do? ~ so1
+1: I'm a scaffolder. I'm outdoors most days, and gloves and knee pads, so the knees are rubbed a lot. ~ so1
+2: That could be making them sorer. Let me have a look. Roll up your sleeve, and your trouser leg. ~ pause=18
+1: There you go. ~
+2: Right. I'm not going to put a label on it today. I'd like to treat them first and see how they respond. ~
+1: Fair enough. What's the treatment? ~
+2: I'd like to start you on a steroid cream, betamethasone, apply it to the patches once a day for two weeks, thinly. ~ m1
+1: Just to the patches? ~
+2: Just the patches, nowhere else. Wash your hands afterwards. ~
+1: Right. Does it stop the itch? ~
+2: It usually does within a few days. And I'd like to arrange a skin scraping from one patch, to make sure it's not a fungal infection. ~ p1
+1: A scraping? ~
+2: A tiny bit of the flaky skin, painless. I'll do it now. ~
+1: Go on then. ~ pause=15
+2: Done. You'll hear if anything shows. Moisturise every day, with a plain thick cream, even when they're better. ~ c1
+1: I'm not much for creams. ~
+2: It makes a big difference. Try it for a fortnight. ~
+1: Right. And if it doesn't work? ~
+2: Then come back and we'll think again. ~
+1: Fine. Thanks, doctor. ~
+@@
+{"chief_complaint":{"value":"these patches. Itchy ones, on my elbows and knees","normalized_value":"Itchy patches on elbows and knees"},
+ "symptoms":[{"k":"s1","name":"Itchy","normalized_name":"Itching","category":"dermatological","body_site":"elbows and knees","duration":null,"onset":"a few months"},
+  {"k":"s2","name":"silvery flaky","normalized_name":"Scaly red plaques","category":"dermatological","body_site":"elbows and knees"}],
+ "negative_findings":[{"k":"n1","finding":"nails","normalized_name":"Nail changes"}],
+ "medical_history":{"social_history":[{"k":"so1","category":"occupation","description":"Scaffolder","details":"scaffolder"}]},
+ "review_of_systems":[{"k":"r1","system":"musculoskeletal"}],
+ "medications":[{"k":"m1","name":"betamethasone","status":"planned","reported_by":"doctor","frequency":"once a day","duration":{"value":2,"unit":"weeks","normalized":"2 weeks"},"route":null}],
+ "procedures_and_investigations":[{"k":"p1","name":"skin scraping","normalized_name":"Skin scraping for fungal culture","type":"laboratory"}],
+ "counsel":[["c1","Moisturise daily with a plain thick cream"]]}
+

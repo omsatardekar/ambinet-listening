@@ -1,0 +1,97 @@
+## 00825 PATIENT=1 DOCTOR=2 CAREGIVER=3
+3: Doctor, I'm Beth, Mr Quigley's carer. He's got a pain in his neck that goes down his arm, and he won't say much, so I'm here to help. ~ cc s1
+1: It's not that bad. ~
+2: Mr Quigley, can you tell me where it hurts? ~ s1
+1: Neck. And down this arm. The right. ~ s1
+2: How long has it been going on? ~ s1
+1: A few weeks. ~
+3: I'd say a month. It started after he painted the ceiling. ~ s1
+2: Is it worse at certain times? ~ s2
+1: At night. And when I turn my head. ~ s2
+2: Any tingling or numbness in your fingers? ~ n1
+1: A bit of tingling. In my thumb, and next finger. ~ s3
+2: Any weakness, dropping things? ~ n2
+1: No. I can grip fine. ~ n2
+3: He's dropped a cup twice, though. ~ s3
+2: I'll note that. What are you taking for it? ~ m1 m2 m3
+3: Naproxen, 500 mg twice a day. Paracetamol, 1 gram, four times a day. And a stomach tablet, omeprazole, 20 mg once a day, to go with the naproxen. ~ m1 m2 m3
+2: Any other conditions? ~ h1 h2
+3: He had a stroke, two years ago, and high blood pressure. ~ h1 h2
+2: Who's at home with him? ~ so1
+3: He lives alone, and I come in morning and evening. ~ so1
+2: Pulse, pressure, and so on. ~
+3: I've done them this morning, doctor. Blood pressure 138 over 84, pulse 72, oxygen 97 percent, temperature 36.7. ~ v
+2: Thanks, Beth. Mr Quigley, I'll test your arm. ~ pause=20
+1: Okay. ~
+2: The strength in your right grip is slightly reduced compared to the left, and your thumb and index finger have reduced feeling, and moving your neck towards the right reproduces the arm pain. ~
+3: Is it a trapped nerve? ~
+2: It looks that way. I'd say this is a pinched nerve in the neck, cervical radiculopathy, probably from wear in the neck bones. ~ d1
+1: Will it get better? ~
+2: Often, yes, with time, within a few months. But with the dropped cups and the reduced grip, I'd like to be careful. ~
+3: What do we do? ~
+2: Keep using a supportive pillow, avoid heavy lifting, and gentle neck movements. ~ c1
+3: I'll make sure he doesn't paint any more ceilings. ~
+2: Please. If the weakness gets worse, you lose feeling in your hand, you have trouble walking, or lose control of your bladder, come in immediately. ~ c2
+3: I'll watch for those. ~
+2: Continue the tablets as they are. Thank you, Beth. ~
+@@
+{"chief_complaint":{"value":"He's got a pain in his neck that goes down his arm","normalized_value":"Neck pain radiating down the right arm","reported_by":"caregiver"},
+ "symptoms":[{"k":"s1","name":"Neck","normalized_name":"Neck pain radiating to right arm","category":"musculoskeletal","body_site":"neck and right arm","duration":{"value":1,"unit":"month","normalized":"1 month"}},
+  {"k":"s2","name":"At night","normalized_name":"Nocturnal pain, worse turning head","category":"musculoskeletal","aggravating_factors":["turn my head"]},
+  {"k":"s3","name":"tingling","normalized_name":"Paraesthesia of thumb and index finger","category":"neurological","body_site":"thumb and index finger"}],
+ "negative_findings":[{"k":"n2","finding":"weakness","normalized_name":"Grip weakness"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"a stroke","normalized_condition":"Previous stroke","reported_by":"caregiver"},{"k":"h2","condition":"high blood pressure","normalized_condition":"Hypertension","reported_by":"caregiver"}],"social_history":[{"k":"so1","category":"living","description":"Lives alone with carer visits","details":"He lives alone","reported_by":"caregiver"}]},
+ "medications":[{"k":"m1","name":"Naproxen","dose":"500 mg","frequency":"twice a day","reported_by":"caregiver"},{"k":"m2","name":"Paracetamol","dose":"1 gram","frequency":"four times a day","reported_by":"caregiver"},{"k":"m3","name":"omeprazole","dose":"20 mg","frequency":"once a day","reported_by":"caregiver"}],
+ "vitals":{"k":"v","by":"caregiver","bp":"138/84","hr":72,"spo2":97,"temp":36.7},
+ "clinical_assessment":[{"k":"d1","assessment":"a pinched nerve in the neck","normalized_assessment":"Cervical radiculopathy","certainty":"provisional"}],
+ "counsel":[["c1","Supportive pillow, avoid heavy lifting and gentle neck movements"],["c2","Safety-net: urgent review for worsening weakness, hand numbness, walking difficulty or bladder loss"]]}
+
+## 00827 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+3: Doctor, please, my husband, he ate prawns, and now his lips are swelling, and he's coming out in hives! ~ cc
+2: Bring him straight in, sit him up. Sir, can you tell me your name, and how you're feeling? ~
+1: Peter. My lips feel huge. And my throat's a bit tight. ~ s1 s2
+2: When did you eat the prawns? ~ s1
+1: Twenty minutes ago. A prawn curry, at the Thai place. ~ s1
+3: No, it was ten minutes. We'd only just got to the car, I looked at my watch. ~
+2: It doesn't matter exactly, we're acting now. Any trouble breathing? ~ n1 u1
+1: No. Not really. I'm fine, I can breathe. ~ n1 u1
+3: He's wheezing, doctor, listen to him. ~ s3 u1
+2: I'll listen. Have you had a reaction like this before? ~
+1: No. Never. I've eaten prawns all my life. ~
+2: Any allergies to medicines or other foods, as far as you know? ~ a1
+1: None. I've never had any. ~ a1
+2: Let me check you. Pulse, oxygen, pressure. ~
+3: Please hurry. ~
+2: Pulse 112, blood pressure 102 over 60, oxygen 95 percent, temperature 36.8, respiratory rate 22. ~ v pause=15
+3: Is that bad? ~
+2: Your pulse is fast, the oxygen is a little low, and the pressure is on the low side, which is concerning. Open your mouth, Peter. ~
+1: Ahh. ~ pause=15
+2: Your lips and tongue are swollen, there are raised red hives over your chest and arms, and I can hear a wheeze in your chest. ~ x1 x2
+1: Is it serious? ~
+2: Yes, it's what we call anaphylaxis, a severe reaction to the prawns. We're treating it now. ~ d1
+3: Oh God. ~
+2: Nurse, I want you to give adrenaline, intramuscular, point five of a milligram, into his thigh, now. And oxygen, and a drip. ~ m1
+1: Will I be all right? ~
+2: Yes. The adrenaline works fast. You'll feel your heart race for a few minutes. ~
+3: Can I stay with him? ~
+2: Yes, please, hold his hand. I'm also going to give an antihistamine and a steroid by injection, and we'll keep you in for at least six hours, to watch for a second reaction. ~ m2 m3
+1: Okay. ~
+2: And I'd like a blood test for tryptase, which shows the reaction, and a repeat set of observations every fifteen minutes. ~ p1
+3: Thank you, doctor. ~
+2: Peter, don't eat or drink anything, and tell the nurse if your breathing worsens. ~ c1
+1: I will. ~
+@@
+{"chief_complaint":{"value":"my husband, he ate prawns, and now his lips are swelling","normalized_value":"Anaphylaxis after eating prawns","reported_by":"family_member"},
+ "symptoms":[{"k":"s1","name":"lips feel huge","normalized_name":"Lip and tongue swelling","category":"other","body_site":"lips","onset":"Twenty minutes ago"},
+  {"k":"s2","name":"throat's a bit tight","normalized_name":"Throat tightness","category":"respiratory"},
+  {"k":"s3","name":"wheezing","normalized_name":"Wheeze","category":"respiratory","reported_by":"family_member","certainty":"disputed"}],
+ "negative_findings":[{"k":"n1","finding":"trouble breathing","normalized_name":"Breathing difficulty"},{"k":"a1","finding":"allergies","normalized_name":"No known allergies"}],
+ "vitals":{"k":"v","hr":112,"bp":"102/60","spo2":95,"temp":36.8,"rr":22},
+ "physical_examination":[{"k":"x1","finding":"lips and tongue are swollen","normalized_finding":"Lip and tongue angioedema","body_site":"lips and tongue"},{"k":"x2","finding":"raised red hives over your chest and arms","normalized_finding":"Urticaria with wheeze on auscultation","body_site":"chest and arms"}],
+ "clinical_assessment":[{"k":"d1","assessment":"anaphylaxis","certainty":"provisional"}],
+ "medications":[{"k":"m1","name":"adrenaline","status":"planned","reported_by":"doctor","dose":"point five of a milligram"},{"k":"m2","name":"antihistamine","normalized_name":"Antihistamine (unspecified)","generic_name":null,"status":"planned","reported_by":"doctor"},{"k":"m3","name":"steroid","normalized_name":"Corticosteroid (unspecified)","generic_name":null,"status":"planned","reported_by":"doctor"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood test for tryptase","normalized_name":"Serum tryptase","type":"laboratory"}],
+ "counsel":[["c1","Nothing to eat or drink and tell the nurse if breathing worsens"]],
+ "clinical_uncertainties":[{"k":"u1","type":"conflicting_statement","description":"Patient says he can breathe and is not having breathing trouble; his wife says he is wheezing (unresolved).","related_entities":["negative_findings[0]","symptoms[2]"]}],
+ "quality_checks":{"contradictions_detected":["Patient denies breathing difficulty; family member reports wheezing (unresolved)."]}}
+

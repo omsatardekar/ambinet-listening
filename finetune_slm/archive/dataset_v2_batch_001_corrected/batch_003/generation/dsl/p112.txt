@@ -1,0 +1,58 @@
+## 00834 PATIENT=1 DOCTOR=2 NURSE=3 CAREGIVER=4
+3: G'day, Maureen. I'm Josie, the nurse. I'll weigh you and take your pulse before the doctor. How are you travelling? ~
+1: Oh, I'm good, love. Well, I'm tired, that's why we're here. And this is my carer, Bridget, she drives me. ~
+3: Pulse 62, blood pressure 118 over 72, weight 66 kilos. ~ v pause=15
+2: Hi Maureen, hi Bridget. I'm Dr Chen. So, tired. Tell me about it. ~
+1: I've been tired all the time for a month, doctor. I'm worn out by two in the afternoon. I wonder if it's my thyroid. ~ cc s1
+2: Why do you wonder about the thyroid? ~
+1: Because I had it treated last year, the radioactive iodine, and I've been on the thyroid tablets since. My sister says it's the thyroid. ~ h1 sg1
+2: That's a good thought. How are you sleeping, and how's your appetite? ~
+1: I sleep well, nine hours, and I'm eating well. ~
+2: Any feeling of being cold, constipation, dry skin? ~ s2
+1: A bit cold, yes. And dry skin on my shins. ~ s2
+2: And your mood? Any low mood, or lost interest in things? ~ n1 s3 u1
+1: No, I'm not low. I'm just tired. I'm perfectly fine in my mood. ~ n1 u1
+4: She has been low, doctor. She hasn't wanted to go to her craft group for weeks. And she's cried a couple of times. ~ s3 u1
+1: Bridget, honestly. ~ u1
+2: I'll note both, Maureen, that you say your mood is fine, and Bridget's noticed you've been withdrawn. What medicines do you take? ~ u1 m1 m2
+1: Levothyroxine, 100 micrograms, once a day, before breakfast. And vitamin D, 1000 units. ~ m1 m2
+2: Do you take the levothyroxine on an empty stomach? ~
+1: Mostly. With my tea. ~
+2: Tea and calcium can reduce absorption. Any allergies? ~ a1
+1: No, none, love. ~ a1
+2: Do you drink alcohol? ~ so1
+1: A sherry on Sundays. ~ so1
+2: Let me look at you. Josie did your pulse, it's a little slow. ~
+1: Is that bad? ~
+2: It can fit with an underactive thyroid. Let me feel your thyroid area and check your reflexes. ~ pause=20
+2: Your skin is dry, your reflexes are slow, and there's no lump in the neck. ~ x1 x2
+4: Is it the thyroid, doctor? ~
+2: Possibly. After thyroid treatment, the tablet dose often needs adjusting. I'd say this could be an underactive thyroid from too low a dose, but I can't rule out another cause of tiredness, such as anaemia or low mood. ~ d1 d2
+1: What do we do? ~
+2: I'd like to arrange a blood test for your thyroid function, your blood count, and your iron and vitamin B12 levels. ~ p1 p2
+3: I can take it right now. ~
+2: And I'd like a blood sugar, to be complete. ~ p3
+1: All right. ~
+2: In the meantime, take the levothyroxine on its own, with water, half an hour before breakfast, and don't have tea or milk with it. ~ c1
+1: Right. ~
+2: And Maureen, if your mood gets lower, or you feel hopeless, please tell us. ~ c2
+1: I will, I promise. ~
+2: If you get very drowsy, very cold, confused, or short of breath, come in straight away. ~ f1
+1: Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"tired all the time for a month","normalized_value":"Fatigue with concern about thyroid"},
+ "symptoms":[{"k":"s1","name":"tired all the time","normalized_name":"Fatigue","category":"constitutional","duration":{"value":1,"unit":"month","normalized":"1 month"}},
+  {"k":"s2","name":"cold","normalized_name":"Cold intolerance and dry skin","category":"constitutional"},
+  {"k":"s3","name":"cried","normalized_name":"Low mood and social withdrawal","category":"psychiatric","reported_by":"caregiver","certainty":"disputed"}],
+ "negative_findings":[{"k":"n1","finding":"low mood","normalized_name":"Low mood"},{"k":"a1","finding":"allergies","normalized_name":"No known allergies"}],
+ "medical_history":{"surgical_history":[{"k":"sg1","procedure":"radioactive iodine","normalized_procedure":"Radioactive iodine therapy for thyroid","timeframe":"last year"}],"social_history":[{"k":"so1","category":"alcohol","description":"Sunday sherry","details":"A sherry on Sundays"}]},
+ "medications":[{"k":"m1","name":"Levothyroxine","dose":"100 micrograms","frequency":"once a day"},{"k":"m2","name":"vitamin D","dose":"1000 units"}],
+ "vitals":{"k":"v","by":"nurse","hr":62,"bp":"118/72","wt":66},
+ "physical_examination":[{"k":"x1","finding":"skin is dry","normalized_finding":"Dry skin","body_site":"skin"},{"k":"x2","finding":"reflexes are slow","normalized_finding":"Delayed ankle reflexes; no goitre","body_site":"reflexes"}],
+ "clinical_assessment":[{"k":"d1","assessment":"an underactive thyroid from too low a dose","normalized_assessment":"Under-replaced hypothyroidism","certainty":"provisional"},{"k":"d2","assessment":"anaemia or low mood","normalized_assessment":"Anaemia or depression","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood test for your thyroid function","normalized_name":"Thyroid function","type":"laboratory"},{"k":"p2","name":"blood count","normalized_name":"Full blood count, iron and vitamin B12","type":"laboratory"},{"k":"p3","name":"blood sugar","normalized_name":"Random glucose","type":"laboratory"}],
+ "counsel":[["c1","Take levothyroxine alone with water half an hour before breakfast, no tea or milk"],["c2","Tell us if mood gets lower or feeling hopeless"]],
+ "follow_up":[{"k":"f1","time_reference":"If you get very drowsy, very cold, confused, or short of breath","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"conflicting_statement","description":"Patient says her mood is fine; her carer says she has been low, withdrawn and tearful (unresolved).","related_entities":["negative_findings[0]","symptoms[2]"]}],
+ "quality_checks":{"contradictions_detected":["Patient denies low mood; caregiver reports she has been low and tearful (unresolved)."]}}
+

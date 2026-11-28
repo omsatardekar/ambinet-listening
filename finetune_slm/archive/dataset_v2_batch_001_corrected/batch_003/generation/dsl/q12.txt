@@ -1,0 +1,155 @@
+## 00828 PATIENT=1 DOCTOR=2 CLINICAL_STAFF=3
+1: Okay, so I kept a log. My right knee swelled up five days ago after a long day kneeling on a tile floor, and it hasn't gone down. I have the dates on my phone. ~ cc s1
+2: Good, thanks. Show me when you're ready. Is it only swollen, or is it painful too? ~ s2
+1: Painful, yes, it hurts in the knee. But I can't tell you when exactly the pain started. I wrote the swelling date, not the pain. I think the pain came first, maybe two days before. Maybe not. ~ s2 u1
+2: That's fine. Does it feel stiff? ~ s3
+1: Stiff after sitting in the truck, yes. Takes a minute to straighten. ~ s3
+2: Is it warm? ~ s4
+1: Warm to the touch, compared to the left. I checked with the back of my hand. ~ s4
+2: And where does it hurt most? ~ s5
+1: Right at the front, over the kneecap. Tender when I press. ~ s5
+2: Any fever? ~ n1
+1: No fever, I took it last night. ~ n1
+2: Redness? ~ n2
+1: No redness. ~ n2
+2: Does the knee lock? ~ n3
+1: No locking. ~ n3
+2: Did you fall or twist it? ~ n4
+1: No fall, no twist. ~ n4
+2: Chills or sweats? ~ n5
+1: No chills. ~ n5
+2: What medications are you taking? ~ m1 m2 m3 m4
+1: Ibuprofen, maybe 400 mg, three times a day, for the knee. Metformin, 500 mg, twice a day, breakfast and dinner, though I skip some dinners. Lisinopril, 10 mg, once a day. And omeprazole, 20 mg, once a day. ~ m1 m2 m3 m4 u2 u3
+2: Okay. Any allergies? ~ a1
+1: Penicillin. My lips swelled up. ~ a1
+2: Medical history? ~ h1 h2
+1: Type 2 diabetes and high blood pressure. ~ h1 h2
+2: Surgery? ~ sg1 sg2
+1: Left knee scope in 2015. And a right shoulder surgery in 2019. ~ sg1 sg2
+2: Family? ~ f1 f2
+1: My father has gout. My mother has arthritis. ~ f1 f2
+2: What do you do for work? ~ so1
+1: Flooring installer, mostly tile. So a lot of kneeling. ~ so1
+2: Alcohol? ~ so2
+1: Two beers after work, most days. ~ so2
+3: Doc, the blood draw tray is ready whenever you want it. ~
+2: Thanks, give me five minutes. Let me check you. Temperature 37.9, blood pressure 132 over 84, pulse 84. ~ v pause=12
+1: Is the temperature high? ~
+2: Slightly. Let me see the knee. ~ pause=10
+1: Careful. ~
+2: There's swelling over the front of the right knee, like a bag of fluid in front of the kneecap. ~ x1
+1: That's what I've been looking at. ~
+2: It's warm, and tender over the kneecap itself. The knee still bends fully, though. ~ x2 x3 x4
+1: It bends, yes. ~
+2: Any trouble with your breathing, chest? ~ r1
+1: No, nothing at all, my chest is fine. ~ r1
+2: This could be bursitis from kneeling, but I can't rule out an infection in the bursa, given the warmth and the temperature. ~ d1 d2
+1: Infection? From kneeling? ~
+2: It happens when the skin gets broken. I'd like to arrange blood tests, including inflammation markers, and an X-ray of the knee. ~ p1 p2
+3: I can draw the bloods now, if you like. ~
+2: Please. And I'd like to do an ultrasound of the knee, and I may need to draw some fluid out with a needle. ~ p3 p4
+1: Sounds unpleasant. ~
+2: It's quick. Stop the ibuprofen on an empty stomach, and rest the knee, no kneeling for now. ~ c1
+1: That's a week's pay gone. ~
+2: I'd like to see you again in two days. ~ f2
+1: Two days. I'll be here. ~
+@@
+{"chief_complaint":{"value":"My right knee swelled up five days ago","normalized_value":"Right knee swelling after kneeling at work"},
+ "symptoms":[{"k":"s1","name":"swelled up","normalized_name":"Right knee swelling","category":"musculoskeletal","body_site":"right knee","duration":{"value":5,"unit":"days","normalized":"5 days"}},
+  {"k":"s2","name":"it hurts in the knee","normalized_name":"Right knee pain","category":"musculoskeletal","body_site":"right knee","certainty":"uncertain"},
+  {"k":"s3","name":"Stiff after sitting","normalized_name":"Knee stiffness after sitting","category":"musculoskeletal","body_site":"right knee"},
+  {"k":"s4","name":"Warm to the touch","normalized_name":"Warmth of right knee","category":"musculoskeletal","body_site":"right knee"},
+  {"k":"s5","name":"Tender when I press","normalized_name":"Prepatellar tenderness","category":"musculoskeletal","body_site":"front of right knee"}],
+ "negative_findings":[{"k":"n1","finding":"fever","normalized_name":"Fever"},{"k":"n2","finding":"Redness","normalized_name":"Redness"},{"k":"n3","finding":"lock","normalized_name":"Knee locking"},{"k":"n4","finding":"fall","normalized_name":"Fall or twisting injury"},{"k":"n5","finding":"Chills","normalized_name":"Chills or sweats"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Type 2 diabetes","normalized_condition":"Type 2 diabetes mellitus"},{"k":"h2","condition":"high blood pressure","normalized_condition":"Hypertension"}],
+  "surgical_history":[{"k":"sg1","procedure":"Left knee scope","normalized_procedure":"Left knee arthroscopy","timeframe":"in 2015"},{"k":"sg2","procedure":"right shoulder surgery","normalized_procedure":"Right shoulder surgery","timeframe":"in 2019"}],
+  "family_history":[{"k":"f1","relation":"father","condition":"gout"},{"k":"f2","relation":"mother","condition":"arthritis"}],
+  "social_history":[{"k":"so1","category":"occupation","details":"Flooring installer, mostly tile"},{"k":"so2","category":"alcohol","details":"Two beers after work, most days"}]},
+ "medications":[{"k":"m1","name":"Ibuprofen","dose":"400 mg","frequency":"three times a day","indication":"the knee"},{"k":"m2","name":"Metformin","dose":"500 mg","frequency":"twice a day"},{"k":"m3","name":"Lisinopril","dose":"10 mg","frequency":"once a day"},{"k":"m4","name":"omeprazole","dose":"20 mg","frequency":"once a day"}],
+ "allergies":[{"k":"a1","substance":"Penicillin","reaction":"lips swelled up"}],
+ "vitals":{"k":"v","by":"doctor","bp":"132/84","hr":84,"temp":37.9},
+ "physical_examination":[{"k":"x1","finding":"swelling over the front of the right knee","normalized_finding":"Prepatellar swelling, right knee","body_site":"right knee"},{"k":"x2","finding":"It's warm","normalized_finding":"Warm right knee","body_site":"right knee"},{"k":"x3","finding":"tender over the kneecap","normalized_finding":"Patellar tenderness","body_site":"right knee"},{"k":"x4","finding":"The knee still bends fully","normalized_finding":"Full knee flexion","body_site":"right knee"}],
+ "review_of_systems":[{"k":"r1","system":"respiratory"}],
+ "clinical_assessment":[{"k":"d1","assessment":"bursitis from kneeling","certainty":"differential"},{"k":"d2","assessment":"an infection in the bursa","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood tests, including inflammation markers","normalized_name":"Blood tests with inflammatory markers","type":"laboratory"},{"k":"p2","name":"X-ray of the knee","normalized_name":"Knee X-ray","type":"imaging"},{"k":"p3","name":"ultrasound of the knee","normalized_name":"Knee ultrasound","type":"imaging"},{"k":"p4","name":"draw some fluid out with a needle","normalized_name":"Aspiration of bursal fluid","type":"other"}],
+ "counsel":[["c1","Rest the knee and avoid kneeling for now"]],
+ "follow_up":[{"k":"f2","time_reference":"in two days"}],
+ "clinical_uncertainties":[{"type":"date_uncertain","description":"The patient cannot say when the knee pain began relative to the swelling.","related_entities":["symptoms[1]"],"k":"u1"},
+  {"type":"uncertain_dose","description":"The patient is unsure of the ibuprofen dose ('maybe 400 mg').","related_entities":["medications[0]"],"k":"u2"},
+  {"type":"adherence_uncertain","description":"Patient takes metformin with breakfast and dinner but admits skipping some dinners.","related_entities":["medications[1]"],"k":"u3"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}
+
+## 00837 PATIENT=1 DOCTOR=2 NURSE=3 FAMILY_MEMBER=4
+2: Mr Pryce, the booking says a painful big toe. Come in, sit, and I'll help you with that foot. Is this your wife? ~
+4: I'm Gwen. He's been up all night. I told him to ring last week. ~
+1: It's my big toe, doctor, the left one. It came on suddenly two days ago and it's the worst pain I've ever had. Is it broken? Is it infected? Is it going to be amputated? ~ cc s1
+2: It's very unlikely to be any of those. Describe the pain. ~ s1
+1: Throbbing, severe, ten out of ten. Even the bedsheet on it is agony. ~ s1 s2
+2: Is it swollen? ~ s3
+1: Swollen like a plum, and hot. ~ s3 s4
+2: Are you limping? ~ s5
+4: He couldn't get his shoe on this morning. He's hopping about the kitchen. ~ s5
+2: Did you knock it, or drop something on it? ~ n1
+1: No, nothing. I didn't hurt it. ~ n1
+2: Any fever or shivers? ~ n2
+1: A bit warm last night, but no fever, no. ~ n2
+2: Pain in any other joints? ~ n3
+1: No, just the toe. ~ n3
+2: Any rash? ~ n4
+1: No rash. ~ n4
+3: Doctor, would you like him on the couch with the foot up? ~
+2: Yes please, nurse. Mr Pryce, what medicines are you taking? ~ m1 m2
+1: Allopurinol, 100 mg, once a day. And naproxen, 250 mg, I took one last night, it did nothing. ~ m1 m2
+2: Any allergies? ~ a1
+1: Penicillin, when I was a boy. I had a rash. ~ a1
+2: Medical history? ~ h1 h2 h3
+1: Gout, from years ago. High blood pressure. And I'm overweight, I know. ~ h1 h2 h3
+2: Surgery? ~ sg1
+1: Gallbladder, in 2016. ~ sg1
+2: Gout in the family? ~ f1
+1: My father had it terribly. ~ f1
+2: What do you do? ~ so1
+1: I drive a bus. Twelve hours. It's my foot on the pedal, doctor, I can't work like this. ~ so1
+2: Do you drink? ~ so2
+1: Four pints on a Saturday, and wine with dinner. ~ so2
+2: And what do you eat? ~ so3
+4: Red meat, and he loves shellfish at the weekend. ~ so3
+2: Let me check you. Pulse 86, blood pressure 150 over 94, temperature 37.4, oxygen 97 percent, breathing 16, weight 104 kilos. ~ v pause=15
+1: Is the pressure dangerous? ~
+2: High, from the pain. Now, the toe. I'll be gentle. ~ pause=10
+1: Ow! Stop! ~
+2: The base of the left big toe is red, hot and swollen, and it's extremely tender to touch. ~ x1 x2
+1: I told you. ~
+2: The other toes look fine, and the ankle moves normally. ~ x3
+4: Is it infected? ~
+2: Any trouble with your chest or breathing, Mr Pryce? ~ r1
+1: No, nothing, I'm fine in that way. ~ r1
+2: This looks like a gout flare, the classic big toe. ~ d1
+1: Not broken then? ~
+2: I don't think so, but I'd like to arrange a uric acid blood test, a kidney function test, and an X-ray of the foot. ~ p1 p2 p3
+3: I'll book the X-ray for this afternoon. ~
+2: Thank you. Keep taking the naproxen with food, rest the foot, and drink plenty of water. ~ c1
+1: Can I go to work? ~
+2: Not on the pedal for a few days. I'd like to see you again in two weeks. ~ f2
+4: Two weeks, I'll make sure he comes. ~
+@@
+{"chief_complaint":{"value":"my big toe, doctor, the left one","normalized_value":"Acute left big toe pain for 2 days"},
+ "symptoms":[{"k":"s1","name":"Throbbing, severe","normalized_name":"Severe throbbing toe pain","category":"musculoskeletal","body_site":"left big toe","duration":{"value":2,"unit":"days","normalized":"2 days"},"severity":"severe","onset":"suddenly"},
+  {"k":"s2","name":"agony","normalized_name":"Pain on contact with bedsheet","category":"musculoskeletal","body_site":"left big toe"},
+  {"k":"s3","name":"Swollen","normalized_name":"Toe swelling","category":"musculoskeletal","body_site":"left big toe"},
+  {"k":"s4","name":"hot","normalized_name":"Toe warmth","category":"musculoskeletal","body_site":"left big toe"}],
+ "negative_findings":[{"k":"n1","finding":"hurt it","normalized_name":"Injury to the toe"},{"k":"n2","finding":"fever","normalized_name":"Fever"},{"k":"n3","finding":"other joints","normalized_name":"Pain in other joints"},{"k":"n4","finding":"rash","normalized_name":"Rash"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Gout","normalized_condition":"Gout"},{"k":"h2","condition":"High blood pressure","normalized_condition":"Hypertension"},{"k":"h3","condition":"overweight","normalized_condition":"Overweight"}],
+  "surgical_history":[{"k":"sg1","procedure":"Gallbladder","normalized_procedure":"Cholecystectomy","timeframe":"in 2016"}],
+  "family_history":[{"k":"f1","relation":"father","condition":"gout"}],
+  "social_history":[{"k":"so1","category":"occupation","details":"drive a bus"},{"k":"so2","category":"alcohol","details":"Four pints on a Saturday, and wine with dinner"},{"k":"so3","category":"diet","details":"Red meat, and he loves shellfish at the weekend","reported_by":"family_member"}]},
+ "medications":[{"k":"m1","name":"Allopurinol","dose":"100 mg","frequency":"once a day"},{"k":"m2","name":"naproxen","dose":"250 mg"}],
+ "allergies":[{"k":"a1","substance":"Penicillin","reaction":"rash","status":"historical"}],
+ "vitals":{"k":"v","by":"doctor","bp":"150/94","hr":86,"temp":37.4,"spo2":97,"rr":16,"wt":104},
+ "physical_examination":[{"k":"x1","finding":"left big toe is red, hot and swollen","normalized_finding":"Red hot swollen left first MTP joint","body_site":"left big toe"},{"k":"x2","finding":"extremely tender to touch","normalized_finding":"Marked tenderness of left big toe","body_site":"left big toe"},{"k":"x3","finding":"ankle moves normally","normalized_finding":"Normal ankle movement","body_site":"left ankle"}],
+ "review_of_systems":[{"k":"r1","system":"respiratory"}],
+ "clinical_assessment":[{"k":"d1","assessment":"a gout flare","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"uric acid blood test","normalized_name":"Serum uric acid","type":"laboratory"},{"k":"p2","name":"kidney function test","normalized_name":"Renal function tests","type":"laboratory"},{"k":"p3","name":"X-ray of the foot","normalized_name":"Foot X-ray","type":"imaging"}],
+ "counsel":[["c1","Keep taking naproxen with food, rest the foot and drink plenty of water"]],
+ "follow_up":[{"k":"f2","time_reference":"in two weeks"}],
+ "quality_checks":{"contradictions_detected":[],"ambiguous_entities":[]}}

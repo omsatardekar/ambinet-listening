@@ -1,0 +1,96 @@
+## 00742 PATIENT=1 DOCTOR=2
+1: Hello, doctor. I've come about the weight clinic, I think? Or was it the diabetes clinic? Oh, the letter's in my bag somewhere. ~ cc
+2: The obesity clinic, yes, I've got your referral here. Don't worry about the letter. Tell me what you're hoping for today. ~
+1: To lose weight. I've been trying for years, diets, the gym, all of it, and I put it all back on. I'm up to the highest I've ever been. ~ s1
+2: How much do you weigh now, as far as you know? ~ s1
+1: I haven't weighed myself in a month, because the scales scare me. Last time it was a hundred and fourteen. ~ s1
+2: And how's that affecting you day to day? ~
+1: Knees ache, I get out of breath on the stairs, and I'm tired. ~ r1
+2: Any chest pain, or breathlessness at rest? ~ r1
+1: No, nothing at rest. Just on the stairs. ~ r1
+2: Let me measure you. Stand up, please. ~
+1: Do I have to take my shoes off? ~
+2: Please. I'll measure around your waist, over the belly button. ~ pause=20
+1: Is that bad? ~
+2: Your waist measures 112 centimetres, which is in the high-risk range for heart and diabetes problems. ~ x1
+1: Hmm. I figured. ~
+2: I'm going to be honest with you, and kind: this is a medical condition, not a failure of willpower. There are treatments, including injections, but we start by understanding your whole picture. ~
+1: I've heard about the injections. A neighbour has them. ~
+2: They can work very well for the right people. I'm not starting anything today, because I want your tests first. ~
+1: What tests? ~
+2: I'd like to arrange blood tests, for sugar, cholesterol, liver, kidneys and thyroid, to see what weight is doing to you and whether anything else is contributing. ~ p1
+1: When? ~
+2: The nurse can take them before you leave. ~
+1: Right. ~
+2: Next, a dietitian will see you, and I'd like you to see them before the next appointment. ~ r1
+1: A dietitian, not just a leaflet? ~
+2: A proper person, for an hour, to look at what you eat and how. ~
+1: That sounds helpful. ~
+2: For now, keep a food diary for two weeks, everything you eat and drink, honestly, and walk twenty minutes a day. ~ c1
+1: A diary, I can do that. I'll put it on my phone. ~
+2: Don't change anything yet, just record. ~
+1: Right. ~
+2: Any questions? ~
+1: Yes, where did I put my keys? ~
+2: Check your coat pocket. ~
+1: There they are. Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"I've come about the weight clinic","normalized_value":"Weight management clinic assessment"},
+ "symptoms":[{"k":"s1","name":"lose weight","normalized_name":"Obesity with weight regain","category":"constitutional"}],
+ "physical_examination":[{"k":"x1","finding":"waist measures 112 centimetres","normalized_finding":"Waist circumference 112 cm","body_site":"waist"}],
+ "review_of_systems":[{"k":"r1","system":"cardiorespiratory","status":"negative","details":"exertional breathlessness only on stairs"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood tests","normalized_name":"HbA1c, lipids, liver, renal and thyroid function","type":"laboratory"}],
+ "clinical_actions":[{"k":"r1","action_type":"referral","description":"Refer to dietitian before next appointment"}],
+ "counsel":[["c1","Keep a two-week food diary and walk twenty minutes a day"]]}
+
+## 00745 PATIENT=1 DOCTOR=2
+1: Good afternoon, doctor. I'll be precise: I had a tick bite on my left thigh twelve days ago, and there's now a red patch that keeps getting bigger. ~ cc s1
+2: Thank you, that's very helpful. How big is it now? ~ s1
+1: I measured it this morning, about fifteen centimetres across. The centre's paler, so it looks like a target. ~ s1
+2: Is it painful or itchy? ~ s2
+1: A bit warm, and slightly itchy. Not painful. ~ s2
+2: Any fever, shivers, or headache? ~ n1
+1: No fever. I've felt a little tired, and I had a mild headache on Tuesday, but no stiff neck. ~ n1 n2
+2: Any stiff neck, or facial drooping, or joint swelling? ~ n2
+1: No, none of that. ~ n2
+2: Are you on any medicines? ~ m1
+1: Omeprazole, 20 mg once a day. ~ m1
+2: Any other conditions? ~ h1 h2
+1: Asthma, mild, and eczema. ~ h1 h2
+2: Any operations? ~ sg1
+1: Tonsils out as a child. ~ sg1
+2: Where were you when you were bitten? ~ so1
+1: Walking in the Scottish Highlands, I do a lot of hill walking. ~ so1
+2: Pulse and temperature first, please. ~
+1: Of course. ~
+2: Temperature 36.8, pulse 70, blood pressure 122 over 76, oxygen 99 percent, respiratory rate 14. ~ v pause=12
+1: Good, no fever then. ~
+2: Let me look at the patch. Could you pull your trousers up? ~
+1: Certainly. ~ pause=15
+2: There's an expanding red ring on the left thigh about fifteen centimetres across, with central clearing, and a tiny scab at the centre where the tick was. ~ x1
+1: That's what I thought, erythema migrans. ~
+2: You've done your homework. The look of it, plus the tick bite, makes Lyme disease very likely, though I can't rule out cellulitis, which can look similar. ~ d1
+1: Do I need blood tests? ~
+2: Not to start treatment, because the rash itself is enough. But I'd like to arrange blood tests, to check your baseline, and Lyme serology, though it can be negative this early. ~ p1 p2
+1: Right. And treatment? ~
+2: I'm going to prescribe doxycycline, 100 mg twice a day, for three weeks. ~ m2
+1: Three weeks? Not two? ~
+2: It's the current recommendation. Take it with food and a full glass of water, and stay out of strong sun. ~ c1
+1: I will. ~
+2: If the rash is still spreading after a few days of treatment, or you develop a fever, a stiff neck, a droopy face, or joint swelling, come back or go to hospital. ~ f1
+1: Understood. ~
+@@
+{"chief_complaint":{"value":"I had a tick bite on my left thigh twelve days ago","normalized_value":"Expanding rash after tick bite"},
+ "symptoms":[{"k":"s1","name":"red patch that keeps getting bigger","normalized_name":"Expanding erythematous rash","category":"dermatological","body_site":"left thigh","duration":{"value":12,"unit":"days","normalized":"12 days"}},
+  {"k":"s2","name":"itchy","normalized_name":"Warmth and itch at rash","category":"dermatological"}],
+ "negative_findings":[{"k":"n1","finding":"fever","normalized_name":"Fever"},{"k":"n2","finding":"stiff neck","normalized_name":"Meningism, facial palsy or joint swelling"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Asthma","normalized_condition":"Asthma"},{"k":"h2","condition":"eczema","normalized_condition":"Eczema"}],"surgical_history":[{"k":"sg1","procedure":"Tonsils out","normalized_procedure":"Tonsillectomy","timeframe":"as a child"}],
+  "social_history":[{"k":"so1","category":"exercise","description":"Hill walking","details":"I do a lot of hill walking"}]},
+ "medications":[{"k":"m1","name":"Omeprazole","dose":"20 mg","frequency":"once a day"},{"k":"m2","name":"doxycycline","status":"planned","reported_by":"doctor","dose":"100 mg","frequency":"twice a day","duration":{"value":3,"unit":"weeks","normalized":"3 weeks"}}],
+ "vitals":{"k":"v","temp":36.8,"hr":70,"bp":"122/76","spo2":99,"rr":14},
+ "physical_examination":[{"k":"x1","finding":"expanding red ring on the left thigh about fifteen centimetres across","normalized_finding":"Annular erythema 15 cm with central clearing and tick bite scab","body_site":"left thigh"}],
+ "clinical_assessment":[{"k":"d1","assessment":"cellulitis","certainty":"differential"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood tests","normalized_name":"Baseline blood tests","type":"laboratory"},{"k":"p2","name":"Lyme serology","normalized_name":"Borrelia serology","type":"laboratory"}],
+ "counsel":[["c1","Take doxycycline with food and a full glass of water and avoid strong sun"]],
+ "follow_up":[{"k":"f1","time_reference":"If the rash is still spreading after a few days of treatment, or you develop a fever, a stiff neck, a droopy face, or joint swelling","status":"conditional"}]}
+

@@ -1,0 +1,48 @@
+## 00904 PATIENT=1 DOCTOR=2
+1: Hello. My irritable bowel is flaring up again, and I've got exams in two weeks, so I'm panicking a bit. ~ cc s1
+2: Okay, let's see what we can do. What's your tummy doing at the moment? ~ s1
+1: Cramping and cramping. Mostly lower down. Then I'm in the toilet a lot. ~ s1
+2: When did this flare start? ~ s1 u1
+1: I'm not sure. Maybe a week ago, or ten days? It crept up on me. ~ s1 u1
+2: Is the stool loose or hard? ~ s2
+1: Loose, mostly. Sometimes constipated for a day, then loose again. ~ s2
+2: Any blood in the stool, or weight loss? ~ n1
+1: No blood. I've not lost any weight that I know of. ~ n1
+2: Has this happened during exams before? ~ h1
+1: Yes, every exam season. I've had IBS since I was sixteen. ~ h1
+2: Fine, that's helpful. I'd like to check your pulse, temperature and blood pressure. ~
+1: Go ahead. ~ pause=10
+2: Pulse 78, blood pressure 116 over 72, temperature 36.7, oxygen 99 percent, breathing 14. ~ v
+1: Are they all right? ~
+2: All normal. Let me press on your tummy. Tell me if anything is sore. ~
+1: A bit there, on the left. ~ pause=14
+2: Mild tenderness in the left lower abdomen, soft, no guarding and no lumps. ~ x1
+1: Is that the IBS? ~
+2: It fits with an IBS flare brought on by stress. Nothing here worries me. ~ d1
+1: Is there anything I can take? ~
+2: Peppermint oil capsules can ease the cramping. And a low-FODMAP diet can help for a few weeks. ~ c1
+1: What's low-FODMAP? ~
+2: A diet that cuts out certain fermentable carbohydrates, like onions, garlic, and some fruits. I'll give you a leaflet. ~ c2
+1: Okay. I can try that. ~
+2: How are you sleeping and eating during revision? ~
+1: Badly, to be honest. Lots of coffee and not much food. ~
+2: Try regular meals and less coffee. Even a short walk each day helps a flare. ~ c3
+1: I'll try. ~
+2: I'll also arrange a blood test and a stool test, just to be certain that nothing else is going on. ~ p1
+1: Will I get the results before my exams? ~
+2: Yes, within the week. If you're not better in two weeks, come back and we'll talk again. ~ f1
+1: Thank you, doctor. That's a relief. ~
+@@
+{"chief_complaint":{"value":"My irritable bowel is flaring up again","normalized_value":"Irritable bowel syndrome flare"},
+ "symptoms":[{"k":"s1","name":"Cramping","normalized_name":"Lower abdominal cramping with frequent bowel motions","category":"gastrointestinal","body_site":"lower abdomen"},
+  {"k":"s2","name":"Loose","normalized_name":"Loose stools alternating with constipation","category":"gastrointestinal"}],
+ "negative_findings":[{"k":"n1","finding":"blood","normalized_name":"Blood in stool or weight loss"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"IBS","normalized_condition":"Irritable bowel syndrome"}]},
+ "vitals":{"k":"v","hr":78,"bp":"116/72","temp":36.7,"spo2":99,"rr":14},
+ "physical_examination":[{"k":"x1","finding":"Mild tenderness in the left lower abdomen","normalized_finding":"Mild left iliac fossa tenderness; soft, no guarding","body_site":"left lower abdomen"}],
+ "clinical_assessment":[{"k":"d1","assessment":"an IBS flare brought on by stress","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"blood test","normalized_name":"Blood and stool tests","type":"laboratory"}],
+ "counsel":[["c1","Peppermint oil capsules for cramping"],["c2","Low-FODMAP diet with leaflet"],["c3","Regular meals, less coffee, short daily walk"]],
+ "follow_up":[{"k":"f1","time_reference":"in two weeks","status":"conditional"}],
+ "clinical_uncertainties":[{"k":"u1","type":"date_uncertain","description":"Patient unsure when the flare began (\"a week ago, or ten days?\").","related_entities":["symptoms[0]"]}]}
+

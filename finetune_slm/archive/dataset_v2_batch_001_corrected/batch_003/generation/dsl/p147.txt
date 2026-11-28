@@ -1,0 +1,44 @@
+## 00903 PATIENT=1 DOCTOR=2 NURSE=3
+1: I don't know what happened. I was in the shopping centre and then I was on the floor and people were standing over me. ~ cc s1
+2: That must have been frightening. I'm glad you're here. What's the last thing you remember before it happened? ~ s1
+1: I was walking, and I felt a bit hot, and my vision went sort of grey. ~ s1 s2
+2: And the next thing you remember? ~
+1: A lady holding my hand. And the ambulance people. ~
+3: Doctor, the ambulance crew said he was out for about a minute, and a bystander saw no shaking. ~ n1
+2: Thank you. Did you bite your tongue or lose control of your bladder? ~ n2
+1: No, nothing like that. ~ n2
+2: Did you have chest pain, or a racing heart before? ~ n3
+1: No chest pain. My heart wasn't racing. ~ n3
+2: Have you eaten today? ~
+1: Not really. A coffee this morning, that's all. I was in a rush. ~
+2: And have you fainted before? ~
+1: Never. This is the first time. ~
+2: Do you take any tablets? ~ m1 m2
+1: Tamsulosin in the evenings, I can't remember the strength. And a baby aspirin, 75 mg, in the morning. ~ m1 m2 u1
+2: Do you have any medical problems? ~ h1
+1: An enlarged prostate. That's it. ~ h1
+3: Doctor, I've done his observations on arrival. Pulse 62, blood pressure 108 over 64 sitting, temperature 36.4, oxygen 98 percent, breathing 16. ~ v
+2: Thank you. Let me check it standing as well, if you're steady. ~
+1: I'll try. ~ pause=18
+2: Standing blood pressure is 92 over 58, and you feel light-headed? ~
+1: Yes. A little, yes. ~
+2: That drop explains it. I think you fainted because your pressure dropped on standing, with not eating, and the tamsulosin. ~ d1
+1: Is it serious? ~
+2: Usually not, but I want to be sure about your heart, so I'll record a heart tracing now and take blood. ~ p1 p2
+1: Okay. ~
+3: I'll take you through to the bay. ~
+2: Please drink fluids and have something to eat before you leave. ~ c1
+1: I will. Thank you. ~
+@@
+{"chief_complaint":{"value":"I was in the shopping centre and then I was on the floor and people were standing over me","normalized_value":"Collapse in a public place"},
+ "symptoms":[{"k":"s1","name":"I felt a bit hot","normalized_name":"Prodromal warmth","category":"constitutional"},
+  {"k":"s2","name":"vision went sort of grey","normalized_name":"Visual greying before collapse","category":"neurological"}],
+ "negative_findings":[{"k":"n2","finding":"bite your tongue","normalized_name":"Tongue biting or incontinence"},{"k":"n3","finding":"chest pain","normalized_name":"Chest pain or palpitations"},{"k":"n1","finding":"no shaking","normalized_name":"Seizure-like movements","reported_by":"nurse"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"An enlarged prostate","normalized_condition":"Benign prostatic hyperplasia"}]},
+ "medications":[{"k":"m1","name":"Tamsulosin","frequency":"in the evenings"},{"k":"m2","name":"baby aspirin","normalized_name":"Aspirin","generic_name":"Aspirin","dose":"75 mg","frequency":"in the morning"}],
+ "vitals":{"k":"v","by":"nurse","hr":62,"bp":"108/64","temp":36.4,"spo2":98,"rr":16},
+ "clinical_assessment":[{"k":"d1","assessment":"you fainted because your pressure dropped on standing","normalized_assessment":"Orthostatic syncope","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"heart tracing","normalized_name":"Electrocardiogram","type":"cardiac"},{"k":"p2","name":"blood","normalized_name":"Blood tests","type":"laboratory"}],
+ "counsel":[["c1","Drink fluids and eat before leaving"]],
+ "clinical_uncertainties":[{"k":"u1","type":"uncertain_dose","description":"Patient cannot recall the tamsulosin strength; no dose given.","related_entities":["medications[0]"]}]}
+

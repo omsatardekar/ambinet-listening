@@ -1,0 +1,129 @@
+## 00621 PATIENT=1 DOCTOR=2
+1: Good afternoon, doctor. I appreciate you fitting me in. My wife thinks I should have this looked at, so here I am. ~
+2: Happy to. Tell me, in your own words, what's been bothering you? ~
+1: Well, I snore, apparently. Quite loudly. But the thing that actually worries me is that I fall asleep in meetings. ~ cc s1 s2
+2: How often is that happening, the falling asleep? ~ s2
+1: Two or three times a week now. Last Thursday I nodded off while presenting the quarterly numbers. It was mortifying. ~ s2
+2: That sounds exhausting. And the snoring, does anyone say anything else about your nights? ~ s1
+1: My wife says I stop breathing for a few seconds and then gasp. She finds it frightening. I've been snoring for years, but it's worse the last six months. ~ s1
+2: Anything else you've noticed, mornings in particular? ~ s3
+1: Yes, I wake up with a dull headache most days. Morning headaches, right across the front, gone by lunchtime. ~ s3
+2: Any chest pain, or pain in your chest when you walk up stairs? ~ n1
+1: No chest pain, no. ~ n1
+2: And any swelling in your legs by evening? ~ n2
+1: No swelling of the legs. My ankles are fine. ~ n2
+2: Now, what medicines do you take? ~ m1 m2
+1: Lisinopril, 10 mg once a day, every morning without fail. Metformin 500 mg twice a day, although if I'm honest I skip the evening one when dinner runs late. ~ m1 m2 u1
+2: Okay, so the metformin is prescribed twice a day but some evenings it doesn't get taken. That's useful to know, thank you. Any allergies to medicines? ~ m2 u1 a1
+1: Sulfa drugs. I came out in hives once when I was given an antibiotic. ~ a1
+2: Noted. And your wider history, the diabetes, the blood pressure, anything else? ~ h1 h2 h3
+1: Type 2 diabetes for about eight years, high blood pressure, and high cholesterol. They're managed, I believe. ~ h1 h2 h3
+2: Any operations? ~ sg1
+1: I had a knee replacement, the right one, in 2019. ~ sg1
+2: Any sleep apnoea or diabetes in the family? ~ f1
+1: My mother had diabetes. As far as I know there's no sleep trouble in the family. ~ f1
+2: And what do you do for work, and do you drink? ~ so1 so2
+1: I'm an accountant. I'll have two beers on a Saturday, no more than that. ~ so1 so2
+2: Thank you. Let me check your numbers. Your breathing, any cough or breathlessness, first? ~ r1
+1: No, my breathing's fine. ~ r1
+2: Pulse 82, blood pressure 142 over 88, temperature 36.6, oxygen 96 percent, breathing 16 times a minute. You weigh 104 kilos and you're 178 centimetres, so your BMI is 32.8. ~ v pause=20
+1: Is the blood pressure a problem? ~
+2: It's a bit higher than I'd like, and I think the sleep issue may be part of it. Open wide for me, say ahh. ~
+1: Ahh. ~
+2: Your airway is narrow at the back of the throat, your lungs are clear, and your heart sounds are normal. ~ x1 x2 x3 pause=15
+1: So what do you make of it all? ~
+2: Given the snoring, the pauses your wife sees, the daytime sleepiness and the morning headaches, this fits best with obstructive sleep apnoea. ~ d1
+1: I've read a bit about that. Is it dangerous? ~
+2: Untreated it can raise blood pressure and strain the heart, and it's risky if you're drowsy at the wheel. That's why we should sort it. ~
+1: Understood. What happens next? ~
+2: I'd like to arrange a sleep study, which you do at home with a small monitor overnight. ~ p1
+1: At home is convenient. ~
+2: I'll also order blood tests, including your HbA1c and thyroid, and let's do an ECG here today to check your heart. ~ p2 p3
+1: All right. And in the meantime? ~
+2: Avoid drinking in the evening, try sleeping on your side, and please don't drive when you feel drowsy. ~ c1
+1: I'll be careful. How soon will I hear? ~
+2: Come back and see me in three weeks and we'll go through all the results together. ~ f1
+1: Three weeks. Thank you, doctor, I feel much better having a plan. ~
+2: Good. See you then. ~
+@@
+{"chief_complaint":{"value":"I fall asleep in meetings","normalized_value":"Daytime sleepiness"},
+ "symptoms":[{"k":"s1","name":"snore","normalized_name":"Snoring","category":"respiratory","duration":null,"onset":"worse the last six months"},
+  {"k":"s2","name":"fall asleep in meetings","normalized_name":"Daytime sleepiness","category":"neurological","frequency":"Two or three times a week"},
+  {"k":"s3","name":"Morning headaches","normalized_name":"Morning headache","category":"neurological","body_site":"forehead"}],
+ "negative_findings":[{"k":"n1","finding":"chest pain","normalized_name":"Chest pain"},{"k":"n2","finding":"swelling of the legs","normalized_name":"Leg swelling"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Type 2 diabetes","normalized_condition":"Type 2 diabetes mellitus","duration":{"value":8,"unit":"years","normalized":"8 years"}},{"k":"h2","condition":"high blood pressure","normalized_condition":"Hypertension"},{"k":"h3","condition":"high cholesterol","normalized_condition":"Hypercholesterolaemia"}],
+  "surgical_history":[{"k":"sg1","procedure":"knee replacement","normalized_procedure":"Total knee replacement","timeframe":"in 2019"}],
+  "family_history":[{"k":"f1","condition":"diabetes","normalized_condition":"Diabetes mellitus","relation":"mother"}],
+  "social_history":[{"k":"so1","category":"occupation","description":"Accountant","details":"accountant"},{"k":"so2","category":"alcohol","description":"Occasional alcohol","details":"two beers on a Saturday"}]},
+ "medications":[{"k":"m1","name":"Lisinopril","dose":"10 mg","frequency":"once a day"},{"k":"m2","name":"Metformin","dose":"500 mg","frequency":"twice a day"}],
+ "allergies":[{"k":"a1","substance":"Sulfa drugs","normalized_substance":"Sulfonamide antibiotics","reaction":"hives"}],
+ "vitals":{"k":"v","hr":82,"bp":"142/88","temp":36.6,"spo2":96,"rr":16,"wt":104,"ht":178,"bmi":32.8},
+ "physical_examination":[{"k":"x1","finding":"airway is narrow at the back of the throat","normalized_finding":"Narrow oropharyngeal airway","body_site":"throat"},{"k":"x2","finding":"lungs are clear","normalized_finding":"Clear lungs","body_site":"chest"},{"k":"x3","finding":"heart sounds are normal","normalized_finding":"Normal heart sounds","body_site":"chest"}],
+ "review_of_systems":[{"k":"r1","system":"respiratory"}],
+ "clinical_assessment":[{"k":"d1","assessment":"obstructive sleep apnoea","certainty":"provisional"}],
+ "procedures_and_investigations":[{"k":"p1","name":"sleep study","normalized_name":"Home sleep study","type":"other"},{"k":"p2","name":"blood tests","normalized_name":"HbA1c and thyroid function","type":"laboratory"},{"k":"p3","name":"ECG","normalized_name":"Electrocardiogram","type":"cardiac","scheduled_datetime":"today"}],
+ "clinical_actions":[{"k":"p1","action_type":"investigation","description":"Arrange Home sleep study"},{"k":"p2","action_type":"investigation","description":"Arrange HbA1c and thyroid function"},{"k":"p3","action_type":"investigation","description":"Arrange Electrocardiogram"},
+  {"k":"c1","action_type":"counselling","description":"Advise avoiding evening alcohol, side sleeping and not driving when drowsy","status":"recommended","responsible_person":"patient"},
+  {"k":"f1","action_type":"follow_up","description":"Follow-up consultation","time_reference":{"value":"in three weeks","normalized_date":null}}],
+ "follow_up":[{"k":"f1","time_reference":"in three weeks"}],
+ "clinical_uncertainties":[{"k":"u1","type":"adherence_uncertain","description":"Metformin is prescribed twice a day but the patient says he skips the evening dose when dinner runs late; actual adherence unknown.","related_entities":["medications[1]"]}]}
+
+## 00623 PATIENT=1 DOCTOR=2 FAMILY_MEMBER=3
+1: Hello. Um. I don't really know why we're here, it was Mark's idea. ~
+3: I'm her husband, doctor. I made the appointment. I hope that's all right. ~
+2: Of course it is. Thanks for coming, both of you. Let's start with you, Sarah, what's been going on? ~
+1: I'm just... tired. I'm a nurse on the acute medical ward, so everyone's tired, it's the job. ~ cc so1
+2: You're not wrong, but you came in, so I'd like to hear about your tired. ~
+1: It's a different sort of tired. I wake up and I'm exhausted before I've done anything. I feel exhausted all the time. ~ s1
+2: How long has it been like that? ~ s1
+1: Since the winter, probably. I don't know, I stopped counting. ~ s1
+2: Okay. Are you having any trouble sleeping at the moment? ~ n1 s2 u2
+1: No, I'm sleeping fine, actually. Seven hours, more or less. ~ n1 u2
+3: She's up at three most nights, love. I hear her in the kitchen. ~ s2 u2
+1: That's, I just get a glass of water, Mark. That's not being awake. ~ s2
+2: Thanks for telling me, both of you. I'll note what you each said. Have you had any thoughts of harming yourself? ~ s2 n2
+1: No. Never. I'd tell you, I'm not that kind of tired. ~ n2
+2: I appreciate that. Let's look at the medicines. What are you taking at the moment? ~ m1 m2 m3 m4
+1: Sertraline, 100 mg once a day. Zopiclone, 3.75 mg at night, only when I need it. Omeprazole, 20 mg in the morning, and propranolol, 40 mg for the shakes when I have a bad shift. ~ m1 m2 m3 m4
+2: And the sertraline, you're taking that daily? ~ m1 u1
+1: Every day. I never miss it. ~ m1 u1
+3: She does miss it, love. I find the strip half full on Sundays. ~ m1 u1
+1: That was once, Mark. ~ m1 u1
+2: I'm not going to decide who's right here. I'll just record that you both told me different things. Any allergies to anything? ~ u1 a1
+1: Latex. I get a rash on my hands from the gloves. ~ a1
+2: Good to know. And your health background? ~ h1 h2 h3
+1: Depression, diagnosed a few years ago. Migraine, and acid reflux, which is what the omeprazole is for. ~ h1 h2 h3 m3
+2: And alcohol, do you drink? ~ so2
+1: I have a drink most evenings. A glass of wine, usually. It helps me switch off. ~ so2
+3: Mostly a glass. Sometimes two. ~
+2: Thanks. Let me check you over. ~
+3: I'll wait right here. ~
+2: Pulse 78, blood pressure 118 over 74, temperature 36.7, oxygen 99 percent. Your pulse is regular. ~ v x1 pause=14
+1: Is everything all right? ~
+2: Your numbers are fine. Sarah, this isn't weakness, it's what burnout looks like. You've been running on empty. ~
+1: I'm scared if I stop, I'll fall apart. ~
+2: What I'd like is a fit note for two weeks, to start with. We'll talk about your hours with occupational health as well. ~ c1
+1: I can't just leave my team short. ~
+3: Sarah, please. You're not the only nurse in the hospital. ~
+2: Take the two weeks, and let's see how you feel at the end. I'd like to see you again in four weeks. ~ f1
+1: Four weeks. Okay. Okay, I'll try. ~
+2: And Mark, thank you for bringing her. ~
+3: Thank you, doctor. ~
+@@
+{"chief_complaint":{"value":"I'm just... tired","normalized_value":"Persistent exhaustion"},
+ "symptoms":[{"k":"s1","name":"exhausted all the time","normalized_name":"Exhaustion","category":"constitutional","onset":"Since the winter"},
+  {"k":"s2","name":"up at three most nights","normalized_name":"Sleep disturbance","category":"neurological","reported_by":"family_member","certainty":"disputed"}],
+ "negative_findings":[{"k":"n1","finding":"trouble sleeping","normalized_name":"Sleep disturbance"},{"k":"n2","finding":"thoughts of harming yourself","normalized_name":"Thoughts of self-harm"}],
+ "medical_history":{"past_medical_history":[{"k":"h1","condition":"Depression","normalized_condition":"Depression"},{"k":"h2","condition":"Migraine","normalized_condition":"Migraine"},{"k":"h3","condition":"acid reflux","normalized_condition":"Gastro-oesophageal reflux disease"}],
+  "social_history":[{"k":"so1","category":"occupation","description":"Nurse on acute medical ward","details":"nurse on the acute medical ward"},{"k":"so2","category":"alcohol","description":"Daily glass of wine","details":"glass of wine"}]},
+ "medications":[{"k":"m1","name":"Sertraline","dose":"100 mg","frequency":"once a day"},{"k":"m2","name":"Zopiclone","dose":"3.75 mg","frequency":"at night"},{"k":"m3","name":"Omeprazole","dose":"20 mg","frequency":"in the morning","indication":"acid reflux"},{"k":"m4","name":"propranolol","dose":"40 mg","indication":"the shakes"}],
+ "allergies":[{"k":"a1","substance":"Latex","allergy_type":"environmental","reaction":"rash on my hands"}],
+ "vitals":{"k":"v","hr":78,"bp":"118/74","temp":36.7,"spo2":99},
+ "physical_examination":[{"k":"x1","finding":"pulse is regular","normalized_finding":"Regular pulse","body_site":"pulse"}],
+ "clinical_actions":[{"k":"c1","action_type":"counselling","description":"Fit note for two weeks and discuss hours with occupational health","status":"recommended","responsible_person":"patient"},
+  {"k":"f1","action_type":"follow_up","description":"Follow-up consultation","time_reference":{"value":"in four weeks","normalized_date":null}}],
+ "follow_up":[{"k":"f1","time_reference":"in four weeks"}],
+ "clinical_uncertainties":[{"k":"u2","type":"conflicting_statement","description":"Patient says she sleeps fine; her husband says she is up at three most nights (unresolved).","related_entities":["negative_findings[0]","symptoms[1]"]},
+  {"k":"u1","type":"adherence_uncertain","description":"Patient says she never misses sertraline; her husband says he finds the strip half full on Sundays; actual adherence unknown.","related_entities":["medications[0]"]}],
+ "quality_checks":{"contradictions_detected":["Patient denies trouble sleeping; family member reports she is up at three most nights (unresolved)."]}}
+
