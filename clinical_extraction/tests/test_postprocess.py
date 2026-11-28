@@ -96,3 +96,21 @@ def test_name_contained_in_another_name_merges_only_with_the_same_frequency_and_
     out, _ = postprocess.clean(x)
     assert [s["name"] for s in out["symptoms"]] == ["night sweats", "pain", "chest pain", "fatigue", "severe fatigue"]
     assert out["symptoms"][0]["evidence_ids"] == ["SEG0001", "SEG0002"]
+
+
+def test_flags_sentence_chief_complaint_and_idiom_symptoms():
+    ext = {"chief_complaint": {"value": "she wouldn't have come at all", "evidence_ids": ["S1"]},
+           "symptoms": [{"name": "I can't hear myself think", "status": "present", "evidence_ids": ["S2"]}]}
+    _, changes = postprocess.clean(ext)
+    rules = {c["rule"] for c in changes}
+    assert {"chief_complaint_wording", "speech_wording"} <= rules
+    assert all(postprocess.warning_for(c) for c in changes)
+
+
+def test_flags_misheard_medicine_but_not_correct_or_unknown_names():
+    ext = {"medications": [{"name": "Omprazole", "evidence_ids": ["S3"]}, {"name": "omeprazole"}, {"name": "Zyxbrellan"}, {"name": "Ompadazole"}]}
+    out, changes = postprocess.clean(ext)
+    flagged = {c["name"]: c["suggestion"] for c in changes if c["rule"] == "medication_spelling"}
+    assert flagged.get("Omprazole") == "omeprazole" and "omeprazole" not in flagged and "Zyxbrellan" not in flagged
+    assert [m["name"] for m in out["medications"]] == ["Omprazole", "omeprazole", "Zyxbrellan", "Ompadazole"]   # nothing rewritten
+    print(flagged)

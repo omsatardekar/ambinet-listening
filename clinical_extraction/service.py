@@ -17,7 +17,7 @@ import time
 from pathlib import Path
 from typing import Any, Callable
 
-from . import blob_sink, blob_source, evidence, postprocess, remote_client
+from . import blob_sink, blob_source, evidence, postprocess, remote_client, safety_checks
 from .compact import CompactTranscriptError, validate_compact
 from . import config
 from .config import DRAFT_NOTICE, extraction_python
@@ -232,6 +232,10 @@ class ExtractionService:
         extraction = self.store.read(job_id, "extraction_raw.json")
         derived = evidence.resolve_all(extraction, compact)
         self.store.write(job_id, "evidence.json", derived)
+        findings = safety_checks.check(extraction, derived)                                    # allergy denied in its own passage, allergy vs planned medicine, vital not in its passage
+        if findings:
+            self.store.write(job_id, "safety_checks.json", findings)
+            warnings.extend(f["warning"] for f in findings)
         totals = derived["totals"]
         schema = metadata.get("schema_validation") or {}
         if schema and not schema.get("compliant"):

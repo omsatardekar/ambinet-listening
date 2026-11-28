@@ -151,6 +151,47 @@ def _flag_speech_wording(out: dict, changes: list[dict]) -> None:
             changes.append({"rule": "speech_wording", "path": f"symptoms[{i}]", "name": s["name"], "evidence_ids": s.get("evidence_ids") or []})
 
 
+_SENTENCE_START = re.compile(r"^\s*(?:i|we|she|he|they)(?:'m|'ve|'d|'ll|n't| am| is| are| was| were| would| wouldn't| will| won't| have| has| had| can't| cannot| don't| do not| didn't| couldn't)\b", re.I)
+
+
+def _flag_chief_complaint_sentence(out: dict, changes: list[dict]) -> None:
+    cc = out.get("chief_complaint")
+    if isinstance(cc, dict) and isinstance(cc.get("value"), str) and _SENTENCE_START.match(cc["value"]):
+        changes.append({"rule": "chief_complaint_wording", "name": cc["value"], "evidence_ids": cc.get("evidence_ids") or []})
+
+
+# Common medicines used only to spot a mis-heard spelling ("Omprazole" for omeprazole). Nothing is rewritten; the clinician is told to check.
+_KNOWN_DRUGS = (
+    "omeprazole", "esomeprazole", "lansoprazole", "pantoprazole", "rabeprazole", "ranitidine", "famotidine", "gaviscon",
+    "paracetamol", "acetaminophen", "ibuprofen", "aspirin", "naproxen", "diclofenac", "codeine", "tramadol", "morphine",
+    "amoxicillin", "amoxycillin", "clarithromycin", "azithromycin", "doxycycline", "penicillin", "flucloxacillin", "ciprofloxacin", "metronidazole",
+    "metformin", "gliclazide", "insulin", "sitagliptin", "empagliflozin", "atorvastatin", "simvastatin", "rosuvastatin", "pravastatin",
+    "amlodipine", "ramipril", "lisinopril", "enalapril", "losartan", "candesartan", "valsartan", "bisoprolol", "atenolol", "propranolol", "metoprolol",
+    "furosemide", "bendroflumethiazide", "hydrochlorothiazide", "spironolactone", "digoxin", "warfarin", "apixaban", "rivaroxaban", "clopidogrel",
+    "levothyroxine", "carbimazole", "prednisolone", "prednisone", "dexamethasone", "hydrocortisone", "salbutamol", "albuterol", "beclometasone", "montelukast",
+    "cetirizine", "loratadine", "fexofenadine", "chlorphenamine", "sertraline", "citalopram", "fluoxetine", "escitalopram", "amitriptyline", "mirtazapine",
+    "diazepam", "lorazepam", "zopiclone", "gabapentin", "pregabalin", "carbamazepine", "levetiracetam", "sumatriptan", "alendronate", "alendronic acid",
+    "tamsulosin", "finasteride", "sildenafil", "estradiol", "tamoxifen", "anastrozole", "allopurinol", "colchicine", "methotrexate", "hydroxychloroquine",
+    "chloroquine", "artemether", "lumefantrine", "ondansetron", "domperidone", "metoclopramide", "loperamide", "lactulose", "senna", "folic acid",
+)
+
+
+def _flag_medication_spelling(out: dict, changes: list[dict]) -> None:
+    import difflib
+    for i, m in enumerate(out.get("medications") or []):
+        name = str(m.get("name") or "").strip().lower() if isinstance(m, dict) else ""
+        if len(name) < 6 or name in _KNOWN_DRUGS:
+            continue
+        for word in re.findall(r"[a-z]{6,}", name):
+            if word in _KNOWN_DRUGS:
+                break
+            close = difflib.get_close_matches(word, _KNOWN_DRUGS, n=1, cutoff=0.84)
+            if close:
+                changes.append({"rule": "medication_spelling", "path": f"medications[{i}]", "name": m.get("name"), "suggestion": close[0],
+                                "evidence_ids": m.get("evidence_ids") or []})
+                break
+
+
 def clean(extraction: dict) -> tuple[dict, list[dict]]:
     """Returns (cleaned copy, list of changes). The input is not modified."""
     out = copy.deepcopy(extraction)
@@ -162,6 +203,8 @@ def clean(extraction: dict) -> tuple[dict, list[dict]]:
         if merged is not None:
             out[section] = merged
     _flag_speech_wording(out, changes)
+    _flag_chief_complaint_sentence(out, changes)
+    _flag_medication_spelling(out, changes)
     return (out if (changes or out != extraction) else extraction), changes             # a stripped article alone is also a (silent) change
 
 
@@ -174,4 +217,8 @@ def warning_for(change: dict) -> str | None:
         return f"'{change['kept']}' was recorded twice with different details ({details}); the first was kept; clinician review required"
     if change["rule"] == "speech_wording":
         return f"symptom '{change['name']}' looks like a sentence copied from speech, not a symptom name; clinician review required"
+    if change["rule"] == "chief_complaint_wording":
+        return f"reason for visit '{change['name']}' looks like a remark copied from speech, not the complaint; clinician review required"
+    if change["rule"] == "medication_spelling":
+        return f"medicine '{change['name']}' may be a mis-heard spelling of '{change['suggestion']}'; clinician review required"
     return None
