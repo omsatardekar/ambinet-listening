@@ -21,6 +21,24 @@ type Recording = {
   audio_url: string;
 };
 
+type SpeakerStatus = {
+  available: boolean;
+  loading: boolean;
+  error: string | null;
+  enrolled: boolean;
+  enabled: boolean;
+  active: boolean;
+  threshold: number;
+  enrolling: boolean;
+  enroll_status: "idle" | "capturing" | "processing" | "done" | "failed";
+  enroll_message: string | null;
+  enroll_progress: number;
+  enroll_target_seconds: number;
+  last_score: number | null;
+  last_ok: boolean | null;
+  last_age: number | null;
+};
+
 type VoiceState = {
   type: "state";
   available: boolean;
@@ -34,11 +52,20 @@ type VoiceState = {
   last_command: "wake" | "start" | "stop" | null;
   heard?: string;
   heard_age?: number | null;
+  speaker?: SpeakerStatus | null;
+  speaker_rejected_age?: number | null;
   recordings: Recording[];
   error: string | null;
 };
 
-type MeterUpdate = { type: "meter"; level: number; elapsed: number; audio_connected: boolean };
+type MeterUpdate = {
+  type: "meter";
+  level: number;
+  elapsed: number;
+  audio_connected: boolean;
+  enroll_progress?: number;
+  enrolling?: boolean;
+};
 
 type MicStatus = "requesting" | "ready" | "denied" | "unsupported" | "error";
 
@@ -166,6 +193,7 @@ function VoiceAssistant({
   const [awakeSince, setAwakeSince] = useState<number | null>(null);
   const [savedClip, setSavedClip] = useState<Recording | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [lockOpen, setLockOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
   const socketRef = useRef<WebSocket | null>(null);
@@ -207,6 +235,10 @@ function VoiceAssistant({
             ...current,
             level: update.level,
             audio_connected: update.audio_connected,
+            speaker:
+              current.speaker && update.enrolling
+                ? { ...current.speaker, enrolling: true, enroll_progress: update.enroll_progress ?? 0 }
+                : current.speaker,
           }));
         } else {
           setVoice(update);
@@ -410,6 +442,57 @@ function VoiceAssistant({
 
   const dismissSaved = () => setSavedClip(null);
 
+  // The speaker status (model loading, enrolment) is only pushed with wake-word updates, so while the voice-lock panel is open ask for it directly.
+  useEffect(() => {
+    if (!lockOpen) return;
+    let active = true;
+    const refresh = async () => {
+      try {
+        const response = await fetch("/api/speaker/status");
+        if (!response.ok) return;
+        const body = (await response.json()) as SpeakerStatus;
+        if (active) setVoice((current) => ({ ...current, speaker: body }));
+      } catch {
+        /* the next tick tries again */
+      }
+    };
+    void refresh();
+    const timer = window.setInterval(() => void refresh(), 1500);
+    return () => {
+      active = false;
+      window.clearInterval(timer);
+    };
+  }, [lockOpen]);
+
+  const speaker = voice.speaker ?? null;
+  const callSpeaker = async (path: string, init: RequestInit) => {
+    setBusy(true);
+    setActionError(null);
+    try {
+      const response = await fetch(`/api/speaker/${path}`, init);
+      const body = (await response.json().catch(() => null)) as (SpeakerStatus & { detail?: string }) | null;
+      if (!response.ok) throw new Error(body?.detail ?? "The speaker service did not respond.");
+      if (body) setVoice((current) => ({ ...current, speaker: body }));
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : "The speaker service did not respond.");
+    } finally {
+      setBusy(false);
+    }
+  };
+  const post = (body: unknown): RequestInit => ({
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const lockLabel = !speaker
+    ? "Voice lock"
+    : speaker.active
+      ? "Voice lock: on"
+      : speaker.enrolled
+        ? "Voice lock: off"
+        : "Set up voice lock";
+  const rejectedRecently = (voice.speaker_rejected_age ?? 99) < 6;
+
   return (
     <>
       {showOverlay && (
@@ -482,6 +565,146 @@ function VoiceAssistant({
             </>
           )}
         </section>
+        </div>
+      )}
+
+      {rejectedRecently && (speaker?.active ?? false) && (
+        <div className="va-unauthorized" role="alert">
+          <strong>Unauthorized voice</strong>
+          <span>Access denied. Only the enrolled doctor can use “Hey Asha”.</span>
+        </div>
+      )}
+
+      {speaker && !lockOpen && (
+        <button
+          type="button"
+          className={`va-recordings-pill va-lock-pill ${speaker.active ? "va-lock-on" : ""}`}
+          onClick={() => setLockOpen(true)}
+        >
+          {lockLabel}
+          {rejectedRecently && <span className="va-lock-alert">denied</span>}
+        </button>
+      )}
+
+      {lockOpen && speaker && (
+        <div className="va-drawer-scrim" onClick={() => setLockOpen(false)}>
+          <aside
+            className="va-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Voice lock"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="va-drawer-head">
+              <div>
+                <h3>Voice lock</h3>
+                <p>Only your enrolled voice can say “Hey Asha”. Processed on this device, never uploaded.</p>
+              </div>
+              <button type="button" className="va-close" onClick={() => setLockOpen(false)} aria-label="Close">
+                ×
+              </button>
+            </div>
+
+            {!speaker.available && (
+              <p className="va-sub">
+                {speaker.loading
+                  ? "Loading the voice model… (a few seconds)"
+                  : `Voice lock is unavailable${speaker.error ? `: ${speaker.error}` : "."} Voice commands still work for everyone.`}
+              </p>
+            )}
+
+            {speaker.available && (
+              <>
+                <p className="va-sub">
+                  Status:{" "}
+                  <strong>
+                    {speaker.enrolled
+                      ? speaker.enabled
+                        ? "your voice is enrolled and the lock is on"
+                        : "your voice is enrolled, lock is off"
+                      : "no voice enrolled yet"}
+                  </strong>
+                </p>
+
+                {speaker.enroll_status === "capturing" || speaker.enrolling ? (
+                  <div className="va-enroll">
+                    <p className="va-title">Keep talking…</p>
+                    <p className="va-sub">{speaker.enroll_message ?? "Speak naturally for about 15 seconds."}</p>
+                    <div className="va-countdown">
+                      <span style={{ width: `${Math.round(speaker.enroll_progress * 100)}%` }} />
+                    </div>
+                    <button
+                      type="button"
+                      className="va-btn va-btn-ghost va-btn-wide"
+                      disabled={busy}
+                      onClick={() => void callSpeaker("enroll/cancel", { method: "POST" })}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      className="va-btn va-btn-wide"
+                      disabled={busy || mic !== "ready"}
+                      onClick={() => void callSpeaker("enroll/start", { method: "POST" })}
+                    >
+                      {speaker.enrolled ? "Re-enroll my voice" : "Enroll my voice"}
+                    </button>
+                    {mic !== "ready" && <p className="va-error">Allow the microphone first.</p>}
+                    {speaker.enroll_status === "processing" && <p className="va-sub">{speaker.enroll_message}</p>}
+                    {speaker.enroll_status === "done" && <p className="va-sub">{speaker.enroll_message}</p>}
+                    {speaker.enroll_status === "failed" && <p className="va-error">{speaker.enroll_message}</p>}
+                  </>
+                )}
+
+                {speaker.enrolled && !speaker.enrolling && (
+                  <div className="va-lock-settings">
+                    <label className="va-lock-row">
+                      <input
+                        type="checkbox"
+                        checked={speaker.enabled}
+                        disabled={busy}
+                        onChange={(event) => void callSpeaker("settings", post({ enabled: event.target.checked }))}
+                      />
+                      <span>Only respond to my voice</span>
+                    </label>
+                    <label className="va-lock-row va-lock-col">
+                      <span>
+                        Strictness: <strong>{speaker.threshold.toFixed(2)}</strong>
+                        <em> (higher = stricter; lower if Asha ignores you)</em>
+                      </span>
+                      <input
+                        type="range"
+                        min={0.1}
+                        max={0.7}
+                        step={0.05}
+                        value={speaker.threshold}
+                        disabled={busy}
+                        onChange={(event) => void callSpeaker("settings", post({ threshold: Number(event.target.value) }))}
+                      />
+                    </label>
+                    <p className="va-sub">
+                      Last check:{" "}
+                      {speaker.last_score === null
+                        ? "none yet. Say “Hey Asha”."
+                        : `score ${speaker.last_score.toFixed(2)} → ${speaker.last_ok ? "accepted" : "ignored"}`}
+                    </p>
+                    <button
+                      type="button"
+                      className="va-btn va-btn-ghost va-btn-wide"
+                      disabled={busy}
+                      onClick={() => void callSpeaker("voiceprint", { method: "DELETE" })}
+                    >
+                      Delete my voiceprint
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+            {actionError && <p className="va-error" role="alert">{actionError}</p>}
+          </aside>
         </div>
       )}
 

@@ -52,6 +52,7 @@ SILENCE_WARNING_SECONDS = 5.0
 END_SILENCE_SECONDS = 0.30         # pause that closes a phrase and triggers decoding
 MAX_PHRASE_SECONDS = 12.0          # force a decode during long speech
 MIN_SPEECH_FRAMES = 3              # ignore clicks shorter than ~100 ms
+JOIN_GAP_SECONDS = 2.0             # "start" ... "recording" said as two phrases are joined if this close
 PRE_ROLL_FRAMES = 10               # audio fed to the recognizer before the detected onset
 RING_FRAMES = 160                  # ~5 s of recent audio kept for exact start trimming
 START_TRIM_SECONDS = 0.10          # drop this much after "recording" so its tail is not saved
@@ -64,11 +65,14 @@ MODEL_ROOT = Path(os.getenv("ASHA_MODEL_DIR", Path(__file__).resolve().parents[2
 MODEL_URL = f"https://alphacephei.com/vosk/models/{MODEL_NAME}.zip"
 
 HEY_WORDS = ("hey", "hay", "hi", "hello", "okay")
-ASHA_WORDS = ("asha",)  # the only spelling present in the model vocabulary
+# "Asha" is easily heard as a near neighbour (especially with an accent); the speaker lock still has to approve the voice.
+ASHA_WORDS = ("asha", "asia", "ashe", "ash", "asher")  # all present in the en-in model vocabulary
 RECORD_WORDS = {"recording", "record"}
 GRAMMAR = json.dumps(
     [f"{hey} {asha}" for hey in HEY_WORDS for asha in ASHA_WORDS]
-    + ["start recording", "stop recording", "hey asha start recording", "hey asha stop recording", "[unk]"]
+    + ["start recording", "stop recording"]
+    + [f"hey {asha} {verb} recording" for asha in ASHA_WORDS for verb in ("start", "stop")]
+    + ["[unk]"]
 )
 
 
@@ -142,8 +146,12 @@ def ensure_model(path: Path | None = None) -> Path:
 class WakeWordService:
     """Voice-controlled recorder. Every recording is one WAV file in ``recordings_dir``."""
 
-    def __init__(self, recordings_dir: Path):
+    def __init__(self, recordings_dir: Path, speaker_gate: Any = None):
         self._recordings_dir = Path(recordings_dir)
+        self._speaker_gate = speaker_gate          # optional SpeakerGate: only the enrolled voice may command
+        self._seg_audio: list[bytes] = []          # raw frames of the phrase being decoded (for the speaker check)
+        self._rejected_at = 0.0
+        self._carry: tuple[list[Token], bytes] | None = None   # a phrase that ended with "start"/"stop", waiting for "recording"
         self._lock = threading.RLock()
         self._listeners: list[Callable[[dict[str, Any]], None]] = []
         self._audio_queue: queue.Queue[bytes] = queue.Queue(maxsize=512)
@@ -191,6 +199,8 @@ class WakeWordService:
             return
         self._loading = True
         self._emit("loading")
+        if self._speaker_gate is not None:
+            self._speaker_gate.start()             # loads the speaker model in the background
         try:
             import vosk
 
@@ -274,6 +284,8 @@ class WakeWordService:
                 "last_command": self._last_command,
                 "heard": self._heard,
                 "heard_age": round(now - self._heard_at, 1) if self._heard_at else None,
+                "speaker": self._speaker_gate.status() if self._speaker_gate is not None else None,
+                "speaker_rejected_age": round(now - self._rejected_at, 1) if self._rejected_at else None,
                 "recordings": list(self._recordings),
                 "error": self._error,
                 "event": self._last_event,
@@ -397,6 +409,9 @@ class WakeWordService:
 
     def _segment(self, frame: bytes, rms: float, start_frame: int) -> None:
         is_speech = rms > max(0.008, self._noise * 3.0)
+        gate = self._speaker_gate
+        if gate is not None and gate.enrolling and gate.feed(frame, is_speech):
+            self._emit("enrolment_captured")
         if not self._in_speech:
             if not is_speech:
                 self._noise = 0.97 * self._noise + 0.03 * rms
@@ -409,6 +424,7 @@ class WakeWordService:
             self._seg_frames = 0
             self._seg_speech_frames = 0
             self._seg_silence = 0
+            self._seg_audio = []
             for _, pre_bytes in preroll:
                 self._feed(pre_bytes)
         self._feed(frame)
@@ -426,6 +442,7 @@ class WakeWordService:
 
     def _feed(self, frame: bytes) -> None:
         self._seg_frames += 1
+        self._seg_audio.append(frame)
         # Quiet microphones recognise poorly: bring the speech level to a usable range.
         gain = min(8.0, max(1.0, 0.06 / max(self._speech_rms, 1e-4)))
         if gain > 1.05:
@@ -440,7 +457,36 @@ class WakeWordService:
         if self._seg_speech_frames < MIN_SPEECH_FRAMES:
             return
         logger.info("Heard %r (decoded in %.0f ms)", result.get("text", ""), (time.monotonic() - started) * 1000)
-        self._handle_tokens(tokens_from_result(result, self._seg_offset))
+        tokens = tokens_from_result(result, self._seg_offset)
+        audio = b"".join(self._seg_audio)
+        # "start" / "stop" and "recording" can fall into two phrases when the speaker pauses between them: join them, and check the voice on the joined audio.
+        carry, self._carry = self._carry, None
+        if carry and tokens and tokens[0].word in RECORD_WORDS and 0 <= tokens[0].start - carry[0][-1].end <= JOIN_GAP_SECONDS * SAMPLE_RATE:
+            tokens, audio = carry[0] + tokens, carry[1] + audio
+        if tokens and not self._speaker_allows(tokens, audio):
+            return
+        if tokens and tokens[-1].word in ("start", "stop"):
+            self._carry = (tokens, audio)
+        self._handle_tokens(tokens)
+
+    def _speaker_allows(self, tokens: list[Token], audio_bytes: bytes) -> bool:
+        """Speaker gate: a recognised command phrase must come from the enrolled voice."""
+        gate = self._speaker_gate
+        if gate is None:
+            return True
+        if gate.enrolling:
+            return False                           # enrolment speech must not trigger commands
+        if not gate.active:
+            return True
+        audio = np.frombuffer(audio_bytes, dtype=np.int16).astype(np.float32) / 32768.0
+        allowed, score = gate.verify(audio)
+        if not allowed:
+            with self._lock:
+                self._heard = "another voice (ignored)"
+                self._heard_at = self._rejected_at = time.monotonic()
+            logger.info("Ignoring %r: not the enrolled speaker (score=%s)", [t.word for t in tokens], score)
+            self._emit("speaker_rejected")
+        return allowed
 
     # ── command state machine ────────────────────────────────────────
 

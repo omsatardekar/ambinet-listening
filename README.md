@@ -161,6 +161,8 @@ From the project folder, with `(.venv)` active:
 
 The launcher checks the Python packages, starts the backend at **http://127.0.0.1:8000** and the interface at **http://127.0.0.1:5173**, then opens your browser. Press **Ctrl+C** in the terminal to stop both.
 
+**Voice lock (speaker verification):** a doctor can enrol their voice in the voice panel (about 15 seconds of speech); after that only that voice can start or stop recordings with "Hey Asha". It is switched on or off and its strictness set in the same panel. It uses a SpeechBrain ECAPA model (`pip install -r requirements.txt` installs `torch` and `speechbrain`; the model files are included in the repository in `models/spkrec-ecapa-voxceleb`, so nothing is downloaded and it works behind company firewalls; only the `pip install` of `torch` and `speechbrain` needs a package index) and stores the voiceprint in `speaker_data/` (git-ignored, never commit it). Environment overrides: `SPEAKER_THRESHOLD`, `SPEAKER_ENROLL_SECONDS`, `SPEAKER_MODEL_DIR`. Not yet tested here with a real microphone. Added from the `shubham` branch.
+
 **Voice model:** the voice model is already included in this repository (`models/vosk-model-small-en-in-0.4`), so nothing is downloaded and it works behind company firewalls and SSL-inspecting proxies. It is loaded once when the server starts. Wait until the terminal prints **`Voice control is ready`**.
 
 When the browser asks for the **microphone**, click **Allow**.
