@@ -52,6 +52,10 @@ export type SummaryModel = {
   assessment: Item[];
   tests: Item[];
   actions: Item[];
+  /** general advice (counselling items of clinical_actions), shown apart from the plan; at most MAX_RECOMMENDATIONS */
+  recommendations: Item[];
+  /** how many advice items there were before the limit */
+  recommendationsTotal: number;
   followUp: Item[];
   uncertainties: Item[];
 };

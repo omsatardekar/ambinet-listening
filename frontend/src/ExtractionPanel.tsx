@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Check, FileText, Info, Link2, RefreshCw, ShieldCheck, Sparkles, TriangleAlert } from "lucide-react";
 import { Badge, Chip, Ring, SourcePanel, SourceButton } from "./extraction/kit";
 import { buildModel, friendlyError, friendlyNotes, labelOf, reporter, visitSeconds } from "./extraction/helpers";
-import { AlertRibbon, Denied, Examination, History, Impression, Medications, Plan, Symptoms, Vitals } from "./extraction/sections";
+import { AlertRibbon, Denied, Examination, History, Impression, Medications, Plan, Recommendations, Symptoms, Vitals } from "./extraction/sections";
 import type { Ctx, Derived, Extraction, FactEvidence, JobStatus, SourceRequest } from "./extraction/types";
 
 /**
@@ -150,6 +150,7 @@ function Summary({ extraction, derived, job }: { extraction: Extraction; derived
       {model.meds.length > 0 && <Medications items={model.meds} ctx={ctx} />}
       <Examination exam={model.exam} ros={model.ros} conditions={model.conditions} ctx={ctx} />
       <Plan tests={model.tests} actions={model.actions} followUp={model.followUp} ctx={ctx} />
+      <Recommendations items={model.recommendations} total={model.recommendationsTotal} ctx={ctx} />
 
       {missing.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 rounded-2xl bg-white/[0.03] p-4 ring-1 ring-white/10">

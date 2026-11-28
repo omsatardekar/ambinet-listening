@@ -52,6 +52,10 @@ function itemsAt(data: unknown, path: string): Item[] {
   return out;
 }
 
+/** General advice ("sleep well", "avoid the cream") is not a step of the plan (tests, scans, follow-up, medicines): it is shown in its own small section. */
+export const MAX_RECOMMENDATIONS = 4;
+const isAdvice = (i: Item): boolean => text(i.data["action_type"]).toLowerCase() === "counselling";
+
 export function buildModel(x: Extraction): SummaryModel {
   const mh = (isRec(x.medical_history) ? x.medical_history : {}) as Rec;
   const at = (key: string) => itemsAt(x[key], key);
@@ -72,7 +76,9 @@ export function buildModel(x: Extraction): SummaryModel {
     conditions: at("clinical_conditions"),
     assessment: at("clinical_assessment"),
     tests: at("procedures_and_investigations"),
-    actions: at("clinical_actions"),
+    actions: at("clinical_actions").filter((i) => !isAdvice(i)),
+    recommendations: at("clinical_actions").filter(isAdvice).slice(0, MAX_RECOMMENDATIONS),
+    recommendationsTotal: at("clinical_actions").filter(isAdvice).length,
     followUp: at("follow_up"),
     uncertainties: at("clinical_uncertainties"),
   };

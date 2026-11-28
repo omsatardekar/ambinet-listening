@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 import {
-  Activity, Ban, Bone, CalendarClock, Check, CircleHelp, ClipboardList, Clock, Droplets, FlaskConical, Gauge, HeartPulse, Home, MapPin, Pill, Repeat, Ruler,
+  Activity, Ban, Bone, CalendarClock, Check, CircleHelp, ClipboardList, Clock, Lightbulb, Droplets, FlaskConical, Gauge, HeartPulse, Home, MapPin, Pill, Repeat, Ruler,
   Scale, ScanLine, ShieldAlert, ShieldCheck, Stethoscope, Thermometer, Users, Wind, type LucideIcon,
 } from "lucide-react";
 import { Badge, Chip, SectionCard, SourceButton, TONE_BOX } from "./kit";
@@ -406,6 +406,26 @@ export function Medications({ items, ctx }: { items: Item[]; ctx: Ctx }) {
 /* ---------- plan ---------------------------------------------------------------------------------------------------------------------- */
 
 type Step = { key: string; icon: LucideIcon; kind: string; title: string; status?: string; meta: string[]; item: Item };
+
+export function Recommendations({ items, total, ctx }: { items: Item[]; total: number; ctx: Ctx }) {
+  if (!items.length) return null;
+  return (
+    <SectionCard id="recommendations" icon={Lightbulb} title="Advice given" count={items.length} tone="cyan">
+      <ul className="space-y-2.5">
+        {items.map((it) => {
+          const title = pick(it.data, "description") || labelOf(it.data);
+          return (
+            <li key={it.path} className="flex items-start justify-between gap-3">
+              <p className="text-[14px] first-letter:uppercase text-slate-100">{title}</p>
+              <Src ctx={ctx} item={it} title={title} chips={[]} />
+            </li>
+          );
+        })}
+      </ul>
+      {total > items.length && <p className="mt-3 text-xs text-slate-400">The first {items.length} of {total} advice items are shown; the rest are in the full record.</p>}
+    </SectionCard>
+  );
+}
 
 export function Plan({ tests, actions, followUp, ctx }: { tests: Item[]; actions: Item[]; followUp: Item[]; ctx: Ctx }) {
   const steps: Step[] = [];
